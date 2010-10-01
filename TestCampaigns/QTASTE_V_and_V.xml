@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><campaign name="QTaste_V_and_V">
+<run testbed="enginetest.xml">
+<testsuite directory="TestSuites/TestSuite_QTaste"/>
+</run>
+<run testbed="testbed_with_control_script_start_error.xml">
+<testsuite directory="TestSuites/TestSuite_QTaste_Control_Script/QTASTE_CONTROL_START_ERROR"/>
+</run>
+<run testbed="testbed_with_control_script_stop_error.xml">
+<testsuite directory="TestSuites/TestSuite_QTaste_Control_Script/QTASTE_CONTROL_STOP_ERROR"/>
+</run>
+<run testbed="testbed_with_good_control_script.xml">
+<testsuite directory="TestSuites/TestSuite_QTaste_Control_Script/QTASTE_CONTROL"/>
+</run>
+<run testbed="testbed_with_missing_control_script.xml">
+<testsuite directory="TestSuites/TestSuite_QTaste_Control_Script/QTASTE_CONTROL_MISSING"/>
+</run>
+</campaign>

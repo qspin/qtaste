@@ -1,0 +1,80 @@
+<HTML><HEAD><TITLE>DoubleWithPrecision</TITLE></HEAD> 
+<BODY> 
+<H2>DoubleWithPrecision</H2> 
+A DoubleWithPrecision object represents a Double with a given precision.
+<P>
+Note that to test equality of an object of this class with a double or integer,
+you must explicitely use the <A HREF="#equals(Object)">equals</A> method instead of the <CODE>==</CODE> or <CODE>!=</CODE> operators.
+<P>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Constructors Summary</B></FONT></TH></TR> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#DoubleWithPrecision(Double,Double)">DoubleWithPrecision(Double,Double)</A></B></CODE></TD><TD>Constructs a new instance of DoubleWithPrecision from given value and precision.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#DoubleWithPrecision(String)">DoubleWithPrecision(String)</I></A></B></CODE></TD><TD>Constructs a new instance of DoubleWithPrecision from its string representation.</TD> 
+</TABLE> 
+<P> 
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Summary</B></FONT></TH></TR> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getValue()">getValue()</A></B></CODE></TD><TD>Returns the value of this DoubleWithPrecision object.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getPrecision()">getPrecision()</A></B></CODE></TD><TD>Returns the precision of this DoubleWithPrecision object.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#equals(Object)">equals(Object)</A></B></CODE></TD><TD>Compares this DoubleWithPrecision object to the specified object.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#toString()">toString()</A></B></CODE></TD><TD>Returns a string representation of this DoubleWithPrecision object.</TD> 
+</TABLE> 
+&nbsp;<P> 
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Constructors Detail</B></FONT></TH></TR> 
+</TABLE> 
+<A NAME="DoubleWithPrecision(Double,Double)"> <H3>DoubleWithPrecision</H3></A> 
+<PRE><B>DoubleWithPrecision</B>(Double&nbsp;value, 
+                    Double&nbsp;precision)</PRE> 
+<DL><DD>Constructs a new instance of DoubleWithPrecision from given value and precision.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>value</CODE> - the value</DD> 
+<DD><CODE>precision</CODE> - the precision</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="DoubleWithPrecision(String)"> <H3>DoubleWithPrecision</H3></A> 
+<PRE><B>DoubleWithPrecision</B>(String&nbsp;s)
+                    throws NumberFormatException</PRE> 
+<DL><DD>Constructs a new instance of DoubleWithPrecision from its string representation.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>s</CODE> - string representation using the format "<CODE>double(precision_double)</CODE>", e.g. "<CODE>1.3(0.001)</CODE>", or simply a double which means precision is <CODE>0.0</CODE>, e.g. "<CODE>1.3</CODE>"</DD> 
+<DT><B>Throws:</B> 
+<DD><CODE>NumberFormatException</CODE> - if the string does not contain a parsable DoubleWithPrecision</DL> 
+</DL></DD></DL> 
+&nbsp;<P>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Detail</B></FONT></TH></TR> 
+</TABLE> 
+<A NAME="getValue()"> <H3>getValue</H3></A> 
+<PRE>Double <B>getValue</B>()</PRE> 
+<DL><DD>Returns the value of this DoubleWithPrecision object.<P><DD><DL> 
+<DT><B>Returns:</B></DT> 
+<DD>the value of this object</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getPrecision()"> <H3>getPrecision</H3></A> 
+<PRE>Double <B>getPrecision</B>()</PRE> 
+<DL><DD>Returns the precision of this DoubleWithPrecision object.<P><DD><DL> 
+<DT><B>Returns:</B></DT> 
+<DD>the precision of this object</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="equals(Object)"> <H3>equals</H3></A> 
+<PRE>boolean <B>equals</B>(Object obj)</PRE> 
+<DL><DD>Compares this DoubleWithPrecision object to the specified object.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>obj</CODE> - the object to compare with this object, null or of type Double, Integer or DoubleWithPrecision.</DD> 
+<DT><B>Returns:</B></DT> 
+<DD><CODE>true</CODE> if the argument is not null and is a Double or Integer object representing a value between (value - precision) and (value + precision) or
+    a DoubleWithPrecision object whoose value is between (value - (precision + obj_precision)) and (value + (precision + obj_precision)),
+	<CODE>false</CODE> false otherwise</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="toString()"> <H3>toString</H3></A> 
+<PRE>String <B>toString</B>()</PRE> 
+<DL><DD>Returns a string representation of this DoubleWithPrecision object.<P><DD><DL> 
+<DT><B>Returns:</B></DT> 
+<DD>the string representation of this object using "<CODE>value(precision)</CODE>" format</DD> 
+</DL></DD></DL> 
+</BODY> 
+</HTML>

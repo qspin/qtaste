@@ -1,0 +1,5 @@
+COMMENT;TIMEOUT;IN_VERB;IN_SLEEP
+Verb is interrupted in sleep. Expected test result: Failed;5;true;true
+Verb never returns. Expected test result: Failed;5;true;false
+Script sleep is interrupted. Expected test result: Failed;5;false;true
+Script never returns. Expected test result: Failed;5;false;false

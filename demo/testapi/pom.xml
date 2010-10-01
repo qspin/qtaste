@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly" or "mvn install assembly:single" -->
+
+   <parent>
+      <groupId>com.qspin.qtaste</groupId>
+      <artifactId>qtaste-testapi-parent</artifactId>
+      <version>1.0</version>
+      <relativePath>../../testapi-parent</relativePath>
+   </parent>
+
+   <groupId>com.qspin.qtaste</groupId>
+   <artifactId>qtaste-demo-testapi</artifactId>
+   <version>1.0</version>
+   <packaging>jar</packaging>
+   <name>QTaste Test API for QTaste Demo</name>
+
+   <properties>
+      <qtaste-toolbox-version>${parent.version}</qtaste-toolbox-version>
+   </properties>
+
+   <build>
+      <finalName>qtaste-testapi</finalName>
+      <plugins>
+         <!-- plugin to build deploy jar file, including version information -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+         </plugin>
+
+         <!-- plugin to get sources of other testapi dependency projects, for testapi doc generation -->
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>unpack-testapi-src</id>
+                  <configuration>
+                     <includeArtifactIds>qtaste-toolbox-testapi</includeArtifactIds>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <!-- plugin to generate testapi doc -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+         </plugin>
+         
+         <!-- plugin to install source artifact -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </build>
+
+   <repositories>
+        <repository>
+            <id>apache-releases</id>
+            <name>Apache Releases</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>openqa-releases</id>
+            <name>OpenQA Releases</name>
+            <url>http://nexus.openqa.org/content/repositories/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+   </repositories>
+   <dependencies>
+      <!-- QTaste kernel -->
+      <dependency>
+         <groupId>com.qspin.qtaste</groupId>
+         <artifactId>qtaste-kernel</artifactId>
+      </dependency>
+
+      <!-- other QTaste testapi projects -->
+      <dependency>
+         <groupId>com.qspin.qtaste</groupId>
+         <artifactId>qtaste-toolbox-testapi</artifactId>
+         <version>${qtaste-toolbox-version}</version>
+      </dependency>
+      <!-- EXTERNAL LIBRARIES -->
+      <!-- Libraries are ordered by group/artifact. -->
+      <dependency>
+         <groupId>mysql</groupId>
+         <artifactId>mysql-connector-java</artifactId>
+         <version>5.1.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+        <version>1.0.1</version>
+        <artifactId>selenium-java-client-driver</artifactId>
+        <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+        <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+        <version>1.0.1</version>
+        <artifactId>selenium-java-client-driver</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+        <version>1.0.1</version>
+        <artifactId>selenium-java-client-driver</artifactId>
+        <classifier>javadoc</classifier>
+    </dependency>
+    <dependency>
+    <groupId>org.apache.xmlrpc</groupId>
+        <version>3.1.2</version>
+        <artifactId>xmlrpc-client</artifactId>
+    </dependency>
+   </dependencies>
+</project>

@@ -1,0 +1,7 @@
+COMMENT;SELECTOR
+Test of doSteps with no selector. Expected test result: Passed;
+Test of doSteps with "[2]" as selector. Expected test result: Passed;[2]
+Test of doSteps with "[3-]" as selector. Expected test result: Passed;[3-]
+Test of doSteps with "[-3]" as selector. Expected test result: Passed;[-3]
+Test of doSteps with "[2-4]" as selector. Expected test result: Passed;[2-4]
+Test of doSteps with "[6]" as selector, where step 6 doesn't exist. Expected test result: Not Available;[6]

@@ -1,0 +1,68 @@
+<HTML><HEAD><TITLE>logger</TITLE></HEAD> 
+<BODY> 
+<H2>logger</H2> 
+Provides a log4j logger.
+<P>
+The logger level is defined by the <CODE>log4j.category.TestScript</CODE> property in the <CODE>log4j.properties</CODE> QTaste configuration file.<BR>
+Valid values are: <CODE>ALL</CODE> (log all messages), <CODE>TRACE</CODE>, <CODE>DEBUG</CODE>, <CODE>INFO</CODE>, <CODE>WARN</CODE>, <CODE>ERROR</CODE>, <CODE>FATAL</CODE>, <CODE>OFF</CODE> (don't log any message).<BR>
+The log levels are ordered: <CODE>TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL</CODE>.<BR>
+A log method actually logs a message only if the log level is higher or equal than the logger level.
+<P>
+Only most useful methods are documented here, see <CODE><A HREF="http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Logger.html">org.apache.log4j.Logger</A></CODE> for complete documentation.
+<P>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Summary</B></FONT></TH></TR> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#trace(Object)">trace(Object)</A></B></CODE></TD><TD>Logs a message with the TRACE level.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#debug(Object)">debug(Object)</A></B></CODE></TD><TD>Logs a message with the DEBUG level.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#info(Object)">info(Object)</A></B></CODE></TD><TD>Logs a message with the INFO level.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#warn(Object)">warn(Object)</A></B></CODE></TD><TD>Logs a message with the WARN level.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#error(Object)">error(Object)</A></B></CODE></TD><TD>Logs a message with the ERROR level.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#fatal(Object)">fatal(Object)</A></B></CODE></TD><TD>Logs a message with the FATAL level.</TD> 
+</TABLE> 
+&nbsp;<P> 
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Detail</B></FONT></TH></TR> 
+</TABLE> 
+<A NAME="trace(Object)"> <H3>trace</H3></A> 
+<PRE>void <B>trace</B>(Object message)</PRE> 
+<DL><DD>Logs a message with the TRACE level.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>message</CODE> - the message object to log</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="debug(Object)"> <H3>debug</H3></A> 
+<PRE>void <B>debug</B>(Object message)</PRE> 
+<DL><DD>Logs a message with the DEBUG level.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>message</CODE> - the message object to log</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="info(Object)"> <H3>info</H3></A> 
+<PRE>void <B>info</B>(Object message)</PRE> 
+<DL><DD>Logs a message with the INFO level.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>message</CODE> - the message object to log</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="warn(Object)"> <H3>warn</H3></A> 
+<PRE>void <B>warn</B>(Object message)</PRE> 
+<DL><DD>Logs a message with the WARN level.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>message</CODE> - the message object to log</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="error(Object)"> <H3>error</H3></A> 
+<PRE>void <B>error</B>(Object message)</PRE> 
+<DL><DD>Logs a message with the ERROR level.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>message</CODE> - the message object to log</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="fatal(Object)"> <H3>fatal</H3></A> 
+<PRE>void <B>fatal</B>(Object message)</PRE> 
+<DL><DD>Logs a message with the FATAL level.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>message</CODE> - the message object to log</DD> 
+</DL></DD></DL> 
+</BODY> 
+</HTML>

@@ -1,0 +1,2 @@
+COMMENT;STRING_DATA;INT_DATA;DOUBLE_DATA;DOUBLE_WITH_PRECISION_DATA;BOOLEAN_DATA
+Data types. Expected test result: Passed;string;2;3.3;5(0.1);true

@@ -1,0 +1,2 @@
+COMMENT;TIMEOUT;FILE_DATA;FILECONTENT
+Load file. Expected test result: Passed;240;data/data.txt;This is the content of the data file.

@@ -1,0 +1,118 @@
+<html>
+<head>
+<STYLE type="text/css">
+  TR.tc-ok { background-color: #eeeecc; }
+  TR.tc-nok { background-color: #d22323; }
+  TR.tc-SUT { background-color: #d7d7d7; }
+  TR.tc-header { background-color: #CCCCFF; }
+  TR.tc-retried { background-color: #d7d7d7; }
+
+  .txtLabel {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .txtLabelVal {
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+
+  a.tooltip {
+    text-decoration: none;
+  }
+
+  a.tooltip:hover {
+    text-decoration: none;
+    background-position: left top;
+  }
+
+  a.tooltip span {
+    display: none;
+  }
+
+  a.tooltip:hover span {
+    display:block;
+    position:absolute;
+    border: #404040 1px solid;
+    background-color:#fff3bf;
+    color:#000;
+    text-align: left;
+    right: 2px;
+    overflow: auto;
+  }
+
+  a.tooltip img {
+    border: 0;
+  }
+
+  img.button {
+    margin-right: 2px;
+    border: 0;
+  }
+
+  tr.hide {
+    display:none;
+  }
+
+  tr.show {
+    display:;
+  }
+  
+ </STYLE>
+<script language="javascript">
+    function showHide(id) {
+      var el = document.getElementById(id);
+	  if (el) {
+        if (el.className == 'hide') {
+          el.className = 'show';
+        } else {
+          el.className = 'hide';
+        }
+	  }
+    }
+</script>
+<title>Test suite ###TEST_SUITE### report</title>
+</head>
+<body>
+<h2>Test suite ###TEST_SUITE### report</h2>
+<p>
+<b>Testbed:</b> ###TESTBED###
+<p>
+<b>Report generation date:</b> ###DATE_OF_REPORT###
+<p>
+<b>QTaste kernel version:</b> ###QTaste_KERNEL_VERSION###<br>
+<b>QTaste testAPI version:</b> ###QTaste_TESTAPI_VERSION###<br>
+<b>SUT version:</b> ###SUT_VERSION###<br>
+<p>
+<table BORDER COLS=6 cellpadding=2 cellspacing=0 WIDTH="680">
+<tr>
+<th width="160">Start execution</th>
+<th width="160">End execution</th>
+<th width="72">Tests executed</th>
+<th width="72">Tests passed</th>
+<th width="72">Tests failed</th>
+<th width="72">Tests in errors</th>
+</tr>
+<tr>
+<td align="center">###DATE_START###</td>
+<td align="center">###DATE_END###</td>
+<td align="center">###TESTS_EXECUTED###</td>
+<td align="center">###TESTS_PASSED###</td>
+<td align="center">###TESTS_FAILED###</td>
+<td align="center">###TESTS_NOT_AVAILABLE###</td>
+</tr>
+</table>
+<p>
+<b>Number of SUT restart to ensure clean SUT state:</b> ###TESTS_RETRIES###
+<p>
+<b> Executive summary
+<p>
+<table BORDER COLS=3 cellpadding=2 cellspacing=0>
+<tr>
+<th>&nbsp;Test script&nbsp;</th>
+<th>&nbsp;Row&nbsp;</th>
+<th>&nbsp;Result&nbsp;</th>
+</tr>
+###EXECUTIVE_SUMMARY###
+</table>

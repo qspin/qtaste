@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly" or "mvn install assembly:single" -->
+
+   <parent>
+      <groupId>com.qspin.qtaste</groupId>
+      <artifactId>qtaste-testapi-parent</artifactId>
+      <version>1.0</version>
+      <relativePath>../../testapi-parent</relativePath>
+   </parent>
+
+   <artifactId>qtaste-toolbox-testapi</artifactId>
+   <packaging>jar</packaging>
+   <version>1.0</version>
+   <name>QTaste Toolbox Test API Components</name>
+
+   <build>
+      <finalName>qtaste-testapi</finalName>
+      <plugins>
+         <!-- plugin to build deploy jar file, including version information -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+         </plugin>
+         <!-- plugin to generate testapi doc -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+         </plugin>
+         
+         <!-- plugin to install source artifact -->
+         <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-source-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies>
+      <!-- QTaste kernel -->
+      <dependency>
+         <groupId>com.qspin.qtaste</groupId>
+         <artifactId>qtaste-kernel</artifactId>
+      </dependency>
+
+      <!-- EXTERNAL LIBRARIES -->
+      <!-- Libraries are ordered by group/artifact. -->
+
+      <dependency>
+         <groupId>com.thoughtworks.xstream</groupId>
+         <artifactId>xstream</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>xpp3</groupId>
+               <artifactId>xpp3_min</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>xpp3</groupId>
+         <artifactId>xpp3</artifactId>
+      </dependency>
+   </dependencies>
+</project>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>		
+	<testapi_implementation>
+		<import>com.qspin.qtaste.testapi.impl.demo</import>
+		<import>com.qspin.qtaste.testapi.impl.generic</import>
+	</testapi_implementation>
+	<control_script>control_bugzilla.py</control_script>
+	<multiple_instances_components>
+		<Selenium id="BugzillaApp">
+			<host>localhost</host>
+			<port>4444</port>
+			<url>http://ate-bugzilla</url>			
+		</Selenium>
+		<Bugzilla id="BugzillaServer">
+			<jdbcURL>jdbc:mysql://ate-bugzilla:3306/bugzilla3</jdbcURL>
+			<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
+			<dbuser>taste</dbuser>
+			<dbpassword>whataG00dN4m3</dbpassword>
+		</Bugzilla>
+	</multiple_instances_components>
+</testbed_configuration>

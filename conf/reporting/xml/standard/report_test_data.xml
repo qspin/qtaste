@@ -1,0 +1,8 @@
+<result>
+  <testCase name="###TEST_CASE###" testScriptVersion="###TEST_SCRIPT_VERSION###" testDataRow="###TEST_DATA_ROW###">###TEST_COMMENT###</testCase>
+  <status result="###RESULT###">###RESULT_DESCRIPTION###</status>
+  <startDate>###START_DATE###</startDate>
+  <endDate>###END_DATE###</endDate>
+  <elapsedTime>###ELAPSED_TIME###</elapsedTime>
+  <steps>###STEPS###</steps>
+</result>

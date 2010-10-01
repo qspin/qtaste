@@ -1,0 +1,5 @@
+COMMENT;NUMBER1;OPERATOR;NUMBER2;RESULT
+Verify the result of a addition;9;+;9;18,
+Verify the result of a substraction;34;-;4;30,
+Verify the result of a division;6;/;3;2,
+Verify the result of a mulitplication;6;*;4;24,

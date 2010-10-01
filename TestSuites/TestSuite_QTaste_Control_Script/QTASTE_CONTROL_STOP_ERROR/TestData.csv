@@ -1,0 +1,2 @@
+COMMENT
+Expected test result: Failed and this line should be displayed once as control script returns an error on stop!

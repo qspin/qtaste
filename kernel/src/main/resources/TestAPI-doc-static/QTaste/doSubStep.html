@@ -1,0 +1,20 @@
+<HTML><HEAD><TITLE>doSubStep</TITLE></HEAD> 
+<BODY> 
+<H2>doSubStep</H2> 
+Function to execute an imported test step as a sub-step of the current step.
+<P>
+This may be used to execute a step of a test script imported with <A HREF="importTestScript.html"><CODE>importTestScript</CODE></A>, as a sub-step.
+<P>
+&nbsp;
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Function Detail</B></FONT></TH></TR> 
+</TABLE> 
+<A NAME="doSubStep"> <H3>doSubStep</H3></A> 
+<PRE>void <B>doSubStep</B>([Integer_or_String stepId,] Function stepFunction)</PRE> 
+<DL><DD>Executes the <CODE>stepFunction</CODE> function as a sub-step of the current step, using <CODE>stepId</CODE> as step id if given, or the step number, starting from 1 for the first step, otherwise.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>stepId</CODE> - (optional) the step id, as an integer or a string.</DD> 
+<DD><CODE>stepFunction</CODE> - the step function.</DD> 
+</DL></DD></DL> 
+</BODY> 
+</HTML>

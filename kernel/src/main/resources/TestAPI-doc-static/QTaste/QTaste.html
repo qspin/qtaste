@@ -1,0 +1,29 @@
+<HTML><HEAD><TITLE>QTaste Python module</TITLE></HEAD> 
+<BODY> 
+<H2>QTaste Python module</H2> 
+QTaste is the module providing access to the QTaste functionalities for the test scripts.
+<P>
+The simplest way to use it is to import all its functionalities by adding the following line at the beginning of the test script:
+<PRE>from QTaste import *</PRE>
+<P>
+&nbsp;
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Summary</B></FONT></TH></TR> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="testAPI.html">testAPI</A></B></CODE></TD><TD>Provides access to the Test API components and the <CODE><A HREF="testAPI.html#stopTest">stopTest</A></CODE> method.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="testData.html">testData</A></B></CODE></TD><TD>Provides access to the test data.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="doStep.html">doStep()</A></B></CODE></TD><TD>Function to execute a test step.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="doSteps.html">doSteps()</A></B></CODE></TD><TD>Function to execute a sequence of test steps.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="doSubStep.html">doSubStep()</A></B></CODE></TD><TD>Function to execute a test step as a sub-step of the current step.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="doSubSteps.html">doSubSteps()</A></B></CODE></TD><TD>Function to execute a sequence of test steps as sub-steps of the current step.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="importTestScript.html">importTestScript()</A></B></CODE></TD><TD>Function to import another test script in order to reuse its steps using the <A HREF="doSubStep.html"><CODE>doSubStep</CODE></A> and <A HREF="doSubSteps.html"><CODE>doSubSteps</CODE></A> functions.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="isInTestScriptImport.html">isInTestScriptImport()</A></B></CODE></TD><TD>Function to check if code is executed during a test script import, i.e. during the execution of the <A HREF="importTestScript.html"><CODE>importTestScript</CODE></A> function.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="logger.html">logger</A></B></CODE></TD><TD>Provides a log4j logger.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="Status.html">Status</A></B></CODE></TD><TD>Test result statuses.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="DoubleWithPrecision.html">DoubleWithPrecision</A></B></CODE></TD><TD>Class representating a double with a given precision.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="QTasteException.html">QTasteException</A></B></CODE></TD><TD>Base QTaste exception, from which all other QTaste exceptions are derived, resulting in a test �not available�.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="QTasteDataException.html">QTasteDataException</A></B></CODE></TD><TD>Exception thrown in case of invalid data or argument, resulting in a test �not available�.</TD>
+<TR><TD WIDTH="1%"><CODE><B><A HREF="QTasteRPCFailException.html">QTasteRPCFailException</A></B></CODE></TD><TD>Exception derived from <CODE><A HREF="QTasteTestFailException.html">QTasteTestFailException</A></CODE>, thrown in case of error RPC return code, resulting in a test �fail�.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="QTasteTestFailException.html">QTasteTestFailException</A></B></CODE></TD><TD>Exception thrown to make a test �fail�.</TD> 
+</TABLE> 
+</BODY> 
+</HTML>

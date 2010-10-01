@@ -1,0 +1,159 @@
+<HTML><HEAD><TITLE>testData</TITLE></HEAD> 
+<BODY> 
+<H2>testData</H2> 
+Provides access to the test data.
+<P>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Summary</B></FONT></TH></TR> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getValue(String)">getValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as a string.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getIntValue(String)">getIntValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as an integer.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getDoubleValue(String)">getDoubleValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as a double.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getDoubleWithPrecisionValue(String)">getDoubleWithPrecisionValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as a DoubleWithPrecision.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getBooleanValue(String)">getBooleanValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as a boolean.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getFileContentAsByteArray(String)">getFileContentAsByteArray(String)</A></B></CODE></TD><TD>Gets the content of the test data file with given name (starting with "<CODE>FILE_</CODE>"), as a byte array.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getFileContentAsString(String)">getFileContentAsString(String)</A></B></CODE></TD><TD>Gets the content of the test data file with given name (starting with "<CODE>FILE_</CODE>"), as a string.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#setValue(String,String)">setValue(String,String)</A></B></CODE></TD><TD>Sets the value of the test data with given name to given value.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#setIntValue(String,int)">setIntValue(String,int)</A></B></CODE></TD><TD>Sets the value of the test data with given name to given int value.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#setDoubleValue(String,double)">setDoubleValue(String,double)</A></B></CODE></TD><TD>Sets the value of the test data with given name to given double value.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#setDoubleWithPrecisionValue(String,DoubleWithPrecision)">setDoubleWithPrecisionValue(String,DoubleWithPrecision)</A></B></CODE></TD><TD>Sets the value of the test data with given name to given DoubleWithPrecision value.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#setBooleanValue(String,boolean)">setBooleanValue(String,boolean)</A></B></CODE></TD><TD>Sets the value of the test data with given name to given boolean value.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#contains(String)">contains(String)</A></B></CODE></TD><TD>Checks if test data with given name exists.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#remove(String)">remove(String)</A></B></CODE></TD><TD>Removes the test data with given name.</TD> 
+</TABLE> 
+&nbsp;<P> 
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Detail</B></FONT></TH></TR> 
+</TABLE> 
+<A NAME="getValue(String)"> <H3>getValue</H3></A> 
+<PRE>String <B>getValue</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the value of the test data with given name, as a string.
+<P>If test data doesn't exist, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the string value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getIntValue(String)"> <H3>getIntValue</H3></A> 
+<PRE>int <B>getIntValue</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the value of the test data with given name, as an integer.
+<P>If test data doesn't exist or value can’t be converted to integer, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the int value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getDoubleValue(String)"> <H3>getDoubleValue</H3></A> 
+<PRE>double <B>getDoubleValue</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the value of the test data with given name, as a double.
+<P>If test data doesn't exist or value can’t be converted to double, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the double value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getDoubleWithPrecisionValue(String)"> <H3>getDoubleWithPrecisionValue</H3></A> 
+<PRE>DoubleWithPrecision <B>getDoubleWithPrecisionValue</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the value of the test data with given name, as a DoubleWithPrecision.
+<P>If test data doesn't exist or value can’t be converted to DoubleWithPrecision, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the DoubleWithPrecision value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getBooleanValue(String)"> <H3>getBooleanValue</H3></A> 
+<PRE>boolean <B>getBooleanValue</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the value of the test data with given name, as a boolean.
+<P>If test data doesn't exist or value can’t be converted to boolean, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the boolean value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getFileContentAsByteArray(String)"> <H3>getFileContentAsByteArray</H3></A> 
+<PRE>byte[] <B>getFileContentAsByteArray</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the content of the test data file with given name (starting with "<CODE>FILE_</CODE>"), as a byte array.
+<P>If test data doesn't exist or is not a file, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the byte array content of the test data file</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="getFileContentAsString(String)"> <H3>getFileContentAsString</H3></A> 
+<PRE>String <B>getFileContentAsString</B>(String&nbsp;name)</PRE> 
+<DL><DD>Gets the content of the test data file with given name (starting with "<CODE>FILE_</CODE>"), as a string.
+<P>If test data doesn't exist or is not a file, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD>the String content of the test data file</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="setValue(String,String)"> <H3>setValue</H3></A> 
+<PRE>void <B>setValue</B>(String&nbsp;name,
+              String&nbsp;value)</PRE> 
+<DL><DD>Sets the value of the test data with given name to given value.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DD><CODE>value</CODE> - the value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="setIntValue(String,String)"> <H3>setIntValue</H3></A> 
+<PRE>void <B>setIntValue</B>(String&nbsp;name,
+                 int&nbsp;value)</PRE> 
+<DL><DD>Sets the value of the test data with given name to given int value.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DD><CODE>value</CODE> - the value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="setDoubleValue(String,String)"> <H3>setDoubleValue</H3></A> 
+<PRE>void <B>setDoubleValue</B>(String&nbsp;name,
+                    double&nbsp;value)</PRE> 
+<DL><DD>Sets the value of the test data with given name to given double value.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DD><CODE>value</CODE> - the value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="setDoubleWithPrecisionValue(String,String)"> <H3>setDoubleWithPrecisionValue</H3></A> 
+<PRE>void <B>setDoubleWithPrecisionValue</B>(String&nbsp;name,
+                                 DoubleWithPrecision&nbsp;value)</PRE> 
+<DL><DD>Sets the value of the test data with given name to given DoubleWithPrecision value.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DD><CODE>value</CODE> - the value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="setBooleanValue(String,String)"> <H3>setBooleanValue</H3></A> 
+<PRE>void <B>setBooleanValue</B>(String&nbsp;name,
+                     boolean&nbsp;value)</PRE> 
+<DL><DD>Sets the value of the test data with given name to given boolean value.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DD><CODE>value</CODE> - the value of the test data</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="contains(String)"> <H3>contains</H3></A> 
+<PRE>boolean <B>contains</B>(String&nbsp;name)</PRE> 
+<DL><DD>Checks if test data with given name exists.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+<DT><B>Returns:</B></DT> 
+<DD><CODE>true</CODE> if test data with given name exists, <CODE>false</CODE> otherwise</DD> 
+</DL></DD></DL> 
+<HR> 
+<A NAME="remove(String)"> <H3>remove</H3></A> 
+<PRE>void <B>remove</B>(String&nbsp;name)</PRE> 
+<DL><DD>Removes the test data with given name.
+<P>If test data doesn't exist, it has no effect.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>name</CODE> - the name of the test data</DD> 
+</DL></DD></DL> 
+</BODY> 
+</HTML>
