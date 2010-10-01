@@ -103,14 +103,14 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             JPanel topPanel = new JPanel(new BorderLayout());
 
             mStartInteractiveTestButton = new JButton();
-            mStartInteractiveTestButton.setText("Start QTaste Interactive mode");
+            mStartInteractiveTestButton.setText("Start Interactive mode");
 
             StartButtonAction startButtonListener = new StartButtonAction();
             mStartInteractiveTestButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/running_32"));
             mStartInteractiveTestButton.addActionListener(startButtonListener);
 
             mStopInteractiveTestButton = new JButton();
-            mStopInteractiveTestButton.setText("Stop QTaste Interactive mode");
+            mStopInteractiveTestButton.setText("Stop Interactive mode");
             mStopInteractiveTestButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stop"));
             StopInterractiveButtonAction stopButtonListener = new StopInterractiveButtonAction();
             mStopInteractiveTestButton.setEnabled(false);

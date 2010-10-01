@@ -29,7 +29,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -44,7 +43,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -68,7 +66,6 @@ import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
-import com.qspin.qtaste.ui.config.MainConfigFrame;
 import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
 import com.qspin.qtaste.ui.testcasebuilder.TestDesignPanels;
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
@@ -112,7 +109,13 @@ public class MainPanel extends JFrame {
 
     private void setUpFrame() {
         setName(title);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(WindowEvent winEvt) {
+                // Perhaps ask user if they want to save any unsaved files first.
+                mTestCasePanel.closeAllTabs();
+                System.exit(0);
+            }
+        });
     }
 
     public void launch() throws InterruptedException, InvocationTargetException {

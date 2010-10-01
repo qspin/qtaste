@@ -1,22 +1,21 @@
 /*
-    Copyright 2007-2009 QSpin - www.qspin.be
+Copyright 2007-2009 QSpin - www.qspin.be
 
-    This file is part of QTaste framework.
+This file is part of QTaste framework.
 
-    QTaste is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+QTaste is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    QTaste is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+QTaste is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public License
-    along with QTaste. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+You should have received a copy of the GNU Lesser General Public License
+along with QTaste. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.qspin.qtaste.ui;
 
 import java.awt.BorderLayout;
@@ -207,12 +206,12 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             public void hyperlinkUpdate(HyperlinkEvent e) {
             }
         });
- 
+
         ExecuteButtonAction buttonListener = new ExecuteButtonAction(this);
         executeButton.addActionListener(buttonListener);
         executeButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/running_32"));
         executeButton.setToolTipText("Run Test(s)");
- 
+
         startExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/start"));
         startExecutionButton.setToolTipText("Continue test case execution (F8)");
         startExecutionButton.setVisible(false);
@@ -222,7 +221,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 continueDebug();
             }
         });
- 
+
         stepOverExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stepover"));
         stepOverExecutionButton.setToolTipText("Step over the script execution (F6)");
         stepOverExecutionButton.setVisible(false);
@@ -232,7 +231,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 continueStep();
             }
         });
- 
+
         stepIntoExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stepinto"));
         stepIntoExecutionButton.setToolTipText("Step into the script execution (F5)");
         stepIntoExecutionButton.setVisible(false);
@@ -242,7 +241,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 continueStepInto();
             }
         });
- 
+
         stopExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stop"));
         stopExecutionButton.setToolTipText("Stop execution");
         stopExecutionButton.setVisible(false);
@@ -252,7 +251,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 stopExecution();
             }
         });
- 
+
         debugButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/debug"));
         debugButton.setToolTipText("Debug Test(s)");
         debugButton.addActionListener(new ActionListener() {
@@ -269,13 +268,11 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         saveButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                //if (checkScriptsSyntax()) // display dialog when syntax is correct
-                //{
-                //    JOptionPane.showMessageDialog(null, "Syntax checked successfully");
-                //}
+                // Check script syntax is also saving the script
+                checkScriptsSyntax();
             }
         });
-         
+
         resultsButton.addActionListener(new ActionListener() {
 
             // Show the browser displayed the last test report
@@ -296,7 +293,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 }
             }
         });
- 
+
         resultsButton.setToolTipText("View the HTML Test Run Summary Results");
         resultsButton.setName("test run results button");
 
@@ -410,26 +407,26 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     public boolean checkScriptsSyntax() {
         // check the test scripts syntax
-        // save and check syntax of the documents
-        for (int i = 0; i < editorTabbedPane.getTabCount(); i++) {
-            NonWrappingTextPane tabTextPane = getTextPane(i);
-            if (tabTextPane != null) {
-                if (tabTextPane.isModified()) {
-                    tabTextPane.save();
-                }
-                // check only opened Python files
-                if (tabTextPane.getFileName().endsWith(".py")) {
-                    ScriptCheckSyntaxValidator scriptCheckSyntaxValidator =
-                            new ScriptCheckSyntaxValidator(tabTextPane.getFileName(), tabTextPane.getText());
-                    if (!scriptCheckSyntaxValidator.check()) {
-                        return false;
-                    }
+        // save and check syntax of the documents        
+
+        int i = editorTabbedPane.getSelectedIndex();
+        NonWrappingTextPane tabTextPane = getTextPane(i);
+        if (tabTextPane != null) {
+            if (tabTextPane.isModified()) {
+                tabTextPane.save();
+            }
+            // check only opened Python files
+            if (tabTextPane.getFileName().endsWith(".py")) {
+                ScriptCheckSyntaxValidator scriptCheckSyntaxValidator =
+                        new ScriptCheckSyntaxValidator(tabTextPane.getFileName(), tabTextPane.getText());
+                if (!scriptCheckSyntaxValidator.check()) {
+                    return false;
                 }
             }
-            TestDataEditor tabDataPane = this.getTestDataPane(i);
-            if (tabDataPane != null && tabDataPane.isModified()) {
-                tabDataPane.save();
-            }
+        }
+        TestDataEditor tabDataPane = this.getTestDataPane(i);
+        if (tabDataPane != null && tabDataPane.isModified()) {
+            tabDataPane.save();
         }
 
         // check the module imported found in pythonlib
@@ -513,7 +510,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         try {
             absolutePath = f.getAbsoluteFile().getCanonicalPath();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.fatal("Cannot load testcase source", e);
             return null;
         }
         NonWrappingTextPane textPane = activateSourceIfAlreadyLoaded(absolutePath, isTestScript);
@@ -643,37 +640,43 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
         if (tcTextFound && isTestScript) {
             // remove all tabs
-            while (editorTabbedPane.getTabCount() > 0) {
-                // check if the current tab must be saved
-                NonWrappingTextPane currentPane = getTextPane(0);
-                if (currentPane != null) {
-                    if (currentPane.isModified()) {
-
-                        if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentPane.getFileName() + "?'",
-                                "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                            currentPane.save();
-                        }
-                    }
-                    // remove all breakpoints and listeners if any
-                    currentPane.removeAllBreakpoints();
-                    currentPane = null;
-                }
-                TestDataEditor currentDataPane = getTestDataPane(0);
-                if (currentDataPane != null) {
-                    if (currentDataPane.isModified()) {
-
-                        if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentDataPane.getCurrentCSVFile() + "?'",
-                                "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                            currentDataPane.save();
-                        }
-                    }
-                    currentDataPane = null;
-                }
-
-                editorTabbedPane.removeTabAt(0);
-            }
+            closeAllTabs();
         }
         return null;
+    }
+
+    /**
+     * Close all tabs and ask user confirmation if a file is modified
+     */
+    public void closeAllTabs() {
+        while (editorTabbedPane.getTabCount() > 0) {
+            // check if the current tab must be saved
+            NonWrappingTextPane currentPane = getTextPane(0);
+            if (currentPane != null) {
+                if (currentPane.isModified()) {
+
+                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentPane.getFileName() + "?'",
+                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        currentPane.save();
+                    }
+                }
+                // remove all breakpoints and listeners if any
+                currentPane.removeAllBreakpoints();
+                currentPane = null;
+            }
+            TestDataEditor currentDataPane = getTestDataPane(0);
+            if (currentDataPane != null) {
+                if (currentDataPane.isModified()) {
+
+                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentDataPane.getCurrentCSVFile() + "?'",
+                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        currentDataPane.save();
+                    }
+                }
+                currentDataPane = null;
+            }
+            editorTabbedPane.removeTabAt(0);
+        }
     }
 
     /**

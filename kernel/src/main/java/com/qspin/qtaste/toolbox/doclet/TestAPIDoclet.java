@@ -257,6 +257,16 @@ public class TestAPIDoclet {
         for (MethodDoc methodDoc : classDoc.methods()) {
             methodsList.add(methodDoc);
         }
+        //
+        for (ClassDoc interface_ : classDoc.interfaces()) {            
+            if (!interface_.qualifiedName().startsWith(TEST_API_KERNEL_PACKAGE)) {
+                for (MethodDoc methodDoc_ : interface_.methods()) {
+                    methodsList.add(methodDoc_);
+                }
+            }
+        }
+
+        //
         return methodsList.toArray(methods);
     }
 
@@ -330,7 +340,10 @@ public class TestAPIDoclet {
         for (int i = 0; i < classes.length; i++) {
             ClassDoc classDoc = classes[i];
             if (isTestAPI(classDoc, root)) {
-                verbsList.add(classDoc);
+                // Exclude factory classes (MultipleInstancesComponent, SingletonComponent, ...)
+                if (!classDoc.qualifiedTypeName().startsWith(TEST_API_KERNEL_PACKAGE)) {
+                    verbsList.add(classDoc);
+                }
             }
         }
 

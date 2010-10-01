@@ -8,32 +8,7 @@
 		<Selenium id="TranslateApp">
 			<host>localhost</host>
 			<port>4444</port>
-			<url>http://babelfish.yahoo.com</url>			
+			<url>http://babelfish.yahoo.com</url>
 		</Selenium>
-		<Selenium id="Tijd">
-			<host>localhost</host>
-			<port>4444</port>
-			<url>http://www.tijd.be</url>
-		</Selenium>
-		<Selenium id="Topographie">
-			<host>localhost</host>
-			<port>4444</port>
-			<url>http://www.topographie.lu</url>
-		</Selenium>
-		<Selenium id="Proximus">
-			<host>localhost</host>
-			<port>4444</port>
-			<url>http://www.proximus.be</url>
-		</Selenium>
-		<Selenium id="Mobistar">
-			<host>localhost</host>
-			<port>4444</port>
-			<url>http://www.mobistar.be</url>
-		</Selenium>
-		<FlashSelenium id="Color">
-			<host>localhost</host>
-			<port>4444</port>
-			<url>http://www.geocities.com/</url>
-		</FlashSelenium>
 	</multiple_instances_components>
 </testbed_configuration>

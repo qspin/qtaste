@@ -34,7 +34,6 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -59,7 +58,6 @@ import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.tools.FileMask;
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
-import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 

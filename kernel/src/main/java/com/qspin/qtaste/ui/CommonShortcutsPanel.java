@@ -30,7 +30,6 @@ import javax.swing.SpringLayout;
 import org.apache.log4j.Logger;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.ui.tools.ResourceManager;
-import com.qspin.qtaste.ui.tools.SpringUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 
@@ -58,7 +57,7 @@ public class CommonShortcutsPanel extends JPanel {
                     if (Desktop.isDesktopSupported()) {
                         Desktop.getDesktop().open(resultsFile);
                     } else {
-                        logger.error("Platform not supportedby this feature");
+                        logger.error("Feature not supported by this platform");
                     }
                 } catch (IOException ex) {
                     logger.error("Could not open " + filename);

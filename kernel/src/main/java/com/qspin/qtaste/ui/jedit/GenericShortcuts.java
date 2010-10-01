@@ -48,8 +48,8 @@ public class GenericShortcuts {
         Keymap parent = m_TCPane.getActiveTextPane().getKeymap();
         Keymap newmap = JTextComponent.addKeymap("KeymapExampleMap", parent);
 
-        KeyStroke shiftF5key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
-        newmap.addActionForKeyStroke(shiftF5key, new SaveAction());
+        KeyStroke ctrlSkey = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
+        newmap.addActionForKeyStroke(ctrlSkey, new SaveAction());
         //KeyStroke ctrlZkey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK);
         //newmap.addActionForKeyStroke(ctrlZkey, new UndoAction());
 

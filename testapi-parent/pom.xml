@@ -8,7 +8,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>1.0</version>
+      <version>continuous-SNAPSHOT</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
@@ -76,6 +76,43 @@
                   </configuration>
                 </execution>
 
+                <execution>
+                  <id>unpack-kernel-src</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>unpack-dependencies</goal>
+                  </goals>
+                  <configuration>
+                    <classifier>sources</classifier>
+					<includeArtifactIds>qtaste-kernel</includeArtifactIds>
+                    <excludeTransitive>true</excludeTransitive>
+                    <includes>com/qspin/qtaste/kernel/testapi/*.java</includes>
+                    <outputDirectory>${project.build.directory}/dependency-kernel-src</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <silent>true</silent>
+                  </configuration>
+                </execution>
+
+                <execution>
+                  <id>unpack-dependencies-src</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>unpack-dependencies</goal>
+                  </goals>
+                  <configuration>
+                    <classifier>sources</classifier>
+                    <excludeTransitive>true</excludeTransitive>
+                    <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <silent>true</silent>
+                  </configuration>
+                </execution>
+
+
                 <!-- unpack QTaste simulators doc in target/TestAPI-doc/simulators -->
                 <execution>
                   <id>unpack-simulators-doc</id>
@@ -106,7 +143,7 @@
                    <artifactId>qtaste-kernel</artifactId>
                    <version>${qtaste-kernel-version}</version>
                  </docletArtifact>
-                 <sourcepath>src/main/java;${project.build.directory}/dependency-testapi-src</sourcepath>
+                 <sourcepath>src/main/java;${project.build.directory}/dependency-testapi-src;${project.build.directory}/dependency-kernel-src</sourcepath>
                  <additionalparam>-d ${project.build.directory}/TestAPI-doc</additionalparam>
                  <useStandardDocletOptions>false</useStandardDocletOptions>
                </configuration>

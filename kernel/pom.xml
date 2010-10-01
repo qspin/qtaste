@@ -7,7 +7,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>1.0</version>
+      <version>continuous-SNAPSHOT</version>
    </parent>
 
    <artifactId>qtaste-kernel</artifactId>
@@ -17,6 +17,21 @@
    <build>
       <finalName>qtaste-kernel</finalName>
       <plugins>
+			<!-- plugin to install source artifact -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-source-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>attach-sources</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>jar-no-fork</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+
          <!-- plugin to build deploy jar file, including version information -->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -58,7 +73,7 @@
              </execution>
             </executions>			
         </plugin>
-		
+        
         <!-- configure unit test to define QTASTE_ROOT and run tests from QTaste root directory -->
         <plugin>
            <groupId>org.apache.maven.plugins</groupId>

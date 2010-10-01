@@ -48,6 +48,6 @@ class VirtualBox(ControlAction):
 		print "Stopping " + self.description + "..."
 		print commandArguments;
 		self.executeCommand(commandArguments);
-		commandArguments = ['VBoxManage', 'snapshot', self.nameOfVBoxImage, 'discardcurrent', "--state"]
+		commandArguments = ['VBoxManage', 'snapshot', self.nameOfVBoxImage, 'restorecurrent']
 		self.executeCommand(commandArguments);
 		print

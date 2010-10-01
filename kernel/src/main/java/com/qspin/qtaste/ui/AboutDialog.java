@@ -94,6 +94,11 @@ public class AboutDialog extends JDialog {
             b.add(testapiVersionLabel);
         }
 
+        JLabel javaVersionVendor = new JLabel("<html><br><b>Java version:</b> " + System.getProperty("java.version") +
+                           " from " + System.getProperty("java.vendor") + "</html>");
+        javaVersionVendor.setFont(ResourceManager.getInstance().getStandardFontLight());
+        b.add(javaVersionVendor);
+
         Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
         b.setBorder(emptyBorder);
 
