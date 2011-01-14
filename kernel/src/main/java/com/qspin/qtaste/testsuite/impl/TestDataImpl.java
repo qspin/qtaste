@@ -79,9 +79,9 @@ public class TestDataImpl implements TestData, Serializable {
                 try {
                     return TestBedConfiguration.getInstance().getDefaultInstanceId();
                 } catch (NoSuchElementException ex) {
-                    throw new QTasteDataException("Default treatment_room is not defined in TestBed configuration!");
+                    throw new QTasteDataException("Default instance_id is not defined in TestBed configuration!");
                 } catch (ConversionException ex) {
-                    throw new QTasteDataException("Default treatment_room is not valid in TestBed configuration!");
+                    throw new QTasteDataException("Default instance_id is not valid in TestBed configuration!");
                 }
             } else {
                 throw new QTasteDataException("TestData doesn't contain value for data " + key);

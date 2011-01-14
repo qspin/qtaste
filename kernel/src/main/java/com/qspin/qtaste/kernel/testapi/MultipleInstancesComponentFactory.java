@@ -70,7 +70,7 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
 
     /**
      * Return the instance of the component associated to the INSTANCE_ID field of the TestData. 
-     * If the INSTANCE_ID is not present in the TestData, the default treatment_room of the TestBedConfiguration will be used.     
+     * If the INSTANCE_ID is not present in the TestData, the default instance ID of the TestBedConfiguration will be used.     
      * @param component the specified component
      * @param data the testdata
      * @return the instance of the component.
