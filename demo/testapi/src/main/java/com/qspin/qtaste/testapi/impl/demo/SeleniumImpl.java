@@ -57,8 +57,10 @@ public class SeleniumImpl extends WebBrowser implements Selenium {
     
     @Override
     public void closeBrowser() {
-        stop();
-        setSelenium(null);
+	if (selenium != null) {
+        	stop();
+        	setSelenium(null);
+	}
     }
 
     @Override
