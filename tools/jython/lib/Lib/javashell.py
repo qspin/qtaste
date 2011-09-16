@@ -133,13 +133,14 @@ def _getOsType( os=None ):
     os: explicitly select desired OS. os=None to autodetect, os='None' to
     disable 
     """
+    
     os = str(os or sys.registry.getProperty( "python.os" ) or \
                System.getProperty( "os.name" ))
-        
+
     _osTypeMap = (
         ( "nt", ( 'nt', 'Windows NT', 'Windows NT 4.0', 'WindowsNT',
                   'Windows 2000', 'Windows 2003', 'Windows XP', 'Windows CE',
-                  'Windows Vista' )),
+                  'Windows Vista', 'Windows 7' )),
         ( "dos", ( 'dos', 'Windows 95', 'Windows 98', 'Windows ME' )),
         ( "mac", ( 'mac', 'MacOS', 'Darwin' )),
         ( "None", ( 'None', )),
@@ -166,7 +167,7 @@ def _getShellEnv():
     envType = sys.registry.getProperty("python.environment", "shell")
     if envType == "shell":
         osType = _getOsType()
-        
+
         # override defaults based on osType
         if osType == "nt":
             shellCmd = ["cmd", "/c"]
