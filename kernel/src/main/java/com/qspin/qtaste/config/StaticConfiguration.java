@@ -30,7 +30,14 @@ public class StaticConfiguration {
 
     public static final String QTASTE_ROOT = getQTasteRoot();
     public static final String JYTHON_HOME = QTASTE_ROOT + "/tools/jython/lib";
-    public static final String JYTHON_LIB = JYTHON_HOME + "/Lib";
+    public static final String JYTHON_LIB;
+    static {
+	String path = JYTHON_HOME + "/Lib";
+	if ( System.getenv("QTASTE_JYTHON_LIB") != null ) {
+	    path += File.pathSeparator + System.getenv("QTASTE_JYTHON_LIB");
+	} 
+	JYTHON_LIB = path;
+    }
     public static final String TEST_SCRIPT_FILENAME = "TestScript.py";
     public static final String TEST_DATA_FILENAME = "TestData.csv";
     public static final String TEST_SCRIPT_DOC_TOOLS_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";

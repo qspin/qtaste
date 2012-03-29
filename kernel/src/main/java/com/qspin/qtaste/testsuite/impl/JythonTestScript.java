@@ -64,6 +64,7 @@ import org.python.core.PyTuple;
 
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
+import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.debug.Breakpoint;
 import com.qspin.qtaste.debug.BreakpointEventHandler;
 import com.qspin.qtaste.debug.BreakpointManager;
@@ -582,7 +583,14 @@ public class JythonTestScript extends TestScript implements Executable {
 
     public static List<String> getAdditionalPythonPath(File file) {
         List<String> pythonlibs = new ArrayList<String>();
-        if (!file.getAbsolutePath().contains("TestSuites")) {
+	//add librairies references by the environment variable
+	for ( String additionnalPath : StaticConfiguration.JYTHON_LIB.split(File.pathSeparator) ) 
+	{
+	    File directory = new File(additionnalPath);
+            pythonlibs.add(directory.toString());
+	}
+
+	if (!file.getAbsolutePath().contains("TestSuites")) {
             return pythonlibs;
         }
         try {

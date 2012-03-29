@@ -193,7 +193,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      */
     public String getMIString(String instanceId, String component, String key, String defaultValue) {
         int index = getMIIndex(instanceId, component);
-        return instance.getString("multiple_instances." + component + "(" + index + ")." + key, defaultValue);
+        return instance.getString("multiple_instances_components." + component + "(" + index + ")." + key, defaultValue);
     }
 
     /**
