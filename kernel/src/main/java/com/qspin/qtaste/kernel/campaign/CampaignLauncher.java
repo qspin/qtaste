@@ -28,7 +28,6 @@ import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.Version;
@@ -57,12 +56,7 @@ public class CampaignLauncher {
 
         // log version information
       	logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-      	try {
-      		Version testAPIVersion = (Version) Class.forName("com.qspin.qtaste.testapi.Version").getMethod("getInstance").invoke(null);
-      		logger.info("QTaste testAPI version: " + testAPIVersion.getFullVersion());
-      	} catch (Exception e) {
-      		logger.info("No QTaste testAPI package found!");
-      	}
+  		logger.info("QTaste testAPI version: " + StaticConfiguration.VERSION_CONTROL.getTestApiVersion(""));
 
         // handle config file name and optional -sutversion
         if (args.length != 1 && (args.length != 3 || !args[1].equals("-sutversion"))) {

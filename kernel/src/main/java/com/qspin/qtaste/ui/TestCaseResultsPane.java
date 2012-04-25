@@ -44,7 +44,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.reporter.campaign.CampaignReportManager;
 import com.qspin.qtaste.testsuite.TestScript;
 import com.qspin.qtaste.ui.jedit.NonWrappingTextPane;
@@ -52,8 +51,8 @@ import com.qspin.qtaste.ui.log4j.Log4jPanel;
 import com.qspin.qtaste.ui.log4j.TextAreaAppender;
 import com.qspin.qtaste.ui.reporter.TestCampaignReporter;
 import com.qspin.qtaste.ui.reporter.TestCaseReportTable;
-import com.qspin.qtaste.ui.reporter.TestCaseReporter;
 import com.qspin.qtaste.ui.reporter.TestCaseReportTable.TCResultsSelectionListeners;
+import com.qspin.qtaste.ui.reporter.TestCaseReporter;
 
 @SuppressWarnings("serial")
 public class TestCaseResultsPane extends JSplitPane {

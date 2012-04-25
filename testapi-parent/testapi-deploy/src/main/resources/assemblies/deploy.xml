@@ -14,7 +14,7 @@
 	  <useTransitiveFiltering>true</useTransitiveFiltering>
       <excludes>
 		<!-- exclude all files included in QTaste-kernel -->
-        <exclude>com.qspin.qtaste:QTaste-kernel</exclude>
+        <exclude>com.qspin.qtaste:qtaste-kernel</exclude>
         <exclude>com.thoughtworks.xstream:xstream</exclude>
         <exclude>commons-collections:commons-collections</exclude>
         <exclude>commons-configuration:commons-configuration</exclude>

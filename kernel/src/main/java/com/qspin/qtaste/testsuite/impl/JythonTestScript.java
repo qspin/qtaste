@@ -62,8 +62,8 @@ import org.python.core.PySyntaxError;
 import org.python.core.PySystemState;
 import org.python.core.PyTuple;
 
+import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.debug.Breakpoint;
 import com.qspin.qtaste.debug.BreakpointEventHandler;
@@ -80,10 +80,10 @@ import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.lang.DoubleWithPrecision;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResult.Status;
+import com.qspin.qtaste.testsuite.Executable;
 import com.qspin.qtaste.testsuite.QTasteDataException;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
-import com.qspin.qtaste.testsuite.Executable;
 import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.testsuite.TestDataSet;
 import com.qspin.qtaste.testsuite.TestScript;
@@ -91,7 +91,6 @@ import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.debug.DebugVariable;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.Strings;
-import com.qspin.qtaste.util.versioncontrol.VersionControlInterface;
 
 /**
  *
@@ -115,16 +114,9 @@ public class JythonTestScript extends TestScript implements Executable {
     private TestScriptBreakpointHandler testScriptBreakPointEventHandler = TestScriptBreakpointHandler.getInstance();
     private BreakpointEventHandler breakPointEventHandler = BreakpointEventHandler.getInstance();
     private DumpPythonResultEventHandler pythonResultEventHandler = DumpPythonResultEventHandler.getInstance();
-    public static VersionControlInterface versionControl;
 
     static {
         initializeEmbeddedJython();
-        try {
-            String classVersionControl = TestEngineConfiguration.getInstance().getString("version_control");
-            versionControl = (VersionControlInterface) Class.forName(classVersionControl).newInstance();
-        } catch (Exception e) {
-            logger.error("Error loading version control plugin", e);
-        }
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
             public void onConfigurationChange() {
@@ -431,7 +423,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
         this.fileName = fileName.getCanonicalFile().getAbsoluteFile();
 
-        String version = versionControl.getVersion(fileName.getParentFile().getPath());
+        String version = StaticConfiguration.VERSION_CONTROL.getTestApiVersion(fileName.getParentFile().getPath());
         //String version = parseVersion(fileName.getParentFile().getPath());
         setVersion(version);
 

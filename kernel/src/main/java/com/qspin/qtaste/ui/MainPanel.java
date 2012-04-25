@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Properties;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -75,7 +76,6 @@ import com.qspin.qtaste.ui.util.QSpinTheme;
 import com.qspin.qtaste.ui.widget.FillLabelUI;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.Version;
 
 
 /**
@@ -341,12 +341,7 @@ public class MainPanel extends JFrame {
 
             // log version information
           	logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-          	try {
-          		Version testAPIVersion = (Version) Class.forName("com.qspin.qtaste.testapi.Version").getMethod("getInstance").invoke(null);
-          		logger.info("QTaste testAPI version: " + testAPIVersion.getFullVersion());
-          	} catch (Exception e) {
-          		logger.info("No QTaste testAPI package found!");
-          	}
+      		logger.info("QTaste testAPI version: " + StaticConfiguration.VERSION_CONTROL.getTestApiVersion(""));
 
           	// handle optional config file name
             if ((args.length != 0) && (args.length != 2) && (args.length != 4) && (args.length != 6)) {

@@ -80,7 +80,7 @@ public class Version {
      * @return the version string, stored in the "Implementation-Version" attribute of the manifest
      */
     public String getVersion() {
-        return getManifestAttributeValue(Attributes.Name.IMPLEMENTATION_VERSION);
+        return getManifestAttributeValue(new Attributes.Name("Kernel-Implementation-Version"));
     }
 
     /**

@@ -39,7 +39,7 @@ public class ProbeManager {
     private int numberUsers = 0;
 
     private ProbeManager() {
-        probes = new ArrayList();
+        probes = new ArrayList<Probe>();
     }
 
     public synchronized static ProbeManager getInstance() {

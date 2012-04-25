@@ -22,12 +22,22 @@ package com.qspin.qtaste.util.versioncontrol.impl;
 import com.qspin.qtaste.util.versioncontrol.*;
 
 /**
- * DefaultVersionControl is the implementation by default (No version control tool used)
+ * DefaultVersionControl is the implementation by default.
  * @author lvboque
  */
 public class DefaultVersionControl implements VersionControlInterface {
 
-    public String getVersion(String path) {
+	/**
+	 * @return unversioned
+	 */
+    public String getSUTVersion(String path) {
+        return "unversioned";
+    }
+    
+	/**
+	 * @return unversioned
+	 */
+    public String getTestApiVersion(String path) {
         return "unversioned";
     }
 

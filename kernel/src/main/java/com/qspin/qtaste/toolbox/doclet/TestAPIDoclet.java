@@ -30,8 +30,6 @@ import java.util.regex.Pattern;
 
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Strings;
-import com.sun.javadoc.AnnotationDesc;
-import com.sun.javadoc.AnnotationValue;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.DocErrorReporter;

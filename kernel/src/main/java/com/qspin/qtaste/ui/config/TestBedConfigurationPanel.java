@@ -22,11 +22,8 @@ package com.qspin.qtaste.ui.config;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.NoSuchElementException;
 
 import javax.swing.DefaultComboBoxModel;
-
-import org.apache.commons.configuration.ConfigurationException;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;

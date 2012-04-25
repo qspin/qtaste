@@ -6,12 +6,12 @@ setlocal enableDelayedExpansion
 
 set JAVA_MAIN_AND_ARGS=%~1
 set JAVA_MAIN_AND_ARGS=%JAVA_MAIN_AND_ARGS:""="%
-
-for /F %%i in ('%~dp0\find_java_process "%JAVA_MAIN_AND_ARGS:"=""%"') do (
+set CMD="%~dp0\find_java_process" %JAVA_MAIN_AND_ARGS%
+for /F %%i in ('!CMD!') do (
   set PID=%%i
 
   rem terminate the process gracefully
-  echo Terminating java program "%JAVA_MAIN_AND_ARGS%"...
+  echo Terminating java program %JAVA_MAIN_AND_ARGS%... PID is !PID!
   taskkill /pid !PID! >NUL 2>NUL
 
   rem wait max 5 seconds for the process to shutdown
@@ -19,7 +19,7 @@ for /F %%i in ('%~dp0\find_java_process "%JAVA_MAIN_AND_ARGS:"=""%"') do (
   :wait
   tasklist /nh /fi "pid eq !PID!" 2>NUL | findstr /c:!PID! >NUL 2>NUL
   if "%errorlevel%" == "0" (
-    call %~dp0\sleep 1
+    call "%~dp0\sleep" 1
     set /a TIMEOUT-=1
     if not "%TIMEOUT%" == "0" goto wait
   )
@@ -34,10 +34,10 @@ for /F %%i in ('%~dp0\find_java_process "%JAVA_MAIN_AND_ARGS:"=""%"') do (
 
     rem wait 1 second after process end to free binded ports
     echo Waiting 1 second for binded ports to be freed...
-    call %~dp0\sleep 1
+    call "%~dp0\sleep" 1
   )
 )
 
-echo Java program "%JAVA_MAIN_AND_ARGS%" is stopped
+echo Java program %JAVA_MAIN_AND_ARGS% is stopped
 
 endlocal

@@ -19,7 +19,6 @@
 
 package com.qspin.qtaste.ui;
 
-import com.qspin.qtaste.ui.panel.TitlePanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -32,8 +31,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -43,11 +42,11 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.ui.panel.TitlePanel;
 import com.qspin.qtaste.ui.tools.FileMask;
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
 import com.qspin.qtaste.ui.widget.InfoCbBox;
 import com.qspin.qtaste.ui.widget.InfoCbBox.Info;
-import com.qspin.qtaste.ui.widget.InfoCbBox.Info.Level;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 

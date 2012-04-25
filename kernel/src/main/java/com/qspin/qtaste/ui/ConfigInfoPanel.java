@@ -77,7 +77,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     private JButton m_startTestbed = new JButton("(Re)start testbed");
     private JButton m_stopTestbed = new JButton("Stop testbed");
     private JCheckBox m_ignoreControlScript = new JCheckBox("Ignore control script");
-    private JTextField m_SUTVersion = new JTextField("undefined");
+    private JTextField m_SUTVersion = new JTextField(StaticConfiguration.VERSION_CONTROL.getSUTVersion(""));
     private TestEngineConfiguration engineConfig = TestEngineConfiguration.getInstance();
     private TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
     private String testSuiteName;

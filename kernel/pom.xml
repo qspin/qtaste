@@ -7,7 +7,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>continuous-SNAPSHOT</version>
+      <version>1.1</version>
    </parent>
 
    <artifactId>qtaste-kernel</artifactId>
@@ -42,7 +42,7 @@
                      <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                   </manifest>
                   <manifestEntries>
-                    <Implementation-Version>${artifactId}-${qtaste-kernel-version}</Implementation-Version>
+                    <Kernel-Implementation-Version>${artifactId}-${qtaste-kernel-version}</Kernel-Implementation-Version>
                   </manifestEntries>
                </archive>
                <descriptors>

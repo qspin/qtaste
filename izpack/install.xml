@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- 
+    QTaste installation file.
+    
+    To compile it :
+    - go in the <QTASTE_HOME>/izpack directory
+    - call "<PATH_TO_IZPACK>/compile install.xml"
+-->
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>QTaste</appname>
+        <appversion>1.0</appversion>
+        <authors>
+            <author name="David Ergo" email="der@qspin.be"/>
+            <author name="Vincent Dubois" email="vdu@qspin.be"/>
+            <author name="Laurent Vanboquestal" email="lvb@qspin.be"/>
+        </authors>
+        <url>http://www.qtaste.org</url>
+    </info>
+
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="yes"/>
+
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="fra"/>
+    </locale>
+
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="LicencePanel.licence" src="../COPYING.LESSER"/>
+<!--		<res id="InfoPanel.info" src="../Readme.txt"/>-->
+    </resources>
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+<!--        <panel classname="InfoPanel"/>-->
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="TreePacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Kernel" required="yes">
+            <description>The kernel files - required to use qtaste</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="bin/*"/>
+				<include name="kernel/target/qtaste-kernel-deploy.jar"/>
+				<include name="lib/**"/>
+				<include name="COPYING"/>
+				<include name="COPYING.LESSER"/>
+				<include name="conf/**"/>
+				<include name="doc/**"/>
+				<include name="tools/**"/>
+				<include name="Testbeds/**"/>
+				<include name="TestSuites/**"/>
+				<include name="plugins/"/>
+				<include name="TestCampaigns/*"/>
+				<exclude name="conf/gui.xml"/>
+				<exclude name="tools/jython/lib/cachedir"/>
+				<exclude name="**/*.class"/>
+<!--				<exclude name="tools/TestScriptDoc/*.class"/>-->
+				<exclude name="**/Thumbs.db"/>
+				<exclude name="**/*.pdf"/>
+				<exclude name="*ate2qtaste*"/>
+			</fileset>
+<!--            <file src="../Readme.txt" targetdir="$INSTALL_PATH"/>-->
+        </pack>
+        <pack name="Demo" required="no" preselected="yes">
+			<depends packname="Kernel"/>
+			<description>The demo files - examples</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
+				<include name="demo/testapi/target/TestAPI-doc/**"/>
+				<include name="demo/pywinauto-0.3.8/**"/>
+				<include name="demo/COPYING"/>
+				<include name="demo/COPYING.LESSER"/>
+				<include name="demo/Testbeds/**"/>
+				<include name="demo/TestSuites/**"/>
+				<include name="demo/selenium-server.jar"/>
+				<include name="demo/startUI.*"/>
+				<include name="demo/TestCampaigns/**"/>
+				<exclude name="**/Thumbs.db"/>
+				<exclude name="*ate2qtaste*"/>
+			</fileset>
+        </pack>
+        <pack name="Docs" required="no" preselected="yes">
+            <description>The documentation files in pdf format.</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="doc/*.pdf"/>
+            </fileset>
+        </pack>
+        <pack name="The kernel Sources" required="no" preselected="yes" parent="Kernel">
+			<description>The source code of the kernel</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="pom.xml"/>
+				<include name="clean.*"/>
+				<include name="packager_*.*"/>
+				<include name="izpack/install.xml"/>
+				<include name="kernel/src/**"/>
+				<include name="testapi-parent/*"/>
+				<include name="testapi-parent/testapi-deploy/**"/>
+				<include name="toolbox/*"/>
+				<include name="toolbox/testapi/*"/>
+				<include name="toolbox/testapi/src/**"/>
+				<include name="lib/**"/>
+				<exclude name="tools/jython/lib/cachedir"/>
+				<exclude name="tools/jython/lib/**/*.class"/>
+				<exclude name="tools/TestScriptDoc/*.class"/>
+				<exclude name="**/target"/>
+				<exclude name="**/Thumbs.db"/>
+				<exclude name="*ate2qtaste*"/>
+			</fileset>
+        </pack>
+        <pack name="The demo Sources" required="no" preselected="yes" parent="Demo">
+<!--            <depends packname="Demo"/>-->
+			<description>The source code of the demo</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="demo/testapi/src/**"/>
+				<include name="demo/testapi/pom.xml"/>
+				<include name="demo/build.*"/>
+				<exclude name="**/target"/>
+				<exclude name="**/Thumbs.db"/>
+				<exclude name="*ate2qtaste*"/>
+			</fileset>
+        </pack>
+    </packs>
+</installation>

@@ -38,7 +38,8 @@ public class TestAPIImplTest extends TestCase {
     public TestAPIImplTest(String testName) {
         super(testName);
         // Log4j Configuration
-        PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+		String path = StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties";
+        PropertyConfigurator.configure(path.replaceAll(" ", "\\ "));
     }
 
     @Override
@@ -46,7 +47,8 @@ public class TestAPIImplTest extends TestCase {
         super.setUp();
         
     	// register component into the TestAPI
-        TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/enginetest." + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION);
+		String path = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/enginetest." + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION;
+        TestBedConfiguration.setConfigFile(path.replaceAll(" ", "\\ "));
         ComponentsLoader.getInstance();
         instance = TestAPIImpl.getInstance();
     }

@@ -18,11 +18,19 @@
 */
 
 package com.qspin.qtaste.ui.widget;
-import com.qspin.qtaste.ui.widget.*;
-import com.qspin.qtaste.ui.tools.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+
+import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
 class InfoCbModel extends DefaultComboBoxModel

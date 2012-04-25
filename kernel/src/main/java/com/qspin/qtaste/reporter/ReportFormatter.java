@@ -27,12 +27,12 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NameValue;
 import com.qspin.qtaste.util.NamesValuesList;
-import com.qspin.qtaste.util.Version;
 
 /** 
  * A report formatter provides methods to ease the generation of test reports
@@ -48,12 +48,7 @@ public abstract class ReportFormatter {
 
     static {
         kernelVersion = com.qspin.qtaste.kernel.Version.getInstance().getFullVersion();
-        Version testAPIVersionInstance = null;
-        try {
-            testAPIVersionInstance = (Version) Class.forName("com.qspin.qtaste.testapi.Version").getMethod("getInstance").invoke(null);
-        } catch (Exception e) {
-        }
-        testapiVersion = (testAPIVersionInstance != null ? testAPIVersionInstance.getFullVersion() : "none");
+        testapiVersion = StaticConfiguration.VERSION_CONTROL.getTestApiVersion("");
     }
 
     public ReportFormatter(File reportFile) {

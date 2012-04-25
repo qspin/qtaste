@@ -296,7 +296,7 @@ class JavaProcess(ControlAction):
 				shellScriptArguments.append("-checkAfter")
 				shellScriptArguments.append(self.checkAfter)
 		else:
-			shellScriptArguments = _IF(isJar, '-jar ', '') + '"' + self.mainWithArgs + '" -dir ' + self.workingDir + ' -title "' + self.description + '"';
+			shellScriptArguments = _IF(isJar, '-jar ', '') + '"' + self.mainWithArgs + '" -dir "' + self.workingDir + '" -title "' + self.description + '"';
 			if self.classPath:
 				shellScriptArguments += ' -cp "' + self.classPath + '"';
 			if self.vmArgs:

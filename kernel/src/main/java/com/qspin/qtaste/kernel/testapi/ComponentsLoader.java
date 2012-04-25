@@ -159,7 +159,7 @@ public class ComponentsLoader {
 
             // Register also inherited interfaces
             // API extends A, B, C
-            Class[] interfaces = componentInterface.getInterfaces();
+            Class<?>[] interfaces = componentInterface.getInterfaces();
             for (int i = 0; i < interfaces.length; i++) {
                 registerClassMethods(componentName, interfaces[i], c, factoryObject);
             }
@@ -171,7 +171,7 @@ public class ComponentsLoader {
         }
     }
 
-    private void registerClassMethods(String componentName, Class componentInterface, Class component, ComponentFactory factoryObject) {
+    private void registerClassMethods(String componentName, Class<?> componentInterface, Class<?> component, ComponentFactory factoryObject) {
         Method[] methods = componentInterface.getDeclaredMethods();
         for (Method method : methods) {
             // Match the signature
@@ -194,8 +194,8 @@ public class ComponentsLoader {
         name = name.replace('.', '/');
 
         // Get a File object for the package
-        URL url = ComponentsLoader.class.getResource(name);
-
+		URL url = ComponentsLoader.class.getResource(name);
+		
         if (url == null) {
             logger.warn("Package " + pckgname + " doesn't exist, no components to load");
             return;
@@ -204,9 +204,9 @@ public class ComponentsLoader {
         String platformName = name.replaceFirst("^.*/", "");
         logger.info("Loading components for platform " + platformName + " from " + url);
 
-        File directory = new File(url.getFile());
-
-        if (directory.exists()) {
+        File directory = new File(url.getFile().toString().replaceAll("%20", "\\ "));
+		
+		if (directory.exists()) {
             // Get the list of the files contained in the package
             String[] files = directory.list();
             for (int i = 0; i < files.length; i++) {

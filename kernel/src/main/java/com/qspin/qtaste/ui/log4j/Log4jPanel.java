@@ -405,6 +405,7 @@ public class Log4jPanel extends JPanel {
                     m_applications.add(application);
                     addFilterLogCheckBox("Source", application, "filterMessageSource", true);
                     SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size() + 1, 5, -5, 2, 2);
+                    m_SourceFilterPanel.validate();
                 }
             }
             cols[LOG_SOURCE] = application;
@@ -592,7 +593,6 @@ public class Log4jPanel extends JPanel {
             return true;
         }
 
-        @SuppressWarnings("unchecked")
 		@Override
         public boolean include(Entry entry) {
             String type = ((String) entry.getValue(1)).toLowerCase();

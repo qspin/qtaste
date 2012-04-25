@@ -20,9 +20,20 @@
 package com.qspin.qtaste.util.versioncontrol;
 
 /**
- * VersionControlInterface is responsible for providing version information facilities from configuration management tools
+ * VersionControlInterface is responsible for providing version information facilities.
  * @author lvboque
  */
 public interface VersionControlInterface {
-    public String getVersion(String path);
+	/**
+	 * Returns the version of the SUT located at the path.
+	 * @param path The path to the SUT.
+	 * @return the version of the SUT.
+	 */
+    public String getSUTVersion(String path);
+    /**
+     * Returns the version of the testapi located at the path.
+	 * @param path The path to the testapi.
+	 * @return the version of the testapi.
+     */
+    public String getTestApiVersion(String path);
 }

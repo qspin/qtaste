@@ -3,12 +3,9 @@ Rem Usage: find_java_process.vbs <command_line_arguments>
 Rem Result: print the process id of each matching process
 Rem Due to a limitation in wscript, you cannot use double-quotes inside arguments, so use 2 single-quote to represent 1 double-quotes
 
-If WScript.Arguments.Count <> 1 Then
-    WScript.Echo "Usage: find_java_process.vbs <command_line_arguments>"
-    WScript.Quit(1)
-End If
+Set objArgs = WScript.Arguments
+CommandLineArguments = Replace(Replace(objArgs(0), "''", """"), "\", "\\")
 
-CommandLineArguments = Replace(Replace(WScript.Arguments.Item(0), "''", """"), "\", "\\")
 Set WMIService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
 Set Processes = WMIService.ExecQuery("Select ProcessId from Win32_Process where Name='java.exe' and CommandLine like '%" & CommandLineArguments & "'")
 If Processes.Count = 0 Then

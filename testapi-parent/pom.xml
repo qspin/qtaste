@@ -8,7 +8,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>continuous-SNAPSHOT</version>
+      <version>1.1</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
@@ -95,7 +95,7 @@
                   </configuration>
                 </execution>
 
-                <execution>
+                <!--<execution>
                   <id>unpack-dependencies-src</id>
                   <phase>package</phase>
                   <goals>
@@ -110,7 +110,7 @@
                     <overWriteIfNewer>true</overWriteIfNewer>
                     <silent>true</silent>
                   </configuration>
-                </execution>
+                </execution>-->
 
 
                 <!-- unpack QTaste simulators doc in target/TestAPI-doc/simulators -->
