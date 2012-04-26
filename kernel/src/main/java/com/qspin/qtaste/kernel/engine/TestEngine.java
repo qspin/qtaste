@@ -140,8 +140,8 @@ public class TestEngine {
 			if (scriptFilename.endsWith(".py")) {
 				final String jythonHome = StaticConfiguration.JYTHON_HOME;
 				final String jythonJar = jythonHome + "/jython.jar";
-				final String jythonLib = formatPathString(StaticConfiguration.JYTHON_LIB);
-				final String classPath = formatPathString(System.getProperties().getProperty("java.class.path", ""));
+				final String jythonLib = formatPathString(StaticConfiguration.JYTHON_LIB.trim());
+				final String classPath = formatPathString(System.getProperties().getProperty("java.class.path", "").trim());
 				// final String javaHome = System.getenv("JAVA_HOME");
 				// if (javaHome!=null)
 				// 		scriptEngine = javaHome + "/bin/java -Dpython.path=" + jythonJar + File.pathSeparator + jythonLib + " -cp \"" +
@@ -211,8 +211,15 @@ public class TestEngine {
 	 * @return the formatted path.
 	 */
 	private static String formatPathString(String pathToFormat) {
+		//remove first and/or last character is their are ;
+		if(  pathToFormat.startsWith(File.pathSeparator) ) {
+			pathToFormat = pathToFormat.substring(1);
+		}
+		if(  pathToFormat.endsWith(File.pathSeparator) ) {
+			pathToFormat = pathToFormat.substring(0,pathToFormat.length() -1);
+		}
 		pathToFormat = pathToFormat.replaceAll(File.pathSeparator, "\"" + File.pathSeparator + "\"");
-		if (pathToFormat.indexOf(File.pathSeparator) > -1) {
+		if (pathToFormat.indexOf(File.pathSeparator) > 0) {
 			if ( !pathToFormat.startsWith("\"")) {
 				pathToFormat = "\"" + pathToFormat;
 			}
