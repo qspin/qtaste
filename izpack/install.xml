@@ -16,7 +16,7 @@
     -->
     <info>
         <appname>QTaste</appname>
-        <appversion>1.0</appversion>
+        <appversion>1.1</appversion>
         <authors>
             <author name="David Ergo" email="der@qspin.be"/>
             <author name="Vincent Dubois" email="vdu@qspin.be"/>
@@ -125,6 +125,7 @@
 				<include name="packager_*.*"/>
 				<include name="izpack/install.xml"/>
 				<include name="kernel/src/**"/>
+				<include name="kernel/**"/>
 				<include name="testapi-parent/*"/>
 				<include name="testapi-parent/testapi-deploy/**"/>
 				<include name="toolbox/*"/>
