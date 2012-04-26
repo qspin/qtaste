@@ -69,6 +69,14 @@ public class SimulatorImpl implements SimulatorMBean {
 
         // initialize the shutdown hook to terminate application properly
         Runtime.getRuntime().addShutdownHook(new ShutdownHookThread ());
+
+        if (OS.getType() == OS.Type.WINDOWS)
+        {
+           // create hidden window to handle WM_CLOSE messages on Windows to react to taskkill
+           JFrame frame = new JFrame();
+           frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+           frame.pack();
+        }
     }
     
     /**
