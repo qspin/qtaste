@@ -59,11 +59,9 @@ OUTPUT="/dev/null"
 
 
 if [ $# -lt 1 ]; then
- echo "Usage: start_java_process.sh [-jar] <java_main_class_or_jar_and_arguments> -dir <start_command_dir> [-cp <classpath>] [-vmArgs <vm_args>] [-jmxPort <jmx_port>] [-checkAfter <process_start_time>] [-title <title>]"
+ echo "Usage: start_java_process.sh [-jar] <java_main_class_or_jar_and_arguments> -dir <start_command_dir> [-cp <classpath>] [-vmArgs <vm_args>] [-jmxPort <jmx_port>] [-checkAfter <process_start_time>] [-title <title>] [-priority low|belownormal|normal|abovenormal|high|realtime]"
  exit
 fi
-
-echo $JMX_ARGS
 
 if [ "$1" = "-jar" ]
 then

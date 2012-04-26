@@ -9,7 +9,8 @@ if [%1] == [] (
 )
 setlocal
 
-set ARGUMENT="%*"
-cscript "%~dp0\find_java_process.vbs" %ARGUMENT% //NoLogo
+set ARGUMENT=%1
+set ARGUMENT=%ARGUMENT:""=''%
+cscript %~dp0\find_java_process.vbs %ARGUMENT% //NoLogo
 
 endlocal

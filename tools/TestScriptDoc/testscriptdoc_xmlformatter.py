@@ -138,7 +138,7 @@ class PythonDocGenerator:
 
 	def done(self):
 		if self.createTestSuiteDoc:
-			filename = self.testSuiteDir + r'/TestSuite-doc.xml'
+			filename = self.testSuiteDir + r'\TestSuite-doc.xml'
 			print 'Saving', filename
 			tree = et.ElementTree(self.testSuite)
 			file = open(filename, 'wb')
@@ -212,7 +212,7 @@ class PythonDocGenerator:
 
 	# get python libs directories for given test script
 	def _getPythonLibDirectories(self, filename):
-		directory = filename
+		directory = os.path.realpath(filename)
 		testSuitesDirectory = os.path.realpath(self.rootTestSuitesDir)
 		pythonLibDirectories = []
 		while directory != testSuitesDirectory:
@@ -365,6 +365,6 @@ class PythonDocGenerator:
 		rootLevel = rootLogger.getLevel()
 		rootLogger.setLevel(_Level.ERROR)
 		from com.qspin.qtaste.testsuite.impl import JythonTestScript
-		version = JythonTestScript.versionControl.getVersion(os.path.dirname(testScriptFileName))
+		version = StaticConfiguration.VERSION_CONTROL.getSUTVersion(os.path.dirname(testScriptFileName))
 		rootLogger.setLevel(rootLevel)
 		return version
