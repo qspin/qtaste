@@ -34,6 +34,7 @@ public class StaticConfiguration {
 
 	public static final String QTASTE_ROOT = getQTasteRoot();
 	public static final String JYTHON_HOME = QTASTE_ROOT + "/tools/jython/lib";
+	public static final String JYTHON_LIB = JYTHON_HOME + "/Lib";
 	public static final String TEST_SCRIPT_FILENAME = "TestScript.py";
 	public static final String TEST_DATA_FILENAME = "TestData.csv";
 	public static final String TEST_SCRIPT_DOC_TOOLS_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
@@ -53,15 +54,15 @@ public class StaticConfiguration {
 	public static final String CAMPAIGN_DIRECTORY = "TestCampaigns";
 	public static final String CAMPAIGN_FILE_EXTENSION = "xml";
 	public static final String FORMATTER_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
-	public static final String JYTHON_LIB;
 	public static final VersionControlInterface VERSION_CONTROL;
+	public static final String ADDITIONNAL_JYTHON_LIB;
 	static {
 		//JYTHON_LIB initialization
-		String path = JYTHON_HOME + "/Lib";
+		String path = "";
 		if (System.getenv("QTASTE_JYTHON_LIB") != null) {
-			path += File.pathSeparator + System.getenv("QTASTE_JYTHON_LIB");
+			path = System.getenv("QTASTE_JYTHON_LIB");
 		}
-		JYTHON_LIB = path;
+		ADDITIONNAL_JYTHON_LIB = path;
 		
 		//VERSION_CONTROL initialization
 		VersionControlInterface versionControl = new DefaultVersionControl();
@@ -84,15 +85,13 @@ public class StaticConfiguration {
 	private static String getQTasteRoot() {
 		String qtasteRoot = System.getenv("QTASTE_ROOT");
 		if (qtasteRoot == null) {
-			System.err
-					.println("QTASTE_ROOT environment variable is not defined");
+			System.err.println("QTASTE_ROOT environment variable is not defined");
 			System.exit(1);
 		}
 		try {
 			qtasteRoot = new File(qtasteRoot).getCanonicalPath();
 		} catch (IOException e) {
-			System.err.println("QTASTE_ROOT environment variable is invalid ("
-					+ qtasteRoot + ")");
+			System.err.println("QTASTE_ROOT environment variable is invalid (" + qtasteRoot + ")");
 			System.exit(1);
 		}
 		return qtasteRoot;
