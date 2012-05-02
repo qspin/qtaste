@@ -952,6 +952,18 @@ public class TestDataEditor extends JPanel {
             public void focusLost( FocusEvent e )
             {  
             }
+            
+            protected void fireEditingStopped()
+            {
+               if (isModified)
+               {
+                  super.fireEditingStopped();
+               }
+               else
+               {
+                  super.fireEditingCanceled();
+               }
+            }
 
         public void keyTyped(KeyEvent e) {
             
@@ -970,16 +982,35 @@ public class TestDataEditor extends JPanel {
                             }
                             return;
                         }
-                        if ((e.getKeyCode() == KeyEvent.VK_S) && (e.isControlDown())) {
-                            // validate the cell
-                            stopCellEditing();
-                            save();
-                            return;
+                        if (e.isControlDown()) {
+                           if (e.getKeyCode() == KeyEvent.VK_S) {
+                               // validate the cell
+                               stopCellEditing();
+                               save();
+                               return;
+                           } else if (e.getKeyCode() == KeyEvent.VK_C) {
+                              // copy
+                              // don't set modified
+                              return;
+                           }
                         }
                         if ((e.getKeyCode() != KeyEvent.VK_TAB) &&
+                            (e.getKeyCode() != KeyEvent.VK_CONTROL) &&
                             (e.getKeyCode() != KeyEvent.VK_ALT) &&
+                            (e.getKeyCode() != KeyEvent.VK_ALT_GRAPH) &&
                             (e.getKeyCode() != KeyEvent.VK_SHIFT) &&
+                            (e.getKeyCode() != KeyEvent.VK_CAPS_LOCK) &&
                             (e.getKeyCode() != KeyEvent.VK_ENTER) &&
+                            (e.getKeyCode() != KeyEvent.VK_LEFT) &&
+                            (e.getKeyCode() != KeyEvent.VK_RIGHT) &&
+                            (e.getKeyCode() != KeyEvent.VK_HOME) &&
+                            (e.getKeyCode() != KeyEvent.VK_END) &&
+                            (e.getKeyCode() != KeyEvent.VK_PAGE_UP) &&
+                            (e.getKeyCode() != KeyEvent.VK_PAGE_DOWN) &&
+                            (e.getKeyCode() != KeyEvent.VK_NUM_LOCK) &&
+                            (e.getKeyCode() != KeyEvent.VK_SCROLL_LOCK) &&
+                            (e.getKeyCode() != KeyEvent.VK_PRINTSCREEN) &&
+                            (e.getKeyCode() != KeyEvent.VK_PAUSE) &&
                             (e.getKeyCode() != KeyEvent.VK_ESCAPE)
                             )
                         {

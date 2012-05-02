@@ -6,7 +6,9 @@ TEMPFILE=`mktemp` || exit 1
 rsh $* | tee $TEMPFILE || (rm $TEMPFILE; exit 1)
 RESULT=`tail -n 1 $TEMPFILE`
 rm $TEMPFILE
-if [ "$RESULT" = "SUCCESS" ]; then 
+echo $RESULT > result.txt
+if [ "$RESULT" = "SUCCESS" ] 
+then 
 	exit 0 
 else	
 	exit -1

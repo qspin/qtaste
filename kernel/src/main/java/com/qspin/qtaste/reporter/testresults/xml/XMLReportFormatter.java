@@ -53,13 +53,13 @@ public class XMLReportFormatter extends XMLFormatter {
     private static final String RESULTS_FILE_NAME_FORMAT = "log-results-" + FILE_NAME_DATE_FORMAT + ".xml";
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private String testSuiteDir;
+	private static String outputDir;
     private String fileName;
     private Date date;
     private TestSuite currentTestSuite;
     private static String template;
     private static String rowTemplate;
     private static String rowStepsTemplate;
-    private static String outputDir;
 
     static {
         TestEngineConfiguration config = TestEngineConfiguration.getInstance();

@@ -1,33 +1,20 @@
 #!/bin/bash
 
-# stop a Java process and wait for its end
+# kill a Java process
 # usage: stop_java_process <main_class_and_args> 
 
-JAVA_MAIN_AND_ARGS=$1
-JAVA_MAIN_AND_ARGS_NO_MULTISPACES=`echo $1 | sed 's/  */ \+/g'`
+echo "Stopping $1"
 
-PID=`pgrep -f "^java .*$JAVA_MAIN_AND_ARGS_NO_MULTISPACES\$"`
+INFO=$(ps -fu $USER | grep "$1" | grep -v "grep" | grep -v "stop_java_process")
 
-if [ -n "$PID" ]; then
-   # terminate the process gracefully
-   echo Terminating java program \"$JAVA_MAIN_AND_ARGS\"...
-   kill $PID 2>/dev/null
+set -- $INFO
 
-   # wait max 5 seconds for the process to shutdown
-   COUNT=50
-   while kill -0 $PID 2>/dev/null && [ $COUNT -gt 0 ]; do 
-      sleep 0.1
-      let COUNT=$COUNT-1
-   done
+PID=$2
 
-   # check if process has shutdown
-   if kill -0 $PID 2>/dev/null; then
-      echo Couldn\'t terminate java program \"$JAVA_MAIN_AND_ARGS\" gracefully
-      # kill the process forcefully
-      echo Killing java program \"$JAVA_MAIN_AND_ARGS\" forcefully...
-      kill -9 $PID 2>/dev/null
-   fi
+if [ -z $PID ]; then
+   echo "Java process not found"
+else
+   echo $PID
+   kill $PID
+   sleep 5s
 fi
-
-echo Java program \"$JAVA_MAIN_AND_ARGS\" is stopped
-

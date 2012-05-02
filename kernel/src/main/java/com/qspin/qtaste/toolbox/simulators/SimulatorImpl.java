@@ -28,6 +28,9 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.python.core.Py;
@@ -38,6 +41,7 @@ import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.OS;
 import com.qspin.qtaste.util.PythonHelper;
 
 /**

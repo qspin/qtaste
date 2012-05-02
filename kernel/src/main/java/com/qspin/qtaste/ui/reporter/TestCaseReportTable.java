@@ -706,9 +706,11 @@ public class TestCaseReportTable {
                     "Campaign name:", JOptionPane.QUESTION_MESSAGE);
             if (newCampaign != null) {
                 // add the new campaign in the list
-                String fileName = StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + newCampaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION;
-                campaign.save(fileName, newCampaign);
-                JOptionPane.showMessageDialog(null, "Campaign file has been saved in " + fileName +  ".", "Information", JOptionPane.INFORMATION_MESSAGE);
+                if (tcPane.getMainPanel().getTestCampaignPanel().addTestCampaign(newCampaign) >= 0) {
+                   String fileName = StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + newCampaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION;
+                   campaign.save(fileName, newCampaign);
+                   JOptionPane.showMessageDialog(null, "Campaign file has been saved in " + fileName +  ".", "Information", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
             
 		}

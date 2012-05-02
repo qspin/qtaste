@@ -93,7 +93,7 @@ public class TestBedConfigurationPanel extends ConfigPanelTemplate {
     /*protected void Apply() {
         
     }
-    /* protected void Save() {
+    protected void Save() {
         try {
             testbedConfig.save();
         } catch (ConfigurationException ex) {

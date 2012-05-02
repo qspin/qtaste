@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -44,6 +45,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -67,16 +69,17 @@ import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
+import com.qspin.qtaste.ui.config.MainConfigFrame;
 import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
 import com.qspin.qtaste.ui.testcasebuilder.TestDesignPanels;
-import com.qspin.qtaste.ui.tools.GridBagLineAdder;
-import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.tools.WrappedToolTipUI;
-import com.qspin.qtaste.ui.util.QSpinTheme;
-import com.qspin.qtaste.ui.widget.FillLabelUI;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-
+import com.qspin.qtaste.ui.tools.WrappedToolTipUI;
+import com.qspin.qtaste.ui.tools.GridBagLineAdder;
+import com.qspin.qtaste.ui.util.QSpinTheme;
+import com.qspin.qtaste.ui.tools.ResourceManager;
+import com.qspin.qtaste.ui.widget.FillLabelUI;
 
 /**
  *
@@ -97,6 +100,7 @@ public class MainPanel extends JFrame {
     private ConfigInfoPanel mHeaderPanel;
     private JTabbedPane mTreeTabsPanel;
     private TestCasePane mTestCasePanel;
+    private TestCampaignMainPanel mTestCampaignPanel;
     
     public MainPanel(String testSuiteDir, int numberLoops, boolean loopsInHour) {
         super();
@@ -165,6 +169,10 @@ public class MainPanel extends JFrame {
         return mHeaderPanel;
     }
     
+    public TestCampaignMainPanel getTestCampaignPanel() {
+        return mTestCampaignPanel;
+    }
+    
     public void genUI() {
         try {
             getContentPane().setLayout(new BorderLayout());
@@ -176,6 +184,7 @@ public class MainPanel extends JFrame {
             JPanel center = new JPanel(new GridBagLayout());
             ImageIcon topLeftLogo = ResourceManager.getInstance().getImageIcon("main/qspin");
             JLabel iconlabel = new JLabel(topLeftLogo);
+
             mHeaderPanel = new ConfigInfoPanel(this);
             mHeaderPanel.init();
 
@@ -185,6 +194,7 @@ public class MainPanel extends JFrame {
             sep.setUI(new FillLabelUI(ResourceManager.getInstance().getLightColor()));
             centeradder.setWeight(1.0f, 0.0f);
             centeradder.add(mHeaderPanel);
+
             // prepare the right panels containg the main information:
             // the right pane is selected through the tabbed pane:
             //    - Test cases: management of test cases and test suites
@@ -196,8 +206,9 @@ public class MainPanel extends JFrame {
             final TestDesignPanels testDesignPanel = new TestDesignPanels();
             rightPanels.add(mTestCasePanel, "Test Cases");
             rightPanels.add(testDesignPanel, "Test Design");
-            TestCampaignMainPanel campaignPanel = new TestCampaignMainPanel();
-            rightPanels.add(campaignPanel, "Test Campaign");
+
+            mTestCampaignPanel = new TestCampaignMainPanel(this);
+            rightPanels.add(mTestCampaignPanel, "Test Campaign");
 
             final TestCaseInteractivePanel testInterractivePanel = new TestCaseInteractivePanel();
             rightPanels.add(testInterractivePanel, "Interactive");
@@ -210,11 +221,12 @@ public class MainPanel extends JFrame {
             mTreeTabsPanel.addTab("Test Cases", sp2);
             
             // add tree view for test campaign definition
-            com.qspin.qtaste.ui.testcampaign.TestCaseTree mtct = new com.qspin.qtaste.ui.testcampaign.TestCaseTree(campaignPanel.getTreeTable());
+            com.qspin.qtaste.ui.testcampaign.TestCaseTree mtct = new com.qspin.qtaste.ui.testcampaign.TestCaseTree(mTestCampaignPanel.getTreeTable());
             JScrollPane sp3 = new JScrollPane(mtct);
             mTreeTabsPanel.addTab("Test Campaign", sp3);
             
             genMenu(tct);
+
             // add another tab contain used for Interactive mode
             TestAPIDocsTree jInteractive = new TestAPIDocsTree(testInterractivePanel);
             JScrollPane spInter = new JScrollPane(jInteractive);
@@ -233,7 +245,7 @@ public class MainPanel extends JFrame {
                     rcl.show(rightPanels, componentName);
                 }
             });
-            campaignPanel.addTestCampaignActionListener(new ActionListener() {
+            mTestCampaignPanel.addTestCampaignActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
                     if (e.getID()== TestCampaignMainPanel.RUN_ID) {
@@ -252,6 +264,7 @@ public class MainPanel extends JFrame {
                     }
                 }
             });
+
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mTreeTabsPanel, rightPanels);
             splitPane.setDividerSize(4);
             GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
@@ -274,6 +287,7 @@ public class MainPanel extends JFrame {
                     }
                 }
             });
+            
             topanel.add(iconlabel, BorderLayout.WEST);
             topanel.add(center);
 
@@ -290,6 +304,7 @@ public class MainPanel extends JFrame {
             }
             setVisible(true);
         //treeTabs.setMinimumSize(new Dimension(100, this.HEIGHT));
+
         } catch (Exception e) {
             logger.fatal(e);
             e.printStackTrace();
@@ -302,6 +317,75 @@ public class MainPanel extends JFrame {
     protected void genMenu(final TestCaseTree tct) {
         final JFrame owner = this;
         JMenuBar menuBar = new JMenuBar();
+        JMenu tools = new JMenu("Tools");
+        tools.setMnemonic(KeyEvent.VK_T);
+
+        // Tools|Config menu item
+        JMenuItem config = new JMenuItem("Config", KeyEvent.VK_D);
+        config.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                //ATEConfigEditPanel configPanel = new  ATEConfigEditPanel(null);
+                //configPanel.setVisible(true);
+                MainConfigFrame configFrame = new MainConfigFrame();
+                configFrame.launch();
+                configFrame.addWindowListener(new WindowListener() {
+
+                    public void windowOpened(WindowEvent e) {
+                    }
+
+                    public void windowClosing(WindowEvent e) {
+                    }
+
+                    public void windowClosed(WindowEvent e) {
+                        // refresh the Configuration information display
+                        refreshParams();
+                    }
+
+                    public void windowIconified(WindowEvent e) {
+                    }
+
+                    public void windowDeiconified(WindowEvent e) {
+                    }
+
+                    public void windowActivated(WindowEvent e) {
+                    }
+
+                    public void windowDeactivated(WindowEvent e) {
+                    }
+                });
+
+            }
+        });
+        tools.add(config);
+
+        // Tools|delete results menu item
+        JMenuItem deleteResults = new JMenuItem("Delete Results", KeyEvent.VK_D);
+        final MainPanel ui = this;
+        deleteResults.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                String baseDir = TestEngineConfiguration.getInstance().getString("reporting.generated_report_path");
+                new File(baseDir, baseDir);
+                // TO DO : delete really the files
+                JOptionPane.showMessageDialog(ui, "Results have been deleted");
+
+            }
+        });
+        tools.add(deleteResults);
+        
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem importTestSuites = new JMenuItem("Import TestSuites");
+        importTestSuites.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+               //
+            	mTestCasePanel.importTestSuites();
+            	
+            }
+        });
+        fileMenu.add(importTestSuites);
+        
         JMenu help = new JMenu("Help");
         help.setMnemonic(KeyEvent.VK_H);
         JMenuItem about = new JMenuItem("About", KeyEvent.VK_A);
@@ -322,12 +406,14 @@ public class MainPanel extends JFrame {
         });
         help.add(ateUserManuel);
         
+        //menuBar.add(tools); // not to be used at this time!!!!!!!!!
+        //menuBar.add(fileMenu);
         menuBar.add(help);
         setJMenuBar(menuBar);
     }
 
     private static void showUsage() {
-        System.err.println("Usage: <command> [-testsuite testsuiteDirectory] [-testbed configFileName.xml] [-engine engineFileName.xml]");
+        System.err.println("Usage: <command> [-testsuite testsuiteDirectory] [-testbed configFileName.xml] [-engine engineFileName.xml] [-sutversion <sut_version_identifier>]");
         TestEngine.shutdown();
         System.exit(1);
     }
@@ -344,7 +430,7 @@ public class MainPanel extends JFrame {
       		logger.info("QTaste testAPI version: " + StaticConfiguration.VERSION_CONTROL.getTestApiVersion(""));
 
           	// handle optional config file name
-            if ((args.length != 0) && (args.length != 2) && (args.length != 4) && (args.length != 6)) {
+            if ((args.length != 0) && (args.length != 2) && (args.length != 4) && (args.length != 6) && (args.length != 8)) {
                 showUsage();
             }
 
@@ -354,6 +440,7 @@ public class MainPanel extends JFrame {
             String testSuiteDir = null;
             int numberLoops = 1;
             boolean loopsInHours = false;
+            String sutVersion = null;
 
             for (int i = 0; i < args.length; i = i + 2) {
                 if (args[i].equals("-testsuite")) {
@@ -399,6 +486,10 @@ public class MainPanel extends JFrame {
                             }
                         }
                     }
+                } else if (args[i].equals("-sutversion") && (i + 1 < args.length)) {
+                    logger.info("Using " + args[i + 1] + " as sutversion");
+                    TestBedConfiguration.setSUTVersion(args[i + 1]);
+                    i += 2;
                 } else {
                     // no more arguments
                     i++;

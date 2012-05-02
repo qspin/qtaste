@@ -34,6 +34,7 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -57,10 +58,12 @@ import com.qspin.qtaste.reporter.testresults.TestResultImpl;
 import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.tools.FileMask;
-import com.qspin.qtaste.ui.tools.GridBagLineAdder;
+
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-
+import com.qspin.qtaste.ui.tools.GridBagLineAdder;
+import com.qspin.qtaste.ui.tools.ResourceManager;
+import com.qspin.qtaste.ui.widget.BarLabelUI;
 
 /**
  *
@@ -70,9 +73,9 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */{
 
     private MainPanel parent;
-    private JLabel mTestSuiteLabel = new JLabel();
-    private JLabel mTestResultsLabel = new JLabel();
-    private JLabel mTestReportingFormat = new JLabel();
+    private JLabel mTestSuiteLabel = new LabelWithBar();
+    private JLabel mTestResultsLabel = new LabelWithBar();
+    private JLabel mTestReportingFormat = new LabelWithBar();
     private JComboBox mTestbedList = new JComboBox();
     private JButton m_startTestbed = new JButton("(Re)start testbed");
     private JButton m_stopTestbed = new JButton("Stop testbed");
@@ -83,6 +86,19 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     private String testSuiteName;
     private boolean isStartingOrStoppingTestbed;
     private static final Logger logger = Log4jLoggerFactory.getLogger(ConfigInfoPanel.class);
+
+    /**
+     * Label with hyphen.
+     */
+    private class LabelWithBar extends JLabel {
+
+        public LabelWithBar() {
+            super("-");
+
+            setUI(new BarLabelUI());
+            setFont(ResourceManager.getInstance().getStandardFontLight());
+        }
+    }
 
     public ConfigInfoPanel(MainPanel parent) {
         super(new BorderLayout());
@@ -176,6 +192,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
 
         //2d column - 2d row
+        adder.add(new LabelWithBar());
 
         //3d column - 2d row
         m_ignoreControlScript.addActionListener(new ActionListener() {
@@ -202,6 +219,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         adder.add(mTestReportingFormat);
        
         //2d column - 3d row
+        adder.add(new LabelWithBar());
         
 
         //3d column - 3d row
@@ -212,6 +230,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
                 isStartingOrStoppingTestbed = true;
                 setControlTestbedButtonsEnabled();
                 parent.getTestCasePanel().showTestcaseResultsTab();
+                TestBedConfiguration.setSUTVersion(getSUTVersion());
                 new SUTStartStopThread("start").start();
             }
         });
@@ -225,6 +244,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
                 isStartingOrStoppingTestbed = true;
                 setControlTestbedButtonsEnabled();
                 parent.getTestCasePanel().showTestcaseResultsTab();
+                TestBedConfiguration.setSUTVersion(getSUTVersion());
                 new SUTStartStopThread("stop").start();
             }
         });
@@ -374,13 +394,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             }
 
             public void actionPerformed(ActionEvent e) {
-               // try {
-                    parent.getTestCasePanel().loadTestCaseSource(testbedConfig.getFile(), true, false);
-                    parent.getTreeTabsPanel().setSelectedIndex(0);
-//                    Desktop.getDesktop().edit(testbedConfig.getFile());
-             //   } catch (IOException ex) {
-                 //   logger.error("Error while calling Desktop edit on " + testbedConfig.getFile());
-                //}
+                 parent.getTestCasePanel().loadTestCaseSource(testbedConfig.getFile(), true, false);
+                 parent.getTreeTabsPanel().setSelectedIndex(0);
             }
 
             @Override
@@ -395,16 +410,11 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             }
 
             public void actionPerformed(ActionEvent e) {
-                //try {
-                    testbedConfig = TestBedConfiguration.getInstance();
-                    String scriptFilename = testbedConfig.getControlScriptFileName();
-                    // use the internal editor
-                    parent.getTestCasePanel().loadTestCaseSource(new File(scriptFilename), true, false);
-                    parent.getTreeTabsPanel().setSelectedIndex(0);
-//                    Desktop.getDesktop().edit(new File(scriptFilename));
-               // } catch (IOException ex) {
-                 //   logger.error("Error while calling Desktop edit on " + testbedConfig.getFile()+ ":" + ex.getMessage());
-                //}
+                 testbedConfig = TestBedConfiguration.getInstance();
+                 String scriptFilename = testbedConfig.getControlScriptFileName();
+                 // use the internal editor
+                 parent.getTestCasePanel().loadTestCaseSource(new File(scriptFilename), true, false);
+                 parent.getTreeTabsPanel().setSelectedIndex(0);
             }
 
             @Override

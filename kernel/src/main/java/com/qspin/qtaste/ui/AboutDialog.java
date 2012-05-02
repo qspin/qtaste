@@ -45,7 +45,7 @@ import javax.swing.border.Border;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.Version;
+import com.qspin.qtaste.util.versioncontrol.VersionControlInterface;
 
 public class AboutDialog extends JDialog {
 
@@ -83,16 +83,10 @@ public class AboutDialog extends JDialog {
             thirdProductsLink.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(kernelReleaseNotesLabel);
         }
-        try {
-            Version testAPIVersionInstance = (Version) Class.forName("com.qspin.qtaste.testapi.Version").getMethod("getInstance").invoke(null);
-            JLabel testapiVersionLabel = new JLabel("<html><b>TestAPI version:</b> " + testAPIVersionInstance.getFullVersion() + "</html>");
+            VersionControlInterface versionControl = StaticConfiguration.VERSION_CONTROL;
+            JLabel testapiVersionLabel = new JLabel("<html><b>TestAPI version:</b> " + versionControl.getTestApiVersion("") + "</html>");
             testapiVersionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(testapiVersionLabel);
-        } catch (Exception e) {
-            JLabel testapiVersionLabel = new JLabel("<html><b>TestAPI version:</b> none</html>");
-            testapiVersionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
-            b.add(testapiVersionLabel);
-        }
 
         JLabel javaVersionVendor = new JLabel("<html><br><b>Java version:</b> " + System.getProperty("java.version") +
                            " from " + System.getProperty("java.vendor") + "</html>");

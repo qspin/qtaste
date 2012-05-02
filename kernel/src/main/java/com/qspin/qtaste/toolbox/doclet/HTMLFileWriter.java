@@ -243,7 +243,13 @@ public class HTMLFileWriter {
                 if (throwsTags.length > 0) {
                     mOut.println("<DT><B>Throws:</B></DT>");
                     for (ThrowsTag throwsTag: throwsTags) {
-                        mOut.println("<DD><CODE>" + throwsTag.exceptionName() + "</CODE> - ");
+                        String exceptionName = throwsTag.exceptionName();
+                        // remove "com.qspin.qtaste.testsuite." prefix if any
+                        if (exceptionName.startsWith("com.qspin.qtaste.testsuite."))
+                        {
+                           exceptionName = exceptionName.substring("com.qspin.qtaste.testsuite.".length());
+                        }
+                        mOut.println("<DD><CODE>" + exceptionName + "</CODE> - ");
                         printInlineTags(throwsTag.inlineTags(), classDoc);
                         mOut.println("</DD>");
                     }

@@ -31,7 +31,6 @@ import com.qspin.qtaste.ui.reporter.TestCaseReportTable;
 import com.qspin.qtaste.ui.reporter.TestCaseReporter;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 
-
 /**
  *
  * @author vdubois
@@ -44,7 +43,7 @@ public class InteractiveLogPanel extends JPanel {
    protected TestCaseInteractivePanel tcInteractivePanel;
    private TestCaseReportTable tcTable;
 
-    protected ImageIcon passedImg, failedImg, runningImg, naImg;
+    protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
     
     public InteractiveLogPanel() {
     	this(null);
@@ -64,6 +63,7 @@ public class InteractiveLogPanel extends JPanel {
         failedImg= ResourceManager.getInstance().getImageIcon("icons/failed");
         runningImg= ResourceManager.getInstance().getImageIcon("icons/running_32");
         naImg= ResourceManager.getInstance().getImageIcon("icons/na");
+        snapShotImg= ResourceManager.getInstance().getImageIcon("icons/snapshot");
     }
 
     public void startTestCaseListener()

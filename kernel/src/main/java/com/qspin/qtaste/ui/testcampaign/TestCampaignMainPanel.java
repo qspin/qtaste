@@ -47,13 +47,14 @@ import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.GUIConfiguration;
+import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.kernel.campaign.Campaign;
 import com.qspin.qtaste.kernel.campaign.CampaignManager;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.treetable.JTreeTable;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.ThreadManager;
-
+import com.qspin.qtaste.ui.MainPanel;
 
 /**
  *
@@ -62,6 +63,7 @@ import com.qspin.qtaste.util.ThreadManager;
 @SuppressWarnings("serial")
 public class TestCampaignMainPanel extends JPanel {
 
+    private MainPanel parent;
     private JTreeTable treeTable;
     private JComboBox metaCampaignComboBox = new JComboBox();
     private JButton addNewMetaCampaignButton = new JButton("Add");
@@ -77,8 +79,9 @@ public class TestCampaignMainPanel extends JPanel {
     public static final String STOPPED_CMD = "STOPPED";
     private static final String LAST_SELECTED_CAMPAIGN_PROPERTY = "last_selected_campaign";
 
-    public TestCampaignMainPanel() {
+    public TestCampaignMainPanel(MainPanel parent) {
         super(new BorderLayout());
+        this.parent = parent;
         genUI();
     }
 
@@ -104,14 +107,9 @@ public class TestCampaignMainPanel extends JPanel {
                 String newCampaign = JOptionPane.showInputDialog(null,
                         "New campaign creation:",
                         "Campaign name:", JOptionPane.QUESTION_MESSAGE);
-                if (newCampaign != null) {
-                    // add the new campaign in the list
-                    MetaCampaignFile newItem = new MetaCampaignFile(newCampaign);
-                    metaCampaignComboBox.addItem(newItem);
-                    // update the tree with empty values
-                    treeTable.removeAll();
-                    // select it 
-                    metaCampaignComboBox.setSelectedIndex(metaCampaignComboBox.getItemCount() - 1);
+                if (newCampaign != null && newCampaign.length() > 0) {
+                    int index = addTestCampaign(newCampaign);
+                    metaCampaignComboBox.setSelectedIndex(index);
                 }
             }
         });
@@ -175,6 +173,9 @@ public class TestCampaignMainPanel extends JPanel {
                         treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
                     }
 
+                    // set SUT version
+                    TestBedConfiguration.setSUTVersion(parent.getSUTVersion());
+                    
                     testExecutionHandler = new CampaignExecutionThread(selectedCampaign.getFileName());
                     Thread t = new Thread(testExecutionHandler);
                     t.start();
@@ -232,6 +233,36 @@ public class TestCampaignMainPanel extends JPanel {
 
     public void removeTestCampaignActionListener(ActionListener listener) {
         campaignActionListeners.remove(listener);
+    }
+
+    /**
+     * Add a test campaign to the test campaigns combobox.
+     * 
+     * @param campaignName test campaign name
+     * @return index of the added test campaign in the combobox or -1 if not added
+     */
+    public int addTestCampaign(String campaignName) {
+      // add the campaign in the list, keeping sorted order
+        int index = 0;
+        while (index < metaCampaignComboBox.getItemCount()) {
+            String elementCampaignName = ((MetaCampaignFile)metaCampaignComboBox.getItemAt(index)).getCampaignName();
+            int comparison = campaignName.compareToIgnoreCase(elementCampaignName);
+            if (comparison < 0) {
+                // insert new campaign at this index
+                break;
+            } else if (comparison == 0) {
+                // error: a campaign with the same name already exists
+                JOptionPane.showMessageDialog(null, "A test campaign named '" + elementCampaignName + "' already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                index = -1;
+                break;
+            }
+            index++;
+        }
+        if (index >= 0) {
+            MetaCampaignFile newItem = new MetaCampaignFile(campaignName);
+            metaCampaignComboBox.insertItemAt(newItem, index);
+        }
+        return index;
     }
 
     public class GenerateDocumentActionListener extends AbstractAction {

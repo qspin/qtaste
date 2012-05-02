@@ -26,6 +26,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.io.CSVFile;
 import com.qspin.qtaste.util.FileUtilities;
@@ -169,5 +174,65 @@ public class FileNode extends TreeNodeImpl{
 
         }
         return false;
+    }
+    
+    /**
+     * Loads the children, caching the results in the children ivar.
+     */
+    public Object[] getChildren() {
+	if (children != null) {
+	    return children; 
+	}
+        if (this.isTestcaseDir()) {
+            try {
+                ArrayList<TestDataNode> arrayDataNode = new ArrayList<TestDataNode>();
+                // load test case data
+                File tcDataFile = this.getPythonTestScript().getTestcaseData();
+                if (tcDataFile== null) return new Object[]{};
+                CSVFile csvDataFile = new CSVFile(tcDataFile);
+                List<LinkedHashMap<String, String>> data = csvDataFile.getCSVDataSet();
+                Iterator<LinkedHashMap<String, String>> it = data.iterator();
+                int rowIndex = 1;
+                while (it.hasNext()) {
+                    LinkedHashMap<String, String> dataRow = it.next();
+                    if (dataRow.containsKey("COMMENT")) {
+                        String comment = dataRow.get("COMMENT");
+                        arrayDataNode.add(new TestDataNode(tcDataFile, comment,rowIndex));
+                    }
+                    rowIndex++;
+                }
+                children = arrayDataNode.toArray();
+                return  children;
+            } catch (FileNotFoundException ex) {
+                // no data found
+            } catch (IOException ex) {
+                // unable to read data file
+                
+            }
+            
+          
+        }
+        else {
+            ArrayList<FileNode> arrayFileNode = new ArrayList<FileNode>();
+            if (f.isDirectory()) {
+                File[] childFiles = FileUtilities.listSortedFiles(f);
+                for (int i = 0; i < childFiles.length; i++) {
+                    FileNode fn = new FileNode(childFiles[i], childFiles[i].getName(), m_TestSuiteDir);
+                    boolean nodeToAdd = fn.isTestcaseDir();
+                    if (!fn.isTestcaseDir()) {
+                        // go recursilvely to its child and check if it must be added
+                        nodeToAdd = checkIfDirectoryContainsTestScriptFile(childFiles[i]);
+                    }
+                    if (nodeToAdd && !childFiles[i].isHidden()) {
+
+                        arrayFileNode.add(fn);
+                    }
+                }
+            }
+            children = arrayFileNode.toArray();
+        }
+        if (children==null)
+            return new Object[]{};
+        else return children; 
     }
 }

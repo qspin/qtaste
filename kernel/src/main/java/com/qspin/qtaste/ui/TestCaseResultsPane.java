@@ -44,6 +44,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.reporter.campaign.CampaignReportManager;
 import com.qspin.qtaste.testsuite.TestScript;
 import com.qspin.qtaste.ui.jedit.NonWrappingTextPane;

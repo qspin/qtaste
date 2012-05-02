@@ -62,6 +62,7 @@ import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
@@ -121,6 +122,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     private static final String SOURCE = "Test Case Source";
     private static final String RESULTS = "Results";
     private static final String LOGS = "Logs";
+    private static final String SHOW_LOGS_TAB = "show_logs_tab";
     public static final int DOC_INDEX = 0;
     public static final int SOURCE_INDEX = 1;
     public static final int RESULTS_INDEX = 2;
@@ -138,6 +140,13 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     public TestCasePane(MainPanel parent) {
         super(new BorderLayout());
+        
+        GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
+        boolean showLogsTab = guiConfiguration.getBoolean(SHOW_LOGS_TAB, true);
+        if (showLogsTab) {
+           tcLogsPane = new Log4jPanel();           
+        }
+        
         this.parent = parent;
         resultsPane = new TestCaseResultsPane(this);
         breakPointEventHandler = TestScriptBreakpointHandler.getInstance();
@@ -199,7 +208,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         tcDocsPane.setEditable(false);
         tcDocsPane.setContentType("text/html");
 
-        TextAreaAppender.addTextArea(tcLogsPane);
+        if (tcLogsPane != null) {
+           TextAreaAppender.addTextArea(tcLogsPane);
+        }
         tcDocsPane.setEditorKit(new HTMLEditorKit());
         tcDocsPane.addHyperlinkListener(new HyperlinkListener() {
 
@@ -268,8 +279,10 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         saveButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                // Check script syntax is also saving the script
-                checkScriptsSyntax();
+                if (checkScriptsSyntax()) // display dialog when syntax is correct    
+                {
+                    JOptionPane.showMessageDialog(null, "Syntax checked successfully");
+                }
             }
         });
 
@@ -387,8 +400,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         tabbedPane.add(SOURCE, sourcePanel);
 
         tabbedPane.add(RESULTS, resultsPane);
-
-        tabbedPane.add(LOGS, tcLogsPane);
+        if (tcLogsPane != null) {
+           tabbedPane.add(LOGS, tcLogsPane);
+        }
 
         add(tabbedPane, BorderLayout.CENTER);
     }
@@ -407,26 +421,26 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     public boolean checkScriptsSyntax() {
         // check the test scripts syntax
-        // save and check syntax of the documents        
-
-        int i = editorTabbedPane.getSelectedIndex();
-        NonWrappingTextPane tabTextPane = getTextPane(i);
-        if (tabTextPane != null) {
-            if (tabTextPane.isModified()) {
-                tabTextPane.save();
-            }
-            // check only opened Python files
-            if (tabTextPane.getFileName().endsWith(".py")) {
-                ScriptCheckSyntaxValidator scriptCheckSyntaxValidator =
-                        new ScriptCheckSyntaxValidator(tabTextPane.getFileName(), tabTextPane.getText());
-                if (!scriptCheckSyntaxValidator.check()) {
-                    return false;
+        // save and check syntax of the documents
+        for (int i = 0; i < editorTabbedPane.getTabCount(); i++) {
+            NonWrappingTextPane tabTextPane = getTextPane(i);
+            if (tabTextPane != null) {
+                if (tabTextPane.isModified()) {
+                    tabTextPane.save();
+                }
+                // check only opened Python files
+                if (tabTextPane.getFileName().endsWith(".py")) {
+	                ScriptCheckSyntaxValidator scriptCheckSyntaxValidator =
+	                        new ScriptCheckSyntaxValidator(tabTextPane.getFileName(), tabTextPane.getText());
+	                if (!scriptCheckSyntaxValidator.check()) {
+	                	return false;
+	                }
                 }
             }
-        }
-        TestDataEditor tabDataPane = this.getTestDataPane(i);
-        if (tabDataPane != null && tabDataPane.isModified()) {
-            tabDataPane.save();
+            TestDataEditor tabDataPane = this.getTestDataPane(i);
+            if (tabDataPane != null && tabDataPane.isModified()) {
+                tabDataPane.save();
+            }
         }
 
         // check the module imported found in pythonlib
@@ -632,7 +646,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             tcTextFound = true;
         }
         int textPaneTabIndex = getTextPane(fileName);
-        if (textPaneTabIndex != -1) {
+        if (textPaneTabIndex != -1 && (!isTestScript || textPaneTabIndex == 0)) {
             editorTabbedPane.setSelectedIndex(textPaneTabIndex);
             tabbedPane.setSelectedIndex(TestCasePane.SOURCE_INDEX);
             return getTextPane(textPaneTabIndex);
@@ -841,6 +855,10 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         return tcSourcePanel;
     }
 
+    public MainPanel getMainPanel() {
+        return parent;
+    }
+    
     public String getCurrentSelectedTestsuite() {
         return currentSelectedTestsuite;
     }

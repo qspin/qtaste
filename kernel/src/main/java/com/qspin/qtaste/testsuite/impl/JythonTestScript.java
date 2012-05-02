@@ -761,7 +761,8 @@ public class JythonTestScript extends TestScript implements Executable {
                     int lineNumber = stackElement.getLineNumber();
 
                     if ((fileName.equals("embedded_jython") &&
-                            (methodName.equals("f$0") || methodName.startsWith("doStep$") || methodName.startsWith("doSteps$") || methodName.startsWith("_TestAPIWrapper__invoke$") || methodName.startsWith("user_line$"))) || fileName.endsWith(File.separator + "bdb.py")) {
+                            (methodName.equals("f$0") || methodName.startsWith("doStep$") || methodName.startsWith("doSteps$") || methodName.startsWith("_TestAPIWrapper__invoke$") || methodName.startsWith("user_line$")))
+							|| fileName.endsWith(File.separator + "bdb.py")) {
                         // this is the execfile() call in the embedded jython
                         // or the doStep() or doSteps function
                         // or a private __invokexxx() method of the __TestAPIWrapper class

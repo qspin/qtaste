@@ -82,14 +82,22 @@ public class Version {
     public String getVersion() {
         return getManifestAttributeValue(new Attributes.Name("Kernel-Implementation-Version"));
     }
-
+	
+	/**
+     * Gets build number string.
+     * @return the build number string, stored in the "Implementation-Build" attribute of the manifest
+     */
+	public String getBuildNumber() {
+		return getManifestAttributeValue(new Attributes.Name("Implementation-Build"));
+	}
+	
     /**
      * Gets full version string, is equivalent to getVersion.
      * @return the full version string
      */
-    public String getFullVersion() {
-        return getVersion();
-    }
+	public String getFullVersion() {
+		return getVersion() + " (build " + getBuildNumber() + ")";
+	}
 
     /**
      * Gets the value of an attribute of the manifest.

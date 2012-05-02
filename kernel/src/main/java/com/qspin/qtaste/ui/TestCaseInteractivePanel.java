@@ -85,7 +85,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
     private JButton mStopInteractiveTestButton;
     private InteractiveLogPanel mLogPanel = new InteractiveLogPanel(this);
     protected Map<String, Integer> testCases = new HashMap<String, Integer>();
-    protected ImageIcon passedImg, failedImg, runningImg, naImg;
+    protected ImageIcon passedImg,  failedImg,  runningImg,  snapShotImg,  naImg;
     private boolean isStarted = false;
     private TestDataInteractive m_testData;
     private int commandId = 0;
@@ -95,6 +95,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
         failedImg = ResourceManager.getInstance().getImageIcon("icons/failed");
         runningImg = ResourceManager.getInstance().getImageIcon("icons/running_32");
         naImg = ResourceManager.getInstance().getImageIcon("icons/na");
+        snapShotImg = ResourceManager.getInstance().getImageIcon("icons/snapshot");
     }
 
     public void init() {

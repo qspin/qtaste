@@ -86,13 +86,13 @@ public class HTMLReportFormatter extends HTMLFormatter {
     private static final String INDEX_FILE_NAME = "index.html";
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private String testSuiteName;
+    private static String outputDir;
     private TestSuite currentTestSuite;
     private boolean generateDataColumn, generateStepsRows;
     private boolean reportStopStartSUT, reportReStartSUT;
 
     private static TestEngineConfiguration config = TestEngineConfiguration.getInstance();
     private static HashMap<String, String> templates = new HashMap<String, String>();
-    private static String outputDir;
 
     static {
         try {
@@ -202,7 +202,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     continue;
                 }
 
-// If no Test Data (Start/Restart/...), no summary line
+				// If no Test Data (Start/Restart/...), no summary line
                 if (tr.getTestData() == null) {
                     continue;
                 }
@@ -260,8 +260,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
                 namesValues.add("###DATA_NAME###", entry.getKey());
                 namesValues.add("###DATA_VALUE###", StringEscapeUtils.escapeHtml(entry.getValue()));
-                dataColumnContent +=
-                        getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
+                dataColumnContent += getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
             }
 
         } catch (Exception e) {
@@ -309,10 +308,9 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     }
 
                     substituteAndWriteFile(templateContents.get("testScript"), namesValues);
-                    previousTestSuiteName =
-                            testcaseName;
+                    previousTestSuiteName = testcaseName;
                 }
-// TODO: Convert String into HTML String
+				// TODO: Convert String into HTML String
 
                 NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
                 String testId = tr.getId();
@@ -404,7 +402,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     namesValues.add("###DATA_CONTENT###", testDataContent);
                 }
 
-// add step entries if any
+				// add step entries if any
                 String stepsContent = "";
 
                 Collection<StepResult> steps = tr.getStepResults();
@@ -463,8 +461,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
 
                         stepsNamesValues.add("###STEP_TIME###", String.valueOf(Math.round(step.getElpasedTime())));
-                        stepsContent +=
-                                getSubstitutedTemplateContent(templateContents.get("rowSteps"), stepsNamesValues);
+                        stepsContent += getSubstitutedTemplateContent(templateContents.get("rowSteps"), stepsNamesValues);
                     }
 
                     namesValues.add("###STEPS###", stepsContent); // default
@@ -486,8 +483,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
     @Override
     public void refresh() {
         boolean firstTime = (generationDate == null);
-        generationDate =
-                new Date();
+        generationDate = new Date();
         super.refresh();
 
         try {
@@ -557,8 +553,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
             plot.setURLGenerator(new StandardPieURLGenerator("pie_chart_detail.jsp"));
             plot.setLabelGenerator(new TestSectiontLabelPieGenerator());
-            chart =
-                    new JFreeChart("Test summary", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+            chart = new JFreeChart("Test summary", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         } else {
             chart = ChartFactory.createPieChart(
                     "Test summary", // chart title
@@ -581,13 +576,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
         if (!tempTestSummaryFile.renameTo(testSummaryFile)) {
             logger.error("Couldn't rename test summary file " + tempTestSummaryFile + " into " + testSummaryFile);
         }
-
-
-
-
-
-
-
     }
 
     /**
