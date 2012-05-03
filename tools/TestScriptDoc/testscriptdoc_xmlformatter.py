@@ -138,7 +138,7 @@ class PythonDocGenerator:
 
 	def done(self):
 		if self.createTestSuiteDoc:
-			filename = self.testSuiteDir + r'/TestSuite-doc.xml'
+			filename = self.testSuiteDir + r'\TestSuite-doc.xml'
 			print 'Saving', filename
 			tree = et.ElementTree(self.testSuite)
 			file = open(filename, 'wb')
@@ -212,7 +212,7 @@ class PythonDocGenerator:
 
 	# get python libs directories for given test script
 	def _getPythonLibDirectories(self, filename):
-		directory = filename
+		directory = os.path.realpath(filename)
 		testSuitesDirectory = os.path.realpath(self.rootTestSuitesDir)
 		pythonLibDirectories = []
 		while directory != testSuitesDirectory:

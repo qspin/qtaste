@@ -66,8 +66,8 @@ public class GenerateTestStepsModulesDoc {
 
     public static void displayUsage() {
         System.out.println("Usage: generate-TestStepsModuleDoc [TestStepsModuleFile dir| BaseDirectory]");
-	System.out.println("Default base directory is TestSuites");
-	System.exit(1);
+        System.out.println("Default base directory is TestSuites");
+        System.exit(1);
     }
 
     public static void main(String [] args) {

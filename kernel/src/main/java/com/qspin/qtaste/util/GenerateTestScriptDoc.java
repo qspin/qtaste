@@ -50,6 +50,7 @@ public class GenerateTestScriptDoc {
         GenerateTestStepsModulesDoc.generate("TestSuites");
         
         try {
+            System.out.println("Generate test script documentation.");
             StringWriter output = new StringWriter();
             Properties properties = new Properties();
             properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
@@ -59,8 +60,9 @@ public class GenerateTestScriptDoc {
             interp.setOut(output);
             interp.setErr(output);
             interp.cleanup();
+            //java -cp %JYTHON_HOME%/jython.jar;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter %TEST_SCRIPT% -V
             //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
-            String args = "import sys;sys.argv[1:]= ['-f', '-s', '-Otestscriptdoc_xmlformatter', '" + testScriptFile.getAbsolutePath() + "']";
+            String args = "import sys;sys.argv[1:]= ['-V', '-f', '-s', '-Otestscriptdoc_xmlformatter', '" + testScriptFile.getAbsolutePath() + "']";
             interp.exec(args);
             interp.exec("__name__ = '__main__'");
             interp.exec("execfile(r'" + StaticConfiguration.JYTHON_HOME + "/Lib/pythondoc.py')");

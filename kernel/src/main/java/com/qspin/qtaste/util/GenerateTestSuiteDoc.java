@@ -20,14 +20,18 @@
 
 package com.qspin.qtaste.util;
 
-import com.qspin.qtaste.config.StaticConfiguration;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+
 import org.python.util.PythonInterpreter;
+
+import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
  * This class is responsible for generating the documentation of a testsuite
@@ -47,13 +51,7 @@ public class GenerateTestSuiteDoc {
             System.out.println("Directory " + testSuiteDir + " doesn't exist");
             System.exit(2);
         }
-       
-        FileFilter fileFilter = new FileFilter() {
-            public boolean accept(File file) {
-                return file.isFile() && file.getName().equals("TestScript.py");
-            }
-        };
-        File [] testScripts = testSuiteDirFile.listFiles(fileFilter);
+        File [] testScripts = searchTestScripts(testSuiteDirFile);
         if (testScripts.length == 0) {
             System.out.println("No testscript found!");
             System.exit(3);
@@ -61,8 +59,9 @@ public class GenerateTestSuiteDoc {
 
         StringBuffer testScriptsList = new StringBuffer();
         boolean firstTime = true;
+        System.out.println("list of testscripts: " );
         for (File f : testScripts) {
-            System.out.println("list of testscripts: " + f.toString() );
+            System.out.println("\t" + f.toString() );
             if (firstTime)
                 testScriptsList.append("'" + f.getAbsolutePath() + "'");
             else
@@ -147,11 +146,42 @@ public class GenerateTestSuiteDoc {
         }
 
     }
+    
     public static void main(String [] args) {
         if (args.length != 1)
             displayUsage();
         else {
             generate(args[0]);
+        }
+    }
+    
+    /**
+     * Searches for a TestScript.py in the Test Script Directory. If none found try to search in the contained directories.
+     * @param aTestScriptDirectory the directory to scan.
+     * @return the found TestScript.py files.
+     */
+    private static File[] searchTestScripts(File aTestScriptDirectory) {
+    	List<File> files = new ArrayList<File>();
+        FileFilter fileFilter = new FileFilter() {
+            public boolean accept(File file) {
+                return file.isFile() && file.getName().equals("TestScript.py");
+            }
+        };
+        File [] testScripts = aTestScriptDirectory.listFiles(fileFilter);
+        if ( testScripts.length != 0 ) {
+        	return testScripts;
+        } else {
+            FileFilter directoryFilter = new FileFilter() {
+                public boolean accept(File file) {
+                    return !file.isFile();
+                }
+            };
+        	for (File dir : aTestScriptDirectory.listFiles(directoryFilter) ) {
+        		for ( File f : searchTestScripts(dir) ) {
+        			files.add(f);
+        		}
+        	}
+        	return files.toArray(new File[0]);
         }
     }
 }

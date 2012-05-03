@@ -19,14 +19,18 @@
 
 package com.qspin.qtaste.util;
 
-import com.qspin.qtaste.config.StaticConfiguration;
 import java.io.StringWriter;
 import java.util.Properties;
-import javax.xml.parsers.DocumentBuilderFactory;
+
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
  * This class is responsible for generating a HTML document containing all the documentation of the tests included in a specified test campaign file
@@ -69,8 +73,8 @@ public class GenerateTestCampaignDoc {
                 interp.cleanup();
                 interp = null;
 
-            } catch (Exception e) {
-                System.err.println("Exception occurs executing PythonInterpreter:" + e.getMessage());
+            } catch (PyException e) {
+                System.err.println("Exception occurs executing PythonInterpreter:" + e.value);
             }
         } catch (Exception e) {
             System.out.println("Error occurs parsing file " + campaignFile + " " + e.getMessage());
