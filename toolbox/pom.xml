@@ -10,7 +10,6 @@
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
-   <groupId>com.qspin.qtaste</groupId>
    <artifactId>qtaste-toolbox</artifactId>
    <packaging>pom</packaging>
    <name>QTaste Toolbox Components</name>

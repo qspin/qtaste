@@ -12,7 +12,6 @@
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
-   <groupId>com.qspin.qtaste</groupId>
    <artifactId>qtaste-testapi-parent</artifactId>
    <packaging>pom</packaging>
    <name>QTaste TestAPI project parent</name>
@@ -30,7 +29,8 @@
                <artifactId>maven-assembly-plugin</artifactId>
                <configuration>
                   <descriptors>
-                     <descriptor>deploy.xml</descriptor>
+                     <descriptor>assemblies/deploy.xml</descriptor>
+		     <!-- deploy.xml available from qtaste-testapi-deploy-->
                   </descriptors>
                   <archive>
                      <manifest>
@@ -94,24 +94,6 @@
                     <silent>true</silent>
                   </configuration>
                 </execution>
-
-                <!--<execution>
-                  <id>unpack-dependencies-src</id>
-                  <phase>package</phase>
-                  <goals>
-                    <goal>unpack-dependencies</goal>
-                  </goals>
-                  <configuration>
-                    <classifier>sources</classifier>
-                    <excludeTransitive>true</excludeTransitive>
-                    <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
-                    <overWriteReleases>false</overWriteReleases>
-                    <overWriteSnapshots>true</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
-                    <silent>true</silent>
-                  </configuration>
-                </execution>-->
-
 
                 <!-- unpack QTaste simulators doc in target/TestAPI-doc/simulators -->
                 <execution>
