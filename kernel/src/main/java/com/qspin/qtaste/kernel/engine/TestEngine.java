@@ -141,6 +141,7 @@ public class TestEngine {
 				final String jythonHome = StaticConfiguration.JYTHON_HOME;
 				final String jythonJar = jythonHome + "/jython.jar";
 				final String jythonLib = formatPathString(StaticConfiguration.JYTHON_LIB.trim());
+				final String additionnalJythonLib = formatPathString(StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim());
 				final String classPath = formatPathString(System.getProperties().getProperty("java.class.path", "").trim());
 				// final String javaHome = System.getenv("JAVA_HOME");
 				// if (javaHome!=null)
@@ -148,7 +149,7 @@ public class TestEngine {
 				// 					   jythonHome + "/../build/jython-engine.jar"+ // File.pathSeparator + jythonJar + File.pathSeparator +
 				// 					   classPath + "\" org.python.util.jython";
 				// else
-				scriptEngine = "java -Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + jythonLib 
+				scriptEngine = "java -Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + jythonLib  + File.pathSeparator + additionnalJythonLib
 									+ " -cp \"" + jythonHome + "/../build/jython-engine.jar" + "\"" + File.pathSeparator 
 									+ "\"" + jythonJar + "\"" + File.pathSeparator + classPath + " org.python.util.jython";
 			}
@@ -162,6 +163,7 @@ public class TestEngine {
 						System.getenv());
 				env.put("TESTBED", config.getFileName());
 				String startOrStopFullCommand = (scriptEngine != null ? scriptEngine + " " + startOrStopCommand : startOrStopCommand);
+				logger.trace("FULL COMMAND : '" + startOrStopFullCommand + "'");
 				int exitCode = sutStartStopExec.exec(startOrStopFullCommand, env, output);
 				if (exitCode == 0) {
 					logger.info("SUT " + (start ? "started" : "stopped"));
