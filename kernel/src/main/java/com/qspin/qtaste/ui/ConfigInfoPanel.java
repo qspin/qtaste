@@ -168,8 +168,6 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         adder.setWeight(0.0, 0.0);
 
         //2d column - 1st row
-
-        //3d column - 1st row
         adder.add(new JLabel("Testbed config:"));
         // set the combobox as read only (not possible to modify the testbed from GUI at this time
         UIManager.put("ComboBox.disabledForeground", Color.BLACK);
@@ -192,9 +190,6 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
 
         //2d column - 2d row
-        adder.add(new LabelWithBar());
-
-        //3d column - 2d row
         m_ignoreControlScript.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -219,10 +214,6 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         adder.add(mTestReportingFormat);
        
         //2d column - 3d row
-        adder.add(new LabelWithBar());
-        
-
-        //3d column - 3d row
         // add a button to manually start the testbed
         m_startTestbed.addActionListener(new ActionListener() {
 
