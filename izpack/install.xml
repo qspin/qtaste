@@ -46,7 +46,8 @@
     -->
     <resources>
         <res id="LicencePanel.licence" src="../COPYING.LESSER"/>
-<!--		<res id="InfoPanel.info" src="../Readme.txt"/>-->
+        <!-- Set the default installation directory shown in the TargetPanel -->
+        <res id="TargetPanel.dir.windows" src="TargetDir.txt" />
     </resources>
 
     <!-- 
@@ -55,7 +56,6 @@
     -->
     <panels>
         <panel classname="HelloPanel"/>
-<!--        <panel classname="InfoPanel"/>-->
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
         <panel classname="TreePacksPanel"/>
@@ -86,36 +86,10 @@
 				<exclude name="conf/gui.xml"/>
 				<exclude name="tools/jython/lib/cachedir"/>
 				<exclude name="**/*.class"/>
-<!--				<exclude name="tools/TestScriptDoc/*.class"/>-->
 				<exclude name="**/Thumbs.db"/>
 				<exclude name="**/*.pdf"/>
 				<exclude name="*ate2qtaste*"/>
 			</fileset>
-<!--            <file src="../Readme.txt" targetdir="$INSTALL_PATH"/>-->
-        </pack>
-        <pack name="Demo" required="no" preselected="yes">
-			<depends packname="Kernel"/>
-			<description>The demo files - examples</description>
-            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
-				<include name="demo/testapi/target/TestAPI-doc/**"/>
-				<include name="demo/pywinauto-0.3.8/**"/>
-				<include name="demo/COPYING"/>
-				<include name="demo/COPYING.LESSER"/>
-				<include name="demo/Testbeds/**"/>
-				<include name="demo/TestSuites/**"/>
-				<include name="demo/selenium-server.jar"/>
-				<include name="demo/startUI.*"/>
-				<include name="demo/TestCampaigns/**"/>
-				<exclude name="**/Thumbs.db"/>
-				<exclude name="*ate2qtaste*"/>
-			</fileset>
-        </pack>
-        <pack name="Docs" required="no" preselected="yes">
-            <description>The documentation files in pdf format.</description>
-            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="doc/*.pdf"/>
-            </fileset>
         </pack>
         <pack name="The kernel Sources" required="no" preselected="yes" parent="Kernel">
 			<description>The source code of the kernel</description>
@@ -135,22 +109,54 @@
 				<exclude name="tools/jython/lib/cachedir"/>
 				<exclude name="tools/jython/lib/**/*.class"/>
 				<exclude name="tools/TestScriptDoc/*.class"/>
-				<exclude name="**/target"/>
+				<exclude name="**/target/**"/>
 				<exclude name="**/Thumbs.db"/>
 				<exclude name="*ate2qtaste*"/>
+                		<!-- excludes eclipse files -->
+				<exclude name="**/.settings/**"/>
+				<exclude name="**/.*"/>
+			</fileset>
+        </pack>
+        <pack name="Demo" required="no" preselected="yes">
+			<description>The demonstrations</description>
+        </pack>
+        <pack name="The demo Binaries" required="no" preselected="yes" parent="Demo">
+			<description>The demo files - examples</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
+				<include name="demo/testapi/target/TestAPI-doc/**"/>
+				<include name="demo/pywinauto-0.3.8/**"/>
+				<include name="demo/COPYING"/>
+				<include name="demo/COPYING.LESSER"/>
+				<include name="demo/Testbeds/**"/>
+				<include name="demo/TestSuites/**"/>
+				<include name="demo/selenium-server.jar"/>
+				<include name="demo/startUI.*"/>
+				<include name="demo/TestCampaigns/**"/>
+				<exclude name="**/Thumbs.db"/>
+				<exclude name="*ate2qtaste*"/>
+				<exclude name="**/*.class"/>
+                		<!-- excludes eclipse files -->
+				<exclude name="**/.settings"/>
+				<exclude name="**/.*"/>
 			</fileset>
         </pack>
         <pack name="The demo Sources" required="no" preselected="yes" parent="Demo">
-<!--            <depends packname="Demo"/>-->
 			<description>The source code of the demo</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 				<include name="demo/testapi/src/**"/>
 				<include name="demo/testapi/pom.xml"/>
 				<include name="demo/build.*"/>
-				<exclude name="**/target"/>
+				<exclude name="**/target/**"/>
 				<exclude name="**/Thumbs.db"/>
 				<exclude name="*ate2qtaste*"/>
 			</fileset>
+        </pack>
+        <pack name="Docs" required="no" preselected="yes">
+            <description>The documentation files in pdf format.</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+				<include name="doc/*.pdf"/>
+            </fileset>
         </pack>
     </packs>
 </installation>
