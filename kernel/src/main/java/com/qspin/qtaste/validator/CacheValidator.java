@@ -78,8 +78,8 @@ public class CacheValidator extends Validator {
 
         //TODO: change this temporary hack by making a SmartSocketsCache ?
         TestBedConfiguration config = TestBedConfiguration.getInstance();
-        if (config == null || !config.containsKey("probe_manager.SmartSocketsProbe")) {
-            throw new RuntimeException("Error: SmartSocketsProbe is not configured in testbed!");
+        if (config == null || !config.containsKey("probe_manager.probe")) {
+            throw new RuntimeException("Error: Probe is not configured in testbed!");
         }
     }
 
