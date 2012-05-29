@@ -46,6 +46,7 @@ def testCalculator():
 	pressDigitButtons(number2)
 	calculator.pressButton("Calculator", "_=")
 	text = calculator.getText("Calculator", "Edit").strip()
+    text = text.replace(".",",")
 	expectedResult = testData.getValue("RESULT")
 	if text != expectedResult:
 		testAPI.stopTest(Status.FAIL, "Expected to get " + expectedResult + " but got " + text)
