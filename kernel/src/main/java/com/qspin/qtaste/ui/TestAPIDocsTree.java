@@ -32,7 +32,10 @@ import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
 import java.awt.dnd.DropTarget;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.JTree;
@@ -48,10 +51,10 @@ import javax.swing.tree.TreeSelectionModel;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.kernel.testapi.ComponentFactory;
 import com.qspin.qtaste.kernel.testapi.ComponentsLoader;
+import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponentFactory;
 import com.qspin.qtaste.kernel.testapi.SingletonComponentFactory;
 import com.qspin.qtaste.kernel.testapi.TestAPI;
 import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
-import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponentFactory;
 import com.qspin.qtaste.ui.testcasebuilder.TestDesignPanels;
 
 
@@ -129,7 +132,8 @@ public class TestAPIDocsTree extends JTree implements DragSourceListener, DragGe
                         DefaultMutableTreeNode node = new DefaultMutableTreeNode(componentName, true);
                         rootNode.add(node);
                         // get all methods from this component
-                        Collection<String> methods = testAPI.getRegisteredVerbs(componentName);
+                        List<String> methods = new ArrayList<String>(testAPI.getRegisteredVerbs(componentName));
+                        Collections.sort(methods);
                         for (String methodName: methods) {
                             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(methodName, true);
                             node.add(childNode);
