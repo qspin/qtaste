@@ -110,6 +110,8 @@ public abstract class TestSuite implements TestReportListener {
                 } else {
                     executionSuccess = executeOnce(debug);
                 }
+            } else {
+            	executionSuccess = false;
             }
             this.abortedByUser = TestEngine.isStartStopSUTCancelled;
             if (initializeTestEngine) {

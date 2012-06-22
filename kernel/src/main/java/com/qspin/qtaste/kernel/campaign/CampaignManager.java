@@ -54,6 +54,7 @@ public class CampaignManager implements TestReportListener {
     private Campaign currentCampaign;
     private String currentTestBed;
     private TestSuite currentTestSuite;
+    private boolean campaignResult;
 
     private CampaignManager() {
     }
@@ -149,7 +150,8 @@ public class CampaignManager implements TestReportListener {
      * Executes a campaign
      * @param campaign the campaign to execute.
      */
-    public void execute(Campaign campaign) {
+    public boolean execute(Campaign campaign) {
+    	campaignResult = true;
         currentCampaign = campaign;
         createReport();
 
@@ -159,7 +161,7 @@ public class CampaignManager implements TestReportListener {
             TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
             currentTestSuite = new MetaTestSuite(testSuiteName, run.getTestsuites());
             currentTestSuite.addTestReportListener(this);
-            TestEngine.execute(currentTestSuite);
+            campaignResult &= TestEngine.execute(currentTestSuite);
             boolean abortedByUser = currentTestSuite.isAbortedByUser();
             currentTestSuite.removeTestReportListener(this);
             currentTestSuite = null;
@@ -168,6 +170,7 @@ public class CampaignManager implements TestReportListener {
             }
         }
         CampaignReportManager.getInstance().stopReport();
+        return campaignResult;
     }
 
     private void updateReport() {

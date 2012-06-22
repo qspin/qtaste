@@ -76,12 +76,14 @@ public class CampaignLauncher {
         PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
 
         CampaignManager campaignManager = CampaignManager.getInstance();
+        boolean executionResult = false;
 
         try {
             Campaign campaign = campaignManager.readFile(args[0]);
-            campaignManager.execute(campaign);
+            executionResult = campaignManager.execute(campaign);
         } finally {
             shutdown();
         }
+        System.exit(executionResult?0:1);
     }
 }

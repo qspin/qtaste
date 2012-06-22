@@ -333,6 +333,7 @@ public class TestEngine {
 	}
 
 	public static void main(String[] args) {
+		boolean executionResult = false;
 		try {
 			// Log4j Configuration
 			PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
@@ -424,9 +425,10 @@ public class TestEngine {
 
 			TestSuite testSuite = new DirectoryTestSuite(testSuiteDir);
 			testSuite.setExecutionLoops(numberLoops, loopsInHours);
-			execute(testSuite);
+			executionResult = execute(testSuite);
 		} finally {
 			shutdown();
 		}
+        System.exit(executionResult?0:1);
 	}
 }
