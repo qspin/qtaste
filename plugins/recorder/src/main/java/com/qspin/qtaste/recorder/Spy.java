@@ -253,7 +253,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 				eventClassName = eventClassName.substring(eventClassName.lastIndexOf(".") + 1);
 			}
 			builder.append("</source>" + LINE_BREAK);
-			builder.append("<type>" + eventClassName + "</type>" + LINE_BREAK);
+			builder.append("<type>DocumentEvent	</type>" + LINE_BREAK);
 			builder.append("<data>" + LINE_BREAK);
 			builder.append("<type>" + pEvent.getType() + "</type>" + LINE_BREAK);
 			builder.append("<offset>" + pEvent.getOffset() + "</offset>" + LINE_BREAK);

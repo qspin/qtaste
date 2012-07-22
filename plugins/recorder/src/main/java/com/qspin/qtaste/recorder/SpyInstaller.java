@@ -25,7 +25,7 @@ public class SpyInstaller implements Runnable, ContainerListener {
 	public void run() {
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new FileWriter("/home/dev/spyRepport.xml"));
+			writer = new BufferedWriter(new FileWriter("spyRepport.xml"));
 			writer.write("<events>\n");
 			while (true) 
 			{
