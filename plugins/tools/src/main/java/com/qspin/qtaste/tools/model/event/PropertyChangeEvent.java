@@ -1,4 +1,4 @@
-package com.qspin.qtaste.tools.model;
+package com.qspin.qtaste.tools.model.event;
 
 public class PropertyChangeEvent extends Event {
 
@@ -6,7 +6,7 @@ public class PropertyChangeEvent extends Event {
 	{
 		super();
 		setComponentName( pEvent.getComponentName());
-		setSourceClass(pEvent.getSouceClass());
+		setSourceClass(pEvent.getSourceClass());
 		setTimeStamp(pEvent.getTimeStamp());
 		setType(pEvent.getType());
 	}

@@ -1,11 +1,11 @@
-package com.qspin.qtaste.tools.model;
+package com.qspin.qtaste.tools.model.event;
 
 public class DocumentEvent extends Event {
 
 	public DocumentEvent(Event pEvent) {
 		super();
 		setComponentName(pEvent.getComponentName());
-		setSourceClass(pEvent.getSouceClass());
+		setSourceClass(pEvent.getSourceClass());
 		setTimeStamp(pEvent.getTimeStamp());
 		setType(pEvent.getType());
 	}
@@ -22,7 +22,7 @@ public class DocumentEvent extends Event {
 	public void setOffset(int offset) {
 		this.mOffset = offset;
 	}
-	public int getLength() {
+	public int getLenght() {
 		return mLength;
 	}
 	public void setLength(int length) {

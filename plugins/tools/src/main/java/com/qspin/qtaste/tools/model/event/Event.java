@@ -1,4 +1,4 @@
-package com.qspin.qtaste.tools.model;
+package com.qspin.qtaste.tools.model.event;
 
 public class Event {
 
@@ -20,7 +20,7 @@ public class Event {
 	{ 
 		mComponentName = pComponentName;
 	}
-	public String getSouceClass()
+	public String getSourceClass()
 	{ 
 		return mSourceClass;
 	}

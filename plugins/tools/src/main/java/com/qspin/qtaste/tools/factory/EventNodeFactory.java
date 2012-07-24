@@ -3,9 +3,15 @@ package com.qspin.qtaste.tools.factory;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-import com.qspin.qtaste.tools.model.DocumentEvent;
-import com.qspin.qtaste.tools.model.Event;
-import com.qspin.qtaste.tools.model.PropertyChangeEvent;
+import com.qspin.qtaste.tools.model.event.ActionEvent;
+import com.qspin.qtaste.tools.model.event.DocumentEvent;
+import com.qspin.qtaste.tools.model.event.Event;
+import com.qspin.qtaste.tools.model.event.ItemEvent;
+import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
+import com.qspin.qtaste.tools.model.node.ActionEventNode;
+import com.qspin.qtaste.tools.model.node.DocumentEventNode;
+import com.qspin.qtaste.tools.model.node.ItemEventNode;
+import com.qspin.qtaste.tools.model.node.PropertyChangeEventNode;
 
 public final class EventNodeFactory {
 
@@ -41,13 +47,21 @@ public final class EventNodeFactory {
 		}
 		value = new DefaultMutableTreeNode("Timestamp: " + pEvent.getTimeStamp());
 		node.insert(value, node.getChildCount());
-		value = new DefaultMutableTreeNode("Class: " + pEvent.getSouceClass());
+		value = new DefaultMutableTreeNode("Class: " + pEvent.getSourceClass());
 		node.insert(value, node.getChildCount());
 		
 		if ( pEvent instanceof PropertyChangeEvent ) {
-			createNode((PropertyChangeEvent)pEvent, node);
+			return new PropertyChangeEventNode((PropertyChangeEvent)pEvent);
+//			createNode((PropertyChangeEvent)pEvent, node);
 		} else if ( pEvent instanceof DocumentEvent ) {
-			createNode((DocumentEvent)pEvent, node);
+			return new DocumentEventNode((DocumentEvent)pEvent);
+//			createNode((DocumentEvent)pEvent, node);
+		} else if ( pEvent instanceof ActionEvent ) {
+			return new ActionEventNode((ActionEvent)pEvent);
+//			createNode((ActionEvent)pEvent, node);
+		} else if ( pEvent instanceof ItemEvent ) {
+			return new ItemEventNode((ItemEvent)pEvent);
+//			createNode((ItemEvent)pEvent, node);
 		}
 		
 		return node;
@@ -96,12 +110,57 @@ public final class EventNodeFactory {
 		data.insert(property, data.getChildCount());
 
 		property = new DefaultMutableTreeNode("Length");
-		value = new DefaultMutableTreeNode(pEvent.getLength());
+		value = new DefaultMutableTreeNode(pEvent.getLenght());
 		property.insert(value, property.getChildCount());
 		data.insert(property, data.getChildCount());
 
 		property = new DefaultMutableTreeNode("Change");
 		value = new DefaultMutableTreeNode(pEvent.getChange());
+		property.insert(value, property.getChildCount());
+		data.insert(property, data.getChildCount());
+		
+		return pNode;
+	}
+	
+	private MutableTreeNode createNode(ActionEvent pEvent, MutableTreeNode pNode) {
+		MutableTreeNode data = new DefaultMutableTreeNode("Data");
+		pNode.insert(data, pNode.getChildCount());
+
+		MutableTreeNode property;
+		MutableTreeNode value;
+
+		property = new DefaultMutableTreeNode("ID");
+		value = new DefaultMutableTreeNode(pEvent.getId());
+		property.insert(value, property.getChildCount());
+		data.insert(property, data.getChildCount());
+
+		property = new DefaultMutableTreeNode("action command");
+		value = new DefaultMutableTreeNode(pEvent.getActionCommand());
+		property.insert(value, property.getChildCount());
+		data.insert(property, data.getChildCount());
+		
+		return pNode;
+	}
+	
+	private MutableTreeNode createNode(ItemEvent pEvent, MutableTreeNode pNode) {
+		MutableTreeNode data = new DefaultMutableTreeNode("Data");
+		pNode.insert(data, pNode.getChildCount());
+
+		MutableTreeNode property;
+		MutableTreeNode value;
+
+		property = new DefaultMutableTreeNode("ID");
+		value = new DefaultMutableTreeNode(pEvent.getId());
+		property.insert(value, property.getChildCount());
+		data.insert(property, data.getChildCount());
+
+		property = new DefaultMutableTreeNode("State");
+		value = new DefaultMutableTreeNode(pEvent.getState());
+		property.insert(value, property.getChildCount());
+		data.insert(property, data.getChildCount());
+
+		property = new DefaultMutableTreeNode("Selected item");
+		value = new DefaultMutableTreeNode(pEvent.getSelectedItem());
 		property.insert(value, property.getChildCount());
 		data.insert(property, data.getChildCount());
 		

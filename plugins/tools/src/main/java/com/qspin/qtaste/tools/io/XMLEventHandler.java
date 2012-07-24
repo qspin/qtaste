@@ -8,203 +8,215 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.qspin.qtaste.tools.model.DocumentEvent;
-import com.qspin.qtaste.tools.model.Event;
-import com.qspin.qtaste.tools.model.PropertyChangeEvent;
+import com.qspin.qtaste.tools.model.event.ActionEvent;
+import com.qspin.qtaste.tools.model.event.DocumentEvent;
+import com.qspin.qtaste.tools.model.event.Event;
+import com.qspin.qtaste.tools.model.event.ItemEvent;
+import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
 
-public class XMLEventHandler extends DefaultHandler{
-		//résultats de notre parsing
-		private List<Event> mDecodedEvent;
-		private Event mEvent;
-		//flags nous indiquant la position du parseur
-		private boolean inEvents;
-		 private boolean inEvent;
-		  private boolean inSource;
-			private boolean inName;
-			private boolean inClass;
-		  private boolean inData;
-		    //PropertyChangeEvent
-		  	private boolean inPropertyName;
-		  	private boolean inOldValue;
-		  	private boolean inNewValue;
-		  private boolean inType;
-		  private boolean inTime;
-		//buffer nous permettant de récupérer les données 
-		private StringBuffer mBuffer;
+public class XMLEventHandler extends DefaultHandler {
+	// resultats de notre parsing
+	private List<Event> mDecodedEvent;
+	private Event mEvent;
+	// flags nous indiquant la position du parseur
+	private boolean inEvents;
+	private boolean inEvent;
+	private boolean inSource;
+	private boolean inData;
+	// buffer nous permettant de recuperer les donnees
+	private StringBuffer mBuffer;
 
-		// simple constructeur
-		public XMLEventHandler(){
-			super();
-		}
-		
-		//détection d'ouverture de balise
-		public void startElement(String uri, String localName,
-				String qName, Attributes attributes) throws SAXException{
-			if(qName.equals(ROOT_ELEMENT)){
-				mDecodedEvent = new LinkedList<Event>();
-				inEvents = true;
-			}else if(qName.equals(EVENT_ELEMENT)){
-				mEvent = new Event();
-				inEvent = true;
-			}else if(qName.equals(SRC_ELEMENT)){
-				inSource = true;
-			}else if(qName.equals(DATA_ELEMENT)){
-				inData = true;
-			}else {
+	// simple constructeur
+	public XMLEventHandler() {
+		super();
+		inData = false;
+	}
+
+	// detection d'ouverture de balise
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) throws SAXException {
+		if (qName.equals(ROOT_ELEMENT)) {
+			mDecodedEvent = new LinkedList<Event>();
+			inEvents = true;
+		} else if (qName.equals(EVENT_ELEMENT)) {
+			mEvent = new Event();
+			inEvent = true;
+		} else if (qName.equals(SRC_ELEMENT)) {
+			inSource = true;
+		} else if (qName.equals(DATA_ELEMENT)) {
+			inData = true;
+		} else {
+			if (qName.equals(CLASS_ELEMENT) || qName.equals(NAME_ELEMENT)
+					||qName.equals(SELECTED_ITEM) || qName.equals(STATE_CHANGED)
+					|| qName.equals(TYPE_ELEMENT) || qName.equals(TIME_ELEMENT)
+					|| qName.equals(PROPERTY_NAME) || qName.equals(OLD_VALUE)
+					|| qName.equals(NEW_VALUE) || qName.equals(LENGTH)
+					|| qName.equals(OFFSET) || qName.equals(CHANGE)
+					|| qName.equals(ID) || qName.equals(ACTION_COMMAND)) {
 				mBuffer = new StringBuffer();
-//				if(qName.equals(CLASS_ELEMENT)){
-//					inClass = true;
-//				}else if(qName.equals(NAME_ELEMENT)){
-//					inName = true;
-//				}else 
-				if(qName.equals(TYPE_ELEMENT) && !inData){
-					inType = true;
-//				}else if(qName.equals(TIME_ELEMENT)){
-//					inTime = true;
-//				}else if(qName.equals(PROPERTY_NAME)){
-//					inPropertyName = true;
-//				}else if(qName.equals(NEW_VALUE)){
-//					inNewValue = true;
-//				}else if(qName.equals(OLD_VALUE)){
-//					inOldValue = true;
-//				}else{
-//					//erreur, on peut lever une exception
-//					LOGGER.warn("Debut de balise "+qName+" inconnue.");
-				}
 			}
 		}
-		//détection fin de balise
-		public void endElement(String uri, String localName, String qName)
-				throws SAXException{
-			if(qName.equals(ROOT_ELEMENT)){
-				inEvents = false;
-			}else if(qName.equals(EVENT_ELEMENT)){
-				mDecodedEvent.add(mEvent);
-				mEvent = null;
-				inEvent = false;
-			}else if(qName.equals(SRC_ELEMENT)){
-				inSource = false;
-			}else if(qName.equals(DATA_ELEMENT)){
-				inSource = false;
-			}else if(qName.equals(NAME_ELEMENT)){
-				mEvent.setComponentName(mBuffer.toString());
-				mBuffer = null;
-				inName = false;
-			}else if(qName.equals(CLASS_ELEMENT)){
-				mEvent.setSourceClass(mBuffer.toString());
-				mBuffer = null;
-				inType = false;
-			}else if(qName.equals(TYPE_ELEMENT) && !inData){
-				mEvent.setType(mBuffer.toString());
-				updateEvent();
-				mBuffer = null;
-				inType = false;
-			}else if(qName.equals(TIME_ELEMENT)){
-				mEvent.setTimeStamp(Long.parseLong(mBuffer.toString()));
-				mBuffer = null;
-				inType = false;
-			}else{
-				if ( inData ) {
-					if ( mEvent instanceof PropertyChangeEvent )
-					{
-						if(qName.equals(PROPERTY_NAME)){
-							((PropertyChangeEvent)mEvent).setPropertyName(mBuffer.toString());
-							mBuffer = null;
-							inPropertyName = false;
-						} else if(qName.equals(OLD_VALUE)){
-							((PropertyChangeEvent)mEvent).setOldValue(mBuffer.toString());
-							mBuffer = null;
-							inOldValue = false;
-						} else if(qName.equals(NEW_VALUE)){
-							((PropertyChangeEvent)mEvent).setNewValue(mBuffer.toString());
-							mBuffer = null;
-							inNewValue = false;
-						}  else {
-							//erreur, on peut lever une exception
-							LOGGER.warn("Fin de balise "+qName+" inconnue.");
-						}
-					} else if ( mEvent instanceof DocumentEvent ) {
-
-						if(qName.equals(TYPE_ELEMENT)){
-							((DocumentEvent)mEvent).setDocumentChangeType(mBuffer.toString());
-							mBuffer = null;
-							inPropertyName = false;
-						} else if(qName.equals(OFFSET)){
-							((DocumentEvent)mEvent).setOffset(Integer.parseInt(mBuffer.toString()));
-							mBuffer = null;
-							inOldValue = false;
-						} else if(qName.equals(LENGTH)){
-							((DocumentEvent)mEvent).setLength(Integer.parseInt(mBuffer.toString()));
-							mBuffer = null;
-							inNewValue = false;
-						} else if(qName.equals(CHANGE)){
-							((DocumentEvent)mEvent).setChange(mBuffer.toString());
-							mBuffer = null;
-							inNewValue = false;
-						} else {
-							//erreur, on peut lever une exception
-							LOGGER.warn("Fin de balise "+qName+" inconnue.");
-						}
-					}
-				} else {
-					//erreur, on peut lever une exception
-					LOGGER.warn("Fin de balise "+qName+" inconnue.");
-				}
-			}          
-		}
-		
-		//détection de caractères
-		public void characters(char[] ch,int start, int length)
-				throws SAXException{
-			String lecture = new String(ch,start,length);
-			if(mBuffer != null) mBuffer.append(lecture);       
-		}
-		
-		//début du parsing
-		public void startDocument() throws SAXException {
-			LOGGER.info("Début du parsing");
-		}
-		
-		//fin du parsing
-		public void endDocument() throws SAXException {
-			LOGGER.info("Fin du parsing");
-//			LOGGER.info("Resultats du parsing");
-//			for(Event p : mDecodedEvent){
-//				LOGGER.info(p);
-//			}
-		}
-		
-		private void updateEvent()
-		{
-			if ( mEvent.getType().equals("PropertyChangeEvent"))
-			{
-				mEvent = new PropertyChangeEvent(mEvent);
-			} else if ( mEvent.getType().equals("DocumentEvent"))
-			{
-				mEvent = new DocumentEvent(mEvent);
-			} 
-		}
-		
-		public List<Event> getDecodedEvent() {
-			return mDecodedEvent;
-		}
-
-		private static final Logger LOGGER = Logger.getLogger(XMLEventHandler.class);
-		private static final String ROOT_ELEMENT = "events";
-		private static final String EVENT_ELEMENT = "event"; 
-		private static final String SRC_ELEMENT = "source"; 
-		private static final String NAME_ELEMENT = "name";
-		private static final String CLASS_ELEMENT = "class";
-		private static final String TYPE_ELEMENT = "type";
-		private static final String DATA_ELEMENT = "data";
-		private static final String TIME_ELEMENT = "time";
-		
-		//FOR PROPERTYCHANGE EVENT
-		private static final String PROPERTY_NAME = "propertyName";
-		private static final String OLD_VALUE = "oldValue";
-		private static final String NEW_VALUE = "newValue";
-		//FOR DOCUMENT EVENT
-		private static final String OFFSET = "offset";
-		private static final String LENGTH = "lenght";
-		private static final String CHANGE = "change";
 	}
+
+	// detection fin de balise
+	public void endElement(String uri, String localName, String qName)
+			throws SAXException {
+		if (qName.equals(ROOT_ELEMENT)) {
+			inEvents = false;
+		} else if (qName.equals(EVENT_ELEMENT)) {
+			System.out.println(mEvent);
+			mDecodedEvent.add(mEvent);
+			mEvent = null;
+			inEvent = false;
+		} else if (qName.equals(SRC_ELEMENT)) {
+			inSource = false;
+		} else if (qName.equals(DATA_ELEMENT)) {
+			inData = false;
+		} else if (qName.equals(NAME_ELEMENT)) {
+			mEvent.setComponentName(mBuffer.toString());
+			mBuffer = null;
+		} else if (qName.equals(CLASS_ELEMENT)) {
+			mEvent.setSourceClass(mBuffer.toString());
+			mBuffer = null;
+		} else if (qName.equals(TYPE_ELEMENT) && !inData) {
+			mEvent.setType(mBuffer.toString());
+			updateEvent();
+			mBuffer = null;
+		} else if (qName.equals(TIME_ELEMENT)) {
+			mEvent.setTimeStamp(Long.parseLong(mBuffer.toString()));
+			mBuffer = null;
+		} else {
+			if (inData) {
+				if (mEvent instanceof PropertyChangeEvent) {
+					fillPropertyChangeEvent((PropertyChangeEvent) mEvent, mBuffer.toString(), qName);
+				} else if (mEvent instanceof DocumentEvent) {
+					fillDocumentEvent((DocumentEvent) mEvent, mBuffer.toString(), qName);
+				} else if (mEvent instanceof ActionEvent) {
+					fillActionEvent((ActionEvent) mEvent, mBuffer.toString(), qName);
+				} else if (mEvent instanceof ItemEvent) {
+					fillItemEvent((ItemEvent) mEvent, mBuffer.toString(), qName);
+				}
+			} else {
+				LOGGER.warn("Fin de balise " + qName + " inconnue.");
+			}
+		}
+	}
+
+	// detection de caracteres
+	public void characters(char[] ch, int start, int length)
+			throws SAXException {
+		String lecture = new String(ch, start, length);
+		if (mBuffer != null)
+			mBuffer.append(lecture);
+	}
+
+	// debut du parsing
+	public void startDocument() throws SAXException {
+		LOGGER.info("Debut du parsing");
+	}
+
+	// fin du parsing
+	public void endDocument() throws SAXException {
+		LOGGER.info("Fin du parsing");
+	}
+
+	private void updateEvent() {
+		if (mEvent.getType().equals("PropertyChangeEvent")) {
+			mEvent = new PropertyChangeEvent(mEvent);
+		} else if (mEvent.getType().endsWith("DocumentEvent")) {
+			mEvent = new DocumentEvent(mEvent);
+			mEvent.setType("DocumentEvent");
+		} else if (mEvent.getType().equals("ActionEvent")) {
+			mEvent = new ActionEvent(mEvent);
+		} else if (mEvent.getType().equals("ItemEvent")) {
+			mEvent = new ItemEvent(mEvent);
+		}
+	}
+	
+	private void fillPropertyChangeEvent(PropertyChangeEvent pEvent, String pValue, String pName)
+	{
+		if (pName.equals(PROPERTY_NAME)) {
+			pEvent.setPropertyName(pValue);
+			mBuffer = null;
+		} else if (pName.equals(OLD_VALUE)) {
+			pEvent.setOldValue(pValue);
+			mBuffer = null;
+		} else if (pName.equals(NEW_VALUE)) {
+			pEvent.setNewValue(pValue);
+			mBuffer = null;
+		}
+	}
+	
+	private void fillActionEvent(ActionEvent pEvent, String pValue, String pName)
+	{
+		if (pName.equals(ID)) {
+			pEvent.setId(pValue);
+			mBuffer = null;
+		} else if (pName.equals(ACTION_COMMAND)) {
+			pEvent.setActionCommand(pValue);
+			mBuffer = null;
+		}
+	}
+
+	private void fillDocumentEvent(DocumentEvent pEvent, String pValue, String pName)
+	{
+		if (pName.equals(TYPE_ELEMENT)) {
+			pEvent.setDocumentChangeType(pValue);
+			mBuffer = null;
+		} else if (pName.equals(OFFSET)) {
+			pEvent.setOffset(Integer.parseInt(pValue));
+			mBuffer = null;
+		} else if (pName.equals(LENGTH)) {
+			pEvent.setLength(Integer.parseInt(pValue));
+			mBuffer = null;
+		} else if (pName.equals(CHANGE)) {
+			pEvent.setChange(pValue);
+			mBuffer = null;
+		}
+	}
+	
+	private void fillItemEvent(ItemEvent pEvent, String pValue, String pName)
+	{
+		if (pName.equals(ID)) {
+			pEvent.setId(pValue);
+			mBuffer = null;
+		} else if (pName.equals(STATE_CHANGED)) {
+			pEvent.setState(pValue);
+			mBuffer = null;
+		} else if (pName.equals(SELECTED_ITEM)) {
+			pEvent.setSelectedItem(pValue);
+			mBuffer = null;
+		}
+	}
+	
+	public List<Event> getDecodedEvent() {
+		return mDecodedEvent;
+	}
+
+	private static final Logger LOGGER = Logger
+			.getLogger(XMLEventHandler.class);
+	private static final String ROOT_ELEMENT = "events";
+	private static final String EVENT_ELEMENT = "event";
+	private static final String SRC_ELEMENT = "source";
+	private static final String NAME_ELEMENT = "name";
+	private static final String CLASS_ELEMENT = "class";
+	private static final String TYPE_ELEMENT = "type";
+	private static final String DATA_ELEMENT = "data";
+	private static final String TIME_ELEMENT = "time";
+
+	// FOR PROPERTYCHANGE EVENT
+	private static final String PROPERTY_NAME = "propertyName";
+	private static final String OLD_VALUE = "oldValue";
+	private static final String NEW_VALUE = "newValue";
+	// FOR DOCUMENT EVENT
+	private static final String OFFSET = "offset";
+	private static final String LENGTH = "length";
+	private static final String CHANGE = "change";
+	// FOR ACTION EVENT
+	private static final String ID = "id";
+	private static final String ACTION_COMMAND = "actionCommand";
+	// FOR ITEM EVENT
+	//private static final String ID = "id";
+	private static final String STATE_CHANGED = "stateChanged";
+	private static final String SELECTED_ITEM = "selectedItem";
+}
