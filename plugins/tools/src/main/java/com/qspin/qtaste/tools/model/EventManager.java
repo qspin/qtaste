@@ -3,6 +3,7 @@ package com.qspin.qtaste.tools.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,15 @@ public class EventManager {
 		firePropertyChange(new PropertyChangeEvent(this, DATA_CHANGE_PROPERTY_NAME, old, pEvents));
 	}
 	
+	public List<Event> getEventsForComponent(String pComponentName)
+	{
+		if ( mComponentNameMap.containsKey(pComponentName) )
+		{
+			return mComponentNameMap.get(pComponentName);
+		}
+		return new ArrayList<Event>();
+	}
+	
 	public void addPropertyChangeListener( PropertyChangeListener pListener)
 	{
 		mListener.add(pListener);
@@ -67,12 +77,16 @@ public class EventManager {
 	
 	public Object[] getComponentNames()
 	{
-		return mComponentNameMap.keySet().toArray();
+		Object[] array = mComponentNameMap.keySet().toArray();;
+		Arrays.sort(array);
+		return array;
 	}
 	
 	public Object[] getEventTypes()
 	{
-		return mEventTypeMap.keySet().toArray();
+		Object[] array = mEventTypeMap.keySet().toArray();;
+		Arrays.sort(array);
+		return array;
 	}
 
 	public void changeComponentName(String pOldName, String pNewName) {

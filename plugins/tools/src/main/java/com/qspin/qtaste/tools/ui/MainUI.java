@@ -1,20 +1,22 @@
 package com.qspin.qtaste.tools.ui;
 
 import static com.qspin.qtaste.tools.ui.UIConstants.COMPONENT_SPACING;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -28,12 +30,13 @@ import org.apache.log4j.Logger;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.qspin.qtaste.tools.action.FactorySelection;
-import com.qspin.qtaste.tools.action.ImportAction;
+import com.qspin.qtaste.tools.action.ConversionTask;
 import com.qspin.qtaste.tools.factory.ComponentTreeFactory;
 import com.qspin.qtaste.tools.factory.EventTreeFactory;
 import com.qspin.qtaste.tools.model.EventManager;
 import com.qspin.qtaste.tools.model.event.Event;
+import com.qspin.qtaste.tools.ui.action.FactorySelection;
+import com.qspin.qtaste.tools.ui.action.ImportAction;
 import com.qspin.qtaste.tools.ui.event.EventPane;
 
 public class MainUI extends JFrame {
@@ -76,7 +79,7 @@ public class MainUI extends JFrame {
 		
 		FormLayout layout = new FormLayout( 
 				FRAME_BORDER + ", right:pref:grow" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref:grow, " + FRAME_BORDER,
-				FRAME_BORDER + ", pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref, " + FRAME_BORDER);
+				FRAME_BORDER + ", pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref, " + FRAME_BORDER);
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		int rowIndex = 2;
@@ -105,9 +108,17 @@ public class MainUI extends JFrame {
 		builder.add(new JScrollPane(mTree), cc.xyw(2, rowIndex, 5));
 		rowIndex += 2;
 		
-		ConversionConfigurationPane config = new ConversionConfigurationPane();
-		EventManager.getInstance().addPropertyChangeListener(config);
-		builder.add(config, cc.xyw(2, rowIndex, 7));
+		mConfigurationPane = new ConversionConfigurationPane();
+		EventManager.getInstance().addPropertyChangeListener(mConfigurationPane);
+		builder.add(mConfigurationPane, cc.xyw(2, rowIndex, 7));
+		rowIndex += 2;
+		
+		JPanel p = new JPanel();
+		JButton launch = new JButton("Launch conversion");
+		launch.addActionListener(new LauchConversionAction());
+		p.add(launch);
+		builder.add(p, cc.xyw(2, rowIndex, 7));
+		rowIndex += 2;
 		
 		add(builder.getPanel(), BorderLayout.CENTER);
 	}
@@ -127,8 +138,28 @@ public class MainUI extends JFrame {
 		
 		setJMenuBar(bar);
 	}
+	
+	private class LauchConversionAction implements ActionListener
+	{
+		public void actionPerformed(ActionEvent pEvt)
+		{
+			try {
+				ConversionTask task = new ConversionTask();
+				task.setAcceptedComponentName(mConfigurationPane.getSelectedComponent());
+				task.setAcceptedEventType(mConfigurationPane.getSelectedEventType());
+				task.setOutputDirectory(mConfigurationPane.getOutputDirectory());
+				new Thread(task).start();
+			}
+			catch (IOException pExc)
+			{
+				LOGGER.error(pExc);
+				JOptionPane.showConfirmDialog(MainUI.this, pExc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
 
 	private EventTree mTree = new EventTree();
+	private ConversionConfigurationPane mConfigurationPane;
 	private List<Event> mEvents;
 	
 	private static final String FRAME_BORDER = "3dlu";

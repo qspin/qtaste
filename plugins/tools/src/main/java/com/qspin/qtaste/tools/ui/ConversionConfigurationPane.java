@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,6 +33,21 @@ public class ConversionConfigurationPane extends JPanel implements PropertyChang
 	{
 		mComponent.resetFor(EventManager.getInstance().getComponentNames());
 		mEventType.resetFor(EventManager.getInstance().getEventTypes());
+	}
+	
+	public List<Object> getSelectedComponent()
+	{
+		return mComponent.getSelectedItems();
+	}
+	
+	public List<Object> getSelectedEventType()
+	{
+		return mEventType.getSelectedItems();
+	}
+	
+	public String getOutputDirectory()
+	{
+		return mExportPath.getText();
 	}
 	
 	private JPanel genUI()

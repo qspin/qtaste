@@ -1,0 +1,19 @@
+<assembly>
+  <id>deploy</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+       <outputDirectory/>
+       <outputFileNameMapping/>
+       <unpack>true</unpack>
+       <scope>runtime</scope>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <excludes>
+        <exclude>*:sources</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>
+</assembly>
