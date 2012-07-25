@@ -140,18 +140,12 @@ public class TestEngine {
 			if (scriptFilename.endsWith(".py")) {
 				final String jythonHome = StaticConfiguration.JYTHON_HOME;
 				final String jythonJar = jythonHome + "/jython.jar";
-				final String jythonLib = formatPathString(StaticConfiguration.JYTHON_LIB.trim());
-				final String additionnalJythonLib = formatPathString(StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim());
-				final String classPath = formatPathString(System.getProperties().getProperty("java.class.path", "").trim());
-				// final String javaHome = System.getenv("JAVA_HOME");
-				// if (javaHome!=null)
-				// 		scriptEngine = javaHome + "/bin/java -Dpython.path=" + jythonJar + File.pathSeparator + jythonLib + " -cp \"" +
-				// 					   jythonHome + "/../build/jython-engine.jar"+ // File.pathSeparator + jythonJar + File.pathSeparator +
-				// 					   classPath + "\" org.python.util.jython";
-				// else
-				scriptEngine = "java -Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + jythonLib  + File.pathSeparator + additionnalJythonLib
-									+ " -cp \"" + jythonHome + "/../build/jython-engine.jar" + "\"" + File.pathSeparator 
-									+ "\"" + jythonJar + "\"" + File.pathSeparator + classPath + " org.python.util.jython";
+				final String jythonLib = StaticConfiguration.JYTHON_LIB.trim();
+				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
+				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
+				scriptEngine = "java -Dpython.path=" + jythonJar + File.pathSeparator + jythonLib  + File.pathSeparator + additionnalJythonLib
+								    + " -cp \"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator 
+									+ jythonJar + File.pathSeparator + classPath + "\" org.python.util.jython";
 			}
 			String scriptArguments = config.getControlScriptArguments();
 			String startOrStopCommand = scriptFilename + " " + startOrStop + " " + (scriptArguments != null ? scriptArguments : "");
@@ -204,32 +198,6 @@ public class TestEngine {
 			logger.info("No SUT control script available for this testbed!");
 		}
 		return false;
-	}
-
-	/**
-	 * Detects {@value File#pathSeparator}, and surround them with ".
-	 * If the path contains at least one {@value File#pathSeparator}, adds a " at the beginning and at the end of the path.
-	 * @param pathToFormat
-	 * @return the formatted path.
-	 */
-	private static String formatPathString(String pathToFormat) {
-		//remove first and/or last character is their are ;
-		if(  pathToFormat.startsWith(File.pathSeparator) ) {
-			pathToFormat = pathToFormat.substring(1);
-		}
-		if(  pathToFormat.endsWith(File.pathSeparator) ) {
-			pathToFormat = pathToFormat.substring(0,pathToFormat.length() -1);
-		}
-		pathToFormat = pathToFormat.replaceAll(File.pathSeparator, "\"" + File.pathSeparator + "\"");
-		if (pathToFormat.indexOf(File.pathSeparator) > 0) {
-			if ( !pathToFormat.startsWith("\"")) {
-				pathToFormat = "\"" + pathToFormat;
-			}
-			if ( !pathToFormat.endsWith("\"")) {
-				pathToFormat = pathToFormat + "\"";
-			}
-		}
-		return pathToFormat;
 	}
 
 	public static boolean restartSUT() {
