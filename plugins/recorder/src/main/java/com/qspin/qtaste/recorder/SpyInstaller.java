@@ -13,6 +13,7 @@ import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 public class SpyInstaller implements Runnable, ContainerListener {
@@ -23,14 +24,14 @@ public class SpyInstaller implements Runnable, ContainerListener {
 			
 	@Override
 	public void run() {
-		BufferedWriter writer = null;
+		mWriter = null;
 		try {
-			writer = new BufferedWriter(new FileWriter("spyRepport.xml"));
-			writer.write("<events>\n");
+			mWriter = new BufferedWriter(new FileWriter("spyRepport.xml"));
+			mWriter.write("<events>\n");
 			while (true) 
 			{
 				if (mSpy == null ) {
-					mSpy = new Spy(writer);
+					mSpy = new Spy(mWriter);
 				}
 				deploy();
 				Thread.sleep(2000);
@@ -39,6 +40,15 @@ public class SpyInstaller implements Runnable, ContainerListener {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if ( mWriter != null ){
+				try {
+					mWriter.write("</events>");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			IOUtils.closeQuietly(mWriter);
 		}
 	}
 	
@@ -95,6 +105,7 @@ public class SpyInstaller implements Runnable, ContainerListener {
 		}
 	}
 
+	protected BufferedWriter mWriter;
 	protected List<Window> mSpiedWindowList;
 	protected Spy mSpy;
 	protected static final Logger LOGGER = Logger.getLogger(SpyInstaller.class);
