@@ -14,6 +14,17 @@
 					<descriptors>
 						<descriptor>src/main/assembly/deploy.xml</descriptor>
 					</descriptors>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<Premain-Class>com.qspin.qtaste.recorder.SpyInstaller</Premain-Class>
+							<Can-Redefine-Classes>true</Can-Redefine-Classes>
+							<Main-Class>NotSuitableAsMain</Main-Class>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
