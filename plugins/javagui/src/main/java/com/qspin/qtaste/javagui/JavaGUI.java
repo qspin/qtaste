@@ -56,25 +56,18 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	}
 
 	private Component getComponentByName(String name) {
-		Frame[] frames = Frame.getFrames();
-		for (int f = 0; f < frames.length; f++) {
-			Frame frame = frames[f];
-			if (frame.getName().equals(name)) {
-				return frame;
+		Window[] windows = Frame.getWindows();
+		for (int w = 0; w < windows.length; w++) {
+			Window window = windows[w];
+			if (window.getName() == null || window.getName().equals("null")) {
+				window.setName("window_" + w);
 			}
-			Window[] windows = frame.getWindows();
-			for (int w = 0; w < windows.length; w++) {
-				Window window = windows[w];
-				if (window.getName().equals(name)) {
-					return window;
-				}
-				Component c = lookForComponent(name, window.getComponents());
-				if (c != null) {
-					// System.out.println("getComponentByName is returning " +
-					// c);
-
-					return c;
-				}
+			if (window.getName().equals(name)) {
+				return window;
+			}
+			Component c = lookForComponent(name, window.getComponents());
+			if (c != null) {
+				return c;
 			}
 		}
 		return null;
@@ -83,10 +76,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	private Component lookForComponent(String name, Component[] components) {
 		for (int c = 0; c < components.length; c++) {
 
+			if ( components[c].getName() == null ||  components[c].getName().equals("null")) {
+				 components[c].setName( components[c].getParent().getName() + "_child" + c);
+			}
 			String componentName = components[c].getName();
-			// System.out.println("browsing " + components[c].toString());
-			// System.out.println("name=" + componentName);
-			if (componentName != null && componentName.equals(name)) {
+			if (componentName.equals(name)) {
 				System.out.println("Component:" + name + " is found!");
 				return components[c];
 			} else {
@@ -344,7 +338,8 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	}
 
 	@Override
-	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) {
+	public boolean selectNode(String componentName, String nodeName,
+			String nodeSeparator) {
 		String[] nodeNames = nodeName.split(nodeSeparator);
 		Component c = getComponentByName(componentName);
 		System.out.println("main condition");
@@ -354,30 +349,30 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			Object[] path = new Object[nodeNames.length];
 			System.out.println("root : " + node);
 			System.out.println("root expected : " + nodeNames[0]);
-			if (node.toString().equals(nodeNames[0]) ) {
+			if (node.toString().equals(nodeNames[0])) {
 				System.out.println("Root found!!");
 				path[0] = node;
 
 				for (int i = 1; i < nodeNames.length; i++) {
-					System.out.println("Search " + nodeNames[i] + " in " + node.toString() );
-					for ( int childIndex = 0; childIndex < model.getChildCount(node); childIndex++)
-					{
+					System.out.println("Search " + nodeNames[i] + " in "
+							+ node.toString());
+					for (int childIndex = 0; childIndex < model
+							.getChildCount(node); childIndex++) {
 						Object child = model.getChild(node, childIndex);
-						if ( child.toString().equals(nodeNames[i])) {
+						if (child.toString().equals(nodeNames[i])) {
 							node = child;
 							path[i] = node;
 							break;
 						}
 					}
-					if ( path[i] == null )
-					{
+					if (path[i] == null) {
 						return false;
 					}
 				}
-				((JTree)c).setSelectionPath(new TreePath(path));
-				((JTree)c).expandPath(new TreePath(path));
-				((JTree)c).setExpandsSelectedPaths(true);
-				
+				((JTree) c).setSelectionPath(new TreePath(path));
+				((JTree) c).expandPath(new TreePath(path));
+				((JTree) c).setExpandsSelectedPaths(true);
+
 				return true;
 			}
 		}
