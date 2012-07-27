@@ -8,6 +8,9 @@
 
 from qtaste import *
 
+# update in order to cope with the javaGUI extension declared in your testbed configuration.
+javaguiMI = testAPI.getJAVAGUI()
+
 def step1():
 	"""
 	@step      Description of the actions done for this step

@@ -49,7 +49,7 @@ public final class SelectionPane extends JPanel {
 	private void genUI(String pItemType)
 	{
 		FormLayout layout = new FormLayout( 
-				"center:pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "center:pref",
+				"center:pref:grow" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "center:pref:grow",
 				"pref" + COMPONENT_SPACING + "30dlu, pref" + COMPONENT_SPACING + "pref, 30dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();

@@ -13,6 +13,7 @@ import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.ItemEvent;
 import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
+import com.qspin.qtaste.tools.model.event.TreeSelectionEvent;
 
 public class XMLEventHandler extends DefaultHandler {
 	// resultats de notre parsing
@@ -52,6 +53,7 @@ public class XMLEventHandler extends DefaultHandler {
 					|| qName.equals(PROPERTY_NAME) || qName.equals(OLD_VALUE)
 					|| qName.equals(NEW_VALUE) || qName.equals(LENGTH)
 					|| qName.equals(OFFSET) || qName.equals(CHANGE)
+					|| qName.equals(SELECTED_PATH)
 					|| qName.equals(ID) || qName.equals(ACTION_COMMAND)) {
 				mBuffer = new StringBuffer();
 			}
@@ -95,6 +97,8 @@ public class XMLEventHandler extends DefaultHandler {
 					fillActionEvent((ActionEvent) mEvent, mBuffer.toString(), qName);
 				} else if (mEvent instanceof ItemEvent) {
 					fillItemEvent((ItemEvent) mEvent, mBuffer.toString(), qName);
+				} else if (mEvent instanceof TreeSelectionEvent) {
+					fillTreeExpansionEvent((TreeSelectionEvent) mEvent, mBuffer.toString(), qName);
 				}
 			} else {
 				LOGGER.warn("Fin de balise " + qName + " inconnue.");
@@ -123,13 +127,15 @@ public class XMLEventHandler extends DefaultHandler {
 	private void updateEvent() {
 		if (mEvent.getType().equals("PropertyChangeEvent")) {
 			mEvent = new PropertyChangeEvent(mEvent);
-		} else if (mEvent.getType().endsWith("DocumentEvent")) {
+		} else if (mEvent.getType().contains("DocumentEvent")) {
 			mEvent = new DocumentEvent(mEvent);
 			mEvent.setType("DocumentEvent");
 		} else if (mEvent.getType().equals("ActionEvent")) {
 			mEvent = new ActionEvent(mEvent);
 		} else if (mEvent.getType().equals("ItemEvent")) {
 			mEvent = new ItemEvent(mEvent);
+		} else if (mEvent.getType().equals("TreeSelectionEvent")) {
+			mEvent = new TreeSelectionEvent(mEvent);
 		}
 	}
 	
@@ -154,6 +160,14 @@ public class XMLEventHandler extends DefaultHandler {
 			mBuffer = null;
 		} else if (pName.equals(ACTION_COMMAND)) {
 			pEvent.setActionCommand(pValue);
+			mBuffer = null;
+		}
+	}
+	
+	private void fillTreeExpansionEvent(TreeSelectionEvent pEvent, String pValue, String pName)
+	{
+		if (pName.equals(SELECTED_PATH)) {
+			pEvent.setExpansionPath(pValue);
 			mBuffer = null;
 		}
 	}
@@ -219,4 +233,6 @@ public class XMLEventHandler extends DefaultHandler {
 	//private static final String ID = "id";
 	private static final String STATE_CHANGED = "stateChanged";
 	private static final String SELECTED_ITEM = "selectedItem";
+	//FOR TREE EXPANSION EVENT
+	private static final String SELECTED_PATH = "selectedPath";
 }

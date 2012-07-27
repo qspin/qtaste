@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.tools.factory.python.PythonEventFactory;
 import com.qspin.qtaste.tools.model.EventManager;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.EventComparator;
@@ -64,6 +65,12 @@ public class ConversionTask implements Runnable {
 				isr = new InputStreamReader(ConversionTask.class.getResourceAsStream(PYTHON_TEMPLATE_PATH));
 				reader = new BufferedReader(isr);
 				writeHeader(reader, writer);
+				for ( int i=0; i< events.size(); ++i)
+				{
+					writer.write( PythonEventFactory.createEvent(events.get(i)));
+					writer.newLine();
+				}
+				writeFooter(reader, writer);
 			}
 			
 		}
@@ -123,6 +130,17 @@ public class ConversionTask implements Runnable {
 	{
 		String line = pReader.readLine();
 		while ( line != null && !line.trim().equals("pass") )
+		{
+			pWriter.write(line);
+			pWriter.newLine();
+			line = pReader.readLine();
+		}
+	}
+	
+	protected void writeFooter(BufferedReader pReader, BufferedWriter pWriter) throws IOException
+	{
+		String line = pReader.readLine();
+		while ( line != null )
 		{
 			pWriter.write(line);
 			pWriter.newLine();

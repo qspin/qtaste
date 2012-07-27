@@ -8,10 +8,12 @@ import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.ItemEvent;
 import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
+import com.qspin.qtaste.tools.model.event.TreeSelectionEvent;
 import com.qspin.qtaste.tools.model.node.ActionEventNode;
 import com.qspin.qtaste.tools.model.node.DocumentEventNode;
 import com.qspin.qtaste.tools.model.node.ItemEventNode;
 import com.qspin.qtaste.tools.model.node.PropertyChangeEventNode;
+import com.qspin.qtaste.tools.model.node.TreeSelectionEventNode;
 
 public final class EventNodeFactory {
 
@@ -61,6 +63,9 @@ public final class EventNodeFactory {
 //			createNode((ActionEvent)pEvent, node);
 		} else if ( pEvent instanceof ItemEvent ) {
 			return new ItemEventNode((ItemEvent)pEvent);
+//			createNode((ItemEvent)pEvent, node);
+		} else if ( pEvent instanceof TreeSelectionEvent ) {
+			return new TreeSelectionEventNode((TreeSelectionEvent)pEvent);
 //			createNode((ItemEvent)pEvent, node);
 		}
 		

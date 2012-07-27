@@ -53,7 +53,7 @@ public class ConversionConfigurationPane extends JPanel implements PropertyChang
 	private JPanel genUI()
 	{
 		FormLayout layout = new FormLayout( 
-				"pref" + COMPONENT_SPACING + "pref",
+				"pref:grow" + COMPONENT_SPACING + "pref:grow",
 				"pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
@@ -74,7 +74,7 @@ public class ConversionConfigurationPane extends JPanel implements PropertyChang
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		
-		mExportPath = new JTextField();
+		mExportPath = new JTextField("D:\\noscan\\WORKSPACES\\DET-DEK\\qtaste\\TestSuites\\DEK-autogen");
 		builder.add(mExportPath, cc.xy(1,1));
 		JButton browse = new JButton("Browse");
 		browse.addActionListener(new BrowseAction());
