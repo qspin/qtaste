@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentEvent.EventType;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -232,8 +233,8 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 	
 	protected synchronized void writeEvent(DocumentEvent pEvent)
 	{
+		StringBuilder builder = new StringBuilder();
 		try {
-			StringBuilder builder = new StringBuilder();
 			builder.append("<event>" + LINE_BREAK);
 			Object source = pEvent.getDocument();
 			builder.append("<source>" + LINE_BREAK);
@@ -258,7 +259,12 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			builder.append("<type>" + pEvent.getType() + "</type>" + LINE_BREAK);
 			builder.append("<offset>" + pEvent.getOffset() + "</offset>" + LINE_BREAK);
 			builder.append("<length>" + pEvent.getLength() + "</length>" + LINE_BREAK);
-			builder.append("<change>" + pEvent.getDocument().getText(pEvent.getOffset(), pEvent.getLength()) + "</change>" + LINE_BREAK);
+			builder.append("<change>");
+			if ( pEvent.getType() != EventType.REMOVE )
+			{
+				builder.append(pEvent.getDocument().getText(pEvent.getOffset(), pEvent.getLength())); 
+			}
+			builder.append("</change>" + LINE_BREAK);
 			builder.append("</data>" + LINE_BREAK);
 			builder.append("</event>" + LINE_BREAK);
 
