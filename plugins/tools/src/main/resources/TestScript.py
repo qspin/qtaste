@@ -7,6 +7,7 @@
 ##
 
 from qtaste import *
+import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJAVAGUI()

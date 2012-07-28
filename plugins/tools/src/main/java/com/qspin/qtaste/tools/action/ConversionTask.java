@@ -3,7 +3,6 @@ package com.qspin.qtaste.tools.action;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,10 +64,16 @@ public class ConversionTask implements Runnable {
 				isr = new InputStreamReader(ConversionTask.class.getResourceAsStream(PYTHON_TEMPLATE_PATH));
 				reader = new BufferedReader(isr);
 				writeHeader(reader, writer);
+				long previousTimestamp = Long.MIN_VALUE;
 				for ( int i=0; i< events.size(); ++i)
 				{
-					writer.write( PythonEventFactory.createEvent(events.get(i)));
-					writer.newLine();
+					String commands = PythonEventFactory.createEvent(events.get(i), previousTimestamp);
+					if ( commands != null && !commands.isEmpty() )
+					{
+						writer.write( commands );
+						writer.newLine();
+					}
+					previousTimestamp = events.get(i).getTimeStamp();
 				}
 				writeFooter(reader, writer);
 			}
