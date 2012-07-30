@@ -53,7 +53,12 @@ if not "%JMX_PORT%" == "" set JMX_ARGS=-Dcom.sun.management.jmxremote.port=%JMX_
 echo Starting java program "%JAVA_MAIN_AND_ARGS%"...
 
 cd %START_COMMAND_DIR%
-start /min %PRIORITY% /b cmd /c (java %VM_ARGS% %JMX_ARGS% %JAR% %JAVA_MAIN_AND_ARGS%)>%TITLE%.out 2>&1
+if [%JAR%] == [] (
+    set JAVA_CMD=java %VM_ARGS% %JMX_ARGS% -cp %CLASSPATH% %JAVA_MAIN_AND_ARGS%
+) else (
+    set JAVA_CMD=java %VM_ARGS% %JMX_ARGS% %JAR% %JAVA_MAIN_AND_ARGS%
+)
+start /min %PRIORITY% /b cmd /c (%JAVA_CMD%)>%TITLE%.out 2>&1
 
 echo Waiting %PROCESS_START_TIME% seconds for program to start...
 call %~dp0\sleep %PROCESS_START_TIME%

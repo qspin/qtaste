@@ -71,7 +71,7 @@
 #		- login: login name 
 #		- log4jconf: configuration of the log4j in order to receive the logs to the QTaste log4j server
 #
-# - RLogin: derived from ControlAction
+# - RebootRlogin: derived from ControlAction
 #	This class has the goal to reboot remote VME process using rlogin
 # 	This class is initialized with following parameters
 #		- host: name of the host where the command must be executed
@@ -138,6 +138,7 @@ qtasteRootDirectory = _os.getenv("QTASTE_ROOT") + _os.sep
 
 # QTaste kernel class path
 qtasteKernelClassPath = qtasteRootDirectory + "kernel/target/qtaste-kernel-deploy.jar"
+qtasteKernelClassPath = qtasteKernelClassPath.replace("/", _os.sep)
 
 # get TestBedConfiguration instance testbedConfig from the TESTBED environment variable
 testbedConfig = _getTestbedConfig()
@@ -239,7 +240,7 @@ class ControlAction(object):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -250,6 +251,7 @@ class JavaProcess(ControlAction):
 		@param vmArgs arguments to be passed to the java VM or None to use no additional java VM arguments
 		@param jmxPort JMX port or None to disable JMX
 		@param checkAfter number of seconds after which to check if process still exist or None to not check
+		@param priority specifies to run the process with the given priority: "low", "belownormal", "normal", "abovenormal", "high" or "realtime" or none for default priority
 		"""
 		ControlAction.__init__(self, description)
 		self.mainClassOrJar = mainClassOrJar
@@ -258,8 +260,17 @@ class JavaProcess(ControlAction):
 			self.mainWithArgs = mainClassOrJar
 		else:
 			self.mainWithArgs = mainClassOrJar + ' ' + args
-		self.workingDir = workingDir
-		self.classPath = classPath
+		if _OS.getType() != _OS.Type.WINDOWS:
+			self.workingDir = workingDir
+		else:
+			self.workingDir = workingDir.replace("/", "\\")
+		if classPath:
+			if _OS.getType() != _OS.Type.WINDOWS:
+				self.classPath = classPath.replace(";",":")
+			else:
+				self.classPath = classPath.replace(":",";")
+		else:
+			self.classPath = None
 		self.vmArgs = vmArgs
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
@@ -269,6 +280,7 @@ class JavaProcess(ControlAction):
 			self.checkAfter = "%d" % checkAfter
 		else:
 			self.checkAfter = None
+		self.priority = priority
 
 	def start(self):
 		print "Starting " + self.description + "...";
@@ -295,9 +307,14 @@ class JavaProcess(ControlAction):
 			if self.checkAfter:
 				shellScriptArguments.append("-checkAfter")
 				shellScriptArguments.append(self.checkAfter)
+			if self.priority:
+				shellScriptArguments.append("-priority")
+				shellScriptArguments.append(self.priority)
 		else:
-			shellScriptArguments = _IF(isJar, '-jar ', '') + '"' + self.mainWithArgs + '" -dir "' + self.workingDir + '" -title "' + self.description + '"';
+			shellScriptArguments = _IF(isJar, '-jar ', '') + '"' + self.mainWithArgs + '" -dir ' + self.workingDir + ' -title "' + self.description + '"';
 			if self.classPath:
+				updateQTasteRoot = qtasteRootDirectory.replace(":",";")
+				self.classPath = self.classPath.replace(updateQTasteRoot, qtasteRootDirectory)
 				shellScriptArguments += ' -cp "' + self.classPath + '"';
 			if self.vmArgs:
 				shellScriptArguments += ' -vmArgs "' + self.vmArgs + '"';
@@ -305,6 +322,8 @@ class JavaProcess(ControlAction):
 				shellScriptArguments += ' -jmxPort ' + str(self.jmxPort);
 			if self.checkAfter:
 				shellScriptArguments += ' -checkAfter ' + str(self.checkAfter);
+			if self.priority:
+				shellScriptArguments += ' -priority ' + self.priority;
 		
 		ControlAction.executeShellScript("start_java_process", shellScriptArguments);
 		print

@@ -41,23 +41,6 @@
 
       <pluginManagement>
          <plugins>
- <!--           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-archiver-plugin</artifactId>
-               <version>2.4</version>
-            </plugin>
-
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-assembly-plugin</artifactId>
-               <version>2.2-beta-2</version>
-            </plugin>
-
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-dependency-plugin</artifactId>
-               <version>2.1</version>
-            </plugin>-->
 
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
