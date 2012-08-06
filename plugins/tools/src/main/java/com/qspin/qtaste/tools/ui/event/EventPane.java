@@ -28,158 +28,130 @@ import com.qspin.qtaste.tools.model.node.ComponentNode;
 import com.qspin.qtaste.tools.model.node.EventNode;
 import com.qspin.qtaste.tools.model.node.EventTypeNode;
 
-public class EventPane extends JPanel implements TreeSelectionListener{
+public class EventPane extends JPanel implements TreeSelectionListener {
 
-	public EventPane()
-	{
+	public EventPane() {
 		mEventPanes = new HashMap<Class<? extends Event>, AbstractSpecificEventPane>();
-		mEventPanes.put(PropertyChangeEvent.class, new PropertyChangeEventPane());
-		mEventPanes.put(com.qspin.qtaste.tools.model.event.ActionEvent.class, new ActionEventPane());
+		mEventPanes.put(PropertyChangeEvent.class,
+				new PropertyChangeEventPane());
+		mEventPanes.put(com.qspin.qtaste.tools.model.event.ActionEvent.class,
+				new ActionEventPane());
 		mEventPanes.put(ItemEvent.class, new ItemEventPane());
 		mEventPanes.put(DocumentEvent.class, new DocumentEventPane());
 		genUI();
 		setBorder(BorderFactory.createTitledBorder("Event"));
 	}
-	
-	private void genUI()
-	{
+
+	private void genUI() {
 		setLayout(new BorderLayout());
-		FormLayout layout = new FormLayout("right:pref, 3dlu, pref:grow", "pref, 3dlu, pref, 3dlu, pref, 3dlu, pref");
+		FormLayout layout = new FormLayout("right:pref, 3dlu, pref:grow",
+				"pref, 3dlu, pref, 3dlu, pref, 3dlu, pref");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		int rowIndex = 1;
-		
-		builder.addLabel("Event type : ", cc.xy(1,rowIndex));
+
+		builder.addLabel("Event type : ", cc.xy(1, rowIndex));
 		mEventType = new JLabel();
-		builder.add(mEventType, cc.xy(3,rowIndex));
+		builder.add(mEventType, cc.xy(3, rowIndex));
 		rowIndex += 2;
-		
-		builder.addLabel("Timestamp : ", cc.xy(1,rowIndex));
+
+		builder.addLabel("Timestamp : ", cc.xy(1, rowIndex));
 		mTimestamp = new JLabel();
-		builder.add(mTimestamp, cc.xy(3,rowIndex));
+		builder.add(mTimestamp, cc.xy(3, rowIndex));
 		rowIndex += 2;
-		
+
 		builder.add(createSourcePanel(), cc.xyw(1, rowIndex, 3));
 		rowIndex += 2;
-		
+
 		mExtention = new JPanel();
 		builder.add(mExtention, cc.xyw(1, rowIndex, 3));
-		
+
 		add(builder.getPanel());
 		resetFields();
 	}
-	
-	private JPanel createSourcePanel()
-	{
-		FormLayout layout = new FormLayout("right:pref, 3dlu, pref:grow", "pref, 3dlu, pref, 3dlu, pref");
+
+	private JPanel createSourcePanel() {
+		FormLayout layout = new FormLayout(
+				"right:pref, 3dlu, pref:grow, 3dlu, pref:grow",
+				"pref, 3dlu, pref, 3dlu, pref");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		builder.setBorder(BorderFactory.createTitledBorder("Source"));
-		int rowIndex = 1; 
-		
-		builder.addLabel("Component name : ", cc.xy(1,rowIndex));
-		mComponentName = new JTextField(40);
-		mComponentName.addActionListener(new ChangeComponentName());
-		builder.add(mComponentName, cc.xy(3,rowIndex));
+		int rowIndex = 1;
+
+		builder.addLabel("Component name : ", cc.xy(1, rowIndex));
+		mComponentName = new JLabel();
+		builder.add(mComponentName, cc.xy(3, rowIndex));
 		rowIndex += 2;
-		
-		builder.addLabel("Component class : ", cc.xy(1,rowIndex));
+
+		builder.addLabel("Alias : ", cc.xy(1, rowIndex));
+		mComponentAlias = new JLabel();
+		builder.add(mComponentAlias, cc.xy(3, rowIndex));
+		rowIndex += 2;
+
+		builder.addLabel("Component class : ", cc.xy(1, rowIndex));
 		mComponentClass = new JLabel();
-		builder.add(mComponentClass, cc.xy(3,rowIndex));
+		builder.add(mComponentClass, cc.xy(3, rowIndex));
 		rowIndex += 2;
-		
+
 		return builder.getPanel();
 	}
-	
-	private void resetFields()
-	{
+
+	private void resetFields() {
 		mComponentName.setText(null);
-		mComponentName.setEnabled(false);
 		mComponentClass.setText(null);
+		mComponentAlias.setText(null);
 		mEventType.setText(null);
 		mTimestamp.setText(null);
 	}
-	
+
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		mCurrentSelectedPath = e.getPath();
 		MutableTreeNode selectedNode = (MutableTreeNode) mCurrentSelectedPath.getLastPathComponent();
 		resetFields();
 		changeExtention(null);
-		if ( selectedNode instanceof ComponentNode )
-		{
-			mComponentName.setEnabled(true);
-			mComponentName.setText(((ComponentNode)selectedNode).getUserObject().toString());
-			mComponentClass.setText(((ComponentNode)selectedNode).getComponentClass());
-		} else if ( selectedNode instanceof EventTypeNode )
-		{
-			mEventType.setText(((EventTypeNode)selectedNode).getUserObject().toString());
-		} else if ( selectedNode instanceof EventNode )
-		{
-			Event event = ((EventNode)selectedNode).getEvent();
+		if (selectedNode instanceof ComponentNode) {
+			mComponentName.setText(((ComponentNode) selectedNode).getUserObject().toString());
+			mComponentClass.setText(((ComponentNode) selectedNode).getComponentClass());
+		} else if (selectedNode instanceof EventTypeNode) {
+			mEventType.setText(((EventTypeNode) selectedNode).getUserObject().toString());
+		} else if (selectedNode instanceof EventNode) {
+			Event event = ((EventNode) selectedNode).getEvent();
 			mComponentName.setText(event.getComponentName());
-			mComponentName.setEnabled(true);
 			mComponentClass.setText(event.getSourceClass());
+			mComponentAlias.setText(event.getAlias());
 			mEventType.setText(event.getType());
 			mTimestamp.setText(Long.toString(event.getTimeStamp()));
 			changeExtention(getSpecificEventPane(event));
-		} 
+		}
 	}
-	
-	private AbstractSpecificEventPane getSpecificEventPane(Event pEvent)
-	{
-		if (mEventPanes.containsKey(pEvent.getClass())) 
-		{
+
+	private AbstractSpecificEventPane getSpecificEventPane(Event pEvent) {
+		if (mEventPanes.containsKey(pEvent.getClass())) {
 			AbstractSpecificEventPane pane = mEventPanes.get(pEvent.getClass());
 			pane.resetFor(pEvent);
 			return pane;
 		}
 		return null;
 	}
-	
-	private void changeExtention(AbstractSpecificEventPane pPanel)
-	{
+
+	private void changeExtention(AbstractSpecificEventPane pPanel) {
 		mExtention.removeAll();
 		mExtention.setLayout(new BorderLayout());
 		mExtention.setVisible(pPanel != null);
-		if( pPanel != null ) {
+		if (pPanel != null) {
 			mExtention.add(pPanel, BorderLayout.CENTER);
 			mExtention.invalidate();
 		}
 	}
-	
-	private JTextField mComponentName;
+
+	private JLabel mComponentName;
 	private JLabel mComponentClass;
 	private JLabel mEventType;
+	private JLabel mComponentAlias;
 	private JLabel mTimestamp;
 	private JPanel mExtention;
 	private Map<Class<? extends Event>, AbstractSpecificEventPane> mEventPanes;
 	private TreePath mCurrentSelectedPath;
-
-	private class ChangeComponentName implements ActionListener
-	{
-		public void actionPerformed(ActionEvent pEvt)
-		{
-			if ( EventManager.getInstance().isNameFree(mComponentName.getText()))
-			{
-				String oldName = null;
-				if ( mCurrentSelectedPath.getLastPathComponent() instanceof EventNode )
-				{
-					oldName = ((EventNode)mCurrentSelectedPath.getLastPathComponent()).getEvent().getComponentName();
-				} else if ( mCurrentSelectedPath.getLastPathComponent() instanceof ComponentNode )
-				{
-					oldName = ((ComponentNode)mCurrentSelectedPath.getLastPathComponent()).getUserObject().toString();
-				}
-				
-				if ( oldName != null )
-				{
-					EventManager.getInstance().changeComponentName(oldName, mComponentName.getText());
-				}
-			}
-			else 
-			{
-				JOptionPane.showMessageDialog(null, "This componant name cannot be used.", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
 }

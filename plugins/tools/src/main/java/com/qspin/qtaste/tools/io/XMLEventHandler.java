@@ -66,7 +66,6 @@ public class XMLEventHandler extends DefaultHandler {
 		if (qName.equals(ROOT_ELEMENT)) {
 			inEvents = false;
 		} else if (qName.equals(EVENT_ELEMENT)) {
-			System.out.println(mEvent);
 			mDecodedEvent.add(mEvent);
 			mEvent = null;
 			inEvent = false;

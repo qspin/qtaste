@@ -28,6 +28,7 @@ public class EventManager {
 		}
 		mComponentNameMap.clear();
 		mEventTypeMap.clear();
+		mEventAliasMap.clear();
 		
 		for ( Event evt : pEvents )
 		{
@@ -44,7 +45,7 @@ public class EventManager {
 		List<Event> old = mEvents;
 		mEvents = pEvents;
 		
-		firePropertyChange(new PropertyChangeEvent(this, DATA_CHANGE_PROPERTY_NAME, old, pEvents));
+		firePropertyChange(new PropertyChangeEvent(this, DATA_CHANGE_PROPERTY_ID, old, pEvents));
 	}
 	
 	public List<Event> getEventsForComponent(String pComponentName)
@@ -89,12 +90,12 @@ public class EventManager {
 		return array;
 	}
 
-	public void changeComponentName(String pOldName, String pNewName) {
+	public void setComponentAlias(String pComponentName, String pAlias) {
 		List<Event> events = new ArrayList<Event>(mEvents);
 		for ( Event e : events )
 		{
-			if(  e.getComponentName().equals(pOldName) ) {
-				e.setComponentName(pNewName);
+			if(  e.getComponentName().equals(pComponentName) ) {
+				e.setAlias(pAlias);
 			}
 		}
 		setEvents(events);
@@ -112,15 +113,17 @@ public class EventManager {
 		mComponentNameMap = new HashMap<String, List<Event>>();
 		mEventTypeMap = new HashMap<String, List<Event>>();
 		mListener = new ArrayList<PropertyChangeListener>();
+		mEventAliasMap = new HashMap<String, String>();
 		setEvents(null);
 	}
 
 	private List<Event> mEvents;
 	private Map<String,  List<Event>> mComponentNameMap;
 	private Map<String,  List<Event>> mEventTypeMap;
+	private Map<String,  String> mEventAliasMap;
 	private List<PropertyChangeListener> mListener;
 	
 	protected static EventManager INSTANCE;
 	
-	public static final String DATA_CHANGE_PROPERTY_NAME = "dataUpdate";
+	public static final String DATA_CHANGE_PROPERTY_ID = "dataUpdate";
 }

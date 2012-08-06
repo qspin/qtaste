@@ -32,20 +32,25 @@ public final class ComponentTreeFactory extends TreeFactory {
 			boolean first=true;
 			for ( String eventType : sortedEvents.get(componentName).keySet() )
 			{
-				MutableTreeNode eventTypeNode = new DefaultMutableTreeNode(eventType);
 				for (Event evt : sortedEvents.get(componentName).get(eventType) )
 				{
 					if ( first )
 					{
 						first = false;
 						MutableTreeNode classNode = new DefaultMutableTreeNode(evt.getSourceClass());
-						componentNode  = new ComponentNode(componentName, evt.getSourceClass());
+						if ( evt.getAlias() == null )
+						{
+							componentNode  = new ComponentNode(componentName, evt.getSourceClass());
+						} 
+						else
+						{
+							componentNode  = new ComponentNode(evt.getAlias(), evt.getSourceClass());	
+						}
 						componentNode.insert(classNode, componentNode.getChildCount());
 					}
 					MutableTreeNode eventNode = EventNodeFactory.getInstance().createNode(evt, false, true);
 					componentNode.insert(eventNode, componentNode.getChildCount());
 				}
-				componentNode.insert(eventTypeNode, componentNode.getChildCount());
 			}
 			root.insert(componentNode, root.getChildCount());
 		}

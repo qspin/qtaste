@@ -48,9 +48,10 @@ public class PropertyChangeEventPane extends AbstractSpecificEventPane {
 	public void resetFor(Event pEvt) {
 		if ( pEvt instanceof PropertyChangeEvent )
 		{
-			mPropertyName.setText(((PropertyChangeEvent)pEvt).getPropertyName());
-			mPropertyOldValue.setText(((PropertyChangeEvent)pEvt).getOldValue());
-			mPropertyNewValue.setText(((PropertyChangeEvent)pEvt).getNewValue());
+			PropertyChangeEvent evt = (PropertyChangeEvent)pEvt;
+			mPropertyName.setText(evt.getPropertyName());
+			mPropertyOldValue.setText(formatText(evt.getOldValue()));
+			mPropertyNewValue.setText(formatText(evt.getNewValue()));
 		}
 		else
 		{
@@ -59,8 +60,19 @@ public class PropertyChangeEventPane extends AbstractSpecificEventPane {
 			mPropertyNewValue.setText(null);	
 		}
 	}
+	
+	private String formatText(String pText)
+	{
+		if ( pText != null && pText.length() > MAX_TEXT_LENGTH )
+		{
+			return pText.substring(0, MAX_TEXT_LENGTH) + "...";
+		}
+		return pText;
+	}
 
 	private JLabel mPropertyName;
 	private JLabel mPropertyOldValue;
 	private JLabel mPropertyNewValue;
+	
+	private static final int MAX_TEXT_LENGTH = 140;
 }

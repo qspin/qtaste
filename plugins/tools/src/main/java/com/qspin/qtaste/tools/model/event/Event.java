@@ -43,10 +43,18 @@ public class Event {
 	public void setType(String pType) {
 		mType = pType;
 	}
+	public String getAlias()
+	{
+		return mAlias;
+	}
+	public void setAlias(String pAlias) {
+		mAlias = pAlias;
+	}
 	
 	protected String mComponentName;
 	protected String mSourceClass;
 	protected String mType;
+	protected String mAlias;
 	protected long mTimeStamp;
 	
 }
