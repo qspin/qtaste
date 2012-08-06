@@ -90,9 +90,9 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 		} else if (pComponent instanceof JTextComponent) {
 			((JTextComponent)pComponent).getDocument().addDocumentListener(this);
 			mDocumentListenerMap.put(((JTextComponent) pComponent).getDocument(), pComponent.getName());
-			LOGGER.info("component name : " + pComponent.getName() );
+			LOGGER.trace("component name : " + pComponent.getName() );
 		} else {
-			LOGGER.warn("Unsupported component : " + pComponent.getClass() );
+			LOGGER.trace(" WARNING - Unsupported component : " + pComponent.getClass() );
 			return;
 		}
 		
@@ -119,7 +119,6 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 		} else if (pComponent instanceof JTextComponent) {
 			((JTextComponent)pComponent).getDocument().removeDocumentListener(this);
 			mDocumentListenerMap.remove(((JTextComponent) pComponent).getDocument());
-			LOGGER.info("component name : " + pComponent.getName() );
 		}
 	}
 
@@ -185,7 +184,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 				name = ((Component)source).getName();
 			} 
 			if ( name == null ){
-				LOGGER.warn("Unable to find the component source");
+				LOGGER.trace(" WARNING - Unable to find the component source");
 				return;
 			}
 			builder.append("<time>" + new Date().getTime() + "</time>" + LINE_BREAK);
@@ -218,7 +217,6 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 
 			mWriter.write(builder.toString());
 			mWriter.newLine();
-			LOGGER.info(builder.toString());
 		} catch (IOException pExc) {
 			pExc.printStackTrace();
 		} finally {
@@ -243,7 +241,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 				name = mDocumentListenerMap.get(source);
 			} 
 			if ( name == null ){
-				LOGGER.warn("Unable to find the component source");
+				LOGGER.trace(" WARNING - Unable to find the component source");
 				return;
 			}
 			builder.append("<time>" + new Date().getTime() + "</time>" + LINE_BREAK);
@@ -270,7 +268,6 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 
 			mWriter.write(builder.toString());
 			mWriter.newLine();
-			LOGGER.info(builder.toString());
 		} catch (BadLocationException pExc) {
 			pExc.printStackTrace();
 		} catch (IOException pExc) {
