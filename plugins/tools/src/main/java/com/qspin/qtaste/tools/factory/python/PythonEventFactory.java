@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.event.ActionEvent;
 import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
@@ -44,6 +45,17 @@ public abstract class PythonEventFactory implements PythonEventFactoryInterface 
 			{
 				pBuilder.append( getPythonIndentation(1) +"time.sleep(" + sleepingTime/1000 + ")" + LINE_BREAK);
 			}
+		}
+	}
+	
+	protected String getComponentIdentifier(String pComponentName)
+	{
+		ComponentNameMapping mapping = ComponentNameMapping.getInstance();
+		if ( mapping.hasAlias(pComponentName) )
+		{
+			return mapping.getAliasFor(pComponentName);
+		} else {
+			return "\"" + pComponentName + "\"";
 		}
 	}
 	

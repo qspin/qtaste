@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.qspin.qtaste.tools.model.event.ActionEvent;
+import com.qspin.qtaste.tools.model.event.ChangeEvent;
 import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.ItemEvent;
@@ -16,24 +17,21 @@ import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
 import com.qspin.qtaste.tools.model.event.TreeSelectionEvent;
 
 public class XMLEventHandler extends DefaultHandler {
-	// resultats de notre parsing
 	private List<Event> mDecodedEvent;
 	private Event mEvent;
-	// flags nous indiquant la position du parseur
+
 	private boolean inEvents;
 	private boolean inEvent;
 	private boolean inSource;
 	private boolean inData;
-	// buffer nous permettant de recuperer les donnees
+
 	private StringBuffer mBuffer;
 
-	// simple constructeur
 	public XMLEventHandler() {
 		super();
 		inData = false;
 	}
 
-	// detection d'ouverture de balise
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		if (qName.equals(ROOT_ELEMENT)) {
@@ -53,7 +51,7 @@ public class XMLEventHandler extends DefaultHandler {
 					|| qName.equals(PROPERTY_NAME) || qName.equals(OLD_VALUE)
 					|| qName.equals(NEW_VALUE) || qName.equals(LENGTH)
 					|| qName.equals(OFFSET) || qName.equals(CHANGE)
-					|| qName.equals(SELECTED_PATH)
+					|| qName.equals(SELECTED_PATH) || qName.equals(NEW_TAB_INDEX)
 					|| qName.equals(ID) || qName.equals(ACTION_COMMAND)) {
 				mBuffer = new StringBuffer();
 			}
@@ -98,6 +96,8 @@ public class XMLEventHandler extends DefaultHandler {
 					fillItemEvent((ItemEvent) mEvent, mBuffer.toString(), qName);
 				} else if (mEvent instanceof TreeSelectionEvent) {
 					fillTreeExpansionEvent((TreeSelectionEvent) mEvent, mBuffer.toString(), qName);
+				} else if (mEvent instanceof ChangeEvent) {
+					fillChangeEvent((ChangeEvent) mEvent, mBuffer.toString(), qName);
 				}
 			} else {
 				LOGGER.warn("Fin de balise " + qName + " inconnue.");
@@ -135,6 +135,8 @@ public class XMLEventHandler extends DefaultHandler {
 			mEvent = new ItemEvent(mEvent);
 		} else if (mEvent.getType().equals("TreeSelectionEvent")) {
 			mEvent = new TreeSelectionEvent(mEvent);
+		} else if (mEvent.getType().equals("ChangeEvent")) {
+			mEvent = new ChangeEvent(mEvent);
 		}
 	}
 	
@@ -159,6 +161,20 @@ public class XMLEventHandler extends DefaultHandler {
 			mBuffer = null;
 		} else if (pName.equals(ACTION_COMMAND)) {
 			pEvent.setActionCommand(pValue);
+			mBuffer = null;
+		}
+	}
+	
+	private void fillChangeEvent(ChangeEvent pEvent, String pValue, String pName)
+	{
+		if (pName.equals(NEW_TAB_INDEX)) {
+			try {
+				pEvent.setTabIndex(Integer.parseInt(pValue));
+			}catch( NumberFormatException pExc)
+			{
+				LOGGER.warn("Invalid tab index.", pExc);
+				pEvent.setTabIndex(0);
+			}
 			mBuffer = null;
 		}
 	}
@@ -234,4 +250,6 @@ public class XMLEventHandler extends DefaultHandler {
 	private static final String SELECTED_ITEM = "selectedItem";
 	//FOR TREE EXPANSION EVENT
 	private static final String SELECTED_PATH = "selectedPath";
+	//FOR TAB CHANGE IN TABBED PANE
+	private static final String NEW_TAB_INDEX  = "newTabIndex";
 }

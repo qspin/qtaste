@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,6 +20,7 @@ import javax.swing.JTextField;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.EventManager;
 
 public class ConversionConfigurationPane extends JPanel implements PropertyChangeListener {
@@ -31,7 +34,20 @@ public class ConversionConfigurationPane extends JPanel implements PropertyChang
 	
 	public void propertyChange (PropertyChangeEvent pEvt)
 	{
-		mComponent.resetFor(EventManager.getInstance().getComponentNames());
+		List<String> componentNames = new ArrayList<String>();
+		for ( Object o : EventManager.getInstance().getComponentNames() )
+		{
+			if ( ComponentNameMapping.getInstance().hasAlias(o.toString()) )
+			{
+				componentNames.add(ComponentNameMapping.getInstance().getAliasFor(o.toString()));
+			}
+			else
+			{
+				componentNames.add(o.toString());
+			}
+		}
+		Collections.sort(componentNames);
+		mComponent.resetFor(componentNames.toArray(new String[0]));
 		mEventType.resetFor(EventManager.getInstance().getEventTypes());
 	}
 	
@@ -74,7 +90,7 @@ public class ConversionConfigurationPane extends JPanel implements PropertyChang
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		
-		mExportPath = new JTextField("D:\\noscan\\WORKSPACES\\DET-DEK\\qtaste\\TestSuites\\DEK-autogen");
+		mExportPath = new JTextField();
 		builder.add(mExportPath, cc.xy(1,1));
 		JButton browse = new JButton("Browse");
 		browse.addActionListener(new BrowseAction());

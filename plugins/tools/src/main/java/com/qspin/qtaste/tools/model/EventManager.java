@@ -2,12 +2,15 @@ package com.qspin.qtaste.tools.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.tools.model.event.Event;
 
@@ -98,6 +101,12 @@ public class EventManager {
 				e.setAlias(pAlias);
 			}
 		}
+		try {
+			ComponentNameMapping.getInstance().setAliasFor(pComponentName, pAlias);
+		} catch (IOException pExc)
+		{
+			LOGGER.warn(pExc);
+		}
 		setEvents(events);
 	}
 	
@@ -124,6 +133,8 @@ public class EventManager {
 	private List<PropertyChangeListener> mListener;
 	
 	protected static EventManager INSTANCE;
-	
+	protected static final Logger LOGGER = Logger.getLogger(EventManager.class);
+
 	public static final String DATA_CHANGE_PROPERTY_ID = "dataUpdate";
+	public static final String ALIAS_CHANGE_PROPERTY_ID = "aliasUpdate";
 }

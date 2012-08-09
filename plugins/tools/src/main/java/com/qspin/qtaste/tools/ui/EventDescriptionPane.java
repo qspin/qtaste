@@ -9,6 +9,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -28,10 +29,11 @@ class EventDescriptionPane extends JPanel {
 	private void genUI()
 	{
 		setLayout( new BorderLayout() );
+		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		
 		FormLayout layout = new FormLayout( 
-				"right:pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref:grow",
-				"pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref");
+				"right:pref:grow" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref",
+				"pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		int rowIndex = 1;
@@ -47,15 +49,15 @@ class EventDescriptionPane extends JPanel {
 		group.add(groupByEvent);
 		builder.add(groupByEvent, cc.xy(5, rowIndex));
 		groupByComponent.setSelected(true);
+		rowIndex+=2;
+		builder.add(new JScrollPane(mTree), cc.xyw(1, rowIndex, 5));
+		split.setLeftComponent(builder.getPanel());
 		EventPane eventPane = new EventPane();
 		mTree.addTreeSelectionListener(eventPane);
-		builder.add(eventPane, cc.xywh(7, rowIndex, 1, 5));
-		rowIndex += 2;
+		split.setRightComponent(eventPane);
 		
-		builder.add(new JScrollPane(mTree), cc.xyw(1, rowIndex, 5));
 		rowIndex += 2;
-
-		add(builder.getPanel(), BorderLayout.CENTER);
+		add(split, BorderLayout.CENTER);
 	}
 
 	private EventTree mTree = new EventTree();

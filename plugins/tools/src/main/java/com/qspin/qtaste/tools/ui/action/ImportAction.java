@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.qspin.qtaste.tools.io.XMLEventHandler;
+import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.EventManager;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.ui.MainUI;
@@ -29,7 +30,12 @@ public class ImportAction implements ActionListener {
 		JFileChooser jfc = new JFileChooser();
 		if (jfc.showOpenDialog(mCaller) == JFileChooser.APPROVE_OPTION) {
 			EventManager.getInstance().setEvents(decodeFile(jfc.getSelectedFile()));
-			
+			try {
+				ComponentNameMapping.getInstance().load();
+			} catch (IOException pExc)
+			{
+				LOGGER.error(pExc);
+			}
 		}
 	}
 
@@ -47,6 +53,7 @@ public class ImportAction implements ActionListener {
 		} catch (ParserConfigurationException pExc) {
 			LOGGER.error(pExc);
 		}
+		ComponentNameMapping.getInstance().setFilePath(pFile.getParent() +File.separator + ComponentNameMapping.ALIAS_FILE_NAME);
 		return gestionnaire.getDecodedEvent();
 	}
 

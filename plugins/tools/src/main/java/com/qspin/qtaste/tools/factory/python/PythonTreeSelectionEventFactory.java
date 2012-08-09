@@ -12,7 +12,7 @@ class PythonTreeSelectionEventFactory extends PythonEventFactory {
 		StringBuilder builder = new StringBuilder();
 		
 		insertSleep(pEvent, pPreviousTimestamp, builder);
-		builder.append(getPythonIndentation(1) + "javaguiMI.selectNode(\"" + evt.getComponentName() + "\", ");
+		builder.append(getPythonIndentation(1) + "javaguiMI.selectNode(" + getComponentIdentifier(evt.getComponentName()) + ", ");
 		builder.append(												  "\"" + evt.getSelectedPath().substring(1, evt.getSelectedPath().length()-1) + "\", " );
 		builder.append(												  "\", \"" + " )" + LINE_BREAK);
 		return builder.toString();

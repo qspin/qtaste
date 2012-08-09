@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +16,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
@@ -24,8 +27,10 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.qspin.qtaste.tools.action.ConversionTask;
+import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.EventManager;
 import com.qspin.qtaste.tools.ui.action.ImportAction;
+import com.qspin.qtaste.tools.ui.model.table.AliasTableModel;
 
 public class MainUI extends JFrame {
 
@@ -59,7 +64,7 @@ public class MainUI extends JFrame {
 		
 		JTabbedPane tabbedPanes = new JTabbedPane();
 		tabbedPanes.insertTab("Description", null, new EventDescriptionPane(), null, 0);
-		tabbedPanes.insertTab("Aliases", null, new AliasMappingPane(), null, 1);
+		tabbedPanes.insertTab("Aliases", null, new JScrollPane(new JTable(new AliasTableModel())), null, 1);
 		builder.add(tabbedPanes, cc.xy(2,rowIndex));
 		rowIndex += 2;
 		
@@ -100,7 +105,12 @@ public class MainUI extends JFrame {
 		{
 			try {
 				ConversionTask task = new ConversionTask();
-				task.setAcceptedComponentName(mConfigurationPane.getSelectedComponent());
+				List<Object> selectedComponents = mConfigurationPane.getSelectedComponent();
+				for (int i=0; i< selectedComponents.size(); ++i)
+				{
+					selectedComponents.set(i, ComponentNameMapping.getInstance().getComponentNameFor(selectedComponents.get(i).toString()));
+				}
+				task.setAcceptedComponentName(selectedComponents);
 				task.setAcceptedEventType(mConfigurationPane.getSelectedEventType());
 				task.setOutputDirectory(mConfigurationPane.getOutputDirectory());
 				new Thread(task).start();

@@ -22,7 +22,7 @@ public final class EventTreeFactory extends TreeFactory {
 
 	@Override
 	public MutableTreeNode buildRootTree(List<Event> pEvents) {
-		MutableTreeNode root = new DefaultMutableTreeNode("Components");
+		MutableTreeNode root = new DefaultMutableTreeNode("Events");
 		Map<String, Map<String,  List<Event>>> sortedEvents = sortData(pEvents);
 		
 		for( String eventType : sortedEvents.keySet() )
@@ -30,7 +30,7 @@ public final class EventTreeFactory extends TreeFactory {
 			MutableTreeNode eventNode = new DefaultMutableTreeNode(eventType);
 			for ( String componentName : sortedEvents.get(eventType).keySet() )
 			{
-				MutableTreeNode componentNode = new DefaultMutableTreeNode(componentName);
+				MutableTreeNode componentNode = new DefaultMutableTreeNode(getComponentDisplayName(componentName));
 				for (Event evt : sortedEvents.get(eventType).get(componentName) )
 				{
 					MutableTreeNode evtNode = EventNodeFactory.getInstance().createNode(evt, false, true);

@@ -72,7 +72,7 @@ public class EventPane extends JPanel implements TreeSelectionListener {
 
 	private JPanel createSourcePanel() {
 		FormLayout layout = new FormLayout(
-				"right:pref, 3dlu, pref:grow, 3dlu, pref:grow",
+				"right:pref, 3dlu, fill:pref:grow",
 				"pref, 3dlu, pref, 3dlu, pref");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
@@ -85,7 +85,8 @@ public class EventPane extends JPanel implements TreeSelectionListener {
 		rowIndex += 2;
 
 		builder.addLabel("Alias : ", cc.xy(1, rowIndex));
-		mComponentAlias = new JLabel();
+		mComponentAlias = new JTextField();
+		mComponentAlias.addActionListener(new changeAlias());
 		builder.add(mComponentAlias, cc.xy(3, rowIndex));
 		rowIndex += 2;
 
@@ -145,11 +146,19 @@ public class EventPane extends JPanel implements TreeSelectionListener {
 			mExtention.invalidate();
 		}
 	}
+	
+	private class changeAlias implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			EventManager.getInstance().setComponentAlias(mComponentName.getText(), mComponentAlias.getText());
+		}
+	}
 
 	private JLabel mComponentName;
 	private JLabel mComponentClass;
 	private JLabel mEventType;
-	private JLabel mComponentAlias;
+	private JTextField mComponentAlias;
 	private JLabel mTimestamp;
 	private JPanel mExtention;
 	private Map<Class<? extends Event>, AbstractSpecificEventPane> mEventPanes;

@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.tools.factory.python.PythonEventFactory;
+import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.EventManager;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.EventComparator;
@@ -134,11 +135,43 @@ public class ConversionTask implements Runnable {
 	protected void writeHeader(BufferedReader pReader, BufferedWriter pWriter) throws IOException
 	{
 		String line = pReader.readLine();
-		while ( line != null && !line.trim().equals("pass") )
+		while ( line != null  )
 		{
-			pWriter.write(line);
-			pWriter.newLine();
-			line = pReader.readLine();
+			if ( !line.trim().equals("pass") ) {
+				pWriter.write(line);
+				pWriter.newLine();
+				line = pReader.readLine();
+				if ( line.trim().equals("import time"))
+				{
+					writeAliases(pWriter);
+					pWriter.newLine();
+				}
+			}
+			else 
+			{
+				break;
+			}
+		}
+	}
+	
+	protected void writeAliases(BufferedWriter pWriter) throws IOException
+	{
+		ComponentNameMapping mapping = ComponentNameMapping.getInstance();
+		boolean first = true;
+		for ( Object componentName : mAcceptedComponentName )
+		{
+			if( mapping.hasAlias(componentName.toString()) )
+			{
+				if ( first )
+				{
+					pWriter.newLine();
+					pWriter.write("# Component aliases");
+					pWriter.newLine();
+					first = false;
+				}
+				pWriter.write(mapping.getAliasFor(componentName.toString()) + " = \"" + componentName + "\"" );
+				pWriter.newLine();
+			}
 		}
 	}
 	
