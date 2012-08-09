@@ -17,9 +17,12 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentEvent.EventType;
 import javax.swing.event.DocumentListener;
@@ -40,15 +43,45 @@ import org.apache.log4j.Logger;
  * Reports action done on component through their listeners.
  * Components supported :<br/>
  * <ol>
- * <li>{@link AbstractButton}<ul><li>{@link ActionListener}</li><li>{@link ItemListener}</li></ul></li>
- * <li>{@link JComboBox}<ul><li>{@link ActionListener}</li><li>{@link ItemListener}</li></ul></li>
- * <li>{@link JList}<ul><li>{@link ListSelectionListener}</li></ul></li>
- * <li>{@link JTable}<ul><li>{@link ListSelectionListener}</li></ul></li>
- * <li>{@link JTree}<ul><li>{@link TreeExpansionListener}</li><li>{@link TreeSelectionListener}</li></ul></li>
+ * <li>{@link AbstractButton}
+ * <ul>
+ * <li>{@link ActionListener}</li>
+ * <li>{@link ItemListener}</li>
+ * </ul>
+ * </li>
+ * <li>{@link JComboBox}
+ * <ul>
+ * <li>{@link ActionListener}</li>
+ * <li>{@link ItemListener}</li>
+ * </ul>
+ * </li>
+ * <li>{@link JList}
+ * <ul>
+ * <li>{@link ListSelectionListener}</li>
+ * </ul>
+ * </li>
+ * <li>{@link JTable}
+ * <ul>
+ * <li>{@link ListSelectionListener}</li>
+ * </ul>
+ * </li>
+ * <li>{@link JTree}
+ * <ul>
+ * <li>{@link TreeExpansionListener}</li>
+ * <li>{@link TreeSelectionListener}</li>
+ * </ul>
+ * </li>
+ * <li>{@link JTabbedPane}
+ * <ul>
+ * <li>{@link ChangeListener}</li>
+ * </ul>
+ * </li>
  * </ol>
  * 
  */
-public class Spy implements DocumentListener, PropertyChangeListener, ItemListener, ActionListener, TreeSelectionListener, ListSelectionListener, TreeExpansionListener {
+public class Spy implements DocumentListener, PropertyChangeListener,
+		ItemListener, ActionListener, TreeSelectionListener,
+		ListSelectionListener, TreeExpansionListener, ChangeListener {
 
 	/**
 	 * Constructor.
@@ -66,6 +99,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 
 	/**
 	 * Add the spy to the component.
+	 * 
 	 * @param pComponent
 	 */
 	public void addTarget(Component pComponent)
@@ -78,24 +112,38 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			((JComboBox) pComponent).addActionListener(this);
 			((JComboBox) pComponent).addItemListener(this);
 		} else if (pComponent instanceof JTree) {
-			((JTree) pComponent).getSelectionModel().addTreeSelectionListener(this);
+			((JTree) pComponent).getSelectionModel().addTreeSelectionListener(
+					this);
 			((JTree) pComponent).addTreeExpansionListener(this);
-			mTreeSelectionModelListenerMap.put(((JTree) pComponent).getSelectionModel(), pComponent.getName());
+			mTreeSelectionModelListenerMap.put(
+					((JTree) pComponent).getSelectionModel(),
+					pComponent.getName());
 		} else if (pComponent instanceof JList) {
-			((JList) pComponent).getSelectionModel().addListSelectionListener(this);
-			mListSelectionModelListenerMap.put(((JList) pComponent).getSelectionModel(), pComponent.getName());
+			((JList) pComponent).getSelectionModel().addListSelectionListener(
+					this);
+			mListSelectionModelListenerMap.put(
+					((JList) pComponent).getSelectionModel(),
+					pComponent.getName());
 		} else if (pComponent instanceof JTable) {
-			((JTable) pComponent).getSelectionModel().addListSelectionListener(this);
-			mListSelectionModelListenerMap.put(((JTable) pComponent).getSelectionModel(), pComponent.getName());
+			((JTable) pComponent).getSelectionModel().addListSelectionListener(
+					this);
+			mListSelectionModelListenerMap.put(
+					((JTable) pComponent).getSelectionModel(),
+					pComponent.getName());
 		} else if (pComponent instanceof JTextComponent) {
-			((JTextComponent)pComponent).getDocument().addDocumentListener(this);
-			mDocumentListenerMap.put(((JTextComponent) pComponent).getDocument(), pComponent.getName());
-			LOGGER.trace("component name : " + pComponent.getName() );
+			((JTextComponent) pComponent).getDocument().addDocumentListener(
+					this);
+			mDocumentListenerMap.put(
+					((JTextComponent) pComponent).getDocument(),
+					pComponent.getName());
+		} else if (pComponent instanceof JTabbedPane) {
+			((JTabbedPane) pComponent).addChangeListener(this);
 		} else {
-			LOGGER.trace(" WARNING - Unsupported component : " + pComponent.getClass() );
+			LOGGER.trace(" WARNING - Unsupported component : "
+					+ pComponent.getClass());
 			return;
 		}
-		
+
 	}
 
 	public void removeTarget(Component pComponent) {
@@ -117,8 +165,10 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			((JTable) pComponent).getSelectionModel().removeListSelectionListener(this);
 			mListSelectionModelListenerMap.remove(((JTable) pComponent).getSelectionModel());
 		} else if (pComponent instanceof JTextComponent) {
-			((JTextComponent)pComponent).getDocument().removeDocumentListener(this);
+			((JTextComponent) pComponent).getDocument().removeDocumentListener(this);
 			mDocumentListenerMap.remove(((JTextComponent) pComponent).getDocument());
+		} else if (pComponent instanceof JTabbedPane) {
+			((JTabbedPane) pComponent).removeChangeListener(this);
 		}
 	}
 
@@ -136,10 +186,12 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 	public void valueChanged(TreeSelectionEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void treeExpanded(TreeExpansionEvent e) {
 		writeEvent(e, true);
@@ -149,6 +201,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 	public void treeCollapsed(TreeExpansionEvent e) {
 		writeEvent(e, false);
 	}
+
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		writeEvent(e);
@@ -168,6 +221,10 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 	public void propertyChange(PropertyChangeEvent e) {
 		writeEvent(e);
 	}
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		writeEvent(e);
+	}
 
 	protected synchronized void writeEvent(EventObject pEvent, Object... pOther) {
 		try {
@@ -180,16 +237,16 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 				name = mListSelectionModelListenerMap.get(source);
 			} else if (mTreeSelectionModelListenerMap.containsKey(source)) {
 				name = mTreeSelectionModelListenerMap.get(source);
-			} else if ( source instanceof Component ){
-				name = ((Component)source).getName();
-			} 
-			if ( name == null ){
+			} else if (source instanceof Component) {
+				name = ((Component) source).getName();
+			}
+			if (name == null) {
 				LOGGER.trace(" WARNING - Unable to find the component source");
 				return;
 			}
 			builder.append("<time>" + new Date().getTime() + "</time>" + LINE_BREAK);
 			builder.append("<name>" + name.replaceAll("&", "&#38;") + "</name>" + LINE_BREAK);
-			builder.append("<class>" + source.getClass().getName() + "</class>"+ LINE_BREAK);
+			builder.append("<class>" + source.getClass().getName() + "</class>" + LINE_BREAK);
 			String eventClassName = pEvent.getClass().getName();
 			if (eventClassName.indexOf(".") > 0) {
 				eventClassName = eventClassName.substring(eventClassName
@@ -211,6 +268,8 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 				readEventData((TreeExpansionEvent) pEvent, builder);
 			} else if (pEvent instanceof PropertyChangeEvent) {
 				readEventData((PropertyChangeEvent) pEvent, builder);
+			}else if (pEvent instanceof ChangeEvent) {
+				readEventData((ChangeEvent) pEvent, builder);
 			}
 			builder.append("</data>" + LINE_BREAK);
 			builder.append("</event>" + LINE_BREAK);
@@ -228,7 +287,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			}
 		}
 	}
-	
+
 	protected synchronized void writeEvent(DocumentEvent pEvent)
 	{
 		StringBuilder builder = new StringBuilder();
@@ -239,14 +298,14 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			String name = null;
 			if (mDocumentListenerMap.containsKey(source)) {
 				name = mDocumentListenerMap.get(source);
-			} 
-			if ( name == null ){
+			}
+			if (name == null) {
 				LOGGER.trace(" WARNING - Unable to find the component source");
 				return;
 			}
 			builder.append("<time>" + new Date().getTime() + "</time>" + LINE_BREAK);
 			builder.append("<name>" + name.replaceAll("&", "&#38;") + "</name>" + LINE_BREAK);
-			builder.append("<class>" + source.getClass().getName() + "</class>"+ LINE_BREAK);
+			builder.append("<class>" + source.getClass().getName() + "</class>" + LINE_BREAK);
 			String eventClassName = pEvent.getClass().getName();
 			if (eventClassName.indexOf(".") > 0) {
 				eventClassName = eventClassName.substring(eventClassName.lastIndexOf(".") + 1);
@@ -258,9 +317,9 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			builder.append("<offset>" + pEvent.getOffset() + "</offset>" + LINE_BREAK);
 			builder.append("<length>" + pEvent.getLength() + "</length>" + LINE_BREAK);
 			builder.append("<change>");
-			if ( pEvent.getType() != EventType.REMOVE )
+			if (pEvent.getType() != EventType.REMOVE)
 			{
-				builder.append(pEvent.getDocument().getText(pEvent.getOffset(), pEvent.getLength())); 
+				builder.append(pEvent.getDocument().getText(pEvent.getOffset(), pEvent.getLength()));
 			}
 			builder.append("</change>" + LINE_BREAK);
 			builder.append("</data>" + LINE_BREAK);
@@ -287,6 +346,13 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 		pBuilder.append("<actionCommand>" + pEvent.getActionCommand() + "</actionCommand>" + LINE_BREAK);
 	}
 
+	private void readEventData(ChangeEvent pEvent, StringBuilder pBuilder) {
+		if ( pEvent.getSource() instanceof JTabbedPane )
+		{
+			pBuilder.append("<newTabIndex>" + ((JTabbedPane)pEvent.getSource()).getSelectedIndex() + "</newTabIndex>" + LINE_BREAK);
+		}
+	}
+
 	private void readEventData(ItemEvent pEvent, StringBuilder pBuilder) {
 		pBuilder.append("<id>" + pEvent.getID() + "</id>" + LINE_BREAK);
 		pBuilder.append("<stateChanged>");
@@ -294,7 +360,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 			pBuilder.append("SELECTED");
 		else
 			pBuilder.append("DESELECTED");
-		pBuilder.append("</stateChanged>" + LINE_BREAK );
+		pBuilder.append("</stateChanged>" + LINE_BREAK);
 		pBuilder.append("<selectedItem>" + pEvent.getItem() + "</selectedItem>" + LINE_BREAK);
 	}
 
@@ -323,7 +389,7 @@ public class Spy implements DocumentListener, PropertyChangeListener, ItemListen
 	protected Map<TreeSelectionModel, String> mTreeSelectionModelListenerMap;
 	protected Map<Document, String> mDocumentListenerMap;
 	protected int mEventIndex;
-	
+
 	protected static final Logger LOGGER = Logger.getLogger(Spy.class);
 	private static final String LINE_BREAK = System.getProperty("line.separator");
 }
