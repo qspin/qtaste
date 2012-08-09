@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,8 @@ public class SpyInstaller implements Runnable, ContainerListener {
 	public void run() {
 		mWriter = null;
 		try {
-			mWriter = new BufferedWriter(new FileWriter("spyRepport_"+ new Date().getTime() +".xml"));
+			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_hhmmss");
+			mWriter = new BufferedWriter(new FileWriter("spyRepport_"+ format.format(new Date().getTime()) +".xml"));
 			mWriter.write("<events>\n");
 			while (true) 
 			{
