@@ -48,14 +48,14 @@ public interface JavaGUIMBean {
       
    /**
      * Check if a specified component is enabled.
-	 * @return true if the specified component is enabled.
+	 * @return <code>true</code> if the specified component is enabled.
      */
    public boolean isEnabled(String componentName);
       
    /**
      * Click on the specified componentName.
      * @param componentName an identifier of the GUI component.     
-	 * @return true if the action occurs correcly.
+	 * @return <code>true</code> if the action occurs correcly.
      */
    public boolean clickOnButton(String componentName);
 
@@ -63,7 +63,7 @@ public interface JavaGUIMBean {
      * Click on the specified componentName during a specified period of time.
      * @param componentName an identifier of the GUI component.
 	 * @param pressTime an identifier of the GUI component.     
-	 * @return true if the action occurs correcly.
+	 * @return <code>true</code> if the action occurs correcly.
      */
    public boolean clickOnButton(String componentName, int pressTime);
    
@@ -78,15 +78,24 @@ public interface JavaGUIMBean {
      * Set the text for the specied component.
      * @param componentName an identifier of the GUI component.
 	 * @param value the new value for the text.
-	 * @return true if the action occurs correcly.
+	 * @return <code>true</code> if the action occurs correcly.
      */
    public boolean setText(String componentName, String value);
-      
+    
+   
+   /**
+    * Select the specified tab for the tabbed pane.
+    * @param tabbedPaneComponentName the tabbed pane component name
+    * @param tabIndex the tab index (first at 0). 
+    * @return <code>true</code> if the action occurs correcly.
+    */
+   public boolean selectTab(String tabbedPaneComponentName, int tabIndex);
+   
     /**
      * Select the specified componentName.
      * @param componentName an identifier of the GUI component.
 	 * @param value the new value for the text.
-	 * @return true if the action occurs correcly.
+	 * @return <code>true</code> if the action occurs correcly.
      */
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?
    public boolean selectComponant(String componentName, boolean value);

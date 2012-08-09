@@ -10,8 +10,7 @@ import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 /**
  * 
  */
-public abstract class JavaGUIImpl extends JMXClient implements
-		MultipleInstancesComponent, JavaGUIMBean {
+public abstract class JavaGUIImpl extends JMXClient implements MultipleInstancesComponent, JavaGUIMBean {
 
 	public JavaGUIImpl(String url, String instanceId) throws Exception {
 		super(url);
@@ -83,6 +82,10 @@ public abstract class JavaGUIImpl extends JMXClient implements
 			String nodeSeparator)
 	{
 		return mProxy.selectNode(componentName, nodeName, nodeSeparator);
+	}
+
+	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) {
+		return mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 
 	private JavaGUIMBean getProxy() throws Exception {

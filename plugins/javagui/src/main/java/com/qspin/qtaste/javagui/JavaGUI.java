@@ -45,6 +45,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeModel;
@@ -338,7 +339,6 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 
 	public static void premain(String agentArgs, Instrumentation inst) {
 		JavaGUI javagui = new JavaGUI();
-
 	}
 
 	public boolean dispatchKeyEvent(KeyEvent e) {
@@ -395,5 +395,15 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return false;
 	}
 	// Todo: getColor, awt?
+
+	@Override
+	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) {
+		Component c = getComponentByName(tabbedPaneComponentName);
+		if (c != null && c instanceof JTabbedPane) {
+			((JTabbedPane)c).setSelectedIndex(tabIndex);
+			return true;
+		}
+		return false;
+	}
 
 }
