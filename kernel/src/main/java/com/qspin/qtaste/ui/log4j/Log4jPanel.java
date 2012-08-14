@@ -264,23 +264,23 @@ public class Log4jPanel extends JPanel {
             addFilterLogCheckBox("Level", "Fatal", "doLogLevelFilter", true);
             final JCheckBox testCaseOrVerbCheckBox = addFilterLogCheckBox("TestCaseOrVerb", "Test case or verb", "filterMessageTestCaseOrVerb", true);
             m_SourceFilterPanel.add(new JLabel("Source: "));
-            final JCheckBox ateCheckBox = addFilterLogCheckBox("Source", "QTaste", "filterMessageSource", true);
+            final JCheckBox qtasteCheckBox = addFilterLogCheckBox("Source", "QTaste", "filterMessageSource", true);
 
             // when selecting "Invoking" force "QTaste" to be selected
             testCaseOrVerbCheckBox.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
                     if (testCaseOrVerbCheckBox.isSelected()) {
-                        ateCheckBox.setSelected(true);
+                        qtasteCheckBox.setSelected(true);
                     }
                 }
             });
 
             // when unselecting "QTaste" force "Invoking" to be unselected
-            ateCheckBox.addActionListener(new ActionListener() {
+            qtasteCheckBox.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    if (!ateCheckBox.isSelected()) {
+                    if (!qtasteCheckBox.isSelected()) {
                         testCaseOrVerbCheckBox.setSelected(false);
                     }
                 }
