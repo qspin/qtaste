@@ -98,7 +98,7 @@ public interface JavaGUIMBean {
 	 * @return <code>true</code> if the action occurs correcly.
      */
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?
-   public boolean selectComponant(String componentName, boolean value);
+   public boolean selectComponent(String componentName, boolean value);
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?   
    public boolean selectValue(String componentName, String value);

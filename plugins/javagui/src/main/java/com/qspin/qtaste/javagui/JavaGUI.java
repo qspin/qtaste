@@ -34,6 +34,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.instrument.Instrumentation;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -41,15 +42,21 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+
+import com.qspin.qtaste.tools.ComponentNamer;
 
 /**
  *  JavaGUI is a java agent started with the same VM as the java GUI application.
@@ -70,15 +77,14 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		System.out.println("Initializing javagui agent!");
 		init();
 		catcher = new MouseEventsCatcher();
+		System.out.println("Start Naming thead!");
+		new Thread(new ComponentNamer()).start();
 	}
 
 	private Component getComponentByName(String name) {
 		Window[] windows = Frame.getWindows();
 		for (int w = 0; w < windows.length; w++) {
 			Window window = windows[w];
-			if (window.getName() == null || window.getName().equals("null")) {
-				window.setName("window_" + w);
-			}
 			if (window.getName().equals(name)) {
 				return window;
 			}
@@ -93,11 +99,8 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	private Component lookForComponent(String name, Component[] components) {
 		for (int c = 0; c < components.length; c++) {
 
-			if ( components[c].getName() == null ||  components[c].getName().equals("null")) {
-				 components[c].setName( components[c].getParent().getName() + "_child" + c);
-			}
 			String componentName = components[c].getName();
-			if (componentName.equals(name)) {
+			if (componentName != null && componentName.equals(name)) {
 				System.out.println("Component:" + name + " is found!");
 				return components[c];
 			} else {
@@ -129,14 +132,14 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			if (frame.getName() != null) {
 				list.add(frame.getName());
 			}
-			Window[] windows = frame.getWindows();
-			for (int w = 0; w < windows.length; w++) {
-				Window window = windows[w];
-				if (window.getName() != null) {
-					list.add(window.getName());
-				}
-				list.addAll(browseComponent(window.getComponents()));
+		}
+		Window[] windows = Frame.getWindows();
+		for (int w = 0; w < windows.length; w++) {
+			Window window = windows[w];
+			if (window.getName() != null) {
+				list.add(window.getName());
 			}
+			list.addAll(browseComponent(window.getComponents()));
 		}
 		String[] result = (String[]) list.toArray(new String[0]);
 		return result;
@@ -168,8 +171,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		}
 
 		System.out.println("Location on screen:" + c.getLocationOnScreen());
-		KeyEvent event = new KeyEvent(c, KeyEvent.KEY_PRESSED,
-				System.currentTimeMillis(), 0, vkEvent);
+		KeyEvent event = new KeyEvent(c, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, vkEvent);
 		try {
 
 			java.lang.reflect.Field f = AWTEvent.class
@@ -195,7 +197,10 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			return false;
 		}
 
-		System.out.println("Location on screen:" + c.getLocationOnScreen());
+		/** 
+		 * Code remove due to an exception...
+		 * System.out.println("Location on screen:" + c.getLocationOnScreen());
+		 */
 		// KeyEvent event = new KeyEvent(c, KeyEvent.KEY_PRESSED,
 		// System.currentTimeMillis(), 0, KeyEvent.VK_SPACE);
 		try {
@@ -262,14 +267,36 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 				((JLabel) c).setText(value);
 				return true;
 			} else if (c instanceof JTextComponent) {
-				((JTextComponent) c).setText(value);
+				if ( c instanceof JFormattedTextField ){
+					try {
+						JFormattedTextField field = ((JFormattedTextField)c);
+						field.requestFocus();
+						field.setText(value);
+						//launch an exception for invalid input
+						field.commitEdit();
+						//lose focus to format the value
+						Container parent= c.getParent();
+						while ( parent != null && !parent.isFocusable() )
+						{
+							parent.getParent();
+						}
+						if ( parent != null ) {
+							parent.requestFocus();
+						}
+						return true;
+					} catch (ParseException e) {
+						return false;
+					}
+				} else {
+					((JTextComponent) c).setText(value);
+				}
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean selectComponant(String componentName, boolean value) {
+	public boolean selectComponent(String componentName, boolean value) {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JCheckBox) {
@@ -287,7 +314,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JCheckBox || c instanceof JRadioButton) {
-				return selectComponant(componentName,
+				return selectComponent(componentName,
 						Boolean.parseBoolean(value));
 			} else if (c instanceof JComboBox) {
 				JComboBox combo = (JComboBox) c;
@@ -306,6 +333,21 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 						return true;
 					}
 				}
+			} else if (c instanceof JSpinner ) {
+				JSpinner spinner = (JSpinner) c;
+				try{
+					spinner.getModel().setValue(Double.parseDouble(value));
+				} catch(Exception pExc) {
+					JOptionPane.showMessageDialog(null, pExc.getStackTrace() );
+					return false;
+				}
+				return true;
+			} else if (c instanceof JSlider ) {
+				JSlider slider = (JSlider) c;
+				slider.getModel().setValue(Integer.parseInt(value));
+				return true;
+			} else {
+				System.out.println("component '" + c.getName() +"' ("+c.getClass()+") found but unused" );
 			}
 		}
 		return false;
@@ -358,20 +400,14 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			String nodeSeparator) {
 		String[] nodeNames = nodeName.split(nodeSeparator);
 		Component c = getComponentByName(componentName);
-		System.out.println("main condition");
 		if (c != null && c instanceof JTree && nodeNames.length > 0) {
 			TreeModel model = ((JTree) c).getModel();
 			Object node = model.getRoot();
 			Object[] path = new Object[nodeNames.length];
-			System.out.println("root : " + node);
-			System.out.println("root expected : " + nodeNames[0]);
 			if (node.toString().equals(nodeNames[0])) {
-				System.out.println("Root found!!");
 				path[0] = node;
 
 				for (int i = 1; i < nodeNames.length; i++) {
-					System.out.println("Search " + nodeNames[i] + " in "
-							+ node.toString());
 					for (int childIndex = 0; childIndex < model
 							.getChildCount(node); childIndex++) {
 						Object child = model.getChild(node, childIndex);
@@ -401,7 +437,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		Component c = getComponentByName(tabbedPaneComponentName);
 		if (c != null && c instanceof JTabbedPane) {
 			((JTabbedPane)c).setSelectedIndex(tabIndex);
-			return true;
+			return tabIndex == ((JTabbedPane)c).getSelectedIndex();
 		}
 		return false;
 	}

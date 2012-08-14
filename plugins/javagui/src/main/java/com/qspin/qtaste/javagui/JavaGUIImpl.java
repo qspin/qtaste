@@ -63,9 +63,9 @@ public abstract class JavaGUIImpl extends JMXClient implements MultipleInstances
 		return mProxy.setText(componentName, value);
 	}
 
-	public boolean selectComponant(String componentName, boolean value)
+	public boolean selectComponent(String componentName, boolean value)
 	{
-		return mProxy.selectComponant(componentName, value);
+		return mProxy.selectComponent(componentName, value);
 	}
 
 	public boolean selectValue(String componentName, String value)
