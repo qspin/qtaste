@@ -8,12 +8,11 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -24,9 +23,7 @@ import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.ItemEvent;
 import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
-import com.qspin.qtaste.tools.model.node.ComponentNode;
 import com.qspin.qtaste.tools.model.node.EventNode;
-import com.qspin.qtaste.tools.model.node.EventTypeNode;
 
 public class EventPane extends JPanel implements TreeSelectionListener {
 
@@ -109,15 +106,14 @@ public class EventPane extends JPanel implements TreeSelectionListener {
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		mCurrentSelectedPath = e.getPath();
-		MutableTreeNode selectedNode = (MutableTreeNode) mCurrentSelectedPath.getLastPathComponent();
+		TreeNode selectedNode = (TreeNode) mCurrentSelectedPath.getLastPathComponent();
+		while ( selectedNode!= null && !(selectedNode instanceof EventNode) )
+		{
+			selectedNode = selectedNode.getParent();
+		}
 		resetFields();
 		changeExtention(null);
-		if (selectedNode instanceof ComponentNode) {
-			mComponentName.setText(((ComponentNode) selectedNode).getUserObject().toString());
-			mComponentClass.setText(((ComponentNode) selectedNode).getComponentClass());
-		} else if (selectedNode instanceof EventTypeNode) {
-			mEventType.setText(((EventTypeNode) selectedNode).getUserObject().toString());
-		} else if (selectedNode instanceof EventNode) {
+		if (selectedNode instanceof EventNode) {
 			Event event = ((EventNode) selectedNode).getEvent();
 			mComponentName.setText(event.getComponentName());
 			mComponentClass.setText(event.getSourceClass());

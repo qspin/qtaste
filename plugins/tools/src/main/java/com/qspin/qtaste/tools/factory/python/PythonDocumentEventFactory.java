@@ -25,8 +25,8 @@ class PythonDocumentEventFactory extends PythonEventFactory {
 	//		builder.append(getPythonIndentation(1) + "for i in range(" + evt.getOffset()+evt.getLenght() + ", len(text)):" + LINE_BREAK);
 	//		builder.append(getPythonIndentation(2) +      "newText = newText + text[i]" + LINE_BREAK);
 	
-	//		builder.append(getPythonIndentation(1) + "text = javaguiMI.setText(\"" + getComponentIdentifier(evt.getComponentName()) + "\", newText)" + LINE_BREAK);
-			builder.append(getPythonIndentation(1) + "text = javaguiMI.setText(" + getComponentIdentifier(evt.getComponentName()) + ", \"" + evt.getChange() + "\")" + LINE_BREAK);
+	//		builder.append(getPythonIndentation(1) + "javaguiMI.setText(\"" + getComponentIdentifier(evt.getComponentName()) + "\", newText)" + LINE_BREAK);
+			builder.append(getPythonIndentation(1) + "javaguiMI.setText(" + getComponentIdentifier(evt.getComponentName()) + ", \"" + evt.getChange() + "\")" + LINE_BREAK);
 		}
 		return builder.toString();
 	}
