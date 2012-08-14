@@ -104,6 +104,11 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 	 */
 	public void addTarget(Component pComponent)
 	{
+		//if the spy is already active for the component, don't install it again.
+		if ( pComponent.getListeners(Spy.class).length != 0 )
+		{
+			return;
+		}
 		pComponent.addPropertyChangeListener(this);
 		if (pComponent instanceof AbstractButton) {
 			((AbstractButton) pComponent).addActionListener(this);
