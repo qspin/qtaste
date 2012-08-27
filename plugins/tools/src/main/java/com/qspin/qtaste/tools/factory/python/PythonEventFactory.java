@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.event.ActionEvent;
+import com.qspin.qtaste.tools.model.event.ChangeEvent;
 import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.TreeSelectionEvent;
@@ -69,6 +70,7 @@ public abstract class PythonEventFactory implements PythonEventFactoryInterface 
 	static
 	{
 		FACTORIES.put(ActionEvent.class, new PythonActionEventFactory());
+		FACTORIES.put(ChangeEvent.class, new PythonChangeEventFactory());
 		FACTORIES.put(DocumentEvent.class, new PythonDocumentEventFactory());
 		FACTORIES.put(TreeSelectionEvent.class, new PythonTreeSelectionEventFactory());
 	}
