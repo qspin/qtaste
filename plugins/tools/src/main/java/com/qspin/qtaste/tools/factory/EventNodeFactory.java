@@ -5,12 +5,14 @@ import javax.swing.tree.MutableTreeNode;
 
 import com.qspin.qtaste.tools.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.model.event.ActionEvent;
+import com.qspin.qtaste.tools.model.event.ChangeEvent;
 import com.qspin.qtaste.tools.model.event.DocumentEvent;
 import com.qspin.qtaste.tools.model.event.Event;
 import com.qspin.qtaste.tools.model.event.ItemEvent;
 import com.qspin.qtaste.tools.model.event.PropertyChangeEvent;
 import com.qspin.qtaste.tools.model.event.TreeSelectionEvent;
 import com.qspin.qtaste.tools.model.node.ActionEventNode;
+import com.qspin.qtaste.tools.model.node.ChangeEventNode;
 import com.qspin.qtaste.tools.model.node.DocumentEventNode;
 import com.qspin.qtaste.tools.model.node.ItemEventNode;
 import com.qspin.qtaste.tools.model.node.PropertyChangeEventNode;
@@ -63,6 +65,8 @@ public final class EventNodeFactory {
 			return new ItemEventNode((ItemEvent)pEvent);
 		} else if ( pEvent instanceof TreeSelectionEvent ) {
 			return new TreeSelectionEventNode((TreeSelectionEvent)pEvent);
+		} else if ( pEvent instanceof ChangeEvent ) {
+			return new ChangeEventNode((ChangeEvent)pEvent);
 		}
 		
 		return node;
