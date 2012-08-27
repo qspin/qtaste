@@ -324,7 +324,7 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 			builder.append("<change>");
 			if (pEvent.getType() != EventType.REMOVE)
 			{
-				builder.append(pEvent.getDocument().getText(pEvent.getOffset(), pEvent.getLength()));
+				builder.append(pEvent.getDocument().getText(0, pEvent.getDocument().getLength()));
 			}
 			builder.append("</change>" + LINE_BREAK);
 			builder.append("</data>" + LINE_BREAK);
