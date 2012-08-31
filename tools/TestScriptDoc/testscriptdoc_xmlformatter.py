@@ -9,9 +9,11 @@ import string, os, re
 try:
 	import xml.etree.ElementTree as et
 	from xml.etree.ElementTree import XMLTreeBuilder as TreeBuilder
+
 except ImportError:
 	import elementtree.ElementTree as et
 	from elementtree.SimpleXMLTreeBuilder import TreeBuilder
+
 
 	
 def relpath(path, reldir):
@@ -32,7 +34,7 @@ def relpath(path, reldir):
 
 class PythonDocGenerator:
 
-	tags = ('name', 'version', 'preparation', 'data', 'step', 'expected')
+	tags = ('name', 'version', 'preparation', 'requirement', 'data', 'step', 'expected')
 
 	def __init__(self, options):
 		self.encoding = options.get('encoding')
@@ -130,6 +132,7 @@ class PythonDocGenerator:
 				print 'Warning: function step ' + stepName + ' of test script ' + testScriptName + ' is used in doStep() but not declared or not documented with @step tag'
 				self._addUndefinedStep(steps, stepId, stepName)
 		self._addTestData(testScriptFileName, testScript)
+		self._addTestRequirement(testScriptFileName, testScript)
 		tree = et.ElementTree(testScript)
 		file = open(filename, 'wb')
 		tree.write(file, self.encoding)
@@ -355,6 +358,21 @@ class PythonDocGenerator:
 								et.SubElement(testDataValues, 'value').text = dataValue
 				row = row + 1
 			dataFile.close()
+		except IOError:
+			pass
+
+
+	def _addTestRequirement(self, testScriptFileName, testScript):
+		testRequirement = et.SubElement(testScript, 'testRequirement')
+		requirementFileName = os.path.dirname(testScriptFileName) + os.sep + 'TestRequirements.xml'
+		try:
+			requirementFile = et.parse(requirementFileName, TreeBuilder())
+			root = requirementFile.getroot()
+			for requirement in root.getiterator('REQ'):
+				xmlReq = et.SubElement(testRequirement, 'REQ')
+				et.SubElement(xmlReq, 'ID').text = requirement.get('id')
+				for desc in requirement.getiterator('REQ_DESCRIPTION'):
+					et.SubElement(xmlReq, 'DESCRIPTION').text = desc.text
 		except IOError:
 			pass
 

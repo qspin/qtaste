@@ -55,6 +55,23 @@
 					</xsl:for-each>
 					</table>
 				</xsl:if>
+		<h3>Verified requirement(s)</h3>
+		<xsl:choose>
+			<xsl:when test="count(testRequirement/REQ)!=0">
+				<table border="1" cellspacing="0" cellPadding="2">
+					<tr><th>Requirement ID</th><th>Requirement description</th></tr>
+					<xsl:for-each select="testRequirement/REQ">
+						<tr>
+							<td><xsl:value-of select="ID"/></td>
+							<td><xsl:value-of select="DESCRIPTION"/></td>
+						</tr>
+					</xsl:for-each>
+				</table>
+			</xsl:when>
+			<xsl:otherwise>
+				Not specified
+			</xsl:otherwise>
+		</xsl:choose>
                 <h3>Steps</h3>
                 <table border="1" cellspacing="0" cellPadding="2" width="100%">
                 <tr><th width="3%">Step</th><th width="7%">Name</th><th width="45%">Description</th><th width="45%">Expected result</th></tr>
