@@ -129,5 +129,10 @@
         <version>3.1.2</version>
         <artifactId>xmlrpc-client</artifactId>
     </dependency>
+    <dependency>
+    	<groupId>com.qspin.qtaste.plugin</groupId>
+    	<artifactId>javagui</artifactId>
+    	<version>1.1</version>
+    </dependency>
    </dependencies>
 </project>
