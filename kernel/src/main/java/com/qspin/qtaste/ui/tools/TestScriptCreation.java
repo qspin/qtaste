@@ -69,7 +69,8 @@ public class TestScriptCreation {
     
     public void createTestSuite() {
         BufferedWriter output = null;
-        String outputFileName = mTestSuiteDir + File.separator + mTestName + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
+        String testSuiteDirectoryName = mTestSuiteDir + File.separator + mTestName;
+        String outputFileName = testSuiteDirectoryName + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
         File destFile = new File (outputFileName);
         if (destFile.exists()) {
                 if (JOptionPane.showConfirmDialog(null,
@@ -90,7 +91,9 @@ public class TestScriptCreation {
             output.close();
             
             // copy the TestData files
-            copyTestData(TEMPLATE_DIR, mTestSuiteDir + File.separator + mTestName);
+            copyTestData(TEMPLATE_DIR, testSuiteDirectoryName);
+            // create empty requirement xml file
+        	copyTestRequirement(TEMPLATE_DIR, testSuiteDirectoryName);
         } catch (FileNotFoundException ex) {           
         } catch (IOException ex) {           
         } finally {
@@ -119,6 +122,14 @@ public class TestScriptCreation {
         if (new File(testDataSourceFileName).exists()) {
 	        testDataDestFileName = DestDir + File.separator + testDataFileNameWithoutExtension + extension;
 	        FileUtilities.copy(testDataSourceFileName, testDataDestFileName);
+        }
+    }
+    
+    private void copyTestRequirement(String sourceDir, String DestDir) {
+        String testRequirementSourceFileName = sourceDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
+        if (new File(testRequirementSourceFileName).exists()) {
+	        String testRequirementDestFileName = DestDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
+	        FileUtilities.copy(testRequirementSourceFileName, testRequirementDestFileName);
         }
     }
     

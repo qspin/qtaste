@@ -203,7 +203,7 @@ public class TestEngine {
 	public static boolean restartSUT() {
 		if (useControlScript()) {
 			logger.info("Restarting SUT");
-			TestResult tr = new TestResultImpl("Restart SUT", null, 1, 1);
+			TestResult tr = new TestResultImpl("Restart SUT", null, null, 1, 1);
 			tr.setTestScriptVersion("-");
 			tr.start();
 			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
@@ -242,7 +242,7 @@ public class TestEngine {
 			isStartStopSUTCancellable = true;
 			isStartStopSUTCancelled = false;
 
-			TestResult tr = new TestResultImpl("Start SUT", null, 1, 1);
+			TestResult tr = new TestResultImpl("Start SUT", null, null, 1, 1);
 			tr.setTestScriptVersion("-");
 			tr.start();
 			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
@@ -271,7 +271,7 @@ public class TestEngine {
 
 		if (useControlScript()) {
 			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-			TestResult tr = new TestResultImpl("Stop SUT", null, 1, 1);
+			TestResult tr = new TestResultImpl("Stop SUT", null, null, 1, 1);
 			tr.setTestScriptVersion("-");
 			tr.start();
 			reportManager.putEntry(tr);

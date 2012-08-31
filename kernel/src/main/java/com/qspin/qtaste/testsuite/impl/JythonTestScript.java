@@ -86,6 +86,7 @@ import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.testsuite.TestDataSet;
+import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.testsuite.TestScript;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.debug.DebugVariable;
@@ -418,8 +419,8 @@ public class JythonTestScript extends TestScript implements Executable {
      * @throws FileNotFoundException 
      * @throws IOException 
      */
-    public JythonTestScript(List<LinkedHashMap<String, String>> data, File fileName, File testSuiteDirectory, TestSuite testSuite) throws IOException {
-        super(fileName.getParentFile(), testSuiteDirectory, fileName.getParentFile().getName(), new TestDataSet(data), testSuite);
+    public JythonTestScript(List<LinkedHashMap<String, String>> data, List<TestRequirement> requirements, File fileName, File testSuiteDirectory, TestSuite testSuite) throws IOException {
+        super(fileName.getParentFile(), testSuiteDirectory, fileName.getParentFile().getName(), new TestDataSet(data), requirements, testSuite);
 
         this.fileName = fileName.getCanonicalFile().getAbsoluteFile();
 

@@ -306,7 +306,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             TestBedConfiguration.reloadConfigFileIfModified();
 
             boolean start = command.equals("start");
-            TestResult tr = new TestResultImpl((start ? "(Re)start" : "Stop") + " SUT", null, 1, 1);
+	        TestResult tr = new TestResultImpl((start ? "(Re)start" : "Stop") + " SUT", null, null, 1, 1);
             tr.start();
             // TODO: Check this!
             TestResultsReportManager reportManager = TestResultsReportManager.getInstance(); //getReporters("Manual SUT " + (start ? "start" : "stop"));

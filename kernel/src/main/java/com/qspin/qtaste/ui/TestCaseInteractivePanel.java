@@ -35,6 +35,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.script.Bindings;
@@ -62,6 +63,7 @@ import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.testsuite.QTasteDataException;
 import com.qspin.qtaste.testsuite.TestData;
+import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.testsuite.impl.JythonTestScript;
 import com.qspin.qtaste.testsuite.impl.TestDataInteractive;
 import com.qspin.qtaste.ui.csveditor.TestDataEditor;
@@ -247,10 +249,10 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
     public synchronized void executeCommand(String command) {
         // define a testcase id
         String tcId = command + " - " + ++commandId;
-        executeCommand(testDataView.getTestData(), command, tcId);
+        executeCommand(testDataView.getTestData(), null, command, tcId);
     }
 
-    protected static void executeCommand(TestData data, String command, String tcId) {
+    protected static void executeCommand(TestData data, List<TestRequirement> requirements, String command, String tcId) {
         String sTempDir = System.getProperty("java.io.tmpdir");
         File tempDir = new File(sTempDir);
         //create a subdirectory called " QTaste_Interactive"
@@ -270,7 +272,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
                 ArrayList<LinkedHashMap<String, String>> l = new ArrayList<LinkedHashMap<String, String>>();
                 l.add(data.getDataHash());
                 // checks must be added to ask specific data
-                JythonTestScript ts = new JythonTestScript(l, iQTasteFile, iQTasteDirectory, null);
+                JythonTestScript ts = new JythonTestScript(l, requirements, iQTasteFile, iQTasteDirectory, null);
                 ts.setName(tcId);
                 ts.execute(false);
                 TestResult testResult = ts.getTestResults().get(0);

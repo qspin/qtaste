@@ -56,6 +56,7 @@ import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.reporter.HTMLFormatter;
 import com.qspin.qtaste.reporter.testresults.TestResultImpl.StepResult;
 import com.qspin.qtaste.testsuite.TestData;
+import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.tools.FileMask;
 import com.qspin.qtaste.util.FileUtilities;
@@ -107,9 +108,11 @@ public class HTMLReportFormatter extends HTMLFormatter {
             templates.put("testScript", template_root + File.separator + "report_testscript_template.html");
             templates.put("testScriptRowResult", template_root + File.separator + "report_testscript_row_result.html");
             templates.put("dataColumn", template_root + File.separator + "report_test_data_column.html");
+            templates.put("requirementColumn", template_root + File.separator + "report_test_requirement_column.html");
             templates.put("rowSteps", template_root + File.separator + "report_test_steps.html");
             templates.put("stepsHeader", template_root + File.separator + "report_test_step_header.html");
             templates.put("testData", template_root + File.separator + "report_test_data_header.html");
+            templates.put("testRequirement", template_root + File.separator + "report_test_requirement_header.html");
             templates.put("executiveSummary", template_root + File.separator + "executive_summary_line.html");
 
             // copy images to report directory
@@ -270,6 +273,26 @@ public class HTMLReportFormatter extends HTMLFormatter {
         return dataColumnContent;
     }
 
+    private String generateRequirementColumn(TestResult tr) throws FileNotFoundException {
+        String requirementColumnContent = "";
+        try {
+        	if ( tr.getTestRequirements() == null || tr.getTestRequirements().isEmpty() ) {
+        		return "Not specified";
+        	}
+            for (TestRequirement req : tr.getTestRequirements()) {
+                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                namesValues.add("###REQ_ID###", req.getId());
+                namesValues.add("###REQ_DESC###", req.getDescription() != null? StringEscapeUtils.escapeHtml(req.getDescription()) : "");
+                requirementColumnContent += getSubstitutedTemplateContent(templateContents.get("requirementColumn"), namesValues);
+            }
+
+        } catch (Exception e) {
+            return "Not specified";
+        }
+
+        return requirementColumnContent;
+    }
+
     public void makeBody() {
         int rowId = 0;
         String previousTestSuiteName = "";
@@ -307,6 +330,16 @@ public class HTMLReportFormatter extends HTMLFormatter {
                         namesValues.add("###DATA_COLUMN###", "");
                     }
 
+
+                    String requirementColumn = generateRequirementColumn(tr);
+                    if( !requirementColumn.equalsIgnoreCase("Not specified"))
+                    {
+                        NamesValuesList<String, String> requirementValue = new NamesValuesList<String, String>();
+                        requirementValue.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
+                        requirementColumn = getSubstitutedTemplateContent(templateContents.get("testRequirement"), requirementValue);	
+                    }
+                    namesValues.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
+                    
                     substituteAndWriteFile(templateContents.get("testScript"), namesValues);
                     previousTestSuiteName = testcaseName;
                 }
@@ -388,20 +421,16 @@ public class HTMLReportFormatter extends HTMLFormatter {
                         break;
                 }
 
+
                 String dataColumn = generateDataColumn(tr);
-                namesValues.add("###DATA_TEMPLATE###", dataColumn);
-
-                if (templateContents.get("testScriptRowResult").contains("###DATA_CONTENT###")) {
-                    // fill the testData row in the corresponding template
-                    String testDataContent = "";
-
-                    if (generateDataColumn) {
-                        testDataContent = getSubstitutedTemplateContent(templateContents.get("testData"), namesValues);
-                    }
-
-                    namesValues.add("###DATA_CONTENT###", testDataContent);
+                if ( !dataColumn.equalsIgnoreCase("none") )
+                {
+                    NamesValuesList<String, String> dataValues = new NamesValuesList<String, String>();
+                    dataValues.add("###DATA_TEMPLATE###", dataColumn);
+                    dataColumn = getSubstitutedTemplateContent(templateContents.get("testData"), dataValues);
                 }
-
+                namesValues.add("###DATA_CONTENT###", dataColumn);
+                
 				// add step entries if any
                 String stepsContent = "";
 

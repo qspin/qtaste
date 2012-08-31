@@ -88,11 +88,12 @@ import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
 import com.qspin.qtaste.ui.tools.FileNode;
 import com.qspin.qtaste.ui.tools.HTMLDocumentLoader;
 import com.qspin.qtaste.ui.tools.PythonTestScript;
+import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.tools.SpringUtilities;
+import com.qspin.qtaste.ui.xmleditor.TestRequirementEditor;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.ScriptCheckSyntaxValidator;
 import com.qspin.qtaste.util.ThreadManager;
-import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
 public class TestCasePane extends JPanel implements TestScriptBreakpointListener, DumpPythonResultListener {
@@ -784,6 +785,14 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         return null;
     }
 
+    public TestRequirementEditor getTestRequirementPane(int tabIndex) {
+        Component comp = editorTabbedPane.getComponentAt(tabIndex);
+        if (comp instanceof TestRequirementEditor) {
+            return (TestRequirementEditor) comp;
+        }
+        return null;
+    }
+
     public TestDataEditor getTestDataPane() {
         for (int i = 0; i < editorTabbedPane.getTabCount(); i++) {
             TestDataEditor testDataEditor = getTestDataPane(i);
@@ -798,6 +807,16 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         for (int i = 0; i < editorTabbedPane.getTabCount(); i++) {
             TestDataEditor tabTestDataPane = getTestDataPane(i);
             if (tabTestDataPane != null) {
+                return i;
+            }
+        }
+        return -1; // not found        
+    }
+
+    public int getTestRequirementTabIndex() {
+        for (int i = 0; i < editorTabbedPane.getTabCount(); i++) {
+            TestRequirementEditor tabTestRequirementPane = getTestRequirementPane(i);
+            if (tabTestRequirementPane != null) {
                 return i;
             }
         }
@@ -846,6 +865,38 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                         editorTabbedPane.setTitleAt(editorTabbedPane.getSelectedIndex(), currentTitle);
                     }
                 }
+            }
+        });
+
+    }
+
+    public void loadXMLFile(String fileName) {
+        int testRequirementTabIndex = getTestRequirementTabIndex();
+        if (testRequirementTabIndex != -1) {
+            TestRequirementEditor currentTestRequirementEditor = this.getTestRequirementPane(testRequirementTabIndex);
+            if (currentTestRequirementEditor != null) {
+                if (currentTestRequirementEditor.getCurrentXMLFile().equals(fileName)) {
+                    return;
+                }
+            }
+        }
+        TestRequirementEditor requirementEditor = new TestRequirementEditor();
+        requirementEditor.loadXMLFile(fileName);
+        editorTabbedPane.addTab("TestRequirements", null, requirementEditor, fileName);
+        requirementEditor.addPropertyChangeListener("isModified", new PropertyChangeListener() {
+        	
+        	private static final String MODIFIED_SUFFIX = " *";
+        	
+            public void propertyChange(PropertyChangeEvent evt) {
+                String currentTitle = editorTabbedPane.getTitleAt(editorTabbedPane.getSelectedIndex());
+                if (evt.getNewValue().equals(true)) {
+                    if (!currentTitle.endsWith(MODIFIED_SUFFIX)) {
+                        currentTitle += MODIFIED_SUFFIX;
+                    }
+                } else if (currentTitle.endsWith(MODIFIED_SUFFIX)) {
+                	currentTitle = currentTitle.replace(MODIFIED_SUFFIX, "");
+                }
+                editorTabbedPane.setTitleAt(editorTabbedPane.getSelectedIndex(), currentTitle);
             }
         });
 

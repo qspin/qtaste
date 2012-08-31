@@ -34,10 +34,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.io.CSVFile;
+import com.qspin.qtaste.io.XMLFile;
+import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.testsuite.TestScript;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.util.FileUtilities;
@@ -109,20 +114,31 @@ public class DirectoryTestSuite extends TestSuite {
     private void addTestScripts(File directory) {
         File scriptFile = new File(directory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
         File csvFile = new File(directory + File.separator + StaticConfiguration.TEST_DATA_FILENAME);
+        File xmlFile = new File(directory + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
         if (scriptFile.exists() && csvFile.exists()) {
             // test case directory: add test script
             try {
                 List<LinkedHashMap<String, String>> csvDataSet = new CSVFile(csvFile).getCSVDataSet();
+                List<TestRequirement> xmlRequirements;
+                if ( xmlFile.exists() ) {
+                	xmlRequirements = new XMLFile(xmlFile).getXMLDataSet();
+                } else {
+                	xmlRequirements = new ArrayList<TestRequirement>();
+                }
                 if (csvDataSet.isEmpty()) {
                     logger.warn("Ignoring test case " + scriptFile + " " + csvFile.getName() + " because it contains no data row");
                 } else {
-                    logger.info("Adding test case " + scriptFile + " " + csvFile.getName());
-                    TestScript ts = new JythonTestScript(csvDataSet, scriptFile, directory, DirectoryTestSuite.this);
+                    logger.info("Adding test case " + scriptFile + " " + csvFile.getName() + " " + xmlFile);
+                    TestScript ts = new JythonTestScript(csvDataSet, xmlRequirements, scriptFile, directory, DirectoryTestSuite.this);
                     testScripts.add(ts);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            } catch (SAXException e) {
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			}
         } else {
             // intermediate directory: add test scripts from sub-directories
             File[] subdirectories = FileUtilities.listSortedFiles(directory, new FileFilter() {

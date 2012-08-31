@@ -41,6 +41,7 @@ public class PythonTestScript {
 	private String m_TestSuiteDir;
 	private File m_ScriptDoc = null;
 	private File m_ScriptData = null;
+	private File m_ScriptReq = null;
 	
 	public PythonTestScript(File file, String testSuiteDir) {
 		m_ScriptFile = file;
@@ -55,6 +56,7 @@ public class PythonTestScript {
 		m_ScriptFileDir = file.getParentFile();
 		m_ScriptDoc = null;
 		m_ScriptData = null;
+		m_ScriptReq = null;
 		
 	}
 	public boolean isDocSynchronized() {
@@ -64,6 +66,10 @@ public class PythonTestScript {
             File testcaseData = this.getTestcaseData();
             if (testcaseData != null) {
                 lastTestCaseModifiedDate = Math.max(lastTestCaseModifiedDate, testcaseData.lastModified());
+            }
+            File testRequirement = this.getTestcaseRequirements();
+            if (testRequirement != null) {
+                lastTestCaseModifiedDate = Math.max(lastTestCaseModifiedDate, testRequirement.lastModified());
             }
             long lastTestDocModifiedDate = doc.lastModified();
             return lastTestCaseModifiedDate < lastTestDocModifiedDate;
@@ -124,33 +130,37 @@ public class PythonTestScript {
         }
         return testcaseDoc;		
 	}
+	
     public File getTestcaseData() {
     	if (m_ScriptData==null) {
-	        File[] childFiles = FileUtilities.listSortedFiles(m_ScriptFileDir);
-	        for (int i = 0; i < childFiles.length; i++) {
-	            if (childFiles[i].getName().equalsIgnoreCase(StaticConfiguration.TEST_DATA_FILENAME)) {
-	            	m_ScriptData =childFiles[i];
-	                return childFiles[i];
-	            }
-	        }
-	        return null;
+        	m_ScriptData = findFileIn(StaticConfiguration.TEST_DATA_FILENAME, m_ScriptFileDir);
     	}
     	return m_ScriptData;
 
-    }	
-    
+    }
+	
     public File getTestcaseDoc() {
     	if (m_ScriptDoc==null) {
-	        File[] childFiles = FileUtilities.listSortedFiles(m_ScriptFileDir);
-	        for (int i = 0; i < childFiles.length; i++) {
-	            if (childFiles[i].getName().equalsIgnoreCase(StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME)) {
-	            	m_ScriptDoc =childFiles[i];
-	                return childFiles[i];
-	            }
-	        }
-	        return null;
+        	m_ScriptDoc = findFileIn(StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME, m_ScriptFileDir);
     	}
     	return m_ScriptDoc;
-
-    }    
+    }
+    
+    public File getTestcaseRequirements() {
+    	if (m_ScriptReq==null) {
+    		m_ScriptReq = findFileIn(StaticConfiguration.TEST_REQUIREMENTS_FILENAME, m_ScriptFileDir);
+    	}
+    	return m_ScriptReq;
+    }
+    
+    protected File findFileIn(String pFileName, File pDirectory)
+    {
+    	File[] childFiles = FileUtilities.listSortedFiles(pDirectory);
+        for (int i = 0; i < childFiles.length; i++) {
+            if (childFiles[i].getName().equalsIgnoreCase(pFileName)) {
+                return childFiles[i];
+            }
+        }
+        return null;
+    }
 }

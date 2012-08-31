@@ -300,25 +300,20 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
     protected void setTestCaseData(final File f, final boolean activateSourceTab) {
         if (f.exists() && f.canRead()) {
-            StringBuffer contents = new StringBuffer();
-            BufferedReader in = null;
             try {
-                in = new BufferedReader(new FileReader(f));
-                while (in.ready()) {
-                    contents.append(in.readLine()).append("\n");
-                }
                 testCasePane.loadCSVFile(f.getAbsoluteFile().getCanonicalPath());
-
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-            } finally {
-                try {
-                    if (in != null) {
-                        in.close();
-                    }
-                } catch (IOException ioe) {
-                    //So I couldn't close the connection?
-                }
+            }
+        }
+    }
+
+    protected void setTestCaseRequirement(final File f, final boolean activateSourceTab) {
+        if (f.exists() && f.canRead()) {
+            try {
+                testCasePane.loadXMLFile(f.getAbsoluteFile().getCanonicalPath());
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
             }
         }
     }
@@ -352,6 +347,10 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 File testcaseData = fn.getPythonTestScript().getTestcaseData();
                 if (testcaseData != null) {
                     setTestCaseData(testcaseData, false);
+                }
+                File testcaseRequirement = fn.getPythonTestScript().getTestcaseRequirements();
+                if (testcaseRequirement != null) {
+                    setTestCaseRequirement(testcaseRequirement, false);
                 }
                 //  regenerate the doc if file date of script > file date of doc
                 PythonTestScript script = fn.getPythonTestScript();

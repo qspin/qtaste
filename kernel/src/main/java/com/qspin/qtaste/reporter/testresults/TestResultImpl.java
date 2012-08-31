@@ -28,9 +28,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.qspin.qtaste.reporter.Result;
 import com.qspin.qtaste.testsuite.TestData;
+import com.qspin.qtaste.testsuite.TestRequirement;
 
 /**
  *
@@ -39,6 +41,7 @@ import com.qspin.qtaste.testsuite.TestData;
 public class TestResultImpl extends Result implements TestResult  {
 
     private TestData data;
+    private List<TestRequirement> mRequirements;
     private long start;
     private long end;
     private String name;
@@ -70,8 +73,9 @@ public class TestResultImpl extends Result implements TestResult  {
     //private TestResultsReportManager reportFormaterManager;
 
     /** Creates a new instance of TestResultImpl */
-    public TestResultImpl(String name, TestData data, int currentRowIndex, int numberRows) {
+    public TestResultImpl(String name, TestData data, List<TestRequirement> requirements, int currentRowIndex, int numberRows) {
         this.data = data;
+        this.mRequirements = requirements;
         mCurrentRowIndex = currentRowIndex;
         mNumberRows = numberRows;
         setName(name);
@@ -90,6 +94,10 @@ public class TestResultImpl extends Result implements TestResult  {
 
     public TestData getTestData() {
         return data;
+    }
+
+    public List<TestRequirement> getTestRequirements() {
+        return mRequirements;
     }
     
     /**

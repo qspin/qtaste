@@ -22,9 +22,11 @@ package com.qspin.qtaste.reporter.testresults;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import com.qspin.qtaste.reporter.testresults.TestResultImpl.StepResult;
 import com.qspin.qtaste.testsuite.TestData;
+import com.qspin.qtaste.testsuite.TestRequirement;
 
 /**
  * Description of all the fields present in the testresult reports
@@ -41,6 +43,7 @@ public interface TestResult {
     }
     
     public TestData getTestData();
+    public List<TestRequirement> getTestRequirements();
     public String getExtraResultDetails();
     public void setExtraResultDetails(String extraResultDetails);        
     public String getReturnValue();

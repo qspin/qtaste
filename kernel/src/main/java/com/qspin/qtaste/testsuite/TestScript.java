@@ -55,15 +55,17 @@ public abstract class TestScript implements Executable {
     protected TestSuite testSuite;
     protected File testSuiteDirectory;
     private TestDataSet ds;
+    private List<TestRequirement> requirements;
     private List<TestResult> testResults;
     protected TestAPI testAPI;
     private boolean abortedByUser = false;
     private static final int DEFAULT_TIMEOUT = 60 * 1000;
     private int RETRY_COUNTER;
 
-    public TestScript(File fileName, File testSuiteDirectory, String name, TestDataSet data, TestSuite testSuite) {
+    public TestScript(File fileName, File testSuiteDirectory, String name, TestDataSet data, List<TestRequirement> requirements, TestSuite testSuite) {
         this.name = name;
         this.ds = data;
+        this.requirements = requirements;
         this.testAPI = TestAPIImpl.getInstance();
         this.fileName = fileName;
         this.testSuite = testSuite;
@@ -116,7 +118,7 @@ public abstract class TestScript implements Executable {
                         }
                     }
 
-                    TestResult testResult = initTestResult(data, trial, reportManager, ds.getData().indexOf(data), ds.getData().size());
+                    TestResult testResult = initTestResult(data, requirements, trial, reportManager, ds.getData().indexOf(data), ds.getData().size());
                     testResults.add(testResult);
 
                     int timeout = DEFAULT_TIMEOUT;
@@ -195,7 +197,7 @@ public abstract class TestScript implements Executable {
         return fileName.toString();
     }
 
-    private TestResult initTestResult(TestData data, int retryCount, TestResultsReportManager reporter, int currentRowIndex, int numberRows) {
+    private TestResult initTestResult(TestData data, List<TestRequirement> requirements, int retryCount, TestResultsReportManager reporter, int currentRowIndex, int numberRows) {
         String testCaseDirectory = getTestCaseDirectory();
         String testSuiteDirectory = this.testSuiteDirectory.toString();
         String testCaseName;
@@ -208,7 +210,7 @@ public abstract class TestScript implements Executable {
         	testCaseName = name;
         }
 
-        TestResult result = new TestResultImpl(testCaseName, data, currentRowIndex, numberRows);
+        TestResult result = new TestResultImpl(testCaseName, data, requirements, currentRowIndex, numberRows);
         result.setTestCaseDirectory(testCaseDirectory);
         result.setTestScriptVersion(version);
 
