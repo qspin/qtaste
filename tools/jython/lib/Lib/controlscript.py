@@ -378,9 +378,8 @@ class NativeProcess(ControlAction):
 
 	def stop(self):
 		print "Stopping " + self.description + "...";
-		shellScriptArguments = []
-		shellScriptArguments.append(self.executable)
-		shellScriptArguments.append(self.args)
+		shellScriptArguments = self.executable
+		shellScriptArguments = shellScriptArguments + " " + self.args
 		if _OS.getType() != _OS.Type.WINDOWS:
 			ControlAction.executeShellScript("stop_process", '"' + shellScriptArguments + '"')
 		else:
