@@ -61,6 +61,7 @@
         <panel classname="TreePacksPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="FinishPanel"/>
+        <panel classname="ProcessPanel"/>
     </panels>
 
     <!-- 
@@ -71,92 +72,161 @@
         <pack name="Kernel" required="yes">
             <description>The kernel files - required to use qtaste</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="bin/*"/>
-				<include name="kernel/target/qtaste-kernel-deploy.jar"/>
-				<include name="lib/**"/>
-				<include name="COPYING"/>
-				<include name="COPYING.LESSER"/>
-				<include name="conf/**"/>
-				<include name="doc/**"/>
-				<include name="tools/**"/>
-				<include name="Testbeds/**"/>
-				<include name="TestSuites/**"/>
-				<include name="plugins/"/>
-				<include name="TestCampaigns/*"/>
-				<exclude name="conf/gui.xml"/>
-				<exclude name="tools/jython/lib/cachedir"/>
-				<exclude name="**/*.class"/>
-				<exclude name="**/Thumbs.db"/>
-				<exclude name="**/*.pdf"/>
-				<exclude name="*ate2qtaste*"/>
-			</fileset>
+		<include name="bin/*"/>
+		<include name="kernel/target/qtaste-kernel-deploy.jar"/>
+		<include name="lib/**"/>
+		<include name="COPYING"/>
+		<include name="COPYING.LESSER"/>
+		<include name="conf/**"/>
+		<include name="doc/**"/>
+		<include name="tools/**"/>
+		<include name="Testbeds/**"/>
+		<include name="TestSuites/**"/>
+		<include name="plugins/"/>
+		<include name="TestCampaigns/*"/>
+		<exclude name="conf/gui.xml"/>
+		<exclude name="tools/jython/lib/cachedir"/>
+		<exclude name="**/*.class"/>
+		<exclude name="**/Thumbs.db"/>
+		<exclude name="**/*.pdf"/>
+		<exclude name="plugins/**"/>
+		<exclude name="*ate2qtaste*"/>
+	    </fileset>
         </pack>
         <pack name="The kernel Sources" required="no" preselected="yes" parent="Kernel">
-			<description>The source code of the kernel</description>
+	    <description>The source code of the kernel</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="pom.xml"/>
-				<include name="clean.*"/>
-				<include name="packager_*.*"/>
-				<include name="izpack/install.xml"/>
-				<include name="kernel/src/**"/>
-				<include name="kernel/**"/>
-				<include name="testapi-parent/*"/>
-				<include name="testapi-parent/testapi-deploy/**"/>
-				<include name="toolbox/*"/>
-				<include name="toolbox/testapi/*"/>
-				<include name="toolbox/testapi/src/**"/>
-				<include name="lib/**"/>
-				<exclude name="tools/jython/lib/cachedir"/>
-				<exclude name="tools/jython/lib/**/*.class"/>
-				<exclude name="tools/TestScriptDoc/*.class"/>
-				<exclude name="**/target/**"/>
-				<exclude name="**/Thumbs.db"/>
-				<exclude name="*ate2qtaste*"/>
-                		<!-- excludes eclipse files -->
-				<exclude name="**/.settings/**"/>
-				<exclude name="**/.*"/>
-			</fileset>
+		<include name="pom.xml"/>
+		<include name="clean.*"/>
+		<include name="packager_*.*"/>
+		<include name="izpack/install.xml"/>
+		<include name="kernel/src/**"/>
+		<include name="kernel/**"/>
+		<include name="testapi-parent/*"/>
+		<include name="testapi-parent/testapi-deploy/**"/>
+		<include name="toolbox/*"/>
+		<include name="toolbox/testapi/*"/>
+		<include name="toolbox/testapi/src/**"/>
+		<include name="lib/**"/>
+		<exclude name="tools/jython/lib/cachedir"/>
+		<exclude name="tools/jython/lib/**/*.class"/>
+		<exclude name="tools/TestScriptDoc/*.class"/>
+		<exclude name="**/target/**"/>
+		<exclude name="**/Thumbs.db"/>
+		<exclude name="*ate2qtaste*"/>
+		<!-- excludes eclipse files -->
+		<exclude name="**/.settings/**"/>
+		<exclude name="**/.*"/>
+	    </fileset>
         </pack>
-        <pack name="Demo" required="no" preselected="yes">
-			<description>The demonstrations</description>
+
+	<pack name="Plugins" required="no" preselected="yes">
+	    <description>The plugins</description>
+        </pack>
+	<pack name="Recoder" required="no" preselected="yes" parent="Plugins">
+	    <description>The recorder agent plugin. This plugin is used to record action in a java GUI and store all events in xml file.</description>
+        </pack>
+        <pack name="The recorder binaries" required="no" preselected="yes" parent="Recoder">
+	    <description>The recorder binaries</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/recorder/target/qtaste-recorder-deploy.jar"/>
+	    </fileset>
+        </pack>
+        <pack name="The recorder sources" required="no" preselected="yes" parent="Recoder">
+	    <description>The recorder sources</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/recorder/src/**"/>
+		<include name="plugins/recorder/pom.xml"/>
+		<!-- excludes eclipse files -->
+		<exclude name="**/.settings/**"/>
+		<exclude name="**/.*"/>
+	    </fileset>
+        </pack>
+	<pack name="Tools" required="no" preselected="yes" parent="Plugins">
+	    <description>The tools plugin. This plugin can convert a recording file to a python script.</description>
+        </pack>
+        <pack name="The tools binaries" required="no" preselected="yes" parent="Tools">
+	    <description>The tools binaries</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/tools/target/qtaste-tools-deploy.jar"/>
+	    </fileset>
+        </pack>
+        <pack name="The tools sources" required="no" preselected="yes" parent="Tools">
+	    <description>The tools sources</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/tools/src/**"/>
+		<include name="plugins/tools/pom.xml"/>
+		<!-- excludes eclipse files -->
+		<exclude name="**/.settings/**"/>
+		<exclude name="**/.*"/>
+	    </fileset>
+        </pack>
+	<pack name="Java GUI" required="no" preselected="yes" parent="Plugins">
+	    <description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
+        </pack>
+        <pack name="The Java GUI binaries" required="no" preselected="yes" parent="Java GUI">
+	    <description>The Java GUI binaries</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/javagui/target/qtaste-javagui-deploy.jar"/>
+	    </fileset>
+        </pack>
+        <pack name="The Java GUI sources" required="no" preselected="yes" parent="Java GUI">
+	    <description>The Java GUI sources</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/javagui/src/**"/>
+		<include name="plugins/javagui/pom.xml"/>
+		<!-- excludes eclipse files -->
+		<exclude name="**/.settings/**"/>
+		<exclude name="**/.*"/>
+	    </fileset>
+        </pack>
+
+	<pack name="Demo" required="no" preselected="yes">
+	    <description>The demonstrations</description>
         </pack>
         <pack name="The demo Binaries" required="no" preselected="yes" parent="Demo">
-			<description>The demo files - examples</description>
+	    <description>The demo files - examples</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
-				<include name="demo/testapi/target/TestAPI-doc/**"/>
-				<include name="demo/pywinauto-0.3.8/**"/>
-				<include name="demo/COPYING"/>
-				<include name="demo/COPYING.LESSER"/>
-				<include name="demo/Testbeds/**"/>
-				<include name="demo/TestSuites/**"/>
-				<include name="demo/selenium-server.jar"/>
-				<include name="demo/startUI.*"/>
-				<include name="demo/TestCampaigns/**"/>
-				<exclude name="**/Thumbs.db"/>
-				<exclude name="*ate2qtaste*"/>
-				<exclude name="**/*.class"/>
-                		<!-- excludes eclipse files -->
-				<exclude name="**/.settings"/>
-				<exclude name="**/.*"/>
-			</fileset>
+		<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
+		<include name="demo/testapi/target/TestAPI-doc/**"/>
+		<include name="demo/pywinauto-0.3.8/**"/>
+		<include name="demo/COPYING"/>
+		<include name="demo/COPYING.LESSER"/>
+		<include name="demo/Testbeds/**"/>
+		<include name="demo/TestSuites/**"/>
+		<include name="demo/selenium-server.jar"/>
+		<include name="demo/startUI.*"/>
+		<include name="demo/TestCampaigns/**"/>
+		<exclude name="**/Thumbs.db"/>
+		<exclude name="*ate2qtaste*"/>
+		<exclude name="**/*.class"/>
+		<!-- excludes eclipse files -->
+		<exclude name="**/.settings"/>
+		<exclude name="**/.*"/>
+	    </fileset>
         </pack>
         <pack name="The demo Sources" required="no" preselected="yes" parent="Demo">
-			<description>The source code of the demo</description>
+	    <description>The source code of the demo</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="demo/testapi/src/**"/>
-				<include name="demo/testapi/pom.xml"/>
-				<include name="demo/build.*"/>
-				<exclude name="**/target/**"/>
-				<exclude name="**/Thumbs.db"/>
-				<exclude name="*ate2qtaste*"/>
-			</fileset>
+		<include name="demo/testapi/src/**"/>
+		<include name="demo/testapi/pom.xml"/>
+		<include name="demo/build.*"/>
+		<exclude name="**/target/**"/>
+		<exclude name="**/Thumbs.db"/>
+		<exclude name="*ate2qtaste*"/>
+	    </fileset>
         </pack>
         <pack name="Docs" required="no" preselected="yes">
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-				<include name="doc/*.pdf"/>
+		<include name="doc/*.pdf"/>
             </fileset>
         </pack>
     </packs>
+    <processing>
+	<job name="Change the permission for the different shell scripts">
+	    <os family="unix" />
+	    <executefile name="$INSTALL_PATH/find . -name '*sh' -print | xargs chmod +x "/>
+	</job>
+    </processing>
 </installation>
