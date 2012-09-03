@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>
+	<sut_host>localhost</sut_host>
+	<control_script>JavaGUI.py</control_script>
+	
+	<testapi_implementation>
+        	<import>com.qspin.qtaste.testapi.javagui.impl</import>
+	</testapi_implementation>
+
+	<multiple_instances_components default="1">
+		<JavaGUI id="1">
+			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
+		</JavaGUI>
+	</multiple_instances_components>
+</testbed_configuration>
