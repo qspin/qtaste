@@ -24,6 +24,7 @@
 ##
 
 from qtaste import *
+import time
 
 translate = testAPI.getSelenium(INSTANCE_ID='TranslateApp')
 
@@ -38,7 +39,7 @@ def connectToWeb():
 	translate.waitForPageToLoad("15000")
 	title = translate.getTitle()
 	logger.info(title)
-	if title != "Yahoo! Babel Fish - Text Translation and Web Page Translation":
+	if title != "Bing Translator":
 		testAPI.stopTest(Status.FAIL, "Title window name is not as expected")
 
 def checkTranslation():
@@ -47,17 +48,24 @@ def checkTranslation():
 	@expected  Check that the translation is correct
 	"""
 	# we can access component using different method (component id, xpath or dom)
-	translate.type("trtext", testData.getValue("WORD"))
+	translate.type("InputText", testData.getValue("WORD"))
 	#translate.type("//div/form/textarea", testData.getValue("WORD"))
 	#translate.type("document.frmTrText.trtext", testData.getValue("WORD"))
-	translate.select("lp", "English to French")
-	translate.click("btnTrTxt")
-	translate.waitForPageToLoad("30000")
-	translation = translate.getText("id=result")
+	translate.click("__LangPair_ToDDL_header")
+	translate.click(u"xpath=(//a[contains(text(),'French')])[2]")
+	translate.click("TranslateButton")
+	#translate.waitForPageToLoad("30000")
+	time.sleep(1);
+	translations = translate.getText("id=OutputTextHtmlCell")
 	expectedTranslation = testData.getValue("TRANSLATION")
 	translate.closeBrowser()
-	if translation != expectedTranslation:
-		testAPI.stopTest(Status.FAIL, "Expected to get " + expectedTranslation + " but got " + translation)
+	found = False
+	for translation in translations.split("\n"):
+		if translation == expectedTranslation:
+			found = True
+			break
+	if ( found == False ):
+		testAPI.stopTest(Status.FAIL, "Expected to get " + expectedTranslation + " but got " + translations)
 
 doStep(connectToWeb)
 doStep(checkTranslation)
