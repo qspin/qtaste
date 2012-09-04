@@ -643,7 +643,7 @@ public class TestRequirementEditor extends JPanel {
 			if (selectedRow == -1) {
 				return;
 			}
-			selectedRow = m_TestRequirementTable.convertColumnIndexToModel(selectedRow);
+			selectedRow = m_TestRequirementTable.convertRowIndexToModel(selectedRow);
 			addNewRow(selectedRow);
 		}
 	}
