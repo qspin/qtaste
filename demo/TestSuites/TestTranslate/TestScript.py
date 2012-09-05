@@ -55,7 +55,7 @@ def checkTranslation():
 	translate.click(u"xpath=(//a[contains(text(),'French')])[2]")
 	translate.click("TranslateButton")
 	#translate.waitForPageToLoad("30000")
-	time.sleep(1);
+	time.sleep(2);
 	translations = translate.getText("id=OutputTextHtmlCell")
 	expectedTranslation = testData.getValue("TRANSLATION")
 	translate.closeBrowser()
