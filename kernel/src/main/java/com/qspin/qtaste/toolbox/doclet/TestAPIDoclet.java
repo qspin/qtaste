@@ -105,7 +105,7 @@ public class TestAPIDoclet {
         ClassDoc[] testAPIComponents = filterTestAPIComponents(root);
         if (testAPIComponents.length == 0) {
             System.err.println("No Test API Component interface found.");
-            return false;
+            return true;
         }
 
         try {
@@ -116,12 +116,7 @@ public class TestAPIDoclet {
             summaryOut.printHeading("QTaste Test API components", 2);
             summaryOut.printTestAPIComponentsSummary(testAPIComponents);
             summaryOut.close();
-
-            /*
-            PrintWriter pythonTestAPIOut = new PrintWriter(new BufferedWriter(new FileWriter("DummyQTastePythonModule/__TestAPI.py")));
-            PrintWriter pythonTestAPIComponentsOut = new PrintWriter(new BufferedWriter(new FileWriter("DummyQTastePythonModule/__TestAPIComponents.py")));
-            printDummyTestAPIClassDeclaration(pythonTestAPIOut);
-             */
+           
 
             for (int i = 0; i < testAPIComponents.length; i++) {
                 ClassDoc classDoc = testAPIComponents[i];
@@ -132,19 +127,11 @@ public class TestAPIDoclet {
                 out.close();
 
                 listOut.printTestAPIComponentLink(classDoc);
-
-                /*
-                printDummyTestAPIClassGetComponentMethod(pythonTestAPIOut, classDoc, root);
-                printDummyTestAPIComponentClassDeclaration(pythonTestAPIComponentsOut, classDoc);
-                 */
+               
             }
 
             listOut.close();
-
-            /*
-            pythonTestAPIOut.close();
-            pythonTestAPIComponentsOut.close();
-             */
+            
         } catch (java.io.IOException e) {
             System.err.println(e);
             return false;
@@ -204,8 +191,13 @@ public class TestAPIDoclet {
      * @return true if specified class is a Test API component interface, false otherwise
      */
     public static boolean isTestAPI(ClassDoc classDoc, RootDoc root) {
-        ClassDoc TestAPIComponent = root.classNamed(TEST_API_KERNEL_PACKAGE + ".Component");
-        return classDoc.isInterface() && classDoc.subclassOf(TestAPIComponent) && (classDoc != TestAPIComponent);
+        try {
+        	ClassDoc TestAPIComponent = root.classNamed(TEST_API_KERNEL_PACKAGE + ".Component");
+        	return classDoc.isInterface() && classDoc.subclassOf(TestAPIComponent) && (classDoc != TestAPIComponent);
+        }        
+        catch (Exception e) {
+        	return false;
+        }
     }
 
     /** 
@@ -245,9 +237,9 @@ public class TestAPIDoclet {
     }
 
     /**
-     * Returns the methods, excluding the old-style verbs, of a Test API component.
+     * Returns the methods of a Test API component.
      * @param classDoc the ClassDoc specifying the Test API component
-     * @return an array of MethodDoc representing the methods, excluding the old-style verbs
+     * @return an array of MethodDoc representing the methods
      */
     public static MethodDoc[] getTestAPIComponentMethods(ClassDoc classDoc) {
         MethodDoc[] methods = new MethodDoc[0];
@@ -255,16 +247,14 @@ public class TestAPIDoclet {
         for (MethodDoc methodDoc : classDoc.methods()) {
             methodsList.add(methodDoc);
         }
-        //
+        // Also add the methods provided by the kernel
         for (ClassDoc interface_ : classDoc.interfaces()) {            
             if (!interface_.qualifiedName().startsWith(TEST_API_KERNEL_PACKAGE)) {
                 for (MethodDoc methodDoc_ : interface_.methods()) {
                     methodsList.add(methodDoc_);
                 }
             }
-        }
-
-        //
+        }       
         return methodsList.toArray(methods);
     }
 
