@@ -259,11 +259,18 @@ public class HTMLReportFormatter extends HTMLFormatter {
         try {
             TestData data = tr.getTestData();
             Set<Entry<String, String>> entrySet = data.getDataHash().entrySet();
-            for (Entry<String, String> entry : entrySet) {
-                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
-                namesValues.add("###DATA_NAME###", entry.getKey());
-                namesValues.add("###DATA_VALUE###", StringEscapeUtils.escapeHtml(entry.getValue()));
-                dataColumnContent += getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
+            if ( !entrySet.isEmpty() )
+            {
+	            for (Entry<String, String> entry : entrySet) {
+	                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+	                namesValues.add("###DATA_NAME###", entry.getKey());
+	                namesValues.add("###DATA_VALUE###", StringEscapeUtils.escapeHtml(entry.getValue()));
+	                dataColumnContent += getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
+	            }
+            }
+            else
+            {
+            	dataColumnContent = "None";
             }
 
         } catch (Exception e) {
@@ -423,12 +430,10 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
 
                 String dataColumn = generateDataColumn(tr);
-                if ( !dataColumn.equalsIgnoreCase("none") )
-                {
-                    NamesValuesList<String, String> dataValues = new NamesValuesList<String, String>();
-                    dataValues.add("###DATA_TEMPLATE###", dataColumn);
-                    dataColumn = getSubstitutedTemplateContent(templateContents.get("testData"), dataValues);
-                }
+                NamesValuesList<String, String> dataValues = new NamesValuesList<String, String>();
+                dataValues.add("###DATA_TEMPLATE###", dataColumn);
+                dataColumn = getSubstitutedTemplateContent(templateContents.get("testData"), dataValues);
+                
                 namesValues.add("###DATA_CONTENT###", dataColumn);
                 
 				// add step entries if any
