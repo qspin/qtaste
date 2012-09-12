@@ -85,6 +85,7 @@ public abstract class TestScript implements Executable {
      */
     public boolean execute(boolean debug) {
         final String INTERACTIVE_REPORT_NAME = "Interactive";
+        boolean returnStatus = true;
         TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
         if (testSuite == null && reportManager.getReportName() != INTERACTIVE_REPORT_NAME) {
             reportManager.startReport(INTERACTIVE_REPORT_NAME);
@@ -169,6 +170,7 @@ public abstract class TestScript implements Executable {
                     status = testResult.getStatus();
                     if (status == TestResult.Status.FAIL) {
                         needToRetry = TestEngine.setNeedToRestartSUT();
+                        returnStatus = false;
                     }
                     trial++;
                 } while (needToRetry && trial <= RETRY_COUNTER);
@@ -179,10 +181,10 @@ public abstract class TestScript implements Executable {
             }
 
             if (isAbortedByUser()) {
-                return false;
+                returnStatus = false;
             }
         }
-        return true;
+        return returnStatus;
     }
 
     public boolean isAbortedByUser() {
