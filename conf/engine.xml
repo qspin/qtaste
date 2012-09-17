@@ -11,12 +11,6 @@
 		</reporters>
 		<!-- Location of the HTML template -->
 		<html_template>conf/reporting/html/standard</html_template>
-		<html_settings>
-			<generate_test_data>true</generate_test_data>
-			<generate_steps_rows>true</generate_steps_rows>
-			<report_stop_start_sut>true</report_stop_start_sut>
-			<report_restart_sut>true</report_restart_sut>
-		</html_settings>
 		<!-- Location of the XML template -->
 		<xml_template>conf/reporting/xml/standard</xml_template>
 		<!-- Location of the generated reports -->
