@@ -92,6 +92,57 @@
 		<exclude name="plugins/**"/>
 		<exclude name="*ate2qtaste*"/>
 	    </fileset>
+	    <executable targetfile="$INSTALL_PATH/bin/generate-TestSuites-doc.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>	    
+	    <executable targetfile="$INSTALL_PATH/bin/qtasteUI_start.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/bin/qtaste_campaign_start.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/bin/qtaste_start.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/bin/generate-TestStepsModules-doc.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/bin/generate-TestSuite-doc.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/bin/generate-TestCampaign-doc.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/bin/generate-TestScript-doc.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/TestSuites/TestSuite_QTaste/Run_TestSuite.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/jython/bin/jython_for_komodo.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/jython/bin/jython.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/stop_process.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/stop_java_process.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/start_process.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/start_java_process.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/rsh_with_result.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/cleanup_portmap.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
         </pack>
         <pack name="The kernel Sources" required="no" preselected="yes" parent="Kernel">
 	    <description>The source code of the kernel</description>
@@ -204,6 +255,9 @@
 		<exclude name="**/.settings"/>
 		<exclude name="**/.*"/>
 	    </fileset>
+	     <executable targetfile="$INSTALL_PATH/demo/startUI.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
         </pack>
         <pack name="The demo Sources" required="no" preselected="yes" parent="Demo">
 	    <description>The source code of the demo</description>
@@ -223,10 +277,4 @@
             </fileset>
         </pack>
     </packs>
-    <processing>
-	<job name="Change the permission for the different shell scripts">
-	    <os family="unix" />
-	    <executefile name="$INSTALL_PATH/find . -name '*sh' -print | xargs chmod +x "/>
-	</job>
-    </processing>
 </installation>
