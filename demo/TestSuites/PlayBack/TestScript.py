@@ -17,8 +17,8 @@ javaguiMI = testAPI.getPlayback()
 
 def step1():
 	"""
-	@step      Description of the actions done for this step
-	@expected  Description of the expected result
+	@step      Execute some operations on java GUI
+	@expected  No verification done
 	"""
 	time.sleep(2)
 	javaguiMI.selectTab("TABBED_PANE", 0)
