@@ -475,8 +475,6 @@ public class TestCaseReportTable {
         ImageIcon icon = null;
         if (path != null) {
             icon = new ImageIcon(path, description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
         }
         return icon;
     }
