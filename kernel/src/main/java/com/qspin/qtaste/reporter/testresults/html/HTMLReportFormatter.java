@@ -402,14 +402,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     case FAIL:
                         namesValues.add("###RESULT_PICTURE###", KO_IMAGE);
                         namesValues.add("###RESULT_TEXT###", KO_TEXT);
-                        if (tr.getRetryCount() > 0) // use different class to notify that this test has been retried and
-                        // its result is not the final one for this test case.
-                        {
-                            namesValues.add("###TC-STATUS###", "tc-nok");
-                        } else {
-                            namesValues.add("###TC-STATUS###", "tc-nok"); // default 
-                        }
-
+                        namesValues.add("###TC-STATUS###", "tc-nok");
                         break;
                 }
 
