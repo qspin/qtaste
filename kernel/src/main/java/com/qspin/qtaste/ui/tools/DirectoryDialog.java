@@ -43,7 +43,7 @@ public class DirectoryDialog extends javax.swing.JDialog {
     
         super(owner, title, ModalityType.APPLICATION_MODAL);
         initComponents(initDirectory);
-        directory = new String();
+        directory = "";
 
         this.setVisible(true);
         this.setLocation(100, 100);
@@ -51,14 +51,7 @@ public class DirectoryDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
     public DirectoryDialog(Window owner, String title) {
-        super(owner, title, ModalityType.APPLICATION_MODAL);
-        initComponents(null);
-        directory = new String();
-
-        this.setVisible(true);
-        this.setLocation(100, 100);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
+        this(owner, title, null);
     }
 
     private void initComponents(File initDirectory) {
