@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <parent>
+      <groupId>com.qspin.qtaste</groupId>
+      <artifactId>qtaste</artifactId>
+      <version>1.1</version>
+   </parent>
+
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>qtaste-izpack</artifactId>
+
+   <!-- Launch IzPack automatically -->
+   <packaging>jar</packaging>
+
+   <properties>
+     <!-- Installer variables -->
+     <info.appName>QTaste</info.appName>
+   </properties>
+
+   <build>
+     <plugins>
+       <plugin>
+         <groupId>org.codehaus.izpack</groupId>
+         <artifactId>izpack-maven-plugin</artifactId>
+	 <version>5.0.0-beta10</version>
+         <extensions>true</extensions>
+	 <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>izpack</goal>
+              </goals>
+	      <configuration>
+	        <baseDir>${basedir}</baseDir>
+	   	<izpackBasedir>${project.directory}</izpackBasedir>
+		<installFile>./install.xml</installFile>
+	      </configuration>
+            </execution>
+          </executions>
+       </plugin>
+     </plugins>   
+  </build>
+</project>
