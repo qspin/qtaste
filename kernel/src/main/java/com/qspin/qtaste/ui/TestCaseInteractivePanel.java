@@ -21,11 +21,8 @@ package com.qspin.qtaste.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -40,19 +37,15 @@ import java.util.Map;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
-import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import com.qspin.qtaste.config.StaticConfiguration;
@@ -166,7 +159,6 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             this.add(bottomSplitPane);
 
             this.apiTree.addTreeSelectionListener(new TCTreeListener());
-            this.apiTree.addMouseListener(new TCTreeMouseListener());
 
             // initialize testData
             m_testData = new TestDataInteractive("QTaste_interactive", 1, null, null);
@@ -355,94 +347,6 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
                     mInteractiveText.setText(text);
                 }
             }
-        }
-    }
-
-    public class TCTreeMouseListener extends MouseAdapter {
-
-        private void evaluatePopup(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                TreePath selectedPath = apiTree.getSelectionPath();
-                if (selectedPath == null) {
-                    return;
-                }
-                // force selection of clicked row
-                int rowId = apiTree.getRowForLocation(e.getX(), e.getY());
-                apiTree.setSelectionRow(rowId);
-
-                // display a popup menu to run/debug a test
-                // display the context dialog
-                JPopupMenu menu = new JPopupMenu();
-                menu.add(new ImportTestDataAction());
-                menu.addSeparator();
-                Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), apiTree);
-                TreePath path = apiTree.getPathForLocation(pt.x, pt.y);
-                apiTree.setSelectionPath(path);
-
-                menu.show(apiTree, pt.x, pt.y);
-            }
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            // only double click check
-            if (e.getClickCount() == 2) {
-                TreePath path = apiTree.getSelectionPath();
-                if (path != null) {
-                    // must be a child path
-                    TreeNode selectedNode = (TreeNode) path.getLastPathComponent();
-                    if (selectedNode.getChildCount() == 0) {
-                        // activate the QTasteShell if needed
-                        if (!isStarted) {
-                            startInteractiveMode();
-                        }
-
-                        executeCommand(mInteractiveText.getText());
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            evaluatePopup(e);
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            evaluatePopup(e);
-        }
-    }
-
-    class ImportTestDataAction extends AbstractAction {
-
-        public ImportTestDataAction() {
-            super("Add test data variable(s)");
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            // show RunDialog
-            // get the test data for the selected method
-            TreePath selectedPath = TestCaseInteractivePanel.this.apiTree.getSelectionPath();
-            if (selectedPath == null) {
-                return;
-            }
-            Object o = selectedPath.getLastPathComponent();
-            if ((o instanceof DefaultMutableTreeNode) &&
-                    selectedPath.getParentPath() != null) {
-                Object[] selectedPathName = selectedPath.getPath();
-                if (selectedPathName.length == 3) {
-                    String componentName = (String) ((DefaultMutableTreeNode) selectedPathName[1]).getUserObject();
-                    String methodName = (String) ((DefaultMutableTreeNode) selectedPathName[2]).getUserObject();
-                    TestAPI testAPI = TestAPIImpl.getInstance();
-                }
-            }
-
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return true;
         }
     }
 }
