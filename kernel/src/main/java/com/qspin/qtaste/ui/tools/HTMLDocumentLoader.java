@@ -145,14 +145,13 @@ public class HTMLDocumentLoader {
       if (token.equals(" ") || token.equals("\t")) {
         continue;
       }
-      if (foundCharSet == false && foundEquals == false
-          && token.equals("charset")) {
+      if (!foundCharSet && !foundEquals && token.equals("charset")) {
         foundCharSet = true;
         continue;
-      } else if (foundEquals == false && token.equals("=")) {
+      } else if (!foundEquals && token.equals("=")) {
         foundEquals = true;
         continue;
-      } else if (foundEquals == true && foundCharSet == true) {
+      } else if (foundEquals && foundCharSet) {
         return token;
       }
 
