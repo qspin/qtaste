@@ -64,7 +64,6 @@ import org.python.core.PyTuple;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.debug.Breakpoint;
 import com.qspin.qtaste.debug.BreakpointEventHandler;
 import com.qspin.qtaste.debug.BreakpointManager;
@@ -220,7 +219,6 @@ public class JythonTestScript extends TestScript implements Executable {
                 // add verbs methods to the ComponentWrapper class
                 Collection<String> verbs = testAPI.getRegisteredVerbs(component);
                 for (String verb : verbs) {
-                    Method method = testAPI.getMethod(component, verb);
                     code += "        def " + verb + "(self, *arguments, **keywords):\n" +
                             "            if self.component:\n";
 
@@ -1093,7 +1091,8 @@ public class JythonTestScript extends TestScript implements Executable {
                         !(variableValue instanceof PySystemState) &&
                         !(variableValue instanceof com.sun.script.jython.JythonScriptEngine) &&
                         !(variableValue instanceof javax.script.SimpleScriptContext) &&
-                        !variableName.equals("javax.script.filename") //                    (!(variableValue instanceof PyClass)) &&
+                        !variableName.equals("javax.script.filename")
+                        //                    (!(variableValue instanceof PyClass)) &&
                         //                  (!(variableValue instanceof PyFunction)) &&
                         //                (!(variableValue instanceof java.lang.Class)) &&
                         //              (!(variableValue instanceof PyModule))
