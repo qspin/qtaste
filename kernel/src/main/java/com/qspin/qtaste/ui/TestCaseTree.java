@@ -43,9 +43,7 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.AbstractAction;
@@ -438,10 +436,6 @@ public class TestCaseTree extends JTree implements DragSourceListener,
            TCTreeNode tcTreeNode = (TCTreeNode)targetNode;
            if (tcTreeNode.getUserObject() instanceof FileNode) {
                FileNode fn = (FileNode)tcTreeNode.getUserObject();
-               if (fn.isTestcaseDir())
-               {
-                   ///dsde.
-               }
            }
         }
     }
@@ -480,14 +474,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                {
                    return;
                }
-
-
            }
-
         }
-        else {
-        }
-
     }
 
     public void dropActionChanged(DropTargetDragEvent dtde) {
@@ -879,27 +867,26 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 if (JOptionPane.showConfirmDialog(null, "Are you sure to remove the script '" + testName + "'", "Confirmation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) ==
                         JOptionPane.OK_OPTION)
                 {
-                        // remove the test script directory
-                        File testScriptFile = fn.getFile();
-                        boolean deleted = DeleteDirectory.deleteDirectory(testScriptFile);
-                        if (deleted)
-                        {
-                            TCTreeNode parentTreeNode = (TCTreeNode)tn.getParent();
-                            parentTreeNode.removeAllChildren();
-                            FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
-                            addTreeToDir(parentFileNode.getFile(), parentTreeNode);
-                            ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-                        }
-                        else
-                        {
-                            JOptionPane.showConfirmDialog(null, "Impossible to delete " + testName, "Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
-                        }
+                    // remove the test script directory
+                    File testScriptFile = fn.getFile();
+                    boolean deleted = DeleteDirectory.deleteDirectory(testScriptFile);
+                    if (deleted)
+                    {
+                        TCTreeNode parentTreeNode = (TCTreeNode)tn.getParent();
+                        parentTreeNode.removeAllChildren();
+                        FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
+                        addTreeToDir(parentFileNode.getFile(), parentTreeNode);
+                        ((DefaultTreeModel) getModel()).reload(parentTreeNode);
+                    }
+                    else
+                    {
+                        JOptionPane.showConfirmDialog(null, "Impossible to delete " + testName, "Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-
             }
         }
-
     }
+
     class ImportTestSuiteAction extends AbstractAction {
 
     	public ImportTestSuiteAction() {
@@ -911,6 +898,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 			
 		}
     }
+
     class CreateNewTestSuite extends AbstractAction {
 
         public CreateNewTestSuite() {
