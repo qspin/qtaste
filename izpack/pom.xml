@@ -11,6 +11,7 @@
 
    <modelVersion>4.0.0</modelVersion>
    <artifactId>qtaste-izpack</artifactId>
+   <name>IZPack - QTaste Installer creator</name>
 
    <!-- Launch IzPack automatically -->
    <packaging>jar</packaging>
@@ -35,8 +36,7 @@
               </goals>
 	      <configuration>
 	        <baseDir>${basedir}</baseDir>
-	   	<izpackBasedir>${project.directory}</izpackBasedir>
-		<installFile>./install.xml</installFile>
+		<installFile>${basedir}/install.xml</installFile>
 	      </configuration>
             </execution>
           </executions>
