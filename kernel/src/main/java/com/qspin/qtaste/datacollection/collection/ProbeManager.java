@@ -61,7 +61,7 @@ public class ProbeManager {
                         String probeName = i.next();
                         logger.info("Starting probe:" + probeName);
                         try {
-                            Class probeClass = Class.forName(probeName);
+                            Class<?> probeClass = Class.forName(probeName);
                             Probe probe = (Probe) probeClass.newInstance();
                             probes.add(probe);
                             probe.start();
@@ -82,7 +82,6 @@ public class ProbeManager {
     public synchronized void stop() {
         numberUsers--;
         if (numberUsers == 0) {
-            Iterator<Probe> i = probes.iterator();
             for (Iterator<Probe> p = probes.iterator(); p.hasNext();) {
                 Probe probe = p.next();
                 logger.info("Stopping probe:" + probe);
