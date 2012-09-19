@@ -71,7 +71,6 @@ public class GenerateTestStepsModulesDoc {
     }
 
     public static void main(String [] args) {
-        GenerateTestStepsModulesDoc testStepsDoc = new GenerateTestStepsModulesDoc();
         switch (args.length) {
             case 0:
                 generate("TestSuites");
