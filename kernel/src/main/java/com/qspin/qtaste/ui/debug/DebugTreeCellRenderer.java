@@ -55,18 +55,17 @@ public class DebugTreeCellRenderer extends DefaultTreeCellRenderer{
 	      setFont(SMALL_FONT);
 	      if (pNode instanceof VariableNode)
 	      {
-	    	  VariableNode node = (VariableNode) pNode;
-	    	  if (node.getChildren().length==0) {
-	              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
-	              setIcon(icon);
-	    	  }
-	    	  else {
-	              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
-	              setIcon(icon);
-	    		  
-	    	  }
+//	    	  VariableNode node = (VariableNode) pNode;
+//	    	  if (node.getChildren().length==0) {
+//	              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
+//	              setIcon(icon);
+//	    	  }
+//	    	  else {
+              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
+              setIcon(icon);
+//	    	  }
 	      }
-	      if (pNode instanceof DebugRootNode)
+	      else if (pNode instanceof DebugRootNode)
 	   	  {
 	    	  setIcon(null);
 	   	  }
