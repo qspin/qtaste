@@ -89,6 +89,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
     private String testSuiteName;
     private static String outputDir;
     private TestSuite currentTestSuite;
+    private boolean generateDataColumn, generateStepsRows;
+    private boolean reportStopStartSUT, reportReStartSUT;
 
     private static TestEngineConfiguration config = TestEngineConfiguration.getInstance();
     private static HashMap<String, String> templates = new HashMap<String, String>();
@@ -129,6 +131,18 @@ public class HTMLReportFormatter extends HTMLFormatter {
         this.testSuiteName = reportName;
 
         this.testSummaryFileName = String.format(TEST_SUMMARY_FILE_NAME_FORMAT, new Date());
+
+        this.generateDataColumn = config.getBoolean("reporting.html_settings.generate_test_data");
+        this.generateStepsRows = config.getBoolean("reporting.html_settings.generate_steps_rows");
+        if (!this.generateStepsRows) {
+            // remove the hyperlink 
+            String content = this.templateContents.get("testResult");
+            content = this.templateContents.get("testScriptRowResult").replace("<a href=\"javascript:showHide('###ROW_ID###')\">###TEST_ID###</a>", "###TEST_ID###");
+            this.templateContents.remove("testScriptRowResult");
+            this.templateContents.put("testScriptRowResult", content);
+        }
+        this.reportStopStartSUT = config.getBoolean("reporting.html_settings.report_stop_start_sut");
+        this.reportReStartSUT = config.getBoolean("reporting.html_settings.report_restart_sut");
     }
 
     public void generateHeader() {
@@ -293,15 +307,15 @@ public class HTMLReportFormatter extends HTMLFormatter {
         for (TestResult tr : TestResultsReportManager.getInstance().getResults()) {
             try {
                 String testcaseName = tr.getName();
-                if (testcaseName.equals("Start SUT")) {
+                if (testcaseName.equals("Start SUT") && !reportStopStartSUT) {
                     continue;
                 }
 
-                if (testcaseName.equals("Restart SUT")) {
+                if (testcaseName.equals("Restart SUT") && !reportReStartSUT) {
                     continue;
                 }
 
-                if (testcaseName.equals("Stop SUT")) {
+                if (testcaseName.equals("Stop SUT") && !reportStopStartSUT) {
                     continue;
                 }
 
@@ -317,7 +331,12 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
                     output.print("</table>");
 
-                    namesValues.add("###DATA_COLUMN###", "<td width=\"5%\" align=\"center\">Data</td>");
+                    if (generateDataColumn) {
+                        namesValues.add("###DATA_COLUMN###", "<td width=\"5%\" align=\"center\">Data</td>");
+                    } else {
+                        namesValues.add("###DATA_COLUMN###", "");
+                    }
+
 
                     String requirementColumn = generateRequirementColumn(tr);
                     if( !requirementColumn.equalsIgnoreCase("Not specified"))
@@ -414,7 +433,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 String stepsContent = "";
 
                 Collection<StepResult> steps = tr.getStepResults();
-                if (!steps.isEmpty()) {
+                if (generateStepsRows && !steps.isEmpty()) {
                     // Display (sorted) steps.
                     for (StepResult step : steps) {
                         NamesValuesList<String, String> stepsNamesValues = new NamesValuesList<String, String>();
