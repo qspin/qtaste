@@ -11,17 +11,5 @@ public class PlaybackImpl extends JavaGUIImpl implements Playback {
     {
 		super(TestBedConfiguration.getInstance().getMIString(instanceId, "Playback", "jmx_url"), instanceId);
 	}
-	
-	@Override
-	public void initialize() throws QTasteException
-	{
-		super.initialize();
-	}
-
-	@Override
-	public void terminate() throws QTasteException
-	{
-		super.terminate();
-	}
 
 }

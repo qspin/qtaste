@@ -12,17 +12,5 @@ public class JavaGUIImplementation extends JavaGUIImpl implements JavaGUI
    {
       super(TestBedConfiguration.getInstance().getMIString(instanceId, "JavaGUI", "jmx_url"), instanceId);
    }
-   
-   @Override
-   public void initialize() throws QTasteException
-   {
-      super.initialize();
-   }
-
-   @Override
-   public void terminate() throws QTasteException
-   {
-      super.terminate();
-   }
 
 }

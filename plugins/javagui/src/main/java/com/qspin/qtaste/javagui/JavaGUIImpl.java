@@ -11,7 +11,7 @@ import com.qspin.qtaste.testsuite.QTasteException;
 /**
  * 
  */
-public abstract class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
+public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 
 	public JavaGUIImpl(String url, String instanceId) throws Exception {
 		mClient = new JMXClient(url);
