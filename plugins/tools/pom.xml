@@ -14,19 +14,15 @@
 					<descriptors>
 						<descriptor>src/main/assembly/deploy.xml</descriptor>
 					</descriptors>
-					<configuration>
-						<archive>
-							<index>true</index>
-							<manifest>
-								<addClasspath>true</addClasspath>
-							</manifest>
-							<archive>
-								<manifestEntries>
-									<Main-Class>com.qspin.qtaste.tools.Main</Main-Class>
-								</manifestEntries>
-							</archive>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+							<manifestEntries>
+								<Main-Class>${mainClass}</Main-Class>
+							</manifestEntries>
 						</archive>
-					</configuration>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -53,6 +49,24 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<workingDirectory>..</workingDirectory> <!-- run tests from QTASTE root directory -->
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<Can-Redefine-Classes>true</Can-Redefine-Classes>
+							<Main-Class>${mainClass}</Main-Class>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
