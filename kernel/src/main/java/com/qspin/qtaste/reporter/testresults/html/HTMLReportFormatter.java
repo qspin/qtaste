@@ -89,7 +89,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
     private String testSuiteName;
     private static String outputDir;
     private TestSuite currentTestSuite;
-    private boolean reportStopStartSUT, reportReStartSUT;
 
     private static TestEngineConfiguration config = TestEngineConfiguration.getInstance();
     private static HashMap<String, String> templates = new HashMap<String, String>();
@@ -130,9 +129,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
         this.testSuiteName = reportName;
 
         this.testSummaryFileName = String.format(TEST_SUMMARY_FILE_NAME_FORMAT, new Date());
-
-        this.reportStopStartSUT = config.getBoolean("reporting.html_settings.report_stop_start_sut");
-        this.reportReStartSUT = config.getBoolean("reporting.html_settings.report_restart_sut");
     }
 
     public void generateHeader() {
@@ -297,15 +293,15 @@ public class HTMLReportFormatter extends HTMLFormatter {
         for (TestResult tr : TestResultsReportManager.getInstance().getResults()) {
             try {
                 String testcaseName = tr.getName();
-                if (testcaseName.equals("Start SUT") && !reportStopStartSUT) {
+                if (testcaseName.equals("Start SUT")) {
                     continue;
                 }
 
-                if (testcaseName.equals("Restart SUT") && !reportReStartSUT) {
+                if (testcaseName.equals("Restart SUT")) {
                     continue;
                 }
 
-                if (testcaseName.equals("Stop SUT") && !reportStopStartSUT) {
+                if (testcaseName.equals("Stop SUT")) {
                     continue;
                 }
 
