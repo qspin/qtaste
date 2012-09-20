@@ -364,7 +364,7 @@ class PythonDocGenerator:
 
 	def _addTestRequirement(self, testScriptFileName, testScript):
 		testRequirement = et.SubElement(testScript, 'testRequirement')
-		requirementFileName = os.path.dirname(testScriptFileName) + os.sep + 'TestRequirements.xml'
+		requirementFileName = os.path.dirname(testScriptFileName) + os.sep + 'Req.xml'
 		try:
 			requirementFile = et.parse(requirementFileName, TreeBuilder())
 			root = requirementFile.getroot()
