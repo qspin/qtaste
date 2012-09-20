@@ -190,7 +190,8 @@ public class TestRequirementEditor extends JPanel {
 			String outputFile = path + File.separator
 					+ StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
 			output = new BufferedWriter(new FileWriter(new File(outputFile)));
-
+			output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+			output.newLine();
 			output.write("<" + XMLFile.ROOT_ELEMENT + ">");
 			for (TestRequirement req : m_TestRequirementModel.getRequirements()) {
 				output.newLine();
