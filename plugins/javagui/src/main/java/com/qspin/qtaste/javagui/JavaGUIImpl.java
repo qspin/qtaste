@@ -6,6 +6,7 @@ package com.qspin.qtaste.javagui;
 
 import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
+import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
  * 
@@ -86,6 +87,17 @@ public abstract class JavaGUIImpl extends JMXClient implements MultipleInstances
 
 	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) {
 		return mProxy.selectTab(tabbedPaneComponentName, tabIndex);
+	}
+
+	@Override
+	public void terminate() throws QTasteException
+	{
+		try {
+			disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new QTasteException(e.getMessage());
+		}
 	}
 
 	private JavaGUIMBean getProxy() throws Exception {

@@ -15,13 +15,12 @@ public class PlaybackImpl extends JavaGUIImpl implements Playback {
 	@Override
 	public void initialize() throws QTasteException
 	{
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void terminate() throws QTasteException
 	{
-		// TODO Auto-generated method stub
+		super.terminate();
 	}
 
 }

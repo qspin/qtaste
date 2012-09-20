@@ -16,15 +16,13 @@ public class JavaGUIImplementation extends JavaGUIImpl implements JavaGUI
    @Override
    public void initialize() throws QTasteException
    {
-      // TODO Auto-generated method stub
       
    }
 
    @Override
    public void terminate() throws QTasteException
    {
-      // TODO Auto-generated method stub
-      
+      super.terminate();
    }
 
 }
