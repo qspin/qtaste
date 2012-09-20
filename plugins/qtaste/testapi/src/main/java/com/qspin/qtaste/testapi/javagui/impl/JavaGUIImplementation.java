@@ -16,7 +16,7 @@ public class JavaGUIImplementation extends JavaGUIImpl implements JavaGUI
    @Override
    public void initialize() throws QTasteException
    {
-      
+      super.initialize();
    }
 
    @Override

@@ -15,6 +15,7 @@ public class PlaybackImpl extends JavaGUIImpl implements Playback {
 	@Override
 	public void initialize() throws QTasteException
 	{
+		super.initialize();
 	}
 
 	@Override

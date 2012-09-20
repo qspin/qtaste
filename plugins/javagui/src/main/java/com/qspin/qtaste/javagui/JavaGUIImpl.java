@@ -11,14 +11,31 @@ import com.qspin.qtaste.testsuite.QTasteException;
 /**
  * 
  */
-public abstract class JavaGUIImpl extends JMXClient implements MultipleInstancesComponent, JavaGUIMBean {
+public abstract class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 
 	public JavaGUIImpl(String url, String instanceId) throws Exception {
-		super(url);
+		mClient = new JMXClient(url);
+		if ( mClient == null ) {
+			throw new QTasteException("Unable to connect to the JMX client");
+		}
 		mInstanceId = instanceId;
-		connect();
-		mProxy = getProxy();
+		initialize();
 	}
+   
+   @Override
+   public void initialize() throws QTasteException
+   {
+	   try
+	   {
+			mClient.connect();
+			mProxy = getProxy();
+	   }
+	   catch (Exception pExc)
+	   {
+		   pExc.printStackTrace();
+		   throw new QTasteException("Unable to initialize the JMX client");
+	   }
+   }
 
 	@Override
 	public String getInstanceId() {
@@ -93,7 +110,8 @@ public abstract class JavaGUIImpl extends JMXClient implements MultipleInstances
 	public void terminate() throws QTasteException
 	{
 		try {
-			disconnect();
+			mClient.disconnect();
+			mClient = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new QTasteException(e.getMessage());
@@ -101,11 +119,12 @@ public abstract class JavaGUIImpl extends JMXClient implements MultipleInstances
 	}
 
 	private JavaGUIMBean getProxy() throws Exception {
-		return (JavaGUIMBean) getProxy(BEAN_NAME, BEAN_INTERFACE);
+		return (JavaGUIMBean) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
 
 	protected String mInstanceId;
 	protected JavaGUIMBean mProxy;
+	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui:type=JavaGUI";
 	private static final Class<?> BEAN_INTERFACE = JavaGUIMBean.class;
 }
