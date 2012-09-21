@@ -3,7 +3,6 @@ package com.qspin.qtaste.testapi.impl.demo;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.javagui.JavaGUIImpl;
 import com.qspin.qtaste.testapi.api.Playback;
-import com.qspin.qtaste.testsuite.QTasteException;
 
 public class PlaybackImpl extends JavaGUIImpl implements Playback {
 
