@@ -119,6 +119,7 @@ public abstract class TestSuite implements TestReportListener {
             }
         } else {
             logger.warn("Test suite " + getName() + " doesn't contain any test to execute");
+            executionSuccess = false;
         }
         stopExecutionDate = new Date();
         reportTestSuiteStopped();
