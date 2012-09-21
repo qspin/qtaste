@@ -88,6 +88,6 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<mainClass>com.qspin.qtaste.tools.Main</mainClass>
+		<mainClass>com.qspin.qtaste.tools.converter.Main</mainClass>
 	</properties>
 </project>
