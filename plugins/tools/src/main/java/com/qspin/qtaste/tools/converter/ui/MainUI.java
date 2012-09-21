@@ -127,5 +127,6 @@ public class MainUI extends JFrame {
 	
 	private static final String FRAME_BORDER = "3dlu";
 	private static final Logger LOGGER = Logger.getLogger(MainUI.class);
-	
+	/** Default serial version UID. */
+	private static final long serialVersionUID = 1L;	
 }
