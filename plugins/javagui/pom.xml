@@ -13,6 +13,9 @@
 	<packaging>jar</packaging>
 	<name>QTASTE javagui</name>
 
+	<properties>
+		<preMainClass>com.qspin.qtaste.javagui.JavaGUI</preMainClass>
+	</properties>
 	<build>
 		<finalName>qtaste-javagui</finalName>
 		<plugins>
@@ -29,7 +32,7 @@
 							<addClasspath>true</addClasspath>
 						</manifest>
 						<manifestEntries>
-							<Premain-Class>com.qspin.qtaste.javagui.JavaGUI</Premain-Class>
+							<Premain-Class>${preMainClass}</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Main-Class>NotSuitableAsMain</Main-Class>
 						</manifestEntries>
@@ -50,7 +53,7 @@
 						<argument>-Xmx512m</argument>
 						<argument>-classpath</argument>
 						<argument>target/qtaste-javagui.jar</argument>
-						<argument>com.qspin.qtaste.javagui.JavaGUI</argument>
+						<argument>${preMainClass}</argument>
 					</arguments>
 					<workingDirectory>..</workingDirectory> <!-- run from QTASTE root directory -->
 				</configuration>
@@ -74,7 +77,7 @@
 							<addClasspath>true</addClasspath>
 						</manifest>
 						<manifestEntries>
-							<Premain-Class>com.qspin.qtaste.javagui.JavaGUI</Premain-Class>
+							<Premain-Class>${preMainClass}</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Main-Class>NotSuitableAsMain</Main-Class>
 						</manifestEntries>

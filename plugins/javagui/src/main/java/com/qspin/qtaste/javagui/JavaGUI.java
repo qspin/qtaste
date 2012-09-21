@@ -29,8 +29,6 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.instrument.Instrumentation;
@@ -39,14 +37,12 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
@@ -56,6 +52,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
 import com.qspin.qtaste.tools.ComponentNamer;
 
 /**
@@ -66,18 +63,8 @@ import com.qspin.qtaste.tools.ComponentNamer;
 public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		KeyEventDispatcher {
 
-	private static int count = 0;
-	private Frame frame;
-	private Window window;
-	private JPanel panel;
-	private JButton b;
-	private MouseEventsCatcher catcher;
-
 	public JavaGUI() {
-		System.out.println("Initializing javagui agent!");
 		init();
-		catcher = new MouseEventsCatcher();
-		System.out.println("Start Naming thead!");
 		new Thread(new ComponentNamer()).start();
 	}
 
@@ -380,19 +367,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	}
 
 	public static void premain(String agentArgs, Instrumentation inst) {
-		JavaGUI javagui = new JavaGUI();
+		new JavaGUI();
 	}
 
 	public boolean dispatchKeyEvent(KeyEvent e) {
 		System.out.println("JavaGUI received: " + e);
 		return true;
-	}
-
-	public class MouseEventsCatcher extends MouseAdapter {
-
-		public void mousePressed(MouseEvent event) {
-			System.out.println(event.toString());
-		}
 	}
 
 	@Override
