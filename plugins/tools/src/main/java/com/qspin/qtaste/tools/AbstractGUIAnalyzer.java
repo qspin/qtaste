@@ -40,7 +40,6 @@ public abstract class AbstractGUIAnalyzer implements Runnable,
 		int unecessaryLoop = 0;
 
 		try {
-			System.out.println("Thread start");
 			if (preProcess()) {
 				while (unecessaryLoop < 5) {
 					process();
@@ -56,7 +55,6 @@ public abstract class AbstractGUIAnalyzer implements Runnable,
 			e.printStackTrace();
 		} finally {
 			postProcess();
-			System.out.println("Thread End");
 		}
 	}
 

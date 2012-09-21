@@ -16,12 +16,8 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 	public synchronized int setNameToComponent(Component pComponent, int idx)
 	{
 		if (pComponent.getName() == null || pComponent.getName().isEmpty()) {
-//			pComponent.setName(pComponent.getParent().getName() + "_Component_" + idx);
 			pComponent.setName(getChildName(pComponent.getParent()));
-			System.out.println("set component name to : " + pComponent.getName());
 			idx += 1;
-		} else {
-			System.out.println("component name is : " + pComponent.getName());
 		}
 		return idx;
 	}
