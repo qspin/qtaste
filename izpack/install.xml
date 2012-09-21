@@ -257,6 +257,8 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="demo/TestSuites/**"/>
 		<include name="demo/selenium-server.jar"/>
 		<include name="demo/startUI.*"/>
+		<include name="demo/launchRecording.*"/>
+		<include name="demo/launchConverter.*"/>
 		<include name="demo/TestCampaigns/**"/>
 		<exclude name="**/Thumbs.db"/>
 		<exclude name="*ate2qtaste*"/>
@@ -266,6 +268,12 @@ to be rechecked in version 5.0.0-beta11 or later
 		<exclude name="**/.*"/>
 	    </fileset>
 	     <executable targetfile="$INSTALL_PATH/demo/startUI.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	     <executable targetfile="$INSTALL_PATH/demo/launchRecording.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
+	     <executable targetfile="$INSTALL_PATH/demo/launchConverter.sh" stage="never">
 	      <os family="unix"/>
 	    </executable>
         </pack>
