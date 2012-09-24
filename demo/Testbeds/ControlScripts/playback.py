@@ -7,5 +7,5 @@ ControlScript([
 	classPath="testapi/target/qtaste-testapi-deploy.jar",
 	vmArgs="-javaagent:../plugins/javagui/target/qtaste-javagui-deploy.jar",
 	jmxPort=10101,
-	checkAfter=2)
+	checkAfter=5)
 ])

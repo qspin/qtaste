@@ -2,7 +2,7 @@
 
 setlocal enabledelayedexpansion
 
-cd testapi
+pushd testapi
 
 set PATH=%PATH%;%QTASTE_ROOT%\tools\GnuWin32\bin
 
@@ -12,6 +12,6 @@ call mvn clean install assembly:single || set FAILED=1
 rem pause if build failed
 if "%FAILED%" == "1" pause
 
-cd ..
+popd
 
 endlocal
