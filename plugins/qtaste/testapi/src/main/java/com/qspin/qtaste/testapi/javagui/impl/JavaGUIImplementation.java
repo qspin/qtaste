@@ -3,7 +3,6 @@ package com.qspin.qtaste.testapi.javagui.impl;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.javagui.JavaGUIImpl;
 import com.qspin.qtaste.testapi.javagui.api.JavaGUI;
-import com.qspin.qtaste.testsuite.QTasteException;
 
 public class JavaGUIImplementation extends JavaGUIImpl implements JavaGUI
 {
