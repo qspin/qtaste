@@ -57,7 +57,7 @@ public class ConversionTask implements Runnable {
 			LOGGER.info("Conversion start");
 			fireProgress(-1, "Retreives concerned event(s)");
 			List<Event> events = retrieveEvents();
-			LOGGER.info("Conversion of " + events.size() + " of " + EventManager.getInstance().getEvents().size() + " event(s)");
+			LOGGER.info("Conversion of " + events.size() + " of " + EventManager.getInstance().getFilteredEvents().size() + " event(s)");
 			if ( !events.isEmpty() ) 
 			{
 				fw = new FileWriter(outputFile, false);

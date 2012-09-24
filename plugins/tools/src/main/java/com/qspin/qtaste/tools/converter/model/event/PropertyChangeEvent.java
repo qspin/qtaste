@@ -29,6 +29,10 @@ public class PropertyChangeEvent extends Event {
 	public void setNewValue(String newValue) {
 		this.mNewValue = newValue;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return java.beans.PropertyChangeEvent.class;
+	}
 
 	private String mPropertyName;
 	private String mOldValue;

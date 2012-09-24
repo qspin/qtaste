@@ -28,6 +28,10 @@ public class ItemEvent extends Event {
 	public void setSelectedItem(String pSelectedItem) {
 		mSelectedItem = pSelectedItem;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return java.awt.event.ItemEvent.class;
+	}
 
 	private String mId;
 	private String mState;

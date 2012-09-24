@@ -16,6 +16,10 @@ public class ChangeEvent extends Event {
 	public void setTabIndex(int pTabIndex) {
 		mTabIndex = pTabIndex;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return javax.swing.event.ChangeEvent.class;
+	}
 
 	private int mTabIndex;
 }

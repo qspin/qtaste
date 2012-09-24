@@ -50,6 +50,10 @@ public class Event {
 	public void setAlias(String pAlias) {
 		mAlias = pAlias;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return java.awt.Event.class;
+	}
 	
 	protected String mComponentName;
 	protected String mSourceClass;

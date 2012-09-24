@@ -38,7 +38,7 @@ public class EventTree extends JTree implements PropertyChangeListener{
 	
 	public void rebuild()
 	{
-		((DefaultTreeModel)getModel()).setRoot(mModelFactory.buildRootTree(EventManager.getInstance().getEvents()));
+		((DefaultTreeModel)getModel()).setRoot(mModelFactory.buildRootTree(EventManager.getInstance().getFilteredEvents()));
 	}
 	
 	public void propertyChange(PropertyChangeEvent pEvt)

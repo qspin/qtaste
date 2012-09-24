@@ -16,6 +16,10 @@ public class TreeSelectionEvent extends Event {
 	public void setExpansionPath(String pExpansionPath) {
 		this.mSelectedPath = pExpansionPath;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return javax.swing.event.TreeSelectionEvent.class;
+	}
 
 	private String mSelectedPath;
 }

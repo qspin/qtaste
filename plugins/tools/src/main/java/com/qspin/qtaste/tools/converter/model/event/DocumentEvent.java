@@ -34,6 +34,10 @@ public class DocumentEvent extends Event {
 	public void setChange(String change) {
 		this.mChange = change;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return javax.swing.event.DocumentEvent.class;
+	}
 
 	private String mDocumentChangeType;
 	private int mOffset;

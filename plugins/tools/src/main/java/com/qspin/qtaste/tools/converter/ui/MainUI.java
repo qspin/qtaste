@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -29,7 +30,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.qspin.qtaste.tools.converter.action.ConversionTask;
 import com.qspin.qtaste.tools.converter.model.ComponentNameMapping;
 import com.qspin.qtaste.tools.converter.model.EventManager;
-import com.qspin.qtaste.tools.converter.ui.action.ImportAction;
+import com.qspin.qtaste.tools.converter.ui.action.ImportEventAction;
+import com.qspin.qtaste.tools.converter.ui.action.ImportFilterAction;
 import com.qspin.qtaste.tools.converter.ui.model.table.AliasTableModel;
 
 public class MainUI extends JFrame {
@@ -45,6 +47,10 @@ public class MainUI extends JFrame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
+
+	public void setFilterDefinitionFile(String pPath) {
+		mUsedFilterFile.setText("Filter definition file:" + pPath);
+	}	
 	
 	private void genUI()
 	{
@@ -52,32 +58,40 @@ public class MainUI extends JFrame {
 		createAndAddMenuBar();
 		
 		FormLayout layout = new FormLayout( 
-				FRAME_BORDER + ", pref:grow, " + FRAME_BORDER,
-				FRAME_BORDER + ", pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref, " + FRAME_BORDER);
+				FRAME_BORDER + ", left:pref:grow " + COMPONENT_SPACING + " pref:grow, " + FRAME_BORDER,
+				FRAME_BORDER + ", pref" + COMPONENT_SPACING +"pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref" + COMPONENT_SPACING + "pref, " + FRAME_BORDER);
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
 		int rowIndex = 2;
 		JButton importXml = new JButton("Import recording file");
-		importXml.addActionListener(new ImportAction(this));
-		builder.add(importXml, cc.xy(2, rowIndex));
+		importXml.addActionListener(new ImportEventAction(this));
+		builder.add(importXml, cc.xyw(2, rowIndex, 3));
+		rowIndex += 2;
+
+		mUsedFilterFile = new JLabel();
+		setFilterDefinitionFile("None");
+		builder.add(mUsedFilterFile, cc.xy(2, rowIndex));
+		JButton importXmlFilter = new JButton("Select filter definition file");
+		importXmlFilter.addActionListener(new ImportFilterAction(this));
+		builder.add(importXmlFilter, cc.xy(4, rowIndex));
 		rowIndex += 2;
 		
 		JTabbedPane tabbedPanes = new JTabbedPane();
 		tabbedPanes.insertTab("Description", null, new EventDescriptionPane(), null, 0);
 		tabbedPanes.insertTab("Aliases", null, new JScrollPane(new JTable(new AliasTableModel())), null, 1);
-		builder.add(tabbedPanes, cc.xy(2,rowIndex));
+		builder.add(tabbedPanes, cc.xyw(2, rowIndex, 3));
 		rowIndex += 2;
 		
 		mConfigurationPane = new ConversionConfigurationPane();
 		EventManager.getInstance().addPropertyChangeListener(mConfigurationPane);
-		builder.add(mConfigurationPane, cc.xy(2, rowIndex));
+		builder.add(mConfigurationPane, cc.xyw(2, rowIndex, 3));
 		rowIndex += 2;
 		
 		JPanel p = new JPanel();
 		JButton launch = new JButton("Launch conversion");
 		launch.addActionListener(new LauchConversionAction());
 		p.add(launch);
-		builder.add(p, cc.xy(2, rowIndex));
+		builder.add(p, cc.xyw(2, rowIndex, 3));
 		rowIndex += 2;
 		
 		add(builder.getPanel(), BorderLayout.CENTER);
@@ -125,8 +139,10 @@ public class MainUI extends JFrame {
 
 	private ConversionConfigurationPane mConfigurationPane;
 	
+	private JLabel mUsedFilterFile;
+	
 	private static final String FRAME_BORDER = "3dlu";
 	private static final Logger LOGGER = Logger.getLogger(MainUI.class);
 	/** Default serial version UID. */
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
 }

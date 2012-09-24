@@ -22,6 +22,10 @@ public class ActionEvent extends Event {
 	public void setActionCommand(String actionCommand) {
 		this.mActionCommand = actionCommand;
 	}
+	public Class<?> getSourceEventClass()
+	{
+		return java.awt.event.ActionEvent.class;
+	}
 
 	private String mId;
 	private String mActionCommand;
