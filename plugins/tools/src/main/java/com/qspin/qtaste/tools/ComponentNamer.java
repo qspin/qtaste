@@ -4,8 +4,16 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Thread which scans all GUI components and give them a name if needed.
+ * @author simjan
+ *
+ */
 public final class ComponentNamer extends AbstractGUIAnalyzer {
 
+	/**
+	 * Constructor.
+	 */
 	public ComponentNamer()
 	{
 		super();
@@ -13,6 +21,12 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 		mMapName = new HashMap<Component, String>();
 	}
 	
+	/**
+	 * If the component's name is null or empty, set a name on this component.
+	 * @param pComponent
+	 * @param idx
+	 * @return the idx increase by 1 if the component's name has been updated.
+	 */
 	public synchronized int setNameToComponent(Component pComponent, int idx)
 	{
 		if (pComponent.getName() == null || pComponent.getName().isEmpty()) {
@@ -22,6 +36,11 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 		return idx;
 	}
 	
+	/**
+	 * Returns a name for a child of the component.  
+	 * @param pComponent can be <code>null</code>.
+	 * @return
+	 */
 	private String getChildName(Component pComponent)
 	{
 		if ( pComponent == null )
@@ -43,6 +62,7 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 	private Map<Component, String> mMapName;
 	private int mNullParentIndex = 0;
 	private int mParentIndex = 0;
+	
 	@Override
 	protected boolean preProcess() {
 		return true;
