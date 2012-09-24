@@ -168,8 +168,10 @@ public abstract class TestScript implements Executable {
                     }
 
                     status = testResult.getStatus();
-                    if (status == TestResult.Status.FAIL) {
-                        needToRetry = TestEngine.setNeedToRestartSUT();
+                    if (status != TestResult.Status.SUCCESS) {
+                        if (status == TestResult.Status.FAIL) {
+                           needToRetry = TestEngine.setNeedToRestartSUT();
+			}
                         returnStatus = false;
                     }
                     trial++;
