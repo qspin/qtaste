@@ -17,3 +17,8 @@ popd
 pushd demo
 ./build.sh || exit 1
 popd
+
+#create installer
+pushd izpack
+./createInstaller.sh || exit 1
+popd
