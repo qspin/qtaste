@@ -19,10 +19,10 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 						</manifest>
-							<manifestEntries>
-								<Main-Class>${mainClass}</Main-Class>
-							</manifestEntries>
-						</archive>
+						<manifestEntries>
+							<Main-Class>${mainClass}</Main-Class>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
