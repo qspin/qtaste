@@ -188,7 +188,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 setTestSuiteDirectory(selectedTestSuites);
                 tcTree.generateScriptsTree(selectedTestSuites);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 logger.error(e);
             }
 
@@ -219,7 +218,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             }
         });
 
-        ExecuteButtonAction buttonListener = new ExecuteButtonAction(this);
+        ExecuteButtonAction buttonListener = new ExecuteButtonAction();
         executeButton.addActionListener(buttonListener);
         executeButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/running_32"));
         executeButton.setToolTipText("Run Test(s)");
@@ -927,12 +926,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     }
 
     protected class ExecuteButtonAction implements ActionListener {
-
-        TestCasePane tcPane;
-
-        protected ExecuteButtonAction(TestCasePane tcPane) {
-            this.tcPane = tcPane;
-        }
 
         /**
          * Invoked when an action occurs.
