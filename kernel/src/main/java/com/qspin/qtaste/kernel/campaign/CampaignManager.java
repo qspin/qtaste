@@ -161,7 +161,7 @@ public class CampaignManager implements TestReportListener {
             TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
             currentTestSuite = new MetaTestSuite(testSuiteName, run.getTestsuites());
             currentTestSuite.addTestReportListener(this);
-            campaignResult &= TestEngine.execute(currentTestSuite);
+            campaignResult &= TestEngine.execute(currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
             boolean abortedByUser = currentTestSuite.isAbortedByUser();
             currentTestSuite.removeTestReportListener(this);
             currentTestSuite = null;
