@@ -20,7 +20,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0</version>
+				<version>1.1</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
@@ -209,5 +209,10 @@
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.tmatesoft.svnkit</groupId> 
+				<artifactId>svnkit</artifactId> 
+				<version>1.7.4-v1</version> 
+		</dependency> 
 	</dependencies>
 </project>
