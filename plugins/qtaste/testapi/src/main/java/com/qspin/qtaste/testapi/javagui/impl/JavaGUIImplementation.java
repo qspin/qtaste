@@ -1,7 +1,7 @@
 package com.qspin.qtaste.testapi.javagui.impl;
 
 import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.javagui.JavaGUIImpl;
+import com.qspin.qtaste.javagui.client.JavaGUIImpl;
 import com.qspin.qtaste.testapi.javagui.api.JavaGUI;
 
 public class JavaGUIImplementation extends JavaGUIImpl implements JavaGUI
