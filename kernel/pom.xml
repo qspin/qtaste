@@ -36,6 +36,13 @@
 						<svn>javasvn</svn>
 					</providerImplementations>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.tmatesoft.svnkit</groupId> 
+						<artifactId>svnkit</artifactId> 
+						<version>1.7.4</version> 
+					</dependency>
+				</dependencies>
 			</plugin>
 			<!-- plugin to install source artifact -->
 			<plugin>
