@@ -270,10 +270,8 @@ public class TestCampaignMainPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             MetaCampaignFile selectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
-            //jython tools/TestProcedureDoc/generateTestCampaignDoc.py <test_campaign_file.xml>
             try {
                 StringWriter output = new StringWriter();
-    //                InteractiveInterpreter interp = new InteractiveInterpreter();
                 PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
                 interp.setOut(output);
                 interp.setErr(output);
@@ -313,9 +311,6 @@ public class TestCampaignMainPanel extends JPanel {
         		JOptionPane.showMessageDialog(null, 
         				"Error during generation of TPO file\n" + ex.getMessage(), 
         				"Error", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                //scriptReader.close();
-                //
             }
         }
 
