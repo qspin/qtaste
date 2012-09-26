@@ -151,7 +151,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         else {
             TreePath tp = this.getPathForLocation(e.getX(), e.getY());
             TreeNode node = this.getTreeNode(tp);
-            if (node instanceof TCTreeNode)
+            if (node != null)
             {
                TCTreeNode tcTreeNode =  (TCTreeNode)node;
                if ( (tcTreeNode.getUserObject() !=null) &&
