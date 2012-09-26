@@ -1,4 +1,4 @@
-package com.qspin.qtaste.testapi.ui;
+package com.qspin.qtaste.sutuidemo;
 
 import java.awt.BorderLayout;
 
@@ -12,7 +12,7 @@ final class Interface extends JFrame {
 	
 	public Interface()
 	{
-		super("Interface");
+		super("SUT GUI Demonstration controlled by QTaste");
 		setName("MAIN_FRAME");
 		
 		genUI();

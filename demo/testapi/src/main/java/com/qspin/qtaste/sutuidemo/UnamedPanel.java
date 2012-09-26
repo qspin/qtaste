@@ -1,4 +1,4 @@
-package com.qspin.qtaste.testapi.ui;
+package com.qspin.qtaste.sutuidemo;
 
 import java.awt.GridLayout;
 
@@ -9,12 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 
-final class SelectionPanel extends JPanel {
+final class UnamedPanel extends JPanel {
 
-	public SelectionPanel()
+	public UnamedPanel()
 	{
 		super();
-		setName(COMPONENT_NAME);
 		
 		genUI();
 	}
@@ -36,10 +35,7 @@ final class SelectionPanel extends JPanel {
 	
 	private void prepareComponent()
 	{
-		mList.setName("LIST");
-		mSpinner.setName("SPINNER");
-		mSlider.setName("SLIDER");
-		mCombo.setName("COMBO_BOX");
+		//do not set name to components
 	}
 
 	private JList mList = new JList(new String[]{"listItem_01", "listItem_02", "listItem_03", "listItem_04", "listItem_05"});
@@ -48,6 +44,5 @@ final class SelectionPanel extends JPanel {
 	private JComboBox mCombo = new JComboBox(new String[]{"elmt_01","elmt_02","elmt_03","elmt_04"});
 	
 	private static final int NUMBER_OF_COMPONENT = 4;
-	public static final String COMPONENT_NAME = "SELECTION_PANEL";
 	
 }

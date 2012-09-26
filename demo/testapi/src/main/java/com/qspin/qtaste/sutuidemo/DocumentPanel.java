@@ -1,4 +1,4 @@
-package com.qspin.qtaste.testapi.ui;
+package com.qspin.qtaste.sutuidemo;
 
 import java.awt.GridLayout;
 import java.text.NumberFormat;

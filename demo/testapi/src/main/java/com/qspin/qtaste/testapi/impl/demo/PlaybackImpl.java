@@ -1,7 +1,7 @@
 package com.qspin.qtaste.testapi.impl.demo;
 
 import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.javagui.JavaGUIImpl;
+import com.qspin.qtaste.javagui.client.JavaGUIImpl;
 import com.qspin.qtaste.testapi.api.Playback;
 
 public class PlaybackImpl extends JavaGUIImpl implements Playback {
