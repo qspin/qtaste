@@ -126,7 +126,7 @@
                    <version>${qtaste-kernel-version}</version>
                  </docletArtifact>
                  <sourcepath>src/main/java;${project.build.directory}/dependency-testapi-src;${project.build.directory}/dependency-kernel-src</sourcepath>
-                 <additionalparam>-d ${project.build.directory}/TestAPI-doc</additionalparam>
+                 <additionalparam>-d "${project.build.directory}/TestAPI-doc"</additionalparam>
                  <useStandardDocletOptions>false</useStandardDocletOptions>
                </configuration>
                <executions>
