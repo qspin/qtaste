@@ -154,7 +154,6 @@ to be rechecked in version 5.0.0-beta11 or later
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="pom.xml"/>
 		<include name="clean.*"/>
-		<include name="packager_*.*"/>
 		<include name="izpack/install.xml"/>
 		<include name="kernel/src/**"/>
 		<include name="kernel/**"/>
@@ -171,7 +170,6 @@ to be rechecked in version 5.0.0-beta11 or later
 		<exclude name="**/Thumbs.db"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
-		<exclude name="**/.*"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
@@ -197,7 +195,6 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="plugins/recorder/pom.xml"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
-		<exclude name="**/.*"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
@@ -220,7 +217,6 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="plugins/tools/pom.xml"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
-		<exclude name="**/.*"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
@@ -243,7 +239,6 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="plugins/javagui/pom.xml"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
-		<exclude name="**/.*"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
@@ -263,7 +258,7 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="demo/COPYING.LESSER"/>
 		<include name="demo/Testbeds/**"/>
 		<include name="demo/TestSuites/**"/>
-		<include name="demo/selenium-server.jar"/>
+		<include name="demo/selenium-server-*.jar"/>
 		<include name="demo/startUI.*"/>
 		<include name="demo/launchRecording.*"/>
 		<include name="demo/launchConverter.*"/>
@@ -301,6 +296,8 @@ to be rechecked in version 5.0.0-beta11 or later
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="doc/*.pdf"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
             </fileset>
         </pack>
     </packs>
