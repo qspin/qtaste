@@ -384,7 +384,7 @@ public class RLogin {
             if (wait) {
                 try {
                     if (waitTime != null) {
-                        rlogin.outputReaderThread.join(waitTime * 1000);
+                        rlogin.outputReaderThread.join(SEC_TO_MS_FACTOR * waitTime);
                     } else {
                         rlogin.outputReaderThread.join();
                     }
@@ -412,4 +412,7 @@ public class RLogin {
             shutdown();
         }
     }
+    
+    /** Factor used to convert second into millisecond. */
+    private static final long SEC_TO_MS_FACTOR = 1000;
 }
