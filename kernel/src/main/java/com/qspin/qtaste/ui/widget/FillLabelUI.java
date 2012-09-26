@@ -33,38 +33,24 @@ import javax.swing.plaf.metal.*;
 public class FillLabelUI extends MetalLabelUI
 {
    private boolean mEndRounded;
-   private boolean mUseTexture;
    private static final double WIDTH_RATIO = 0.15;
    private static final double HEIGHT_RATIO = 0.20;
-   private static Paint mBackTexture = null;
    private Color mColor = ResourceManager.getInstance().getLightColor();
 
    public FillLabelUI()
    {
       mEndRounded = false;
-      mUseTexture = false;
    }
 
    public FillLabelUI(Color pColor)
    {
       mEndRounded = false;
-      mUseTexture = false;
       mColor = pColor;
    }
 
    public FillLabelUI(boolean pEndRounded)
    {
       mEndRounded = pEndRounded;
-
-      /*if(mBackTexture == null)
-      {
-         Image img = ResourceManager.getInstance().getImageIcon("main/noise").getImage();
-         BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
-         Graphics2D big = bi.createGraphics();
-         big.drawImage(img, 0, 0, null);
-         mBackTexture = new TexturePaint(bi, new Rectangle(img.getWidth(null), img.getHeight(null)));
-         mUseTexture = true;
-      }*/
    }
 
    protected void paintElements(JLabel pLabel,
@@ -80,14 +66,7 @@ public class FillLabelUI extends MetalLabelUI
       if(!mEndRounded)
       {
          r = pG.getClipBounds();
-         if(mUseTexture && mBackTexture != null)
-         {
-            g2D.setPaint(mBackTexture);
-         }
-         else
-         {
-            g2D.setColor(pBackColor);
-         }
+         g2D.setColor(pBackColor);
          pG.fillRect(r.x, r.y, r.width, r.height);
       }
       else
@@ -100,14 +79,7 @@ public class FillLabelUI extends MetalLabelUI
          int stepy = (int)(r.height * HEIGHT_RATIO);
          int step2y = stepy * 2;
          int starty = r.height - stepy;
-         if(mUseTexture && mBackTexture != null)
-         {
-            g2D.setPaint(mBackTexture);
-         }
-         else
-         {
-            g2D.setColor(pBackColor);
-         }
+         g2D.setColor(pBackColor);
          pG.fillRect(r.x, r.y, startx, r.height);
          pG.fillRect(r.x + startx, r.y, stepx, starty);
          g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

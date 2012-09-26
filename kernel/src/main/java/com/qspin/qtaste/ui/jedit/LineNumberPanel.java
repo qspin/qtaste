@@ -89,7 +89,6 @@ public class LineNumberPanel extends JComponent
    private int y_offset = DEFAULT_Y_OFFSET;
    private int charHeight;
    private int charWidth;
-   private MouseListener mouseListener = null;
    private TestScriptBreakpointEvent lastBreakEvent;
    private Color breakpointReachedColor = new Color(189,230,170);
    
@@ -225,7 +224,6 @@ public class LineNumberPanel extends JComponent
 
    @Override
    public void deinstall(JEditorPane editor) {
-       removeMouseListener(mouseListener);
        status = Status.DEINSTALLING;
        JScrollPane sp = getScrollPane(editor);
        if (sp != null) {
