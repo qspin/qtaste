@@ -23,7 +23,6 @@
 package com.qspin.qtaste.ui;
 
 import java.awt.datatransfer.StringSelection;
-import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
 import java.awt.dnd.DragSource;
@@ -31,7 +30,6 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
-import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,14 +53,12 @@ import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponentFactory;
 import com.qspin.qtaste.kernel.testapi.SingletonComponentFactory;
 import com.qspin.qtaste.kernel.testapi.TestAPI;
 import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
-import com.qspin.qtaste.ui.testcasebuilder.TestDesignPanels;
 
 
 @SuppressWarnings("serial")
 public class TestAPIDocsTree extends JTree implements DragSourceListener, DragGestureListener {
 
     private DragSource dragSourceObject;
-    private DropTarget dropTargetObject;
     private StringSelection transferable;
     TestAPIPanel mLinkedpanel;
     
@@ -88,29 +84,6 @@ public class TestAPIDocsTree extends JTree implements DragSourceListener, DragGe
 
     }
 
-    public void initDragDropOperations()
-    {
-        if (mLinkedpanel instanceof TestDesignPanels)
-        {
-            dropTargetObject = new DropTarget();
-            dragSourceObject = new DragSource();
-            TestDesignPanels designPanel = (TestDesignPanels)mLinkedpanel;
-            dragSourceObject.createDefaultDragGestureRecognizer(this, 
-                    DnDConstants.ACTION_COPY, this);
-            try
-            {
-                dropTargetObject.setComponent(designPanel.getDesignPanel().getSourceTextArea());
-                dropTargetObject.addDropTargetListener(designPanel.getDesignPanel());
-            }
-            catch (java.util.TooManyListenersException e)
-            {
-                // to be completed but what ???
-            }
-                    
-        }
-    }
-
-    
     private void buildTree(final DefaultMutableTreeNode rootNode, TestAPIDocsTree tree) {
         Thread t = new Thread() {
             public void run() {

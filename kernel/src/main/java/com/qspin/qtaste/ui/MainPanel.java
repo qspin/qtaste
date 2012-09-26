@@ -71,15 +71,13 @@ import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
 import com.qspin.qtaste.ui.config.MainConfigFrame;
 import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
-import com.qspin.qtaste.ui.testcasebuilder.TestDesignPanels;
+import com.qspin.qtaste.ui.tools.GridBagLineAdder;
+import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.tools.WrappedToolTipUI;
+import com.qspin.qtaste.ui.util.QSpinTheme;
+import com.qspin.qtaste.ui.widget.FillLabelUI;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.ui.tools.WrappedToolTipUI;
-import com.qspin.qtaste.ui.tools.GridBagLineAdder;
-import com.qspin.qtaste.ui.util.QSpinTheme;
-import com.qspin.qtaste.ui.tools.ResourceManager;
-import com.qspin.qtaste.ui.widget.FillLabelUI;
 
 /**
  *
@@ -203,9 +201,7 @@ public class MainPanel extends JFrame {
 
             final JPanel rightPanels = new JPanel(new CardLayout());
             mTestCasePanel = new TestCasePane(this);
-            final TestDesignPanels testDesignPanel = new TestDesignPanels();
             rightPanels.add(mTestCasePanel, "Test Cases");
-            rightPanels.add(testDesignPanel, "Test Design");
 
             mTestCampaignPanel = new TestCampaignMainPanel(this);
             rightPanels.add(mTestCampaignPanel, "Test Campaign");
@@ -234,7 +230,6 @@ public class MainPanel extends JFrame {
 
             // init will do the link between the tree view and the pane
             testInterractivePanel.init();
-            testDesignPanel.init();
 
             // Define the listener to display the pane depending on the selected tab
             mTreeTabsPanel.addChangeListener(new ChangeListener() {
@@ -440,7 +435,7 @@ public class MainPanel extends JFrame {
             String testSuiteDir = null;
             int numberLoops = 1;
             boolean loopsInHours = false;
-            String sutVersion = null;
+//            String sutVersion = null;
 
             for (int i = 0; i < args.length; i = i + 2) {
                 if (args[i].equals("-testsuite")) {
@@ -459,7 +454,7 @@ public class MainPanel extends JFrame {
                     logger.info("Using " + args[i + 1] + " as engine configuration file");
                     TestEngineConfiguration.setConfigFile(args[i + 1]);
                 } else if (args[i].equals("-loop")) {
-                    String message = "Running test suite in loop";
+//                    String message = "Running test suite in loop";
                     numberLoops = -1;
                     if ((i + 1 < args.length)) {
                         // more arguments, check if next argument is a loop argument
@@ -479,7 +474,7 @@ public class MainPanel extends JFrame {
                                 if (numberLoops <= 0) {
                                     throw new NumberFormatException();
                                 }
-                                message += (loopsInHours ? " during " : " ") + numberLoops + " " + (loopsInHours ? "hour" : "time") + (numberLoops > 1 ? "s" : "");
+//                                message += (loopsInHours ? " during " : " ") + numberLoops + " " + (loopsInHours ? "hour" : "time") + (numberLoops > 1 ? "s" : "");
                                 i += 2;
                             } catch (NumberFormatException e) {
                                 showUsage();
