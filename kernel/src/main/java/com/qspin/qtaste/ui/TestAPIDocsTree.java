@@ -22,14 +22,6 @@
 */
 package com.qspin.qtaste.ui;
 
-import java.awt.datatransfer.StringSelection;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,10 +48,8 @@ import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 
 
 @SuppressWarnings("serial")
-public class TestAPIDocsTree extends JTree implements DragSourceListener, DragGestureListener {
+public class TestAPIDocsTree extends JTree {
 
-    private DragSource dragSourceObject;
-    private StringSelection transferable;
     TestAPIPanel mLinkedpanel;
     
     public TestAPIDocsTree(TestAPIPanel linkedPanel) {
@@ -156,42 +146,5 @@ public class TestAPIDocsTree extends JTree implements DragSourceListener, DragGe
         }
     }
 
-    public void dragEnter(DragSourceDragEvent dsde) {
-           System.out.println("Drag enter");    
-    }
-
-    public void dragOver(DragSourceDragEvent dsde) {
-           System.out.println("Drag over");    
-        
-    }
-
-    public void dropActionChanged(DragSourceDragEvent dsde) {
-           System.out.println("Drag action changed");    
-    }
-
-    public void dragExit(DragSourceEvent dse) {
-           System.out.println("Drag exit");    
-    }
-
-    public void dragDropEnd(DragSourceDropEvent dsde) {
-        
-        if (dsde.getDropSuccess())
-           System.out.println("Drag Drop end successfully");    
-        else
-           System.out.println("Drag Drop end failed");    
-    }
-
-    public void dragGestureRecognized(DragGestureEvent dge) {
-        System.out.println("Drag gesture recognized");
-        TreePath path = this.getLeadSelectionPath();
-        if (path != null ) {
-            if (path.getParentPath()!=null)
-            {
-                DefaultMutableTreeNode tn = (DefaultMutableTreeNode)path.getLastPathComponent();
-                transferable = new StringSelection((String)tn.getUserObject());
-                dragSourceObject.startDrag(dge, DragSource.DefaultCopyDrop, transferable, this);
-            }
-        }
-    }
   }
 
