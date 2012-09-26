@@ -87,7 +87,7 @@ public abstract class TestScript implements Executable {
         final String INTERACTIVE_REPORT_NAME = "Interactive";
         boolean returnStatus = true;
         TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-        if (testSuite == null && reportManager.getReportName() != INTERACTIVE_REPORT_NAME) {
+        if (testSuite == null && !reportManager.getReportName().equals(INTERACTIVE_REPORT_NAME) ) {
             reportManager.startReport(INTERACTIVE_REPORT_NAME);
         }
         testResults = new LinkedList<TestResult>();
