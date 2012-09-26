@@ -16,7 +16,7 @@
     -->
     <info>
         <appname>QTaste</appname>
-        <appversion>1.2-RC1</appversion>
+        <appversion>1.2</appversion>
         <authors>
             <author name="David Ergo" email="der@qspin.be"/>
             <author name="Vincent Dubois" email="vdu@qspin.be"/>
@@ -94,7 +94,8 @@ to be rechecked in version 5.0.0-beta11 or later
 		<exclude name="**/Thumbs.db"/>
 		<exclude name="**/*.pdf"/>
 		<exclude name="plugins/**"/>
-		<exclude name="*ate2qtaste*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
 	    <executable targetfile="$INSTALL_PATH/bin/generate-TestSuites-doc.sh" stage="never">
 	      <os family="unix"/>
@@ -148,7 +149,7 @@ to be rechecked in version 5.0.0-beta11 or later
 	      <os family="unix"/>
 	    </executable>
         </pack>
-        <pack name="The kernel Sources" required="no" preselected="yes" parent="Kernel">
+        <pack name="The kernel sources" required="yes" preselected="yes" parent="Kernel">
 	    <description>The source code of the kernel</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="pom.xml"/>
@@ -168,10 +169,11 @@ to be rechecked in version 5.0.0-beta11 or later
 		<exclude name="tools/TestScriptDoc/*.class"/>
 		<exclude name="**/target/**"/>
 		<exclude name="**/Thumbs.db"/>
-		<exclude name="*ate2qtaste*"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
 <!--
@@ -182,13 +184,13 @@ to be rechecked in version 5.0.0-beta11 or later
 	    <description>The recorder agent plugin. This plugin is used to record action in a java GUI and store all events in xml file.</description>
         </pack>
 -->
-        <pack name="The recorder binaries" required="no" preselected="yes" parent="Recoder">
+        <pack name="The recorder binaries" required="yes" preselected="yes" parent="Recoder">
 	    <description>The recorder binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins/recorder/target/qtaste-recorder-deploy.jar"/>
 	    </fileset>
         </pack>
-        <pack name="The recorder sources" required="no" preselected="yes" parent="Recoder">
+        <pack name="The recorder sources" required="yes" preselected="yes" parent="Recoder">
 	    <description>The recorder sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins/recorder/src/**"/>
@@ -196,6 +198,8 @@ to be rechecked in version 5.0.0-beta11 or later
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
 <!--
@@ -203,13 +207,13 @@ to be rechecked in version 5.0.0-beta11 or later
 	    <description>The tools plugin. This plugin can convert a recording file to a python script.</description>
         </pack>
 -->
-        <pack name="The tools binaries" required="no" preselected="yes" parent="Tools">
+        <pack name="The tools binaries" required="yes" preselected="yes" parent="Tools">
 	    <description>The tools binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins/tools/target/qtaste-tools-deploy.jar"/>
 	    </fileset>
         </pack>
-        <pack name="The tools sources" required="no" preselected="yes" parent="Tools">
+        <pack name="The tools sources" required="yes" preselected="yes" parent="Tools">
 	    <description>The tools sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins/tools/src/**"/>
@@ -217,6 +221,8 @@ to be rechecked in version 5.0.0-beta11 or later
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
 <!--
@@ -224,13 +230,13 @@ to be rechecked in version 5.0.0-beta11 or later
 	    <description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
         </pack>
 -->
-        <pack name="The Java GUI binaries" required="no" preselected="yes" parent="Java GUI">
+        <pack name="The Java GUI binaries" required="yes" preselected="yes" parent="Java GUI">
 	    <description>The Java GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins/javagui/target/qtaste-javagui-deploy.jar"/>
 	    </fileset>
         </pack>
-        <pack name="The Java GUI sources" required="no" preselected="yes" parent="Java GUI">
+        <pack name="The Java GUI sources" required="yes" preselected="yes" parent="Java GUI">
 	    <description>The Java GUI sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins/javagui/src/**"/>
@@ -238,6 +244,8 @@ to be rechecked in version 5.0.0-beta11 or later
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
 <!--
@@ -245,7 +253,7 @@ to be rechecked in version 5.0.0-beta11 or later
 	    <description>The demonstrations</description>
         </pack>
 -->
-        <pack name="The demo Binaries" required="no" preselected="yes" parent="Demo">
+        <pack name="The demo binaries" required="yes" preselected="yes" parent="Demo">
 	    <description>The demo files - examples</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
@@ -261,11 +269,11 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="demo/launchConverter.*"/>
 		<include name="demo/TestCampaigns/**"/>
 		<exclude name="**/Thumbs.db"/>
-		<exclude name="*ate2qtaste*"/>
 		<exclude name="**/*.class"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings"/>
-		<exclude name="**/.*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
 	     <executable targetfile="$INSTALL_PATH/demo/startUI.sh" stage="never">
 	      <os family="unix"/>
@@ -277,7 +285,7 @@ to be rechecked in version 5.0.0-beta11 or later
 	      <os family="unix"/>
 	    </executable>
         </pack>
-        <pack name="The demo Sources" required="no" preselected="yes" parent="Demo">
+        <pack name="The demo sources" required="yes" preselected="yes" parent="Demo">
 	    <description>The source code of the demo</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="demo/testapi/src/**"/>
@@ -285,10 +293,11 @@ to be rechecked in version 5.0.0-beta11 or later
 		<include name="demo/build.*"/>
 		<exclude name="**/target/**"/>
 		<exclude name="**/Thumbs.db"/>
-		<exclude name="*ate2qtaste*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
-        <pack name="Docs" required="no" preselected="yes">
+        <pack name="Docs" required="yes" preselected="yes">
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="doc/*.pdf"/>
