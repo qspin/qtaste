@@ -17,7 +17,7 @@
     along with QTaste. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.qspin.qtaste.javagui;
+package com.qspin.qtaste.javagui.server;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
@@ -52,6 +52,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import com.qspin.qtaste.javagui.JavaGUIMBean;
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
 import com.qspin.qtaste.tools.ComponentNamer;
 

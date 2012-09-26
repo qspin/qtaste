@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qspin.qtaste.javagui;
+package com.qspin.qtaste.javagui.client;
 
+import com.qspin.qtaste.javagui.JavaGUIMBean;
 import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
