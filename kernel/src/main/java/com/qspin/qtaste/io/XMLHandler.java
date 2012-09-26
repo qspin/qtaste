@@ -31,7 +31,8 @@ public class XMLHandler extends DefaultHandler {
 			mBuffer = new StringBuffer();
 			mCurrentRequirementElement = qName;
 		} else if ( mBuffer!= null ){
-			mBuffer.append("<" + qName );
+			mBuffer.append("<");
+			mBuffer.append( qName );
 			for ( int i = 0; i<attributes.getLength(); i++ )
 			{
 				mBuffer.append(" " + attributes.getQName(i) + "=\"" + attributes.getValue(i) + "\"");
