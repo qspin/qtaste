@@ -187,7 +187,7 @@ public class ComponentsLoader {
      * @param tosubclass the Class object to inherit from
      */
     private void register(String pckgname, Class<?> tosubclass) {
-        String name = new String(pckgname);
+        String name = pckgname;
         if (!name.startsWith("/")) {
             name = "/" + name;
         }
