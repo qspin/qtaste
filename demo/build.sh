@@ -1,8 +1,8 @@
 #!/bin/bash
 
-cd testapi
+pushd testapi
 
 # build using maven
-mvn clean install assembly:single
+mvn clean install assembly:single || exit 1
 
-cd ..
+popd
