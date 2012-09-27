@@ -52,7 +52,6 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import com.qspin.qtaste.javagui.JavaGUIMBean;
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
 import com.qspin.qtaste.tools.ComponentNamer;
 

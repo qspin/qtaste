@@ -4,7 +4,7 @@
  */
 package com.qspin.qtaste.javagui.client;
 
-import com.qspin.qtaste.javagui.JavaGUIMBean;
+import com.qspin.qtaste.javagui.server.JavaGUIMBean;
 import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -126,6 +126,6 @@ public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 	protected String mInstanceId;
 	protected JavaGUIMBean mProxy;
 	protected JMXClient mClient;
-	private static final String BEAN_NAME = "com.qspin.qtaste.javagui:type=JavaGUI";
+	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
 	private static final Class<?> BEAN_INTERFACE = JavaGUIMBean.class;
 }

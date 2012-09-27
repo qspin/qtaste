@@ -17,7 +17,7 @@
     along with QTaste. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.qspin.qtaste.javagui;
+package com.qspin.qtaste.javagui.server;
 
 /**
  * This interface describe all the methods usable to perform actions or control on a Java GUI application.
