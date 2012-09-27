@@ -6,7 +6,7 @@ ControlScript([
 				mainClassOrJar="com.qspin.qtaste.testapi.ui.TestInterface",
 				workingDir="./testapi/target",
 				classPath="qtaste-testapi-deploy.jar",
-				vmArgs="-javaagent:/home/sjansse/workspaces/qtaste/plugins/javagui/target/qtaste-javagui-deploy.jar",
+				vmArgs="-javaagent:../../../javagui/target/qtaste-javagui-deploy.jar",
 				jmxPort=10101,
 				checkAfter=2)
 ])
