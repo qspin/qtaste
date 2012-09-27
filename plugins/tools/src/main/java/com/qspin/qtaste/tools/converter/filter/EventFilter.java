@@ -7,11 +7,7 @@ public class EventFilter extends Filter {
 
 
 	public EventFilter(Filter pFilter) {
-		super();
-		setDescription(pFilter.getDescription());
-		setSourceRule(pFilter.getSourceRule());
-		setAcceptedEventRules(pFilter.getAcceptedEventRules());
-		setRejectedEventRules(pFilter.getRejectedEventRules());
+		super(pFilter);
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public abstract class AbstractGUIAnalyzer implements Runnable,
 	 * Calls the #scanComponent(ContainerEvent) on the event's container.
 	 */
 	public synchronized void componentAdded(ContainerEvent e) {
-		if (e.getContainer() != null) {
-			scanComponent(e.getContainer());
+		if (e.getChild() != null) {
+			scanComponent(e.getChild());
 		}
 	}
 

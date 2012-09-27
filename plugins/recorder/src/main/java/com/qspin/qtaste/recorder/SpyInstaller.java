@@ -26,22 +26,60 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.xml.sax.SAXException;
 
 import com.qspin.qtaste.tools.AbstractGUIAnalyzer;
 import com.qspin.qtaste.tools.ComponentNamer;
+import com.qspin.qtaste.tools.filter.Filter;
+import com.qspin.qtaste.tools.filter.FilterXmlHandler;
 
 public class SpyInstaller extends AbstractGUIAnalyzer {
 
 	public static void premain(String agentArgs, Instrumentation inst) {
-		new Thread(new ComponentNamer()).start();
-		new Thread(new SpyInstaller()).start();
+		new Thread(ComponentNamer.getInstance()).start();
+		if (agentArgs == null)
+		{
+			new Thread(new SpyInstaller()).start();
+		} else {
+			new Thread(new SpyInstaller(agentArgs)).start();
+		}
 	}
-			
+	
 	public SpyInstaller() {
+		this(null);
+	}
+
+	public SpyInstaller(String pXmlFilterDefinitionPath) {
 		super();
+		mFilter = new ArrayList<RecorderFilter>();
+		if ( pXmlFilterDefinitionPath != null )
+		{
+			FilterXmlHandler gestionnaire = new FilterXmlHandler();
+			try {
+				SAXParserFactory fabrique = SAXParserFactory.newInstance();
+				SAXParser parseur = fabrique.newSAXParser();
+				parseur.parse(pXmlFilterDefinitionPath, gestionnaire);
+				for (Filter f : gestionnaire.getDecodedFilters() )
+				{
+					mFilter.add(new RecorderFilter(f));
+				}
+			} catch (IOException pExc) {
+				LOGGER.error(pExc);
+			} catch (SAXException pExc) {
+				LOGGER.error(pExc);
+			} catch (ParserConfigurationException pExc) {
+				LOGGER.error(pExc);
+			}
+		}
 	}
 
 	@Override
@@ -61,7 +99,7 @@ public class SpyInstaller extends AbstractGUIAnalyzer {
 			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_hhmmss");
 			mWriter = new BufferedWriter(new FileWriter("spyRepport_"+ format.format(new Date().getTime()) +".xml"));
 			mWriter.write("<events>\n");
-			mSpy = new Spy(mWriter);
+			mSpy = new Spy(mWriter, mFilter);
 			return true;
 		} catch(IOException pExc)
 		{
@@ -88,6 +126,7 @@ public class SpyInstaller extends AbstractGUIAnalyzer {
 		return true;
 	}
 
+	protected List<RecorderFilter> mFilter;
 	protected BufferedWriter mWriter;
 	protected Spy mSpy;
 }

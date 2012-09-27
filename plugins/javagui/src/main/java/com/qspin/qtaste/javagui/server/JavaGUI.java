@@ -48,11 +48,14 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
 import com.qspin.qtaste.tools.ComponentNamer;
 
 /**
@@ -65,11 +68,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 
 	public JavaGUI() {
 		init();
-		new Thread(new ComponentNamer()).start();
+		new Thread(ComponentNamer.getInstance()).start();
 	}
 
-	private Component getComponentByName(String name) {
+	private Component getComponentByName(String name)  throws QTasteTestFailException {
 		Window[] windows = Frame.getWindows();
+		Component foundComponent = null;
 		for (int w = 0; w < windows.length; w++) {
 			Window window = windows[w];
 			if (window.getName().equals(name)) {
@@ -77,16 +81,30 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			}
 			Component c = lookForComponent(name, window.getComponents());
 			if (c != null) {
-				return c;
+				c.requestFocus();
+				foundComponent = c;
+				
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+////				c.requestFocusInWindow();
+//				return c;
 			}
 		}
-		return null;
+		if ( foundComponent != null )
+		{
+			return foundComponent;
+		}
+		throw new QTasteTestFailException("The component \"" + name + "\" is not found.");
 	}
 
 	private Component lookForComponent(String name, Component[] components) {
 		for (int c = 0; c < components.length; c++) {
 
-			String componentName = components[c].getName();
+			String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
 			if (componentName != null && componentName.equals(name)) {
 				System.out.println("Component:" + name + " is found!");
 				return components[c];
@@ -110,7 +128,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	 * true; }
 	 */
 
-	public String[] listComponents() {
+	public String[] listComponents() throws QTasteTestFailException {
 		ArrayList<String> list = new ArrayList<String>();
 
 		Frame[] frames = Frame.getFrames();
@@ -151,7 +169,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return list;
 	}
 
-	public boolean keyPressedOnComponent(String componentName, int vkEvent) {
+	public boolean keyPressedOnComponent(String componentName, int vkEvent)  throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 		if (c == null) {
 			return false;
@@ -174,50 +192,58 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return true;
 	}
 
-	public boolean clickOnButton(String componentName) {
-		return clickOnButton(componentName, 1);
+	public boolean clickOnButton(String componentName) throws QTasteTestFailException {
+		return clickOnButton(componentName, 68);
 	}
 
-	public boolean clickOnButton(String componentName, int pressTime) {
-		Component c = getComponentByName(componentName);
-		if (c == null) {
-			return false;
-		}
-
-		/** 
-		 * Code remove due to an exception...
-		 * System.out.println("Location on screen:" + c.getLocationOnScreen());
-		 */
-		// KeyEvent event = new KeyEvent(c, KeyEvent.KEY_PRESSED,
-		// System.currentTimeMillis(), 0, KeyEvent.VK_SPACE);
-		try {
-			// c.dispatchEvent(event);
-			AbstractButton btn = (AbstractButton) c;
-			btn.doClick(pressTime);
-			// java.lang.reflect.Field f =
-			// AWTEvent.class.getDeclaredField("focusManagerIsDispatching");
-			// f.setAccessible(true);
-			// f.set(event, Boolean.TRUE);
-			// c.dispatchEvent(event);
-		} catch (Exception exc) {
-			System.out.println("Exception sending event" + exc);
-			return false;
-		}
+	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteTestFailException {
+		final Component c = getComponentByName(componentName);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				/** 
+				 * Code remove due to an exception...
+				 * System.out.println("Location on screen:" + c.getLocationOnScreen());
+				 */
+				// KeyEvent event = new KeyEvent(c, KeyEvent.KEY_PRESSED,
+				// System.currentTimeMillis(), 0, KeyEvent.VK_SPACE);
+				try {
+					// c.dispatchEvent(event);
+					AbstractButton btn = (AbstractButton) c;
+					System.out.println("button class : " + c.getClass());
+					if (!btn.isVisible())
+					{
+						System.out.println("Button " + componentName + " is not visible!");
+					}
+					btn.doClick(pressTime);
+					// java.lang.reflect.Field f =
+					// AWTEvent.class.getDeclaredField("focusManagerIsDispatching");
+					// f.setAccessible(true);
+					// f.set(event, Boolean.TRUE);
+					// c.dispatchEvent(event);
+				} catch (Exception exc) {
+					System.out.println("Exception sending event" + exc);
+		//			return false;
+				}
+			}
+		});
 
 		return true;
 	}
 
-	public boolean isEnabled(String componentName) {
+	public boolean isEnabled(String componentName) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
-		return c.isEnabled();
+		return c==null?false:c.isEnabled();
 	}
 
-	public String getButtonText(String componentName) {
+	public String getButtonText(String componentName) throws QTasteTestFailException {
 		AbstractButton c = (AbstractButton) getComponentByName(componentName);
 		return c.getText();
 	}
 
-	public void takeSnapShot(String componentName, String fileName) {
+	public void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 
 		Dimension size = c.getSize();
@@ -235,7 +261,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		}
 	}
 
-	public String getText(String componentName) {
+	public String getText(String componentName) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JLabel) {
@@ -247,7 +273,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return null;
 	}
 
-	public boolean setText(String componentName, String value) {
+	public boolean setText(String componentName, String value) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JLabel) {
@@ -283,7 +309,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return false;
 	}
 
-	public boolean selectComponent(String componentName, boolean value) {
+	public boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JCheckBox) {
@@ -297,7 +323,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return false;
 	}
 
-	public boolean selectValue(String componentName, String value) {
+	public boolean selectValue(String componentName, String value) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JCheckBox || c instanceof JRadioButton) {
@@ -340,7 +366,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return false;
 	}
 
-	public boolean selectIndex(String componentName, int index) {
+	public boolean selectIndex(String componentName, int index) throws QTasteTestFailException {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JComboBox) {
@@ -377,7 +403,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 
 	@Override
 	public boolean selectNode(String componentName, String nodeName,
-			String nodeSeparator) {
+			String nodeSeparator) throws QTasteTestFailException {
 		String[] nodeNames = nodeName.split(nodeSeparator);
 		Component c = getComponentByName(componentName);
 		if (c != null && c instanceof JTree && nodeNames.length > 0) {
@@ -413,7 +439,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	// Todo: getColor, awt?
 
 	@Override
-	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) {
+	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException {
 		Component c = getComponentByName(tabbedPaneComponentName);
 		if (c != null && c instanceof JTabbedPane) {
 			((JTabbedPane)c).setSelectedIndex(tabIndex);
@@ -422,4 +448,5 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return false;
 	}
 
+	private Thread mSwingThread;
 }

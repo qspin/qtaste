@@ -14,8 +14,18 @@ import org.apache.log4j.Logger;
 import com.qspin.qtaste.tools.converter.model.event.Event;
 import com.qspin.qtaste.tools.filter.Filter;
 
+/**
+ * Responsible for the management/filtering  of the events.
+ * Implemented with the singleton pattern.
+ * @author simjan
+ *
+ */
 public class EventManager {
 
+	/**
+	 * Returns the unique instance of the manager. If non exist, creates one.
+	 * @return the unique instance of the manager.
+	 */
 	public synchronized static EventManager getInstance()
 	{
 		if ( INSTANCE == null ) {
@@ -24,6 +34,10 @@ public class EventManager {
 		return INSTANCE;
 	}
 	
+	/**
+	 * Loads and filters the events into the manager.
+	 * @param pEvents
+	 */
 	public void setEvents(List<Event> pEvents)
 	{
 		if(  pEvents == null ) {
@@ -69,6 +83,11 @@ public class EventManager {
 		firePropertyChange(new PropertyChangeEvent(this, DATA_CHANGE_PROPERTY_ID, old, pEvents));
 	}
 	
+	/**
+	 * Returns all events registered for the component identified by the name.
+	 * @param pComponentName
+	 * @return all events registered for the component identified by the name.
+	 */
 	public List<Event> getEventsForComponent(String pComponentName)
 	{
 		if ( mComponentNameMap.containsKey(pComponentName) )
@@ -78,6 +97,10 @@ public class EventManager {
 		return new ArrayList<Event>();
 	}
 	
+	/**
+	 * Registers the listener to receive an event when events, filters or alias change.
+	 * @param pListener
+	 */
 	public void addPropertyChangeListener( PropertyChangeListener pListener)
 	{
 		mListener.add(pListener);

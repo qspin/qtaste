@@ -8,6 +8,7 @@ import com.qspin.qtaste.javagui.server.JavaGUIMBean;
 import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
  * 
@@ -43,67 +44,67 @@ public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 		return mInstanceId;
 	}
 
-	public boolean clickOnButton(String pComponentName) {
+	public boolean clickOnButton(String pComponentName) throws QTasteTestFailException {
 		return mProxy.clickOnButton(pComponentName);
 	}
 
-	public void takeSnapShot(String componentName, String fileName)
+	public void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException
 	{
 		mProxy.takeSnapShot(componentName, fileName);		
 	}
 
-	public boolean keyPressedOnComponent(String componentName, int vkEvent)
+	public boolean keyPressedOnComponent(String componentName, int vkEvent) throws QTasteTestFailException
 	{
 		return mProxy.keyPressedOnComponent(componentName, vkEvent);
 	}
 
-	public String[] listComponents()
+	public String[] listComponents() throws QTasteTestFailException
 	{
 		return mProxy.listComponents();
 	}
 
-	public boolean isEnabled(String componentName)
+	public boolean isEnabled(String componentName) throws QTasteTestFailException
 	{
 		return mProxy.isEnabled(componentName);
 	}
 
-	public boolean clickOnButton(String componentName, int pressTime)
+	public boolean clickOnButton(String componentName, int pressTime) throws QTasteTestFailException
 	{
 		return mProxy.clickOnButton(componentName, pressTime);
 	}
 
-	public String getText(String componentName)
+	public String getText(String componentName) throws QTasteTestFailException
 	{
 		return mProxy.getText(componentName);
 	}
 
-	public boolean setText(String componentName, String value)
+	public boolean setText(String componentName, String value) throws QTasteTestFailException
 	{
 		return mProxy.setText(componentName, value);
 	}
 
-	public boolean selectComponent(String componentName, boolean value)
+	public boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException
 	{
 		return mProxy.selectComponent(componentName, value);
 	}
 
-	public boolean selectValue(String componentName, String value)
+	public boolean selectValue(String componentName, String value) throws QTasteTestFailException
 	{
 		return mProxy.selectValue(componentName, value);
 	}
 
-	public boolean selectIndex(String componentName, int index)
+	public boolean selectIndex(String componentName, int index) throws QTasteTestFailException
 	{
 		return mProxy.selectIndex(componentName, index);
 	}
 
 	public boolean selectNode(String componentName, String nodeName,
-			String nodeSeparator)
+			String nodeSeparator) throws QTasteTestFailException
 	{
 		return mProxy.selectNode(componentName, nodeName, nodeSeparator);
 	}
 
-	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) {
+	public boolean selectTab(String tabbedPaneComponentName, int tabIndex)  throws QTasteTestFailException{
 		return mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 

@@ -28,9 +28,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
@@ -57,6 +59,8 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
+
+import com.qspin.qtaste.tools.ComponentNamer;
 
 /**
  * Reports action done on component through their listeners.
@@ -107,9 +111,10 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 	 * 
 	 * @param pWriter the writer to write the spy report.
 	 */
-	public Spy(BufferedWriter pWriter)
+	public Spy(BufferedWriter pWriter, List<RecorderFilter> pFilters)
 	{
 		mWriter = pWriter;
+		mFilters = pFilters;
 		mListSelectionModelListenerMap = new HashMap<ListSelectionModel, String>();
 		mTreeSelectionModelListenerMap = new HashMap<TreeSelectionModel, String>();
 		mDocumentListenerMap = new HashMap<Document, String>();
@@ -128,46 +133,26 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 		{
 			return;
 		}
-		pComponent.addPropertyChangeListener(this);
+		addPropertyChangeListener(pComponent);
 		if (pComponent instanceof AbstractButton) {
-			((AbstractButton) pComponent).addActionListener(this);
-			((AbstractButton) pComponent).addItemListener(this);
+			addToAbstractButton((AbstractButton)pComponent);
 		} else if (pComponent instanceof JComboBox) {
-			((JComboBox) pComponent).addActionListener(this);
-			((JComboBox) pComponent).addItemListener(this);
+			addToJComboBox((JComboBox) pComponent);
 		} else if (pComponent instanceof JTree) {
-			((JTree) pComponent).getSelectionModel().addTreeSelectionListener(
-					this);
-			((JTree) pComponent).addTreeExpansionListener(this);
-			mTreeSelectionModelListenerMap.put(
-					((JTree) pComponent).getSelectionModel(),
-					pComponent.getName());
+			addToJTree(((JTree) pComponent));
 		} else if (pComponent instanceof JList) {
-			((JList) pComponent).getSelectionModel().addListSelectionListener(
-					this);
-			mListSelectionModelListenerMap.put(
-					((JList) pComponent).getSelectionModel(),
-					pComponent.getName());
+			addToJList((JList) pComponent);
 		} else if (pComponent instanceof JTable) {
-			((JTable) pComponent).getSelectionModel().addListSelectionListener(
-					this);
-			mListSelectionModelListenerMap.put(
-					((JTable) pComponent).getSelectionModel(),
-					pComponent.getName());
+			addToJTable((JTable)pComponent);
 		} else if (pComponent instanceof JTextComponent) {
-			((JTextComponent) pComponent).getDocument().addDocumentListener(
-					this);
-			mDocumentListenerMap.put(
-					((JTextComponent) pComponent).getDocument(),
-					pComponent.getName());
+			addToJTextComponent((JTextComponent)pComponent);
 		} else if (pComponent instanceof JTabbedPane) {
-			((JTabbedPane) pComponent).addChangeListener(this);
+			addToJTabbedPane((JTabbedPane)pComponent);
 		} else {
 			LOGGER.trace(" WARNING - Unsupported component : "
 					+ pComponent.getClass());
 			return;
 		}
-
 	}
 
 	public void removeTarget(Component pComponent) {
@@ -249,7 +234,102 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 	public void stateChanged(ChangeEvent e) {
 		writeEvent(e);
 	}
+	
+	protected boolean checkFilters(Component pComponent, Class<?> pListenerClass)
+	{
+		List<Object> data = new ArrayList<Object>();
+		data.add(pComponent);
+		data.add(pListenerClass);
 
+		for ( RecorderFilter filter : mFilters )
+		{
+			if (!filter.accept(data) )
+			{
+				LOGGER.debug(pComponent.getName() + " is not spied with " + pListenerClass);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	protected void addPropertyChangeListener(Component pComponent)
+	{
+		if ( checkFilters(pComponent, PropertyChangeListener.class))
+		{
+			pComponent.addPropertyChangeListener(this);
+		}
+	}
+	protected void addToAbstractButton(AbstractButton pComponent)
+	{
+		if ( checkFilters(pComponent, ActionListener.class))
+		{
+			pComponent.addActionListener(this);
+		}
+		if ( checkFilters(pComponent, ItemListener.class))
+		{
+			pComponent.addItemListener(this);
+		}
+	}
+	protected void addToJComboBox(JComboBox pComponent)
+	{
+		if ( checkFilters(pComponent, ActionListener.class))
+		{
+			pComponent.addActionListener(this);
+		}
+		if ( checkFilters(pComponent, ItemListener.class))
+		{
+			pComponent.addItemListener(this);
+		}
+	}
+	protected void addToJTree(JTree pComponent)
+	{
+		if( checkFilters(pComponent, TreeSelectionListener.class))
+		{
+			pComponent.getSelectionModel().addTreeSelectionListener(this);
+			mTreeSelectionModelListenerMap.put(
+					((JTree) pComponent).getSelectionModel(),
+					ComponentNamer.getInstance().getNameForComponent(pComponent));
+		}
+		if ( checkFilters(pComponent, TreeExpansionListener.class))
+		{
+			((JTree) pComponent).addTreeExpansionListener(this);
+		}
+	}
+	protected void addToJList(JList pComponent)
+	{
+		if( checkFilters(pComponent, ListSelectionListener.class))
+		{
+			pComponent.getSelectionModel().addListSelectionListener(this);
+			mListSelectionModelListenerMap.put( pComponent.getSelectionModel(),
+					ComponentNamer.getInstance().getNameForComponent(pComponent));
+		}
+	}
+	protected void addToJTable(JTable pComponent)
+	{
+		if ( checkFilters(pComponent, ListSelectionListener.class))
+		{
+			pComponent.getSelectionModel().addListSelectionListener(this);
+			mListSelectionModelListenerMap.put(pComponent.getSelectionModel(),
+					ComponentNamer.getInstance().getNameForComponent(pComponent));
+		}
+	}
+	protected void addToJTextComponent(JTextComponent pComponent)
+	{
+		if ( checkFilters(pComponent, DocumentListener.class))
+		{
+			pComponent.getDocument().addDocumentListener(this);
+			mDocumentListenerMap.put( pComponent.getDocument(),
+					ComponentNamer.getInstance().getNameForComponent(pComponent));
+		}
+	}
+	protected void addToJTabbedPane(JTabbedPane pComponent)
+	{
+		if ( checkFilters(pComponent, ChangeListener.class))
+		{
+			pComponent.addChangeListener(this);
+		}
+	}
+	
 	protected synchronized void writeEvent(EventObject pEvent, Object... pOther) {
 		try {
 			StringBuilder builder = new StringBuilder();
@@ -262,7 +342,7 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 			} else if (mTreeSelectionModelListenerMap.containsKey(source)) {
 				name = mTreeSelectionModelListenerMap.get(source);
 			} else if (source instanceof Component) {
-				name = ((Component) source).getName();
+				name = ComponentNamer.getInstance().getNameForComponent((Component) source);
 			}
 			if (name == null) {
 				LOGGER.trace(" WARNING - Unable to find the component source");
@@ -409,6 +489,7 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 	}
 
 	protected BufferedWriter mWriter;
+	protected List<RecorderFilter> mFilters;
 	protected Map<ListSelectionModel, String> mListSelectionModelListenerMap;
 	protected Map<TreeSelectionModel, String> mTreeSelectionModelListenerMap;
 	protected Map<Document, String> mDocumentListenerMap;

@@ -18,7 +18,7 @@ public class Analyzer {
 	
 	public static void premain(String agentArgs, Instrumentation inst) {
 		System.out.println("Start naming thread!");
-		new Thread(new ComponentNamer()).start();
+		new Thread(ComponentNamer.getInstance()).start();
 		System.out.println("Start analyzer thread!");
 		new Thread(new Runnable() {
 			

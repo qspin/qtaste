@@ -13,6 +13,13 @@ public class Filter {
 		mRejectedEvents = new ArrayList<FilterRule>();
 	}
 	
+	public Filter(Filter pFilter) {
+		setDescription(pFilter.getDescription());
+		setSourceRule(pFilter.getSourceRule());
+		setAcceptedEventRules(pFilter.getAcceptedEventRules());
+		setRejectedEventRules(pFilter.getRejectedEventRules());
+	}
+	
 	public boolean accept(Object o) {
 		if ( mSourceRule != null && !mSourceRule.isRespected(o))
 		{

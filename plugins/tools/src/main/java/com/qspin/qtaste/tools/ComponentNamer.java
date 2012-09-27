@@ -1,7 +1,9 @@
 package com.qspin.qtaste.tools;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,11 +16,16 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 	/**
 	 * Constructor.
 	 */
-	public ComponentNamer()
+	private ComponentNamer()
 	{
 		super();
 		mMapChildIndex = new HashMap<Component, Integer>();
 		mMapName = new HashMap<Component, String>();
+		mMapNameIndex = new HashMap<String, Integer>();
+		mProccedComponent = new ArrayList<Component>();
+		
+		mComponentToNameMapping = new HashMap<Component, String>();
+		mNametoComponentMapping = new HashMap<String, Component>();
 	}
 	
 	/**
@@ -29,10 +36,31 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 	 */
 	public synchronized int setNameToComponent(Component pComponent, int idx)
 	{
+		if ( mProccedComponent.contains(pComponent) )
+		{
+			return idx;
+		}
+		String name = null;
 		if (pComponent.getName() == null || pComponent.getName().isEmpty()) {
-			pComponent.setName(getChildName(pComponent.getParent()));
+			name = getChildName(pComponent.getParent());
 			idx += 1;
 		}
+		name = pComponent.getName();
+		if ( !mMapNameIndex.containsKey(name) )
+		{
+			mMapNameIndex.put(name, 0);
+		}
+		else
+		{
+			String key = name;
+			int index = mMapNameIndex.get(key);
+			name += "_" + index;
+			mMapNameIndex.put(key, index +1);
+		}
+		System.out.println("change name to " + name);
+		mComponentToNameMapping.put(pComponent, name);
+		mNametoComponentMapping.put(name, pComponent);
+		mProccedComponent.add(pComponent);
 		return idx;
 	}
 	
@@ -55,11 +83,19 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 		}
 		int childIndex = mMapChildIndex.get(pComponent);
 		mMapChildIndex.put(pComponent, childIndex+1);
-		return mMapName.get(pComponent)+childIndex;
+		String name = mMapName.get(pComponent)+childIndex;
+		
+		return name;
 	}
-	
+
 	private Map<Component, Integer> mMapChildIndex;
+	private Map<String, Integer> mMapNameIndex;
 	private Map<Component, String> mMapName;
+	private List<Component> mProccedComponent;
+
+	private Map<Component, String> mComponentToNameMapping;
+	private Map<String, Component> mNametoComponentMapping;
+	
 	private int mNullParentIndex = 0;
 	private int mParentIndex = 0;
 	
@@ -76,5 +112,24 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 	@Override
 	protected boolean postProcess() {
 		return true;
+	}
+	
+	private static ComponentNamer INSTANCE;
+	
+	public static synchronized ComponentNamer getInstance(){
+		if ( INSTANCE == null ) {
+			INSTANCE = new ComponentNamer();
+		}
+		return INSTANCE;
+	}
+	
+	public synchronized String getNameForComponent(Component pComponent)
+	{
+		return mComponentToNameMapping.get(pComponent);
+	}
+	
+	public synchronized Component getComponentForName(String pName)
+	{
+		return mNametoComponentMapping.get(pName);
 	}
 }
