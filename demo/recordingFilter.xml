@@ -1,0 +1,6 @@
+<filters>
+  <filter>
+	<description>Do not capture event with property change listener</description>
+	<rejectedEvent>java.beans.PropertyChangeListener</rejectedEvent>
+  </filter>
+</filters>
