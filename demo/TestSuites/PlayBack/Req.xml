@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<REQUIREMENTS_LINKS>
-	<REQ id="id_1">
-		<REQ_DESCRIPTION>Playback script should be able to automate a java swing application</REQ_DESCRIPTION>
-	</REQ>
-</REQUIREMENTS_LINKS>
