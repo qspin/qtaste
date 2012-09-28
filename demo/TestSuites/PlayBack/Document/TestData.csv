@@ -1,0 +1,7 @@
+COMMENT;TAB_IDX;TAB_COMPONENT_NAME;COMPONENT_NAME;COMMAND_RESULT;VALUE;FIELD_CONTENT
+insert in text field;0;TABBED_PANE;TEXT_FIELD;true;test;test
+insert in password field;0;TABBED_PANE;PASSWORD_FIELD;true;passWord;passWord
+insert in text area;0;TABBED_PANE;TEXT_AREA;true;This is a \\n test;This is a \\n test
+insert wrong value in formatted text field;0;TABBED_PANE;FORMATTED_TEXT_FIELD;false;test;
+insert in formatted text field;0;TABBED_PANE;FORMATTED_TEXT_FIELD;true;5%;5%
+insert in formatted text field (format change value);0;TABBED_PANE;FORMATTED_TEXT_FIELD;true;11.5%;12%
