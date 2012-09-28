@@ -104,7 +104,6 @@ public class JavaGUIImpl implements JavaGUIMBean {
 	{
 		try {
 			mClient.disconnect();
-			mClient = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new QTasteException(e.getMessage());
