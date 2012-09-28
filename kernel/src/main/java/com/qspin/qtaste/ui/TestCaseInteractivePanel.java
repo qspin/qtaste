@@ -334,12 +334,12 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
 
                     String text = "testAPI.get" + componentName + "()." + methodName + "(";
                     boolean argumentAdded = false;
-
-                    for (Class<?> parameterType : method.getParameterTypes()) {
-                        text += parameterType.getSimpleName() + ", ";
-                        argumentAdded = true;
-                    }
-
+		    if (method != null) {
+                    	for (Class<?> parameterType : method.getParameterTypes()) {
+                        	text += parameterType.getSimpleName() + ", ";
+                        	argumentAdded = true;
+                    	}
+		    }
                     if (argumentAdded) { // remove last ", " characters
                         text = text.substring(0, text.length() - 2);
                     }
