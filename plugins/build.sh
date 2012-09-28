@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PLUGINS="tools javagui recorder qtaste/testapi"
+PLUGINS="tools javagui recorder"
 
 for PLUGIN in $PLUGINS
 do
