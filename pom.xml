@@ -9,6 +9,15 @@
    <version>1.2</version>
    <packaging>pom</packaging>
    <name>QTaste: QSpin Tailored Automated Test Environment</name>
+   <description>QTaste is a generic engine to perform automated integration tests</description>
+   <url>https://sourceforge.net/projects/qtaste/</url>
+   <licenses>
+	   <license>
+		   <name>LGPL</name>
+		   <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+		   <distribution>repo</distribution>
+	   </license>
+   </licenses>
 
   <modules>
       <module>kernel</module>
