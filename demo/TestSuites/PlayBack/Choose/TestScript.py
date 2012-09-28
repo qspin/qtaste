@@ -1,7 +1,7 @@
 ##
-# [$TEST_NAME].
+# Playback test.
 # <p>
-# Description of the test.
+# Example of test to control and check a java GUI.
 #
 # @data INSTANCE_ID [String] instance id
 ##
@@ -12,7 +12,7 @@ from qtaste import *
 import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
-javaguiMI = testAPI.getJavaGUI()
+javaguiMI = testAPI.getPlayback()
 
 importTestScript("TabbedPaneSelection")
 
