@@ -19,6 +19,7 @@
 
 package com.qspin.qtaste.javagui.server;
 
+import com.qspin.qtaste.javagui.JavaGUI;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
@@ -26,88 +27,6 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  * This interface is called "MBean" as methods may be used remotely using JMX.
  * @author lvboque
  */
-public interface JavaGUIMBean {
+public interface JavaGUIMBean extends JavaGUI {
   
-  /**
-     * Create a snapshot of the specified GUI componentName and save it as the specified filename in the current working directory.
-     * @param componentName an identifier of the GUI component.
-     * @param fileName the name of the image file.
-     */
-   public void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException;
-   
-   /**
-     * Send a key event on the specified componentName.
-     * @param componentName an identifier of the GUI component.
-     * @param fileName the name of the image file.
-     */
-   public boolean keyPressedOnComponent(String componentName, int vkEvent) throws QTasteTestFailException;
-   
-   /**
-     * Get the list of all the component names.
-	 * @return an array of String containing all the names of the component of the GUI application.
-     */
-   public String [] listComponents() throws QTasteTestFailException;
-      
-   /**
-     * Check if a specified component is enabled.
-	 * @return <code>true</code> if the specified component is enabled.
-     */
-   public boolean isEnabled(String componentName) throws QTasteTestFailException;
-      
-   /**
-     * Click on the specified componentName.
-     * @param componentName an identifier of the GUI component.     
-	 * @return <code>true</code> if the action occurs correcly.
-     */
-   public boolean clickOnButton(String componentName) throws QTasteTestFailException;
-
-    /**
-     * Click on the specified componentName during a specified period of time.
-     * @param componentName an identifier of the GUI component.
-	 * @param pressTime an identifier of the GUI component.     
-	 * @return <code>true</code> if the action occurs correcly.
-     */
-   public boolean clickOnButton(String componentName, int pressTime) throws QTasteTestFailException;
-   
-    /**
-     * Get the text used for the specied component.
-     * @param componentName an identifier of the GUI component.     
-	 * @return Return the text of the specified componentName.
-     */
-   public String getText(String componentName) throws QTasteTestFailException;
-   
-    /**
-     * Set the text for the specied component.
-     * @param componentName an identifier of the GUI component.
-	 * @param value the new value for the text.
-	 * @return <code>true</code> if the action occurs correcly.
-     */
-   public boolean setText(String componentName, String value) throws QTasteTestFailException;
-    
-   
-   /**
-    * Select the specified tab for the tabbed pane.
-    * @param tabbedPaneComponentName the tabbed pane component name
-    * @param tabIndex the tab index (first at 0). 
-    * @return <code>true</code> if the action occurs correcly.
-    */
-   public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException;
-   
-    /**
-     * Select the specified componentName.
-     * @param componentName an identifier of the GUI component.
-	 * @param value the new value for the text.
-	 * @return <code>true</code> if the action occurs correcly.
-     */
-   // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?
-   public boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException;
-   
-   // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?   
-   public boolean selectValue(String componentName, String value) throws QTasteTestFailException;
-   
-   // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   public boolean selectIndex(String componentName, int index) throws QTasteTestFailException;
-   
-   // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException;
 }

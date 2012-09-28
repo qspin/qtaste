@@ -31,7 +31,7 @@ def step1():
 	
 	time.sleep(1)
 	
-	if testData.getBooleanValue("COMMAND_RESULT") == True:
+	if testData.getBooleanValue("COMMAND_RESULT"):
 		result = javaguiMI.getText(component)
 		text = testData.getValue("FIELD_CONTENT")
 		if result != text:

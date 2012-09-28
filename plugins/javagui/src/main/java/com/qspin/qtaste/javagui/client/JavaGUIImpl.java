@@ -4,7 +4,8 @@
  */
 package com.qspin.qtaste.javagui.client;
 
-import com.qspin.qtaste.javagui.server.JavaGUIMBean;
+import com.qspin.qtaste.javagui.JavaGUI;
+import com.qspin.qtaste.javagui.server.*;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -12,7 +13,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * 
  */
-public class JavaGUIImpl implements JavaGUIMBean {
+public class JavaGUIImpl implements JavaGUI {
 
 	public JavaGUIImpl(String url) throws Exception {
 		mClient = new JMXClient(url);
@@ -110,12 +111,12 @@ public class JavaGUIImpl implements JavaGUIMBean {
 		}
 	}
 
-	private JavaGUIMBean getProxy() throws Exception {
-		return (JavaGUIMBean) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
+	private JavaGUI getProxy() throws Exception {
+		return (com.qspin.qtaste.javagui.JavaGUI) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
 	
-	protected JavaGUIMBean mProxy;
+	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
-	private static final Class<?> BEAN_INTERFACE = JavaGUIMBean.class;
+	private static final Class<?> BEAN_INTERFACE = com.qspin.qtaste.javagui.JavaGUI.class;
 }
