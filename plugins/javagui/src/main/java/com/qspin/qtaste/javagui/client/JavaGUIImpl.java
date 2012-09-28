@@ -5,7 +5,6 @@
 package com.qspin.qtaste.javagui.client;
 
 import com.qspin.qtaste.javagui.server.JavaGUIMBean;
-import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -13,18 +12,16 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * 
  */
-public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
+public class JavaGUIImpl implements JavaGUIMBean {
 
-	public JavaGUIImpl(String url, String instanceId) throws Exception {
+	public JavaGUIImpl(String url) throws Exception {
 		mClient = new JMXClient(url);
 		if ( mClient == null ) {
 			throw new QTasteException("Unable to connect to the JMX client");
 		}
-		mInstanceId = instanceId;
 		initialize();
 	}
    
-   @Override
    public void initialize() throws QTasteException
    {
 	   try
@@ -38,11 +35,6 @@ public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 		   throw new QTasteException("Unable to initialize the JMX client");
 	   }
    }
-
-	@Override
-	public String getInstanceId() {
-		return mInstanceId;
-	}
 
 	public boolean clickOnButton(String pComponentName) throws QTasteTestFailException {
 		return mProxy.clickOnButton(pComponentName);
@@ -108,7 +100,6 @@ public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 		return mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 
-	@Override
 	public void terminate() throws QTasteException
 	{
 		try {
@@ -123,8 +114,7 @@ public class JavaGUIImpl implements MultipleInstancesComponent, JavaGUIMBean {
 	private JavaGUIMBean getProxy() throws Exception {
 		return (JavaGUIMBean) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
-
-	protected String mInstanceId;
+	
 	protected JavaGUIMBean mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
