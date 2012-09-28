@@ -57,7 +57,6 @@ public final class ComponentNamer extends AbstractGUIAnalyzer {
 			name += "_" + index;
 			mMapNameIndex.put(key, index +1);
 		}
-		System.out.println("change name to " + name);
 		mComponentToNameMapping.put(pComponent, name);
 		mNametoComponentMapping.put(name, pComponent);
 		mProccedComponent.add(pComponent);
