@@ -33,17 +33,25 @@
          <plugin>
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
+	   <executions>
+                <!-- Unpack selenium in order to generate TestAPI Documentation -->
+		<execution>
+			<id>unpack-selenium-src</id>
+			<phase>package</phase>
+			<goals>
+				<goal>unpack-dependencies</goal>
+			</goals>
+			<configuration>
+	                     <classifier>sources</classifier>
+			     <includeArtifactIds>selenium-java-client-driver</includeArtifactIds>
+			     <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+			</configuration>
+		</execution>
+
                <execution>
                   <id>unpack-testapi-src</id>
                   <configuration>
                      <includeArtifactIds>qtaste-toolbox-testapi</includeArtifactIds>
-                  </configuration>
-               </execution>
-               <execution>
-                  <id>unpack-dependencies-src</id>
-                  <configuration>
-                     <includeArtifactIds>selenium-java-client-driver</includeArtifactIds>
                   </configuration>
                </execution>
             </executions>
