@@ -1,4 +1,4 @@
-p##
+##
 # Control script jython module.
 #
 # This module contains the following classes:
