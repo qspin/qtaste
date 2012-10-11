@@ -1,4 +1,4 @@
-##
+p##
 # Control script jython module.
 #
 # This module contains the following classes:
@@ -20,6 +20,13 @@
 #		-args (optional): arguments to pass to the application or None if no argument
 #		-workingDir: working directory to start process in, defaults to QTaste root directory
 #		-checkAfter (optional): number of seconds after which to check if process still exist or None to not check
+#		- start: method called by ControlScript when the ControlScript needs to start NativeProcess
+#		- stop: method called by ControlScript when the ControlScript needs to stop NativeProcess
+#
+# - ServiceProcess: derived from ControlAction where start and stop methods are implemented
+#	This class is initialized with following parameters:
+#		- description: name of the native process (title of the window) 
+#		-serviceName: name of the service to control
 #		- start: method called by ControlScript when the ControlScript needs to start NativeProcess
 #		- stop: method called by ControlScript when the ControlScript needs to stop NativeProcess
 #
@@ -384,6 +391,41 @@ class NativeProcess(ControlAction):
 			ControlAction.executeShellScript("stop_process", '"' + shellScriptArguments + '"')
 		else:
 			ControlAction.executeShellScript("stop_process", shellScriptArguments)
+
+class ServiceProcess(ControlAction):
+	""" Control script action for starting/stopping a service process """
+	def __init__(self, description, serviceName):
+		"""
+		Initialize ServiceProcess object
+		@param description control script action description, also used as window title
+		@param serviceName name of the service to control
+		"""
+		ControlAction.__init__(self, description)
+		self.serviceName = serviceName
+
+	def start(self):
+		print "Starting " + self.description + "...";
+		if _OS.getType() != _OS.Type.WINDOWS:
+			print "Not yet implemented!"
+			#shellScriptArguments = []
+			#shellScriptArguments.append(self.serviceName)
+			#shellScriptArguments.append("-title")
+			#shellScriptArguments.append(self.description)
+		else:
+			shellScriptArguments = '"' + self.serviceName + '" -title "' + self.description + '"';
+		
+		ControlAction.executeShellScript("start_service_process", shellScriptArguments);
+		print
+
+	def stop(self):
+		print "Stopping " + self.description + "...";
+		shellScriptArguments = self.serviceName
+		if _OS.getType() != _OS.Type.WINDOWS:
+			print "Not yet implemented!"
+			#ControlAction.executeShellScript("stop_service_process", '"' + shellScriptArguments + '"')
+		else:
+			print "command : stop_service_process " + shellScriptArguments
+			ControlAction.executeShellScript("stop_service_process", shellScriptArguments)
 
 class ReplaceInFiles(ControlAction):
 	""" Control script action for doing a replace in file(s), only on start """
