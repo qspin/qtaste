@@ -16,3 +16,8 @@ echo Compiling demos ...
 pushd demo
 call build.cmd
 popd
+
+echo creation of the installer ...
+pushd izpack
+call createInstaller.cmd
+popd
