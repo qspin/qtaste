@@ -92,15 +92,16 @@ public class DirectoryTestSuite extends TestSuite {
     }
 
     public boolean executeOnce(boolean debug) {
+    	boolean result = true; 
         for (TestScript testScript : testScripts) {
             if (!testScript.execute(debug)) {
                 if (testScript.isAbortedByUser()) {
                     setAbortedByUser(true);
                 }
-                return false;
+                result = false;
             }
         }
-        return true;
+        return result;
     }
 
     public List<TestScript> getTestScripts() {
