@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qspin.qtaste</groupId>
 		<artifactId>qtaste</artifactId>
-		<version>1.2.1</version>
+		<version>1.2.2-RC1</version>
 	</parent>
 
 	<artifactId>javagui</artifactId>
@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>qtaste-plugin</groupId>
 			<artifactId>tools</artifactId>
-			<version>1.2.1</version>
+			<version>${qtaste-version}</version>
 		</dependency>
 	</dependencies>
 	<groupId>com.qspin.qtaste.plugin</groupId>
