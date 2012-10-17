@@ -28,7 +28,6 @@
         <exclude>jsyntaxpane:jsyntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
         <exclude>org.python:jython</exclude>
-        <exclude>org.springframework:spring-core</exclude>
         <exclude>xalan:xalan</exclude>
         <exclude>xalan:serializer</exclude>
         <exclude>xerces:xercesImpl</exclude>

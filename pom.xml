@@ -9,6 +9,15 @@
    <version>1.2.2-RC1</version>
    <packaging>pom</packaging>
    <name>QTaste: QSpin Tailored Automated Test Environment</name>
+   <description>QTaste is a generic engine to perform automated integration tests</description>
+   <url>https://sourceforge.net/projects/qtaste/</url>
+   <licenses>
+	   <license>
+		   <name>LGPL</name>
+		   <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+		   <distribution>repo</distribution>
+	   </license>
+   </licenses>
 
   <modules>
       <module>testapi-parent</module>
@@ -210,13 +219,8 @@
             <groupId>org.python</groupId>
             <artifactId>jython</artifactId>
             <version>2.2.1</version>
-         </dependency>
-         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>2.0.5</version>
-         </dependency>
-         <dependency>
+         </dependency>        
+        <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
             <version>2.7.1</version>
