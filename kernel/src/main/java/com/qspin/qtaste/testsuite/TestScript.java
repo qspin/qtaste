@@ -185,7 +185,7 @@ public abstract class TestScript implements Executable {
             }
 
             if (isAbortedByUser()) {
-                returnStatus = false;
+                return false;
             }
         }
         return returnStatus;
@@ -324,7 +324,7 @@ public abstract class TestScript implements Executable {
                 logger.error("abort has been interrupted!");
             }
 
-            TestScript.this.abortedByUser = abortedByUser;
+            setAbortedByUser(abortedByUser);
             result.setStatus(status);
             result.setExtraResultDetails(message);
             result.stop();
