@@ -1,9 +1,11 @@
 ##
-# TabbedPaneSelection.
+# PlayBack/TabbedPaneSelection.
 # <p>
 # Description of the test.
 #
-# @data INSTANCE_ID [String] instance id
+# @data COMMENT [String] Comment for the test
+# @data TAB_COMPONENT_NAME [String] The ID of the TAB selector to be controlled
+# @data TAB_IDX [Int] The indice of the tab to be selected
 ##
 
 from qtaste import *
@@ -27,7 +29,6 @@ def testChangeTab():
 	
 	if result != 1 :
 		testAPI.stopTest(Status.FAIL, "Fail to set tab " + testData.getValue("TAB_IDX") + " for " + component )
-	pass
 
 def reset():
 	"""
@@ -38,9 +39,7 @@ def reset():
 	component = testData.getValue("TAB_COMPONENT_NAME")
 	index = -1
 	javaguiMI.selectTab(component, index)
-	
 	time.sleep(1)
-	pass
 	
 changeTab=[(1, testChangeTab)]
 
