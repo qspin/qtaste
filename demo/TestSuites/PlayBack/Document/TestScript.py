@@ -1,9 +1,8 @@
 ##
-# [$TEST_NAME].
+# Playback/Document test.
 # <p>
 # Description of the test.
 #
-# @data INSTANCE_ID [String] instance id
 ##
 
 from qtaste import *

@@ -1,7 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <REQUIREMENTS_LINKS>
-	<REQ id="id_1"/>
-	<REQ id="id_2">
-		<REQ_DESCRIPTION>description for the req 2</REQ_DESCRIPTION>
+	<REQ id="id_1">
+		<REQ_DESCRIPTION>It should be possible to select the appropriate tab</REQ_DESCRIPTION>
 	</REQ>
-	<REQ id="id_3"/>
 </REQUIREMENTS_LINKS>

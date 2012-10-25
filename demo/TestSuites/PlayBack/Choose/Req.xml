@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <REQUIREMENTS_LINKS>
 	<REQ id="id_1">
-		<REQ_DESCRIPTION>description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req 1. description for the req</REQ_DESCRIPTION>
+		<REQ_DESCRIPTION>It should be possible to choose a radio button</REQ_DESCRIPTION>
 	</REQ>
 	<REQ id="id_2">
-		<REQ_DESCRIPTION>qsdyhthyt</REQ_DESCRIPTION>
-		<bal1>qsdfgdfghsdh</bal1>
-		<bal5>qssdfgqsdfgfghsdh</bal5>
-	</REQ>
-	<REQ id="id_3">
-		<REQ_DESCRIPTION>description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. description for the req 3. v</REQ_DESCRIPTION>
-		<bal1>
-			<bal2 chose="machin"></bal2>
-		</bal1>
+		<REQ_DESCRIPTION>It should be possible to choose a checkbox</REQ_DESCRIPTION>
 	</REQ>
 </REQUIREMENTS_LINKS>

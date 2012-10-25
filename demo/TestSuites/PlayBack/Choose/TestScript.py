@@ -1,13 +1,10 @@
 ##
-# Playback test.
+# Playback/Choose test.
 # <p>
 # Example of test to control and check a java GUI.
-#
-# @data INSTANCE_ID [String] instance id
 ##
 
 from qtaste import *
-
 
 import time
 
