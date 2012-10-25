@@ -8,5 +8,6 @@ ControlScript([
 	vmArgs="-javaagent:../plugins/javagui/target/qtaste-javagui-deploy.jar",
 	#vmArgs="-javaagent:../plugins/recorder/target/qtaste-recorder-deploy.jar=/home/sjansse/filter.xml",
 	jmxPort=10101,
-	checkAfter=5)
+	checkAfter=5,
+	useJacoco=True)
 ])
