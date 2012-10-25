@@ -1,4 +1,4 @@
-##
+##.
 # Control script jython module.
 #
 # This module contains the following classes:
@@ -40,6 +40,8 @@
 #		- vmArgs (optional): arguments to be passed to the java VM
 #		- jmxPort (optional): specify the jmx port if the java process must be started with JMX interface
 #		- checkAfter (optional): specifies if the control script needs to check if the process is still present after the period of time specified
+#       -priority (optional): specifies to run the process with the given priority: "low", "belownormal", "normal", "abovenormal", "high" or "realtime" or none for default priority
+#		-useJacoco (optional): enable the coverage analysis using jacoco tool
 #
 #	- start: method called by ControlScript when the ControlScript needs to start JavaProcess
 #	- stop: method called by ControlScript when the ControlScript needs to stop JavaProcess
@@ -247,7 +249,7 @@ class ControlAction(object):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -259,6 +261,7 @@ class JavaProcess(ControlAction):
 		@param jmxPort JMX port or None to disable JMX
 		@param checkAfter number of seconds after which to check if process still exist or None to not check
 		@param priority specifies to run the process with the given priority: "low", "belownormal", "normal", "abovenormal", "high" or "realtime" or none for default priority
+		@param useJacoco enable the coverage analysis using jacoco tool
 		"""
 		ControlAction.__init__(self, description)
 		self.mainClassOrJar = mainClassOrJar
@@ -279,6 +282,12 @@ class JavaProcess(ControlAction):
 		else:
 			self.classPath = None
 		self.vmArgs = vmArgs
+		if useJacoco:
+			jacocoHome = _os.getenv("JACOCO_HOME")
+			if not jacocoHome:
+				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
+			else:
+				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
 		else:
