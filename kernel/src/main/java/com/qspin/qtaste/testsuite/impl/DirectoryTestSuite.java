@@ -97,6 +97,7 @@ public class DirectoryTestSuite extends TestSuite {
             if (!testScript.execute(debug)) {
                 if (testScript.isAbortedByUser()) {
                     setAbortedByUser(true);
+                    return false;
                 }
                 result = false;
             }
