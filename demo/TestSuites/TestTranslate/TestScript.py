@@ -25,6 +25,7 @@
 
 from qtaste import *
 import time
+import string
 
 translate = testAPI.getSelenium(INSTANCE_ID='TranslateApp')
 
@@ -35,12 +36,12 @@ def connectToWeb():
 	"""
 	translate.openBrowser(testData.getValue("BROWSER"))
 	translate.setTimeout("50000")
-	translate.open("translate_txt")
+	translate.open("?hl=fr")
 	translate.waitForPageToLoad("15000")
 	title = translate.getTitle()
-	logger.info(title)
-	if title != "Bing Translator":
-		testAPI.stopTest(Status.FAIL, "Title window name is not as expected")
+	expected = "Google"+chr(160)+"Traduction"
+	if title != expected:
+		testAPI.stopTest(Status.FAIL, "Title window name is not as expected. It's '" + title + "' and expects '"+expected+"'" )
 
 def checkTranslation():
 	"""
@@ -48,15 +49,9 @@ def checkTranslation():
 	@expected  Check that the translation is correct
 	"""
 	# we can access component using different method (component id, xpath or dom)
-	translate.type("InputText", testData.getValue("WORD"))
-	#translate.type("//div/form/textarea", testData.getValue("WORD"))
-	#translate.type("document.frmTrText.trtext", testData.getValue("WORD"))
-	translate.click("__LangPair_ToDDL_header")
-	translate.click(u"xpath=(//a[contains(text(),'French')])[2]")
-	translate.click("TranslateButton")
-	#translate.waitForPageToLoad("30000")
+	translate.type("id=source", testData.getValue("WORD"))
 	time.sleep(2);
-	translations = translate.getText("id=OutputTextHtmlCell")
+	translations = translate.getText("id=result_box")
 	expectedTranslation = testData.getValue("TRANSLATION")
 	translate.closeBrowser()
 	found = False

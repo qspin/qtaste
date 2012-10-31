@@ -45,6 +45,7 @@ public class SeleniumImpl extends WebBrowser implements Selenium {
         this.host = config.getMIString(instanceId, "Selenium", "host");
         this.port = config.getMIInt(instanceId, "Selenium", "port");
         this.URL = config.getMIString(instanceId, "Selenium", "url");
+        logger.debug("Target url : " + this.URL);
     }
 
     

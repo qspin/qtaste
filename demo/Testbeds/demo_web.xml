@@ -8,7 +8,7 @@
 		<Selenium id="TranslateApp">
 			<host>localhost</host>
 			<port>4444</port>
-			<url>http://babelfish.yahoo.com</url>
+			<url>http://translate.google.be/?hl=fr</url>
 		</Selenium>
 	</multiple_instances_components>
 </testbed_configuration>
