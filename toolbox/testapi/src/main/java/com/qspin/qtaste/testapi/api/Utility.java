@@ -33,6 +33,14 @@ import com.qspin.qtaste.testsuite.QTasteException;
 public interface Utility extends SingletonComponent {
 
     /**
+     * Create a capture of the screen and save the content as PNG in the specified location.
+     *
+     * @param fileName full path to the generated png file
+     * @throws QTasteException if the screenshot cannot be performed sucessfully
+     */
+    public void createScreenshot(String fileName) throws QTasteException;
+
+    /**
      * Shows a message dialog window displaying information to the tester, modal or not (modeless) as specified.
      * If the dialog is modal, the test is suspended until the dialog window is closed.
      *

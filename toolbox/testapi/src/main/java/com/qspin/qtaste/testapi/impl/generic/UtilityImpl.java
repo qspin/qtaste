@@ -29,6 +29,14 @@ import java.io.FileReader;
 import java.io.ObjectInputStream;
 import javax.swing.JDialog;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+
 /**
  *
  * @author Vincent Dubois
@@ -54,6 +62,19 @@ public class UtilityImpl implements Utility {
         }
     }
 
+    public void createScreenshot(String fileName) throws QTasteException {
+		try {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			Rectangle screenRectangle = new Rectangle(screenSize);
+			Robot robot = new Robot();
+			BufferedImage image = robot.createScreenCapture(screenRectangle);
+			ImageIO.write(image, "png", new File(fileName));
+		}
+		catch (Exception e) {
+			throw new QTasteException("Error in createScreenshot: " + e.getMessage());
+		}
+	}
+	
     public void showMessageDialog(String title, String message, boolean modal) {
         if (messageDialog == null) {
             optionPane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE);
