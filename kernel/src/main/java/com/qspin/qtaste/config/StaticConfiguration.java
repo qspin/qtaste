@@ -37,7 +37,7 @@ public class StaticConfiguration {
 	public static final String JYTHON_LIB = JYTHON_HOME + "/Lib";
 	public static final String TEST_SCRIPT_FILENAME = "TestScript.py";
 	public static final String TEST_DATA_FILENAME = "TestData.csv";
-	public static final String TEST_REQUIREMENTS_FILENAME = "Req.xml";
+	public static final String TEST_REQUIREMENTS_FILENAME = "TestRequirements.xml";
 	public static final String TEST_SCRIPT_DOC_TOOLS_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
 	public static final String TEST_SCRIPT_DOC_XML_FILENAME = "TestScript-doc.xml";
 	public static final String TEST_SCRIPT_DOC_HTML_FILENAME = "TestScript-doc.html";

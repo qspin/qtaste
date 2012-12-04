@@ -126,7 +126,9 @@ public class TestScriptCreation {
     }
     
     private void copyTestRequirement(String sourceDir, String DestDir) {
+    	logger.debug("Create test requirement XML file");
         String testRequirementSourceFileName = sourceDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
+    	logger.debug("test Requirement Source Filename : " + testRequirementSourceFileName);
         if (new File(testRequirementSourceFileName).exists()) {
 	        String testRequirementDestFileName = DestDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
 	        FileUtilities.copy(testRequirementSourceFileName, testRequirementDestFileName);
