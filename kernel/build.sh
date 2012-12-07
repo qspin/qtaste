@@ -2,7 +2,7 @@
 
 #remove previous python compilation classes.
 pushd ../tools/jython/lib/Lib/
-rm *.class
+rm -f *.class
 popd
 
 # build using maven
