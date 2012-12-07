@@ -586,7 +586,7 @@ public class Log4jPanel extends JPanel {
          */
         public boolean filterMessageTestCaseOrVerb(String level, String source, String message) {
             for (JCheckBox checkBox : m_MessageFilterCheckBoxes) {
-                if (checkBox.isSelected() && (message.startsWith("Invoking ") || message.startsWith("Executing test script: ") || message.startsWith("Retrying test script: "))) {
+                if (checkBox.isSelected() && source.equals("QTaste") && (message.startsWith("Invoking ") || message.startsWith("Executing test script: ") || message.startsWith("Retrying test script: "))) {
                     return false;
                 }
             }
