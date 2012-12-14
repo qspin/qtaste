@@ -249,7 +249,7 @@ class ControlAction(object):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -262,6 +262,7 @@ class JavaProcess(ControlAction):
 		@param checkAfter number of seconds after which to check if process still exist or None to not check
 		@param priority specifies to run the process with the given priority: "low", "belownormal", "normal", "abovenormal", "high" or "realtime" or none for default priority
 		@param useJacoco enable the coverage analysis using jacoco tool
+		@param useJavaGui enable the javagui service to enable remote javagui accessibility 
 		"""
 		ControlAction.__init__(self, description)
 		self.mainClassOrJar = mainClassOrJar
@@ -288,6 +289,8 @@ class JavaProcess(ControlAction):
 				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
 			else:
 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
+		if useJavaGUI:
+			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "javagui" + _os.sep + "target" + _os.sep +  "qtaste-javagui-deploy.jar"
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
 		else:
