@@ -110,4 +110,34 @@ public interface JavaGUI {
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
    public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException;
+   
+   // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
+   
+   /**
+    * Return the name of the GUI component that have the focus
+    * @return the name of the component
+    * @throws QTasteTestFailException
+    */
+   public String whoAmI() throws QTasteTestFailException;
+   
+   /**
+    * Set the name of the GUI component that have the focus with the specified name
+    * @throws QTasteTestFailException 
+    */
+   public void setComponentName(String name) throws QTasteTestFailException;
+   
+   /**
+    * Send the specified key code to the application
+    * @param keycode key code of the key sent to the application.
+    * @throws QTasteTestFailException If some internal errors occurs.
+    */
+   public void pressKey(int keycode) throws QTasteTestFailException;
+   
+   /**
+    * Send the specified key code to the application
+    * @param keycode key code of the key sent to the application.
+    * @param delay delay for the button pressed in milliseconds.
+    * @throws QTasteTestFailException If some internal errors occurs. 
+    */
+   public void pressKey(int keycode, long delay) throws QTasteTestFailException;
 }

@@ -110,13 +110,35 @@ public class JavaGUIImpl implements JavaGUI {
 			throw new QTasteException(e.getMessage());
 		}
 	}
-
+	
+	public String whoAmI() throws QTasteTestFailException {	
+		return mProxy.whoAmI();	
+    }
+	
+	public void setComponentName(String name) throws QTasteTestFailException {
+		mProxy.setComponentName(name);
+	}
+	
+	
 	private JavaGUI getProxy() throws Exception {
 		return (com.qspin.qtaste.javagui.JavaGUI) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
+	
+	public void pressKey(int keycode) throws QTasteTestFailException {
+		mProxy.pressKey(keycode);
+		
+	}
+	
+	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
+		mProxy.pressKey(keycode, delay);	
+	}
+	
 	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
 	private static final Class<?> BEAN_INTERFACE = com.qspin.qtaste.javagui.JavaGUI.class;
+	
+	
+			
 }
