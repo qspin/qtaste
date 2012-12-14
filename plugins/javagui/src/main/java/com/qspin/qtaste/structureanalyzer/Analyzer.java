@@ -31,7 +31,6 @@ public class Analyzer {
 					new Analyzer().analyse();				
 					System.out.println("thread stop analyse");
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
