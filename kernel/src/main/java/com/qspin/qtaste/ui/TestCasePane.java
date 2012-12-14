@@ -100,7 +100,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     private static Logger logger = Log4jLoggerFactory.getLogger(TestCasePane.class);
     protected JTextPane tcDocsPane = new JTextPane();
-    protected Log4jPanel tcLogsPane = new Log4jPanel();
+    protected Log4jPanel tcLogsPane;
     private NonWrappingTextPane tcSourceTextPane = null;
     protected JButton executeButton = new JButton();
     protected JButton startExecutionButton = new JButton();
