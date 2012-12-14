@@ -24,7 +24,11 @@ def step1():
 	component = testData.getValue("COMPONENT_NAME")
 	value = testData.getBooleanValue("VALUE")
 	
-	result = javaguiMI.selectComponent(component, value)
+	result = True
+	try:		
+		javaguiMI.selectComponent(component, value)
+	except:
+		result = False
 	
 	time.sleep(1)
 	

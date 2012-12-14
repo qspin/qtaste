@@ -26,11 +26,15 @@ def step1():
 	component = testData.getValue("COMPONENT_NAME")
 	value = testData.getIntValue("INDEX")
 	if value != -1:
-		if javaguiMI.selectIndex(component, value) == False:
+		try:
+			javaguiMI.selectIndex(component, value)
+		except:
 			testAPI.stopTest(Status.FAIL, "Fail to select index " + testData.getValue("INDEX") + " in " + component + "'")
 	else:
 		value = testData.getValue("VALUE")
-		if javaguiMI.selectValue(component, value) == False:
+		try:
+			javaguiMI.selectValue(component, value)
+		except:
 			testAPI.stopTest(Status.FAIL, "Fail to select value '" + value + "' in " + component + "'")
 			
 	time.sleep(1)

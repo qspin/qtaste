@@ -25,7 +25,9 @@ def step1():
 	
 	text = testData.getValue("VALUE")
 	component = testData.getValue("COMPONENT_NAME")
-	if javaguiMI.setText(component, text) != testData.getBooleanValue("COMMAND_RESULT"):
+	try:
+	    javaguiMI.setText(component, text) != testData.getBooleanValue("COMMAND_RESULT")
+	except:
 		testAPI.stopTest(Status.FAIL, "Fail to insert " + text)
 	
 	time.sleep(1)
@@ -45,7 +47,6 @@ def reset():
 	
 	component = testData.getValue("COMPONENT_NAME")
 	value = ""
-	
 	javaguiMI.setText(component, value)
 
 doStep(step1)
