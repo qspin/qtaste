@@ -37,7 +37,7 @@
 		   	            <mainClass>com.qspin.qtaste.ui.MainPanel</mainClass>
                      </manifest>
                      <manifestEntries>
-                        <Implementation-Version>${artifactId}-${version}</Implementation-Version>
+                        <Implementation-Version>${project.artifactId}-${project.version}</Implementation-Version>
                      </manifestEntries>
                   </archive>
                </configuration>
