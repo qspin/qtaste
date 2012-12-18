@@ -213,7 +213,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteTestFailException {
 		final Component c = getComponentByName(componentName);		
 		if (!c.isVisible())
-		//	throw new QTasteTestFailException("Button " + componentName + " is not visible!");
+			throw new QTasteTestFailException("Button " + componentName + " is not visible!");
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
