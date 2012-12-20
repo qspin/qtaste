@@ -35,7 +35,7 @@ set FORMATTER_DIR="%QTASTE_ROOT%\tools\TestScriptDoc"
 
 echo.
 echo Generating Test script XML doc...
-java -cp %JYTHON_HOME%/jython.jar;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter %TEST_SCRIPT%
+java -cp %JYTHON_HOME%/jython.jar;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter %TEST_SCRIPT%
 echo.
 
 if exist %TEST_SCRIPT_DIR%\TestScript-doc.xml (
