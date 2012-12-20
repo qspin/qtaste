@@ -71,18 +71,21 @@ public class GenerateTestSuiteDoc {
         System.out.println("testscripts:" + testScriptsList.toString());
         System.out.println("Generating Test Scripts and Test suite XML doc...");
   
+
+        StringWriter outputs = new StringWriter();
         try {
-            StringWriter output = new StringWriter();
             Properties properties = new Properties();
             properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
             properties.setProperty("python.path", StaticConfiguration.FORMATTER_DIR);
             PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
             PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-            interp.setOut(output);
-            interp.setErr(output);
+            interp.setOut(outputs);
+            interp.setErr(outputs);
             interp.cleanup();
             //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
             String args = "import sys;sys.argv[1:]= ['-f', '-s', '-Otestscriptdoc_xmlformatter', '-Dtestsuite_dir=" + testSuiteDir + "'," + testScriptsList.toString() + "]";
+            System.out.println(args);
+            System.out.println(args.toString());
             interp.exec(args.toString());
             interp.exec("__name__ = '__main__'");
             interp.exec("execfile(r'" + StaticConfiguration.JYTHON_HOME + "/Lib/pythondoc.py')");
@@ -91,6 +94,9 @@ public class GenerateTestSuiteDoc {
         }
         catch (Exception e) {
             System.err.println("Exception occurs executing PythonInterpreter:" + e.getMessage());
+        }
+        finally{
+        	System.out.println(outputs.getBuffer().toString());
         }
 
         for (File testscript : testScripts) {
