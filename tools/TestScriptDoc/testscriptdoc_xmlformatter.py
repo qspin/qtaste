@@ -141,7 +141,7 @@ class PythonDocGenerator:
 
 	def done(self):
 		if self.createTestSuiteDoc:
-			filename = self.testSuiteDir + r'\TestSuite-doc.xml'
+			filename = self.testSuiteDir + r'%sTestSuite-doc.xml' %(os.sep)
 			print 'Saving', filename
 			tree = et.ElementTree(self.testSuite)
 			file = open(filename, 'wb')
