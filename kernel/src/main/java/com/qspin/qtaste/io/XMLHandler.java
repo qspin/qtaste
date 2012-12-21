@@ -30,14 +30,15 @@ public class XMLHandler extends DefaultHandler {
 		{
 			mBuffer = new StringBuffer();
 			mCurrentRequirementElement = qName;
-		} else if ( mBuffer!= null ){
+		} else if ( mBuffer!= null ) {
 			mBuffer.append("<");
-			mBuffer.append( qName );
+			mBuffer.append( qName.replace(XMLFile.SPACE_REPLACEMENT, " ") );
 			for ( int i = 0; i<attributes.getLength(); i++ )
 			{
-				mBuffer.append(" " + attributes.getQName(i) + "=\"" + attributes.getValue(i) + "\"");
+				mBuffer.append(" " + attributes.getQName(i).replace(XMLFile.SPACE_REPLACEMENT, " ") + "=\"" + attributes.getValue(i) + "\"");
 			}
 			mBuffer.append(">");
+			System.out.println("buffer : " + mBuffer);
 		}
 	}
 
@@ -51,27 +52,26 @@ public class XMLHandler extends DefaultHandler {
 			{
 				mRequirement.setRequirementDescription(mBuffer.toString());
 			} else {
-				mRequirement.setData(qName, mBuffer.toString());
+				mRequirement.setData(qName.replace(XMLFile.SPACE_REPLACEMENT, " "), mBuffer.toString());
 			}
 			mBuffer = null;
 			mCurrentRequirementElement = null;
 		} else if ( mCurrentRequirementElement != null && mBuffer != null ) {
-			mBuffer.append("</" + qName + ">");
+			mBuffer.append("</" + qName.replace(XMLFile.SPACE_REPLACEMENT, " ") + ">");
 		}
 	}
 
-	// detection de caracteres
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		String lecture = new String(ch, start, length);
+		String readData = new String(ch, start, length);
 		if (mBuffer != null)
-			mBuffer.append(lecture);
+			mBuffer.append(readData);
 	}
 
-	// debut du parsing
-	public void startDocument() throws SAXException {}
+	public void startDocument() throws SAXException {
+		mDecodedRequirement.clear();
+	}
 
-	// fin du parsing
 	public void endDocument() throws SAXException {}
 
 	public List<TestRequirement> getDecodedRequirement() {

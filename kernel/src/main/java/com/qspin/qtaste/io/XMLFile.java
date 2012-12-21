@@ -47,6 +47,7 @@ public class XMLFile {
 	public static final String REQUIREMENT_ELEMENT = "REQ";
 	public static final String REQUIREMENT_ID = "id";
 	public static final String DESCRIPTION_ELEMENT = "REQ_DESCRIPTION";
+	public static final String SPACE_REPLACEMENT = "-_-";
     public static final ArrayList<String> COLUMN_NAMES;
     static{
     	COLUMN_NAMES = new ArrayList<String>();

@@ -207,9 +207,9 @@ public class TestRequirementEditor extends JPanel {
 						continue;
 					}
 					output.newLine();
-					output.append("\t\t<" + dataId + ">" );
+					output.append("\t\t<" + dataId.replace(" ", XMLFile.SPACE_REPLACEMENT) + ">" );
 					output.append(req.getData(dataId));
-					output.append("</" + dataId + ">");
+					output.append("</" + dataId.replace(" ", XMLFile.SPACE_REPLACEMENT) + ">");
 				}
 
 				output.newLine();
