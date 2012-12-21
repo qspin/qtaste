@@ -65,7 +65,7 @@ public class GenerateTestSuiteDoc {
             if (firstTime)
                 testScriptsList.append("'" + f.getAbsolutePath() + "'");
             else
-                testScriptsList.append(",'" + f.getAbsolutePath() + "'");
+                testScriptsList.append(" '" + f.getAbsolutePath() + "'");
             firstTime = false;
         }
         System.out.println("testscripts:" + testScriptsList.toString());
