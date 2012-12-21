@@ -382,7 +382,7 @@ class PythonDocGenerator:
 		rootLogger = _Logger.getRootLogger()
 		rootLevel = rootLogger.getLevel()
 		rootLogger.setLevel(_Level.ERROR)
-		from com.qspin.qtaste.config import StaticConfiguration
-		version = StaticConfiguration.VERSION_CONTROL.getTestApiVersion(os.path.dirname(testScriptFileName))
+		from com.qspin.qtaste.util.versioncontrol import VersionControl
+		version = VersionControl.getInstance().getTestApiVersion(os.path.dirname(testScriptFileName))
 		rootLogger.setLevel(rootLevel)
 		return version
