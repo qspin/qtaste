@@ -745,6 +745,8 @@ def dump(elem):
 
 def _encode(s, encoding):
     try:
+	if type(s).__name__ == 'str':
+	  return s
         return s.encode(encoding)
     except AttributeError:
         return s # 1.5.2: assume the string uses the right encoding
