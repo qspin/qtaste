@@ -4,6 +4,7 @@
 	
 	<testapi_implementation>
 		<import>com.qspin.qtaste.testapi.impl.demo</import>
+		<import>com.qspin.qtaste.testapi.impl.generic</import>
 	</testapi_implementation>
 
 	<control_script>playback.py</control_script>
@@ -12,5 +13,7 @@
 		<Playback id="JavaGuiApp">
 			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
 		</Playback>
+		<Process id="p1"/>
+		<Process id="p2"/>
 	</multiple_instances_components>
 </testbed_configuration>
