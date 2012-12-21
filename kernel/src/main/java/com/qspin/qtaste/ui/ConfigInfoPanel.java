@@ -34,7 +34,6 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -58,12 +57,12 @@ import com.qspin.qtaste.reporter.testresults.TestResultImpl;
 import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.tools.FileMask;
-
-import com.qspin.qtaste.util.FileUtilities;
-import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.widget.BarLabelUI;
+import com.qspin.qtaste.util.FileUtilities;
+import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  *
@@ -80,7 +79,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     private JButton m_startTestbed = new JButton("(Re)start testbed");
     private JButton m_stopTestbed = new JButton("Stop testbed");
     private JCheckBox m_ignoreControlScript = new JCheckBox("Ignore control script");
-    private JTextField m_SUTVersion = new JTextField(StaticConfiguration.VERSION_CONTROL.getSUTVersion(""));
+    private JTextField m_SUTVersion = new JTextField(VersionControl.getInstance().getSUTVersion(""));
     private TestEngineConfiguration engineConfig = TestEngineConfiguration.getInstance();
     private TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
     private String testSuiteName;

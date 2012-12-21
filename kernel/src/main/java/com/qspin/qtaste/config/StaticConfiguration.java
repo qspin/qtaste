@@ -22,9 +22,6 @@ package com.qspin.qtaste.config;
 import java.io.File;
 import java.io.IOException;
 
-import com.qspin.qtaste.util.versioncontrol.VersionControlInterface;
-import com.qspin.qtaste.util.versioncontrol.impl.DefaultVersionControl;
-
 /**
  * Class containing static configuration, like static paths and filenames.
  * 
@@ -54,7 +51,6 @@ public class StaticConfiguration {
 	public static final String CAMPAIGN_DIRECTORY = "TestCampaigns";
 	public static final String CAMPAIGN_FILE_EXTENSION = "xml";
 	public static final String FORMATTER_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
-	public static final VersionControlInterface VERSION_CONTROL;
 	public static final String ADDITIONNAL_JYTHON_LIB;
 	static {
 		//JYTHON_LIB initialization
@@ -63,18 +59,6 @@ public class StaticConfiguration {
 			path = System.getenv("QTASTE_JYTHON_LIB");
 		}
 		ADDITIONNAL_JYTHON_LIB = path;
-		
-		//VERSION_CONTROL initialization
-		VersionControlInterface versionControl = new DefaultVersionControl();
-		try {
-            String classVersionControl = TestEngineConfiguration.getInstance().getString("version_control");
-            versionControl = (VersionControlInterface) Class.forName(classVersionControl).newInstance();
-        } catch (Exception e) {
-        	System.err.println("Error loading version control plugin");
-            e.printStackTrace();
-        } finally {
-        	VERSION_CONTROL = versionControl;
-        }
 	}
 
 	/**

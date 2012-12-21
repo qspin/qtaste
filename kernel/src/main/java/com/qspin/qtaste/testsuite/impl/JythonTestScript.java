@@ -91,6 +91,7 @@ import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.ui.debug.DebugVariable;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.Strings;
+import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  *
@@ -422,7 +423,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
         this.fileName = fileName.getCanonicalFile().getAbsoluteFile();
 
-        String version = StaticConfiguration.VERSION_CONTROL.getTestApiVersion(fileName.getParentFile().getPath());
+        String version = VersionControl.getInstance().getTestApiVersion(fileName.getParentFile().getPath());
         //String version = parseVersion(fileName.getParentFile().getPath());
         setVersion(version);
 

@@ -19,8 +19,6 @@
 
 package com.qspin.qtaste.ui;
 
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.ui.tools.ResourceManager;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -44,7 +42,10 @@ import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.versioncontrol.VersionControl;
 import com.qspin.qtaste.util.versioncontrol.VersionControlInterface;
 
 public class AboutDialog extends JDialog {
@@ -83,7 +84,7 @@ public class AboutDialog extends JDialog {
             thirdProductsLink.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(kernelReleaseNotesLabel);
         }
-            VersionControlInterface versionControl = StaticConfiguration.VERSION_CONTROL;
+            VersionControlInterface versionControl = VersionControl.getInstance();
             JLabel testapiVersionLabel = new JLabel("<html><b>TestAPI version:</b> " + versionControl.getTestApiVersion("") + "</html>");
             testapiVersionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(testapiVersionLabel);

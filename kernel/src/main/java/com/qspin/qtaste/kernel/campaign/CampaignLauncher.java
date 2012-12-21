@@ -30,7 +30,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.Version;
+import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  * CampaignLauncher is the main command-line program for the execution of a campaign 
@@ -56,7 +56,7 @@ public class CampaignLauncher {
 
         // log version information
       	logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-  		logger.info("QTaste testAPI version: " + StaticConfiguration.VERSION_CONTROL.getTestApiVersion(""));
+  		logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
         // handle config file name and optional -sutversion
         if (args.length != 1 && (args.length != 3 || !args[1].equals("-sutversion"))) {

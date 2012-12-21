@@ -78,6 +78,7 @@ import com.qspin.qtaste.ui.util.QSpinTheme;
 import com.qspin.qtaste.ui.widget.FillLabelUI;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  *
@@ -422,7 +423,7 @@ public class MainPanel extends JFrame {
 
             // log version information
           	logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-      		logger.info("QTaste testAPI version: " + StaticConfiguration.VERSION_CONTROL.getTestApiVersion(""));
+      		logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
           	// handle optional config file name
             if ((args.length != 0) && (args.length != 2) && (args.length != 4) && (args.length != 6) && (args.length != 8)) {

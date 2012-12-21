@@ -44,6 +44,7 @@ import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
 import com.qspin.qtaste.util.Exec;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  * This is the main entry point for the TestEngine application
@@ -308,7 +309,7 @@ public class TestEngine {
 
 			// log version information
 			logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-			logger.info("QTaste testAPI version: " + StaticConfiguration.VERSION_CONTROL.getTestApiVersion(""));
+			logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
 			// handle optional config file name
 			if ((args.length < 4) || (args.length > 10)) {
