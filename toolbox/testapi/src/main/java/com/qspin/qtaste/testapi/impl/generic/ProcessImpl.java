@@ -1,6 +1,9 @@
 package com.qspin.qtaste.testapi.impl.generic;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import com.qspin.qtaste.testapi.api.Process;
 import com.qspin.qtaste.testapi.api.ProcessStatus;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.util.InputStreamWriter;
+import com.qspin.qtaste.util.OS;
 
 public class ProcessImpl implements Process {
 
@@ -64,6 +68,63 @@ public class ProcessImpl implements Process {
 				}
 			}
 		}).start();
+		searchPid();
+	}
+	
+	private void searchPid()
+	{
+		if ( OS.getType() != OS.Type.LINUX )
+		{
+			LOGGER.warn("Unable to retreive the process pid on a non unix system.");
+			mPid = -1;
+		}
+		
+		List<String> lines = new ArrayList<String>();
+		
+		//rebuild the process command
+		String cmd = "";
+		for (int i=0; i<mParameters.length; i++)
+		{
+			if ( i > 0 )
+				cmd += " ";
+			cmd += mParameters[i];
+		}
+		
+		//use ps command to list all process and filter on the process command
+		try
+		{
+			java.lang.Process myProcess = Runtime.getRuntime().exec( "ps -eo pid,command" );  
+            BufferedReader stdout = new BufferedReader( new InputStreamReader( myProcess.getInputStream() ) ) ;  
+            String line = stdout.readLine();
+            while ( line != null )  
+            {
+            	if (line.contains(cmd) && !lines.contains(line))
+            	{
+					lines.add(line);
+            	}
+            	line = stdout.readLine();
+            }  
+            myProcess.waitFor() ;  
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+		} catch (InterruptedException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		//get the last process and retrieve the pid (first value of the line)
+		if ( lines.size() >= 1 )
+		{
+			String line = lines.get(lines.size()-1).trim();
+			for (String part : line.split(" "))
+			{
+				System.out.println(part);
+			}
+			mPid = Integer.parseInt(line.split(" ")[0]);
+		}
+		else
+		{
+			LOGGER.warn("unable to find the process pid");
+		}
 	}
 
 	@Override
@@ -95,6 +156,15 @@ public class ProcessImpl implements Process {
 			throw new QTasteException("Invalide state. Cannot stop a non running process.");
 		}
 		mCurrentProcess.destroy();
+	}
+
+	@Override
+	public int getPid() throws QTasteException {
+		if (getStatus() != ProcessStatus.RUNNING)
+		{
+			throw new QTasteException("Invalide state. Cannot stop a non running process.");
+		}
+		return mPid;
 	}
 
 	@Override
@@ -132,6 +202,7 @@ public class ProcessImpl implements Process {
 	protected InputStreamWriter mStdLogs;
 	protected InputStreamWriter mErrLogs;
 	protected int mReturnCode;
+	protected int mPid;
 	
 	protected static final Logger LOGGER = Logger.getLogger(ProcessImpl.class);
 }
