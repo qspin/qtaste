@@ -68,15 +68,20 @@ public class ProcessImpl implements Process {
 				}
 			}
 		}).start();
-		searchPid();
+		mPid = searchPid();
 	}
 	
-	private void searchPid()
+	/**
+	 * Searches the process'identifier of the current process. If none found, return -1.
+	 * <br/> Only available for Unix process.
+	 * @return the process'identifier or -1 if none found.
+	 */
+	protected int searchPid()
 	{
 		if ( OS.getType() != OS.Type.LINUX )
 		{
 			LOGGER.warn("Unable to retreive the process pid on a non unix system.");
-			mPid = -1;
+			return -1;
 		}
 		
 		List<String> lines = new ArrayList<String>();
@@ -119,11 +124,12 @@ public class ProcessImpl implements Process {
 			{
 				System.out.println(part);
 			}
-			mPid = Integer.parseInt(line.split(" ")[0]);
+			return Integer.parseInt(line.split(" ")[0]);
 		}
 		else
 		{
 			LOGGER.warn("unable to find the process pid");
+			return -1;
 		}
 	}
 
@@ -162,7 +168,7 @@ public class ProcessImpl implements Process {
 	public int getPid() throws QTasteException {
 		if (getStatus() != ProcessStatus.RUNNING)
 		{
-			throw new QTasteException("Invalide state. Cannot stop a non running process.");
+			throw new QTasteException("Invalide state. Cannot retrieve tha pid of a non running process.");
 		}
 		return mPid;
 	}
@@ -180,7 +186,7 @@ public class ProcessImpl implements Process {
 	public List<String> getStdOut() throws QTasteException {
 		if ( getStatus() != ProcessStatus.RUNNING && getStatus() != ProcessStatus.STOPPED )
 		{
-			throw new QTasteException("Invalide state. The process has not yet started.");
+			throw new QTasteException("Invalide state. The process is not yet started.");
 		}
 		return mStdLogs.getLogs();
 	}
@@ -189,7 +195,7 @@ public class ProcessImpl implements Process {
 	public List<String> getStdErr() throws QTasteException {
 		if ( getStatus() != ProcessStatus.RUNNING && getStatus() != ProcessStatus.STOPPED )
 		{
-			throw new QTasteException("Invalide state. The process has not yet started.");
+			throw new QTasteException("Invalide state. The process is not yet started.");
 		}
 		return mErrLogs.getLogs();
 	}
