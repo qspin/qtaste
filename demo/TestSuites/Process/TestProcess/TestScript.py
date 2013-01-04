@@ -15,7 +15,7 @@ def step1():
 	@step      Description of the actions done for this step
 	@expected  Description of the expected result
 	"""
-	process = testAPI.getProcess(INSTANCE_ID="p1")
+	process = testAPI.getLinuxProcess(INSTANCE_ID="p1")
 	logger.info(process.getStatus())
 	checkStatus(process.getStatus(), ProcessStatus.UNDEFINED)
 	params = ["java","-cp", "/home/sjansse/workspaces/qtaste/demo/testapi/target/qtaste-testapi-deploy.jar","com.qspin.qtaste.sutuidemo.Interface"]
@@ -26,6 +26,7 @@ def step1():
 	time.sleep(2)
 	logger.info(process.getStatus())
 	checkStatus(process.getStatus(), ProcessStatus.RUNNING)
+	logger.info("Process pid : " + str(process.getPid()))
 	process.stop()
 	time.sleep(2)
 	logger.info(process.getStatus())
