@@ -13,7 +13,7 @@
 		<Playback id="JavaGuiApp">
 			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
 		</Playback>
-		<Process id="p1"/>
-		<Process id="p2"/>
+		<LinuxProcess id="p1"/>
+		<LinuxProcess id="p2"/>
 	</multiple_instances_components>
 </testbed_configuration>
