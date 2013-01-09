@@ -77,7 +77,7 @@
 	<parent>
 		<groupId>com.qspin.qtaste</groupId>
 		<artifactId>qtaste</artifactId>
-		<version>1.2.2-RC3</version>
+		<version>1.2.2-RC4</version>
 	</parent>
 	<dependencies>
 		<dependency>
