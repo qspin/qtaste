@@ -1,9 +1,9 @@
 ##
 # MultiProcess.
 # <p>
-# Description of the test.
-#
-# @data INSTANCE_ID [String] instance id
+# <u><b>Test only available on LINUX.</b></u>
+# <p>
+# Try to launch a "xterm" process and a "xterm top" process. Then kill the first process and use a sigKill to stop the second one.
 ##
 
 from qtaste import *
@@ -20,7 +20,7 @@ def startProcess1():
 	@expected  The first process status is RUNNING
 	"""
 	checkStatus(process1.getStatus(), ProcessStatus.UNDEFINED)
-	params = ["java","-cp", "/home/sjansse/workspaces/qtaste/demo/testapi/target/qtaste-testapi-deploy.jar","com.qspin.qtaste.sutuidemo.Interface"]
+	params = ["xterm"]
 	process1.initialize(params)
 	checkStatus(process1.getStatus(), ProcessStatus.READY_TO_START)
 	process1.start()
@@ -33,7 +33,7 @@ def startProcess2():
 	@expected  The second process status is RUNNING
 	"""
 	checkStatus(process2.getStatus(), ProcessStatus.UNDEFINED)
-	params = ["gedit"]
+	params = ["xterm", "top"]
 	process2.initialize(params)
 	checkStatus(process2.getStatus(), ProcessStatus.READY_TO_START)
 	process2.start()
