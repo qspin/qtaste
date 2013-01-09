@@ -19,39 +19,28 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 
 	@Override
 	public void killProcess() throws QTasteException {
-		if (getStatus() != ProcessStatus.RUNNING)
-			throw new QTasteTestFailException("Unable to stop a non running process.");
-		try
-		{
-			Runtime.getRuntime().exec("kill " + getPid());
-			Thread.sleep(1000);
-			if ( searchPid() != -1 )
-				throw new QTasteTestFailException("The process is still running.");
-		}
-		catch (IOException pException)
-		{
-			LOGGER.error("Unable to kill the process :" + pException.getMessage(), pException);
-		} catch (InterruptedException pException) {
-			LOGGER.error("Unable to kill the process with a sigkill : " + pException.getMessage(), pException);
-		}
+		killProcessWithSignal(-1);
 	}
 
 	@Override
-	public void killProcessWithSigKill() throws QTasteException {
+	public void killProcessWithSignal(int pSignal) throws QTasteException {
 		if (getStatus() != ProcessStatus.RUNNING)
 			throw new QTasteTestFailException("Unable to stop a non running process.");
 		try
 		{
-			Runtime.getRuntime().exec("kill -9 " + getPid());
+			String command = "kill ";
+			if (pSignal > 0)
+				command += "-" + pSignal + " ";
+			Runtime.getRuntime().exec(command + getPid());
 			Thread.sleep(1000);
 			if ( searchPid() != -1 )
 				throw new QTasteTestFailException("The process is still running.");
 		}
 		catch (IOException pException)
 		{
-			LOGGER.error("Unable to kill the process with a sigkill : " + pException.getMessage(), pException);
+			LOGGER.error("Unable to kill the process : " + pException.getMessage(), pException);
 		} catch (InterruptedException pException) {
-			LOGGER.error("Unable to kill the process with a sigkill : " + pException.getMessage(), pException);
+			LOGGER.error("Unable to kill the process : " + pException.getMessage(), pException);
 		}
 	}
 
