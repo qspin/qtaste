@@ -46,7 +46,7 @@ def killBoth():
 	@expected  Process's status are STOPPED
 	"""
 	process1.killProcess()
-	process2.killProcessWithSigKill()
+	process2.killProcessWithSignal(9)
 	time.sleep(2)
 	checkStatus(process1.getStatus(), ProcessStatus.STOPPED)
 	checkStatus(process2.getStatus(), ProcessStatus.STOPPED)
