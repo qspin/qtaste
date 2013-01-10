@@ -8,7 +8,7 @@ echo Compiling other stuff ...
 call mvn install
 
 echo Compiling plugins ...
-pushd plugins
+pushd plugins_src
 call build.cmd
 popd
 
