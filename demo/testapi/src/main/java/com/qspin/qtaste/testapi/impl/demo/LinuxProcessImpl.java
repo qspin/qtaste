@@ -31,16 +31,19 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 			String command = "kill ";
 			if (pSignal > 0)
 				command += "-" + pSignal + " ";
-			Runtime.getRuntime().exec(command + getPid());
+			command +=  getPid();
+			LOGGER.trace("Kill the process " + getInstanceId() + " with the command : " + command);
+			Runtime.getRuntime().exec(command);
 			Thread.sleep(1000);
-			if ( searchPid() != -1 )
-				throw new QTasteTestFailException("The process is still running.");
+			LOGGER.trace("Process " + getInstanceId() + " status : " + getStatus());
+			if ( getStatus() != ProcessStatus.STOPPED )
+				throw new QTasteTestFailException("The process " + getInstanceId() + " is still running.");
 		}
 		catch (IOException pException)
 		{
-			LOGGER.error("Unable to kill the process : " + pException.getMessage(), pException);
+			LOGGER.error("Unable to kill the process " + getInstanceId() + " : " + pException.getMessage(), pException);
 		} catch (InterruptedException pException) {
-			LOGGER.error("Unable to kill the process : " + pException.getMessage(), pException);
+			LOGGER.error("Unable to kill the process " + getInstanceId() + " : " + pException.getMessage(), pException);
 		}
 	}
 
