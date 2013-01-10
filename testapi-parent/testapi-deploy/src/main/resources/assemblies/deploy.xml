@@ -1,0 +1,38 @@
+<assembly>
+  <id>deploy</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory/>
+      <outputFileNameMapping/>
+      <unpack>true</unpack>
+      <scope>runtime</scope>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+	  <useTransitiveFiltering>true</useTransitiveFiltering>
+      <excludes>
+		<!-- exclude all files included in QTaste-kernel -->
+        <exclude>com.qspin.qtaste:qtaste-kernel</exclude>
+        <exclude>com.thoughtworks.xstream:xstream</exclude>
+        <exclude>commons-collections:commons-collections</exclude>
+        <exclude>commons-configuration:commons-configuration</exclude>
+        <exclude>commons-lang:commons-lang</exclude>
+        <exclude>commons-logging:commons-logging</exclude>
+        <exclude>commons-net:commons-net</exclude>
+        <exclude>javax.scripting:jython-engine</exclude>
+        <exclude>jfree:jfreechart</exclude>
+        <exclude>com.jgoodies:bindings</exclude>
+        <exclude>com.jgoodies:forms</exclude>
+        <exclude>jsyntaxpane:jsyntaxpane</exclude>
+        <exclude>log4j:log4j</exclude>
+        <exclude>org.python:jython</exclude>
+        <exclude>xalan:xalan</exclude>
+        <exclude>xalan:serializer</exclude>
+        <exclude>xerces:xercesImpl</exclude>
+        <exclude>xml-apis:xml-apis</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>
+</assembly>

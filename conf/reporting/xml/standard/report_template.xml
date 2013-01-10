@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE log [<!ENTITY results SYSTEM "###RESULTS_FILE###">]>
+<log date="###LOG_DATE###" qtasteKernelVersion="###QTaste_KERNEL_VERSION###" qtasteTestAPIVersion="###QTaste_TESTAPI_VERSION###" testSuite="###TEST_SUITE###" testbed="###TESTBED###" startDate="###DQTaste_START###" endDate="###DQTaste_END###" numberTestsToExecute="###TESTS_TO_EXECUTE###" numberTestsExecuted="###TESTS_EXECUTED###" numberTestsPassed="###TESTS_PASSED###" numberTestsFailed="###TESTS_FAILED###" numberTestsNotAvailable="###TESTS_NOT_AVAILABLE###" numberTestsRetries="###TESTS_RETRIES###">
+  <testbedConfiguration fileName="###TESTBED_CONFIGURATION_FILE_NAME###">###TESTBED_CONFIGURATION_FILE_CONTENT###</testbedConfiguration>
+  <testbedControlScript fileName="###TESTBED_CONTROL_SCRIPT_FILE_NAME###">###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###</testbedControlScript>
+&results;
+</log>

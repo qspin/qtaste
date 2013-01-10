@@ -1,0 +1,14 @@
+<filters>
+  <filter>
+	<description>Rules applicable for JTree</description>
+  </filter>
+
+  <filter>
+	<rejectedEvent>java.beans.PropertyChangeEvent</rejectedEvent>
+  </filter>
+
+  <filter>
+	<source>javax.swing.JPasswordField</source>
+        <rejectedEvent>javax.swing.event.DocumentEvent</rejectedEvent>
+  </filter>
+</filters>

@@ -1,0 +1,4 @@
+COMMENT;TYPE;DATA
+Integer type - Expected test result: Not available (Invalid data format);integer;1.5
+Double type - Expected test result: Not available (Invalid data format);double;two
+Boolean type - Expected test result: Not available (Invalid data format);boolean;bad

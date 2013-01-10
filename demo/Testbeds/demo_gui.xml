@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>		
+	<testapi_implementation>
+		<import>com.qspin.qtaste.testapi.impl.demo</import>
+	</testapi_implementation>
+	<control_script>control_windows.py</control_script>
+	<singleton_components>
+		<Windows>
+			<host>localhost</host>
+			<port>8080</port>
+		</Windows>
+	</singleton_components>
+</testbed_configuration>

@@ -1,0 +1,4 @@
+COMMENT;STATUS
+Test of doStep. Expected test result: Passed;SUCCESS
+Test of doStep. Expected test result: Failed;FAIL
+Test of doStep. Expected test result: Not Available;NOT_AVAILABLE

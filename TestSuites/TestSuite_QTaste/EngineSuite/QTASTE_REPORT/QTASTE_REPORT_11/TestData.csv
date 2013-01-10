@@ -1,0 +1,3 @@
+COMMENT;ROW
+Call verb with invalid argument type - Expected test result: Not available;1
+Call verb with wrong number of arguments - Expected test result: Not available;2

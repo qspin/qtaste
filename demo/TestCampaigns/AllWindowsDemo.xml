@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><campaign name="AllWindowsDemo">
+    <run testbed="demo_gui.xml">
+        <testsuite directory="TestSuites/TestCalculator"/>
+    </run>
+    <run testbed="demo_web.xml">
+        <testsuite directory="TestSuites/TestTranslate"/>
+    </run>
+</campaign>

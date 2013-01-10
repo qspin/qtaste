@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>com.qspin.qtaste</groupId>
+   <artifactId>qtaste</artifactId>
+   <version>1.2.2-RC4</version>
+   <packaging>pom</packaging>
+   <name>QTaste: QSpin Tailored Automated Test Environment</name>
+   <description>QTaste is a generic engine to perform automated integration tests</description>
+   <url>https://sourceforge.net/projects/qtaste/</url>
+   <licenses>
+	   <license>
+		   <name>LGPL</name>
+		   <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+		   <distribution>repo</distribution>
+	   </license>
+   </licenses>
+
+  <modules>
+      <module>testapi-parent</module>
+      <module>kernel</module>
+      <module>toolbox</module>
+   </modules>
+
+   <properties>
+      <qtaste-version>1.2.2-RC4</qtaste-version>
+   </properties>
+
+   <scm>
+      <developerConnection>scm:svn:file://${basedir}</developerConnection>
+   </scm>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.6</source>
+                <target>1.6</target>
+                <excludes>
+                   <exclude>**/package-info.java</exclude>
+                </excludes>
+            </configuration>
+         </plugin>
+      </plugins>
+
+      <pluginManagement>
+         <plugins>
+
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-javadoc-plugin</artifactId>
+               <version>2.6.1</version>
+            </plugin>
+
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-resources-plugin</artifactId>
+               <version>2.4</version>
+               <configuration>
+                   <encoding>UTF-8</encoding>
+               </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-source-plugin</artifactId>
+              <version>2.1</version>
+            </plugin>
+
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <version>2.4.2</version>
+            </plugin>
+
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>buildnumber-maven-plugin</artifactId>
+               <version>1.0-beta-3</version>
+            </plugin>
+
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>exec-maven-plugin</artifactId>
+               <version>1.1.1</version>
+            </plugin>
+
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>javancss-maven-plugin</artifactId>
+               <version>2.0-beta-2</version>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                	<createChecksum>true</createChecksum>
+                </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+   </build>
+
+   <dependencies>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>3.8.1</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+         <version>1.2.15</version>
+         <exclusions>
+            <exclusion>
+               <groupId>javax.jms</groupId>
+               <artifactId>jms</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.sun.jdmk</groupId>
+               <artifactId>jmxtools</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.sun.jmx</groupId>
+               <artifactId>jmxri</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+	 <dependency>
+            <groupId>com.sun.jdk</groupId>
+            <artifactId>jdk-tools</artifactId>
+            <version>1.5</version>
+         </dependency>
+   </dependencies>
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>com.qspin.qtaste</groupId>
+            <artifactId>qtaste-kernel</artifactId>
+            <version>${qtaste-version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.qspin.qtaste</groupId>
+            <artifactId>qtaste-kernel</artifactId>
+            <version>${qtaste-version}</version>
+            <classifier>tests</classifier>
+         </dependency>
+
+         <!-- EXTERNAL LIBRARIES -->
+         <!-- Libraries are ordered by group/artifact. -->
+
+         <dependency>
+          <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.3.1</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+            <scope>runtime</scope>
+         </dependency>
+         <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.6</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+            <scope>runtime</scope>
+         </dependency>
+         <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>2.0</version>
+         </dependency>
+         <dependency>
+            <groupId>javax.scripting</groupId>            
+            <artifactId>jython-engine</artifactId>            
+            <version>20080808</version>         
+        </dependency>         
+        <dependency>            
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.5</version>
+         </dependency>
+         <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>binding</artifactId>
+            <version>2.0.6</version>
+         </dependency>
+         <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>forms</artifactId>
+            <version>1.2.1</version>
+         </dependency>
+         <dependency>
+            <groupId>jsyntaxpane</groupId>
+            <artifactId>jsyntaxpane</artifactId>
+            <version>0.9.5-b27</version>
+         </dependency>
+         <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython</artifactId>
+            <version>2.2.1</version>
+         </dependency>        
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.1</version>
+         </dependency>
+         <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>serializer</artifactId>
+            <version>2.7.1</version>
+         </dependency>
+         <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.9.1</version>
+         </dependency>
+         <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.3.04</version>
+         </dependency>
+         <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3</artifactId>
+   	        <version>1.1.4c</version>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+
+   <profiles>
+      <profile>
+         <id>qspin-site</id>
+         <activation>
+            <activeByDefault>false</activeByDefault>
+            <property>
+               <!-- every value is accepted. -->
+               <name>site</name>
+            </property>
+         </activation>
+         <reporting>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-javadoc-plugin</artifactId>
+                  <version>2.5</version>
+                  <inherited>true</inherited>
+                  <configuration>
+                     <links>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                     </links>
+                     
+                     <aggregate>true</aggregate>
+                     <windowtitle>QTaste ${releaseVersion}</windowtitle>
+                     <doctitle>QTaste ${releaseVersion}</doctitle>
+                     <tags>
+                        <tag>
+                           <name>data</name>
+                        </tag>
+                        <tag>
+                           <name>config</name>
+                        </tag>
+                        <tag>
+                           <name>fail</name>
+                        </tag>
+                     </tags>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </reporting>
+      </profile>
+   </profiles>
+</project>
+

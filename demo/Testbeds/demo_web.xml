@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>		
+	<testapi_implementation>
+		<import>com.qspin.qtaste.testapi.impl.demo</import>
+	</testapi_implementation>
+	<control_script>control_selenium.py</control_script>
+	<multiple_instances_components>
+		<Selenium id="TranslateApp">
+			<host>localhost</host>
+			<port>4444</port>
+			<url>http://translate.google.be/?hl=fr</url>
+		</Selenium>
+	</multiple_instances_components>
+</testbed_configuration>

@@ -1,0 +1,4 @@
+COMMENT;USE_DO_STEPS;UNDEFINED_STEPS_TABLE
+Test of doStep with undefined function. Expected test result: Not Available;False;False
+Test of doSteps with undefined function. Expected test resut: Not Available;True;False
+Test of doSteps with undefined table. Expected test result: Not Available;True;True

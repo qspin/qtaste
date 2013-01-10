@@ -1,0 +1,3 @@
+COMMENT
+Set local variable. Expected test result: Passed
+Check that local variable is not set. Expected test result: Passed

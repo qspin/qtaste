@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>		
+	<testapi_implementation>
+		<import>com.qspin.qtaste.testapi.impl.enginetest</import>
+	</testapi_implementation>
+	
+	<control_script>stop_error.py</control_script>
+	
+	<singleton_components>
+		<EngineTest/>
+	</singleton_components>
+</testbed_configuration>

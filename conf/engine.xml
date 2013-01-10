@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<engine_configuration>
+	
+	<retry_test_on_fail>true</retry_test_on_fail>
+
+	<reporting>
+		<!-- Reporting format  (XML or HTML, default to HTML) -->
+		<reporters>
+			<format>HTML</format>
+			<format>GUI</format>
+		</reporters>
+
+		<html_settings>
+			<generate_test_data>true</generate_test_data>
+			<generate_steps_rows>true</generate_steps_rows>
+			<report_stop_start_sut>true</report_stop_start_sut>
+			<report_restart_sut>true</report_restart_sut>
+		</html_settings>
+
+		<!-- Location of the HTML template -->
+		<html_template>conf/reporting/html/standard</html_template>
+		<!-- Location of the XML template -->
+		<xml_template>conf/reporting/xml/standard</xml_template>
+		<!-- Location of the generated reports -->
+		<generated_report_path>reports</generated_report_path>
+		<!-- Test campaign aggregated documentation parameters -->
+		<test_campaign_doc>
+			<remove_step_name_column>true</remove_step_name_column>
+			<add_step_result_column>true</add_step_result_column>
+			<duplicate_steps_per_test_data_row>true</duplicate_steps_per_test_data_row>
+		</test_campaign_doc>
+	</reporting>
+
+	<log4j_server>
+		<port>4446</port>
+	</log4j_server>
+	<version_control>com.qspin.qtaste.util.versioncontrol.impl.DefaultVersionControl</version_control>
+</engine_configuration>
