@@ -290,7 +290,7 @@ class JavaProcess(ControlAction):
 			else:
 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		if useJavaGUI:
-			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "javagui" + _os.sep + "target" + _os.sep +  "qtaste-javagui-deploy.jar"
+			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "qtaste-javagui-deploy.jar"
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
 		else:

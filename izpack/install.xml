@@ -21,6 +21,7 @@
             <author name="David Ergo" email="der@qspin.be"/>
             <author name="Vincent Dubois" email="vdu@qspin.be"/>
             <author name="Laurent Vanboquestal" email="lvb@qspin.be"/>
+            <author name="Simon Janssens" email="sja@qspin.be"/>
         </authors>
         <url>http://sourceforge.net/projects/qtaste</url>
     </info>
@@ -185,14 +186,14 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="The recorder binaries" required="yes" preselected="yes" parent="Recoder">
 	    <description>The recorder binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/recorder/target/qtaste-recorder-deploy.jar"/>
+		<include name="plugins/qtaste-recorder-deploy.jar"/>
 	    </fileset>
         </pack>
         <pack name="The recorder sources" required="yes" preselected="yes" parent="Recoder">
 	    <description>The recorder sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/recorder/src/**"/>
-		<include name="plugins/recorder/pom.xml"/>
+		<include name="plugins_src/recorder/src/**"/>
+		<include name="plugins_src/recorder/pom.xml"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>
@@ -207,14 +208,14 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="The tools binaries" required="yes" preselected="yes" parent="Tools">
 	    <description>The tools binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/tools/target/qtaste-tools-deploy.jar"/>
+		<include name="plugins/qtaste-tools-deploy.jar"/>
 	    </fileset>
         </pack>
         <pack name="The tools sources" required="yes" preselected="yes" parent="Tools">
 	    <description>The tools sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/tools/src/**"/>
-		<include name="plugins/tools/pom.xml"/>
+		<include name="plugins_src/tools/src/**"/>
+		<include name="plugins_src/tools/pom.xml"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>
@@ -229,14 +230,14 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="The Java GUI binaries" required="yes" preselected="yes" parent="Java GUI">
 	    <description>The Java GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/javagui/target/qtaste-javagui-deploy.jar"/>
+		<include name="plugins/qtaste-javagui-deploy.jar"/>
 	    </fileset>
         </pack>
         <pack name="The Java GUI sources" required="yes" preselected="yes" parent="Java GUI">
 	    <description>The Java GUI sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/javagui/src/**"/>
-		<include name="plugins/javagui/pom.xml"/>
+		<include name="plugins_src/javagui/src/**"/>
+		<include name="plugins_src/javagui/pom.xml"/>
 		<!-- excludes eclipse files -->
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>

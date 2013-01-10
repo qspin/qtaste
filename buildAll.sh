@@ -9,7 +9,7 @@ popd
 mvn install || exit 1
 
 # build plugins
-pushd plugins
+pushd plugins_src
 ./build.sh || exit 1
 popd
 
