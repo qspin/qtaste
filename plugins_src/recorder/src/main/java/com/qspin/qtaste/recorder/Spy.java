@@ -113,8 +113,6 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 	 */
 	public Spy(BufferedWriter pWriter, List<RecorderFilter> pFilters)
 	{
-		mListeners = new ArrayList<PropertyChangeListener>();
-		mActiveState = false;
 		mWriter = pWriter;
 		mFilters = pFilters;
 		mListSelectionModelListenerMap = new HashMap<ListSelectionModel, String>();
@@ -183,60 +181,51 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 		}
 	}
 
-	public void addPropertyChangeListener(PropertyChangeListener pListener) {
-		mListeners.add(pListener);
-	}
-	public void removePropertyChangeListener(PropertyChangeListener pListener) {
-		mListeners.remove(pListener);
-	}
-	
-	public void setActive(boolean pActive)
-	{
-		mActiveState = pActive;
-		PropertyChangeEvent evt = new PropertyChangeEvent(this, ACTIVE_STATE_PROPERTY, !mActiveState, mActiveState);
-		firePropertyChange(evt);
-	}
-	
-	public boolean isActive() {
-		return mActiveState;
-	}
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void treeExpanded(TreeExpansionEvent e) {
 		writeEvent(e, true);
 	}
+
 	@Override
 	public void treeCollapsed(TreeExpansionEvent e) {
 		writeEvent(e, false);
 	}
+
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		writeEvent(e);
 	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		writeEvent(e);
@@ -261,14 +250,6 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 			}
 		}
 		return true;
-	}
-	
-	protected void firePropertyChange(PropertyChangeEvent pEvt)
-	{
-		for (PropertyChangeListener l : mListeners)
-		{
-			l.propertyChange(pEvt);
-		}
 	}
 	
 	protected void addPropertyChangeListener(Component pComponent)
@@ -507,8 +488,6 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 		pBuilder.append("<newValue>" + pEvent.getNewValue() + "</newValue>" + LINE_BREAK);
 	}
 
-	protected List<PropertyChangeListener> mListeners;
-	protected boolean mActiveState;
 	protected BufferedWriter mWriter;
 	protected List<RecorderFilter> mFilters;
 	protected Map<ListSelectionModel, String> mListSelectionModelListenerMap;
@@ -518,6 +497,4 @@ public class Spy implements DocumentListener, PropertyChangeListener,
 
 	protected static final Logger LOGGER = Logger.getLogger(Spy.class);
 	private static final String LINE_BREAK = System.getProperty("line.separator");
-	
-	public static final String ACTIVE_STATE_PROPERTY = "active.state";
 }

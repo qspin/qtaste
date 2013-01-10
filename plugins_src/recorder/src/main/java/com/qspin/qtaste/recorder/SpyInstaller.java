@@ -37,7 +37,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
 
-import com.qspin.qtaste.recorder.tray.RecorderTray;
 import com.qspin.qtaste.tools.AbstractGUIAnalyzer;
 import com.qspin.qtaste.tools.ComponentNamer;
 import com.qspin.qtaste.tools.filter.Filter;
@@ -101,8 +100,6 @@ public class SpyInstaller extends AbstractGUIAnalyzer {
 			mWriter = new BufferedWriter(new FileWriter("spyRepport_"+ format.format(new Date().getTime()) +".xml"));
 			mWriter.write("<events>\n");
 			mSpy = new Spy(mWriter, mFilter);
-			new RecorderTray(mSpy);
-			mSpy.setActive(true);
 			return true;
 		} catch(IOException pExc)
 		{
