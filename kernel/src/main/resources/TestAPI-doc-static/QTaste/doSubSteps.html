@@ -1,0 +1,27 @@
+<HTML><HEAD><TITLE>doSubSteps</TITLE></HEAD> 
+<BODY> 
+<H2>doSubSteps</H2> 
+Function to execute an imported sequence of test steps as sub-steps of the current step.
+<P>
+This may be used to execute a steps sequence of a test script imported with <A HREF="importTestScript.html"><CODE>importTestScript</CODE></A>, as sub-steps.
+<P>
+&nbsp;
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
+<TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Function Detail</B></FONT></TH></TR> 
+</TABLE> 
+<A NAME="doSubSteps"> <H3>doSubSteps</H3></A> 
+<PRE>void <B>doSubSteps</B>(Sequence stepsSequence [, String selector])</PRE> 
+<DL><DD>Executes the selected steps of the given steps sequence, all steps being executed if no selector is given, as sub-steps of the current step.<P><DD><DL> 
+<DT><B>Parameters:</B></DT> 
+<DD><CODE>stepsSequence</CODE> - the steps sequence, which is a list or tuple of <CODE>(stepId, stepFunction)</CODE> tuples, <CODE>stepId</CODE> being an integer or a string.</DD> 
+<DD><CODE>selector</CODE> - (optional) the steps selector, using one of the following formats: 
+<UL>
+<LI>"<CODE>[firstStepId-lastStepId]</CODE>" to execute steps from <CODE>firstStepId</CODE> to <CODE>lastStepId</CODE>;
+<LI>"<CODE>[firstStepId-]</CODE>" to execute steps from <CODE>firstStepId</CODE> to last step;
+<LI>"<CODE>[-lastStepId]</CODE>" to execute steps from first step to <CODE>lastStepId</CODE>;
+<LI>"<CODE>[stepId]</CODE>" to execute only step <CODE>stepId</CODE>.
+</UL>
+</DD> 
+</DL></DD></DL> 
+</BODY> 
+</HTML>
