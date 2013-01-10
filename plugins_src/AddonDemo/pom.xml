@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly" 
+		or "mvn install assembly:single" -->
+
+	<parent>
+		<groupId>com.qspin.qtaste</groupId>
+		<artifactId>qtaste-testapi-parent</artifactId>
+		<version>1.2.2-RC4</version>
+	</parent>
+
+	<artifactId>qtaste-demo-addon</artifactId>
+	<packaging>jar</packaging>
+	<name>Demo Add-On</name>
+
+	<properties>
+		<qtaste-toolbox-version>${parent.version}</qtaste-toolbox-version>
+	</properties>
+
+	<build>
+		<finalName>${artifactId}</finalName>
+		<plugins>
+			<!-- plugin to build deploy jar file, including version information -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<addonVersion>${version}</addonVersion>
+							<addonName>${name}</addonName>
+							<addonDescription>${description}</addonDescription>
+							<addonMainClass>com.qspin.qtaste.demo.addon.DemoAddOn</addonMainClass>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>apache-releases</id>
+			<name>Apache Releases</name>
+			<url>http://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>openqa-releases</id>
+			<name>OpenQA Releases</name>
+			<url>http://nexus.openqa.org/content/repositories/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<dependencies>
+		<!-- QTaste kernel -->
+		<dependency>
+			<groupId>com.qspin.qtaste</groupId>
+			<artifactId>qtaste-kernel</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>forms</artifactId>
+		</dependency>
+	</dependencies>
+	<description>Simple add-on used as demonstrator.</description>
+	<version>1.0</version>
+</project>
