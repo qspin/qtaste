@@ -156,12 +156,12 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         genUI();
     }
     
-    public void addTabPane(JPanel pPanel, String pTabTile)
+    public void addTabPane(JScrollPane pPanel, String pTabTile)
     {
     	tabbedPane.addTab(pTabTile, pPanel);
     }
 
-	public void removeTabPane(JPanel pEditor) {
+	public void removeTabPane(JScrollPane pEditor) {
 		tabbedPane.remove(pEditor);
 	}
 
@@ -361,6 +361,17 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 // transfer focus to editor if necessary
                 if (tabbedPane.getSelectedIndex() == SOURCE_INDEX) {
                     Component tab = editorTabbedPane.getSelectedComponent();
+                    if (tab != null && tab instanceof JScrollPane) {
+                        JScrollPane scrollPane = (JScrollPane) tab;
+                        tab = scrollPane.getViewport().getView();
+                        if (tab != null) {
+                            tab.requestFocusInWindow();
+                        }
+                    }
+                }
+                else
+                {
+                    Component tab = tabbedPane.getSelectedComponent();
                     if (tab != null && tab instanceof JScrollPane) {
                         JScrollPane scrollPane = (JScrollPane) tab;
                         tab = scrollPane.getViewport().getView();

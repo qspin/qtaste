@@ -1,12 +1,18 @@
 package com.qspin.qtaste.addon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.log4j.Logger;
+
+import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.util.Environment;
 
 
+@SuppressWarnings("serial")
 public class AddOnTableModel extends AbstractTableModel {
 
 	public AddOnTableModel(List<AddOnMetadata> pAddons)
@@ -60,10 +66,35 @@ public class AddOnTableModel extends AbstractTableModel {
 			if (Boolean.parseBoolean(aValue.toString()))
 			{
 				getAddonManager().loadAddOn(mAddons.get(rowIndex));
+				TestEngineConfiguration.getInstance().addProperty("addons.addon", mAddons.get(rowIndex).getMainClass());
 			}
 			else
 			{
-				getAddonManager().unloadAddOn(mAddons.get(rowIndex));	
+				getAddonManager().unloadAddOn(mAddons.get(rowIndex));
+				List<String> classes = new ArrayList<String>();
+				TestEngineConfiguration config = TestEngineConfiguration.getInstance();
+				int reportersCount = config.getMaxIndex("addons.addon") + 1;
+		        for (int reporterIndex = 0; reporterIndex < reportersCount; reporterIndex++) {
+		        	String addon = config.getString("addons.addon(" + reporterIndex + ")");
+		        	if ( !addon.equals(mAddons.get(rowIndex).getMainClass()))
+		        	{
+		        		classes.add(addon);
+		        	}
+		        }
+				TestEngineConfiguration.getInstance().clearProperty("addons.addon");
+		        for ( String addon : classes )
+		        {
+					TestEngineConfiguration.getInstance().addProperty("addons.addon", addon);
+		        }
+			}
+
+			try
+			{
+				TestEngineConfiguration.getInstance().save();
+			}
+			catch(ConfigurationException pExc)
+			{
+				LOGGER.error("Unable to save the configuration: " + pExc.getMessage(), pExc);
 			}
 		}
 		fireTableDataChanged();
@@ -80,6 +111,7 @@ public class AddOnTableModel extends AbstractTableModel {
 	}
 	
 	protected List<AddOnMetadata> mAddons;
-	private static String[] COLUMN_NAMES = new String[]{"Active", "Name", "Version", "Jar name", "Status"};
+	private static final String[] COLUMN_NAMES = new String[]{"Active", "Name", "Version", "Jar name", "Status"};
+	private static final Logger LOGGER = Logger.getLogger(AddOnTableModel.class);
 
 }

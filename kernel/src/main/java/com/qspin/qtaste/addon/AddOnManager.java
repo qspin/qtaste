@@ -41,12 +41,15 @@ public class AddOnManager {
 		{
 			if ( f.isFile() && f.getName().toUpperCase().endsWith(".JAR"))
 			{
-				AddOnMetadata meta = new AddOnMetadata(f);
-				mAddons.add(meta);
-				LOGGER.debug("load " + meta.getMainClass());
-				if ( addonToLoad.contains(meta.getMainClass()) )
+				AddOnMetadata meta = AddOnMetadata.createAddOnMetadata(f);
+				if ( meta != null )
 				{
-					loadAddOn(meta);
+					mAddons.add(meta);
+					LOGGER.debug("load " + meta.getMainClass());
+					if ( addonToLoad.contains(meta.getMainClass()) )
+					{
+						loadAddOn(meta);
+					}
 				}
 			}
 		}
@@ -72,6 +75,11 @@ public class AddOnManager {
         	pAddonMetaData.setStatus(AddOnMetadata.ERROR);
             LOGGER.error("Exception load the add-on: " + pAddonMetaData.getName(), e);
         }
+		finally
+		{
+			Environment.getEnvironment().getMainMenuBar().updateUI();
+			Environment.getEnvironment().getMainFrame().validate();
+		}
 	}
 	
 	public void unloadAddOn(AddOnMetadata pAddonMetaData)
@@ -92,6 +100,11 @@ public class AddOnManager {
 		{
 			LOGGER.error("Unable to unload the add-on " + pAddonMetaData.getName());
 	        pAddonMetaData.setStatus(AddOnMetadata.ERROR);
+		}
+		finally
+		{
+			Environment.getEnvironment().getMainMenuBar().updateUI();
+			Environment.getEnvironment().getMainFrame().validate();
 		}
 	}
 	

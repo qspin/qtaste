@@ -185,11 +185,11 @@ public class Environment {
 		return mMainPanel;
 	}
 	
-	public void addTestEditor(JPanel pEditor, String pEditorTitle)
+	public void addTestEditor(JScrollPane pEditor, String pEditorTitle)
 	{
 		mMainPanel.getTestCasePanel().addTabPane(pEditor, pEditorTitle);
 	}
-	public void removeTestEditor(JPanel pEditor) {
+	public void removeTestEditor(JScrollPane pEditor) {
 		mMainPanel.getTestCasePanel().removeTabPane(pEditor);
 	}
 

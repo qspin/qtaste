@@ -17,26 +17,39 @@ import org.apache.log4j.Logger;
 
 public final class AddOnMetadata {
 
-	public AddOnMetadata(File pJar)
+	public static AddOnMetadata createAddOnMetadata(File pJar)
 	{
-		mListener = new ArrayList<PropertyChangeListener>();
-		mJarName = pJar.getName();
+		AddOnMetadata am = new AddOnMetadata();
+		am.setJarName(pJar.getName());
 		URL manifestURL;
         try {
             manifestURL = new URL("jar:file:" + pJar.getAbsolutePath()+ "!/META-INF/MANIFEST.MF");
             LOGGER.debug("Add-on jar url : " + manifestURL);
             Manifest manifest = new Manifest(manifestURL.openStream());
             Attributes attributes = manifest.getMainAttributes();
-        	setName(attributes.getValue(ADDON_NAME_ATTRIBUTE));
-        	setVersion(attributes.getValue(ADDON_VERSION_ATTRIBUTE));
-        	setDescription(attributes.getValue(ADDON_DESCRIPTION_ATTRIBUTE));
-        	setMainClass(attributes.getValue(ADDON_MAIN_CLASS_ATTRIBUTE));
+        	am.setName(attributes.getValue(ADDON_NAME_ATTRIBUTE));
+        	am.setVersion(attributes.getValue(ADDON_VERSION_ATTRIBUTE));
+        	am.setDescription(attributes.getValue(ADDON_DESCRIPTION_ATTRIBUTE));
+        	am.setMainClass(attributes.getValue(ADDON_MAIN_CLASS_ATTRIBUTE));
+            Class<?> addOnClass = Class.forName(am.getMainClass());
+            if (am.getMainClass() != null && AddOn.class.isAssignableFrom(addOnClass))
+            {
+            	return am;			                
+            }
         } catch (MalformedURLException e) {
         	LOGGER.error("Couldn't create jar manifest URL for reading version information: " + e.getMessage());
         } catch (IOException e) {
         	LOGGER.error("Couldn't read jar manifest for reading addon metadata information: " + e.getMessage());
-        	e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+        	LOGGER.error("Couldn't initialize the referenced class: " + e.getMessage());
         }
+        LOGGER.warn("jar " + am.getJarName() + " is not an add-on. The jar will be ignored");
+        return null;
+	}
+	
+	protected AddOnMetadata()
+	{
+		mListener = new ArrayList<PropertyChangeListener>();
         setStatus(NONE);
 	}
 	
@@ -52,10 +65,8 @@ public final class AddOnMetadata {
 	
 	protected void firePropertyChangeEvent(PropertyChangeEvent pEvent)
 	{
-		LOGGER.debug("fire property change");
 		for ( PropertyChangeListener listener : mListener )
 		{
-			LOGGER.debug("alert " + listener.toString());
 			listener.propertyChange(pEvent);
 		}
 	}
@@ -91,6 +102,7 @@ public final class AddOnMetadata {
 		return mMainClass;
 	}
 	public void setMainClass(String pMainClass) {
+		LOGGER.trace("Change add-on main class from '" + mMainClass + "' to '" + pMainClass + "' for (" + getName() + ")");
 		mMainClass = pMainClass;
 	}
 	public String getDescription() {
