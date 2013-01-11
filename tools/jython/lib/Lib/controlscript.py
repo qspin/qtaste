@@ -249,7 +249,7 @@ class ControlAction(object):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs="", jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -290,7 +290,7 @@ class JavaProcess(ControlAction):
 			else:
 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		if useJavaGUI:
-			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "qtaste-javagui-deploy.jar"
+			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
 		else:
