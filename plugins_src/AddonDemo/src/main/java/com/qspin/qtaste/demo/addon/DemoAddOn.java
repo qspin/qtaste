@@ -42,7 +42,6 @@ public class DemoAddOn extends AddOn {
 	@Override
 	public boolean unloadAddOn() throws AddOnException {
 		Environment.getEnvironment().getMainMenuBar().remove(mMenu);
-		Environment.getEnvironment().getMainMenuBar().updateUI();
 		return true;
 	}
 

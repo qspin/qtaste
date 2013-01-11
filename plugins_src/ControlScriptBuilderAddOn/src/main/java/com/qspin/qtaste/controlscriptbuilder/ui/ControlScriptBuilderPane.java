@@ -1,6 +1,5 @@
 package com.qspin.qtaste.controlscriptbuilder.ui;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -30,13 +28,13 @@ import com.qspin.qtaste.controlscriptbuilder.ui.editor.Editor;
 import com.qspin.qtaste.controlscriptbuilder.ui.model.ControlActionsTableModel;
 
 @SuppressWarnings("serial")
-public class ControlScriptBuilderPane extends JPanel implements ListSelectionListener{
+public class ControlScriptBuilderPane extends JScrollPane implements ListSelectionListener{
 
 	public ControlScriptBuilderPane()
 	{
 		super();
 		genUI();
-		this.addFocusListener(new MyFocusListener());
+		this.getViewport().getView().addFocusListener(new MyFocusListener());
 		
 	}
 
@@ -63,7 +61,7 @@ public class ControlScriptBuilderPane extends JPanel implements ListSelectionLis
 		String controlScriptFileName = TestBedConfiguration.getInstance().getControlScriptFileName();
 		String paramFileName = controlScriptFileName.substring(0, controlScriptFileName.length()-3) + ".param";
 		File paramFile = new File(paramFileName);
-		LOGGER.info("parameter file existence ? " + paramFile.exists());
+		LOGGER.trace("parameter file existence ? " + paramFile.exists());
 		if ( paramFile.exists() )
 		{
 			//decode the control script
@@ -105,8 +103,7 @@ public class ControlScriptBuilderPane extends JPanel implements ListSelectionLis
 		builder.add(mDeleteButton, cc.xy(4, rowIndex));
 		rowIndex += 2;
 		
-		setLayout(new BorderLayout());
-		add(builder.getPanel(), BorderLayout.CENTER);
+		getViewport().add(builder.getPanel());
 	}
 	
 	private void loadComponents()
@@ -126,6 +123,7 @@ public class ControlScriptBuilderPane extends JPanel implements ListSelectionLis
 		mDownButton.addActionListener(ba);
 		
 		mNewButton = new JButton("Add");
+		mDownButton.setEnabled(false);
 		mNewButton.addActionListener(ba);
 		
 		mEditButton = new JButton("Edit");
