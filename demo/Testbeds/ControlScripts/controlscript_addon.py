@@ -32,7 +32,13 @@ class VirtualBox(ControlAction):
 		@param workingDir working directory to start process in, defaults to QTaste root directory
 		"""
 		ControlAction.__init__(self, description)
+		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.nameOfVBoxImage = nameOfVBoxImage
+
+	def dump(self, writer):
+		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
+		super(VirtualBox, self).dump(writer)
+		writer.write(str(self.caID) + ".nameOfVBoxImage=" + str(self.nameOfVBoxImage) + "\n")
 	
 	def start(self):
 		# the VBoxManage command has to be in the PATH ...
