@@ -109,6 +109,7 @@ public class ControlScriptBuilderPane extends JScrollPane implements ListSelecti
 	private void loadComponents()
 	{
 		mTable = new JTable(new ControlActionsTableModel());
+		mTable.getColumnModel().getColumn(3).setCellRenderer(mTable.getDefaultRenderer(Boolean.class));
 		mTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mTable.getSelectionModel().addListSelectionListener(this);
 		

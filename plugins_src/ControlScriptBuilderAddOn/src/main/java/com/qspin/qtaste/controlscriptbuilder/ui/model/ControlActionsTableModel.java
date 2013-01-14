@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.qspin.qtaste.controlscriptbuilder.io.ControlScriptEncoder;
 import com.qspin.qtaste.controlscriptbuilder.model.ControlAction;
 
 
@@ -29,6 +30,11 @@ public class ControlActionsTableModel extends AbstractTableModel {
 	public String getColumnName(int column) {
 		return COLUMN_NAMES[column];
     }
+	
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return columnIndex == 3;
+	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -37,7 +43,29 @@ public class ControlActionsTableModel extends AbstractTableModel {
 		case 0 : return rowIndex;
 		case 1 : return mControlActions.get(rowIndex).getType().toString();
 		case 2 : return mControlActions.get(rowIndex).toString();
+		case 3 : return mControlActions.get(rowIndex).isActive();
 		default : return null;
+		}
+	}
+
+	@Override
+	public void setValueAt(Object pValue, int rowIndex, int columnIndex) {
+		switch(columnIndex)
+		{
+		case 3 : 
+			mControlActions.get(rowIndex).setActive((Boolean)pValue);
+			break;
+		}
+		ControlScriptEncoder.updateAndSaveControlActions(mControlActions);
+	}
+
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		switch(columnIndex)
+		{
+		case 0 : return Integer.class;
+		case 3 : return Boolean.class;
+		default : return String.class;
 		}
 	}
 	
@@ -75,6 +103,6 @@ public class ControlActionsTableModel extends AbstractTableModel {
 	
 	private List<ControlAction> mControlActions;
 
-	private static final String[] COLUMN_NAMES = {"Index", "Type", "Name"};
+	private static final String[] COLUMN_NAMES = {"Index", "Type", "Name", "Active"};
 
 }
