@@ -192,7 +192,8 @@ class ControlScript(object):
 			writer.close
 			
 		for controlAction in self.controlActions:
-			controlAction.start()
+			if controlAction.active:
+				controlAction.start()
 	
 	def stop(self):
 		""" Method called on stop, stops control actions in reverse order """
@@ -201,7 +202,7 @@ class ControlScript(object):
 
 class ControlAction(object):
 	""" Control script action """
-	def __init__(self, description):
+	def __init__(self, description, active=True):
 		"""
 		Initialize ControlAction object.
 		@param description string describing the control action
@@ -210,6 +211,7 @@ class ControlAction(object):
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.description = description
 		self.caID = controlScriptID
+		self.active = active
 		controlScriptID += 1
 		
 	def start(self):
@@ -222,10 +224,14 @@ class ControlAction(object):
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
-		writer.write(str(self.caID) + ".description=" + self.description + "\n")
+		writer.write(str(self.caID) + ".description=\"" + self.description + "\"\n")
 		writer.write(str(self.caID) + ".type=" + self.__class__.__name__+ "\n")
 		writer.write(str(self.caID) + ".controlActionID=" + str(self.caID) + "\n")
 		writer.write(str(self.caID) + ".callerScript=" + self.callerScript + "\n")
+		if self.active:
+			writer.write(str(self.caID) + ".active=true\n")
+		else:
+			writer.write(str(self.caID) + ".active=false\n")
 		pass
 
 	def executeCommand(command):
@@ -280,7 +286,7 @@ class ControlAction(object):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False, active=True):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -295,7 +301,7 @@ class JavaProcess(ControlAction):
 		@param useJacoco enable the coverage analysis using jacoco tool
 		@param useJavaGui enable the javagui service to enable remote javagui accessibility 
 		"""
-		ControlAction.__init__(self, description)
+		ControlAction.__init__(self, description, active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.mainClassOrJar = mainClassOrJar
 		self.args = args
@@ -323,7 +329,7 @@ class JavaProcess(ControlAction):
 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		self.useJacoco = useJacoco
 		if useJavaGUI:
-			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "qtaste-javagui-deploy.jar"
+			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
 		self.useJavaGUI = useJavaGUI
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
@@ -338,16 +344,30 @@ class JavaProcess(ControlAction):
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(JavaProcess, self).dump(writer)
-		writer.write(str(self.caID) + ".args=" + str(self.args) + "\n")
-		writer.write(str(self.caID) + ".workingDir=" + str(self.workingDir) + "\n")
-		writer.write(str(self.caID) + ".mainClassOrJar=" + str(self.mainClassOrJar) + "\n")
-		writer.write(str(self.caID) + ".classPath=" + str(self.classPath) + "\n")
-		writer.write(str(self.caID) + ".vmArgs=" + str(self.vmArgs) + "\n")
-		writer.write(str(self.caID) + ".useJacoco=" + str(self.useJacoco) + "\n")
-		writer.write(str(self.caID) + ".useJavaGUI=" + str(self.useJavaGUI) + "\n")
-		writer.write(str(self.caID) + ".jmxPort=" + str(self.jmxPort) + "\n")
-		writer.write(str(self.caID) + ".checkAfter=" + str(self.checkAfter) + "\n")
-		writer.write(str(self.caID) + ".priority=" + str(self.priority) + "\n")
+		if self.args is not None:
+			writer.write(str(self.caID) + ".args=\"" + str(self.args) + "\"\n")
+		if self.workingDir is not None:
+			writer.write(str(self.caID) + ".workingDir=\"" + str(self.workingDir) + "\"\n")
+		if self.mainClassOrJar is not None:
+			writer.write(str(self.caID) + ".mainClassOrJar=\"" + str(self.mainClassOrJar) + "\"\n")
+		if self.classPath is not None:
+			writer.write(str(self.caID) + ".classPath=\"" + str(self.classPath) + "\"\n")
+		if self.vmArgs is not None:
+			writer.write(str(self.caID) + ".vmArgs=\"" + str(self.vmArgs) + "\"\n")
+		if self.useJacoco:
+			writer.write(str(self.caID) + ".useJacoco=True\n")
+		else:
+			writer.write(str(self.caID) + ".useJacoco=False\n")
+		if self.useJavaGUI:
+			writer.write(str(self.caID) + ".useJavaGUI=True\n")
+		else:
+			writer.write(str(self.caID) + ".useJavaGUI=False\n")
+		if self.jmxPort is not None:
+			writer.write(str(self.caID) + ".jmxPort=" + str(self.jmxPort) + "\n")
+		if self.checkAfter is not None:
+			writer.write(str(self.caID) + ".checkAfter=" + str(self.checkAfter) + "\n")
+		if self.priority is not None:
+			writer.write(str(self.caID) + ".priority=\"" + str(self.priority) + "\"\n")
 		pass
 
 	def start(self):
@@ -403,7 +423,7 @@ class JavaProcess(ControlAction):
 
 class NativeProcess(ControlAction):
 	""" Control script action for starting/stopping a native process """
-	def __init__(self, description, executable, args=None, workingDir=qtasteRootDirectory, checkAfter=None):
+	def __init__(self, description, executable, args=None, workingDir=qtasteRootDirectory, checkAfter=None, active=True):
 		"""
 		Initialize NativeProcess object
 		@param description control script action description, also used as window title
@@ -412,7 +432,7 @@ class NativeProcess(ControlAction):
 		@param workingDir working directory to start process in, defaults to QTaste root directory
 		@param checkAfter number of seconds after which to check if process still exist or None to not check
 		"""
-		ControlAction.__init__(self, description)
+		ControlAction.__init__(self, description, active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.executable = executable
 		self.args = args
@@ -427,9 +447,9 @@ class NativeProcess(ControlAction):
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(NativeProcess, self).dump(writer)
-		writer.write(str(self.caID) + ".executable=" + str(self.executable) + "\n")
-		writer.write(str(self.caID) + ".workingDir=" + str(self.workingDir) + "\n")
-		writer.write(str(self.caID) + ".args=" + str(self.args) + "\n")
+		writer.write(str(self.caID) + ".executable=\"" + str(self.executable) + "\"\n")
+		writer.write(str(self.caID) + ".workingDir=\"" + str(self.workingDir) + "\"\n")
+		writer.write(str(self.caID) + ".args=\"" + str(self.args) + "\"\n")
 		writer.write(str(self.caID) + ".checkAfter=" + str(self.checkAfter) + "\n")
 
 	def start(self):
@@ -464,20 +484,20 @@ class NativeProcess(ControlAction):
 
 class ServiceProcess(ControlAction):
 	""" Control script action for starting/stopping a service process """
-	def __init__(self, description, serviceName):
+	def __init__(self, description, serviceName, active=True):
 		"""
 		Initialize ServiceProcess object
 		@param description control script action description, also used as window title
 		@param serviceName name of the service to control
 		"""
-		ControlAction.__init__(self, description)
+		ControlAction.__init__(self, description, active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.serviceName = serviceName
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(ServiceProcess, self).dump(writer)
-		writer.write(str(self.caID) + ".serviceName=" + str(self.serviceName) + "\n")
+		writer.write(str(self.caID) + ".serviceName=\"" + str(self.serviceName) + "\"\n")
 
 	def start(self):
 		print "Starting " + self.description + "...";
@@ -505,14 +525,14 @@ class ServiceProcess(ControlAction):
 
 class ReplaceInFiles(ControlAction):
 	""" Control script action for doing a replace in file(s), only on start """
-	def __init__(self, findString, replaceString, files):
+	def __init__(self, findString, replaceString, files, active=True):
 		"""
 		Initialize ReplaceInFiles object.
 		@param findString regular expression string to find
 		@param replaceString string by which to replace findString, may contain matches references in the form \1
 		@param files file name or list of files names
 		"""
-		ControlAction.__init__(self, "Replace in file(s)")
+		ControlAction.__init__(self, "Replace in file(s)", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.findString = findString
 		self.replaceString = replaceString
@@ -523,9 +543,9 @@ class ReplaceInFiles(ControlAction):
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(ReplaceInFiles, self).dump(writer)
-		writer.write(str(self.caID) + ".findString=" + str(self.findString) + "\n")
-		writer.write(str(self.caID) + ".replaceString=" + str(self.replaceString) + "\n")
-		writer.write(str(self.caID) + ".files=" + str(self.files) + "\n")
+		writer.write(str(self.caID) + ".findString=\"" + str(self.findString) + "\"\n")
+		writer.write(str(self.caID) + ".replaceString=\"" + str(self.replaceString) + "\"\n")
+		writer.write(str(self.caID) + ".files=\"" + str(self.files) + "\"\n")
 
 	def start(self):
 		print "Replacing", repr(self.findString), "by", repr(self.replaceString), "in", self.files
@@ -538,7 +558,7 @@ class ReplaceInFiles(ControlAction):
 
 class Rsh(ControlAction):
 	""" Control script action for executing a command on a remote host using rsh """
-	def __init__(self, startCommand, stopCommand, host, login):
+	def __init__(self, startCommand, stopCommand, host, login, active=True):
 		"""
 		Initialize Rsh object.
 		@param startCommand command to execute on start
@@ -546,7 +566,7 @@ class Rsh(ControlAction):
 		@param host remote host
 		@param login remote user login
 		"""
-		ControlAction.__init__(self, "Remote command execution using rsh")
+		ControlAction.__init__(self, "Remote command execution using rsh", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.startCommand = startCommand
 		self.stopCommand = stopCommand
@@ -556,10 +576,10 @@ class Rsh(ControlAction):
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(Rsh, self).dump(writer)
-		writer.write(str(self.caID) + ".startCommand=" + str(self.startCommand) + "\n")
-		writer.write(str(self.caID) + ".stopCommand=" + str(self.stopCommand) + "\n")
-		writer.write(str(self.caID) + ".host=" + str(self.host) + "\n")
-		writer.write(str(self.caID) + ".login=" + str(self.login) + "\n")
+		writer.write(str(self.caID) + ".startCommand=\"" + str(self.startCommand) + "\"\n")
+		writer.write(str(self.caID) + ".stopCommand=\"" + str(self.stopCommand) + "\"\n")
+		writer.write(str(self.caID) + ".host=\"" + str(self.host) + "\"\n")
+		writer.write(str(self.caID) + ".login=\"" + str(self.login) + "\"\n")
 		
 	def remoteExecute(self, command):
 		print 'Remotely executing "%s" on %s using rsh' % (command, self.host) 
@@ -575,7 +595,7 @@ class Rsh(ControlAction):
 
 class RExec(ControlAction):
 	""" Control script action for executing a command on a remote host using rexec """
-	def __init__(self, startCommand, stopCommand, host, login, password):
+	def __init__(self, startCommand, stopCommand, host, login, password, active=True):
 		"""
 		Initialize RExec object.
 		@param startCommand command to execute on start
@@ -584,7 +604,7 @@ class RExec(ControlAction):
 		@param login remote user login
 		@param password remote user password
 		"""
-		ControlAction.__init__(self, "Remote command execution using rexec")
+		ControlAction.__init__(self, "Remote command execution using rexec", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.startCommand = startCommand
 		self.stopCommand = stopCommand
@@ -595,11 +615,11 @@ class RExec(ControlAction):
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(RExec, self).dump(writer)
-		writer.write(str(self.caID) + ".startCommand=" + str(self.startCommand) + "\n")
-		writer.write(str(self.caID) + ".stopCommand=" + str(self.stopCommand) + "\n")
-		writer.write(str(self.caID) + ".host=" + str(self.host) + "\n")
-		writer.write(str(self.caID) + ".login=" + str(self.login) + "\n")
-		writer.write(str(self.caID) + ".password=" + str(self.password) + "\n")
+		writer.write(str(self.caID) + ".startCommand=\"" + str(self.startCommand) + "\"\n")
+		writer.write(str(self.caID) + ".stopCommand=\"" + str(self.stopCommand) + "\"\n")
+		writer.write(str(self.caID) + ".host=\"" + str(self.host) + "\"\n")
+		writer.write(str(self.caID) + ".login=\"" + str(self.login) + "\"\n")
+		writer.write(str(self.caID) + ".password=\"" + str(self.password) + "\"\n")
 		
 	def remoteExecute(self, command):
 		print 'Remotely executing "%s" on %s using rexec' % (command, self.host) 
@@ -614,14 +634,14 @@ class RExec(ControlAction):
 
 class RLogin(JavaProcess):
 	""" Control script action for doing a rlogin connection using the RLogin QTaste TCOM """
-	def __init__(self, host, login, log4jconf, command=None):
+	def __init__(self, host, login, log4jconf, command=None, active=True):
 		"""
 		Initialize RLogin object.
 		@param command command to execute using rlogin
 		@param host remote host
 		@param login remote user login
 		"""
-		ControlAction.__init__(self, "Remote command execution and/or logging using rlogin")
+		ControlAction.__init__(self, "Remote command execution and/or logging using rlogin", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.command = ControlAction.escapeArgument(command)
 		self.host = host
@@ -635,10 +655,10 @@ class RLogin(JavaProcess):
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(RLogin, self).dump(writer)
-		writer.write(str(self.caID) + ".command=" + str(self.command) + "\n")
-		writer.write(str(self.caID) + ".log4jconf=" + str(self.logConf) + "\n")
-		writer.write(str(self.caID) + ".host=" + str(self.host) + "\n")
-		writer.write(str(self.caID) + ".login=" + str(self.login) + "\n")
+		writer.write(str(self.caID) + ".command=\"" + str(self.command) + "\"\n")
+		writer.write(str(self.caID) + ".log4jconf=\"" + str(self.logConf) + "\"\n")
+		writer.write(str(self.caID) + ".host=\"" + str(self.host) + "\"\n")
+		writer.write(str(self.caID) + ".login=\"" + str(self.login) + "\"\n")
 
 	def start(self):
 		print "Starting execution of remote command '%s' and logging output using log4j on %s" % (self.command, self.host)
@@ -650,14 +670,14 @@ class RLogin(JavaProcess):
 
 
 class RebootRlogin(ControlAction):
-	def __init__(self, host, login, waitingTime=60):
+	def __init__(self, host, login, waitingTime=60, active=True):
 		"""
 		Initialize RebootRLogin object.
 		@param host remote host
 		@param login remote user login
 		@param waitingTime time to wait, after reboot
 		"""
-		ControlAction.__init__(self, "Remote reboot using rlogin")
+		ControlAction.__init__(self, "Remote reboot using rlogin", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.host = host
 		self.login = login
@@ -669,8 +689,8 @@ class RebootRlogin(ControlAction):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(RebootRlogin, self).dump(writer)
 		writer.write(str(self.caID) + ".waitingTime=" + str(self.waitingTime) + "\n")
-		writer.write(str(self.caID) + ".host=" + str(self.host) + "\n")
-		writer.write(str(self.caID) + ".login=" + str(self.login) + "\n")
+		writer.write(str(self.caID) + ".host=\"" + str(self.host) + "\"\n")
+		writer.write(str(self.caID) + ".login=\"" + str(self.login) + "\"\n")
 
 	def start(self):
 		print "Rebooting %s..." % self.host
@@ -688,13 +708,13 @@ class RebootRlogin(ControlAction):
 
 class Sleep(ControlAction):
 	""" Control script action to sleep some time """
-	def __init__(self, time, message = None):
+	def __init__(self, time, message = None, active=True):
 		"""
 		Initialize Sleep object.
 		@param time time to sleep, in seconds, may be a floating point value
 		@param message message to print or None to print a standard message 
 		"""
-		ControlAction.__init__(self, "Sleep")
+		ControlAction.__init__(self, "Sleep", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.time = time
 		self.message = message
@@ -703,7 +723,7 @@ class Sleep(ControlAction):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(Sleep, self).dump(writer)
 		writer.write(str(self.caID) + ".time=" + str(self.time) + "\n")
-		writer.write(str(self.caID) + ".message=" + str(self.message) + "\n")
+		writer.write(str(self.caID) + ".message=\"" + str(self.message) + "\"\n")
 
 	def execute(self):
 		if self.message is None:
@@ -722,12 +742,12 @@ class Sleep(ControlAction):
 
 class OnStart(ControlAction):
 	""" Control script action to execute an action only on start """
-	def __init__(self, controlAction):
+	def __init__(self, controlAction, active=True):
 		"""
 		Initialize OnStart object.
 		@param controlAction control action to execute only on start
 		"""
-		ControlAction.__init__(self, controlAction.description + " on start")
+		ControlAction.__init__(self, controlAction.description + " on start", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.controlAction = controlAction
 
@@ -745,12 +765,12 @@ class OnStart(ControlAction):
 
 class OnStop(ControlAction):
 	""" Control script action to execute an action only on stop """
-	def __init__(self, controlAction):
+	def __init__(self, controlAction, active=True):
 		"""
 		Initialize OnStop object.
 		@param controlAction control action to execute only on stop
 		"""
-		ControlAction.__init__(self, controlAction.description + " on stop")
+		ControlAction.__init__(self, controlAction.description + " on stop", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.controlAction = controlAction
 
