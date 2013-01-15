@@ -42,6 +42,7 @@ public final class ControlScriptEncoder {
 		for (String controlScriptName : mSortActions.keySet())
 		{
 			File original = new File(controlScriptName);
+			File backup = new File(original.getParentFile(), original.getName() + ".bak");
 
 			StringBuilder fileContent = new StringBuilder();
 			InputStream is = null;
@@ -52,7 +53,7 @@ public final class ControlScriptEncoder {
 			BufferedWriter writer = null;
 			try {
 				//create a backup
-				FileUtilities.copy(original, new File(original.getParentFile(), original.getName() + ".bak"));
+				FileUtilities.copy(original, backup);
 				is = new FileInputStream(original);
 				isr = new InputStreamReader(is);
 				reader = new BufferedReader(isr);
@@ -115,6 +116,8 @@ public final class ControlScriptEncoder {
 				osw = new OutputStreamWriter(os);
 				writer = new BufferedWriter(osw);
 				writer.write(fileContent.toString());
+				backup.delete();
+				backup = null;
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
@@ -124,6 +127,8 @@ public final class ControlScriptEncoder {
 				IOUtils.closeQuietly(writer);
 				IOUtils.closeQuietly(osw);
 				IOUtils.closeQuietly(os);
+				if (backup != null)
+					backup.renameTo(original);
 			}
 		}
 	}
@@ -173,14 +178,13 @@ public final class ControlScriptEncoder {
 			mInControlAction = true;
 			mCurrentControlAction = new StringBuilder();
 			pOutput.append(pLine.substring(0, pLine.indexOf(containControlAction)));
-			pLine = pLine.substring(pLine.indexOf(containControlAction)+containControlAction.length()).trim();
+			return pLine.substring(pLine.indexOf(containControlAction)+containControlAction.length()).trim();
 		}
 		else
 		{
 			pOutput.append(pLine);
-			pLine = "";
+			return "";
 		}
-		return pLine;
 	}
 	
 	private void sortControlAction()

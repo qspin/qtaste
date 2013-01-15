@@ -65,13 +65,15 @@ public abstract class ControlAction {
 		StringBuilder builder = new StringBuilder();
 		for( Object key : mParameters.keySet() )
 		{
+			String propertyId = key.toString();
+			if ( propertyId.equals("type") || propertyId.equals("controlActionID") || propertyId.equals("callerScript"))
+				continue;
+
 			if ( builder.length() > 0 )
 			{
 				builder.append(System.getProperty("line.separator") + "\t");
 			}
-			String propertyId = key.toString();
-			if ( propertyId.equals("type") || propertyId.equals("controlActionID") || propertyId.equals("callerScript"))
-				continue;
+			
 			if ( propertyId.equals("active") )
 				builder.append(propertyId + "=" + (isActive()?"True":"False") + ",");
 			else
