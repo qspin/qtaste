@@ -60,6 +60,7 @@ public abstract class ControlAction {
 	protected Properties mParameters;
 	
 	protected static final Logger LOGGER = Logger.getLogger(ControlAction.class);
+	private static final Properties PARAMETER_TYPES = new Properties();
 
 	public String getScriptCode() {
 		StringBuilder builder = new StringBuilder();
@@ -80,5 +81,27 @@ public abstract class ControlAction {
 				builder.append(propertyId + "=" + mParameters.getProperty(propertyId) + ",");
 		}
 		return getRawType() + "(" + builder.toString() + ")";
+	}
+
+	public static void resetParameterType() {
+		PARAMETER_TYPES.clear();
+	}
+
+	public static void addParameterType(String key, String property) {
+		if ( !PARAMETER_TYPES.containsKey(key) )
+		{
+			PARAMETER_TYPES.put(key, property);
+		}
+	}
+	
+	public static Class<?> getParameterType(ControlAction pAction, String pParameterName)
+	{
+		String type = PARAMETER_TYPES.getProperty(pAction.getRawType() + "." + pParameterName, "string");
+		if ( type.equalsIgnoreCase("integer") )
+			return Integer.class;
+		else if ( type.equalsIgnoreCase("boolean") )
+			return Boolean.class;
+		else 
+			return String.class;
 	}
 }

@@ -17,16 +17,16 @@ import com.qspin.qtaste.controlscriptbuilder.model.ControlAction;
 import com.qspin.qtaste.controlscriptbuilder.model.ControlActionFactory;
 
 
-public final class ControlScriptDecoder {
+public final class ControlScriptParameterDecoder {
 
 	public static synchronized List<ControlAction> decode(File pControlScriptFile) throws IOException
 	{
-		ControlScriptDecoder decoder = new ControlScriptDecoder();
+		ControlScriptParameterDecoder decoder = new ControlScriptParameterDecoder();
 		decoder.readFile(pControlScriptFile);
 		return decoder.parseParameters();
 	}
 	
-	private ControlScriptDecoder(){}
+	private ControlScriptParameterDecoder(){}
 	
 	private void readFile(File pControlScriptFile) throws IOException
 	{
@@ -46,6 +46,7 @@ public final class ControlScriptDecoder {
 	private List<ControlAction> parseParameters()
 	{
 		Map<String, ControlAction> mapAction = new HashMap<String, ControlAction>();
+		ControlAction.resetParameterType();
 		for (String s : mParameters.getProperty("processes", "").split("\\|") )
 		{
 			LOGGER.debug("Process found : " + s);
@@ -58,13 +59,14 @@ public final class ControlScriptDecoder {
 				continue;
 			//get the process name
 			String processName = key.toString().substring(0, key.toString().lastIndexOf("."));
+			String parameterName = key.toString().substring(processName.length() + 1);
 			if ( !mapAction.containsKey(processName) )
 			{
-				LOGGER.warn("Unknown process : " + processName);
+				LOGGER.debug("Unknown process  '" + processName + "', process the property as a parameter type definition.");
+				ControlAction.addParameterType(key.toString(), mParameters.getProperty(key.toString()));
 			}
 			else
 			{
-				String parameterName = key.toString().substring(processName.length() + 1);
 				mapAction.get(processName).addParameter(parameterName, mParameters.getProperty(key.toString()));
 			}
 		}
@@ -74,5 +76,5 @@ public final class ControlScriptDecoder {
 	
 	private Properties mParameters;
 	
-	private static final Logger LOGGER = Logger.getLogger(ControlScriptDecoder.class);
+	private static final Logger LOGGER = Logger.getLogger(ControlScriptParameterDecoder.class);
 }

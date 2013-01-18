@@ -22,7 +22,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.controlscriptbuilder.io.ControlScriptDecoder;
+import com.qspin.qtaste.controlscriptbuilder.io.ControlScriptParameterDecoder;
 import com.qspin.qtaste.controlscriptbuilder.model.ControlAction;
 import com.qspin.qtaste.controlscriptbuilder.ui.editor.Editor;
 import com.qspin.qtaste.controlscriptbuilder.ui.model.ControlActionsTableModel;
@@ -67,7 +67,7 @@ public class ControlScriptBuilderPane extends JScrollPane implements ListSelecti
 			//decode the control script
 			try
 			{
-				actions = ControlScriptDecoder.decode(paramFile);
+				actions = ControlScriptParameterDecoder.decode(paramFile);
 			}
 			catch (IOException pExc)
 			{
