@@ -75,11 +75,4 @@ public interface Process extends MultipleInstancesComponent {
 	 * @throws QTasteException If the process is not running or stopped.
 	 */
 	List<String> getStdErr() throws QTasteException;
-	
-	/**
-	 * Returns the process's identifier.
-	 * @return the process's identifier.
-	 * @throws QTasteException If the process is not running.
-	 */
-	int getPid() throws QTasteException;
 }
