@@ -25,6 +25,14 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 		super.start();
 		mPid = searchPid();
 	}
+
+	@Override
+	public void terminate() throws QTasteException {
+		if ( getStatus() == ProcessStatus.RUNNING )
+		{
+			killProcessWithSignal(-9);
+		}
+	}
 	
 	@Override
 	public void killProcess() throws QTasteException {
@@ -43,7 +51,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 			command +=  getPid();
 			LOGGER.trace("Kill the process " + getInstanceId() + " with the command : " + command);
 			Runtime.getRuntime().exec(command);
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 			LOGGER.trace("Process " + getInstanceId() + " status : " + getStatus());
 			if ( getStatus() != ProcessStatus.STOPPED )
 				throw new QTasteTestFailException("The process " + getInstanceId() + " is still running.");
