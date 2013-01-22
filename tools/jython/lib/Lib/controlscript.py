@@ -286,8 +286,9 @@ class JavaProcess(ControlAction):
 		if useJacoco:
 			jacocoHome = _os.getenv("JACOCO_HOME")
 			if not jacocoHome:
-				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
+				print("WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!")
 			else:
+				print("USING: JACOCO_HOME located into %s" %(jacocoHome))
 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		if useJavaGUI:
 			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
@@ -317,7 +318,7 @@ class JavaProcess(ControlAction):
 
 			shellScriptArguments.append("-title")
 			shellScriptArguments.append(self.description)
-			if self.vmArgs:
+			if len(self.vmArgs) > 0:
 				shellScriptArguments.append("-vmArgs")
 				shellScriptArguments.append(self.vmArgs)
 			if self.jmxPort:
@@ -335,7 +336,7 @@ class JavaProcess(ControlAction):
 				updateQTasteRoot = qtasteRootDirectory.replace(":",";")
 				self.classPath = self.classPath.replace(updateQTasteRoot, qtasteRootDirectory)
 				shellScriptArguments += ' -cp "' + self.classPath + '"';
-			if self.vmArgs:
+			if len(self.vmArgs) > 0:
 				shellScriptArguments += ' -vmArgs "' + self.vmArgs + '"';
 			if self.jmxPort:
 				shellScriptArguments += ' -jmxPort ' + str(self.jmxPort);
@@ -344,8 +345,9 @@ class JavaProcess(ControlAction):
 			if self.priority:
 				shellScriptArguments += ' -priority ' + self.priority;
 		
+		print(str(shellScriptArguments))
 		ControlAction.executeShellScript("start_java_process", shellScriptArguments);
-		print
+		print 
 
 	def stop(self):
 		print "Stopping " + self.description + "...";
