@@ -22,7 +22,7 @@ def initializeProcess():
 	logger.info(process.getStatus())
 	checkStatus(process.getStatus(), ProcessStatus.UNDEFINED)
 	params = ["xterm"]
-	process.initialize(params)
+	process.initialize(None, ".", params)
 	checkStatus(process.getStatus(), ProcessStatus.READY_TO_START)
 	
 def launchProcess():

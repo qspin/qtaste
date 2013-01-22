@@ -1,6 +1,7 @@
 package com.qspin.qtaste.testapi.api;
 
 import java.util.List;
+import java.util.Map;
 
 import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -23,10 +24,12 @@ public interface Process extends MultipleInstancesComponent {
 	
 	/**
 	 * Initialized a process with the given parameters.
+	 * @param pEnvUpdate A map filled with the environment variable to update. Can be <code>null</code>.
+	 * @param pWorkingDirectory The process working directory path.
 	 * @param pProcessArguments Process's arguments.
 	 * @throws QTasteException if a process is already defined.
 	 */
-	void initialize(String... pProcessArguments) throws QTasteException;
+	void initialize(Map<String, String> pEnvUpdate, String pWorkingDirectory, String... pProcessArguments) throws QTasteException;
 
 	/**
 	 * Defined the maximal number of line saved for the standard output.

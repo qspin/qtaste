@@ -22,7 +22,7 @@ def startProcess1():
 	"""
 	checkStatus(process1.getStatus(), ProcessStatus.UNDEFINED)
 	params = ["xterm"]
-	process1.initialize(params)
+	process1.initialize(None, ".", params)
 	checkStatus(process1.getStatus(), ProcessStatus.READY_TO_START)
 	process1.start()
 	time.sleep(2)
@@ -35,7 +35,7 @@ def startProcess2():
 	"""
 	checkStatus(process2.getStatus(), ProcessStatus.UNDEFINED)
 	params = ["xterm", "top"]
-	process2.initialize(params)
+	process2.initialize(None, ".", params)
 	checkStatus(process2.getStatus(), ProcessStatus.READY_TO_START)
 	process2.start()
 	time.sleep(2)

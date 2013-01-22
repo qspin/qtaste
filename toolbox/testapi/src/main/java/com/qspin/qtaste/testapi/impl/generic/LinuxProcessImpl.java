@@ -36,7 +36,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 	
 	@Override
 	public void killProcess() throws QTasteException {
-		killProcessWithSignal(-1);
+		killProcessWithSignal(15);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 			command +=  getPid();
 			LOGGER.trace("Kill the process " + getInstanceId() + " with the command : " + command);
 			Runtime.getRuntime().exec(command);
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 			LOGGER.trace("Process " + getInstanceId() + " status : " + getStatus());
 			if ( getStatus() != ProcessStatus.STOPPED )
 				throw new QTasteTestFailException("The process " + getInstanceId() + " is still running.");
@@ -80,8 +80,6 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 	 */
 	protected int searchPid()
 	{
-		List<String> lines = new ArrayList<String>();
-		
 		//rebuild the process command
 		String cmd = "";
 		for (int i=0; i<mParameters.length; i++)
@@ -90,8 +88,9 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 				cmd += " ";
 			cmd += mParameters[i];
 		}
-		
-		//use ps command to list all process and filter on the process command
+
+		List<String> lines = new ArrayList<String>();		
+		//use ps command to list all processes and filter on the process command
 		try
 		{
 			java.lang.Process myProcess = Runtime.getRuntime().exec( "ps -eo pid,command" );  
@@ -101,6 +100,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
             {
             	if (line.contains(cmd) && !lines.contains(line))
             	{
+            		LOGGER.info("line found for the process : " + line);
 					lines.add(line);
             	}
             	line = stdout.readLine();
@@ -116,10 +116,6 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 		if ( lines.size() >= 1 )
 		{
 			String line = lines.get(lines.size()-1).trim();
-			for (String part : line.split(" "))
-			{
-				System.out.println(part);
-			}
 			return Integer.parseInt(line.split(" ")[0]);
 		}
 		else

@@ -1,8 +1,10 @@
 package com.qspin.qtaste.testapi.impl.generic;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -69,8 +71,16 @@ public class ProcessImpl implements Process {
 	
 
 	@Override
-	public void initialize(String... pProcessArguments) throws QTasteException {
+	public void initialize(Map<String, String> pEnvUpdate, String workingDirectory, String... pProcessArguments) throws QTasteException {
 		 mBuilder = new ProcessBuilder(Arrays.asList(pProcessArguments));
+		 mBuilder.directory(new File(workingDirectory));
+		 if ( pEnvUpdate != null )
+		 {
+			 for ( String key : pEnvUpdate.keySet() )
+			 {
+				 mBuilder.environment().put(key, pEnvUpdate.get(key));
+			 }
+		 }
 		 mParameters = pProcessArguments;
 		 mStatus = ProcessStatus.READY_TO_START;
 	}
