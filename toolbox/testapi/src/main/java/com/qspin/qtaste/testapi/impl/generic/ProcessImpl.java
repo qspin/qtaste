@@ -42,8 +42,11 @@ public class ProcessImpl implements Process {
 
 	@Override
 	public void start() throws QTasteException {
+		if (getStatus() != ProcessStatus.READY_TO_START)
+		{
+			throw new QTasteException("Invalide state. Cannot start a non initialized process.");
+		}
 		new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
 				try

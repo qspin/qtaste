@@ -52,7 +52,7 @@ public final class InputStreamWriter extends Thread
       }
       catch (IOException ioe)
       {
-         LOGGER.error(ioe.getMessage(), ioe);
+         LOGGER.warn(ioe.getMessage(), ioe);
       }
       finally
       {

@@ -48,6 +48,9 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 			String command = "kill ";
 			if (pSignal > 0)
 				command += "-" + pSignal + " ";
+			if (getPid() == -1)
+				throw new QTasteTestFailException("Cannot kill a process if the pid cannot be found!");
+			
 			command +=  getPid();
 			LOGGER.trace("Kill the process " + getInstanceId() + " with the command : " + command);
 			Runtime.getRuntime().exec(command);
@@ -65,11 +68,13 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 	}
 
 	@Override
-	public int getPid() throws QTasteException {
+	public synchronized int getPid() throws QTasteException {
 		if (getStatus() != ProcessStatus.RUNNING)
 		{
 			throw new QTasteException("Invalide state. Cannot retrieve tha pid of a non running process.");
 		}
+		if ( mPid == -1 )
+			mPid = searchPid();
 		return mPid;
 	}
 	
@@ -78,7 +83,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 	 * <br/> Only available for Unix process.
 	 * @return the process'identifier or -1 if none found.
 	 */
-	protected int searchPid()
+	protected synchronized int searchPid()
 	{
 		//rebuild the process command
 		String cmd = "";
