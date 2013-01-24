@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>
+	<multiple_instances_components default="p1">
+		<LinuxProcess id="p1"/>
+		<LinuxProcess id="p2"/>
+	</multiple_instances_components>
+</testbed_configuration>

@@ -2,6 +2,7 @@
 # MultiProcess.
 # <p>
 # <u><b>Test only available on LINUX.</b></u>
+# This demo requires the process testbed.
 # <p>
 # Try to launch a "xterm" process and a "xterm top" process. Then kill the first process and use a sigKill to stop the second one.
 ##

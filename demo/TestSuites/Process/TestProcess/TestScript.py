@@ -2,6 +2,7 @@
 # TestProcess.
 # <p>
 # <u><b>Test only available on LINUX.</b></u>
+# This demo requires the process testbed.
 # <p>
 # Try to launch the xterm command and then stop the created process.
 #
