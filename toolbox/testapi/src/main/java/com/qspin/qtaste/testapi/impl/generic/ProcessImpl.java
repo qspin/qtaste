@@ -51,8 +51,8 @@ public class ProcessImpl implements Process {
 			public void run() {
 				try
 				{
-					mCurrentProcess = mBuilder.start();
 					mStatus = ProcessStatus.RUNNING;
+					mCurrentProcess = mBuilder.start();
 					mStdLogs = new InputStreamWriter(mCurrentProcess.getInputStream());
 					new Thread(mStdLogs).start();
 					mErrLogs = new InputStreamWriter(mCurrentProcess.getErrorStream());
