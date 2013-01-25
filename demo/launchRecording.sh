@@ -2,7 +2,7 @@
 # set -x
 
 ROOT=`pwd`/../
-RECORDER_PATH=$ROOT/plugins/
+RECORDER_PATH=$ROOT/plugins/SUT/
 FILTER_PATH="=./recordingFilter.xml"
 echo 
 java -javaagent:$RECORDER_PATH/qtaste-recorder-deploy.jar$FILTER_PATH -cp testapi/target/qtaste-testapi-deploy.jar com.qspin.qtaste.sutuidemo.Interface || exit 1
