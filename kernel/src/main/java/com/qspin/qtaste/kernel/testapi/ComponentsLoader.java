@@ -77,7 +77,6 @@ public class ComponentsLoader {
                 }
                 if (!newTestAPIimplementation.equals(testapiImplementation)) {
                     initialize(newTestAPIimplementation);
-                    testapiImplementation = newTestAPIimplementation;
                 }
             }
         });
@@ -86,6 +85,7 @@ public class ComponentsLoader {
     private void initialize(List<String> testAPIimplementation) {
         componentMap.clear();
         api.unregisterAllMethods();
+	testapiImplementation = testAPIimplementation;
 
         // create factory instances to avoid creating them later on a testbed change
         // which would generate a ConcurrentModificationException in configurationChangeHandlers of TestBedConfiguration
