@@ -35,6 +35,11 @@ class VirtualBox(ControlAction):
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.nameOfVBoxImage = nameOfVBoxImage
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(VirtualBox, self).dumpDataType(prefix, writer)
+		writer.write(prefix + ".nameOfVBoxImage=string\n")
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(VirtualBox, self).dump(writer)

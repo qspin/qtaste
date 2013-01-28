@@ -4,10 +4,10 @@ ControlScript([
 	JavaProcess( "PlayBack-Interface",
 	mainClassOrJar="com.qspin.qtaste.sutuidemo.Interface",
 	workingDir="demo",
-	classPath="testapi/target/qtaste-testapi-deploy.jar",
-	vmArgs="-javaagent:../plugins/javagui/target/qtaste-javagui-deploy.jar",
-	#vmArgs="-javaagent:../plugins/recorder/target/qtaste-recorder-deploy.jar=/home/sjansse/filter.xml",
+	classPath="testapi/target/qtaste-testapi-deploy.jar",		
 	jmxPort=10101,
+	vmArgs="-Dlocale:Be-Fr",
 	checkAfter=5,
+	useJavaGUI=True,
 	useJacoco=True)
 ])
