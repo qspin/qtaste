@@ -2,4 +2,10 @@
     <run testbed="demo_web.xml">
         <testsuite directory="TestSuites/TestTranslate"/>
     </run>
+    <run testbed="playback.xml">
+        <testsuite directory="TestSuites/PlayBack"/>
+    </run>
+    <run testbed="process.xml">
+        <testsuite directory="TestSuites/Process"/>
+    </run>
 </campaign>
