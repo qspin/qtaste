@@ -187,6 +187,7 @@ class ControlScript(object):
 				if len(processId) != 0:
 					processId += "|"
 				processId += str(controlAction.caID)
+				controlAction.dumpDataType(controlAction.__class__.__name__, writer)
 			writer.write("processes=" + processId + "\n")
 		finally:
 			writer.close
@@ -222,8 +223,16 @@ class ControlAction(object):
 		""" Method called on stop, to be overridden by subclasses """
 		pass
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		writer.write(prefix + ".description=string\n")
+		writer.write(prefix + ".type=string\n")
+		writer.write(prefix + ".controlActionID=integer\n")
+		writer.write(prefix + ".callerScript=string\n")
+		writer.write(prefix + ".active=boolean\n")
+
 	def dump(self, writer):
-		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
+		""" Method called on start. It dumps the control action parameter in the writer, to be overridden by subclasses """
 		writer.write(str(self.caID) + ".description=\"" + self.description + "\"\n")
 		writer.write(str(self.caID) + ".type=" + self.__class__.__name__+ "\n")
 		writer.write(str(self.caID) + ".controlActionID=" + str(self.caID) + "\n")
@@ -232,7 +241,6 @@ class ControlAction(object):
 			writer.write(str(self.caID) + ".active=true\n")
 		else:
 			writer.write(str(self.caID) + ".active=false\n")
-		pass
 
 	def executeCommand(command):
 		""" 
@@ -286,7 +294,7 @@ class ControlAction(object):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs=None, jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False, active=True):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs="", jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False, active=True):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -370,6 +378,20 @@ class JavaProcess(ControlAction):
 			writer.write(str(self.caID) + ".priority=\"" + str(self.priority) + "\"\n")
 		pass
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(JavaProcess, self).dumpDataType(prefix, writer)
+		writer.write(prefix + ".args=string\n")
+		writer.write(prefix + ".workingDir=string\n")
+		writer.write(prefix + ".mainClassOrJar=string\n")
+		writer.write(prefix + ".classPath=string\n")
+		writer.write(prefix + ".vmArgs=string\n")
+		writer.write(prefix + ".useJacoco=boolean\n")
+		writer.write(prefix + ".useJavaGUI=boolean\n")
+		writer.write(prefix + ".jmxPort=integer\n")
+		writer.write(prefix + ".checkAfter=integer\n")
+		writer.write(prefix + ".priority=string\n")
+
 	def start(self):
 		print "Starting " + self.description + "...";
 		isJar = self.mainClassOrJar.endswith(".jar")
@@ -444,6 +466,14 @@ class NativeProcess(ControlAction):
 		else:
 			self.checkAfter = None
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(NativeProcess, self).dumpDataType(prefix, writer)
+		writer.write(prefix + ".executable=string\n")
+		writer.write(prefix + ".args=string\n")
+		writer.write(prefix + ".workingDir=string\n")
+		writer.write(prefix + ".checkAfter=integer\n")
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(NativeProcess, self).dump(writer)
@@ -494,6 +524,11 @@ class ServiceProcess(ControlAction):
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.serviceName = serviceName
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(ServiceProcess, self).dumpDataType(prefix, writer)
+		writer.write(prefix + ".serviceName=string\n")
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(ServiceProcess, self).dump(writer)
@@ -540,6 +575,13 @@ class ReplaceInFiles(ControlAction):
 		sed = _IF(_OS.getType() == _OS.Type.WINDOWS, qtasteRootDirectory + r"tools\GnuWin32\bin\sed", "sed")
 		self.sedCommand = sed + " -r -i s/" + findString.replace("/", r"\/") + "/" + replaceString.replace("/", r"\/") + "/g " + self.files
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(ReplaceInFiles, self).dumpDataType(writer, prefix)
+		writer.write(prefix + ".findString=string\n")
+		writer.write(prefix + ".replaceString=string\n")
+		writer.write(prefix + ".files=string\n")
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(ReplaceInFiles, self).dump(writer)
@@ -572,6 +614,14 @@ class Rsh(ControlAction):
 		self.stopCommand = stopCommand
 		self.host = host
 		self.login = login
+
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(RExec, self).dumpDataType(writer, prefix)
+		writer.write(prefix + ".startCommand=string\n")
+		writer.write(prefix + ".stopCommand=string\n")
+		writer.write(prefix + ".host=string\n")
+		writer.write(prefix + ".login=string\n")
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
@@ -611,6 +661,13 @@ class RExec(ControlAction):
 		self.host = host
 		self.login = login
 		self.password = password
+
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(RExec, self).dumpDataType(writer, prefix)
+		writer.write(prefix + ".findString=string\n")
+		writer.write(prefix + ".replaceString=string\n")
+		writer.write(prefix + ".files=string\n")
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
@@ -652,6 +709,14 @@ class RLogin(JavaProcess):
 		else:		
 			JavaProcess.__init__(self, "RLogin", "com.qspin.qtaste.tcom.rlogin.RLogin", '%s -logOutput -interactive -log4jconf %s' %(self.host, self.logconf), "%s" % qtasteRootDirectory, "kernel/target/qtaste-kernel-deploy.jar" )
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(RLogin, self).dump(writer, prefix)
+		writer.write(prefix + ".command=string\n")
+		writer.write(prefix + ".host=string\n")
+		writer.write(prefix + ".login=string\n")
+		writer.write(prefix + ".logconf=string\n")
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(RLogin, self).dump(writer)
@@ -684,6 +749,13 @@ class RebootRlogin(ControlAction):
 		self.waitingTime = waitingTime
 		self.localuser = _IF(_OS.getType() == _OS.Type.WINDOWS, _os.getenv("username"), _os.getenv("user"))
 		self.rlogin = _RLogin(host, self.localuser, login, "", False, False)
+
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(RebootRlogin, self).dumpDataType(writer, prefix)
+		writer.write(prefix + ".waitingTime=integer\n")
+		writer.write(prefix + ".host=string\n")
+		writer.write(prefix + ".login=string\n")
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
@@ -719,6 +791,12 @@ class Sleep(ControlAction):
 		self.time = time
 		self.message = message
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(Sleep, self).dumpDataType(writer, prefix)
+		writer.write(prefix + ".time=integer\n")
+		writer.write(prefix + ".message=string\n")
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(Sleep, self).dump(writer)
@@ -751,6 +829,11 @@ class OnStart(ControlAction):
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.controlAction = controlAction
 
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(OnStart, self).dumpDataType(writer, prefix)
+		controlAction.dumpDataType(prefix, writer)
+
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
 		super(OnStart, self).dump(writer)
@@ -773,6 +856,11 @@ class OnStop(ControlAction):
 		ControlAction.__init__(self, controlAction.description + " on stop", active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.controlAction = controlAction
+
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(OnStop, self).dumpDataType(writer, prefix)
+		controlAction.dumpDataType(prefix, writer)
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """

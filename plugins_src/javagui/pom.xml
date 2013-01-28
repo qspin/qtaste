@@ -19,6 +19,9 @@
 	<build>
 		<finalName>qtaste-javagui</finalName>
 		<plugins>
+
+			<!-- plugin to get sources of other testapi dependency projects, for testapi 
+				doc generation -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -34,7 +37,6 @@
 						<manifestEntries>
 							<Premain-Class>${preMainClass}</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
-							<Main-Class>NotSuitableAsMain</Main-Class>
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -64,6 +66,20 @@
 				<configuration>
 					<workingDirectory>..</workingDirectory> <!-- run tests from QTASTE root directory -->
 				</configuration>
+			</plugin>
+			<!-- plugin to install source artifact -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
