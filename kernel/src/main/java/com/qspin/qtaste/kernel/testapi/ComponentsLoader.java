@@ -77,6 +77,7 @@ public class ComponentsLoader {
                 }
                 if (!newTestAPIimplementation.equals(testapiImplementation)) {
                     initialize(newTestAPIimplementation);
+                    testapiImplementation = newTestAPIimplementation;
                 }
             }
         });
