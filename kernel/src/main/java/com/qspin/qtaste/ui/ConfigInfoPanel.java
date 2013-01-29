@@ -31,6 +31,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -51,6 +52,7 @@ import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
+import com.qspin.qtaste.kernel.campaign.CampaignManager;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResultImpl;
@@ -309,7 +311,14 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             tr.start();
             // TODO: Check this!
             TestResultsReportManager reportManager = TestResultsReportManager.getInstance(); //getReporters("Manual SUT " + (start ? "start" : "stop"));
-            reportManager.startReport("Manual SUT " + (start ? "start" : "stop"));
+            if ( CampaignManager.getInstance().getCurrentCampaign() != null )
+            {
+            	reportManager.startReport(CampaignManager.getInstance().getTimeStampCampaign(), "Manual SUT " + (start ? "start" : "stop"));
+            }
+            else
+            {
+            	reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));	
+            }
             reportManager.putEntry(tr);
             if (start) {
                 TestEngine.stopSUT(null);

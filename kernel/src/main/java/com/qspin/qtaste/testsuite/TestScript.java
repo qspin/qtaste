@@ -25,6 +25,7 @@
 package com.qspin.qtaste.testsuite;
 
 import java.io.File;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public abstract class TestScript implements Executable {
         TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
         if (testSuite == null && 
         		(reportManager.getReportName() == null ||  reportManager.getReportName().equals(INTERACTIVE_REPORT_NAME)) ) {
-            reportManager.startReport(INTERACTIVE_REPORT_NAME);
+            reportManager.startReport(new Date(), INTERACTIVE_REPORT_NAME);
         }
         testResults = new LinkedList<TestResult>();
         

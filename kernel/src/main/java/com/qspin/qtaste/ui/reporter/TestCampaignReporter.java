@@ -20,6 +20,7 @@
 package com.qspin.qtaste.ui.reporter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.qspin.qtaste.ui.TestCaseResultsPane;
 
@@ -60,7 +61,7 @@ public class TestCampaignReporter  {
             panel.refreshCampaign();
         }
     }
-    public void startReport(String name) {
+    public void startReport(Date timeStamp, String name) {
         for (TestCaseResultsPane panel : reportListeners) {
             panel.startCampaign(name);
         }

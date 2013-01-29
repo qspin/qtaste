@@ -22,6 +22,7 @@ package com.qspin.qtaste.reporter.campaign;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -49,6 +50,7 @@ public class CampaignReportManager extends ReportManager {
 
     private void initFormatters() {
         try {
+        	formatters.clear();
             TestEngineConfiguration config = TestEngineConfiguration.getInstance();
             String output = config.getString("reporting.generated_report_path");
 
@@ -81,9 +83,10 @@ public class CampaignReportManager extends ReportManager {
     }
 
     @Override
-    public void startReport(String name) {
+    public void startReport(Date timeStamp, String name) {
         results.clear();
-        super.startReport(name);
+        initFormatters();
+        super.startReport(timeStamp, name);
     }
 
     @Override

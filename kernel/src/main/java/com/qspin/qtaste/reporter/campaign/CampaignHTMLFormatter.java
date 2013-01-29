@@ -32,6 +32,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.config.TestBedConfiguration;
+import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.reporter.HTMLFormatter;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NamesValuesList;
@@ -57,12 +58,10 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
     private static final String INDEX_FILE_NAME = "campaign.html";
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private Date generationDate;
-    private String outputDir;
+    private static String outputDir = TestEngineConfiguration.getInstance().getString("reporting.generated_report_path");
 
-    public CampaignHTMLFormatter(HashMap<String, String> templates, String outputDir) throws IOException {
-        super(templates, new File(outputDir + File.separator + String.format(FILE_NAME_FORMAT, new Date())));
-//        super(startTemplate, tsTemplate, rowTemplate, endTemplate, new File(outputDir + File.separator + String.format(FILE_NAME_FORMAT, new Date())));
-        this.outputDir = outputDir;
+    public CampaignHTMLFormatter(HashMap<String, String> templates, String pOutputDir) throws IOException {
+        super(templates, new File(outputDir), String.format(FILE_NAME_FORMAT, new Date()));
     }
 
     public void generateHeader() {
@@ -91,7 +90,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 namesValues.add("###ELAPSED_TIME###", "&nbsp;");
             } else {
                 String absoluteDetailedURL = cr.getDetailedURL();
-                String relativeDetailedURL = new File(outputDir).toURI().relativize(new File(absoluteDetailedURL).toURI()).getPath();
+                String relativeDetailedURL = reportFile.toURI().relativize(new File(absoluteDetailedURL).toURI()).getPath();
                 String nbTestsToExecuteStr = cr.getNbTestsToExecute() != -1 ? "" + cr.getNbTestsToExecute() : "-";
                 namesValues.add("###TESTBED###", "<a href=" + relativeDetailedURL + ">" + cr.getTestBed() + "</a>");        
                 namesValues.add("###TESTS_EXECUTED###", cr.getNbTestsExecuted() + "/" + nbTestsToExecuteStr);
@@ -141,7 +140,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 // generate index file                
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
-                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + this.reportFile.getName() + "\"/></head><body><a href=\"" + this.reportFile.getName() + "\">Redirection</a></body></html>");
+                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + this.reportFile.getCanonicalPath() + "\"/></head><body><a href=\"" + this.reportFile.getName() + "\">Redirection</a></body></html>");
                 index.close();
             }
         } catch (IOException e) {

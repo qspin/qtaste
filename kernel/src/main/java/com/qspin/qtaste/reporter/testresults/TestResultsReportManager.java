@@ -20,7 +20,9 @@ package com.qspin.qtaste.reporter.testresults;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -28,7 +30,6 @@ import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.reporter.ReportFormatter;
 import com.qspin.qtaste.reporter.ReportManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import java.lang.reflect.Constructor;
 
 /**
  * A TestResultsReportManager manager is responsible to maintain the results of a test results report
@@ -67,10 +68,10 @@ public class TestResultsReportManager extends ReportManager {
     }
 
     @Override
-    public void startReport(String name) {
+    public void startReport(Date timeStamp, String name) {
         results.clear();
         initFormatters(name);
-        super.startReport(name);
+        super.startReport(timeStamp, name);
     }
 
     private void initFormatters(String reportName) {
@@ -82,9 +83,9 @@ public class TestResultsReportManager extends ReportManager {
             String reportFormat = config.getString("reporting.reporters.format(" + reporterIndex + ")");
             try {
 
-                Class formatterClass = Class.forName("com.qspin.qtaste.reporter.testresults." + reportFormat.toLowerCase() + "." + reportFormat.toUpperCase() + "ReportFormatter");
+                Class<?> formatterClass = Class.forName("com.qspin.qtaste.reporter.testresults." + reportFormat.toLowerCase() + "." + reportFormat.toUpperCase() + "ReportFormatter");
 
-                Constructor formatterConstructor = formatterClass.getConstructor(reportName.getClass());                
+                Constructor<?> formatterConstructor = formatterClass.getConstructor(reportName.getClass());                
                 formatters.add((ReportFormatter) formatterConstructor.newInstance(reportName));
             } catch (Exception e) {
                 logger.fatal("Exception initializing the report format: " + reportFormat, e);

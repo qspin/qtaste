@@ -24,6 +24,8 @@
 
 package com.qspin.qtaste.reporter.campaign;
 
+import java.util.Date;
+
 import com.qspin.qtaste.reporter.ReportFormatter;
 import com.qspin.qtaste.ui.reporter.TestCampaignReporter;
 
@@ -38,8 +40,8 @@ public class CampaignGUIFormatter extends ReportFormatter {
             TestCampaignReporter.getInstance().refresh();
     }
     @Override
-    public void startReport(String name) {
-            TestCampaignReporter.getInstance().startReport(name);
+    public void startReport(Date timeStamp, String name) {
+            TestCampaignReporter.getInstance().startReport(timeStamp, name);
     }
     
     @Override

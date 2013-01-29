@@ -19,6 +19,7 @@
 
 package com.qspin.qtaste.kernel.campaign;
 
+import java.util.Date;
 import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -52,6 +53,7 @@ public class CampaignManager implements TestReportListener {
     private static CampaignManager instance = null;
     private static Logger logger = Log4jLoggerFactory.getLogger(CampaignManager.class);
     private Campaign currentCampaign;
+    private Date campaignStartTimeStamp;
     private String currentTestBed;
     private TestSuite currentTestSuite;
     private boolean campaignResult;
@@ -147,29 +149,46 @@ public class CampaignManager implements TestReportListener {
     }
 
     /**
+     * Return the current campaign start timestamp
+     * @return the current campaign start timestamp
+     */
+    public Date getTimeStampCampaign() {
+        return campaignStartTimeStamp;
+    }
+
+    /**
      * Executes a campaign
      * @param campaign the campaign to execute.
      */
     public boolean execute(Campaign campaign) {
     	campaignResult = true;
         currentCampaign = campaign;
-        createReport();
-
-        for (CampaignRun run : currentCampaign.getRuns()) {
-            currentTestBed = run.getTestbed();
-            String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0, currentTestBed.lastIndexOf('.'));
-            TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
-            currentTestSuite = new MetaTestSuite(testSuiteName, run.getTestsuites());
-            currentTestSuite.addTestReportListener(this);
-            campaignResult &= TestEngine.execute(currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
-            boolean abortedByUser = currentTestSuite.isAbortedByUser();
-            currentTestSuite.removeTestReportListener(this);
-            currentTestSuite = null;
-            if (abortedByUser) {
-                break;
-            }
+        campaignStartTimeStamp = new Date();
+        try
+        {
+	        createReport();
+	
+	        for (CampaignRun run : currentCampaign.getRuns()) {
+	            currentTestBed = run.getTestbed();
+	            String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0, currentTestBed.lastIndexOf('.'));
+	            TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
+	            currentTestSuite = new MetaTestSuite(testSuiteName, run.getTestsuites());
+	            currentTestSuite.addTestReportListener(this);
+	            campaignResult &= TestEngine.execute(currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
+	            boolean abortedByUser = currentTestSuite.isAbortedByUser();
+	            currentTestSuite.removeTestReportListener(this);
+	            currentTestSuite = null;
+	            if (abortedByUser) {
+	                break;
+	            }
+	        }
+	        CampaignReportManager.getInstance().stopReport();
         }
-        CampaignReportManager.getInstance().stopReport();
+        finally
+        {
+        	campaignStartTimeStamp = null;
+        	currentCampaign = null;
+        }
         return campaignResult;
     }
 
@@ -188,7 +207,7 @@ public class CampaignManager implements TestReportListener {
      * Create a empty report. All campaign run will be "Not Executed"
      */
     private void createReport() {
-        CampaignReportManager.getInstance().startReport(currentCampaign.getName());
+        CampaignReportManager.getInstance().startReport(campaignStartTimeStamp, currentCampaign.getName());
         for (CampaignRun run : currentCampaign.getRuns()) {
             CampaignResult result = new CampaignResult(run.getTestbed());
             result.setStatus(Status.NOT_EXECUTED);
