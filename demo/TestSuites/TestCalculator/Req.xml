@@ -1,2 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <REQUIREMENTS_LINKS>
+	<REQ id="CALC_1">
+		<REQ_DESCRIPTION>The calculator should support the '+' operator</REQ_DESCRIPTION>
+	</REQ>
+	<REQ id="CALC_2">
+		<REQ_DESCRIPTION>The calculator should support the '-' operator</REQ_DESCRIPTION>
+	</REQ>
+	<REQ id="CALC_3">
+		<REQ_DESCRIPTION>The calculator should support the '*' operator</REQ_DESCRIPTION>
+	</REQ>
+	<REQ id="CALC_4">
+		<REQ_DESCRIPTION>The calculator should support the '/' operator</REQ_DESCRIPTION>
+	</REQ>
 </REQUIREMENTS_LINKS>
