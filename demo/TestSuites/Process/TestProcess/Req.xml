@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<REQUIREMENTS_LINKS>
+	<REQ id="00001">
+		<REQ_DESCRIPTION>The system should be able to launch an external process</REQ_DESCRIPTION>
+	</REQ>
+	<REQ id="00002">
+		<REQ_DESCRIPTION>The system should be able to control (stop) an external process</REQ_DESCRIPTION>
+	</REQ>
+</REQUIREMENTS_LINKS>
