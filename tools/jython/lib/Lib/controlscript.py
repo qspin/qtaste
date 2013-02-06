@@ -288,7 +288,7 @@ class JavaProcess(ControlAction):
 			if not jacocoHome:
 				print("WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!")
 			else:
-				print("USING: JACOCO_HOME located into %s" %(jacocoHome))
+				#print("USING: JACOCO_HOME located into %s" %(jacocoHome))
 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		if useJavaGUI:
 			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
