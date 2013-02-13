@@ -94,9 +94,6 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			}
 			Component c = lookForComponent(name, window.getComponents());
 			if (c != null) {
-				if (!c.isEnabled()) {
-					throw new QTasteTestFailException("The component \"" + name + "\" is not enabled.");
-				}				
 				c.requestFocus();
 				foundComponent = c;				
 			}
@@ -212,7 +209,10 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	}
 
 	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);		
+		final Component c = getComponentByName(componentName);
+		if (!c.isEnabled()) {
+			throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
+		}
 		if (!c.isVisible())
 			throw new QTasteTestFailException("Button " + componentName + " is not visible!");
 		SwingUtilities.invokeLater(new Runnable() {
@@ -281,6 +281,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	// TODO: boolean returns is useless and confusing!
 	public boolean setText(final String componentName, final String value) throws QTasteTestFailException {
 		final Component c = getComponentByName(componentName);
+		if (!c.isEnabled()) {
+			throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {		
@@ -343,6 +346,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	public boolean selectComponent(final String componentName, final boolean value) throws QTasteTestFailException {
 		final Component c = getComponentByName(componentName);
 		if (c != null) {
+			if (!c.isEnabled()) {
+				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
+			}
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {												
@@ -362,6 +368,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		if (c != null) {
 			if (c instanceof JCheckBox || c instanceof JRadioButton) {
 				return selectComponent(componentName, Boolean.parseBoolean(value));
+			}
+			if (!c.isEnabled()) {
+				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
 			}
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -416,6 +425,10 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	public boolean selectIndex(final String componentName, final int index) throws QTasteTestFailException {
 		final Component c = getComponentByName(componentName);
 		if (c != null) {
+
+			if (!c.isEnabled()) {
+				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
+			}
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {																					
@@ -460,6 +473,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		Component c = getComponentByName(componentName);
 		JTree tree = (JTree) c;
 		if (c != null && c instanceof JTree && nodeNames.length > 0) {
+			if (!c.isEnabled()) {
+				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
+			}
 			TreeModel model = tree.getModel();
 			Object node = model.getRoot();
 			Object[] path = new Object[nodeNames.length];
@@ -525,6 +541,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException {
 		Component c = getComponentByName(tabbedPaneComponentName);
 		if (c != null && c instanceof JTabbedPane) {
+			if (!c.isEnabled()) {
+				throw new QTasteTestFailException("The component \"" + tabbedPaneComponentName + "\" is not enabled.");
+			}
 			((JTabbedPane)c).setSelectedIndex(tabIndex);
 			return tabIndex == ((JTabbedPane)c).getSelectedIndex();
 		}
