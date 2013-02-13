@@ -28,6 +28,7 @@ import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.Label;
 import java.awt.Robot;
 import java.awt.TextComponent;
 import java.awt.TextField;
@@ -457,18 +458,49 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			String nodeSeparator) throws QTasteTestFailException {
 		String[] nodeNames = nodeName.split(nodeSeparator);
 		Component c = getComponentByName(componentName);
+		JTree tree = (JTree) c;
 		if (c != null && c instanceof JTree && nodeNames.length > 0) {
-			TreeModel model = ((JTree) c).getModel();
+			TreeModel model = tree.getModel();
 			Object node = model.getRoot();
 			Object[] path = new Object[nodeNames.length];
-			if (node.toString().equals(nodeNames[0])) {
+			Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
+			String value = null;
+			System.out.println("component is " + nodeComponent);
+			if ( nodeComponent instanceof JLabel )
+			{
+				System.out.println("component extend JLabel");
+				value = ((JLabel)nodeComponent).getText();
+			} else if ( nodeComponent instanceof Label )
+			{
+				System.out.println("component extend TextComponent");
+				value = ((Label)nodeComponent).getText();
+			} else {
+				System.out.println("component extend something else");
+				value = node.toString();
+			}
+			System.out.println("compare node (" + value + ") with root (" + nodeNames[0] + ")");
+			if (value.equals(nodeNames[0])) {
 				path[0] = node;
 
 				for (int i = 1; i < nodeNames.length; i++) {
-					for (int childIndex = 0; childIndex < model
-							.getChildCount(node); childIndex++) {
+					for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++) {
 						Object child = model.getChild(node, childIndex);
-						if (child.toString().equals(nodeNames[i])) {
+						nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, child, true, false, true, i, false);
+						value = null;
+						if ( nodeComponent instanceof JLabel )
+						{
+							System.out.println("component extend JLabel");
+							value = ((JLabel)nodeComponent).getText();
+						} else if ( nodeComponent instanceof Label )
+						{
+							System.out.println("component extend TextComponent");
+							value = ((Label)nodeComponent).getText();
+						} else {
+							System.out.println("component extend something else");
+							value = child.toString();
+						}
+						System.out.println("compare node (" + value + ") with value (" + nodeNames[i] + ")");
+						if (value.equals(nodeNames[i])) {
 							node = child;
 							path[i] = node;
 							break;
