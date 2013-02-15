@@ -39,6 +39,7 @@ import java.io.File;
 import java.lang.instrument.Instrumentation;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
@@ -85,10 +86,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 
 	private Component getComponentByName(String name) throws QTasteTestFailException {
 		// TODO: Think about several component having the same names!
-		Window[] windows = Frame.getWindows();
 		Component foundComponent = null;
-		for (int w = 0; w < windows.length; w++) {
-			Window window = windows[w];
+		for (int w = 0; w < Frame.getWindows().length; w++) {
+			Window window = Frame.getWindows()[w];
 			if (window.getName().equals(name)) {
 				return window;
 			}
@@ -151,6 +151,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 			}
 			list.addAll(browseComponent(window.getComponents()));
 		}
+		list.add("Number of ownerless windows : " + Frame.getOwnerlessWindows().length);
+		list.add("Number of windows : " + Frame.getWindows().length);
+		list.add("Number of frames : " + Frame.getFrames().length);
 		String[] result = (String[]) list.toArray(new String[0]);
 		return result;
 	}
@@ -495,10 +498,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 				value = node.toString();
 			}
 			System.out.println("compare node (" + value + ") with root (" + nodeNames[0] + ")");
-			if (value.equals(nodeNames[0])) {
+			if (!tree.isRootVisible() || value.equals(nodeNames[0])) {
 				path[0] = node;
-
-				for (int i = 1; i < nodeNames.length; i++) {
+				for ( int i = tree.isRootVisible()?1:0 ; i < nodeNames.length; i++) {
 					for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++) {
 						Object child = model.getChild(node, childIndex);
 						nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, child, true, false, true, i, false);
@@ -523,7 +525,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 						}
 					}
 					if (path[i] == null) {
-						return false;
+						throw new QTasteTestFailException("Unabled to find node named " + nodeNames[i]);
 					}
 				}
 				((JTree) c).setSelectionPath(new TreePath(path));
@@ -533,7 +535,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 				return true;
 			}
 		}
-		return false;
+		throw new QTasteTestFailException("Unabled to find node named " + nodeNames[0]);
 	}
 	// Todo: getColor, awt?
 
@@ -593,6 +595,71 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	public void pressKey(int keycode) throws QTasteTestFailException {
 		// 68 is the default delay for a keypress
 		pressKey(keycode, 68);		
+	}
+
+	@Override
+	public boolean exist(String pComponentName) {
+		try{
+			return getComponentByName(pComponentName) != null; 
+		} catch (QTasteTestFailException pExc)
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public int getEnabledComponentCount(boolean isEnabled) {
+		int counter = 0;
+		List<Container> superContainers = new ArrayList<Container>();
+		for( Frame f : Frame.getFrames() )
+		{
+			if (!superContainers.contains(f))
+			{
+				superContainers.add(f);
+			}
+		}
+		for( Window f : Frame.getWindows() )
+		{
+			if (!superContainers.contains(f))
+			{
+				superContainers.add(f);
+			}
+		}
+		for( Window f : Frame.getOwnerlessWindows() )
+		{
+			if (!superContainers.contains(f))
+			{
+				superContainers.add(f);
+			}
+		}
+		
+		for ( Container c : superContainers )
+		{
+			counter += getEnabledComponentCount(isEnabled, c);
+		}
+		return counter;
+	}
+	
+	protected int getEnabledComponentCount(boolean isEnabled, Container c)
+	{
+		int counter = 0;
+		if ( c.isEnabled() == isEnabled )
+		{
+			counter ++;
+		}
+		for (int i=0; i<c.getComponentCount(); i++)
+		{
+			Component child = c.getComponent(i);
+			if ( c instanceof Container )
+			{
+				counter += getEnabledComponentCount(isEnabled, (Container)child);
+			}
+			else
+			{
+				counter += child.isEnabled() == isEnabled? 1 : 0;
+			}
+		}
+		return counter;
 	}
 	
 }

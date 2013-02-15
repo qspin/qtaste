@@ -140,4 +140,18 @@ public interface JavaGUI {
     * @throws QTasteTestFailException If some internal errors occurs. 
     */
    public void pressKey(int keycode, long delay) throws QTasteTestFailException;
+   
+   /**
+    * Checks if a component with the name exist or not.
+    * @param pComponentName The component's name.
+    * @return <code>true</code> if the component exist.
+    */
+   public boolean exist(String pComponentName);
+   
+   /**
+    * Counts the number of components that have the enabled state.
+    * @param isEnabled <code>false</code> if the disabled components have to be counted.
+    * @return The number of components that have the enabled state.
+    */
+   public int getEnabledComponentCount(boolean isEnabled);
 }

@@ -132,6 +132,14 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.pressKey(keycode, delay);	
 	}
 	
+	public boolean exist(String pComponentName) {
+		return mProxy.exist(pComponentName);
+	}
+
+	public int getEnabledComponentCount(boolean isEnabled) {
+		return mProxy.getEnabledComponentCount(isEnabled);
+	}
+	
 	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
