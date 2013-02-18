@@ -27,136 +27,175 @@ package com.qspin.qtaste.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 /**
  * This class is responsible to build a different kind of data structures from a CSV file
+ * 
  * @author lvboque
  */
-public class CSVFile {
+public class CSVFile
+{
 
-    //private static final Logger logger = Log4jLoggerFactory.getLogger(CSVFile.class);
-    private File csvFile;
-    private boolean alreadyParsed = false;
-    private ArrayList<LinkedHashMap<String, String>> dataSet;
-    private ArrayList<String> columnNames;
+   // private static final Logger logger = Log4jLoggerFactory.getLogger(CSVFile.class);
+   private Resource csvResource;
+   private boolean alreadyParsed = false;
+   private ArrayList<LinkedHashMap<String, String>> dataSet;
+   private ArrayList<String> columnNames;
 
-    /**
-     * Creates a new instance of CSVFile
-     */
-    public CSVFile(File csvFile) {
-        this.csvFile = csvFile;
-        dataSet = new ArrayList<LinkedHashMap<String, String>>();
-        columnNames = new ArrayList<String>();
-    }
+   /**
+    * Creates a new instance of CSVFile
+    */
+   public CSVFile(File csvFile)
+   {
+      this(new FileSystemResource(csvFile));
+   }
 
-    public CSVFile(String csvFileName) {
-        this(new File(csvFileName));
-    }
+   public CSVFile(String csvFileName)
+   {
+      this(new FileSystemResource(csvFileName));
+   }
 
-    public String getName() {
-        return csvFile.getName();
-    }
+   public CSVFile(Resource csvResourceFile)
+   {
+      this.csvResource = csvResourceFile;
+      dataSet = new ArrayList<LinkedHashMap<String, String>>();
+      columnNames = new ArrayList<String>();
+   }
 
-    /**
-     * Return a list of HashMap of Name/Value from the CSV file
-     * @return the list of HashMap of Name/Value read from the CSV file
-     * @throws java.io.FileNotFoundException If the CSV file is not found
-     * @throws java.io.IOException If an error occurs reading the CSV file
-     */
-    public List<LinkedHashMap<String, String>> getCSVDataSet() throws FileNotFoundException, IOException {
-        parseCSVFile();
-        return dataSet;
-    }
+   public String getName()
+   {
+      return csvResource.getFilename();
+   }
 
-    /**
-     * Return a HashMap mapping the specified keyField with a HashMap of names/values
-     * @param keyField the keyField
-     * @return a HashMap the hashmap
-     * @throws java.io.FileNotFoundException If the CSV file is not found
-     * @throws java.io.IOException If an error occurs while reading the CSV File
-     * @throws java.lang.NoSuchFieldException If the keyField is not found in the CSV file
-     */
-    public HashMap<String, HashMap<String, String>> getHashMapDataSet(String keyField) throws FileNotFoundException, IOException, NoSuchFieldException {
-        parseCSVFile();
-        HashMap<String, HashMap<String, String>> result = new HashMap<String, HashMap<String, String>>();
-        for (int i = 0; i < dataSet.size(); i++) {
-            String key = dataSet.get(i).get(keyField);
-            if (key == null) {
-                throw new NoSuchFieldException("keyField " + keyField + " is mandatory " + "at line " + i + " in the csv file");
-            }
-            HashMap<String, String> line = dataSet.get(i);
-            result.put(dataSet.get(i).get(keyField), line);
-        }
-        return result;
-    }
+   /**
+    * Return a list of HashMap of Name/Value from the CSV file
+    * 
+    * @return the list of HashMap of Name/Value read from the CSV file
+    * @throws java.io.FileNotFoundException If the CSV file is not found
+    * @throws java.io.IOException If an error occurs reading the CSV file
+    */
+   public List<LinkedHashMap<String, String>> getCSVDataSet() throws FileNotFoundException, IOException
+   {
+      parseCSVFile();
+      return dataSet;
+   }
 
-    /**
-     * Return a list of the column names of a CSV file
-     * @return a list of the column names read from the CSV file
-     * @throws java.io.FileNotFoundException If the CSV file is not found
-     * @throws java.io.IOException If an error occurs while reading the CSV File
-     */
-    public List<String> getColumnNames() throws FileNotFoundException, IOException {
-        parseCSVFile();
-        return columnNames;
-    }
+   /**
+    * Return a HashMap mapping the specified keyField with a HashMap of names/values
+    * 
+    * @param keyField the keyField
+    * @return a HashMap the hashmap
+    * @throws java.io.FileNotFoundException If the CSV file is not found
+    * @throws java.io.IOException If an error occurs while reading the CSV File
+    * @throws java.lang.NoSuchFieldException If the keyField is not found in the CSV file
+    */
+   public HashMap<String, HashMap<String, String>> getHashMapDataSet(String keyField)
+         throws FileNotFoundException, IOException, NoSuchFieldException
+   {
+      parseCSVFile();
+      HashMap<String, HashMap<String, String>> result = new HashMap<String, HashMap<String, String>>();
+      for (int i = 0; i < dataSet.size(); i++)
+      {
+         String key = dataSet.get(i).get(keyField);
+         if (key == null)
+         {
+            throw new NoSuchFieldException("keyField " + keyField + " is mandatory " + "at line " + i
+                  + " in the csv file");
+         }
+         HashMap<String, String> line = dataSet.get(i);
+         result.put(dataSet.get(i).get(keyField), line);
+      }
+      return result;
+   }
 
-    private void parseCSVFile() throws FileNotFoundException, IOException {
-        if (!alreadyParsed) {
-            BufferedReader csvBuffer = new BufferedReader(new FileReader(csvFile));
-            String csvLine;
-            while ((csvLine = csvBuffer.readLine()) != null) {
-                if (!csvLine.startsWith("#")) {
-                    if (csvLine.length() == 0) {
-                        throw new IOException("CSVFile: First line cannot be an empty line");
-                    }
-                    // First line is the header with variable names
-                    String[] allNames = csvLine.split(";");
-                    for (String name: allNames) {
-                        if (name.length() > 0) {
-                            columnNames.add(name);
+   /**
+    * Return a list of the column names of a CSV file
+    * 
+    * @return a list of the column names read from the CSV file
+    * @throws java.io.FileNotFoundException If the CSV file is not found
+    * @throws java.io.IOException If an error occurs while reading the CSV File
+    */
+   public List<String> getColumnNames() throws FileNotFoundException, IOException
+   {
+      parseCSVFile();
+      return columnNames;
+   }
+
+   private void parseCSVFile() throws FileNotFoundException, IOException
+   {
+      if (!alreadyParsed)
+      {
+         BufferedReader csvBuffer = new BufferedReader(new InputStreamReader(csvResource.getInputStream()));
+         String csvLine;
+         while ((csvLine = csvBuffer.readLine()) != null)
+         {
+            if (!csvLine.startsWith("#"))
+            {
+               if (csvLine.length() == 0)
+               {
+                  throw new IOException("CSVFile: First line cannot be an empty line");
+               }
+               // First line is the header with variable names
+               String[] allNames = csvLine.split(";");
+               for (String name : allNames)
+               {
+                  if (name.length() > 0)
+                  {
+                     columnNames.add(name);
+                  }
+               }
+
+               String[] values;
+
+               // Next lines are data
+               while ((csvLine = csvBuffer.readLine()) != null)
+               {
+                  // Skip empty and commented out lines
+                  if ((csvLine.length() != 0) && !csvLine.startsWith("#"))
+                  {
+                     values = csvLine.split(";", -1);
+
+                     LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                     boolean hasNoValues = true;
+                     for (int i = 0; i < allNames.length; i++)
+                     {
+                        if (allNames[i].length() > 0)
+                        {
+                           try
+                           {
+                              map.put(allNames[i], values[i]);
+                              if (!values[i].isEmpty())
+                              {
+                                 hasNoValues = false;
+                              }
+                           }
+                           catch (ArrayIndexOutOfBoundsException e)
+                           {
+                              // Value are missing, value is then ""
+                              map.put(allNames[i], "");
+                           }
                         }
-                    }
+                     }
+                     if (!hasNoValues)
+                     {
+                        dataSet.add(map);
+                     }
+                  }
+               }
 
-                    String[] values;
-
-                    // Next lines are data
-                    while ((csvLine = csvBuffer.readLine()) != null) {
-                        // Skip empty and commented out lines
-                        if ((csvLine.length() != 0) && !csvLine.startsWith("#")) {
-                            values = csvLine.split(";", -1);
-
-                            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-                            boolean hasNoValues = true;
-                            for (int i = 0; i < allNames.length; i++) {
-                                if (allNames[i].length() > 0) {
-                                    try {
-                                        map.put(allNames[i], values[i]);
-                                        if (!values[i].isEmpty()) {
-                                            hasNoValues = false;
-                                        }
-                                    } catch (ArrayIndexOutOfBoundsException e) {
-                                        // Value are missing, value is then ""
-                                        map.put(allNames[i], "");
-                                    }
-                                }
-                            }
-                            if (!hasNoValues) {
-                                dataSet.add(map);
-                            }
-                        }
-                    }
-                    
-                }
             }
-            csvBuffer.close();
-        }
-        alreadyParsed = true;
-    }
+         }
+         csvBuffer.close();
+      }
+      alreadyParsed = true;
+   }
 }
+
