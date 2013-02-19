@@ -6,7 +6,7 @@
 
    <groupId>com.qspin.qtaste</groupId>
    <artifactId>qtaste</artifactId>
-   <version>1.2.2-RC4</version>
+   <version>1.2.2-RC5</version>
    <packaging>pom</packaging>
    <name>QTaste: QSpin Tailored Automated Test Environment</name>
    <description>QTaste is a generic engine to perform automated integration tests</description>
@@ -26,7 +26,7 @@
    </modules>
 
    <properties>
-      <qtaste-version>1.2.2-RC4</qtaste-version>
+      <qtaste-version>1.2.2-RC5</qtaste-version>
    </properties>
 
    <scm>

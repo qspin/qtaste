@@ -9,7 +9,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste-testapi-parent</artifactId>
-      <version>1.2.2-RC4</version>
+      <version>1.2.2-RC5</version>
    </parent>
 
    <artifactId>qtaste-demo-testapi</artifactId>
