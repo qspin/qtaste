@@ -45,11 +45,6 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.takeSnapShot(componentName, fileName);		
 	}
 
-	public boolean keyPressedOnComponent(String componentName, int vkEvent) throws QTasteTestFailException
-	{
-		return mProxy.keyPressedOnComponent(componentName, vkEvent);
-	}
-
 	public String[] listComponents() throws QTasteTestFailException
 	{
 		return mProxy.listComponents();

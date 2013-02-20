@@ -19,46 +19,17 @@
 
 package com.qspin.qtaste.javagui.server;
 
-import java.awt.AWTEvent;
 import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Graphics2D;
-import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.Label;
 import java.awt.Robot;
-import java.awt.TextComponent;
-import java.awt.TextField;
 import java.awt.Window;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.lang.instrument.Instrumentation;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.swing.AbstractButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.text.JTextComponent;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
 
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -68,9 +39,12 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  *  It implements all the JavaGUIMBean services using JMX.
  * @author lvboque
  */
-public class JavaGUI extends JMXAgent implements JavaGUIMBean,
-		KeyEventDispatcher {
+public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
+	public static void premain(String agentArgs, Instrumentation inst) {
+		new JavaGUI();
+	}
+	
 	private Robot bot;
 	
 	public JavaGUI() {
@@ -83,48 +57,6 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		}
 		//new Thread(ComponentNamer.getInstance()).start();
 	}
-
-	private Component getComponentByName(String name) throws QTasteTestFailException {
-		// TODO: Think about several component having the same names!
-		Component foundComponent = null;
-		for (int w = 0; w < Frame.getWindows().length; w++) {
-			Window window = Frame.getWindows()[w];
-			if (window.getName().equals(name)) {
-				return window;
-			}
-			Component c = lookForComponent(name, window.getComponents());
-			if (c != null) {
-				c.requestFocus();
-				foundComponent = c;				
-			}
-		}
-		if ( foundComponent != null )
-		{
-			return foundComponent;
-		}
-		throw new QTasteTestFailException("The component \"" + name + "\" is not found.");
-	}	
-
-	private Component lookForComponent(String name, Component[] components) {
-		for (int i = 0; i < components.length; i++) {
-			//String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
-			Component c = components[i];
-			if (c != null && c.getName() != null && c.getName().contains(name)) {
-				System.out.println("Component:" + name + " is found!");
-				return c;
-			} else {
-				if (c instanceof Container) {
-					Component result = lookForComponent(name,
-							((Container) c).getComponents());
-					if (result != null) {
-						return result;
-					}
-				}
-			}
-		}
-		return null;
-	}
-
 		
 	/*
 	 * public boolean clickOnButton(String name) { Component c =
@@ -157,7 +89,6 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		String[] result = (String[]) list.toArray(new String[0]);
 		return result;
 	}
-	
 
 	private ArrayList<String> browseComponent(Component[] components) {
 		ArrayList<String> list = new ArrayList<String>();
@@ -183,373 +114,52 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return list;
 	}
 
-	public boolean keyPressedOnComponent(String componentName, int vkEvent)  throws QTasteTestFailException {
-		Component c = getComponentByName(componentName);
-		if (c == null) {
-			return false;
-		}
-
-		System.out.println("Location on screen:" + c.getLocationOnScreen());
-		KeyEvent event = new KeyEvent(c, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, vkEvent);
-		try {
-
-			java.lang.reflect.Field f = AWTEvent.class
-					.getDeclaredField("focusManagerIsDispatching");
-			f.setAccessible(true);
-			f.set(event, Boolean.TRUE);
-			c.dispatchEvent(event);
-		} catch (Exception exc) {
-			System.out.println("Exception sending event" + exc);
-			return false;
-		}
-
-		return true;
-	}
-
-	
 	public boolean clickOnButton(String componentName) throws QTasteTestFailException {
 		return clickOnButton(componentName, 68);
 	}
 
 	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);
-		if (!c.isEnabled()) {
-			throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
-		}
-		if (!c.isVisible())
-			throw new QTasteTestFailException("Button " + componentName + " is not visible!");
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					AbstractButton btn = (AbstractButton) c;					
-					btn.doClick(pressTime);
-				} catch (Exception exc) {
-					System.out.println("Exception sending event" + exc);
-		//			return false;
-				}
-			}
-		});
-		return true;
+		return new ButtonClicker().executeCommand(componentName, pressTime);
 	}
 
 	public boolean isEnabled(String componentName) throws QTasteTestFailException {
-		Component c = getComponentByName(componentName);
-		return c==null?false:c.isEnabled();
-	}
-
-	public String getButtonText(String componentName) throws QTasteTestFailException {
-		AbstractButton c = (AbstractButton) getComponentByName(componentName);
-		return c.getText();
+		return new EnabledStateGetter().executeCommand(componentName);
 	}
 
 	public void takeSnapShot(final String componentName, final String fileName) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {									
-					Dimension size = c.getSize();
-					BufferedImage myImage = new BufferedImage(size.width, size.height,
-							BufferedImage.TYPE_INT_RGB);
-					Graphics2D g2 = myImage.createGraphics();
-					c.paint(g2);
-			
-					File file = new File(fileName);
-					file.createNewFile();
-					System.out.println("creating empty file");
-					ImageIO.write(myImage, "jpg", file);				 			
-			}
-			catch (Exception e) {
-				System.out.println("Error saving snapshot " + fileName + ":" + e);
-			}	
-			}
-		});
+		new Snapshotter().executeCommand(componentName, fileName);
 	}
 
 	public String getText(String componentName) throws QTasteTestFailException {
-		Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (c instanceof JLabel) {
-				return ((JLabel) c).getText();
-			} else if (c instanceof JTextComponent) {
-				return ((JTextComponent) c).getText();
-			}
-		}
-		return null;
+		return new TextGetter().executeCommand(componentName);
 	}
 				
-
 	// TODO: boolean returns is useless and confusing!
 	public boolean setText(final String componentName, final String value) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);
-		if (!c.isEnabled()) {
-			throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
-		}
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {		
-										
-				// Support for AWT
-				if (c instanceof TextField) {					
-					TextComponent t = (TextComponent) c;
-					t.setText(value);
-					forceToLooseFocus(c);						
-				}
-				
-				// Support for Swing		
-				if (c instanceof JTextComponent) {			
-					System.out.println("Swing case");
-					JTextComponent t = (JTextComponent) c;
-					t.setText(value);
-					t.getParent().requestFocus();			
-				}
-				
-				if (c instanceof JTextComponent) {
-				    if ( c instanceof JFormattedTextField ){
-						try {
-							JFormattedTextField field = ((JFormattedTextField)c);
-							field.requestFocus();
-							field.setText(value);
-							//launch an exception for invalid input
-							field.commitEdit();
-							//lose focus to format the value
-							forceToLooseFocus(c);
-							} catch (ParseException e) {
-								// Invalid value in field
-								//return false;
-								//TODO: Handle the case of invalid values
-							}
-						}
-				    else {
-				    	((JTextComponent) c).setText(value);    	
-				    	((JTextComponent)c).requestFocus();		    	
-					}				
-				    //return true;
-				}
-				//throw new QTasteTestFailException("JavaGUI cannot setText for such component " + c.getClass().getName());
-			}
-		});
-		return true;
-	}
+		return new TextSetter().executeCommand(componentName, value);
+	}	
 	
-	
-	private void forceToLooseFocus(Component c) {
-		Container parent= c.getParent();
-		while ( parent != null && !parent.isFocusable() )
-		{
-			parent.getParent();
-		}
-		if ( parent != null ) {
-			parent.requestFocus();			
-		}
-	}
-
 	public boolean selectComponent(final String componentName, final boolean value) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (!c.isEnabled()) {
-				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
-			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {												
-					if (c instanceof JCheckBox) {
-						((JCheckBox) c).setSelected(value);
-					} else if (c instanceof JRadioButton) {
-						((JRadioButton) c).setSelected(value);
-					}			
-				}
-			});
-		}
-		return false;	
+		return new ComponentSelector().executeCommand(componentName, value);
 	}			
 
 	public boolean selectValue(final String componentName, final String value) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (c instanceof JCheckBox || c instanceof JRadioButton) {
-				return selectComponent(componentName, Boolean.parseBoolean(value));
-			}
-			if (!c.isEnabled()) {
-				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
-			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {																					
-					if (c instanceof JComboBox) {
-						JComboBox combo = (JComboBox) c;
-						System.out.println("LVB4:" + combo.getItemCount());
-						for (int i = 0; i < combo.getItemCount(); i++) {							//
-							// Use a startsWith instead of equals() as toString() can return more than the value
-							System.out.println("LVB4:" + combo.getItemAt(i).toString());
-							if ((combo.getItemAt(i)).toString().startsWith(value)) {
-								combo.setSelectedIndex(i);
-								return;
-							}
-						}						
-					}
-					if (c instanceof JList) {
-						JList list = (JList) c;
-						for (int i = 0; i < list.getModel().getSize(); i++) {
-							if (list.getModel().getElementAt(i).toString()
-									.equals(value)) {
-								list.setSelectedIndex(i);
-								return;
-							}
-						}
-						// TODO: Value not found! Send exception?
-					}
-					if (c instanceof JSpinner ) {
-						JSpinner spinner = (JSpinner) c;
-						try {
-							spinner.getModel().setValue(Double.parseDouble(value));
-						} catch(Exception pExc) {
-							JOptionPane.showMessageDialog(null, pExc.getStackTrace() );
-							return;
-						}
-						return;
-					}					
-					if (c instanceof JSlider ) {
-						JSlider slider = (JSlider) c;
-						slider.getModel().setValue(Integer.parseInt(value));
-						return;
-					} 
-					else {
-						System.out.println("component '" + c.getName() +"' ("+c.getClass()+") found but unused" );
-					}
-				}
-			});
-		}
-		return false;
+		return new ValueSelector().executeCommand(componentName, value);
 	}
 
 	public boolean selectIndex(final String componentName, final int index) throws QTasteTestFailException {
-		final Component c = getComponentByName(componentName);
-		if (c != null) {
-
-			if (!c.isEnabled()) {
-				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
-			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {																					
-					if (c instanceof JComboBox) {
-						JComboBox combo = (JComboBox) c;
-						if (combo.getItemCount() > index) {
-							combo.setSelectedIndex(index);
-							return;
-						}
-					}
-					if (c instanceof JList) {
-						JList list = (JList) c;
-						if (list.getModel().getSize() > index) {
-							list.setSelectedIndex(index);						
-						}
-					}
-				}
-			});
-		}
-		return false;
-	}
-
-	private void getAllKeys() {
-		KeyboardFocusManager.getCurrentKeyboardFocusManager()
-				.addKeyEventDispatcher(this);
-
-	}
-
-	public static void premain(String agentArgs, Instrumentation inst) {
-		new JavaGUI();
-	}
-
-	public boolean dispatchKeyEvent(KeyEvent e) {
-		System.out.println("JavaGUI received: " + e);
-		return true;
+		return new IndexSelector().executeCommand(componentName, index);
 	}
 
 	@Override
-	public boolean selectNode(String componentName, String nodeName,
-			String nodeSeparator) throws QTasteTestFailException {
-		String[] nodeNames = nodeName.split(nodeSeparator);
-		Component c = getComponentByName(componentName);
-		JTree tree = (JTree) c;
-		if (c != null && c instanceof JTree && nodeNames.length > 0) {
-			if (!c.isEnabled()) {
-				throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
-			}
-			TreeModel model = tree.getModel();
-			Object node = model.getRoot();
-			Object[] path = new Object[nodeNames.length];
-			Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
-			String value = null;
-			System.out.println("component is " + nodeComponent);
-			if ( nodeComponent instanceof JLabel )
-			{
-				System.out.println("component extend JLabel");
-				value = ((JLabel)nodeComponent).getText();
-			} else if ( nodeComponent instanceof Label )
-			{
-				System.out.println("component extend TextComponent");
-				value = ((Label)nodeComponent).getText();
-			} else {
-				System.out.println("component extend something else");
-				value = node.toString();
-			}
-			System.out.println("compare node (" + value + ") with root (" + nodeNames[0] + ")");
-			if (!tree.isRootVisible() || value.equals(nodeNames[0])) {
-				path[0] = node;
-				for ( int i = tree.isRootVisible()?1:0 ; i < nodeNames.length; i++) {
-					for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++) {
-						Object child = model.getChild(node, childIndex);
-						nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, child, true, false, true, i, false);
-						value = null;
-						if ( nodeComponent instanceof JLabel )
-						{
-							System.out.println("component extend JLabel");
-							value = ((JLabel)nodeComponent).getText();
-						} else if ( nodeComponent instanceof Label )
-						{
-							System.out.println("component extend TextComponent");
-							value = ((Label)nodeComponent).getText();
-						} else {
-							System.out.println("component extend something else");
-							value = child.toString();
-						}
-						System.out.println("compare node (" + value + ") with value (" + nodeNames[i] + ")");
-						if (value.equals(nodeNames[i])) {
-							node = child;
-							path[i] = node;
-							break;
-						}
-					}
-					if (path[i] == null) {
-						throw new QTasteTestFailException("Unabled to find node named " + nodeNames[i]);
-					}
-				}
-				((JTree) c).setSelectionPath(new TreePath(path));
-				((JTree) c).expandPath(new TreePath(path));
-				((JTree) c).setExpandsSelectedPaths(true);
-
-				return true;
-			}
-		}
-		throw new QTasteTestFailException("Unabled to find node named " + nodeNames[0]);
+	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException {
+		return new TreeNodeSelector().executeCommand(componentName, nodeName, nodeSeparator);
 	}
 	// Todo: getColor, awt?
 
 	@Override
 	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException {
-		Component c = getComponentByName(tabbedPaneComponentName);
-		if (c != null && c instanceof JTabbedPane) {
-			if (!c.isEnabled()) {
-				throw new QTasteTestFailException("The component \"" + tabbedPaneComponentName + "\" is not enabled.");
-			}
-			((JTabbedPane)c).setSelectedIndex(tabIndex);
-			return tabIndex == ((JTabbedPane)c).getSelectedIndex();
-		}
-		return false;
+		return new TabSelector().executeCommand(tabbedPaneComponentName, tabIndex);
 	}
 	
 	public String whoAmI() throws QTasteTestFailException {		
@@ -561,15 +171,6 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().getName();	
 	}
 	
-	public String whereAmI() throws QTasteTestFailException {		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) { 
-			e.printStackTrace();
-		}				
-		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().getName();	
-	}
-		
 	public void setComponentName(String name) throws QTasteTestFailException {
 		try {
 			Thread.sleep(5000);
@@ -580,16 +181,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 	}								    
 
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
-		if (bot == null)
-			throw new QTasteTestFailException("JavaGUI cannot pressKey if java.awt.Robot is not available!");
-		bot.keyPress(keycode);
-		try {			
-			Thread.sleep(delay);
-		}
-		catch (InterruptedException e) { 
-			e.printStackTrace();
-		}	
-		bot.keyRelease(keycode);
+		new KeyPresser().executeCommand(bot, keycode, delay);
 	}
 	
 	public void pressKey(int keycode) throws QTasteTestFailException {
@@ -599,67 +191,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean,
 
 	@Override
 	public boolean exist(String pComponentName) {
-		try{
-			return getComponentByName(pComponentName) != null; 
-		} catch (QTasteTestFailException pExc)
-		{
-			return false;
-		}
+		return new ExistenceChecker().executeCommand(pComponentName);
 	}
 
 	@Override
 	public int getEnabledComponentCount(boolean isEnabled) {
-		int counter = 0;
-		List<Container> superContainers = new ArrayList<Container>();
-		for( Frame f : Frame.getFrames() )
-		{
-			if (!superContainers.contains(f))
-			{
-				superContainers.add(f);
-			}
-		}
-		for( Window f : Frame.getWindows() )
-		{
-			if (!superContainers.contains(f))
-			{
-				superContainers.add(f);
-			}
-		}
-		for( Window f : Frame.getOwnerlessWindows() )
-		{
-			if (!superContainers.contains(f))
-			{
-				superContainers.add(f);
-			}
-		}
-		
-		for ( Container c : superContainers )
-		{
-			counter += getEnabledComponentCount(isEnabled, c);
-		}
-		return counter;
-	}
-	
-	protected int getEnabledComponentCount(boolean isEnabled, Container c)
-	{
-		int counter = 0;
-		if ( c.isEnabled() == isEnabled )
-		{
-			counter ++;
-		}
-		for (int i=0; i<c.getComponentCount(); i++)
-		{
-			Component child = c.getComponent(i);
-			if ( c instanceof Container )
-			{
-				counter += getEnabledComponentCount(isEnabled, (Container)child);
-			}
-			else
-			{
-				counter += child.isEnabled() == isEnabled? 1 : 0;
-			}
-		}
-		return counter;
+		return new EnabledComponentCounter().executeCommand(isEnabled);
 	}
 	
 }

@@ -1,0 +1,67 @@
+package com.qspin.qtaste.javagui.server;
+
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.Window;
+import java.util.ArrayList;
+import java.util.List;
+
+class EnabledComponentCounter extends ComponentCommander {
+
+	@Override
+	Integer executeCommand(Object... data) {
+		int counter = 0;
+		List<Container> superContainers = new ArrayList<Container>();
+		for( Frame f : Frame.getFrames() )
+		{
+			if (!superContainers.contains(f))
+			{
+				superContainers.add(f);
+			}
+		}
+		for( Window f : Frame.getWindows() )
+		{
+			if (!superContainers.contains(f))
+			{
+				superContainers.add(f);
+			}
+		}
+		for( Window f : Frame.getOwnerlessWindows() )
+		{
+			if (!superContainers.contains(f))
+			{
+				superContainers.add(f);
+			}
+		}
+		
+		boolean isEnable = Boolean.parseBoolean(data[0].toString());
+		for ( Container c : superContainers )
+		{
+			counter += getEnabledComponentCount(isEnable, c);
+		}
+		return counter;
+	}
+	
+	protected int getEnabledComponentCount(boolean isEnabled, Container c)
+	{
+		int counter = 0;
+		if ( c.isEnabled() == isEnabled )
+		{
+			counter ++;
+		}
+		for (int i=0; i<c.getComponentCount(); i++)
+		{
+			Component child = c.getComponent(i);
+			if ( c instanceof Container )
+			{
+				counter += getEnabledComponentCount(isEnabled, (Container)child);
+			}
+			else
+			{
+				counter += child.isEnabled() == isEnabled? 1 : 0;
+			}
+		}
+		return counter;
+	}
+}
