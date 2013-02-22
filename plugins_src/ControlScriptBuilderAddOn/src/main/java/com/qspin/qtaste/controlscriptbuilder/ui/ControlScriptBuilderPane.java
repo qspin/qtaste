@@ -59,19 +59,22 @@ public class ControlScriptBuilderPane extends JScrollPane implements ListSelecti
 	{
 		List<ControlAction> actions = new ArrayList<ControlAction>();
 		String controlScriptFileName = TestBedConfiguration.getInstance().getControlScriptFileName();
-		String paramFileName = controlScriptFileName.substring(0, controlScriptFileName.length()-3) + ".param";
-		File paramFile = new File(paramFileName);
-		LOGGER.trace("parameter file existence ? " + paramFile.exists());
-		if ( paramFile.exists() )
+		if ( controlScriptFileName != null )
 		{
-			//decode the control script
-			try
+			String paramFileName = controlScriptFileName.substring(0, controlScriptFileName.length()-3) + ".param";
+			File paramFile = new File(paramFileName);
+			LOGGER.trace("parameter file existence ? " + paramFile.exists());
+			if ( paramFile.exists() )
 			{
-				actions = ControlScriptParameterDecoder.decode(paramFile);
-			}
-			catch (IOException pExc)
-			{
-				LOGGER.error("Unable to decode the control script: " + pExc.getMessage(), pExc);
+				//decode the control script
+				try
+				{
+					actions = ControlScriptParameterDecoder.decode(paramFile);
+				}
+				catch (IOException pExc)
+				{
+					LOGGER.error("Unable to decode the control script: " + pExc.getMessage(), pExc);
+				}
 			}
 		}
 		setControlActions(actions);
