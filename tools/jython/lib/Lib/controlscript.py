@@ -329,15 +329,15 @@ class JavaProcess(ControlAction):
 		else:
 			self.classPath = None
 		self.vmArgs = vmArgs
-		if useJacoco:
-			jacocoHome = _os.getenv("JACOCO_HOME")
-			if not jacocoHome:
-				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
-			else:
-				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
+# 		if useJacoco:
+# 			jacocoHome = _os.getenv("JACOCO_HOME")
+# 			if not jacocoHome:
+# 				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
+# 			else:
+# 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		self.useJacoco = useJacoco
-		if useJavaGUI:
-			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
+# 		if useJavaGUI:
+# 			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
 		self.useJavaGUI = useJavaGUI
 		if jmxPort:
 			self.jmxPort = "%d" % jmxPort
@@ -391,10 +391,31 @@ class JavaProcess(ControlAction):
 		writer.write(prefix + ".jmxPort=integer\n")
 		writer.write(prefix + ".checkAfter=integer\n")
 		writer.write(prefix + ".priority=string\n")
+	
+	def getJacocoVar(self):
+		if self.useJacoco:
+			jacocoHome = _os.getenv("JACOCO_HOME")
+			if not jacocoHome:
+				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
+				return ""
+			else:
+				return " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + self.description + ".jacoco"
+
+	def getJavaGUIVar(self):
+		if self.useJavaGUI:
+			return " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
+		return ""
 
 	def start(self):
 		print "Starting " + self.description + "...";
 		isJar = self.mainClassOrJar.endswith(".jar")
+		
+		vmArgs = self.vmArgs
+		if self.useJacoco:
+			vmArgs += " " + self.getJacocoVar()
+		if self.useJavaGUI:
+			vmArgs += " " + self.getJavaGUIVar()
+			
 		if _OS.getType() != _OS.Type.WINDOWS:
 			shellScriptArguments = []
 			if isJar:
@@ -410,7 +431,7 @@ class JavaProcess(ControlAction):
 			shellScriptArguments.append(self.description)
 			if self.vmArgs:
 				shellScriptArguments.append("-vmArgs")
-				shellScriptArguments.append(self.vmArgs)
+				shellScriptArguments.append(vmArgs)
 			if self.jmxPort:
 				shellScriptArguments.append("-jmxPort")
 				shellScriptArguments.append(self.jmxPort)
@@ -427,7 +448,7 @@ class JavaProcess(ControlAction):
 				self.classPath = self.classPath.replace(updateQTasteRoot, qtasteRootDirectory)
 				shellScriptArguments += ' -cp "' + self.classPath + '"';
 			if self.vmArgs:
-				shellScriptArguments += ' -vmArgs "' + self.vmArgs + '"';
+				shellScriptArguments += ' -vmArgs "' + vmArgs + '"';
 			if self.jmxPort:
 				shellScriptArguments += ' -jmxPort ' + str(self.jmxPort);
 			if self.checkAfter:
