@@ -1,11 +1,16 @@
 package com.qspin.qtaste.javagui.server;
 
+import java.awt.Component;
+import java.awt.Label;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.swing.ListCellRenderer;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
@@ -20,11 +25,12 @@ public class ValueSelector extends UpdateComponentCommander {
 			}
 			if (component instanceof JComboBox) {
 				JComboBox combo = (JComboBox) component;
-				for (int i = 0; i < combo.getItemCount(); i++) { //
-					// Use a startsWith instead of equals() as toString()
-					// can
-					// return more than the value
-					if ((combo.getItemAt(i)).toString().startsWith(value)) {
+				ListCellRenderer renderer = combo.getRenderer();
+				for (int i = 0; i < combo.getItemCount(); i++) { 
+					String itemValue = getItemText(combo.getModel().getElementAt(i), renderer);
+					System.out.println("compare combo elmt (" + itemValue + ") with '" + value + "'");
+					// Use a startsWith instead of equals() as toString() can return more than the value
+					if (itemValue.equals(value)) {
 						combo.setSelectedIndex(i);
 						return;
 					}
@@ -32,8 +38,11 @@ public class ValueSelector extends UpdateComponentCommander {
 			}
 			if (component instanceof JList) {
 				JList list = (JList) component;
+				ListCellRenderer renderer = list.getCellRenderer();
 				for (int i = 0; i < list.getModel().getSize(); i++) {
-					if (list.getModel().getElementAt(i).toString().equals(value)) {
+					String itemValue = getItemText(list.getModel().getElementAt(i), renderer);
+					System.out.println("compare list elmt (" + itemValue + ") with '" + value + "'");
+					if (itemValue.equals(value)) {
 						list.setSelectedIndex(i);
 						return;
 					}
@@ -54,6 +63,20 @@ public class ValueSelector extends UpdateComponentCommander {
 		} catch (Exception pExc) {
 			mError = pExc;
 		}
+	}
+	
+	protected String getItemText(Object item, ListCellRenderer renderer)
+	{
+		Component c = renderer.getListCellRendererComponent(new JList(), item, 0, false, false);
+		if ( c instanceof Label )
+		{
+			return ((Label)c).getText();
+		}
+		if ( c instanceof JLabel )
+		{
+			return ((JLabel)c).getText();
+		}
+		return item.toString();
 	}
 
 }
