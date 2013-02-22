@@ -45,11 +45,6 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.takeSnapShot(componentName, fileName);		
 	}
 
-	public boolean keyPressedOnComponent(String componentName, int vkEvent) throws QTasteTestFailException
-	{
-		return mProxy.keyPressedOnComponent(componentName, vkEvent);
-	}
-
 	public String[] listComponents() throws QTasteTestFailException
 	{
 		return mProxy.listComponents();
@@ -130,6 +125,14 @@ public class JavaGUIImpl implements JavaGUI {
 	
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
 		mProxy.pressKey(keycode, delay);	
+	}
+	
+	public boolean exist(String pComponentName) {
+		return mProxy.exist(pComponentName);
+	}
+
+	public int getEnabledComponentCount(boolean isEnabled) {
+		return mProxy.getEnabledComponentCount(isEnabled);
 	}
 	
 	

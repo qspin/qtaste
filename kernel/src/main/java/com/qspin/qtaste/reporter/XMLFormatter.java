@@ -39,8 +39,8 @@ public abstract class XMLFormatter extends ReportFormatter {
     private static Logger logger = Log4jLoggerFactory.getLogger(XMLFormatter.class);
     protected String templateContent,  rowTemplateContent,  rowStepsTemplateContent;
     
-    public XMLFormatter(String template, String rowTemplate, String rowStepsTemplate, File reportFile) throws IOException {
-        super(reportFile);
+    public XMLFormatter(String template, String rowTemplate, String rowStepsTemplate, File reportDirectory, String reportName) throws IOException {
+        super(reportDirectory, reportName);
         this.templateContent = FileUtilities.readFileContent(template);
         this.rowTemplateContent = FileUtilities.readFileContent(rowTemplate);
         this.rowStepsTemplateContent = FileUtilities.readFileContent(rowStepsTemplate);    

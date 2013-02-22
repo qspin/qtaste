@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<REQUIREMENTS_LINKS>
+	<REQ id="00001">
+		<REQ_DESCRIPTION>The system should be able to control (start/stop) multiple external processes.</REQ_DESCRIPTION>
+	</REQ>
+</REQUIREMENTS_LINKS>

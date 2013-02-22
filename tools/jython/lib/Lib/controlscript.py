@@ -429,7 +429,7 @@ class JavaProcess(ControlAction):
 
 			shellScriptArguments.append("-title")
 			shellScriptArguments.append(self.description)
-			if self.vmArgs:
+			if len(self.vmArgs) > 0:
 				shellScriptArguments.append("-vmArgs")
 				shellScriptArguments.append(vmArgs)
 			if self.jmxPort:
@@ -447,7 +447,7 @@ class JavaProcess(ControlAction):
 				updateQTasteRoot = qtasteRootDirectory.replace(":",";")
 				self.classPath = self.classPath.replace(updateQTasteRoot, qtasteRootDirectory)
 				shellScriptArguments += ' -cp "' + self.classPath + '"';
-			if self.vmArgs:
+			if len(self.vmArgs) > 0:
 				shellScriptArguments += ' -vmArgs "' + vmArgs + '"';
 			if self.jmxPort:
 				shellScriptArguments += ' -jmxPort ' + str(self.jmxPort);
@@ -456,8 +456,9 @@ class JavaProcess(ControlAction):
 			if self.priority:
 				shellScriptArguments += ' -priority ' + self.priority;
 		
+		print(str(shellScriptArguments))
 		ControlAction.executeShellScript("start_java_process", shellScriptArguments);
-		print
+		print 
 
 	def stop(self):
 		print "Stopping " + self.description + "...";

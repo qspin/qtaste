@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -42,6 +43,8 @@ public abstract class ReportFormatter {
 
     private static Logger logger = Log4jLoggerFactory.getLogger(ReportFormatter.class);
     protected File reportFile;
+    protected File reportDirectory;
+    protected String reportFileName;
     protected PrintWriter output;
     protected Date startDate, endDate;
     protected static final String kernelVersion, testapiVersion;
@@ -51,8 +54,9 @@ public abstract class ReportFormatter {
         testapiVersion = VersionControl.getInstance().getTestApiVersion("");
     }
 
-    public ReportFormatter(File reportFile) {
-        this.reportFile = reportFile;
+    public ReportFormatter(File reportDirectory, String reportFileName) {
+        this.reportDirectory = reportDirectory;
+        this.reportFileName = reportFileName;
     }
 
     public ReportFormatter() {
@@ -164,8 +168,16 @@ public abstract class ReportFormatter {
         }
     }
 
-    public void startReport(String name) {
+    public void startReport(Date timeStamp, String name) {
         startDate = new Date();
+        if ( reportDirectory != null )
+        {
+	        reportFile = new File( reportDirectory, new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(timeStamp) + File.separator + reportFileName);
+	        if ( !reportFile.getParentFile().exists() )
+	        {
+	        	reportFile.getParentFile().mkdirs();
+	        }
+        }
         refresh();
     }
 

@@ -75,7 +75,7 @@ public class XMLReportFormatter extends XMLFormatter {
 
     
     public XMLReportFormatter(String reportName) throws FileNotFoundException, IOException {
-        super(template, rowTemplate, rowStepsTemplate, new File(outputDir + File.separator + String.format(RESULTS_FILE_NAME_FORMAT, new Date())));
+        super(template, rowTemplate, rowStepsTemplate, new File(outputDir), String.format(RESULTS_FILE_NAME_FORMAT, new Date()));
         this.testSuiteDir = reportName;
     }
 
@@ -88,14 +88,20 @@ public class XMLReportFormatter extends XMLFormatter {
     }
 
     @Override
-    public void startReport(String name) {
+    public void startReport(Date timeStamp, String name) {
         if (date == null) {
             date = new Date();
         }
-        fileName = outputDir + File.separator + String.format(FILE_NAME_FORMAT, date);
-        File file = new File(fileName);
-        if (file.exists()) {
-            file.delete();
+        fileName = outputDir + File.separator;
+        fileName += new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(timeStamp) + File.separator;
+        fileName += String.format(FILE_NAME_FORMAT, date);
+        reportFile = new File(fileName);
+        if ( !reportFile.getParentFile().exists() )
+        {
+        	reportFile.getParentFile().mkdirs();
+        }
+        if (reportFile.exists()) {
+        	reportFile.delete();
         }
 
         try {

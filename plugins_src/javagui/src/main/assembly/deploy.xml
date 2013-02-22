@@ -6,7 +6,7 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
-			<outputDirectory>.</outputDirectory>
+			<outputDirectory/>
 			<directory>target/classes</directory>
 		</fileSet>
 	</fileSets>
@@ -28,7 +28,6 @@
 			</unpackOptions>
 		</dependencySet>
 		<dependencySet>
-			<outputDirectory>.</outputDirectory>
 			<unpack>true</unpack>
 			<includes>
 				<include>qtaste-plugin:tools</include>

@@ -2,16 +2,18 @@
 <testbed_configuration>
 	<sut_host>localhost</sut_host>
 	
-	<testapi_implementation>
-		<import>com.qspin.qtaste.testapi.impl.demo</import>
-		<import>com.qspin.qtaste.testapi.impl.generic</import>
+	<testapi_implementation>		
+		<import>com.qspin.qtaste.javagui.testapi.impl</import>
 	</testapi_implementation>
 
 	<control_script>playback.py</control_script>
 
-	<multiple_instances_components default="JavaGuiApp">
-		<Playback id="JavaGuiApp">
+	<multiple_instances_components default="PlaybackApp">
+		<JavaGUI id="PlaybackApp">
 			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
-		</Playback>
+		</JavaGUI>
+		<!--Playback id="PlaybackApp">
+			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
+		</Playback-->
 	</multiple_instances_components>
 </testbed_configuration>

@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<engine_configuration>
-	
-	<retry_test_on_fail>true</retry_test_on_fail>
-
-	<reporting>
+<?xml version="1.0" encoding="UTF-8"?><engine_configuration>
+<retry_test_on_fail>true</retry_test_on_fail>
+<reporting>
 		<!-- Reporting format  (XML or HTML, default to HTML) -->
 		<reporters>
 			<format>HTML</format>
@@ -30,9 +27,12 @@
 			<duplicate_steps_per_test_data_row>true</duplicate_steps_per_test_data_row>
 		</test_campaign_doc>
 	</reporting>
-
-	<log4j_server>
+<log4j_server>
 		<port>4446</port>
 	</log4j_server>
-	<version_control>com.qspin.qtaste.util.versioncontrol.impl.DefaultVersionControl</version_control>
+<version_control>com.qspin.qtaste.util.versioncontrol.impl.DefaultVersionControl</version_control>
+<addons>
+<addon>com.qspin.qtaste.demo.addon.DemoAddOn</addon>
+<addon>com.qspin.qtaste.controlscriptbuilder.ControlScriptBuilderAddOn</addon>
+</addons>
 </engine_configuration>

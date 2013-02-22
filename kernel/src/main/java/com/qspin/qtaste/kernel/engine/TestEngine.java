@@ -22,6 +22,7 @@ package com.qspin.qtaste.kernel.engine;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -35,6 +36,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.datacollection.collection.ProbeManager;
+import com.qspin.qtaste.kernel.campaign.CampaignManager;
 import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResult.Status;
@@ -85,7 +87,14 @@ public class TestEngine {
 		TestBedConfiguration.reloadConfigFileIfModified();
 		currentTestSuite = testSuite;
 		TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-		reportManager.startReport(testSuite.getName());
+		if ( CampaignManager.getInstance().getCurrentCampaign() != null )
+        {
+        	reportManager.startReport(CampaignManager.getInstance().getTimeStampCampaign(), testSuite.getName());
+        }
+        else
+        {
+        	reportManager.startReport(new Date(), testSuite.getName());	
+        }
 		boolean executionSuccess = testSuite.execute(debug, true);
 		reportManager.stopReport();
 		currentTestSuite = null;

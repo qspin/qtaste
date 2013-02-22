@@ -9,16 +9,12 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste-testapi-parent</artifactId>
-      <version>1.2.2-RC4</version>
+      <version>1.2.2-RC5</version>
    </parent>
 
    <artifactId>qtaste-demo-testapi</artifactId>
    <packaging>jar</packaging>
    <name>QTaste Test API for QTaste Demo</name>
-
-   <properties>
-      <qtaste-toolbox-version>${parent.version}</qtaste-toolbox-version>
-   </properties>
 
    <build>
       <finalName>qtaste-testapi</finalName>
@@ -105,7 +101,7 @@
       <dependency>
          <groupId>com.qspin.qtaste</groupId>
          <artifactId>qtaste-toolbox-testapi</artifactId>
-         <version>${qtaste-toolbox-version}</version>
+         <version>${qtaste-version}</version>
       </dependency>
       <!-- EXTERNAL LIBRARIES -->
       <!-- Libraries are ordered by group/artifact. -->

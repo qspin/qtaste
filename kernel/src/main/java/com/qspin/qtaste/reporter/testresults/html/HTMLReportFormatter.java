@@ -18,8 +18,6 @@ along with QTaste. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.qspin.qtaste.reporter.testresults.html;
 
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.reporter.testresults.*;
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,8 +32,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -50,11 +48,14 @@ import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
+import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.reporter.HTMLFormatter;
+import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResultImpl.StepResult;
+import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.testsuite.TestSuite;
@@ -115,18 +116,31 @@ public class HTMLReportFormatter extends HTMLFormatter {
             templates.put("testRequirement", template_root + File.separator + "report_test_requirement_header.html");
             templates.put("executiveSummary", template_root + File.separator + "executive_summary_line.html");
 
-            // copy images to report directory
-            String[] imagesExtensions = {"gif", "jpg", "png"};
-            FileUtilities.copyFiles(template_root, outputDir, new FileMask(imagesExtensions));
 
         } catch (Exception e) {
             logger.fatal("Exception initialising the HTML report:" + e);
         }
     }
+    
+    private static void copyImages(File targetDirectory)
+    {
+    	try{
+	        String template_root = config.getString("reporting.html_template");
+	        if (!new File(template_root).isAbsolute()) {
+	            template_root = StaticConfiguration.QTASTE_ROOT + File.separator + template_root;
+	        }
+	        
+	        // copy images to report directory
+	        String[] imagesExtensions = {"gif", "jpg", "png"};
+	        FileUtilities.copyFiles(template_root, targetDirectory.getAbsolutePath(), new FileMask(imagesExtensions));
+	    } catch (IOException e) {
+	        logger.fatal("Exception initialising the HTML report:" + e);
+	    }
+    }
 
     
     public HTMLReportFormatter(String reportName) throws FileNotFoundException, IOException {
-        super(HTMLReportFormatter.templates, new File(outputDir + File.separator + String.format(FILE_NAME_FORMAT, new Date())));
+        super(HTMLReportFormatter.templates, new File(outputDir), String.format(FILE_NAME_FORMAT, new Date()));
 
         this.testSuiteName = reportName;
 
@@ -519,8 +533,9 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 // generate index file
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
-                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + reportFile.getName() + "\"/></head><body><a href=\"" + reportFile.getName() + "\">Redirection</a></body></html>");
+                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + reportFile.getCanonicalPath() + "\"/></head><body><a href=\"" + reportFile.getName() + "\">Redirection</a></body></html>");
                 index.close();
+                copyImages(reportFile.getParentFile());
             }
 
         } catch (IOException e) {
@@ -558,7 +573,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
             return;
         }
 
-        File testSummaryFile = new File(outputDir + File.separator + testSummaryFileName);
+        File testSummaryFile = new File(reportFile.getParentFile(), testSummaryFileName);
         File tempTestSummaryFile = new File(testSummaryFile.getPath() + ".tmp");
 
         final DefaultPieDataset pieDataSet = new DefaultPieDataset();

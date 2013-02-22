@@ -2,6 +2,7 @@
 # TestProcess.
 # <p>
 # <u><b>Test only available on LINUX.</b></u>
+# This demo requires the process testbed.
 # <p>
 # Try to launch the xterm command and then stop the created process.
 #
@@ -22,7 +23,7 @@ def initializeProcess():
 	logger.info(process.getStatus())
 	checkStatus(process.getStatus(), ProcessStatus.UNDEFINED)
 	params = ["xterm"]
-	process.initialize(params)
+	process.initialize(None, ".", params)
 	checkStatus(process.getStatus(), ProcessStatus.READY_TO_START)
 	
 def launchProcess():

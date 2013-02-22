@@ -21,6 +21,7 @@
 package com.qspin.qtaste.reporter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * The class that will extends a report manager is responsible for:
@@ -36,10 +37,10 @@ public abstract class ReportManager {
         formatters = new ArrayList<ReportFormatter> ();
     }
     
-    public void startReport(String name) {        
+    public void startReport(Date timeStamp, String name) {        
         this.reportName = name;
         for (ReportFormatter formatter : formatters) {
-            formatter.startReport(name);
+            formatter.startReport(timeStamp, name);
         }        
     }
     

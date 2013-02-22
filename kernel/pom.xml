@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qspin.qtaste</groupId>
 		<artifactId>qtaste</artifactId>
-		<version>1.2.2-RC4</version>
+		<version>1.2.2-RC5</version>
 	</parent>
 
 	<artifactId>qtaste-kernel</artifactId>
@@ -213,9 +213,15 @@
 			<artifactId>xml-apis</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.tmatesoft.svnkit</groupId> 
-				<artifactId>svnkit</artifactId> 
-				<version>1.7.4-v1</version> 
+		        <groupId>org.tmatesoft.svnkit</groupId> 
+			<artifactId>svnkit</artifactId> 
+			<version>1.7.4-v1</version> 
 		</dependency> 
+		<dependency>
+	                <groupId>org.springframework</groupId>
+		        <artifactId>spring-core</artifactId>
+		        <version>3.0.3.RELEASE</version>
+		</dependency>
+
 	</dependencies>
 </project>

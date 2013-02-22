@@ -13,7 +13,7 @@ from qtaste import *
 import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
-javaguiMI = testAPI.getPlayback()
+javaguiMI = testAPI.getJavaGUI(INSTANCE_ID="PlaybackApp")
 
 def testChangeTab():
 	"""

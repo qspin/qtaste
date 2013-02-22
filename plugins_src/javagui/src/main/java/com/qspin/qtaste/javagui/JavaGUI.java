@@ -36,13 +36,6 @@ public interface JavaGUI {
    public void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException;
    
    /**
-     * Send a key event on the specified componentName.
-     * @param componentName an identifier of the GUI component.
-     * @param fileName the name of the image file.
-     */
-   public boolean keyPressedOnComponent(String componentName, int vkEvent) throws QTasteTestFailException;
-   
-   /**
      * Get the list of all the component names.
 	 * @return an array of String containing all the names of the component of the GUI application.
      */
@@ -140,4 +133,18 @@ public interface JavaGUI {
     * @throws QTasteTestFailException If some internal errors occurs. 
     */
    public void pressKey(int keycode, long delay) throws QTasteTestFailException;
+   
+   /**
+    * Checks if a component with the name exist or not.
+    * @param pComponentName The component's name.
+    * @return <code>true</code> if the component exist.
+    */
+   public boolean exist(String pComponentName);
+   
+   /**
+    * Counts the number of components that have the enabled state.
+    * @param isEnabled <code>false</code> if the disabled components have to be counted.
+    * @return The number of components that have the enabled state.
+    */
+   public int getEnabledComponentCount(boolean isEnabled);
 }

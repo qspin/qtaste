@@ -20,9 +20,10 @@ public final class InputStreamWriter extends Thread
     * @param pInput
     * @param pOutput if it's null, writes all in the class Logger at INFO level.
     */
-   public InputStreamWriter(InputStream pInput)
+   public InputStreamWriter(String pLogPrefix, InputStream pInput)
    {
       mInput = pInput;
+      mLogPrefix = pLogPrefix;
       mOutput = new ArrayList<String>();
       mLimit = 1000;
    }
@@ -47,7 +48,8 @@ public final class InputStreamWriter extends Thread
     				 mOutput.remove(0);
     			 }
     		 }
-            mLastLine = line;
+        	 LOGGER.debug(mLogPrefix + " => " + line);
+        	 mLastLine = line;
          }
       }
       catch (IOException ioe)
@@ -91,6 +93,8 @@ public final class InputStreamWriter extends Thread
 	   return mOutput;
    }
 
+   /** Prefix that will appear in the logger. */
+   private String mLogPrefix;
    /** Last line read from the input stream. */
    private String mLastLine = "";
    /** The redirected input stream. */

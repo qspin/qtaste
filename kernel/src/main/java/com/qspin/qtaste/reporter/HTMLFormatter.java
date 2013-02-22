@@ -41,8 +41,8 @@ public abstract class HTMLFormatter extends ReportFormatter {
     private static Logger logger = Log4jLoggerFactory.getLogger(HTMLFormatter.class);
     protected HashMap<String, String> templateContents;
 
-    public HTMLFormatter(HashMap<String, String> templates,  File reportFile) throws IOException {
-        super(reportFile);
+    public HTMLFormatter(HashMap<String, String> templates,  File reportDirectory, String reportFileName) throws IOException {
+        super(reportDirectory, reportFileName);
         templateContents = new HashMap<String, String>();
         Iterator<String> templateNames = templates.keySet().iterator();
         while (templateNames.hasNext()) {
