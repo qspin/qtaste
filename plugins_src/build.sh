@@ -15,3 +15,15 @@ do
 	cp target/*-deploy.jar ../$targetDir
 	popd
 done
+
+PLUGINS="AddonDemo ControlScriptBuilderAddOn"
+
+targetDir=../plugins/
+
+for PLUGIN in $PLUGINS
+do
+	pushd $PLUGIN
+	mvn clean install assembly:single || exit 1
+	cp target/*-deploy.jar ../$targetDir
+	popd
+done

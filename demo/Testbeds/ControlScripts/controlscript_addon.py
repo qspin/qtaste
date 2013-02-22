@@ -23,7 +23,7 @@ class ControlScriptAddon(ControlScript):
 
 class VirtualBox(ControlAction):
 	""" Control script action for starting/stopping a Virtual Box image """
-	def __init__(self, description, nameOfVBoxImage):
+	def __init__(self, description, nameOfVBoxImage, active=True):
 		"""
 		Initialize VirtualBox object
 		@param description control script action description, also used as window title
@@ -31,8 +31,19 @@ class VirtualBox(ControlAction):
 		@param args arguments to pass to the application or None if no argument
 		@param workingDir working directory to start process in, defaults to QTaste root directory
 		"""
-		ControlAction.__init__(self, description)
+		ControlAction.__init__(self, description, active)
+		self.callerScript = traceback.format_stack()[0].split("\"")[1]
 		self.nameOfVBoxImage = nameOfVBoxImage
+
+	def dumpDataType(self, prefix, writer):
+		""" Method called on start. It dumps the data type. to be overridden by subclasses """
+		super(VirtualBox, self).dumpDataType(prefix, writer)
+		writer.write(prefix + ".nameOfVBoxImage=string\n")
+
+	def dump(self, writer):
+		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
+		super(VirtualBox, self).dump(writer)
+		writer.write(str(self.caID) + ".nameOfVBoxImage=\"" + str(self.nameOfVBoxImage) + "\"\n")
 	
 	def start(self):
 		# the VBoxManage command has to be in the PATH ...

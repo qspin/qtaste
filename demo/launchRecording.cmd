@@ -1,7 +1,7 @@
 @echo off
 
 set ROOT=%~dp0\..\
-set RECORDER_PATH=%ROOT%\plugins\
+set RECORDER_PATH=%ROOT%\plugins\SUT\
 set FILTER_PATH="=recordingFilter.xml"
 
 java -javaagent:%RECORDER_PATH%\qtaste-recorder-deploy.jar%FILTER_PATH% -cp testapi\target\qtaste-testapi-deploy.jar com.qspin.qtaste.sutuidemo.Interface || exit 1
