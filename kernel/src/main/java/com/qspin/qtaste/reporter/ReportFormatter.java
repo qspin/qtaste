@@ -172,7 +172,7 @@ public abstract class ReportFormatter {
         startDate = new Date();
         if ( reportDirectory != null )
         {
-	        reportFile = new File( reportDirectory, new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(timeStamp) + File.separator + reportFileName);
+	        reportFile = new File( reportDirectory, new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(timeStamp) + File.separator + reportFileName);
 	        if ( !reportFile.getParentFile().exists() )
 	        {
 	        	reportFile.getParentFile().mkdirs();
