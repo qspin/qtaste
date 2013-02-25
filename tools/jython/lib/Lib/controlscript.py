@@ -274,12 +274,13 @@ class JavaProcess(ControlAction):
 		if _OS.getType() != _OS.Type.WINDOWS:
 			self.workingDir = workingDir
 		else:
-			self.workingDir = workingDir.replace("/", "\\")
+			self.workingDir = workingDir.replace("/", _os.sep)
 		if classPath:
 			if _OS.getType() != _OS.Type.WINDOWS:
 				self.classPath = classPath.replace(";",":")
 			else:
 				self.classPath = classPath.replace(":",";")
+				self.classPath = classPath.replace("/", _os.sep)
 		else:
 			self.classPath = None
 		self.vmArgs = vmArgs
