@@ -150,6 +150,7 @@ to be rechecked in version 5.0.0-beta11 or later
 	      <os family="unix"/>
 	    </executable>
         </pack>
+	<!-- ignore source packages
         <pack name="The kernel sources" required="yes" preselected="yes" parent="Kernel">
 	    <description>The source code of the kernel</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
@@ -169,12 +170,14 @@ to be rechecked in version 5.0.0-beta11 or later
 		<exclude name="tools/TestScriptDoc/*.class"/>
 		<exclude name="**/target/**"/>
 		<exclude name="**/Thumbs.db"/>
-		<!-- excludes eclipse files -->
+		<!- excludes eclipse files -->
+		<!--
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
+	-->
 <!--
 	<pack name="Plugins" required="no" preselected="yes">
 	    <description>The plugins</description>
@@ -186,20 +189,23 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="The recorder binaries" required="yes" preselected="yes" parent="Recoder">
 	    <description>The recorder binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/qtaste-recorder-deploy.jar"/>
+		<include name="plugins/SUT/qtaste-recorder-deploy.jar"/>
 	    </fileset>
         </pack>
+	<!-- ignore source packages
         <pack name="The recorder sources" required="yes" preselected="yes" parent="Recoder">
 	    <description>The recorder sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins_src/recorder/src/**"/>
 		<include name="plugins_src/recorder/pom.xml"/>
-		<!-- excludes eclipse files -->
+		<!- excludes eclipse files -->
+		<!--		
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
+	-->
 <!--
 	<pack name="Tools" required="no" preselected="yes" parent="Plugins">
 	    <description>The tools plugin. This plugin can convert a recording file to a python script.</description>
@@ -208,20 +214,24 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="The tools binaries" required="yes" preselected="yes" parent="Tools">
 	    <description>The tools binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/qtaste-tools-deploy.jar"/>
+		<include name="plugins/SUT/qtaste-tools-deploy.jar"/>
 	    </fileset>
         </pack>
+
+	<!-- ignore source packages
         <pack name="The tools sources" required="yes" preselected="yes" parent="Tools">
 	    <description>The tools sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins_src/tools/src/**"/>
 		<include name="plugins_src/tools/pom.xml"/>
-		<!-- excludes eclipse files -->
+		<!- excludes eclipse files -->
+		<!--
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
+	-->
 <!--
 	<pack name="Java GUI" required="no" preselected="yes" parent="Plugins">
 	    <description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
@@ -230,20 +240,23 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="The Java GUI binaries" required="yes" preselected="yes" parent="Java GUI">
 	    <description>The Java GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/qtaste-javagui-deploy.jar"/>
+		<include name="plugins/SUT/qtaste-javagui-deploy.jar"/>
 	    </fileset>
         </pack>
+	<!-- ignore source packages
         <pack name="The Java GUI sources" required="yes" preselected="yes" parent="Java GUI">
 	    <description>The Java GUI sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
 		<include name="plugins_src/javagui/src/**"/>
 		<include name="plugins_src/javagui/pom.xml"/>
-		<!-- excludes eclipse files -->
+		<!- excludes eclipse files -->
+		<!--
 		<exclude name="**/.settings/**"/>
 		<exclude name="**/.svn"/>
 		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
+	-->
 <!--
 	<pack name="Demo" required="no" preselected="yes">
 	    <description>The demonstrations</description>
@@ -281,6 +294,7 @@ to be rechecked in version 5.0.0-beta11 or later
 	      <os family="unix"/>
 	    </executable>
         </pack>
+	<!-- ignore source packages
         <pack name="The demo sources" required="yes" preselected="yes" parent="Demo">
 	    <description>The source code of the demo</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
@@ -293,6 +307,7 @@ to be rechecked in version 5.0.0-beta11 or later
 		<exclude name="**/.svn/**"/>
 	    </fileset>
         </pack>
+	-->
         <pack name="Docs" required="yes" preselected="yes">
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
