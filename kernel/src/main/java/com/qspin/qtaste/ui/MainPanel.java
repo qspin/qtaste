@@ -33,11 +33,8 @@ import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Locale;
-import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -59,15 +56,11 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
-import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
 import com.qspin.qtaste.ui.config.MainConfigFrame;
 import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
@@ -76,9 +69,8 @@ import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.tools.WrappedToolTipUI;
 import com.qspin.qtaste.ui.util.QSpinTheme;
 import com.qspin.qtaste.ui.widget.FillLabelUI;
-import com.qspin.qtaste.util.FileUtilities;
+import com.qspin.qtaste.util.Environment;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  *
@@ -98,6 +90,7 @@ public class MainPanel extends JFrame {
     private QSpinTheme mTheme;
     private ConfigInfoPanel mHeaderPanel;
     private JTabbedPane mTreeTabsPanel;
+    private JPanel mRightPanels;
     private TestCasePane mTestCasePanel;
     private TestCampaignMainPanel mTestCampaignPanel;
     
@@ -159,6 +152,10 @@ public class MainPanel extends JFrame {
     public JTabbedPane getTreeTabsPanel() {
         return mTreeTabsPanel;
     }
+
+    public JPanel getTabsPanel() {
+        return mRightPanels;
+    }
     
     public TestCasePane getTestCasePanel() {
         return mTestCasePanel;
@@ -200,15 +197,16 @@ public class MainPanel extends JFrame {
             //    - Test campaign: management of test campaigns
             //    - Interactive: ability to invoke QTaste verbs one by one
 
-            final JPanel rightPanels = new JPanel(new CardLayout());
+            mRightPanels = new JPanel(new CardLayout());
+            
             mTestCasePanel = new TestCasePane(this);
-            rightPanels.add(mTestCasePanel, "Test Cases");
+            mRightPanels.add(mTestCasePanel, "Test Cases");
 
             mTestCampaignPanel = new TestCampaignMainPanel(this);
-            rightPanels.add(mTestCampaignPanel, "Test Campaign");
+            mRightPanels.add(mTestCampaignPanel, "Test Campaign");
 
             final TestCaseInteractivePanel testInterractivePanel = new TestCaseInteractivePanel();
-            rightPanels.add(testInterractivePanel, "Interactive");
+            mRightPanels.add(testInterractivePanel, "Interactive");
 
             mTreeTabsPanel = new JTabbedPane(JTabbedPane.BOTTOM);
             mTreeTabsPanel.setPreferredSize(new Dimension(TREE_TABS_WIDTH, HEIGHT));
@@ -237,8 +235,8 @@ public class MainPanel extends JFrame {
 
                 public void stateChanged(ChangeEvent e) {
                     String componentName = mTreeTabsPanel.getTitleAt(mTreeTabsPanel.getSelectedIndex());
-                    CardLayout rcl = (CardLayout) rightPanels.getLayout();
-                    rcl.show(rightPanels, componentName);
+                    CardLayout rcl = (CardLayout) mRightPanels.getLayout();
+                    rcl.show(mRightPanels, componentName);
                 }
             });
             mTestCampaignPanel.addTestCampaignActionListener(new ActionListener() {
@@ -261,7 +259,7 @@ public class MainPanel extends JFrame {
                 }
             });
 
-            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mTreeTabsPanel, rightPanels);
+            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mTreeTabsPanel, mRightPanels);
             splitPane.setDividerSize(4);
             GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
             int mainHorizontalSplitDividerLocation= guiConfiguration.getInt(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY, 285);
@@ -408,133 +406,8 @@ public class MainPanel extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    private static void showUsage() {
-        System.err.println("Usage: <command> [-testsuite testsuiteDirectory] [-testbed configFileName.xml] [-engine engineFileName.xml] [-sutversion <sut_version_identifier>]");
-        TestEngine.shutdown();
-        System.exit(1);
-    }
-
     public static void main(String args[]) throws Exception {
-        try {
-        	Locale.setDefault(Locale.ENGLISH);
-        	
-        	// Log4j Configuration
-            PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
-
-            // log version information
-          	logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-      		logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
-
-          	// handle optional config file name
-            if ((args.length != 0) && (args.length != 2) && (args.length != 4) && (args.length != 6) && (args.length != 8)) {
-                showUsage();
-            }
-
-            GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-
-            boolean testBedArgumentPresent = false;
-            String testSuiteDir = null;
-            int numberLoops = 1;
-            boolean loopsInHours = false;
-//            String sutVersion = null;
-
-            for (int i = 0; i < args.length; i = i + 2) {
-                if (args[i].equals("-testsuite")) {
-                    logger.info("Using " + args[i + 1] + " as test suite directory");
-                    testSuiteDir = args[i + 1];
-                } else if (args[i].equals("-testbed")) {
-                    String testbedFileName = args[i + 1];
-                    logger.info("Using " + testbedFileName + " as testbed configuration file");
-                    TestBedConfiguration.setConfigFile(testbedFileName);
-                    // save testbed
-                    testbedFileName = new File(testbedFileName).getName();
-                    String testbed = testbedFileName.substring(0, testbedFileName.lastIndexOf('.'));
-                    guiConfiguration.setProperty(StaticConfiguration.LAST_SELECTED_TESTBED_PROPERTY, testbed);
-                    testBedArgumentPresent = true;
-                } else if (args[i].equals("-engine")) {
-                    logger.info("Using " + args[i + 1] + " as engine configuration file");
-                    TestEngineConfiguration.setConfigFile(args[i + 1]);
-                } else if (args[i].equals("-loop")) {
-//                    String message = "Running test suite in loop";
-                    numberLoops = -1;
-                    if ((i + 1 < args.length)) {
-                        // more arguments, check if next argument is a loop argument
-                        if (args[i + 1].startsWith("-")) {
-                            i++;
-                        } else {
-                            String countOrHoursStr;
-                            if (args[i + 1].endsWith("h")) {
-                                loopsInHours = true;
-                                countOrHoursStr = args[i + 1].substring(0, args[i + 1].length() - 1);
-                            } else {
-                                loopsInHours = false;
-                                countOrHoursStr = args[i + 1];
-                            }
-                            try {
-                                numberLoops = Integer.parseInt(countOrHoursStr);
-                                if (numberLoops <= 0) {
-                                    throw new NumberFormatException();
-                                }
-//                                message += (loopsInHours ? " during " : " ") + numberLoops + " " + (loopsInHours ? "hour" : "time") + (numberLoops > 1 ? "s" : "");
-                                i += 2;
-                            } catch (NumberFormatException e) {
-                                showUsage();
-                            }
-                        }
-                    }
-                } else if (args[i].equals("-sutversion") && (i + 1 < args.length)) {
-                    logger.info("Using " + args[i + 1] + " as sutversion");
-                    TestBedConfiguration.setSUTVersion(args[i + 1]);
-                    i += 2;
-                } else {
-                    // no more arguments
-                    i++;
-                }
-            }
-            if (!testBedArgumentPresent) {
-                String lastSelectedTestbed = guiConfiguration.getString(StaticConfiguration.LAST_SELECTED_TESTBED_PROPERTY, "default");
-                String testbedConfigFileName = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + lastSelectedTestbed + "." + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION;
-                if (!new File(testbedConfigFileName).exists()) {
-                    // if last selected testbed doesn't exist use the first one found
-                    File[] testbedConfigFiles = FileUtilities.listSortedFiles(new File(StaticConfiguration.TESTBED_CONFIG_DIRECTORY),new FileFilter() {
-
-                        public boolean accept(File pathname) {
-                            return pathname.getName().toLowerCase().endsWith(".xml");
-                        }
-                    });
-                    if (testbedConfigFiles == null) {
-                        throw new RuntimeException("Testbed configuration directory (" + StaticConfiguration.TESTBED_CONFIG_DIRECTORY + ") not found.");
-                    }
-                    if (testbedConfigFiles.length > 0) {
-                        testbedConfigFileName = testbedConfigFiles[0].getCanonicalPath();
-                        // save testbed
-                        final String testbedFileName = testbedConfigFiles[0].getName();
-                        guiConfiguration.setProperty(StaticConfiguration.LAST_SELECTED_TESTBED_PROPERTY, testbedFileName.substring(0, testbedFileName.lastIndexOf('.')));
-                    } else {
-                        throw new RuntimeException("No testbed config file available.");
-                    }
-                }
-                TestBedConfiguration.setConfigFile(testbedConfigFileName);
-            }
-            
-            // start the log4j server
-            Log4jServer.getInstance().start();
-            
-            // initialize the Python interpreter (used for Doc generation)
-            Properties props = new Properties();
-            //Le chemin des librairies python            
-            
-            props.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
-            props.setProperty("python.path", StaticConfiguration.JYTHON_LIB + File.pathSeparator + StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR);
-            PythonInterpreter.initialize(System.getProperties(), props, new String[]{""});
-            MainPanel me = new MainPanel(testSuiteDir, numberLoops, loopsInHours);
-            me.launch();
-
-        } catch (Exception e) {
-            logger.error(e);
-            TestEngine.shutdown();
-            System.exit(1);            
-        }
+        Environment.getEnvironment().initializeEnvironment(args);
     }
     private void viewQTasteUserManuel() {
         try {

@@ -52,6 +52,7 @@ public class StaticConfiguration {
 	public static final String CAMPAIGN_FILE_EXTENSION = "xml";
 	public static final String FORMATTER_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
 	public static final String ADDITIONNAL_JYTHON_LIB;
+	public static final String PLUGINS_HOME = QTASTE_ROOT + "/plugins";
 	static {
 		//JYTHON_LIB initialization
 		String path = "";
