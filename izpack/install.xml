@@ -143,6 +143,9 @@ to be rechecked in version 5.0.0-beta11 or later
 	    <executable targetfile="$INSTALL_PATH/tools/start_java_process.sh" stage="never">
 	      <os family="unix"/>
 	    </executable>
+	    <executable targetfile="$INSTALL_PATH/tools/rexec_with_result.sh" stage="never">
+	      <os family="unix"/>
+	    </executable>
 	    <executable targetfile="$INSTALL_PATH/tools/rsh_with_result.sh" stage="never">
 	      <os family="unix"/>
 	    </executable>
@@ -308,6 +311,18 @@ to be rechecked in version 5.0.0-beta11 or later
 	    </fileset>
         </pack>
 	-->
+        <pack name="Add-on demonstrator" required="yes" preselected="yes" parent="Add-on">
+	    <description>The Add-on demonstrator</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/qtaste-demo-addon-deploy.jar"/>
+	    </fileset>
+        </pack>
+        <pack name="ConstrolScript builder Add-On" required="yes" preselected="yes" parent="Add-on">
+	    <description>The ConstrolScript builder Add-On. Allow through the QTaste user interface to active/desactive control script actions.</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+		<include name="plugins/ControlScriptBuilderAddOn-deploy.jar"/>
+	    </fileset>
+        </pack>
         <pack name="Docs" required="yes" preselected="yes">
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
