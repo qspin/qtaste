@@ -20,6 +20,10 @@ public class ConfigurationTree extends JTree {
 		getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
+				if ( e.getNewLeadSelectionPath() == null)
+				{
+					return;
+				}
                 String componentName = e.getNewLeadSelectionPath().getLastPathComponent().toString();
                 CardLayout rcl = (CardLayout) pConfigurationPane.getLayout();
                 rcl.show(pConfigurationPane, componentName);
