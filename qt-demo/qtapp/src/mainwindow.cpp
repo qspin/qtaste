@@ -54,6 +54,7 @@ void MainWindow::_buildDocumentTabWidget()
     label->setObjectName("lineEdit_label");
     QLineEdit *lineEdit = new QLineEdit(m_uiDocumentWidget);
     lineEdit->setObjectName("lineEdit");
+    lineEdit->setWindowTitle("lineEdit");
     gridLayout->addWidget(label, 0, 0);
     gridLayout->addWidget(lineEdit, 0, 1);
 
