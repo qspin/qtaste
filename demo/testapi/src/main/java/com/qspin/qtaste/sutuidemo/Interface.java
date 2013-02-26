@@ -26,14 +26,21 @@ final class Interface extends JFrame {
 	private void genUI()
 	{
 		setLayout(new BorderLayout());
-
+		int index = 0;
 		mTabbedPane = new JTabbedPane();
 		mTabbedPane.setName("TABBED_PANE");
-		mTabbedPane.insertTab(DocumentPanel.COMPONENT_NAME, null, new DocumentPanel(), null, 0);
-		mTabbedPane.insertTab(ChoosePanel.COMPONENT_NAME, null, new ChoosePanel(), null, 1);
-		mTabbedPane.insertTab(SelectionPanel.COMPONENT_NAME, null, new SelectionPanel(), null, 2);
-		mTabbedPane.insertTab(TablePanel.COMPONENT_NAME, null, new TablePanel(), null, 3);
-		mTabbedPane.insertTab("UNAMED COMPONENTS", null, new UnamedPanel(), null, 4);
+		System.out.println("insert " + DocumentPanel.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(DocumentPanel.COMPONENT_NAME, null, new DocumentPanel(), null, index++);
+		System.out.println("insert " + ChoosePanel.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(ChoosePanel.COMPONENT_NAME, null, new ChoosePanel(), null, index++);
+		System.out.println("insert " + SelectionPanel.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(SelectionPanel.COMPONENT_NAME, null, new SelectionPanel(), null, index++);
+		System.out.println("insert " + Tree_ListComponentsPanel.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(Tree_ListComponentsPanel.COMPONENT_NAME, null, new Tree_ListComponentsPanel(), null, index++);
+		System.out.println("insert " + TablePanel.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(TablePanel.COMPONENT_NAME, null, new TablePanel(), null, index++);
+		System.out.println("insert UNAMED COMPONENTS at " + index);
+		mTabbedPane.insertTab("UNAMED COMPONENTS", null, new UnamedPanel(), null, index++);
 		mTabbedPane.setSelectedIndex(-1);
 		
 		add(mTabbedPane, BorderLayout.CENTER);

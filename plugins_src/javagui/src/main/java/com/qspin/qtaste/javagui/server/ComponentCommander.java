@@ -36,7 +36,7 @@ abstract class ComponentCommander {
 		for (int i = 0; i < components.length; i++) {
 			//String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
 			Component c = components[i];
-			if (c != null && c.getName() != null && c.getName().contains(name)) {
+			if (c != null && c.getName() != null && c.getName().equals(name)) {
 				System.out.println("Component:" + name + " is found!");
 				return c;
 			} else {

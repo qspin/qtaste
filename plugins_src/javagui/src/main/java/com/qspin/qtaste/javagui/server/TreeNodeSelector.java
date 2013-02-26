@@ -2,6 +2,7 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Label;
+import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -20,42 +21,33 @@ class TreeNodeSelector extends UpdateComponentCommander {
 			if (component instanceof JTree && nodeNames.length > 0) {
 				TreeModel model = tree.getModel();
 				Object node = model.getRoot();
-				Object[] path = new Object[nodeNames.length];
-				Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
-				String value = null;
-				System.out.println("component is " + nodeComponent);
-				if (nodeComponent instanceof JLabel) {
-					System.out.println("component extend JLabel");
-					value = ((JLabel) nodeComponent).getText();
-				} else if (nodeComponent instanceof Label) {
-					System.out.println("component extend TextComponent");
-					value = ((Label) nodeComponent).getText();
-				} else {
-					System.out.println("component extend something else");
-					value = node.toString();
+				int pathLength = nodeNames.length;
+				if ( !tree.isRootVisible() )
+				{
+					//root is not present in the list.
+					pathLength += 1;
 				}
-				System.out.println("compare node (" + value + ") with root (" + nodeNames[0] + ")");
+				Object[] path = new Object[pathLength];
+				String value = getNodeText(tree, node);
+				if ( tree.isRootVisible() )
+				{
+					System.out.println("compare node (" + value + ") with root (" + nodeNames[0] + ")");
+				}
 				if (!tree.isRootVisible() || value.equals(nodeNames[0])) {
-					path[0] = node;
-					for (int i = tree.isRootVisible() ? 1 : 0; i < nodeNames.length; i++) {
+					path[0] = tree.getModel().getRoot();
+					for (int i = 0; i < nodeNames.length; i++) {
 						for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++) {
 							Object child = model.getChild(node, childIndex);
-							nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, child, true, false, true, i, false);
-							value = null;
-							if (nodeComponent instanceof JLabel) {
-								System.out.println("component extend JLabel");
-								value = ((JLabel) nodeComponent).getText();
-							} else if (nodeComponent instanceof Label) {
-								System.out.println("component extend TextComponent");
-								value = ((Label) nodeComponent).getText();
-							} else {
-								System.out.println("component extend something else");
-								value = child.toString();
-							}
+							value = getNodeText(tree, child);;
 							System.out.println("compare node (" + value + ") with value (" + nodeNames[i] + ")");
 							if (value.equals(nodeNames[i])) {
 								node = child;
-								path[i] = node;
+								if ( tree.isRootVisible() )
+								{
+									path[i] = node;
+								} else {
+									path[i+1] = node;	
+								}
 								break;
 							}
 						}
@@ -67,10 +59,26 @@ class TreeNodeSelector extends UpdateComponentCommander {
 					tree.expandPath(new TreePath(path));
 					tree.setExpandsSelectedPaths(true);
 				}
+			} else {
+				throw new QTasteTestFailException("Unabled to find node named " + nodeNames[0]);
 			}
-			throw new QTasteTestFailException("Unabled to find node named " + nodeNames[0]);
 		} catch (Exception pExc) {
 			mError = pExc;
+		}
+	}
+	
+	private String getNodeText(JTree tree, Object node)
+	{
+		Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
+		if (nodeComponent instanceof JLabel) {
+			System.out.println("component extend JLabel");
+			return ((JLabel) nodeComponent).getText();
+		} else if (nodeComponent instanceof Label) {
+			System.out.println("component extend TextComponent");
+			return ((Label) nodeComponent).getText();
+		} else {
+			System.out.println("component extend something else");
+			return node.toString();
 		}
 	}
 

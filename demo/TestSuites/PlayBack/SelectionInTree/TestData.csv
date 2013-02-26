@@ -1,0 +1,3 @@
+COMMENT;TAB_IDX;TAB_COMPONENT_NAME;COMPONENT_NAME;VALUE
+Select "blue" node;3;TABBED_PANE;TREE;JTree!colors!blue
+Select "soccer" node;3;TABBED_PANE;TREE_2;sports!soccer

@@ -1,6 +1,7 @@
 package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
@@ -21,9 +22,17 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
 		}
 		if (!component.isVisible())
-			throw new QTasteTestFailException("Button " + componentName + " is not visible!");
+			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
 		
-		SwingUtilities.invokeLater(this);
+		try {
+			SwingUtilities.invokeAndWait(this);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if ( mError != null )
 		{
 			throw new QTasteTestFailException(mError.getMessage(), mError);
