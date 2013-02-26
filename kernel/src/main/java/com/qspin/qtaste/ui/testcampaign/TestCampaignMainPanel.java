@@ -140,7 +140,7 @@ public class TestCampaignMainPanel extends JPanel {
 	                    try {
 	                        guiConfiguration.save();
 	                    } catch (ConfigurationException ex) {
-	                        logger.error("Error while saving GUI configuration: " + ex.getMessage());
+	                        logger.error("Error while saving GUI configuration: " + ex.getMessage(), ex);
 	                    }
 	                }
                 }
@@ -183,7 +183,7 @@ public class TestCampaignMainPanel extends JPanel {
                 // TO DO
                 } catch (Exception ex) {
                     //
-                    logger.error(ex);
+                    logger.error(ex.getMessage(), ex);
                 }
             }
         });
@@ -302,12 +302,12 @@ public class TestCampaignMainPanel extends JPanel {
                 }
                 
             } catch (PyException ex) {
-                logger.error(ex);
+                logger.error(ex.getMessage(), ex);
         		JOptionPane.showMessageDialog(null, 
         				"Error during generation of TPO file\n" + ex.getMessage(), 
         				"Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
-                logger.error(ex);
+                logger.error(ex.getMessage(), ex);
         		JOptionPane.showMessageDialog(null, 
         				"Error during generation of TPO file\n" + ex.getMessage(), 
         				"Error", JOptionPane.ERROR_MESSAGE);
@@ -348,7 +348,7 @@ public class TestCampaignMainPanel extends JPanel {
                 Campaign campaign = campaignManager.readFile(xmlFileName);
                 campaignManager.execute(campaign);
             } catch (Exception e) {
-                logger.fatal(e);
+                logger.fatal(e.getMessage(), e);
             } finally {
                 isExecuting = false;
                 SwingUtilities.invokeLater(new UpdateButtons());
