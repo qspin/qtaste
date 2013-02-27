@@ -5,11 +5,16 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
 
+import org.apache.log4j.Logger;
+
+import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 abstract class ComponentCommander {
 
-	abstract Object executeCommand(Object... data) throws QTasteTestFailException;
+	abstract Object executeCommand(Object... data) throws QTasteException;
+	
+	protected static final Logger LOGGER = Logger.getLogger(ComponentCommander.class);
 	
 	protected Component getComponentByName(String name) throws QTasteTestFailException {
 		// TODO: Think about several component having the same names!

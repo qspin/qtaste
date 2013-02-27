@@ -11,7 +11,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class Snapshotter extends UpdateComponentCommander {
 
-	public void run() {
+	public void doActionsInSwingThread() throws QTasteTestFailException{
 		try {
 
 			Dimension size = component.getSize();
@@ -26,7 +26,10 @@ class Snapshotter extends UpdateComponentCommander {
 			ImageIO.write(myImage, "jpg", file);				 			
 		}
 		catch (Exception e) {
-			mError = new QTasteTestFailException("Error saving snapshot " + mData[1].toString() + ":", e);
+			throw new QTasteTestFailException("Error saving snapshot " + mData[1].toString() + ":", e);
 		}	
 	}
+
+	@Override
+	protected void prepareActions() throws QTasteTestFailException {}
 }

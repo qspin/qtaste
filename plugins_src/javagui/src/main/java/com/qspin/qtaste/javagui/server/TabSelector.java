@@ -2,20 +2,21 @@ package com.qspin.qtaste.javagui.server;
 
 import javax.swing.JTabbedPane;
 
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
+
 class TabSelector extends UpdateComponentCommander {
 
+	protected int mTabIndex;
+
 	@Override
-	public void run() {
-		try
-		{
-			int tabIndex = Integer.parseInt(mData[1].toString());
-			if (component != null && component instanceof JTabbedPane) {
-				((JTabbedPane)component).setSelectedIndex(tabIndex);
-			}
-		}
-		catch (Exception pExc)
-		{
-			mError = pExc;
+	protected void prepareActions() throws QTasteTestFailException {
+		mTabIndex = Integer.parseInt(mData[1].toString());
+	}
+
+	@Override
+	protected void doActionsInSwingThread() {
+		if (component != null && component instanceof JTabbedPane) {
+			((JTabbedPane)component).setSelectedIndex(mTabIndex);
 		}
 	}
 

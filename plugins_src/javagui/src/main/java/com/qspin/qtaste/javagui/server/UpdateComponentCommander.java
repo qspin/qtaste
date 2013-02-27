@@ -1,7 +1,6 @@
 package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
@@ -23,22 +22,23 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		}
 		if (!component.isVisible())
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
-		
-		try {
-			SwingUtilities.invokeAndWait(this);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if ( mError != null )
-		{
-			throw new QTasteTestFailException(mError.getMessage(), mError);
-		}
+		prepareActions();
+		SwingUtilities.invokeLater(this);
 		return true;
 	}
+	
+	public void run()
+	{
+		try {
+			doActionsInSwingThread();
+		}
+		catch (QTasteTestFailException e) {
+			LOGGER.fatal(e.getMessage(), e);
+		}
+	}
+	
+	protected abstract void prepareActions() throws QTasteTestFailException;
+	protected abstract void doActionsInSwingThread()throws QTasteTestFailException;
 
 	private void setData(Object[] data)
 	{
@@ -46,6 +46,5 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	}
 	
 	protected Object[] mData;
-	protected Exception mError;
 	protected Component component;
 }
