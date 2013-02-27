@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>		
+	<testapi_implementation>
+		<import>com.qspin.qtaste.testapi</import>
+	</testapi_implementation>
+</testbed_configuration>

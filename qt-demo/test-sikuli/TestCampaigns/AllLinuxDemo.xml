@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><campaign name="AllLinuxDemo">
+    <run testbed="qt_demo.xml">
+        <testsuite directory="TestSuites/QtDemo"/>
+    </run>
+</campaign>

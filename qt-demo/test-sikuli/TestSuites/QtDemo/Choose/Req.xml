@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<REQUIREMENTS_LINKS>
+	<REQ id="id_1">
+		<REQ_DESCRIPTION>It should be possible to choose a radio button</REQ_DESCRIPTION>
+	</REQ>
+	<REQ id="id_2">
+		<REQ_DESCRIPTION>It should be possible to choose a checkbox</REQ_DESCRIPTION>
+	</REQ>
+</REQUIREMENTS_LINKS>
