@@ -1,5 +1,7 @@
 #! /bin/bash
 
+find . -name "*.sh" | xargs chmod +x
+
 # build the kernel
 pushd kernel
 ./build.sh || exit 1
