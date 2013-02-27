@@ -83,15 +83,17 @@ public class MetaTestSuite extends TestSuite {
     
     @Override
     public boolean executeOnce(boolean debug) {
+    	boolean result = true;
         for (TestSuite testSuite : testSuites) {
             if (!testSuite.execute(debug, false)) {
                 if (testSuite.isAbortedByUser()) {
                     setAbortedByUser(true);
+                    return false;
                 }
-                return false;
+                result = false;
             }
         }
-        return true;
+        return result;
     }
 
     public List<TestScript> getTestScripts() {
