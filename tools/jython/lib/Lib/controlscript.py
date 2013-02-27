@@ -280,7 +280,7 @@ class JavaProcess(ControlAction):
 				self.classPath = classPath.replace(";",":")
 			else:
 				self.classPath = classPath.replace(":",";")
-				self.classPath = classPath.replace("/", _os.sep)
+				self.classPath = self.classPath.replace("/", _os.sep)
 		else:
 			self.classPath = None
 		self.vmArgs = vmArgs
