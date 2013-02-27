@@ -17,4 +17,10 @@ else
    echo $PID
    kill $PID
    sleep 5s
+   if [ -z $PID ]; then
+      echo "Process still running - use kill -9"
+   else
+      kill -9 $PID
+      sleep 5s
+   fi
 fi
