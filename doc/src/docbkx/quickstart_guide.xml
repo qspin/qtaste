@@ -1,181 +1,274 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-          "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <book>
-	<title>QTaste QuickStart Guide</title>
-	<bookinfo>
-		<authorgroup>
-			<author><firstname>Laurent</firstname><surname>Vanboquestal</surname></author>
-			<author><firstname>David</firstname><surname>Ergo</surname></author>
-			<author><firstname>Sim</firstname><surname>Jan</surname></author>
-		</authorgroup>
-		<copyright>
-			<year>2012</year>
-			<holder>QSpin SA</holder>
-		</copyright>
-	</bookinfo>		
+  <title>QTaste QuickStart Guide</title>
+  <bookinfo>
+    <copyright>
+      <year>2012</year>
+      <holder>QSpin SA</holder>
+    </copyright>
+    <revhistory>
+  		<revision>
+        <revnumber>1.0</revnumber>
+        <date>21/10/2009</date>
+        <revdescription>
+          <para>First version for Open Source Release</para>
+        </revdescription>
+      </revision>
+  		<revision>
+        <revnumber>1.1</revnumber>
+        <date>29/03/2012</date>
+        <revdescription>
+          <para>Some minor change for release 1.1</para>
+        </revdescription>
+      </revision>
+  		<revision>
+        <revnumber>1.2</revnumber>
+        <date>24/09/2012</date>
+        <revdescription>
+          <para>Requirements module + bug fixing release 1.2</para>
+        </revdescription>
+      </revision>
+    </revhistory>
+  </bookinfo>
 
-	<!-- TABLE OF CONTENT -->
-	<!-- automatically generated -->
+  <chapter>
+    <title>Installation of the QTaste Framework</title>
 
-	<!-- CONTENT -->
-	<chapter>
-		<title>Installation of the QTaste Framework</title>
-		<para>
-			The QTaste framework is mainly developed in java programming language and python. So by definition, it can be installed on any platform running java VM 1.6. However, it has been only validated on Windows (XP Pro / Vista) and Linux platform (OpenSuse 11.04).
-		</para>
-		<section>
-			<title>QTaste system requirements</title>
-			<itemizedlist mark='opencircle'>
-				<listitem override='bullet'>
-					Java Virtual Machine (JDK) 1.6 (<ulink url="http://java.sun.com/javase/downloads/index.jsp"/>)
-				</listitem>				
-				<listitem override='bullet'>
-					(optional) subversion command-line client accessible from PATH (“svn”), for test script versioning
-				</listitem>				
-				<listitem override='bullet'>
-					At least 100 MB of disk space
-				</listitem>				
-				<listitem override='bullet'>
-					At least 256 MB of system memory (Running with less memory may cause disk swapping which has a severe effect on performance. Very large programs may require more RAM for adequate performance.)	 				
-				</listitem>				
-				<listitem override='bullet'>
-					On Linux system, Java VM requires some graphical gnome libraries. These libraries have to be installed. <ulink url="https://sourceforge.net/apps/mantisbt/qtaste/view.php?id=3"/>
-				</listitem>				
-			</itemizedlist>
-		</section>
-		<section>
-			<title>Installation of the QTaste</title>
-			<para>
-				The QTaste framework is composed of:
-				<itemizedlist mark='opencircle'>
-					<listitem override='bullet'>Test Engine kernel</listitem>
-					<listitem override='bullet'>Simulators base classes</listitem>
-					<listitem override='bullet'>Other tools</listitem>
-					<listitem override='bullet'>Components Test API and Component Implementations</listitem>
-					<listitem override='bullet'>Test Suites containing test scripts and test data</listitem>
-					<listitem override='bullet'>Test Campaigns</listitem>
-					<listitem override='bullet'>Testbeds configurations</listitem>
-				</itemizedlist>
-			</para>
-			<para>
-				The installer available on source forge (<ulink url="https://sourceforge.net/projects/qtaste/files"/>) contains the QTaste Kernel (sources and binaries), the demonstration (sources and binaries) and the documentation. 
-			</para>
-			<para>
-				To start the installer, just click on the <ulink url="http://www.sourceforge.net/projects/qtaste/files/QTaste_V1.1/QTaste_1.1-installer.jar/download">QTaste_1.2-installer.jar</ulink>
-			</para>
-			<warning>
-				<para>
-				It is not recommended to install QTASTE in a directory containing spaces (like Program Files/QTaste) due to limitations in some shell scripts.(<ulink url="http://sourceforge.net/apps/mantisbt/qtaste/view.php?id=6"/>)
-				</para>
-			</warning>
-		</section>
-	</chapter>
-	<chapter>
-		<title>Qtaste demo Quick start</title>
-		<section>
-			<title>About the demos</title>
-			<para>
-			The goal of demos are to demonstrate that QTaste can be used in different kind of environments like Web, Windows GUI, Databases, embedded systems or others. For that reason, each demo required the installation of the test environment. It comes with some pre-requisites of each demo described in the README.txt file located in the Test suite directory of each demo (demo/TestSuites/*)
-			</para>
-		</section>
-		<section>
-			<title>Starting the calculator demo</title>
-		</section>
-			<para>
-				Unfortunately, this demo is only working on XP 32 bits platform. <ulink url="https://sourceforge.net/apps/mantisbt/qtaste/view.php?id=4" />		
-			</para>
-			<para>
-				Keep in mind that this demo is only working on Windows XP 32 bits platform as this example demonstrates how QTaste can communicate with low-level GUI component controls. It uses pyWinAuto python component (http://pywinauto.openqa.org/) in order to communication with the Windows components.
-				<itemizedlist mark='opencircle'>
-					<listitem override='bullet'>In this implementation, it requires the installation of python (tested with 2.5) and python has to be available in the PATH environment variable. (<ulink url="http://www.python.org/download/releases/2.5/"/>)</listitem>
-					<listitem override='bullet'>JDK 1.6 has to be installed as well as it is part of the QTaste pre-requisite.</listitem>
-					<listitem override='bullet'>Start the Qtaste demo using the startUI.cmd (or startUI.sh) script located in demo directory.</listitem>
-					<listitem override='bullet'>
-						Select the testbed called “demo_gui” in the testbed configuration drop-down (upper-right corner of the QTaste GUI)
-						<para>
-							<imageobject>
-								<imagedata fileref="res/quickstart_guide/testbed_selection.png" format="PNG"/>
-							</imageobject>
-						</para>
-					</listitem>
-					<listitem override='bullet'>Select the “TestCalculator” TestSuites (in the treeview on the left).</listitem>
-					<listitem override='bullet'>
-						Click on the “Run Test” button
-						<para>
-							<imageobject>
-								<imagedata fileref="res/quickstart_guide/start_button.jpg" format="JPG"/>
-							</imageobject>
-						</para>
-					</listitem>
-					<listitem override='bullet'>
-						And QTaste will execute the test on the Windows Calculator
-						<para>
-							<imageobject>
-								<imagedata fileref="res/quickstart_guide/win_calc_test.jpg" width="15.20cm" height="9.07cm" format="JPG"/>
-							</imageobject>
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
-		<section>
-			<title>Starting the translate demo</title>
-			<para>
-				This demo demonstrates an example of Web functional test using the Selenium implementation. (<ulink url="http://seleniumhq.org" />)
-			</para>
-			<para>
-				This demo can be started from Windows or Linux platform. This demo required Firefox (tested with version 3.x). More browsers are supported. Please have a look at the selenium web site to know about the supported browser. 
-			</para>
-			
-			<itemizedlist mark='opencircle'>
-				<listitem override='bullet'>JDK 1.6 has to be installed as well as it is part of the QTaste pre-requisite.</listitem>
-				<listitem override='bullet'>Start the Qtaste demo using the startUI.cmd (or startUI.sh) script located in demo directory.</listitem>
-				<listitem override='bullet'>Select the testbed called “demo_web” in the testbed configuration drop-down (upper-right corner of the QTaste GUI)</listitem>
-				<listitem override='bullet'>Select the “TestTranslate” TestSuites (in the treeview on the left).</listitem>
-				<listitem override='bullet'>
-					Click on the “Run Test” button
-					<para>
-						<imageobject>
-							<imagedata fileref="res/quickstart_guide/start_button.jpg" format="JPG"/>
-						</imageobject>
-					</para>
-				</listitem>
-				<listitem override='bullet'>
-					And QTaste will execute the test using Firefox
-					<para>
-						<imageobject>
-							<imagedata fileref="res/quickstart_guide/translate_test.png"  width="15.20cm" height="9.07cm" format="PNG"/>
-						</imageobject>
-					</para>
-				</listitem>
-			</itemizedlist>
-		</section>
-		<section>
-			<title>Starting the JavaGUI demo</title>
-			<para>
-				This demo demonstrates an example of  automation of control of a Java application developed using Swing.
-			</para>
-			<itemizedlist mark='opencircle'>
-				<listitem override='bullet'>Start the Qtaste demo using the startUI.cmd (or startUI.sh) script located in demo directory.</listitem>
-				<listitem override='bullet'>Select the testbed called “playback” in the testbed configuration drop-down (upper-right corner of the QTaste GUI)</listitem>
-				<listitem override='bullet'>Select the “PlayBack” TestSuites (in the treeview on the left).</listitem>
-				<listitem override='bullet'>
-					Click on the “Run Test” button
-					<para>
-						<imageobject>
-							<imagedata fileref="res/quickstart_guide/start_button.jpg" format="JPG"/>
-						</imageobject>
-					</para>
-				</listitem>
-				<listitem override='bullet'>
-					And QTaste will execute the test of the Java application
-					<para>
-						<imageobject>
-							<imagedata fileref="res/quickstart_guide/swing_test.png"  width="15.20cm" height="9.07cm" format="PNG"/>
-						</imageobject>
-					</para>
-				</listitem>
-			</itemizedlist>
-		</section>
-	</chapter>
+    <para>The QTaste framework is mainly developed in java programming
+    language and python. So by definition, it can be installed on any platform
+    running java VM 1.6. However, it has been only validated on Windows (XP
+    Pro / Vista) and Linux platform (OpenSuse 11.04).</para>
+
+    <section>
+      <title>QTaste system requirements</title>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           Java Virtual Machine (JDK) 1.6 ( 
+
+          <ulink url="http://java.sun.com/javase/downloads/index.jsp"/>
+
+           ) 
+        </listitem>
+
+        <listitem override="bullet">
+           (optional) subversion command-line client accessible from PATH (“svn”), for test script versioning 
+        </listitem>
+
+        <listitem override="bullet">
+           At least 100 MB of disk space 
+        </listitem>
+
+        <listitem override="bullet">
+           At least 256 MB of system memory (Running with less memory may cause disk swapping which has a severe effect on performance. Very large programs may require more RAM for adequate performance.) 
+        </listitem>
+
+        <listitem override="bullet">
+           On Linux system, Java VM requires some graphical gnome libraries. These libraries have to be installed. 
+
+          <ulink url="https://sourceforge.net/apps/mantisbt/qtaste/view.php?id=3"/>
+
+           
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Installation of the QTaste</title>
+
+      <para>The QTaste framework is composed of: <itemizedlist
+          mark="opencircle">
+          <listitem override="bullet">
+             Test Engine kernel 
+          </listitem>
+
+          <listitem override="bullet">
+             Simulators base classes 
+          </listitem>
+
+          <listitem override="bullet">
+             Other tools 
+          </listitem>
+
+          <listitem override="bullet">
+             Components Test API and Component Implementations 
+          </listitem>
+
+          <listitem override="bullet">
+             Test Suites containing test scripts and test data 
+          </listitem>
+
+          <listitem override="bullet">
+             Test Campaigns 
+          </listitem>
+
+          <listitem override="bullet">
+             Testbeds configurations 
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The installer available on source forge (<ulink
+      url="https://sourceforge.net/projects/qtaste/files"/>) contains the
+      QTaste Kernel (sources and binaries), the demonstration (sources and
+      binaries) and the documentation.</para>
+
+      <para>To start the installer, just click on the <ulink
+      url="http://www.sourceforge.net/projects/qtaste/files/QTaste_V1.1/QTaste_1.1-installer.jar/download">QTaste_1.2-installer.jar</ulink></para>
+
+      <warning>
+        <para>It is not recommended to install QTASTE in a directory
+        containing spaces (like Program Files/QTaste) due to limitations in
+        some shell scripts.(<ulink
+        url="http://sourceforge.net/apps/mantisbt/qtaste/view.php?id=6"/>)</para>
+      </warning>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Qtaste demo Quick start</title>
+
+    <section>
+      <title>About the demos</title>
+
+      <para>The goal of demos are to demonstrate that QTaste can be used in
+      different kind of environments like Web, Windows GUI, Databases,
+      embedded systems or others. For that reason, each demo required the
+      installation of the test environment. It comes with some pre-requisites
+      of each demo described in the README.txt file located in the Test suite
+      directory of each demo (demo/TestSuites/*)</para>
+    </section>
+
+    <section>
+      <title>Starting the calculator demo</title>
+    </section>
+
+    <para>Unfortunately, this demo is only working on XP 32 bits platform.
+    <ulink
+    url="https://sourceforge.net/apps/mantisbt/qtaste/view.php?id=4"/></para>
+
+    <para>Keep in mind that this demo is only working on Windows XP 32 bits
+    platform as this example demonstrates how QTaste can communicate with
+    low-level GUI component controls. It uses pyWinAuto python component
+    (http://pywinauto.openqa.org/) in order to communication with the Windows
+    components. <itemizedlist mark="opencircle">
+        <listitem override="bullet">In this implementation, it requires the
+        installation of python (tested with 2.5) and python has to be
+        available in the PATH environment variable. (<ulink
+        url="http://www.python.org/download/releases/2.5/"/>)</listitem>
+
+        <listitem override="bullet">JDK 1.6 has to be installed as well as it
+        is part of the QTaste pre-requisite.</listitem>
+
+        <listitem override="bullet">Start the Qtaste demo using the
+        startUI.cmd (or startUI.sh) script located in demo
+        directory.</listitem>
+
+        <listitem override="bullet">Select the testbed called “demo_gui” in
+        the testbed configuration drop-down (upper-right corner of the QTaste
+        GUI) <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/testbed_selection.png"
+                         format="PNG"/>
+            </imageobject>
+          </para></listitem>
+
+        <listitem override="bullet">Select the “TestCalculator” TestSuites (in
+        the treeview on the left).</listitem>
+
+        <listitem override="bullet">Click on the “Run Test” button <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/start_button.jpg"
+                         format="PNG"/>
+            </imageobject>
+          </para></listitem>
+
+        <listitem override="bullet">And QTaste will execute the test on the
+        Windows Calculator <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/win_calc_test.jpg"
+                         format="JPG" height="9.07cm" width="15.20cm"/>
+            </imageobject>
+          </para></listitem>
+      </itemizedlist></para>
+
+    <section>
+      <title>Starting the translate demo</title>
+
+      <para>This demo demonstrates an example of Web functional test using the
+      Selenium implementation. (<ulink url="http://seleniumhq.org"/>)</para>
+
+      <para>This demo can be started from Windows or Linux platform. This demo
+      required Firefox (tested with version 3.x). More browsers are supported.
+      Please have a look at the selenium web site to know about the supported
+      browser.</para>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">JDK 1.6 has to be installed as well as it
+        is part of the QTaste pre-requisite.</listitem>
+
+        <listitem override="bullet">Start the Qtaste demo using the
+        startUI.cmd (or startUI.sh) script located in demo
+        directory.</listitem>
+
+        <listitem override="bullet">Select the testbed called “demo_web” in
+        the testbed configuration drop-down (upper-right corner of the QTaste
+        GUI)</listitem>
+
+        <listitem override="bullet">Select the “TestTranslate” TestSuites (in
+        the treeview on the left).</listitem>
+
+        <listitem override="bullet">Click on the “Run Test” button <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/start_button.jpg"
+                         format="JPG"/>
+            </imageobject>
+          </para></listitem>
+
+        <listitem override="bullet">And QTaste will execute the test using
+        Firefox <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/translate_test.png"
+                         format="PNG" height="9.07cm" width="15.20cm"/>
+            </imageobject>
+          </para></listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Starting the JavaGUI demo</title>
+
+      <para>This demo demonstrates an example of automation of control of a
+      Java application developed using Swing.</para>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">Start the Qtaste demo using the
+        startUI.cmd (or startUI.sh) script located in demo
+        directory.</listitem>
+
+        <listitem override="bullet">Select the testbed called “playback” in
+        the testbed configuration drop-down (upper-right corner of the QTaste
+        GUI)</listitem>
+
+        <listitem override="bullet">Select the “PlayBack” TestSuites (in the
+        treeview on the left).</listitem>
+
+        <listitem override="bullet">Click on the “Run Test” button <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/start_button.jpg"
+                         format="JPG"/>
+            </imageobject>
+          </para></listitem>
+
+        <listitem override="bullet">And QTaste will execute the test of the
+        Java application <para>
+            <imageobject>
+              <imagedata fileref="res/quickstart_guide/swing_test.png"
+                         format="PNG" height="9.07cm" width="15.20cm"/>
+            </imageobject>
+          </para></listitem>
+      </itemizedlist>
+    </section>
+  </chapter>
 </book>

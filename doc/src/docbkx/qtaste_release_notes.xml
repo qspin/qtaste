@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book>
+  <title>QTaste Release Notes</title>
+  <bookinfo>
+    <copyright>
+      <year>2012</year>
+      <holder>QSpin SA</holder>
+    </copyright>
+    <revhistory>
+  		<revision>
+        <revnumber>1.0</revnumber>
+        <date>02/10/2009</date>
+        <revdescription>
+          <para>First version for Open Source Release</para>
+        </revdescription>
+      </revision>
+  		<revision>
+        <revnumber>1.1</revnumber>
+        <date>24/04/2012</date>
+        <revdescription>
+          <para>Minor updates for release notes V1.1</para>
+        </revdescription>
+      </revision>
+  		<revision>
+        <revnumber>1.2</revnumber>
+        <date>25/09/2012</date>
+        <revdescription>
+          <para>Minor updates for release notes V1.2</para>
+        </revdescription>
+      </revision>
+  		<revision>
+        <revnumber>1.2.1</revnumber>
+        <date>10/10/2012</date>
+        <revdescription>
+          <para>Minor updates for release notes V1.2.1</para>
+        </revdescription>
+      </revision>
+    </revhistory>
+  </bookinfo>
+
+  <chapter>
+    <title>Release identification</title>
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">Sourceforge subversion tag: QTASTE-1.2.1</listitem>
+        <listitem override="bullet">Date: 10/10/2012</listitem>
+      </itemizedlist>
+  </chapter>
+  <chapter>
+    <title>Release content</title>
+      <section>
+        <title>New feature</title>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">No new feature in the patch version</listitem>
+        </itemizedlist>
+      </section>
+      <section>
+        <title>Resolved issues</title>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">[KERNEL] add windows script to start/stop a service</listitem>
+          <listitem override="bullet">[KERNEL] Compile testapi-parent before kernel code</listitem>
+          <listitem override="bullet">[KERNEL] Remove useless Spring dependencies</listitem>
+        </itemizedlist>
+      </section>
+      <section>
+        <title>Remaining issues</title>
+          [TODO] : add remaining issues table
+      </section>
+  </chapter>
+  <chapter>
+    <title>Distribution</title>
+    <para>This version of QTaste is stored on sourceforge. <ulink url="https://sourceforge.net/projects/qtaste"/></para>
+  </chapter>
+  <chapter>
+    <title>Applicable documents</title>
+      <section>
+        <title>Quick Start Guide</title>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">This document is provided as a PDF file. It explains how to start QTaste and start QTaste demos. It also contains the compilation procedure of the QTaste framework.</listitem>
+        </itemizedlist>
+      </section>
+      <section>
+        <title>QTaste User Manual</title>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">This document is provided as a PDF file and is also accessible directly from the QTaste GUI as html (Help Menu).</listitem>
+        </itemizedlist>
+      </section>
+      <section>
+        <title>QTaste Release Notes</title>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">This document or accessible through the “About” in the Help menu.</listitem>
+        </itemizedlist>
+      </section>
+  </chapter>
+  <chapter>
+    <title>Known limitations</title>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">The QTaste test thread can be blocked in some particular conditions and prevent the QTaste kernel to restart it (due to some java Thread.stop() limitation).</listitem>
+          <listitem override="bullet">If a TestAPI interface extends another java interface, the generated TestAPI. Documentation doesn’t inherit the javadoc of the extended interface. (workaround: The javadoc have to be recopied in the TestAPI interface).
+          </listitem>
+          <listitem override="bullet">No example of Simulators is provided.</listitem>
+          <listitem override="bullet">Only Jython is supported as QTaste TestScript scripting language.</listitem>
+          <listitem override="bullet">QTaste starts/stops command is not working on Windows XP Home edition as
+“taskkill” and “tasklist” executables are not provided on this edition.</listitem>
+          <listitem override="bullet">The calculator demonstration is not working on Windows 7.</listitem>
+        </itemizedlist>
+  </chapter>
+</book>
