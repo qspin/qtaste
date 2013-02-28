@@ -5,10 +5,21 @@ import javax.swing.JList;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
+/**
+ * Component controller responsible for the selection of a specific index on a {@link JComboBox} or on a {@link JList}.
+ * This selection is processed by the Swing Thread.
+ * 
+ * @author simjan
+ *
+ */
 class IndexSelector extends UpdateComponentCommander {
 
 	protected int mIndex;
 	
+	/**
+	 * Takes the index in the user data (the second parameter) and checks the component's type.
+	 * @throws QTasteTestFailException if the component is not a JComboBox or a JList.
+	 */
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
 		mIndex = Integer.parseInt(mData[1].toString());
@@ -27,6 +38,9 @@ class IndexSelector extends UpdateComponentCommander {
 		}
 	}
 
+	/**
+	 * Selects the index.
+	 */
 	@Override
 	protected void doActionsInSwingThread() {
 		if (component instanceof JComboBox) {

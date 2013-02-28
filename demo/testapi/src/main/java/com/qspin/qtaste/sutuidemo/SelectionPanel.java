@@ -2,8 +2,6 @@ package com.qspin.qtaste.sutuidemo;
 
 import java.awt.GridLayout;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -41,32 +39,15 @@ final class SelectionPanel extends JPanel {
 		mSpinner.setName("SPINNER");
 		mSlider.setName("SLIDER");
 		mCombo.setName("COMBO_BOX");
+		mCombo.setRenderer(new CustomListCellRenderer());
 		mList.setName("LIST");
-		
-		prepareModels();
-	}
-	
-	private void prepareModels()
-	{
-		DefaultListModel listModel = new DefaultListModel();
-		for ( int i = 0; i<10; ++i )
-		{
-			listModel.add(i, "listItem_0" + i);
-		}
-		mList.setModel(listModel);
-		
-		DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
-		for ( int i = 0; i<10; ++i )
-		{
-			comboModel.addElement("elmt_0" + i);
-		}
-		mCombo.setModel(comboModel);
+		mList.setCellRenderer(new CustomListCellRenderer());
 	}
 
 	private JSpinner mSpinner = new JSpinner();
 	private JSlider mSlider = new JSlider();
-	private JComboBox mCombo = new JComboBox();
-	private JList mList = new JList();
+	private JComboBox mCombo = new JComboBox(ModelBuilder.getComboBoxModel());
+	private JList mList = new JList(ModelBuilder.getListModel());
 	
 	private static final int NUMBER_OF_COMPONENT = 4;
 	public static final String COMPONENT_NAME = "SELECTION_PANEL";

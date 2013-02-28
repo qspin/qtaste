@@ -7,8 +7,18 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Component asker responsible to count the number of GUI component that are enabled/disabled.
+ * 
+ * @author simjan
+ *
+ */
 class EnabledComponentCounter extends ComponentCommander {
 
+	/**
+	 * @param data a string representing the boolean enabled state.
+	 * @return the number of GUI component with the given enabled state.
+	 */
 	@Override
 	Integer executeCommand(Object... data) {
 		int counter = 0;

@@ -20,16 +20,9 @@
 package com.qspin.qtaste.javagui.server;
 
 import java.awt.AWTException;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.Robot;
-import java.awt.Window;
 import java.lang.instrument.Instrumentation;
-import java.util.ArrayList;
-
-import javax.swing.JPopupMenu;
 
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -66,52 +59,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	 */
 
 	public String[] listComponents() throws QTasteTestFailException {
-		ArrayList<String> list = new ArrayList<String>();
-
-		Frame[] frames = Frame.getFrames();
-		for (int f = 0; f < frames.length; f++) {
-			Frame frame = frames[f];
-			if (frame.getName() != null) {
-				list.add(frame.getName());
-			}
-		}
-		Window[] windows = Frame.getWindows();
-		for (int w = 0; w < windows.length; w++) {
-			Window window = windows[w];
-			if (window.getName() != null) {
-				list.add(window.getName());
-			}
-			list.addAll(browseComponent(window.getComponents()));
-		}
-		list.add("Number of ownerless windows : " + Frame.getOwnerlessWindows().length);
-		list.add("Number of windows : " + Frame.getWindows().length);
-		list.add("Number of frames : " + Frame.getFrames().length);
-		String[] result = (String[]) list.toArray(new String[0]);
-		return result;
-	}
-
-	private ArrayList<String> browseComponent(Component[] components) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (int c = 0; c < components.length; c++) {			
-			String componentName = components[c].getName();
-			// System.out.println("browsing " + components[c].toString());
-			// System.out.println("name=" + componentName);
-			if (componentName != null) {
-				//System.out.println("Component:" + componentName + " is found!");
-				//if (!componentName.startsWith("null."))
-					list.add(componentName);					
-			}
-			if (components[c] instanceof Container) {
-				list.addAll(browseComponent(((Container) components[c])
-						.getComponents()));
-			}
-			if (components[c] instanceof JPopupMenu) {
-				System.out.println("detected JPopupMenu !!!!");
-				JPopupMenu m = (JPopupMenu)components[c];
-				list.addAll(browseComponent(m.getComponents()));
-			}
-		}
-		return list;
+		return new ComponentLister().executeCommand();
 	}
 
 	public boolean clickOnButton(String componentName) throws QTasteTestFailException {

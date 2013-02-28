@@ -28,13 +28,15 @@ public class Tree_ListComponentsPanel extends JPanel {
 	{
 		mTree.setName("TREE");
 		mTree.setBorder(BorderFactory.createTitledBorder("JTree"));
+		mTree.setCellRenderer(new CustomTreeCellRenderer());
 		mTree2.setName("TREE_2");
 		mTree2.setRootVisible(false);
 		mTree2.setBorder(BorderFactory.createTitledBorder("JTree 2"));
+		mTree2.setCellRenderer(new CustomTreeCellRenderer());
 	}
 
-	private JTree mTree = new JTree();
-	private JTree mTree2 = new JTree();
+	private JTree mTree = new JTree(ModelBuilder.getTreeModel());
+	private JTree mTree2 = new JTree(ModelBuilder.getTreeModel());
 	
 	public static final String COMPONENT_NAME = "TREE_LIST_PANEL";
 }
