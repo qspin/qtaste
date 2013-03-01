@@ -7,7 +7,6 @@
 ##
 
 from qtaste import *
-from qtaste import *
 
 import time
 
@@ -24,9 +23,11 @@ def step1():
 	doSubSteps(TabbedPaneSelection.changeTab)
 	javaguiMI.clickOnButton("VISIBILITY_BUTTON")
 	time.sleep(3)
-	javaguiMI.setText("VISIBILITY_TEXT", "pas bien")
-	time.sleep(3)
-	javaguiMI.clickOnButton("VISIBILITY_BUTTON")
+	try:
+		javaguiMI.setText("VISIBILITY_TEXT", "pas bien")
+		testAPI.stop(Status.FAIL, "The component should not be visible and the setText() should failed")
+	except :
+		javaguiMI.clickOnButton("VISIBILITY_BUTTON")
 	pass
 
 doStep(step1)
