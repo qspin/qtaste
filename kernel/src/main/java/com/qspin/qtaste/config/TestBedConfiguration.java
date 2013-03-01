@@ -294,7 +294,12 @@ public class TestBedConfiguration extends XMLConfiguration {
      */
     protected static void onConfigurationChange() {
         for (ConfigurationChangeHandler handler : configurationChangeHandlers) {
-            handler.onConfigurationChange();
+        	try {
+        		handler.onConfigurationChange();
+        	} catch (Exception pExc)
+        	{
+        		logger.error("An error occured during the testbed configuration change event management:" + pExc.getMessage(), pExc);
+        	}
         }
     }
 
