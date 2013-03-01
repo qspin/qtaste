@@ -634,45 +634,340 @@ which must be run from the test specific directory containing the directories sp
         </figure>
         <para>When a testbed is selected, the current selection is stored in the preferences file (${QTASTE_HOME}/conf/gui.xml) in order to select it by default at the next launch.</para>
         <para>A contextual menu is available on this list to view or edit the testbed configuration file.</para>
-        
+        <figure>
+          <title>Testbed selection</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure9.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Testbed selection
+            </textobject>
+          </mediaobject>
+        </figure>
       </section>
       <section>
         <title>Test suite execution</title>
+        <para>From the selection panel where the test cases are displayed, select the test case (Figure 9: test case execution) or test suite to execute (Figure XXX: Test suite execution), then press on the "Execute test"' button (Figure XXX: Execute test button).</para>
+        <figure>
+          <title>Test case execution</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure10.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Test case execution
+            </textobject>
+          </mediaobject>
+        </figure>
+        <figure>
+          <title>Test suite execution</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure11.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Test suite execution
+            </textobject>
+          </mediaobject>
+        </figure>
+        <figure>
+          <title>Execute test button</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure12.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Execute test button
+            </textobject>
+          </mediaobject>
+        </figure>
       </section>
       <section>
         <title>Test case result analysis</title>
+        <para>The tab "Test Case Results" is automatically displayed when the executed test is started.</para>
+        <figure>
+          <title>Test case results panel</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure13.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Test case results panel
+            </textobject>
+          </mediaobject>
+        </figure>
+        <para>The test case results panel displays the following information:</para>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">Summary of the test case execution status;</listitem>
+          <listitem override="bullet">Error details when test case is failed</listitem>
+          <listitem override="bullet">Stack trace when test case is failed</listitem>
+          <listitem override="bullet">Log4j panel displayed QTaste logs</listitem>
+        </itemizedlist>
+        <para>When a test case result is failed (or Not available status), the corresponding icon is displayed. By selecting the row, the error details and the available stack traces will be displayed.</para>
+        <para>From the Error details, the user can double click on the row and the Python editor will be opened at the line of the detected error. This is available for any python script except for the one having the file name "embedded_jython" which is built dynamically by QTaste during the test execution.</para>
+        <para>By selecting test case result row, the Log4j panel will point to the first log associated to the test case.</para>
+        <para>For more details about the use of the Log4j panel filters, please refer to Erreur : source de la référence non trouvée.</para>
+        <para>It is possible to re-run a specific test case row (or several rows) using the popup menu on the test case result row, and select "Re-execute test(s)". Copy the details of the error in the clipboard or generate a test campaign from the test in errors.</para>
+        <figure>
+          <title>Re-execute test(s) pop-up</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure14.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Re-execute test(s) pop-up
+            </textobject>
+          </mediaobject>
+        </figure>
       </section>
     </section>
     <section>
       <title>QTaste main window</title>
+      <para>When the QTaste GUI application is started, the main window is displayed (Figure XXX: Main QTaste User Interface window).</para>
+        <figure>
+          <title>Main QTaste User Interface window</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure15.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Main QTaste User Interface window
+            </textobject>
+          </mediaobject>
+        </figure>
+        <para>This main window is split into the following panels:</para>
+        <itemizedlist mark="opencircle">
+          <listitem override="bullet">Menu items</listitem>
+          <listitem override="bullet">Information panel: this panel located at the upper side is designed to display useful information about the current configuration of the QTaste software</listitem>
+          <listitem override="bullet">Selection panel: this panel is designated to select an action to be performed by QTaste. This panel is subdivided into three different tabs:
+            <itemizedlist mark="opencircle">
+              <listitem override = "bullet">Test case tree view: this view displays the list of available test suites that can be executed by QTaste</listitem>
+              <listitem override = "bullet">Test Campaign view: from this window, test cases can be added or removed to a test campaign</listitem>
+              <listitem override = "bullet">Interactive view: this view allows the tester to execute QTaste verbs independently of a test script in order to validate its implementation or to observe the SUT behavior once the selected verb is called</listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem override="bullet">Main panel: this panel is the main view of the QTaste GUI. This view differs depending on the selected view from the selection panel.</listitem>
+            <itemizedlist mark="opencircle">
+              <listitem override = "bullet">Test case main panel: from this view the tester can view or edit test scripts, run a test suite, check the status of the test execution and also the logging generated by QTaste and its component supporting this feature.</listitem>
+              <listitem override = "bullet">Test Campaign editor panel: from this view the tester can define or modify test campaign. The result of this edition will result of a xml file that can be used by the test campaign (see Starting the Meta-Campaign launcher); From this panel it is also possible to start a selected test campaign.</listitem>
+              <listitem override = "bullet">Interactive panel: from this panel status and results of the calls done using QTaste interactive mode is displayed</listitem>
+            </itemizedlist>          
       <section>
         <title>Menu items</title>
+        <figure>
+          <title>Help menu content</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure16.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              Help menu content
+            </textobject>
+          </mediaobject>
+        </figure>
       </section>
       <section>
         <title>Help menu</title>
+        <para>Two menu items are available:</para>
+        <itemizedlist mark="opencircle">
+          <itemlist override="bullet">About: display the QTaste information</itemlist>
+          <itemlist override="bullet">User Manual: open Internet browser to this document in HTML version.</itemlist>
+        </itemizedlist>
       </section>
       <section>
         <title>Information panel</title>
+        <figure>
+          <title>Information panel window</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure17.png" format="PNG"/>
+            </imageobject>
+            <textobject>Information panel window</textobject>
+          </mediaobject>
+        </figure>
+        <para>This panel displays the following information:</para>
+        <itemizedlist mark="opencircle">
+          <itemlist override="bullet">Test suite currently set</itemlist>
+          <itemlist override="bullet">Test result directory location (relative to QTaste main path);</itemlist>
+          <itemlist override="bullet">Reporting format used (separated by “|” if different reports format generated by the test engine);</itemlist>
+          <itemlist override="bullet">Testbed config: indicates the current testbed selection. When no testsuite is being executed, it is possible to change the testbed using the combo box.</itemlist>
+          <itemlist override="bullet">Ignore control script: by selecting this check box, when test engine is started, the control script defined in the testbed configuration is ignored.</itemlist>
+          <itemlist override="bullet">Restart testbed button: from this button, it is possible to start the testbed using the control script as it is defined in the testbed configuration file. This button is disabled when “Ignore control script” is not selected or when a test is being executed.</itemlist>
+          <itemlist override="bullet">Stop testbed button: from this button, it is possible to stop the testbed using the control script as it is defined in the testbed configuration file. This button is disabled when “Ignore control script” is not selected or when a test is being executed.</itemlist>
+          <itemlist override="bullet">SUT version is used to set the version of the “System Under Test”. This will be present in the generated reports.</itemlist>
+        </itemizedlist>
       </section>
       <section>
         <title>Selection panel</title>
+        <para>This selection panel displays 3 different tabs depending on the desired action:</para>
+        <itemizedlist mark="opencircle">
+          <itemlist override="bullet">“Test case selection view” to perform actions linked to test case edition and execution</itemlist>
+          <itemlist override="bullet">“Test Campaign view” to define and edit test campaigns</itemlist>
+          <itemlist override="bullet">“Interactive view” in order to execute tests using the interactive mode of QTaste</itemlist>
+        </itemizedlist>
+        <figure>
+          <title>Selection panel</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure18.png" format="PNG"/>
+            </imageobject>
+            <textobject>Selection panel</textobject>
+          </mediaobject>
+        </figure>        
         <section>
           <title>Test case selection view</title>
+          <para>From this window, the tester can navigate through the different test suites. The tree view displays directories found in the main directory TestSuites. All directories containing a TestScript.py file will be displayed as a test script with the name of the directory where the script is found.</para>
+          <para>In case no associated TestData.csv file is defined or in case the csv file is empty, an error icon is displayed on the test script.</para>
+        <figure>
+          <title>Test case selection view</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure19.png" format="PNG"/>
+            </imageobject>
+            <textobject>Test case selection view</textobject>
+          </mediaobject>
+        </figure> 
+        <para>From this navigation tree, following mouse actions are possible:</para>
+        <itemizedlist mark="opencircle">
+          <itemlist override="bullet">Left mouse click: selection of a test script or a test suite</itemlist>
+          <itemlist override="bullet">
+              Popup mouse click (triggered by right click on Windows and Unix): this action invokes a popup menu (Figure XXX: Test  script popup window) from which it is possible to:            <itemizedlist mark="opencircle">
+              <itemlist override="bullet">Run the selected script</itemlist>
+              <itemlist override="bullet">Run the selected script in loop mode (can run the same script in loop)</itemlist>
+              <itemlist override="bullet">Debug the script (run in debug mode)</itemlist>
+              <itemlist override="bullet">Generate documentation: selecting this option will force the generation of the test documentation.</itemlist>
+              <itemlist override="bullet">Edit the testscript in an external editor.</itemlist>
+              <itemlist override="bullet">Open the testscript directory using a file browser.</itemlist>
+              <itemlist override="bullet">Copy test script (only available when a test script is selected): the tester can then enter the name of the name of the destination test script. This will copy the selected script to the same parent directory of the source; This action copies also the testdata.csv file.</itemlist>
+              <itemlist override="bullet">Create new test script (only available when other than test script is selected): this will define a new script into the selected directory. This action generates also an empty testdata.csv file.</itemlist>
+              <itemlist override="bullet">Rename the testscript</itemlist>
+              <itemlist override="bullet">Remove the testscript</itemlist>
+            </itemizedlist>
+          </itemlist>
+        </itemizedlist>
+        <figure>
+          <title>Test script popup window</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure20.png" format="PNG"/>
+            </imageobject>
+            <textobject>Test script popup window</textobject>
+          </mediaobject>
+        </figure> 
         </section>
         <section>
           <title>Test campaign view</title>
+          <para>This view displays the list of test cases (as done in the Test case view) from which the user can drag/drop test cases or test suites into a test campaign.</para>
+          <figure>
+            <title>Test Campaign main view panel</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure21.png" format="PNG"/>
+              </imageobject>
+              <textobject>Test Campaign main view panel</textobject>
+            </mediaobject>
+          </figure> 
         </section>
         <section>
           <title>Interactive view</title>
-        </section>
+          <para>In this view, the list of QTaste components are displayed with all accessible verbs associated to it. At any time, the user can invoke a method using this mode. This mode supposes that the SUT is already started.</para>
+          <figure>
+            <title>Interactive main panel</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure22.png" format="PNG"/>
+              </imageobject>
+              <textobject>Interactive main panel</textobject>
+            </mediaobject>
+          </figure>
+          <para>From the selection view, the user can select the component from which the verb can be called (only components defined in the selected testbed are displayed).</para>
+          <para>To start the interactive mode, click on the button "Start Interactive mode": this action will re-direct the log4j logs to the interactive panel.</para>
+          <para>To invoke a verb, just double-click on it if there is no parameter. Otherwise, a single-click will display the python call associated to this verb with the parameter types as arguments, change them to the actual argument and click on the “Send” button to invoke the verb.</para>
+          <para>The result of the call is displayed in the column "Result".</para>
+          <para>The test data can be passed through the Test Data editor displayed in this panel.</para>
+          <para>Please notice that some variable may be required in order to execute the command interactively (i.e.: INSTANCE_ID, etc.). </para>
+         </section>
       </section>
       <section>
         <title>Main panel</title>
+        <para>This panel has the goal to display the following information:</para>
+        <itemizedlist mark="opencircle">
+          <itemlist override="bullet">Status of a test case run;</itemlist>
+          <itemlist override="bullet">Display of log4j logs;</itemlist>
+          <itemlist override="bullet">Display and edit test scripts and test data files;</itemlist>
+          <itemlist override="bullet">Display the test script documentation</itemlist>
+        </itemizedlist>
         <section>
           <title>Test case documentation</title>
+          <para>The documentation of a test case is automatically displayed when a test case is selected from the selection panel (see also 1).</para>
+          <para>This documentation is automatically generated when modification on the TestScript.py has been identified. At any time, the use can force the generation of the documentation through the pop-up window accessible from the selection panel.</para>
         </section>
         <section>
           <title>Test case source editor</title>
+          <para>This editor is displayed when the user selected a test case from the selection panel and the tab “Test Case source” is selected.</para>
+          <figure>
+            <title>Test case source window</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure23.png" format="PNG"/>
+              </imageobject>
+              <textobject>Test case source window</textobject>
+            </mediaobject>
+          </figure>
+          <para>When the content of the file is modified the "*" is displayed to inform the user that modifications occurred in the file.</para>          
+          <figure>
+            <title>Test script not saved</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure24.png" format="PNG"/>
+              </imageobject>
+              <textobject>Test script not saved</textobject>
+            </mediaobject>
+          </figure>
+          <para>To save the modifications (all opened files), "CTRL-S" can be used or just click on the save button.</para>
+          <para>Following popup menu is opened on the testcase source editor:</para>
+          <figure>
+            <title>Test editor pop-up</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure25.png" format="PNG"/>
+              </imageobject>
+              <textobject>Test editor pop-up</textobject>
+            </mediaobject>
+          </figure>
+          <para>If the user decides to run the test case being modified, the opened files are automatically saved.</para>
+          <para>If the user selects another test case from the selection panel while files are modified without save, a confirmation dialog window is displayed asking the user if he want to save first the files.</para>
+          <para>Test data (csv file) can also be edited by selecting "test data".</para>
+          <figure>
+            <title>Test data editor</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure26.png" format="PNG"/>
+              </imageobject>
+              <textobject>Test data editor</textobject>
+            </mediaobject>
+          </figure>
+          <para>A contextual menu is available in order to:</para>
+          <itemizedlist mark="opencircle">
+            <itemlist override="bullet">Add a variable: this will add a column into the csv.</itemlist>
+            <itemlist override="bullet">Rename variable: this will rename the currently selected variable.</itemlist>
+            <itemlist override="bullet">Remove a variable: this will remove a column from the csv.</itemlist>
+            <itemlist override="bullet">Add row: this will define a new test case.</itemlist>
+            <itemlist override="bullet">Insert row: this will insert a row in the currently selected position.</itemlist>
+            <itemlist override="bullet">Duplicate row: this will copy the currently selected row.</itemlist>
+            <itemlist override="bullet">Remove row: this will remove a test case.</itemlist>
+            <itemlist override="bullet">Save the changes into the csv file.</itemlist>
+          </itemizedlist>
+          <figure>
+            <title>Contextual menu of the Test data editor</title>
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure27.png" format="PNG"/>
+              </imageobject>
+              <textobject>Contextual menu of the Test data editor</textobject>
+            </mediaobject>
+          </figure>          
         </section>
         <section>
           <title>Test case result</title>
