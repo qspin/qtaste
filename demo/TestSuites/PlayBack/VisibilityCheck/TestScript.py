@@ -1,10 +1,12 @@
 ##
-# Playback/Selection test.
+# VisibilityCheck.
 # <p>
 # Description of the test.
 #
+# @data INSTANCE_ID [String] instance id
 ##
 
+from qtaste import *
 from qtaste import *
 
 import time
@@ -19,17 +21,12 @@ def step1():
 	@step      Description of the actions done for this step
 	@expected  Description of the expected result
 	"""
-	
 	doSubSteps(TabbedPaneSelection.changeTab)
-	
-	component = testData.getValue("COMPONENT_NAME")
-	value = testData.getValue("VALUE")
-# 	try:
-	javaguiMI.selectNode(component, value, "\!")
-# 	except:
-# 		testAPI.stopTest(Status.FAIL, "Fail to select value '" + value + "' in " + component + "'")
-			
-	time.sleep(1)
-
+	javaguiMI.clickOnButton("VISIBILITY_BUTTON")
+	time.sleep(3)
+	javaguiMI.setText("VISIBILITY_TEXT", "pas bien")
+	time.sleep(3)
+	javaguiMI.clickOnButton("VISIBILITY_BUTTON")
+	pass
 
 doStep(step1)

@@ -41,6 +41,8 @@ final class Interface extends JFrame {
 		mTabbedPane.insertTab(TablePanel.COMPONENT_NAME, null, new TablePanel(), null, index++);
 		System.out.println("insert UNAMED COMPONENTS at " + index);
 		mTabbedPane.insertTab("UNAMED COMPONENTS", null, new UnamedPanel(), null, index++);
+		System.out.println("insert " + MiscellaneousPane.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(MiscellaneousPane.COMPONENT_NAME, null, new MiscellaneousPane(), null, index++);
 		mTabbedPane.setSelectedIndex(-1);
 		
 		add(mTabbedPane, BorderLayout.CENTER);

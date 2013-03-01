@@ -20,7 +20,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		if (!component.isEnabled()) {
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not enabled.");
 		}
-		if (!component.isVisible())
+		if (! chekComponentIsVisible(component))
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
 		prepareActions();
 		SwingUtilities.invokeLater(this);
@@ -35,6 +35,20 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		catch (QTasteTestFailException e) {
 			LOGGER.fatal(e.getMessage(), e);
 		}
+	}
+	
+	protected boolean chekComponentIsVisible(Component c)
+	{
+		Component currentComponent = c;
+		while (currentComponent != null)
+		{
+			if ( !currentComponent.isVisible() )
+			{
+				return false;
+			}
+			currentComponent = currentComponent.getParent();
+		}
+		return true;
 	}
 	
 	protected abstract void prepareActions() throws QTasteTestFailException;
