@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -52,6 +53,10 @@ final class ModelBuilder {
 		}
 		return new DefaultTreeModel(root);
 	}
+
+	public static TableModel getTableModel() {
+		return new CustomTableModel(getPeople());
+	}
 	
 	private static List<Person> getPeople()
 	{
@@ -60,6 +65,7 @@ final class ModelBuilder {
 		people.add(new Person("Tintin", "Milou", 40, "Moulinsart"));
 		people.add(new Person("Louis", "XVII", 30, "Versaille"));
 		people.add(new Person("Elisabeth", "II", 80, "London"));
+		people.add(new Person("Milou", "Tintin", 40, "Moulinsart"));
 		return people;
 	}
 }

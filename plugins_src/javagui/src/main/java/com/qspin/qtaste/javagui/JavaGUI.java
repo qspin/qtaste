@@ -19,6 +19,7 @@
 
 package com.qspin.qtaste.javagui;
 
+import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
@@ -147,4 +148,8 @@ public interface JavaGUI {
     * @return The number of components that have the enabled state.
     */
    public int getEnabledComponentCount(boolean isEnabled);
+
+   public int countTableRows(String pComponentName, String pColumnName, String pColumnValue)throws QTasteException ;
+   public void selectInTable(String pComponentName, String pColumnName, String pColumnValue)throws QTasteException ;
+   public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex)throws QTasteException ;
 }

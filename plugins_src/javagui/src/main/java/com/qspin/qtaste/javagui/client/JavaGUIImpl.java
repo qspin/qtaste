@@ -134,6 +134,20 @@ public class JavaGUIImpl implements JavaGUI {
 	public int getEnabledComponentCount(boolean isEnabled) {
 		return mProxy.getEnabledComponentCount(isEnabled);
 	}
+	@Override
+	public int countTableRows(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
+		return mProxy.countTableRows(pComponentName, pColumnName, pColumnValue);
+	}
+
+	@Override
+	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
+		mProxy.selectInTable(pComponentName, pColumnName, pColumnValue);
+	}
+
+	@Override
+	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
+		mProxy.selectInTable(pComponentName, pColumnName, pColumnValue, pOccurenceIndex);
+	}
 	
 	
 	protected JavaGUI mProxy;

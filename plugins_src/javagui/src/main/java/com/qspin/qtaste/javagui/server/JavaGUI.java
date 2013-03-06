@@ -25,6 +25,7 @@ import java.awt.Robot;
 import java.lang.instrument.Instrumentation;
 
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
+import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
@@ -145,6 +146,21 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	@Override
 	public int getEnabledComponentCount(boolean isEnabled) {
 		return new EnabledComponentCounter().executeCommand(isEnabled);
+	}
+
+	@Override
+	public int countTableRows(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
+		return new TableRowCounter().executeCommand(pComponentName, pColumnName, pColumnValue);
+	}
+
+	@Override
+	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
+		selectInTable(pComponentName, pColumnName, pColumnValue, 0);
+	}
+
+	@Override
+	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
+		new TableRowSelector().executeCommand(pComponentName, pColumnName, pColumnValue, pOccurenceIndex);		
 	}
 	
 }
