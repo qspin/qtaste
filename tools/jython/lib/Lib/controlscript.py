@@ -167,9 +167,8 @@ class ControlScript(object):
 		@param controlActions sequence of ControlAction (list or tuple) 
 		"""
 		self.controlActions = controlActions
-		
 		caller = traceback.format_stack()[0].split("\"")[1]
-		self.callerScript = caller.split(_os.sep)[len(caller.split(_os.sep))-1]
+		self.callerScript = caller.split("/")[len(caller.split("/"))-1]
 		self.callerDirectory = caller.replace(self.callerScript, "")
 		
 		if start:
@@ -179,19 +178,22 @@ class ControlScript(object):
 	
 	def start(self):
 		""" Method called on start, starts control actions in defined order"""
-		writer = open(self.callerDirectory + _os.sep + self.callerScript.replace(".py", ".param"), "w")
 		try:
-			processId = ""
-			for controlAction in self.controlActions:
-				controlAction.dump(writer)
-				if len(processId) != 0:
-					processId += "|"
-				processId += str(controlAction.caID)
-				controlAction.dumpDataType(controlAction.__class__.__name__, writer)
-			writer.write("processes=" + processId + "\n")
-		finally:
-			writer.close
-			
+			writer = open(self.callerDirectory + _os.sep + self.callerScript.replace(".py", ".param"), "w")
+			try:
+				processId = ""
+				for controlAction in self.controlActions:
+					controlAction.dump(writer)
+					if len(processId) != 0:
+						processId += "|"
+					processId += str(controlAction.caID)
+					controlAction.dumpDataType(controlAction.__class__.__name__, writer)
+				writer.write("processes=" + processId + "\n")
+			finally:
+				writer.close
+		except:
+			print "error during the param file generation"
+						
 		for controlAction in self.controlActions:
 			if controlAction.active:
 				controlAction.start()
