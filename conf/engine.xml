@@ -32,7 +32,5 @@
 	</log4j_server>
 <version_control>com.qspin.qtaste.util.versioncontrol.impl.DefaultVersionControl</version_control>
 <addons>
-<addon>com.qspin.qtaste.demo.addon.DemoAddOn</addon>
-<addon>com.qspin.qtaste.controlscriptbuilder.ControlScriptBuilderAddOn</addon>
 </addons>
 </engine_configuration>
