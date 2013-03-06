@@ -533,7 +533,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 // generate index file
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
-                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + reportFile.getCanonicalPath() + "\"/></head><body><a href=\"" + reportFile.getName() + "\">Redirection</a></body></html>");
+                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + new File(outputDir).toURI().relativize(reportFile.toURI()).getPath() + "\"/></head><body><a href=\"" + reportFile.getName() + "\">Redirection</a></body></html>");
                 index.close();
                 copyImages(reportFile.getParentFile());
             }
@@ -655,7 +655,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
          *
          * @return Customized label for section of pie chart identified by aKey.
          */
-        @SuppressWarnings("unchecked")
         public String generateSectionLabel(final PieDataset aDataset, @SuppressWarnings("rawtypes") final Comparable aKey) {
             String labelResult = null;
             if (aDataset != null) {

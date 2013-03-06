@@ -90,7 +90,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 namesValues.add("###ELAPSED_TIME###", "&nbsp;");
             } else {
                 String absoluteDetailedURL = cr.getDetailedURL();
-                String relativeDetailedURL = reportFile.toURI().relativize(new File(absoluteDetailedURL).toURI()).getPath();
+                String relativeDetailedURL = new File(outputDir).toURI().relativize(new File(absoluteDetailedURL).toURI()).getPath();
                 String nbTestsToExecuteStr = cr.getNbTestsToExecute() != -1 ? "" + cr.getNbTestsToExecute() : "-";
                 namesValues.add("###TESTBED###", "<a href=" + relativeDetailedURL + ">" + cr.getTestBed() + "</a>");        
                 namesValues.add("###TESTS_EXECUTED###", cr.getNbTestsExecuted() + "/" + nbTestsToExecuteStr);
@@ -140,7 +140,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 // generate index file                
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
-                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + this.reportFile.getCanonicalPath() + "\"/></head><body><a href=\"" + this.reportFile.getName() + "\">Redirection</a></body></html>");
+                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + new File(outputDir).toURI().relativize(reportFile.toURI()).getPath() + "\"/></head><body><a href=\"" + this.reportFile.getName() + "\">Redirection</a></body></html>");
                 index.close();
             }
         } catch (IOException e) {
