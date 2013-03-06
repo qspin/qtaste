@@ -17,10 +17,10 @@ popd
 
 pushd AddonDemo
 call mvn clean install assembly:single
-copy target\*-deploy.jar ..\..\plugins\SUT\
+copy target\*-deploy.jar ..\..\plugins\
 popd
 
 pushd ControlScriptBuilderAddOn
 call mvn clean install assembly:single
-copy target\*-deploy.jar ..\..\plugins\SUT\
+copy target\*-deploy.jar ..\..\plugins\
 popd
