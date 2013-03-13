@@ -61,7 +61,7 @@ abstract class ComponentCommander {
 	 * @param components components to browse.
 	 * @return the first component with the name.
 	 */
-	private Component lookForComponent(String name, Component[] components) {
+	protected Component lookForComponent(String name, Component[] components) {
 		for (int i = 0; i < components.length && !mFindWithEqual; i++) {
 			//String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
 			Component c = components[i];
@@ -79,7 +79,7 @@ abstract class ComponentCommander {
 		return null;
 	}
 	
-	private boolean checkName(String name, Component c)
+	protected boolean checkName(String name, Component c)
 	{
 		if (c != null && c.getName() != null)
 		{
@@ -98,7 +98,7 @@ abstract class ComponentCommander {
 		return false;
 	}
 	
-	private boolean mFindWithEqual;
-	private Component mFoundComponent;
+	protected boolean mFindWithEqual;
+	protected Component mFoundComponent;
 
 }
