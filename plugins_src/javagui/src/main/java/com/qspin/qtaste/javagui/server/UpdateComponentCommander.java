@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -41,23 +43,53 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	}
 	
 	protected Component getComponentByName(String name) throws QTasteTestFailException {
+		mFoundComponents = new ArrayList<Component>();
 		mFoundComponent = null;
 		mFindWithEqual = false;
 		LOGGER.debug("try to find a component with the name : " + name);
 		// TODO: Think about several component having the same names!
-		for (int w = 0; w < Frame.getWindows().length && !mFindWithEqual; w++) {
+		//search for all components which contains the name
+		for (int w = 0; w < Frame.getWindows().length; w++) {
 			Window window = Frame.getWindows()[w];
-			if ( !checkName(name, window) || !mFindWithEqual ) {
-				LOGGER.debug("parse window");
-				lookForComponent(name, window.getComponents());
-			}
-			if  ( mFoundComponent != null && checkComponentIsVisible(mFoundComponent) )
+			LOGGER.debug("parse window");
+			if ( checkName(name, window) )
 			{
-				break;
+				mFoundComponents.add(window);
+			}
+			lookForComponent(name, window.getComponents());
+		}
+		LOGGER.debug( mFoundComponents.size() + " component(s) found with the contains");
+		
+		//if equals the remove others
+		if ( mFindWithEqual )
+		{
+			for (int i=0; i<mFoundComponents.size(); )
+			{
+				if (!mFoundComponents.get(i).getName().equals(name))
+				{
+					mFoundComponents.remove(i);
+				} else {
+					i++;
+				}
+			}
+			LOGGER.debug( mFoundComponents.size() + " component(s) found with the equals");
+		}
+		
+		//Remove invisible components
+		for (int i=0; i<mFoundComponents.size(); )
+		{
+			if (!checkComponentIsVisible(mFoundComponents.get(i)) )
+			{
+				mFoundComponents.remove(i);
+			} else {
+				i++;
 			}
 		}
-		if ( mFoundComponent != null )
+		LOGGER.debug( mFoundComponents.size() + " visible component(s) found");
+		
+		if ( !mFoundComponents.isEmpty() )
 		{
+			mFoundComponent = mFoundComponents.get(0);
 			mFoundComponent.requestFocus();
 			return mFoundComponent;
 		}
@@ -65,28 +97,17 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	}
 
 	protected Component lookForComponent(String name, Component[] components) {
-		for (int i = 0; i < components.length && !mFindWithEqual; i++) {
+		for (int i = 0; i < components.length; i++) {
 			//String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
 			Component c = components[i];
-			boolean checkNameResult = checkName(name, c);
-			LOGGER.trace("Has check the component's name (" + c.getName() + ") with the searched value '" + name + "' with result : " + checkNameResult);
-			if ( mFoundComponent != null && mFindWithEqual && !checkComponentIsVisible(mFoundComponent))
+			if ( checkName(name, c) )
 			{
-				LOGGER.trace("The component has the searched name but is not visible => continue");
-				mFindWithEqual = false;
+				LOGGER.debug("Component " + c.getName() + " added to the list of found components");
+				mFoundComponents.add(c);
 			}
-			if ( !checkNameResult || !mFindWithEqual )
-			{
-				if (c instanceof Container) {
-					LOGGER.trace("Will parse the container " + c.getName() );
-					Component result = lookForComponent(name, ((Container) c).getComponents());
-					if (result != null && checkComponentIsVisible(result)) {
-						LOGGER.trace("A component (" + result.getName() + ") has been returned by lookForComponent... and it is visible!");
-						return result;
-					}
-				}
-			} else {
-				return c;
+			if (c instanceof Container) {
+				LOGGER.trace("Will parse the container " + c.getName() );
+				lookForComponent(name, ((Container) c).getComponents());
 			}
 		}
 		return null;
@@ -127,6 +148,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		this.mData = data;
 	}
 	
+	private List<Component> mFoundComponents;
 	protected Object[] mData;
 	protected Component component;
 }

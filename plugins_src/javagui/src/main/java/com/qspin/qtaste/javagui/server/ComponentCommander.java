@@ -92,8 +92,8 @@ abstract class ComponentCommander {
 				} else {
 					LOGGER.debug("Component:" + name + " is (maybe) found! (component's name : " + mFoundComponent.getName() + ")");
 				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
