@@ -68,19 +68,25 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		for (int i = 0; i < components.length && !mFindWithEqual; i++) {
 			//String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
 			Component c = components[i];
-			checkName(name, c);
+			boolean checkNameResult = checkName(name, c);
+			LOGGER.trace("Has check the component's name (" + c.getName() + ") with the searched value '" + name + "' with result : " + checkNameResult);
 			if ( mFindWithEqual && !checkComponentIsVisible(mFoundComponent))
 			{
+				LOGGER.trace("The component has the searched name but is not visible => continue");
 				mFindWithEqual = false;
 			}
-			if ( !mFindWithEqual )
+			if ( !checkNameResult || !mFindWithEqual )
 			{
 				if (c instanceof Container) {
+					LOGGER.trace("Will parse the container " + c.getName() );
 					Component result = lookForComponent(name, ((Container) c).getComponents());
 					if (result != null && checkComponentIsVisible(result)) {
+						LOGGER.trace("A component (" + result.getName() + ") has been returned by lookForComponent... and it is visible!");
 						return result;
 					}
 				}
+			} else {
+				return c;
 			}
 		}
 		return null;
