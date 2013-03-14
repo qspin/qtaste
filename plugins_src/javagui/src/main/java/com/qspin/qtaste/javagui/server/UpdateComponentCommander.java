@@ -97,12 +97,21 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		Component currentComponent = c;
 		if ( c == null )
 		{
+			LOGGER.debug("checkComponentIsVisible on a null component");
 			return false;
 		}
 		while (currentComponent != null)
 		{
 			if ( !currentComponent.isVisible() )
 			{
+				if ( c != currentComponent )
+				{
+					LOGGER.debug("The component " + c.getName() + " is not visible.");
+				}
+				else
+				{
+					LOGGER.debug("The parent (" + currentComponent.getName() + ") of the component " + c.getName() + " is not visible.");
+				}
 				return false;
 			}
 			currentComponent = currentComponent.getParent();
