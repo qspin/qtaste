@@ -51,7 +51,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				LOGGER.debug("parse window");
 				lookForComponent(name, window.getComponents());
 			}
-			if  ( checkComponentIsVisible(mFoundComponent) )
+			if  ( mFoundComponent != null && checkComponentIsVisible(mFoundComponent) )
 			{
 				break;
 			}
@@ -70,7 +70,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			Component c = components[i];
 			boolean checkNameResult = checkName(name, c);
 			LOGGER.trace("Has check the component's name (" + c.getName() + ") with the searched value '" + name + "' with result : " + checkNameResult);
-			if ( mFindWithEqual && !checkComponentIsVisible(mFoundComponent))
+			if ( mFoundComponent != null && mFindWithEqual && !checkComponentIsVisible(mFoundComponent))
 			{
 				LOGGER.trace("The component has the searched name but is not visible => continue");
 				mFindWithEqual = false;
@@ -95,6 +95,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	protected boolean checkComponentIsVisible(Component c)
 	{
 		Component currentComponent = c;
+		if ( c == null )
+		{
+			return false;
+		}
 		while (currentComponent != null)
 		{
 			if ( !currentComponent.isVisible() )
