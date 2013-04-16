@@ -29,12 +29,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 /**
  * This class is responsible to build a different kind of data structures from a CSV file
@@ -45,7 +45,8 @@ public class CSVFile
 {
 
    // private static final Logger logger = Log4jLoggerFactory.getLogger(CSVFile.class);
-   private Resource csvResource;
+   private InputStream csvInputStream;
+   private String name;
    private boolean alreadyParsed = false;
    private ArrayList<LinkedHashMap<String, String>> dataSet;
    private ArrayList<String> columnNames;
@@ -53,26 +54,27 @@ public class CSVFile
    /**
     * Creates a new instance of CSVFile
     */
-   public CSVFile(File csvFile)
+   public CSVFile(File csvFile) throws IOException
    {
-      this(new FileSystemResource(csvFile));
+      this(new FileInputStream(csvFile), csvFile.getName());
    }
 
-   public CSVFile(String csvFileName)
+   public CSVFile(String csvFileName) throws IOException
    {
-      this(new FileSystemResource(csvFileName));
+      this(new File(csvFileName));
    }
 
-   public CSVFile(Resource csvResourceFile)
+   public CSVFile(InputStream csvInputStreamFile, String name)
    {
-      this.csvResource = csvResourceFile;
+      this.csvInputStream = csvInputStreamFile;
+      this.name = name;
       dataSet = new ArrayList<LinkedHashMap<String, String>>();
-      columnNames = new ArrayList<String>();
+      columnNames = new ArrayList<String>();      
    }
 
    public String getName()
    {
-      return csvResource.getFilename();
+      return name;
    }
 
    /**
@@ -133,7 +135,7 @@ public class CSVFile
    {
       if (!alreadyParsed)
       {
-         BufferedReader csvBuffer = new BufferedReader(new InputStreamReader(csvResource.getInputStream()));
+         BufferedReader csvBuffer = new BufferedReader(new InputStreamReader(csvInputStream));
          String csvLine;
          while ((csvLine = csvBuffer.readLine()) != null)
          {
@@ -196,6 +198,23 @@ public class CSVFile
          csvBuffer.close();
       }
       alreadyParsed = true;
+   }
+   
+   
+   
+   
+   //------------------------------------
+   public static void main(String [ ] args) throws Exception
+   {
+      InputStream csvInputStream = CSVFile.class.getResourceAsStream("/TestData.csv");
+
+      CSVFile testDataFile = new CSVFile(csvInputStream, "TestData.csv");
+      List<String> columnNames = testDataFile.getColumnNames(); 
+
+      for (int i = 0; i < columnNames.size(); i++)
+      {
+         System.out.println(columnNames.get(i));
+      }
    }
 }
 

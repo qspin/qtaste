@@ -217,11 +217,6 @@
 			<artifactId>svnkit</artifactId> 
 			<version>1.7.4-v1</version> 
 		</dependency> 
-		<dependency>
-	                <groupId>org.springframework</groupId>
-		        <artifactId>spring-core</artifactId>
-		        <version>3.0.3.RELEASE</version>
-		</dependency>
 
 	</dependencies>
 </project>
