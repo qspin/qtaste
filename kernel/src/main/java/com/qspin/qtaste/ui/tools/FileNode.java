@@ -98,8 +98,8 @@ public class FileNode extends TreeNodeImpl{
     }
     public int getTestcaseCount() {
         File testDataFileName = new File(f + File.separator + StaticConfiguration.TEST_DATA_FILENAME);
-        CSVFile testDataFile = new CSVFile(testDataFileName);
         try {
+            CSVFile testDataFile = new CSVFile(testDataFileName);
             return testDataFile.getCSVDataSet().size();
         } catch (FileNotFoundException ex) {
             //
@@ -119,8 +119,8 @@ public class FileNode extends TreeNodeImpl{
         if (!testScriptFile.canRead() || !testDataFile.canRead()) {
             return false;
         }
-        CSVFile csvFile = new CSVFile(testDataFile);
         try {
+            CSVFile csvFile = new CSVFile(testDataFile);
             return !csvFile.getCSVDataSet().isEmpty();
         } catch (Exception ex) {
             return false;
