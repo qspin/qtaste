@@ -199,22 +199,5 @@ public class CSVFile
       }
       alreadyParsed = true;
    }
-   
-   
-   
-   
-   //------------------------------------
-   public static void main(String [ ] args) throws Exception
-   {
-      InputStream csvInputStream = CSVFile.class.getResourceAsStream("/TestData.csv");
-
-      CSVFile testDataFile = new CSVFile(csvInputStream, "TestData.csv");
-      List<String> columnNames = testDataFile.getColumnNames(); 
-
-      for (int i = 0; i < columnNames.size(); i++)
-      {
-         System.out.println(columnNames.get(i));
-      }
-   }
 }
 
