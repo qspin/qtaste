@@ -192,7 +192,7 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
                         et.SubElement(trElem, tag, {'width':'3%'}).text = 'Result'
                     elif tag == "td":
                         et.SubElement(trElem, tag).text = ' ' # non-breakable space
-            testStepsTable = et.tostring(testStepsTableHtmlTree)
+            testStepsTable = et.tostring(testStepsTableHtmlTree, 'iso-8859-1') 
         if DUPLICATE_STEPS_PER_TEST_DATA_ROW:
             contentBeforeSteps = content[:testStepsTableMatch.start(0)]
             testDataContent = content[testStepsTableMatch.end(1):]
