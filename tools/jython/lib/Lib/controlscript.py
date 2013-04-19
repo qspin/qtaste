@@ -309,7 +309,7 @@ class JavaProcess(ControlAction):
 		@param checkAfter number of seconds after which to check if process still exist or None to not check
 		@param priority specifies to run the process with the given priority: "low", "belownormal", "normal", "abovenormal", "high" or "realtime" or none for default priority
 		@param useJacoco enable the coverage analysis using jacoco tool
-		@param useJavaGui enable the javagui service to enable remote javagui accessibility 
+		@param useJavaGUI enable the javagui service to enable remote javagui accessibility 
 		"""
 		ControlAction.__init__(self, description, active)
 		self.callerScript = traceback.format_stack()[0].split("\"")[1]
