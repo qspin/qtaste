@@ -148,13 +148,15 @@ public class JavaGUIImpl implements JavaGUI {
 	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
 		mProxy.selectInTable(pComponentName, pColumnName, pColumnValue, pOccurenceIndex);
 	}
-	
+
+	@Override
+	public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException {
+		mProxy.setComponentEnabledTimeout(pTimeOut);
+	}
 	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
 	private static final Class<?> BEAN_INTERFACE = com.qspin.qtaste.javagui.JavaGUI.class;
-	
-	
 			
 }

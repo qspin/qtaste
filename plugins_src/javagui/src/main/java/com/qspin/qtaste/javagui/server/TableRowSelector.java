@@ -18,9 +18,9 @@ final class TableRowSelector extends UpdateComponentCommander {
 		{
 			throw new QTasteTestFailException("The component is not a JTable.");
 		}
-		mColumnName = mData[1].toString();
-		mColumnValue = mData[2].toString();
-		mOccurence = Integer.parseInt(mData[3].toString());
+		mColumnName = mData[2].toString();
+		mColumnValue = mData[3].toString();
+		mOccurence = Integer.parseInt(mData[4].toString());
 		int columnIndex = getColumnIndex(mColumnName, ((JTable)component).getModel());
 		mRowToSelect = findRow(mColumnValue, columnIndex, (JTable)component);
 	}

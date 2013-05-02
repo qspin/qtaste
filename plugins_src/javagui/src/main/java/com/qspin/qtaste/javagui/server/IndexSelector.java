@@ -22,7 +22,7 @@ class IndexSelector extends UpdateComponentCommander {
 	 */
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		mIndex = Integer.parseInt(mData[1].toString());
+		mIndex = Integer.parseInt(mData[2].toString());
 		if (component instanceof JComboBox) {
 			JComboBox combo = (JComboBox) component;
 			if (combo.getItemCount() < mIndex) {

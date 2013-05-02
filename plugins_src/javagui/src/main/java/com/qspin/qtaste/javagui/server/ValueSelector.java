@@ -19,9 +19,9 @@ public class ValueSelector extends UpdateComponentCommander {
 	@Override
 	protected void prepareActions() throws QTasteTestFailException
 	{
-		String value = mData[1].toString();
+		String value = mData[2].toString();
 		if (component instanceof JCheckBox || component instanceof JRadioButton) {
-			new ComponentSelector().executeCommand(mData[0].toString(), Boolean.parseBoolean(value));
+			new ComponentSelector().executeCommand(mData[0].toString(),Integer.parseInt(mData[1].toString()), Boolean.parseBoolean(value));
 		} else if (component instanceof JComboBox) {
 			JComboBox combo = (JComboBox) component;
 			ListCellRenderer renderer = combo.getRenderer();

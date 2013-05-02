@@ -15,7 +15,7 @@ class TextSetter extends UpdateComponentCommander {
 
 	@Override
 	protected void doActionsInSwingThread() throws QTasteTestFailException{
-		String value = mData[1].toString();
+		String value = mData[2].toString();
 										
 		// Support for AWT
 		if (component instanceof TextField) {					

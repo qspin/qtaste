@@ -29,7 +29,14 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  */
 public interface JavaGUI {
   
-  /**
+   /**
+    * Change the COMPONENT_ENABLED_TIMEOUT used when JavaGUI searches a fully active component. 
+    * @param pTimeOut the new timeout value in seconds.
+    * @throws IllegalArgumentException if the timeout value is negative.
+    */
+   public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException;
+	
+   /**
      * Create a snapshot of the specified GUI componentName and save it as the specified filename in the current working directory.
      * @param componentName an identifier of the GUI component.
      * @param fileName the name of the image file.

@@ -10,7 +10,7 @@ class TabSelector extends UpdateComponentCommander {
 
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		mTabIndex = Integer.parseInt(mData[1].toString());
+		mTabIndex = Integer.parseInt(mData[2].toString());
 	}
 
 	@Override

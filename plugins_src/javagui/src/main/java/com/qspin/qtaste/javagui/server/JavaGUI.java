@@ -34,7 +34,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  * @author lvboque
  */
 public class JavaGUI extends JMXAgent implements JavaGUIMBean {
-
+	
 	public static void premain(String agentArgs, Instrumentation inst) {
 		new JavaGUI();
 	}
@@ -68,7 +68,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteTestFailException {
-		return new ButtonClicker().executeCommand(componentName, pressTime);
+		return new ButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, pressTime);
 	}
 
 	public boolean isEnabled(String componentName) throws QTasteTestFailException {
@@ -85,30 +85,30 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 				
 	// TODO: boolean returns is useless and confusing!
 	public boolean setText(final String componentName, final String value) throws QTasteTestFailException {
-		return new TextSetter().executeCommand(componentName, value);
+		return new TextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}	
 	
 	public boolean selectComponent(final String componentName, final boolean value) throws QTasteTestFailException {
-		return new ComponentSelector().executeCommand(componentName, value);
+		return new ComponentSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}			
 
 	public boolean selectValue(final String componentName, final String value) throws QTasteTestFailException {
-		return new ValueSelector().executeCommand(componentName, value);
+		return new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}
 
 	public boolean selectIndex(final String componentName, final int index) throws QTasteTestFailException {
-		return new IndexSelector().executeCommand(componentName, index);
+		return new IndexSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, index);
 	}
 
 	@Override
 	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException {
-		return new TreeNodeSelector().executeCommand(componentName, nodeName, nodeSeparator);
+		return new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
 	}
 	// Todo: getColor, awt?
 
 	@Override
 	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException {
-		return new TabSelector().executeCommand(tabbedPaneComponentName, tabIndex);
+		return new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
 	}
 	
 	public String whoAmI() throws QTasteTestFailException {		
@@ -130,7 +130,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}								    
 
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
-		new KeyPresser().executeCommand(bot, keycode, delay);
+		new KeyPresser().executeCommand(COMPONENT_ENABLED_TIMEOUT, bot, keycode, delay);
 	}
 	
 	public void pressKey(int keycode) throws QTasteTestFailException {
@@ -150,7 +150,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	@Override
 	public int countTableRows(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
-		return new TableRowCounter().executeCommand(pComponentName, pColumnName, pColumnValue);
+		return new TableRowCounter().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue);
 	}
 
 	@Override
@@ -160,7 +160,16 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	@Override
 	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
-		new TableRowSelector().executeCommand(pComponentName, pColumnName, pColumnValue, pOccurenceIndex);		
+		new TableRowSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue, pOccurenceIndex);		
+	}
+
+	@Override
+	public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException{
+		if (pTimeOut < 0)
+			throw new IllegalArgumentException("Cannot set a negative timeout value. Try to set " + pTimeOut);
+		
+		COMPONENT_ENABLED_TIMEOUT = pTimeOut;
 	}
 	
+	private static int COMPONENT_ENABLED_TIMEOUT = 10;
 }

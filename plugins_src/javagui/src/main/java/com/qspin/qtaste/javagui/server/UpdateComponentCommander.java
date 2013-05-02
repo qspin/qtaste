@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
@@ -16,8 +17,22 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	@Override
 	public Boolean executeCommand(Object... data) throws QTasteTestFailException {
 		setData(data);
+		int timeout = Integer.parseInt(mData[1].toString());
+		long maxTime = new Date().getTime() + 1000 * timeout;
 		String componentName = mData[0].toString();
-		component = getComponentByName(componentName);
+		
+		while ( new Date().getTime() < maxTime )
+		{
+			component = getComponentByName(componentName);
+			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+				break;
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				LOGGER.warn("Exception during the component search sleep...");
+			}
+		}
+		
 		if (component == null )
 		{
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not found.");
@@ -27,6 +42,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		}
 		if (! checkComponentIsVisible(component))
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
+		
 		prepareActions();
 		SwingUtilities.invokeLater(this);
 		return true;
@@ -58,7 +74,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			}
 			lookForComponent(name, window.getComponents());
 		}
-		LOGGER.debug( mFoundComponents.size() + " component(s) found with the contains");
+		LOGGER.trace( mFoundComponents.size() + " component(s) found with the contains");
 		
 		//if equals the remove others
 		if ( mFindWithEqual )
@@ -72,7 +88,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 					i++;
 				}
 			}
-			LOGGER.debug( mFoundComponents.size() + " component(s) found with the equals");
+			LOGGER.trace( mFoundComponents.size() + " component(s) found with the equals");
 		}
 		
 		//Remove invisible components
@@ -85,7 +101,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				i++;
 			}
 		}
-		LOGGER.debug( mFoundComponents.size() + " visible component(s) found");
+		LOGGER.trace( mFoundComponents.size() + " visible component(s) found");
 		
 		if ( !mFoundComponents.isEmpty() )
 		{

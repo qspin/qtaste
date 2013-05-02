@@ -23,7 +23,7 @@ class ComponentSelector extends UpdateComponentCommander {
 	 */
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		mSelectState = Boolean.parseBoolean(mData[1].toString());
+		mSelectState = Boolean.parseBoolean(mData[2].toString());
 		if ( !(component instanceof JCheckBox) && !(component instanceof JRadioButton) ){
 			throw new QTasteTestFailException("Unsupported component.");
 		}
