@@ -17,9 +17,9 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	@Override
 	public Boolean executeCommand(Object... data) throws QTasteTestFailException {
 		setData(data);
-		int timeout = Integer.parseInt(mData[1].toString());
+		int timeout = Integer.parseInt(mData[0].toString());
 		long maxTime = new Date().getTime() + 1000 * timeout;
-		String componentName = mData[0].toString();
+		String componentName = mData[1].toString();
 		
 		while ( new Date().getTime() < maxTime )
 		{
