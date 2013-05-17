@@ -659,15 +659,16 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             }
             removeTestSuiteFromModel(childNode);
         }
-        node.removeAllChildren();
+        node.removeAllChildren();        
         this.fireTreeNodesRemoved(this, this.getPathToRoot(node), indices, childNodes.toArray());
-        TCTreeNode parentNode = (TCTreeNode)node.getParent();
-        int nodeIndex = parentNode.getIndex(node);
         
-        parentNode.remove(node);
-        
-        this.fireTreeNodesRemoved(this, this.getPathToRoot(parentNode), new int[] {nodeIndex}, new TreeNode[]{node});
-        
+        //prevent to delete root node - 'Test Campaign'
+        if (!node.isRoot()) {
+            TCTreeNode parentNode = (TCTreeNode)node.getParent();
+            int nodeIndex = parentNode.getIndex(node);            
+            parentNode.remove(node);            
+            this.fireTreeNodesRemoved(this, this.getPathToRoot(parentNode), new int[] {nodeIndex}, new TreeNode[]{node});    
+        }
     }
     public void removeAll() {
         metaCampaignSelectionList.clear();

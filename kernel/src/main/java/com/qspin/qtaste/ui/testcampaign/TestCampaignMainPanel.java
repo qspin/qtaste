@@ -96,6 +96,10 @@ public class TestCampaignMainPanel extends JPanel {
         saveMetaCampaignButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                if (selectedCampaign == null) {
+                    logger.warn("No Campaign created");
+                    return;
+                }                
                 treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
             }
         });
@@ -168,6 +172,11 @@ public class TestCampaignMainPanel extends JPanel {
 
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if (selectedCampaign == null) {
+                        logger.warn("No Campaign created");
+                        return;
+                    }
+                    
                     // first save the current campaign if needed
                     if (treeTable.hasChanged()) {
                         treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
@@ -186,10 +195,7 @@ public class TestCampaignMainPanel extends JPanel {
                     logger.error(ex.getMessage(), ex);
                 }
             }
-        });
-       
-
-  
+        });  
 
         topPanel.add(addNewMetaCampaignButton);
         topPanel.add(saveMetaCampaignButton);
