@@ -88,11 +88,10 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 namesValues.add("###TESTS_NOT_AVAILABLE###", "&nbsp;");
                 namesValues.add("###TESTS_RETRIES###", "&nbsp;");
                 namesValues.add("###ELAPSED_TIME###", "&nbsp;");
-            } else {
-                String absoluteDetailedURL = cr.getDetailedURL();
-                String relativeDetailedURL = new File(outputDir).toURI().relativize(new File(absoluteDetailedURL).toURI()).getPath();
+            } else {                
+                String testBedHtmlFile = new File(cr.getDetailedURL()).getName();
                 String nbTestsToExecuteStr = cr.getNbTestsToExecute() != -1 ? "" + cr.getNbTestsToExecute() : "-";
-                namesValues.add("###TESTBED###", "<a href=" + relativeDetailedURL + ">" + cr.getTestBed() + "</a>");        
+                namesValues.add("###TESTBED###", "<a href=" + testBedHtmlFile + ">" + cr.getTestBed() + "</a>");        
                 namesValues.add("###TESTS_EXECUTED###", cr.getNbTestsExecuted() + "/" + nbTestsToExecuteStr);
                 namesValues.add("###TESTS_PASSED###", cr.getNbTestsPassed() + "/" + nbTestsToExecuteStr);
                 namesValues.add("###TESTS_FAILED###", cr.getNbTestsFailed() + "/" + nbTestsToExecuteStr);
