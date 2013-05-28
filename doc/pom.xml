@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.qspin.qtaste</groupId>
+        <artifactId>qtaste</artifactId>
+        <version>1.2.2-RC6</version>
+    </parent>
+
+    <artifactId>qtaste-doc</artifactId>
+    <name>QTaste Documentation</name>
+
+    <build>
+        <finalName>qtaste-doc</finalName>
+        <plugins>
+            <plugin>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <version>2.0.11</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.docbook</groupId>
+                    <artifactId>docbook-xml</artifactId>
+                    <version>4.4</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.docbook</groupId>
+                    <artifactId>docbook-xsl</artifactId>
+                    <version>1.72.0</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+            <executions>
+                <execution>
+                    <id>qtaste-xhtml</id>
+                    <phase>pre-site</phase>
+                    <goals>
+                        <goal>generate-html</goal>
+                    </goals>
+                    <configuration>
+                        <postProcess>
+                        <copy todir="target/docbkx/html/res">
+                            <fileset dir="src/docbkx/res">
+                            </fileset>
+                        </copy>
+                    </postProcess>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>qtaste-pdf</id>
+                    <phase>pre-site</phase>
+                    <goals>
+                        <goal>generate-pdf</goal>
+                    </goals>
+                    <configuration>
+                        <foCustomization>src/docbkx/qtaste_docs_stylesheet.xsl</foCustomization>
+                        <externalFOPConfiguration>/projet/docbkx/docbkx-maven-plugin/src/test/resources/fop.xconf</externalFOPConfiguration>
+                    </configuration>
+                </execution>
+            </executions>
+                <configuration>
+                    <!-- Number the chapters and sections -->
+                   <sectionAutolabel>1</sectionAutolabel>
+                   <sectionLabelIncludesComponentLabel>1</sectionLabelIncludesComponentLabel>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

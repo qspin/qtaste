@@ -1,0 +1,3674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book>
+  <title><emphasis>QTaste User Manual</emphasis></title>
+
+  <bookinfo>
+    <copyright>
+      <year>2012</year>
+
+      <holder>QSpin SA</holder>
+    </copyright>
+
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+
+        <date>02/10/2009</date>
+
+        <revdescription>
+          <para>First version for Open Source Release</para>
+        </revdescription>
+      </revision>
+
+      <revision>
+        <revnumber>1.1</revnumber>
+
+        <date>29/03/2012</date>
+
+        <revdescription>
+          <para>Minor updates (QTASTE_JYTHON_LIB), update some url for
+          sourceforge</para>
+        </revdescription>
+      </revision>
+
+      <revision>
+        <revnumber>1.2</revnumber>
+
+        <date>25/09/2012</date>
+
+        <revdescription>
+          <para>Minor updates for release 1.2</para>
+        </revdescription>
+      </revision>
+    </revhistory>
+  </bookinfo>
+
+  <chapter>
+    <title><emphasis>Introduction</emphasis></title>
+
+    <section>
+      <title><emphasis>Why QTaste ?</emphasis></title>
+
+      <para>QTaste framework (QSpin Tailored Automated System Test
+      Environment) is a generic test environment customizable to test
+      different kind of systems. It can be used to test simple and complex
+      hardware or software systems including a lot of different technologies.
+      For that reason, the test api has to be “tailored” in order to enable
+      the kernel to communicate with your system.</para>
+    </section>
+
+    <section>
+      <title><emphasis>Purpose</emphasis></title>
+
+      <para>This document describes the installation and configuration steps
+      of the “QSpin Tailored Automated System Test Environment” (QTaste). It
+      provides useful information to the test designer and to the developer in
+      order to define a new test script to be used by the QTaste
+      framework.</para>
+
+      <para>The test designer is responsible for writing test scripts based on
+      the requirement documents. Associated to this task, the developer needs
+      to provide a set of verbs that can be used by the script. The developer
+      is responsible for the development of the newly defined QTaste verbs.
+      Those activities must be performed with respect to the QTaste
+      architecture.</para>
+    </section>
+
+    <section>
+      <title><emphasis>Definitions, Acronyms and Abbreviations</emphasis></title>
+
+      <informaltable frame="all">
+        <tgroup cols="2" colsep="1" rowsep="1">
+          <colspec align="center" colname="c1" colwidth="1*"/>
+
+          <colspec align="justify" colname="c2" colwidth="2*"/>
+
+          <thead>
+            <row>
+              <entry>Term</entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>Acceptance criterion</entry>
+
+              <entry>Set of expected results expected at the output of the
+              system when specific test data are provided. These can be exact
+              values, ranges, probabilities, ...</entry>
+            </row>
+
+            <row>
+              <entry>Actual outcome</entry>
+
+              <entry>Contains a brief description of what the tester saw after
+              the test steps have been completed. This is compared to the
+              expected results in order to decide if the test is
+              Success/Fail.</entry>
+            </row>
+
+            <row>
+              <entry>Agent</entry>
+
+              <entry>Agents are active objects.They are capable of performing
+              operations. Such agents may be software agents, hardware
+              devices, or humans. They read inputs and generate outputs
+              supposedly according to their requirements.</entry>
+            </row>
+
+            <row>
+              <entry>Automated testing</entry>
+
+              <entry>Execution of tests without the intervention of the
+              tester. Limited intervention of the tester for the introduction
+              of results that are not available through interfaces, protocols
+              and middlewares are possible during automated testing.</entry>
+            </row>
+
+            <row>
+              <entry>Control script</entry>
+
+              <entry>A control script is a shell script able to start or stop
+              a System Under Test (SUT).</entry>
+            </row>
+
+            <row>
+              <entry>Developer</entry>
+
+              <entry>Person implementing some component, hardware or software
+              and their stubs.</entry>
+            </row>
+
+            <row>
+              <entry>Environment</entry>
+
+              <entry>(Sub-)set of systems, modules and components needed to
+              perform a specific execution of a (sub-) set of operation of the
+              original and complete system.</entry>
+            </row>
+
+            <row>
+              <entry>Expected results</entry>
+
+              <entry>is a description of the results of the successful
+              execution of a test case</entry>
+            </row>
+
+            <row>
+              <entry>Failure</entry>
+
+              <entry>in case of a failure, the software does not do what the
+              user expects, according to the validation rule</entry>
+            </row>
+
+            <row>
+              <entry>GPL</entry>
+
+              <entry>The GNU General Public License (www.gnu.org)</entry>
+            </row>
+
+            <row>
+              <entry>Input data</entry>
+
+              <entry>is a set of values for input variables of a test
+              case</entry>
+            </row>
+
+            <row>
+              <entry>Intrusive, non-intrusive and low-intrusive test
+              methods</entry>
+
+              <entry>Intrusion means that the test is not using the public API
+              of the tested component. Low-intrusion means that the behaviour
+              of the component has been changed using the public API of a
+              sub-component.</entry>
+            </row>
+
+            <row>
+              <entry>LGPL</entry>
+
+              <entry>The GNU Lesser General Public License
+              (www.gnu.org)</entry>
+            </row>
+
+            <row>
+              <entry>Manual testing</entry>
+
+              <entry>Execution of tests that are requiring the interaction of
+              the tester or the test designer, to request some operation, to
+              introduce test data, to introduce test results or to introduce
+              validation rules.</entry>
+            </row>
+
+            <row>
+              <entry>Nominal cases</entry>
+
+              <entry>Test case that is likely to happen during the nominal
+              exploitation of the system.</entry>
+            </row>
+
+            <row>
+              <entry>Non-nominal cases</entry>
+
+              <entry>Test case that may happen during the exploitation of the
+              system during a fault or a degradation</entry>
+            </row>
+
+            <row>
+              <entry>Open Source</entry>
+
+              <entry>source code is provided</entry>
+            </row>
+
+            <row>
+              <entry>Proxy</entry>
+
+              <entry>A class functioning as an interface to another thing. The
+              other thing could be anything: a network connection, a large
+              object in memory, a file, or some other resource that is
+              expensive or impossible to duplicate.</entry>
+            </row>
+
+            <row>
+              <entry>Requirement</entry>
+
+              <entry>Is prescriptive statement of intent about the system to
+              be, to be enforced by a single agent of the system-to-be through
+              actuation of the variable under its control.</entry>
+            </row>
+
+            <row>
+              <entry>Simulated environment</entry>
+
+              <entry>Environment that is using simulated and dummy
+              (sub-)systems, modules and components.</entry>
+            </row>
+
+            <row>
+              <entry>Stub</entry>
+
+              <entry>A piece of software or hardware that mimics the activity
+              of a missing component</entry>
+            </row>
+
+            <row>
+              <entry>SUT</entry>
+
+              <entry>System Under Test</entry>
+            </row>
+
+            <row>
+              <entry>Test API</entry>
+
+              <entry>is the API providing methods to test a system or
+              component and check the results</entry>
+            </row>
+
+            <row>
+              <entry>Test bed</entry>
+
+              <entry>the aggregate of system under test, the test system, and
+              the simulated environment.</entry>
+            </row>
+
+            <row>
+              <entry>Test campaign</entry>
+
+              <entry>is a predefined set of test suites or test cases that
+              will be executed in order to get feedback about the quality of a
+              system.</entry>
+            </row>
+
+            <row>
+              <entry>Test case</entry>
+
+              <entry>is a scenario composed of a sequence of actions and
+              validations under which a tester will determine if a requirement
+              or use case upon an application is partially or fully satisfied.
+              It may take many test cases to determine that a requirement is
+              fully satisfied.</entry>
+            </row>
+
+            <row>
+              <entry>Test data</entry>
+
+              <entry>is a set of values for test cases, used as input data and
+              as expected results</entry>
+            </row>
+
+            <row>
+              <entry>Test Designer</entry>
+
+              <entry>Person designing the tests to be executed on the QTaste.
+              This person has a good understanding of the system under
+              test.</entry>
+            </row>
+
+            <row>
+              <entry>Test environment</entry>
+
+              <entry>Synonym of test bed</entry>
+            </row>
+
+            <row>
+              <entry>Test Extension</entry>
+
+              <entry>is an extension to the Test API mainly used for Stress
+              Test in order to « break » some components.</entry>
+            </row>
+
+            <row>
+              <entry>Test log</entry>
+
+              <entry>is a log of all the test verbs that have been executed
+              and of their actual results</entry>
+            </row>
+
+            <row>
+              <entry>Test management tool</entry>
+
+              <entry>is a tool used to define and organize test cases, test
+              data, test suites to perform a test campaign. It helps the
+              tester to do the follow up of the test results.</entry>
+            </row>
+
+            <row>
+              <entry>Test report</entry>
+
+              <entry>is a report containing the result of the execution of a
+              test suite</entry>
+            </row>
+
+            <row>
+              <entry>Test script</entry>
+
+              <entry>is a short program written in a test-dedicated
+              programming language used to test part of the functionality of a
+              software system. It mentions a set of steps that should be
+              performed in order to execute the test case.</entry>
+            </row>
+
+            <row>
+              <entry>Test suite</entry>
+
+              <entry>is a collection of test cases</entry>
+            </row>
+
+            <row>
+              <entry>Tester</entry>
+
+              <entry>Person executing the tests defined by the Test Designer
+              on the QTaste. Less skills are required than for the Test
+              Designer, notably, he should not need to be an expert of the
+              system under test in order to perform the tests.</entry>
+            </row>
+
+            <row>
+              <entry>Use case</entry>
+
+              <entry>is a technique for documenting the requirements of a new
+              system or software change. Each use case provides one or more
+              scenarios that convey how the system should interact with the
+              end user or another system to achieve a specific business goal.
+              Use cases typically avoid technical jargon, preferring instead
+              the language of the end user or domain expert. Use cases are
+              often co-authored by requirements engineers and
+              stakeholders.</entry>
+            </row>
+
+            <row>
+              <entry>Validation</entry>
+
+              <entry>Checking that the behaviour of the system under test
+              matches the expected behaviour, as described by its
+              requirements.</entry>
+            </row>
+
+            <row>
+              <entry>Validation rule</entry>
+
+              <entry>Rule checking if the expected behaviour and the actual
+              outcome are identical or are matching acceptance criterion
+              (parametric check)</entry>
+            </row>
+
+            <row>
+              <entry>Verb</entry>
+
+              <entry>is an abstract definition of a functionality of the test
+              API</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Overview of the QTaste framework</emphasis></title>
+
+    <figure>
+      <title><emphasis>QTaste “Overall system architecture overview”</emphasis></title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="res/user_manual/figure1.png" format="PNG"
+                     scalefit="1" width="100%"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Requirements, taken from a requirement management tool or from a
+    document are derived into Use cases and Test scripts specific to the SUT
+    business.</para>
+
+    <para>Test scripts correspond to a sequence of Test API calls expressed in
+    python scripting language. Each call corresponds to an operation or to a
+    validation. Test cases are the combination of test scripts and the
+    associated data.</para>
+
+    <para>An operation consists of a set of actions on the system under test.
+    Validation consists of a check enabling the validation of a previous set
+    of operations.</para>
+
+    <para>In order to support a data driven approach, Test Data are stored
+    independently of test scripts in a CSV (Comma Separated Values)
+    file.</para>
+
+    <figure>
+      <title><emphasis>QTaste “Example of python test script”</emphasis></title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" fileref="res/user_manual/figure2.png"
+                     format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <figure>
+      <title><emphasis>QTaste “Example of test data”</emphasis></title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="res/user_manual/figure3.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The table contains a list of columns names and associated values
+    used by the Test scripts as inputs or expected outputs. These values are
+    defined by the test designer. The values can correspond to a string input,
+    numeric values, date, file path or any other kind of data format such as
+    ranges or fuzzy information.</para>
+
+    <para>Each line of the sheet corresponds to a specific test with
+    predefined data. It may correspond to the “nominal case” scenario or it
+    could be a set of data that will lead to an expected failure (e.g. value
+    out of range) for “non nominal case” scenarios.</para>
+
+    <para>The combination of the test script and the test data allows the test
+    designer to generate tests cases that will be run by the test engineer
+    using QTaste. The creation of the test cases is a shared responsibility
+    between the test designer and the developer, as specific formalism and
+    functions might be required in order to allow the Test Engine to correctly
+    parse and execute the complete sequences.</para>
+
+    <para>Once the test cases are executed by QTaste, test report is generated
+    giving the result of the test case execution.</para>
+
+    <figure>
+      <title><emphasis>QTaste “Example of test report (part 1)”</emphasis></title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="res/user_manual/figure4.png" format="PNG"
+                     scalefit="1" width="100%"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <figure>
+      <title><emphasis>QTaste “Example of test report (part 2)”</emphasis></title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="res/user_manual/figure5.png" format="PNG"
+                     scalefit="1" width="100%"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>The QTaste Test-API parent</emphasis></title>
+
+    <para>Each testapi have to inherit of testapi-parent component. This is
+    used to make the internal qtaste dependencies available to the custom
+    testapi. It is also used to share the configuration of maven plugins.
+    (like plugins for the testapi documentation, etc)</para>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Overview of the QTaste directory structures</emphasis></title>
+
+    <section>
+      <title><emphasis>QTaste kernel directories</emphasis></title>
+
+      <para>The following directories are located in the QTaste root
+      directory.</para>
+
+      <informaltable frame="all">
+        <tgroup cols="2" colsep="1" rowsep="1">
+          <colspec align="center" colname="c1" colwidth="1*"/>
+
+          <colspec align="justify" colname="c2" colwidth="2*"/>
+
+          <thead>
+            <row>
+              <entry>Directory</entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>bin</entry>
+
+              <entry>This directory contains scripts to start the test engine,
+              generate documentations and start simulators</entry>
+            </row>
+
+            <row>
+              <entry>conf</entry>
+
+              <entry>This directory contains the configuration files</entry>
+            </row>
+
+            <row>
+              <entry>kernel/target</entry>
+
+              <entry>This directory contains the QTaste kernel jar</entry>
+            </row>
+
+            <row>
+              <entry>lib</entry>
+
+              <entry>This directory contains all the shared libraries (dll and
+              so) required by the QTaste framework</entry>
+            </row>
+
+            <row>
+              <entry>tools</entry>
+
+              <entry>This directory contains all the shared libraries (dll and
+              so) required by the QTaste framework</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </section>
+
+    <section>
+      <title><emphasis>Test specific directories</emphasis></title>
+
+      <informaltable frame="all">
+        <tgroup cols="2" colsep="1" rowsep="1">
+          <colspec align="center" colname="c1" colwidth="1*"/>
+
+          <colspec align="justify" colname="c2" colwidth="2*"/>
+
+          <thead>
+            <row>
+              <entry>Directory</entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>Testbeds</entry>
+
+              <entry>This directory contains the testbeds configuration
+              files</entry>
+            </row>
+
+            <row>
+              <entry>Testbeds/ControlScripts</entry>
+
+              <entry>This directory contains the control scripts associated to
+              the testbeds</entry>
+            </row>
+
+            <row>
+              <entry>TestCampaigns</entry>
+
+              <entry>This directory contains the test campaigns description
+              files</entry>
+            </row>
+
+            <row>
+              <entry>TestSuites</entry>
+
+              <entry>This directory contains different test suites containing
+              test scripts and test data</entry>
+            </row>
+
+            <row>
+              <entry>log</entry>
+
+              <entry>This directory contains execution logs of the QTaste
+              framework. It will be automatically created after the first
+              execution of the Test Engine</entry>
+            </row>
+
+            <row>
+              <entry>reports</entry>
+
+              <entry>This directory contains the test reports generated by the
+              Test Engine</entry>
+            </row>
+
+            <row>
+              <entry>testapi/target</entry>
+
+              <entry>This directory contains the QTaste TestAPI jar and the
+              generated HTML TestAPI documentation (in TestAPI-doc
+              subdirectory)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Using QTaste framework</emphasis></title>
+
+    <section>
+      <title><emphasis>Test automation workflow</emphasis></title>
+
+      <para>In order to develop new test cases using the QTaste framework, it
+      is really important to understand the following points:</para>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           Identification of the architectural components of the SUT and their interfaces that will be used to perform the tests. Which technologies are required to communicate with the components interfaces?
+        </listitem>
+
+        <listitem override="bullet">
+           Are the components testapi already implemented in QTaste? Are the technologies required to communicate with components already supported by the QTaste?
+        </listitem>
+
+        <listitem override="bullet">
+           Do the components have the required verbs to perform the operations and checks?
+        </listitem>
+
+        <listitem override="bullet">
+           What are the parameters required to perform operations on the components? Identify variables that can be used as “Test Data”
+        </listitem>
+
+        <listitem override="bullet">
+           What configuration parameters of the testbed are required in order to use the components in any testbed configurations?
+        </listitem>
+
+        <listitem override="bullet">
+           Design the QTaste components interfaces and develop component implementations
+        </listitem>
+
+        <listitem override="bullet">
+           Develop the python test script(s)
+        </listitem>
+
+        <listitem override="bullet">
+           Add rows in the “Test Data” to test specific cases
+        </listitem>
+
+        <listitem override="bullet">
+           Execute the test suite(s)
+        </listitem>
+
+        <listitem override="bullet">
+           Analyse the test reports and report test failures
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>Starting the test engine</emphasis></title>
+
+      <para>The command to execute a test suite or test script is:</para>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           ${QTASTE_HOME}/bin/qtaste_start.bat (or qtaste_start.sh for Unix platform) which must be run from the test specific directory containing the directories specified in section 4.2.
+        </listitem>
+      </itemizedlist>
+
+      <para>To simplify usage, it is advised to put the ${QTASTE_HOME}/bin
+      directory in your path.</para>
+
+      <cmdsynopsis>
+         Usage:
+
+        <command>
+          <replaceable>command</replaceable>
+        </command>
+
+
+
+        <arg choice="req">-testsuite
+        <replaceable>testsuiteDirectory</replaceable></arg>
+
+
+
+        <arg choice="req">-testbed
+        <replaceable>configFilename.xml</replaceable></arg>
+
+
+
+        <arg choice="opt">-sutversion
+        <replaceable>SUT_version</replaceable></arg>
+
+
+
+        <arg choice="opt">-engine
+        <replaceable>engineFilename.xml</replaceable></arg>
+
+
+
+        <arg choice="opt">-loop [<replaceable>count</replaceable> |
+        <replaceable>hours</replaceable>h]</arg>
+
+
+      </cmdsynopsis>
+
+      <informaltable frame="all">
+        <tgroup cols="4" colsep="1" rowsep="1">
+          <colspec align="center"/>
+
+          <colspec align="center"/>
+
+          <colspec align="center"/>
+
+          <colspec align="justify"/>
+
+          <thead>
+            <row>
+              <entry>Option</entry>
+
+              <entry>Parameters</entry>
+
+              <entry>Presence</entry>
+
+              <entry align="center">Meaning</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>-testsuite</entry>
+
+              <entry>testsuiteDirectory</entry>
+
+              <entry>MANDATORY</entry>
+
+              <entry>Specify the directory containing the testsuite(s)</entry>
+            </row>
+
+            <row>
+              <entry>-testbed</entry>
+
+              <entry>configFileName.xml</entry>
+
+              <entry>MANDATORY</entry>
+
+              <entry>Specify the testbed configuration file to be used for the
+              test.</entry>
+            </row>
+
+            <row>
+              <entry>-sutversion</entry>
+
+              <entry>SUT_version</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify the SUT version that will be reported.</entry>
+            </row>
+
+            <row>
+              <entry>-engine</entry>
+
+              <entry>engineFileName.xml</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify the engine configuration to be used for the test.
+              By default, the file conf/engine.xml is used.</entry>
+            </row>
+
+            <row>
+              <entry>-loop</entry>
+
+              <entry>None | &lt;count&gt; | &lt;hours&gt;h</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify to execute the test suite in loop, respectively
+              infinitely, &lt;count&gt; times or during &lt;hours&gt;&gt;
+              hours.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </section>
+
+    <section>
+
+
+      <title><emphasis>Starting the meta-campaign launcher</emphasis></title>
+
+
+
+      <para>A meta-campaign specifies a set of testsuites or testscripts to be
+      executed on specified testbeds. Optionally, the number of times they
+      must be executed can be specified as well as the test data rows for
+      which a test script must be executed.</para>
+
+
+
+      <para>The command to execute a meta-campaign is:</para>
+
+
+
+      <itemizedlist mark="opencircle">
+        <listitem
+        override="bullet">${QTASTE_HOME}/bin/qtaste_campaign_start.bat (or
+        qtaste_campaign_start.sh for Unix platform)</listitem>
+      </itemizedlist>
+
+       which must be run from the test specific directory containing the directories specified in section 4.2.
+
+      <para>To simplify usage, it is advised to put the ${QTASTE_HOME}/bin
+      directory in your path.</para>
+
+
+
+      <cmdsynopsis>Usage:<command>
+          <replaceable>command</replaceable>
+        </command> <arg choice="req">campaignFileName</arg> <arg
+      choice="opt">-sutversion
+      <replaceable>SUT_version</replaceable></arg></cmdsynopsis>
+
+
+
+      <informaltable frame="all">
+        <tgroup cols="4" colsep="1" rowsep="1">
+          <colspec align="center"/>
+
+          <colspec align="center"/>
+
+          <colspec align="center"/>
+
+          <colspec align="justify"/>
+
+          <thead>
+            <row>
+              <entry>Option</entry>
+
+              <entry>Parameters</entry>
+
+              <entry>Presence</entry>
+
+              <entry align="center">Meaning</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry/>
+
+              <entry>campaignFileName</entry>
+
+              <entry>MANDATORY</entry>
+
+              <entry>Specify the name of the XML campaign file</entry>
+            </row>
+
+            <row>
+              <entry>-sutversion</entry>
+
+              <entry>SUT_version</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify the SUT version that will be reported.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+
+
+      <para>The format of the campaign file is the following:</para>
+
+
+
+      <literallayout>&lt;campaign name="Campaign_Name"&gt;
+   &lt;run testbed="testbedName.xml"&gt;
+      &lt;testsuite directory="testSuiteDirName"&gt;
+         [&lt;testdata selector="commaSeparatedListOfRowId"/&gt;] (optional, to
+                execute scripts only for specified test data rows; row id starts at 1)
+         [&lt;count&gt;numberOfTimesOrHoursToExecute&lt;/count&gt;] (optional, to execute in loop)
+         [&lt;loopInHours/&gt;] (optional, if numberOfTimesOrHoursToExecute is in hours)
+      &lt;/testsuite&gt;
+      &lt;testsuite …&gt; … &lt;/testsuite&gt;
+      …
+   &lt;/run&gt;
+   &lt;run …&gt; … &lt;/run&gt;
+   …
+&lt;/campaign&gt;</literallayout>
+
+
+
+      <para>Here below an example of campaign file:</para>
+
+
+
+      <literallayout>&lt;campaign name="Campaign example"&gt;
+   &lt;run testbed="enginetest.xml"&gt;
+      &lt;testsuite directory="TestSuites/TestSuite_QTaste/EngineSuite/QTaste_SCRIPT"/&gt;
+      &lt;testsuite directory="TestSuites/TestSuite_QTaste/EngineSuite/QTaste_KERNEL/QTaste_RES_06"&gt;
+         &lt;testdata selector="1,4,5"/&gt;
+         &lt;count&gt;2&lt;/count&gt;
+      &lt;/testsuite&gt;
+      &lt;testsuite directory="TestSuites/TestSuite_QTaste/EngineSuite/QTaste_DATA/QTaste_DATA_01"/&gt;
+      &lt;testsuite directory="TestSuites/TestSuite_QTaste/EngineSuite/QTaste_DATA/QTaste_DATA_04"/&gt;
+      &lt;testsuite directory="TestSuites/TestSuite_QTaste/EngineSuite/QTaste_DATA/QTaste_DATA_05"/&gt;
+   &lt;/run&gt;
+&lt;/campaign&gt;</literallayout>
+
+
+    </section>
+
+    <section>
+      <title><emphasis>Starting QTaste graphical user interface</emphasis></title>
+
+      <para>The QTaste Graphical User Interface can be used in order to
+      interact with the QTaste test engine and QTaste test campaign.</para>
+
+      <para>The command to execute QTaste with its GUI is:</para>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           ${QTASTE_HOME}/bin/ qtasteUI_start.bat (or qtasteUI_start.sh for Unix platform)
+        </listitem>
+      </itemizedlist>
+
+      <para>which must be run from the test specific directory containing the
+      directories specified in section 4.2.</para>
+
+      <para>To simplify usage, it is advised to put the ${QTASTE_HOME}/bin
+      directory in your path.</para>
+
+      <cmdsynopsis>
+         Usage:
+
+        <command>
+          <replaceable>command</replaceable>
+        </command>
+
+
+
+        <arg choice="req">-testsuite
+        <replaceable>testsuiteDirectory</replaceable></arg>
+
+
+
+        <arg choice="opt">-testbed
+        <replaceable>configFilename.xml</replaceable></arg>
+
+
+
+        <arg choice="opt">-engine
+        <replaceable>engineFilename.xml</replaceable></arg>
+
+
+
+        <arg choice="opt">-loop [<replaceable>count</replaceable> |
+        <replaceable>hours</replaceable>h]</arg>
+
+
+      </cmdsynopsis>
+
+      <informaltable frame="all">
+        <tgroup cols="4" colsep="1" rowsep="1">
+          <colspec align="center"/>
+
+          <colspec align="center"/>
+
+          <colspec align="center"/>
+
+          <colspec align="justify"/>
+
+          <thead>
+            <row>
+              <entry>Option</entry>
+
+              <entry>Parameters</entry>
+
+              <entry>Presence</entry>
+
+              <entry align="center">Meaning</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>-testsuite</entry>
+
+              <entry>testsuiteDirectory</entry>
+
+              <entry>MANDATORY</entry>
+
+              <entry>Specify the directory containing the testsuite(s) to use
+              when the GUI is started. So using this parameter, a test suite
+              is launched.</entry>
+            </row>
+
+            <row>
+              <entry>-testbed</entry>
+
+              <entry>configFileName.xml</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify the testbed configuration file to select, if not
+              specified the last used testbed is selected.</entry>
+            </row>
+
+            <row>
+              <entry>-engine</entry>
+
+              <entry>engineFileName.xml</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify the engine configuration to be used for the test.
+              By default, the file conf/engine.xml is used.</entry>
+            </row>
+
+            <row>
+              <entry>-loop</entry>
+
+              <entry>None | &lt;count&gt; | &lt;hours&gt;h</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Specify to execute the test suite in loop, respectively
+              infinitely, &lt;count&gt; times or during &lt;hours&gt;
+              hours.This parameter is only taken into account when the
+              parameter testsuite is also specified.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </section>
+
+    <section>
+      <title><emphasis>HTML test report document</emphasis></title>
+
+      <figure>
+        <title><emphasis>QTaste "HTML Test reports”</emphasis></title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="res/user_manual/figure6.png" format="PNG"
+                       scalefit="1" width="100%"/>
+          </imageobject>
+
+          <textobject>
+             An example of HTML test report
+          </textobject>
+        </mediaobject>
+      </figure>
+
+      <para>Some additional remarks about HTML test reports document:</para>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           The versions of the test scripts may be extracted from a version control tool (like subversion repository as example) during the execution of the tests. The version of will be reported only if:
+
+          <itemizedlist mark="opencircle">
+            <listitem>the subversion command-client (“svn”) is available in
+            the PATH</listitem>
+
+            <listitem>testsuites are used in a svn repository and are a
+            “tagged” as version. (rely on svn URL).</listitem>
+
+            <listitem>The engine configuration file (conf/engine.xml) tag
+            &lt;version_control&gt; is configured
+            properly.(com.qspin.qtaste.util.versioncontrol.impl.SubversionVersionControl)</listitem>
+          </itemizedlist>
+
+
+
+          <para>The version will be set to “undefined” in all the other
+          cases.</para>
+
+
+        </listitem>
+
+        <listitem override="bullet">
+           SUT version field is coming from either the SUT version field if the test is started from the QTaste GUI or the “-sutversion” parameter if started from the command-line.
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>Test API Documentation</emphasis></title>
+
+      <para>The HTML Test API documentation is automatically generated by the
+      maven Test API projects, in the target/TestAPI-doc subdirectory and is
+      accessible from the GUI (see Figure XXX: Navigation buttons).</para>
+
+      <figure>
+        <title><emphasis>QTaste "Test API documentation"</emphasis></title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="res/user_manual/figure7.png" format="PNG"
+                       scalefit="1" width="100%"/>
+          </imageobject>
+
+          <textobject>
+             Test API documentation
+          </textobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title><emphasis>Additional Java libraries</emphasis></title>
+
+      <para>If for some reason, QTaste needs additional libraries, they can be
+      specified through the environment variable QTASTE_CLASSPATH. These
+      libraries will be automatically added to the class path and available
+      during the QTASTE execution.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>QTaste Graphical User Interface</emphasis></title>
+
+    <section>
+      <title><emphasis>Starting tests</emphasis></title>
+
+      <section>
+        <title><emphasis>QTaste user interface startup</emphasis></title>
+
+        <para>The command to start the QTaste User Interface is the following:
+        ${QTASTE_HOME}/bin/qtasteUI_start.bat (or qtasteUI_start.sh for Unix
+        platform) which must be run from the test specific directory
+        containing the directories specified in section 4.2.</para>
+      </section>
+
+      <section>
+        <title><emphasis>Testbed management</emphasis></title>
+
+        <para>For first startup a default testbed is selected, otherwise the
+        last selected testbed during previous sessions will be selected by
+        default.</para>
+
+        <para>The user can change the testbed for which test must be executed
+        by using the dedicated combo box displayed in the Information
+        panel.</para>
+
+        <figure>
+          <title><emphasis>QTaste "Current selected testbed"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure8.png" format="PNG"/>
+            </imageobject>
+
+            <textobject>
+               Current selected testbed
+            </textobject>
+          </mediaobject>
+        </figure>
+
+        <para>When a testbed is selected, the current selection is stored in
+        the preferences file (${QTASTE_HOME}/conf/gui.xml) in order to select
+        it by default at the next launch.</para>
+
+        <para>A contextual menu is available on this list to view or edit the
+        testbed configuration file.</para>
+
+        <para/>
+
+        <figure>
+          <title><emphasis>QTaste "Testbed selection"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure9.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title><emphasis>Test suite execution</emphasis></title>
+
+        <para>From the selection panel where the test cases are displayed,
+        select the test case (Figure 9: test case execution) or test suite to
+        execute (Figure 10: Test suite execution), then press on the "Execute
+        test"' button (Figure 11: Execute test button).</para>
+      </section>
+
+      <section>
+        <title><emphasis>Test case result analysis</emphasis></title>
+
+        <para>The tab "Test Case Results" is automatically displayed when the
+        executed test is started.</para>
+
+        <figure>
+          <title><emphasis>QTaste "Test Case Results panel"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" fileref="res/user_manual/figure12.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>The test case results panel displays the following
+        information:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>- Summary of the test case execution status;</para>
+          </listitem>
+
+          <listitem>
+            <para>- Error details when test case is failed</para>
+          </listitem>
+
+          <listitem>
+            <para>- Stack trace when test case is failed</para>
+          </listitem>
+
+          <listitem>
+            <para>- Log4j panel displayed QTaste logs</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>When a test case result is failed (or Not available status), the
+        corresponding icon is displayed. By selecting the row, the error
+        details and the available stack traces will be displayed.</para>
+
+        <para>From the Error details, the user can double click on the row and
+        the Python editor will be opened at the line of the detected error.
+        This is available for any python script except for the one having the
+        file name "embedded_jython" which is built dynamically by QTaste
+        during the test execution.</para>
+
+        <para>By selecting test case result row, the Log4j panel will point to
+        the first log associated to the test case. For more details about the
+        use of the Log4j panel filters, please refer to</para>
+
+        <para>It is possible to re-run a specific test case row (or several
+        rows) using the popup menu on the test case result row, and select
+        "Re-execute test(s)". Copy the details of the error in the clipboard
+        or generate a test campaign from the test in errors.</para>
+
+        <figure>
+          <title><emphasis>QTaste "Re-execute test(s) pop-up"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure13.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste main window</emphasis></title>
+
+      <para>When the QTaste GUI application is started, the main window is
+      displayed (Figure 14: Main QTaste User Interface window).</para>
+
+      <figure>
+        <title><emphasis>QTaste "Main QTaste User Interface window"</emphasis></title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="res/user_manual/figure14.jpg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>This main window is split into the following panels:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Menu items</para>
+        </listitem>
+
+        <listitem>
+          <para>Information panel: this panel located at the upper side is
+          designed to display useful information about the current
+          configuration of the QTaste software</para>
+        </listitem>
+
+        <listitem>
+          <para>Selection panel: this panel is designated to select an action
+          to be performed by QTaste. This panel is subdivided into three
+          different tabs:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Test case tree view: this view displays the list of
+              available test suites that can be executed by QTaste</para>
+            </listitem>
+
+            <listitem>
+              <para>Test Campaign view: from this window, test cases can be
+              added or removed to a test campaign</para>
+            </listitem>
+
+            <listitem>
+              <para>Interactive view: this view allows the tester to execute
+              QTaste verbs independently of a test script in order to validate
+              its implementation or to observe the SUT behavior once the
+              selected verb is called</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Main panel: this panel is the main view of the QTaste GUI.
+          This view differs depending on the selected view from the selection
+          panel.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Test case main panel: from this view the tester can view
+              or edit test scripts, run a test suite, check the status of the
+              test execution and also the logging generated by QTaste and its
+              component supporting this feature.</para>
+            </listitem>
+
+            <listitem>
+              <para>Test Campaign editor panel: from this view the tester can
+              define or modify test campaign. The result of this edition will
+              result of a xml file that can be used by the test campaign (see
+              Starting the Meta-Campaign launcher); From this panel it is also
+              possible to start a selected test campaign.</para>
+            </listitem>
+
+            <listitem>
+              <para>Interactive panel: from this panel status and results of
+              the calls done using QTaste interactive mode is displayed</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <section>
+        <title><emphasis>Menu items</emphasis></title>
+
+        <figure>
+          <title><emphasis>QTaste "Help menu content"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure15.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title><emphasis>Help menu</emphasis></title>
+
+        <para>Two menu items are available:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>About: display the QTaste information</para>
+          </listitem>
+
+          <listitem>
+            <para>User Manual: open Internet browser to this document in HTML
+            version.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title><emphasis>Information panel</emphasis></title>
+
+        <figure>
+          <title><emphasis>QTaste "Information panel window"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure16.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>This panel displays the following information:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Test suite currently set</para>
+          </listitem>
+
+          <listitem>
+            <para>Test result directory location (relative to QTaste main
+            path);</para>
+          </listitem>
+
+          <listitem>
+            <para>Reporting format used (separated by “|” if different reports
+            format generated by the test engine);</para>
+          </listitem>
+
+          <listitem>
+            <para>Testbed config: indicates the current testbed selection.
+            When no testsuite is being executed, it is possible to change the
+            testbed using the combo box.</para>
+          </listitem>
+
+          <listitem>
+            <para>Ignore control script: by selecting this check box, when
+            test engine is started, the control script defined in the testbed
+            configuration is ignored.</para>
+          </listitem>
+
+          <listitem>
+            <para>Restart testbed button: from this button, it is possible to
+            start the testbed using the control script as it is defined in the
+            testbed configuration file. This button is disabled when “Ignore
+            control script” is not selected or when a test is being
+            executed.</para>
+          </listitem>
+
+          <listitem>
+            <para>Stop testbed button: from this button, it is possible to
+            stop the testbed using the control script as it is defined in the
+            testbed configuration file. This button is disabled when “Ignore
+            control script” is not selected or when a test is being
+            executed.</para>
+          </listitem>
+
+          <listitem>
+            <para>SUT version is used to set the version of the “System Under
+            Test”. This will be present in the generated reports.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title><emphasis>Selection panel</emphasis></title>
+
+        <figure>
+          <title><emphasis>QTaste "Selection panel"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure17.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>This selection panel displays 3 different tabs depending on the
+        desired action:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>“Test case selection view” to perform actions linked to test
+            case edition and execution</para>
+          </listitem>
+
+          <listitem>
+            <para>“Test Campaign view” to define and edit test
+            campaigns</para>
+          </listitem>
+
+          <listitem>
+            <para>“Interactive view” in order to execute tests using the
+            interactive mode of QTaste</para>
+          </listitem>
+        </itemizedlist>
+
+        <section>
+          <title><emphasis>Test case selection view</emphasis></title>
+
+          <para>From this window, the tester can navigate through the
+          different test suites. The tree view displays directories found in
+          the main directory TestSuites. All directories containing a
+          TestScript.py file will be displayed as a test script with the name
+          of the directory where the script is found.</para>
+
+          <para>In case no associated TestData.csv file is defined or in case
+          the csv file is empty, an error icon is displayed on the test
+          script.</para>
+
+          <figure>
+            <title><emphasis>QTaste "Test script error indicator"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure18.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>From this navigation tree, following mouse actions are
+          possible:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Left mouse click: selection of a test script or a test
+              suite</para>
+            </listitem>
+
+            <listitem>
+              <para>Popup mouse click (triggered by right click on Windows and
+              Unix): this action invokes a popup menu (Figure 19: Test script
+              popup window) from which it is possible to:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>Run the selected script</para>
+                </listitem>
+
+                <listitem>
+                  <para>Run the selected script in loop mode (can run the same
+                  script in loop)</para>
+                </listitem>
+
+                <listitem>
+                  <para>Debug the script (run in debug mode)</para>
+                </listitem>
+
+                <listitem>
+                  <para>Generate documentation: selecting this option will
+                  force the generation of the test documentation.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Edit the testscript in an external editor.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Open the testscript directory using a file
+                  browser.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Copy test script (only available when a test script is
+                  selected): the tester can then enter the name of the name of
+                  the destination test script. This will copy the selected
+                  script to the same parent directory of the source; This
+                  action copies also the testdata.csv file.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Create new test script (only available when other than
+                  test script is selected): this will define a new script into
+                  the selected directory. This action generates also an empty
+                  testdata.csv file.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Rename the testscript</para>
+                </listitem>
+
+                <listitem>
+                  <para>Remove the testscript</para>
+
+                  <figure>
+                    <title><emphasis>QTaste "Test script pop-up window"</emphasis></title>
+
+                    <mediaobject>
+                      <imageobject>
+                        <imagedata fileref="res/user_manual/figure19.jpg"/>
+                      </imageobject>
+                    </mediaobject>
+                  </figure>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </section>
+
+        <section>
+          <title><emphasis>Test campaign view</emphasis></title>
+
+          <para>This view displays the list of test cases (as done in the Test
+          case view) from which the user can drag/drop test cases or test
+          suites into a test campaign.</para>
+
+          <figure>
+            <title><emphasis>QTaste "Test Campaign main view panel"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure20.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+        </section>
+
+        <section>
+          <title><emphasis>Interactive view</emphasis></title>
+
+          <para>In this view, the list of QTaste components are displayed with
+          all accessible verbs associated to it. At any time, the user can
+          invoke a method using this mode. This mode supposes that the SUT is
+          already started.</para>
+
+          <figure>
+            <title><emphasis>QTaste "Interactive main panel"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure21.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>From the selection view, the user can select the component
+          from which the verb can be called (only components defined in the
+          selected testbed are displayed).</para>
+
+          <para>To start the interactive mode, click on the button "Start
+          Interactive mode": this action will re-direct the log4j logs to the
+          interactive panel.</para>
+
+          <para>To invoke a verb, just double-click on it if there is no
+          parameter. Otherwise, a single-click will display the python call
+          associated to this verb with the parameter types as arguments,
+          change them to the actual argument and click on the “Send” button to
+          invoke the verb.</para>
+
+          <para>The result of the call is displayed in the column
+          "Result".</para>
+
+          <para>The test data can be passed through the Test Data editor
+          displayed in this panel.</para>
+
+          <para>Please notice that some variable may be required in order to
+          execute the command interactively (i.e.: INSTANCE_ID, etc.).</para>
+        </section>
+      </section>
+
+      <section>
+        <title><emphasis>Main panel</emphasis></title>
+
+        <para>This panel has the goal to display the following
+        information:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Status of a test case run;</para>
+          </listitem>
+
+          <listitem>
+            <para>Display of log4j logs;</para>
+          </listitem>
+
+          <listitem>
+            <para>Display and edit test scripts and test data files;</para>
+          </listitem>
+
+          <listitem>
+            <para>Display the test script documentation</para>
+          </listitem>
+        </itemizedlist>
+
+        <section>
+          <title><emphasis>Test case documentation</emphasis></title>
+
+          <para>The documentation of a test case is automatically displayed
+          when a test case is selected from the selection panel (see also
+          [1]).</para>
+
+          <para>This documentation is automatically generated when
+          modification on the TestScript.py has been identified. At any time,
+          the use can force the generation of the documentation through the
+          pop-up window accessible from the selection panel.</para>
+        </section>
+
+        <section>
+          <title><emphasis>Test case source editor</emphasis></title>
+
+          <para>This editor is displayed when the user selected a test case
+          from the selection panel and the tab “Test Case source” is selected
+          [2].</para>
+
+          <figure>
+            <title><emphasis>QTaste "Test case source window"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure22.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>When the content of the file is modified the "*" is displayed
+          to inform the user that modifications occurred in the file.</para>
+
+          <figure>
+            <title><emphasis>QTaste "Test script not saved"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure23.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>To save the modifications (all opened files), "CTRL-S" can be
+          used or just click on the save button.</para>
+
+          <para>Following popup menu is opened on the testcase source
+          editor:</para>
+
+          <figure>
+            <title><emphasis>QTaste "Test editor pop-up"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure24.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>If the user decides to run the test case being modified, the
+          opened files are automatically saved.</para>
+
+          <para>If the user selects another test case from the selection panel
+          while files are modified without save, a confirmation dialog window
+          is displayed asking the user if he want to save first the
+          files.</para>
+
+          <para>Test data (csv file) can also be edited by selecting "test
+          data".</para>
+
+          <figure>
+            <title><emphasis>QTaste "Test Data editor"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure25.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>A contextual menu is available in order to:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Add a variable: this will add a column into the
+              csv.</para>
+            </listitem>
+
+            <listitem>
+              <para>Rename variable: this will rename the currently selected
+              variable.</para>
+            </listitem>
+
+            <listitem>
+              <para>Remove a variable: this will remove a column from the
+              csv.</para>
+            </listitem>
+
+            <listitem>
+              <para>Add row: this will define a new test case.</para>
+            </listitem>
+
+            <listitem>
+              <para>Insert row: this will insert a row in the currently
+              selected position.</para>
+            </listitem>
+
+            <listitem>
+              <para>Duplicate row: this will copy the currently selected
+              row.</para>
+            </listitem>
+
+            <listitem>
+              <para>Remove row: this will remove a test case.</para>
+            </listitem>
+
+            <listitem>
+              <para>Save the changes into the csv file.</para>
+
+              <figure>
+                <title><emphasis>QTaste "Contextual menu of the Test data
+                editor"</emphasis></title>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata fileref="res/user_manual/figure26.jpg"/>
+                  </imageobject>
+                </mediaobject>
+              </figure>
+            </listitem>
+          </itemizedlist>
+
+          <para>Test Requirements (NEW IN VERSION 1.2):</para>
+
+          <para>QTaste can now store the list of requirements tested by a
+          testscript in a simple xml files called “Req.xml”. This information
+          will be used in test reports to show what requirements have been
+          tested. The content of this file can be viewed and edited using the
+          “TestRequirements” tab.</para>
+
+          <para><figure>
+              <title><emphasis>QTaste "Test requirements tab"</emphasis></title>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="res/user_manual/figure27.jpg"/>
+                </imageobject>
+              </mediaobject>
+            </figure></para>
+        </section>
+
+        <section>
+          <title><emphasis>Test case result</emphasis></title>
+
+          <para>This panel is automatically displayed when a run has been
+          launched. This panel is divided into 4 parts:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Test run summary</para>
+            </listitem>
+
+            <listitem>
+              <para>Test case error identification</para>
+            </listitem>
+
+            <listitem>
+              <para>Test case error stack trace</para>
+            </listitem>
+
+            <listitem>
+              <para>Test case logs</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+
+        <section>
+          <title><emphasis>Test case logs</emphasis></title>
+
+          <para>This panel displays the Log4J data as it also stored in the
+          log file (&lt;test_specific_dir&gt;/log/QTaste.log, where
+          &lt;test_specific_dir&gt; is the test specific directory specified
+          in section 4.2).</para>
+
+          <para>From this panel, the logs from LOG4J clients are also
+          displayed: this feature is only available if the client application
+          has been configured to be connected to QTaste log4J server.</para>
+
+          <figure>
+            <title><emphasis>QTaste "Log4J panel"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure28.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <para>Following information is displayed:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Time: time of the log</para>
+            </listitem>
+
+            <listitem>
+              <para>Level: log4J level (Trace, Debug, Info, Warn, Error or
+              Fatal)</para>
+            </listitem>
+
+            <listitem>
+              <para>Source: QTaste for all logs generated by the QTaste
+              application, otherwise the name of the application as specified
+              in the QTaste appender of the client application
+              (log4j.appender.QTaste.application)</para>
+            </listitem>
+
+            <listitem>
+              <para>@: The name of the logger</para>
+            </listitem>
+
+            <listitem>
+              <para>Step: step of the current test (when applicable)</para>
+            </listitem>
+
+            <listitem>
+              <para>Message: log4j message</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>It is possible to filter messages using the check boxes. It is
+          possible to filter log4j messages based on its level and the
+          application generating the message.</para>
+        </section>
+
+        <section>
+          <title><emphasis>Test case execution navigation buttons</emphasis></title>
+
+          <para>At upper side of the main panel buttons are displayed to give
+          "quick" access to some actions.</para>
+
+          <figure>
+            <title><emphasis>QTaste "Navigation buttons"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure29.jpg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+
+          <itemizedlist>
+            <listitem>
+              <para>Execute button: by clicking on this button, the current
+              selected test script or test suite is executed</para>
+            </listitem>
+
+            <listitem>
+              <para>Save button: by clicking on this button the current test
+              script selected or test data is saved (and compiled through
+              Python compiler)</para>
+            </listitem>
+
+            <listitem>
+              <para>Debug button: by clicking on this button, the execution of
+              the test script is launched in debug mode (see QTaste debugging
+              mode)</para>
+            </listitem>
+
+            <listitem>
+              <para>"View Test Report": use this button top open the last
+              generated (or generating) test report in your internet
+              browser.</para>
+            </listitem>
+
+            <listitem>
+              <para>Show test API button: use this button to open the main
+              page in your internet browser of the QTaste test API
+              documentation</para>
+            </listitem>
+
+            <listitem>
+              <para>Stop button (displayed only when a test case is being
+              executed): abort the test case execution. In that case the
+              status of the test is set to "Not Available" with the reason
+              "Test aborted by the user"</para>
+            </listitem>
+          </itemizedlist>
+
+          <figure>
+            <title><emphasis>QTaste "Stop button"</emphasis></title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="res/user_manual/figure30.gif"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
+        </section>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste debugging mode</emphasis></title>
+
+      <section>
+        <title><emphasis>Setting breakpoint</emphasis></title>
+
+        <para>To set a breakpoint, just open the test script file and click on
+        the line number panel where the script must be stopped.</para>
+
+        <para>Remark: breakpoint can only be set at the TestScript.py
+        file.</para>
+
+        <figure>
+          <title><emphasis>QTaste "Setting a breakpoint"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure31.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title><emphasis>Script breakpoint</emphasis></title>
+
+        <para>When a test is executed in debug mode (click on"Debug test"
+        button <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/image034.gif"/>
+            </imageobject>
+          </inlinemediaobject> ) the script is stopped at the selected
+        breakpoint.</para>
+
+        <para>Automatically, the QTaste user Interface displays the Test Case
+        source window by highlighting the current execution line with the
+        current python variable values.</para>
+
+        <figure>
+          <title><emphasis>QTaste "Debugging variables"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure32.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title><emphasis>Script break actions</emphasis></title>
+
+        <para>The navigation buttons are updated to add buttons enable to
+        continue the test script execution. Three actions are possible when a
+        test script is break:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Continue: continue the script until next breakpoint is
+            reached</para>
+          </listitem>
+
+          <listitem>
+            <para>Step over: Step over the test script execution</para>
+          </listitem>
+
+          <listitem>
+            <para>Step into: Step into the test script execution</para>
+          </listitem>
+
+          <listitem>
+            <para>Stop: abort the test script execution</para>
+          </listitem>
+        </itemizedlist>
+
+        <figure>
+          <title><emphasis>QTaste "Script break actions"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure33.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>QTaste build procedures</emphasis></title>
+
+    <section>
+      <title><emphasis>QTaste and testapi demo compilation pre-requisites</emphasis></title>
+
+      <itemizedlist>
+        <listitem>
+          <para>Maven 2 has to be installed and available in the PATH
+          environment variable (recommended version 2.2.1 or higher) can be
+          downloaded from <link linkend="???"><ulink
+          url="http://maven.apache.org/download.html">http://maven.apache.org/download.html</ulink></link></para>
+        </listitem>
+
+        <listitem>
+          <para>Some libraries required by QTaste are not available on a
+          public maven repository, so the qtaste_mvn_missing_dependencies.zip
+          has to be uncompressed in the maven2 repository directory (i.e:
+          ~/.m2/repository on linux). (Available on SourceForge <ulink
+          url="http://sourceforge.net/projects/qtaste/files/">http://sourceforge.net/projects/qtaste/files/</ulink>)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste compilation procedure</emphasis></title>
+
+      <para>The QTaste framework is composed of the kernel, demos and plugins
+      test API.</para>
+
+      <para>The kernel is generic while the test API depends on the interfaces
+      of the SUT.</para>
+
+      <para>For that reason, it is quite important to be able to recompile the
+      test API especially if these interfaces are not stabilized.</para>
+
+      <para>The QTaste framework is using maven “pom.xml” file to be built.
+      This procedure does not take into account the installation of the SUT as
+      this step are specific to the system to be tested.</para>
+
+      <para>Retrieve the QTaste source code from source forge available on
+      <ulink
+      url="http://sourceforge.net/projects/qtaste/">http://sourceforge.net/projects/qtaste/</ulink></para>
+
+      <section>
+        <title><emphasis>QTaste compilation</emphasis></title>
+
+        <para>To compile a simple unix/windows scripts can be used. QTaste is
+        using ‘izpack” to create installation package.</para>
+
+        <para>To ease the compilation procedure:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Go into the &lt;QTASTE_SOURCE_ROOT&gt;</para>
+          </listitem>
+
+          <listitem>
+            <para>Launch the buildAll.cmd/sh script</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To create a new version of QTASTE installer:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Go into the &lt;QTASTE_SOURCE_ROOT&gt;/izpack</para>
+          </listitem>
+
+          <listitem>
+            <para>Launch the createInstaller.sh script</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If dependencies problems appear while compiling, please check
+        that you uncompress the “qtaste_mvn_missing_dependencies.zip” in your
+        maven repository directory.</para>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>CSV file generation from Excel</emphasis></title>
+
+      <para>The initial test data is an Excel file having the name
+      “TestData.xls”.</para>
+
+      <para>To generate the CSV file really used by QTaste, the QTaste Excel
+      macro can be used (see (Optional) Installation of the Excel
+      Macro).</para>
+
+      <para>Using the “CTRL-S” key, the macro generates the CSV file according
+      to the content of the Excel sheet. The macro is mainly responsible to
+      use the correct data separator and convert numerical decimal value using
+      a correct decimal separator into the CSV file.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Guidelines applicable for the test designer</emphasis></title>
+
+    <section>
+      <title><emphasis>Test scripts</emphasis></title>
+
+      <section>
+        <title><emphasis>Guidelines and requirements to write test cases</emphasis></title>
+
+        <para>Test designer and tester shall never assume that a verb will be
+        executed and return the expected result.</para>
+
+        <para>Test designer and tester shall never assume that a verb will be
+        executed and return the expected result.</para>
+
+        <para>Ideally, each verb should be validated by at least one check
+        operation; this check operation is either another verb or a check done
+        at the script level.</para>
+
+        <para>First step is to validate your script before trusting its
+        results.</para>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>Test data</emphasis></title>
+
+      <para>Test data are stored in a CSV file and can be edited either from
+      the QTaste GUI (see Figure 25: Test Data editor) or in a Microsoft Excel
+      sheet and saved back to a CSV file. An Excel macro can be used to ease
+      the conversion of the Test Data into a CSV file (see CSV file generation
+      from Excel).</para>
+
+      <para>The first line of the file corresponds to the names of the test
+      data and other lines correspond to test data values for a run of the
+      test script.</para>
+
+      <para>Test designer should try to find a meaningful name for test data
+      and shall assure that all the test data have to be defined before the
+      test is executed.</para>
+
+      <para>There are some special test data associated with the QTaste test
+      engine:</para>
+
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>Test data name</entry>
+
+              <entry>Comment</entry>
+            </row>
+
+            <row>
+              <entry>COMMENT</entry>
+
+              <entry>This free text variable is used by the Test Designer to
+              comment the values inserted in the line and their impact on the
+              test at run time. This information will be used during the test
+              report generation.</entry>
+            </row>
+
+            <row>
+              <entry>TIMEOUT</entry>
+
+              <entry>This variable is used as a maximum time expressed in
+              seconds for the test execution of one test row. By the default
+              the value is 60 seconds. This value can also be set at the
+              beginning of the script (in order to set the value for all test
+              rows) or in the testdata file is value can differ from one test
+              row to another.</entry>
+            </row>
+
+            <row>
+              <entry>FILE_*</entry>
+
+              <entry>Column names starting with “FILE_” are automatically
+              loaded by the Test Engine and their content can be retrieved by
+              the scripts using the TestData (can be useful for data that need
+              to be used on remote hosts).</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <section>
+        <title><emphasis>Test data usage</emphasis></title>
+
+        <para>The test data file is created in a CSV file named TestData.csv
+        in the same directory as the test script itself. Following table
+        provides an example of the content of this file.</para>
+
+        <figure>
+          <title><emphasis>QTaste "test data usage"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure34.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>As already explained, the COMMENT test data is dedicated to
+        define a free text comment associated to the row.</para>
+
+        <para>The next columns contain test data values to be used by the test
+        script.</para>
+
+        <para>The test data can be changed inside the script itself using the
+        python syntax (see Test data).</para>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Guidelines applicable for the developer</emphasis></title>
+
+    <section>
+      <title><emphasis>Introduction</emphasis></title>
+
+      <para>This section describes the guidelines to be followed by the
+      developer to develop or modify a component of the test API. The
+      development of the test API consists of the following activities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Define new test API components if necessary.</para>
+        </listitem>
+
+        <listitem>
+          <para>Define new QTaste verbs applicable for a defined test API
+          component.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>Test API</emphasis></title>
+
+      <section>
+        <title><emphasis>Test API Components</emphasis></title>
+
+        <para>Each component will be composed of:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>a java interface defining the verbs available for the
+            component, extending SingletonComponent or
+            MultipleInstancesComponent interface from the
+            com.qspin.qtaste.kernel.testapi package;</para>
+          </listitem>
+
+          <listitem>
+            <para>java classes implementing the previous interface, we
+            recommend to use the following convention for package names.
+            com.&lt;company&gt;.qtaste.testapi.impl.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Verbs are simply java methods with no specific signature.</para>
+
+        <para>For a component that must have only one instance, the java
+        interface must extend the SingletonComponent interface and the
+        matching implementing classes must have a constructor with no
+        parameter.</para>
+
+        <para>For a multiple instances component that must be identified by an
+        id, the java interface must extend the MultipleInstancesComponent and
+        the matching implementing classes must have a constructor with one id
+        String parameter, the instance id and implement the getInstanceId
+        method:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>public &lt;Component&gt;(String instanceId) { … }</term>
+
+            <listitem>
+              <para/>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>public String getInstanceId() { …}</term>
+
+            <listitem>
+              <para/>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>All component implementation classes must implement the
+        initialize() and terminate() methods of the Component interface, which
+        will be called on all components respectively before and after a test
+        is executed. It can be e.g. used to connect to and disconnect from the
+        SUT.</para>
+      </section>
+
+      <section>
+        <title><emphasis>Exception handling</emphasis></title>
+
+        <para>Test API should be compliant with the QTaste Exception handling
+        policy in order to publish the appropriate test results.</para>
+
+        <para>A verb may stop a test execution and set the test result to
+        “failed” by throwing an QTasteTestFailException, or to not available
+        by throwing any other exception.</para>
+      </section>
+
+      <section>
+        <title><emphasis>Usage of TCOM</emphasis></title>
+
+        <para>The test API implementation has the goal to communicate to the
+        SUT. The way to communicate to the SUT depends on the kind of
+        communication available.</para>
+
+        <para>For this purpose, TCOM classes are provided and can be used by
+        the developer.</para>
+
+        <para>For example if you need to define a new JMX client to initiate
+        the connection with the SUT using JMX, you can use the class
+        “com.qspin.qtaste.tcom.jmx.impl.JMXClient”.</para>
+      </section>
+
+      <section>
+        <title><emphasis>Test API documentation</emphasis></title>
+
+        <para>The test API can be documented using Javadoc. The documentation
+        is generated through the provided doclet TestAPIDoclet, which is
+        automatically run when compiling the testapi project (using maven). In
+        order to get a complete documentation following doclets have been
+        defined:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Only interfaces in the “com.qspin.qtaste.testapi.api”
+            package, extending (indirectly) the
+            com.qspin.qtaste.kernel.testapi.TestAPIComponent interface are
+            documented</para>
+          </listitem>
+
+          <listitem>
+            <para>The specific configuration of the component is specified in
+            the interface documentation, using @config tags; the syntax is
+            “@config CONFIG_NAME [Type] Description”, where Type is Integer,
+            Double, Boolean or String</para>
+          </listitem>
+
+          <listitem>
+            <para>Verbs are documented using standard Javadoc tags @param,
+            @return and @throws</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Here below an example of the documentation:</para>
+
+        <literallayout>/**
+ * Compare the content of the specified defectID record with the expected value provided as parameter
+ * @param defectID the identified of the record
+ * @param shortDescription the title of the defect
+ * @param longDescription the long description of the defect
+ * @param assignee the identifier of the person assigned to this defect
+ * @throws QTasteTestFailException If the content of the DB doesn't correspond to the specified values
+ * @throws Exception Throw an exception in case of database connection errors
+ */ String assignee) throws QTasteTestFailException, Exception;</literallayout>
+
+        <para>From this example, following documentation will be
+        generated:</para>
+
+        <figure>
+          <title><emphasis>QTaste "Example of generated Test API documentation"</emphasis></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="res/user_manual/figure35.jpg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>Logging levels</emphasis></title>
+
+      <para>We defined some “recommendations” for the usage of logs severity
+      levels:</para>
+
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>Level of logs</entry>
+
+              <entry>Used to</entry>
+            </row>
+
+            <row>
+              <entry>FATAL</entry>
+
+              <entry>Used to report unexpected and unrecoverable errors. (no
+              guarantee that the Test Engine execution will behave
+              correctly)</entry>
+            </row>
+
+            <row>
+              <entry>ERROR</entry>
+
+              <entry>Unexpected error but the Test Engine can continue to run
+              normally</entry>
+            </row>
+
+            <row>
+              <entry>WARN</entry>
+
+              <entry>For example, to indicate that the test scenario is
+              non-nominal.</entry>
+            </row>
+
+            <row>
+              <entry>INFO</entry>
+
+              <entry>Used to log what the Test Engine has done</entry>
+            </row>
+
+            <row>
+              <entry>DEBUG</entry>
+
+              <entry>Used for debugging purpose while using the test
+              engine.</entry>
+            </row>
+
+            <row>
+              <entry>TRACE</entry>
+
+              <entry>Used for debugging purpose during development phases of
+              components.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Configuration of the QTaste framework</emphasis></title>
+
+    <section>
+      <title><emphasis>General remarks about XML configuration files</emphasis></title>
+
+      <itemizedlist>
+        <listitem>
+          <para>The configuration files of the QTaste framework are stored in
+          XML files located under the “conf” directory. The tag names used in
+          the XML files are case sensitive.</para>
+
+          <screen>&lt;smartsockets&gt;&lt;/smartsockets&gt;   is valid
+&lt;SmartSockets&gt;&lt;/SmartSockets&gt;   is not valid</screen>
+        </listitem>
+
+        <listitem>
+          <para>Properties can be used as “variable” to avoid repetition of
+          configuration items.</para>
+
+          <screen>&lt;sut_host&gt;myhost&lt;/sut_host&gt;     to define a variable sut_host
+&lt;host1&gt;${sut_host}&lt;/host1&gt;      use the value of the variable sut_host
+&lt;host2&gt;$(sut_host)&lt;/host2&gt;
+&lt;host3&gt;AnotherHostName&lt;/host3&gt;</screen>
+        </listitem>
+
+        <listitem>
+          <para>Entity can be added to avoid repetition of settings or block
+          of configuration.</para>
+
+          <para>The following configuration file shows a block of
+          configuration stored in the file called “component_web.inc”.</para>
+
+          <screen>&lt;!-- defines the Selenium component --&gt;
+&lt;!-- &gt;${selenium_host} must have been previously defined --&gt;
+&lt;Selenium id="TranslateApp"&gt;
+          &lt;host&gt;${selenium_host}&lt;/host&gt;
+          &lt;port&gt;4444&lt;/port&gt;
+          &lt;url&gt;http://babelfish.yahoo.com&lt;/url&gt;
+&lt;/Selenium&gt;</screen>
+
+          <para>The following configuration file will reused the configuration
+          block defined in the file “component_web.inc”.</para>
+
+          <screen>&lt;?xml version="1.0" encoding="ISO-8859-1" standalone="no"?&gt;
+&lt;!DOCTYPE configuration [&lt;!ENTITY components_web SYSTEM "component_web.inc"&gt;]&gt;
+&lt;configuration&gt;
+         &lt;multiple_instances_components&gt;
+              The component of the irradiation controller will be copied here!!!
+              &amp;component_web;
+         &lt;/multiple_instances_components&gt;
+&lt;/testbed_configuration&gt;</screen>
+        </listitem>
+
+        <listitem>
+          <para>XML elements are accessed by the QTaste kernel and Test API
+          components. They can access nested element using a dot notation.
+          This notation will be used in order to improve the readability of
+          the configuration elements.</para>
+
+          <screen>&lt;smartsockets&gt;
+         &lt;host&gt;myHost&lt;/host&gt;
+&lt;/smartsockets&gt;
+
+will be presented as “smartsockets.host” in the description tables.</screen>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>Test engine configuration</emphasis></title>
+
+      <para>Test engine configuration file allow the tester to:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Enable/disable test retry when test fails</para>
+        </listitem>
+
+        <listitem>
+          <para>Control the test report output formats</para>
+        </listitem>
+
+        <listitem>
+          <para>Change parameters for the test reports or test campaigns
+          doc</para>
+        </listitem>
+
+        <listitem>
+          <para>Select the port for the log4j server (default is 4446), to
+          which SUT processes can connect using a SocketAppender</para>
+        </listitem>
+      </itemizedlist>
+
+      <screen>&lt;?xml version="1.0" encoding="ISO-8859-1" standalone="no"?&gt;
+&lt;configuration&gt;
+      &lt;retry_test_on_fail&gt;true&lt;/retry_test_on_fail&gt;
+
+      &lt;reporting&gt;
+            &lt;!-- Reporting format  (XML or HTML, default to HTML) --&gt;
+            &lt;reporters&gt;
+                  &lt;format&gt;HTML&lt;/format&gt;
+                  &lt;format&gt;GUI&lt;/format&gt;
+            &lt;/reporters&gt;
+            &lt;!-- Location of the HTML template --&gt;
+            &lt;html_template&gt;conf/reporting/html/iba&lt;/html_template&gt;
+            &lt;html_settings&gt;
+                  &lt;generate_test_data&gt;true&lt;/generate_test_data&gt;
+                  &lt;generate_steps_rows&gt;true&lt;/generate_steps_rows&gt;
+                  &lt;report_stop_start_sut&gt;true&lt;/report_stop_start_sut&gt;
+                  &lt;report_restart_sut&gt;true&lt;/report_restart_sut&gt;
+            &lt;/html_settings&gt;
+            &lt;!-- Location of the XML template --&gt;
+            &lt;xml_template&gt;conf/reporting/xml/standard&lt;/xml_template&gt;
+            &lt;!-- Location of the generated reports --&gt;
+            &lt;generated_report_path&gt;reports&lt;/generated_report_path&gt;
+            &lt;!-- Test campaign aggregated documentation parameters --&gt;
+            &lt;test_campaign_doc&gt;
+                  &lt;remove_step_name_column&gt;true&lt;/remove_step_name_column&gt;
+                  &lt;add_step_result_column&gt;true&lt;/add_step_result_column&gt;
+                  &lt;duplicate_steps_per_test_data_row&gt;true
+                  &lt;/duplicate_steps_per_test_data_row&gt;
+            &lt;/test_campaign_doc&gt;
+      &lt;/reporting&gt;
+
+      &lt;log4j_server&gt;
+            &lt;port&gt;4446&lt;/port&gt;
+      &lt;/log4j_server&gt;
+&lt;/configuration&gt;
+</screen>
+    </section>
+
+    <section>
+      <title><emphasis>Testbed configuration</emphasis></title>
+
+      <para>All the information related to the testbed (like connection
+      parameters, userid, password…) must be stored in the testbed
+      configuration file which is located in the Testbeds subdirectory of the
+      test specific directory (see Test specific directories).</para>
+
+      <para>It is recommended to create a new testbed configuration file with
+      a meaningful name for each new testbed.</para>
+
+      <para>The following table explains the meaning of the xml tags used by
+      the testbed configurations files.</para>
+
+      <informaltable>
+        <tgroup cols="3">
+          <tbody>
+            <row>
+              <entry>Tag name</entry>
+
+              <entry>Presence</entry>
+
+              <entry>Meaning</entry>
+            </row>
+
+            <row>
+              <entry>control_script</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>This tag point to a script that will be used to start or
+              stop the SUT once the test engine is started/stopped.This tag
+              point to a script that will be used to start or stop the SUT
+              once the test engine is started/stopped.</entry>
+            </row>
+
+            <row>
+              <entry>testapi_implementation</entry>
+
+              <entry>MANDATORY</entry>
+
+              <entry>This tag is used to group the list of component
+              implementations to load for a specific testbed.</entry>
+            </row>
+
+            <row>
+              <entry>testapi_implementation.import</entry>
+
+              <entry>MANDATORY</entry>
+
+              <entry>This tag is used to specify the java package to be used
+              for testapi implementations. The testbed supports multiple
+              values for this parameter.</entry>
+            </row>
+
+            <row>
+              <entry>singleton_components</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Special tag to describe the list of components of type
+              “singleton” available in the testbed. But not the multiple
+              instances components!!! Only singleton component should be
+              described here.</entry>
+            </row>
+
+            <row>
+              <entry>multiple_instances_components</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Special tag to define the list of components of type
+              “multiple instances”. all the treatment rooms available in the
+              testbed.</entry>
+            </row>
+
+            <row>
+              <entry>probe_manager</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>Special tag to define all the probes required to collect
+              asynchronous events in the testbed.</entry>
+            </row>
+
+            <row>
+              <entry>probe_manager.probe</entry>
+
+              <entry>OPTIONAL</entry>
+
+              <entry>This tag is used to specify the fully qualified java
+              class name implementing the Probe interface required to collect
+              asynchronous events.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <screen>&lt;?xml version="1.0" encoding="ISO-8859-1" standalone="no"?&gt;
+&lt;testbed_configuration&gt;
+        &lt;testapi_implementation&gt;
+                &lt;import&gt;com.qspin.qtaste.testapi.impl.demo&lt;/import&gt;
+                &lt;import&gt;com.qspin.qtaste.testapi.impl.generic&lt;/import&gt;
+        &lt;/testapi_implementation&gt;
+        &lt;control_script&gt;control_selenium.py&lt;/control_script&gt;
+        &lt;multiple_instances_components&gt;
+                &lt;Selenium id="BugzillaApp"&gt;
+                        &lt;host&gt;localhost&lt;/host&gt;
+                        &lt;port&gt;4444&lt;/port&gt;
+                        &lt;url&gt;http://qtaste-bugzilla&lt;/url&gt;
+                &lt;/Selenium&gt;
+                &lt;Bugzilla id="BugzillaServer"&gt;
+                        &lt;jdbcURL&gt;jdbc:mysql://QTaste-bugzilla:3306/bugzilla3
+                        &lt;/jdbcURL&gt;
+                        &lt;jdbcDriver&gt;com.mysql.jdbc.Driver&lt;/jdbcDriver&gt;
+                        &lt;dbuser&gt;Taste&lt;/dbuser&gt;
+                        &lt;dbpassword&gt;whataG00dN4m3&lt;/dbpassword&gt;
+                &lt;/Bugzilla&gt;
+        &lt;/multiple_instances_components&gt;
+
+       &lt;singleton_components&gt;
+             &lt;!—no singleton component in this testbed&gt;
+       &lt;/singleton_components&gt;
+&lt;/testbed_configuration&gt;      </screen>
+    </section>
+
+    <section>
+      <title><emphasis>Control scripts</emphasis></title>
+
+      <section>
+        <title><emphasis>Description</emphasis></title>
+
+        <para>As mentioned in Testbed configuration, QTaste provides a section
+        in the testbed configuration to stop or start the SUT using a control
+        script. This control script has a mandatory arguments "start" or
+        "stop" and must return by an exit code different than 0 when
+        failed.</para>
+
+        <para>In the QTaste framework, it is possible to write those control
+        scripts using some classes as provided by the
+        tools/jython/lib/lib/control_script.py python module. This python
+        module has the purpose to give an easier way to write new control
+        scripts but also to be OS independent.</para>
+
+        <para>Please refer to control_script.py file for more details.</para>
+
+        <literallayout>Here below example of control script stopping/starting the Virtual box and Selenium software:</literallayout>
+
+        <screen>from controlscript_addon import *
+
+ControlScript([
+    VirtualBox("Bugzilla debian server",
+                nameOfVBoxImage="QTaste-bugzilla",
+                ),
+    JavaProcess("Selenium Server",
+                mainClassOrJar="demo/selenium-server.jar",
+                checkAfter=5)
+])</screen>
+
+        <literallayout>The control script needs to initialize the class "ControlScript" with a list of actions to perform what is defined in an array.
+The example here upper performs 2 actions:</literallayout>
+
+        <itemizedlist>
+          <listitem>
+            <para>Start the VirtualBox virtual machine with the image called
+            “QTaste-bugzilla”</para>
+          </listitem>
+
+          <listitem>
+            <para>Launch a Selenium server using the JavaProcess</para>
+          </listitem>
+        </itemizedlist>
+
+        <literallayout>Here below the classes defined in controlscript.py that can be used to defined new control scripts:</literallayout>
+
+        <itemizedlist>
+          <listitem>
+            <para>JavaProcess: used to launch a java process</para>
+          </listitem>
+
+          <listitem>
+            <para>NativeProcess: used to launch a simple native process</para>
+          </listitem>
+
+          <listitem>
+            <para>ReplaceInFiles: used to perform a "sed" action on
+            files.</para>
+          </listitem>
+
+          <listitem>
+            <para>Rsh: to perform rsh command on remote host</para>
+          </listitem>
+
+          <listitem>
+            <para>RExec: to perform rexec command on remote host</para>
+          </listitem>
+
+          <listitem>
+            <para>Rlogin: to perform Rlogin</para>
+          </listitem>
+
+          <listitem>
+            <para>RebootRLogin: based on Rlogin and has the goal to reboot
+            using RLogin a remote VME host</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title><emphasis>Some examples</emphasis></title>
+
+        <section>
+          <title><emphasis>JavaProcess</emphasis></title>
+
+          <screen>JavaProcess("Selenium Server",
+             mainClassOrJar="demo/selenium-server.jar",
+             args="-specialOption option1",
+             workingDir=sutDir+"/Selenium",
+             checkAfter=5)</screen>
+
+          <para>This example will start a native process using the executable
+          file "python.exe" with arguments specified in args variable. This
+          native process is being launched having as working directory equals
+          to the variable sutDir and the controls script will check if the
+          process still exits after 5 seconds.</para>
+        </section>
+
+        <section>
+          <title><emphasis>NativeProcess</emphasis></title>
+
+          <screen>NativeProcess("Windows control native Agent",
+               executable="python.exe",
+               args="demo/pywinauto-0.3.8/XMLRPCServer.py",
+               workingDir=sutDir,
+               checkAfter=5)</screen>
+
+          <para>This example will start a native process using the executable
+          file "python.exe" with arguments specified in args variable. This
+          native process is being launched having as working directory equals
+          to the variable sutDir and the controls script will check if the
+          process still exits after 5 seconds.</para>
+        </section>
+
+        <section>
+          <title><emphasis>ReplaceInFiles class</emphasis></title>
+
+          <screen>RExec(startCommand="start.csh",
+      stopCommand="stop.csh",
+      host="myhost",
+      use="user",
+      password="userPassword")</screen>
+        </section>
+
+        <section>
+          <title><emphasis>RExec class</emphasis></title>
+
+          <screen>RLogin(command='"sp cuStartup"',
+       host=host,
+       login="QTaste",
+       log4jconf="Testbeds/ControlScripts/x.log4j.properties")])</screen>
+        </section>
+
+        <section>
+          <title><emphasis>RLogin class</emphasis></title>
+
+          <screen>RLogin(command='"sp cuStartup"',
+       host=host,
+       login="QTaste",
+       log4jconf="Testbeds/ControlScripts/x.log4j.properties")])</screen>
+        </section>
+      </section>
+
+      <section>
+        <title><emphasis>(Optional) Installation of Excel Macro</emphasis></title>
+
+        <para>In order to ease the generation of CSV files, a Microsoft Excel
+        macro has been developed. This macro file is located in the
+        “tools\TestData” directory of the QTaste framework. To enable it, open
+        the file QTasteMacros.xls with Excel and save it as an add-in (select
+        Microsoft Office Excel Add-in (*.xla) format, add-ins directory will
+        be selected automatically), then go in Tools menu, select Add-Ins,
+        check “QTastemacros” and click on “Ok”.</para>
+
+        <literallayout>This macro is generating a CSV file when you press “Ctrl-S” but the name of the xls file has to be called TestData.xls.</literallayout>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>QTaste scripting language guide</emphasis></title>
+
+    <section>
+      <title><emphasis>General</emphasis></title>
+
+      <para>QTaste scripts are written in Python language v2.2 and interpreted
+      by Jython v2.2.1, (http://www.jython.org). Any Python feature supported
+      by Jython v2.2.1 is thus supported by the QTaste.</para>
+
+      <para>The pythonlib subdirectories of all the directories from the test
+      script directory up to the TestSuites directory are automatically added,
+      in that order, to the Python path so that custom Python modules can
+      easily be imported from those directories, using the Python import
+      directive.</para>
+
+      <para>If some specific python modules have to be written, they can be
+      added to the python class path just by adding the directory to the
+      QTASTE_JYTHON_LIB environment variable. QTaste will automatically check
+      this variable and use it if it’s defined.</para>
+
+      <para>This allows for easy script reusability (see Module
+      import).</para>
+
+      <section>
+        <title><emphasis>Test API Components</emphasis></title>
+
+        <para>Test API is accessed through components instances, which are
+        obtained through the testAPI variable. This variable must be imported
+        from the QTaste module e.g. using “from qtaste import *”, via
+        get&lt;Component&gt; methods. For singleton components, no argument is
+        required. For multiple instances components, an INSTANCE_ID test data
+        is required to define the instance that will be used in the CSV file,
+        in the script via the testData variable (see Test data) or by passing
+        it as a named argument to the get&lt;Component&gt; method. The
+        returned value can be tested to check if the component is present in
+        testbed.</para>
+
+        <literallayout>Get components instances examples:</literallayout>
+
+        <itemizedlist>
+          <listitem>
+            <para>win = testAPI.getWindows()</para>
+
+            <para>Defines win as the singleton Windows instance</para>
+          </listitem>
+
+          <listitem>
+            <para>selenium = testAPI.getSelenium()</para>
+
+            <para>Defines selenium as the Selenium instance of the instance
+            defined in the test data.</para>
+          </listitem>
+
+          <listitem>
+            <para>selenium =
+            testAPI.getSelenium(INSTANCE_ID=”TranslateApp”)</para>
+
+            <para>Defines selenium as the Selenium instance identified by
+            “TranslateApp”</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Testing the value returned by the get&lt;Component&gt; methods
+        makes it possible to make a script usable in different
+        testbeds.</para>
+
+        <para>Example: myStub = testAPI.getComponentStub() if myStub: …</para>
+      </section>
+
+      <section>
+        <title><emphasis>Component verbs</emphasis></title>
+
+        <para>Verbs are called directly on the components instances, using the
+        required arguments.</para>
+
+        <para>If a verb has a return value, it is returned by the call.</para>
+
+        <literallayout>Call examples:</literallayout>
+
+        <itemizedlist>
+          <listitem>
+            <para>selenium.click("link=New")</para>
+
+            <para>On selenium, calls click(), which has an identifier</para>
+          </listitem>
+
+          <listitem>
+            <para>text = calculator.getText("Calculator", "Edit")</para>
+
+            <para>On calculator, calls getText(), which has two parameters,
+            and assigns its return value to the text variable</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title><emphasis>Stopping test execution</emphasis></title>
+
+        <para>A method named stopTest is also available on testAPI, to stop
+        the test execution and set its status to “failed” or “not available”,
+        with an associated message.</para>
+
+        <para>Call syntax: testAPI.stopTest(status, message) where status is
+        Status.FAIL or Status.NOT_AVAILABLE (Status must be imported from
+        qtaste module, e.g. using “from qtaste import *”) and message is a
+        string containing the message to report.</para>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>Test data</emphasis></title>
+
+      <para>Test data are accessed through the testData variable, which must
+      be imported from the QTaste module, e.g. using “from qtaste import *”,
+      on which the following methods are available:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>String getValue(String name)</para>
+
+          <para>Returns the value of the test data with given name, as a
+          string</para>
+        </listitem>
+
+        <listitem>
+          <para>int getIntValue(String name)</para>
+
+          <para>Returns the value of the test data with given name, as an
+          integer</para>
+        </listitem>
+
+        <listitem>
+          <para>double getDoubleValue(String name)</para>
+
+          <para>Returns the value of the test data with given name, as a
+          double</para>
+        </listitem>
+
+        <listitem>
+          <para>DoubleWithPrecision getDoubleWithPrecisionValue(String
+          name)</para>
+
+          <para>Returns the value of the test data with given name, as a
+          DoubleWithPrecision</para>
+        </listitem>
+
+        <listitem>
+          <para>boolean getBooleanValue(String name)</para>
+
+          <para>Returns the value of the test data with given name, as a
+          boolean</para>
+        </listitem>
+
+        <listitem>
+          <para>byte[] getFileContentAsByteArray(String name)</para>
+
+          <para>Returns the file content of the test data file with given name
+          (starting with “FILE_”), as a byte array</para>
+        </listitem>
+
+        <listitem>
+          <para>String getFileContentAsString(String name)</para>
+
+          <para>Returns the file content of the test data file with given name
+          (starting with “FILE_”), as a string</para>
+        </listitem>
+
+        <listitem>
+          <para>void setValue(String name, String value)</para>
+
+          <para>Sets the value of the test data with given name to given
+          value</para>
+        </listitem>
+
+        <listitem>
+          <para>void setIntValue(String name, int value)</para>
+
+          <para>Sets the value of the test data with given name to given int
+          value</para>
+        </listitem>
+
+        <listitem>
+          <para>void setDoubleValue(String name, double value)</para>
+
+          <para>Sets the value of the test data with given name to given
+          double value</para>
+        </listitem>
+
+        <listitem>
+          <para>void set DoubleWithPrecision Value(String name,
+          DoubleWithPrecision value)</para>
+
+          <para>Sets the value of the test data with given name to given
+          DoubleWithPrecision value</para>
+        </listitem>
+
+        <listitem>
+          <para>void setBooleanValue(String name, boolean value)</para>
+
+          <para>Sets the value of the test data with given name to given
+          boolean value</para>
+        </listitem>
+
+        <listitem>
+          <para>void remove(String name)</para>
+
+          <para>Removes the test data with given name</para>
+        </listitem>
+
+        <listitem>
+          <para>boolean contains(String name)</para>
+
+          <para>Checks if test data with given name exists</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Calling a get value method (getValue, getIntValue, getDoubleValue,
+      getDoubleWithPrecisionValue or getBooleanValue) with an inexistent test
+      data name terminates the script execution and the test result is set to
+      “Not available” with a message explaining that the given data doesn’t
+      exist.</para>
+
+      <para>Calling a typed get value method (getIntValue, getDoubleValue,
+      getDoubleWithPrecisionValue or getBooleanValue) terminates the script
+      execution if the data value can’t be converted to the specified type.
+      The test result is then set to “Not available” with a message explaining
+      that the given data has not the correct format.</para>
+
+      <para>Calling remove with an inexistent test data name has no
+      effect.</para>
+
+      <para>DoubleWithPrecision is a class implementing a double with a
+      specified precision. To use the constructor, it must be imported from
+      the QTaste module, e.g. using “from qtaste import *”.</para>
+
+      <para>Note that to test equality of an object of this class with a
+      double or integer, you must explicitely use the equals() method instead
+      of the == or != operators.</para>
+    </section>
+
+    <section>
+      <title><emphasis>Logging</emphasis></title>
+
+      <para>Logging is done through any Apache Log4j Logger, which can be the
+      logger variable, imported from the QTaste module, e.g. using “from
+      qtaste import *” and is a Logger named TestScript, or any Logger
+      obtained using the log4j Logger class, e.g.: from org.apache.log4j
+      import Logger logger = Logger.getLogger("LoggerName")</para>
+
+      <literallayout>Most useful available methods are:</literallayout>
+
+      <itemizedlist>
+        <listitem>
+          <para>logger.trace(Object message)</para>
+
+          <literallayout>Logs a message object with the TRACE level</literallayout>
+        </listitem>
+
+        <listitem>
+          <para>logger.debug(Object message)</para>
+
+          <literallayout>Logs a message object with the DEBUG level</literallayout>
+        </listitem>
+
+        <listitem>
+          <para>logger.info(Object message)</para>
+
+          <literallayout>Logs a message object with the INFO level</literallayout>
+        </listitem>
+
+        <listitem>
+          <para>logger.warn(Object message)</para>
+
+          <literallayout>Logs a message object with the WARN level</literallayout>
+        </listitem>
+
+        <listitem>
+          <para>logger.error(Object message)</para>
+
+          <literallayout>Logs a message object with the ERROR level</literallayout>
+        </listitem>
+
+        <listitem>
+          <para>logger.fatal(Object message)</para>
+
+          <literallayout>Logs a message object with the FATAL level</literallayout>
+        </listitem>
+      </itemizedlist>
+
+      <para>The logger level is defined by the “log4j.category.LoggerName”
+      property in the log4j.properties QTaste’s configuration file. Valid
+      values are: ALL (log all messages), TRACE, DEBUG, INFO, WARN, ERROR,
+      FATAL, OFF (doesn’t log any message). The log levels are ordered: TRACE
+      &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL. A log method
+      actually logs a message only if the log level is higher or equal than
+      the logger level.</para>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste exceptions</emphasis></title>
+
+      <literallayout>The following QTaste exceptions may be imported from the QTaste module, e.g. using “from qtaste import *:</literallayout>
+
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>Exception name</entry>
+
+              <entry>Meaning</entry>
+            </row>
+
+            <row>
+              <entry>QTasteException</entry>
+
+              <entry>Base QTaste exception, from which all other QTaste
+              exceptions are derived, resulting in a test “not
+              available”.</entry>
+            </row>
+
+            <row>
+              <entry>QTasteDataEcxeption</entry>
+
+              <entry>Exception thrown in case of invalid data or argument,
+              resulting in a test “not available”.</entry>
+            </row>
+
+            <row>
+              <entry>QTasteTestFailException</entry>
+
+              <entry>Exception thrown to make a test “fail”.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <literallayout>By catching an expected exception in the script, you can write a non-nominal test.
+Here below is such an example.</literallayout>
+
+      <programlisting><emphasis>try:
+   myComponent.throwAnException()
+except QTasteTestFailException:
+   pass</emphasis></programlisting>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste script</emphasis></title>
+
+      <literallayout>Script documentation is generated through PythonDoc and an XSLT style-sheet.</literallayout>
+
+      <section>
+        <title><emphasis>Test script description</emphasis></title>
+
+        <para>The test script is described by adding a PythonDoc module
+        comment at the beginning of the script, i.e. a comment starting and
+        ending with a double sharp character.</para>
+
+        <para>The name of the test script is the name of its containing
+        directory and, as for javadoc, the first sentence up to the first dot
+        is the summary and the next sentences up to the first tag completes
+        the description.</para>
+
+        <literallayout>The following tags must or may be added:</literallayout>
+
+        <itemizedlist>
+          <listitem>
+            <para>@preparation (optional): the description of the test
+            preparation</para>
+          </listitem>
+
+          <listitem>
+            <para>@data (optional): the data used by the test; the syntax is
+            “@data DATA_NAME [Type] Description”, where Type is Integer,
+            Double, DoubleWithPrecision, Boolean or String.</para>
+
+            <para>DoubleWithPrecision is a double with a specified precision
+            and is represented by the following string format:
+            “doubleValue(precisionValue)” or simply “doubleValue” for a
+            precision of 0.</para>
+          </listitem>
+        </itemizedlist>
+
+        <literallayout>HereHere below an example of the documentation:</literallayout>
+
+        <programlisting><emphasis>##
+# TestBugzilla - add a new record in the bugzilla database.
+# &lt;p&gt;
+# Script requests to add defects using the bugzilla web interface and
+# the specified web browser and checks that
+# the information are introduced correctly in the database.
+# @preparation The bugzilla server has to be UP
+# @data BROWSER [String] The selenium browser identifier
+# @data BUGZILLA_LOGIN [String]  The bugzilla login ID
+# @data BUGZILLA_PASSWORD [String] The bugzilla password
+# @data SHORT_DESCRIPTION [String] The short description of the bug
+# @data LONG_DESCRIPTION [String] The long description of the bug
+# @data ASSIGNEE [String] The person that will be assigned to the bug
+##</emphasis></programlisting>
+      </section>
+
+      <section>
+        <title><emphasis>Steps description</emphasis></title>
+
+        <para>Each step should be defined by a Python function, and described
+        by a docstring comment (i.e. text between triple double-quotes inside
+        the function), containing a @step tag describing the step and an
+        optional @expected tag describing the expected results.</para>
+
+        <literallayout>Here below an example of steps description:</literallayout>
+
+        <programlisting><emphasis>def disconnectFromBugzilla():
+   """
+   @step        Disconnect from bugzilla
+   @expected  The session should be closed
+   """
+   selenium.click("link=Log out")
+   selenium.waitForPageToLoad("30000")
+   selenium.closeBrowser()</emphasis></programlisting>
+      </section>
+
+      <section>
+        <title><emphasis>Steps execution</emphasis></title>
+
+        <para>Steps must be executed by calling the doStep() function or the
+        doSteps() function, which must be imported from the QTaste module,
+        e.g. using “from qtaste import *”, rather than calling the step
+        functions directly. This enables the QTaste to detect the beginning
+        and end of steps, and compute the elapsed time.</para>
+
+        <para>The doStep() function, allows to execute one step, passing an
+        optional step id and the step function as arguments. The step id is an
+        integer or a string containing only [a-zA-Z0-9_] characters, if not
+        given the step number is used, starting from 1 for the first step. The
+        signature of the function is:</para>
+
+        <literallayout>  doStep([Integer_or_String stepId,] Function stepFunction)</literallayout>
+
+        <literallayout>Here below an example of steps execution using the doStep() function, without step id:</literallayout>
+
+        <programlisting><emphasis>doStep(connectToBugzilla)
+doStep(createRecord)
+doStep(checkDatabaseRecord)
+doStep(disconnectFromBugzilla)</emphasis></programlisting>
+
+        <literallayout>Here below an example of steps execution using the doStep() function, with step id:</literallayout>
+
+        <programlisting><emphasis>doStep(0, connectToBugzilla)
+doStep(1, createRecord)
+doStep(‘1a’, checkDatabaseRecord)
+doStep(‘2’, disconnectFromBugzilla)</emphasis></programlisting>
+
+        <para>The doSteps() function, allows to execute a defined sequence of
+        steps, passing a steps sequence and an optional steps selector as
+        arguments. The steps sequence is a list or tuple of (stepId,
+        stepFunction) tuples, stepId being an integer or a string containing
+        only [a-zA-Z0-9_] characters. The steps selector is a string using one
+        of the following formats:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>"[firstStepId-lastStepId]" to execute steps from firstStepId
+            to lastStepId;</para>
+          </listitem>
+
+          <listitem>
+            <para>"[firstStepId-]" to execute steps from firstStepId to last
+            step;</para>
+          </listitem>
+
+          <listitem>
+            <para>"[-lastStepId]" to execute steps from first step to
+            lastStepId;</para>
+          </listitem>
+
+          <listitem>
+            <para>"[stepId]" to execute only step stepId.</para>
+          </listitem>
+        </itemizedlist>
+
+        <literallayout>If no steps selector is given, all steps of the sequence are executed.</literallayout>
+
+        <literallayout>The signature of the function is:</literallayout>
+
+        <literallayout>  doSteps(Sequence stepsSequence [, String selector])</literallayout>
+
+        <para>Using this function allows reusability of a steps sequence if it
+        is defined in a common module (see Module import), because it can be
+        imported and used in several test scripts.</para>
+
+        <literallayout>Here below an example of steps execution using the doSteps() function:</literallayout>
+
+        <programlisting><emphasis>bugzillaSteps = [
+  (0, connectToBugzilla),
+  (1, createRecord),
+  (2, checkDatabaseRecord),
+  ('2a', disconnectFromBugzilla),
+]
+
+doSteps(bugzillaSteps)</emphasis></programlisting>
+      </section>
+
+      <section>
+        <title><emphasis>Documentation generation</emphasis></title>
+
+        <para>First of all, note that the documentation generation scripts
+        must be run from the test specific directory containing the
+        directories specified in section 4.2.</para>
+
+        <para>To generate the documentation of a single test script, execute
+        the command generate-TestScript-doc.bat(or .sh) with the test script
+        file name as argument. This will generate an HTML file named
+        TestScript-doc.html in the test script directory.</para>
+
+        <para>To generate the documentation of a test suite, execute the
+        command generate-TestSuite-doc.bat(or .sh) with the test suite
+        directory name as argument. This will generate:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>HTML files named TestScript-doc.html for each test scripts
+            of the test suite, aside the test scripts;</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML files named TestSuite-doc.html (main file, frameset),
+            TestSuite-doc-list.html (list of test scripts) and
+            TestSuite-doc-summary.html (summary of test scripts), in the test
+            suite directory.</para>
+          </listitem>
+        </itemizedlist>
+
+        <literallayout>To generate the documentation of all test suites, execute the command generate-TestSuites-doc.bat (or .sh).</literallayout>
+
+        <literallayout>To generate a Campaign test procedure document for a test campaign:</literallayout>
+
+        <itemizedlist>
+          <listitem>
+            <para>execute the command generate-TestCampaign-doc.bat (or .sh)
+            with the test campaign description XML file path as argument. This
+            will generate an HTML file name &lt;campaignName&gt;-doc.html in
+            the TestCampaigns directory;</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title><emphasis>Scripts reusability</emphasis></title>
+
+      <section>
+        <title><emphasis>Test script import</emphasis></title>
+
+        <para>A test script can be reused by another script thanks to the
+        importTestScript(), isInTestScriptImport(), doSubStep() and
+        doSubSteps() functions, which must be imported from the QTaste module,
+        e.g. using “from qtaste import *”.</para>
+
+        <para>The importTestScript() function allows to import a test script
+        in order to reuse its steps using the doSubStep() and doSubSteps()
+        functions. void importTestScript(String testScriptPath) Imports the
+        test script located in the testScriptPath directory and make its
+        symbols available, including step functions and steps sequences, in a
+        namespace named as the test case name, i.e. the name of the final
+        directory of the test script. Actually, the code of the test script is
+        evaluated except for the doStep and doSteps functions which are
+        automatically skipped to avoid executing the steps during the import.
+        testScriptPath - path to the directory of the test script to import.
+        This path is relative to the parent directory of the current test
+        script. It is advised to used forward slashes “/” as directory
+        separator instead of backslashes “\” to make path platform
+        independent.</para>
+
+        <para>The isInTestScriptImport() function allows to check if code is
+        executed during a test script import, i.e. during the execution of the
+        importTestScript() function. It is useful to prevent execution of
+        portion of code during a test script import.</para>
+
+        <literallayout>   Boolean isInTestScriptImport()
+      Returns True if code is executed during a test script import, False otherwise.</literallayout>
+
+        <para>The doSubStep() function allows to execute an imported test step
+        as a sub-step of the current step. It has the same signature as the
+        doStep() function (see Steps execution).</para>
+
+        <para>The doSubSteps() function allows to execute an imported sequence
+        of test steps as sub-steps as a sub-steps of the current step. It has
+        the same signature as the doSteps() function (see Steps
+        execution).</para>
+
+        <para>For example, the test script of the test case XYZ_01 reuse the
+        test scripts of the test cases XYZ_01_02 and
+        1_PreparationPhase/2_BDS/PBSV2_BDS_PREP_01.</para>
+
+        <literallayout>Test script XYZ_01:</literallayout>
+
+        <programlisting linenumbering="numbered"><emphasis>##
+# Test Title - Description - Test case XYZ_01: Main flow.
+# …
+##
+
+…
+
+# set the MY_VARIABLE test data to False, because it is used by the XYZ_02
+# test script but not declared in this test script
+testData.setBooleanValue("MY_VARIABLE", False)
+importTestScript("../1_ABC/XYZ_01_02")
+importTestScript("../2_DEF/XYZ_01")
+
+…
+
+def step1():
+   …
+
+def step2():
+   """
+   @step Based on the test case XYZ_01: Main flow perform the nominal case.
+   """
+   doSubSteps(XYZ_01_02.mainFlow)
+
+
+def step3():
+   """
+   @step Based on the test case XYZ_01: Main flow perform the nominal case
+    (steps 1 and 3 to 5).
+   """
+   doSubStep(XYZ_01.step1)
+   doSubStep(XYZ_01.step3)
+   doSubStep(XYZ_01.step4)
+
+# main flow steps, reusable in another test scripts
+# doesn’t include step1 which is a initial step
+# nor step5 which is a cleanup step
+mainFlow=[(2, step2),
+          (3, step3),
+          (4, step4)]
+
+resetSystem()
+doStep(step1)
+doSteps(mainFlow)
+doStep(step5)</emphasis></programlisting>
+
+        <para>Some function may use the isInTestScriptImport() function to
+        avoid executing the a function when a script is imported:</para>
+
+        <programlisting linenumbering="numbered"><emphasis>def function():
+   if isInTestScriptImport():
+       # test script is imported, so return immediately
+       return
+   …</emphasis></programlisting>
+      </section>
+
+      <section>
+        <title><emphasis>Module import</emphasis></title>
+
+        <para>Test scripts can import common Python modules, allowing reusing
+        the same code from several test scripts without duplicating it.</para>
+
+        <para>For that reason, common modules have been created in the
+        TestSuites/pythonlib directory. These common steps or common checks
+        are implemented as classes and can therefore be derived and methods
+        can be over-written for tests that need to modify the behaviour of
+        some steps or to add new ones.</para>
+
+        <literallayout>For example, the ABC module contains a CommonSteps class defined as follow:</literallayout>
+
+        <programlisting linenumbering="numbered"><emphasis>class CommonSteps:
+
+       def __init__(self, someValue):
+          """
+          @data SOME_VALUE [Integer] treatment room id
+          """
+           …
+       …
+
+       def aFunction(self):
+          """
+          @step      Start the function
+          @expected  Description of the expected result
+          @data SOME_VARIABLE [Double] A variable
+          """
+          self.function5()
+          self.function8()
+
+       …</emphasis></programlisting>
+
+        <literallayout>This class can be used to create the test steps, as in the following example:</literallayout>
+
+        <programlisting linenumbering="numbered"><emphasis>import ABC
+
+class ABCSteps(ABC.CommonSteps):
+       def performThis(self):
+          """
+          New step, not present in ABC.CommonSteps
+          @step      Request the system to …
+          @expected  After 5 seconds, system should be …
+          """
+          self.someCommands(self.someParam)
+          time.sleep(5)
+          self.someOtherCommans.('prepare.state:pending', 0)
+          self.checkSomething(0)
+
+steps = ABCSteps()
+
+def prepareTest():
+   """
+   @step      Prepare the test and its parameters
+   @expected  …
+   """
+   steps.prepareTest()
+
+…
+
+…
+doStep(prepareTest)
+…</emphasis></programlisting>
+
+        <literallayout>It is also possible to reuse a defined steps sequence, by defining the steps and steps sequence in a common module.</literallayout>
+      </section>
+    </section>
+  </chapter>
+</book>
