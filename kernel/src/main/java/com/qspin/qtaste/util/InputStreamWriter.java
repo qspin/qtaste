@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,7 @@ public final class InputStreamWriter extends Thread
    {
       mInput = pInput;
       mLogPrefix = pLogPrefix;
-      mOutput = new ArrayList<String>();
+      mOutput = Collections.synchronizedList(new ArrayList<String>());
       mLimit = 1000;
    }
 
