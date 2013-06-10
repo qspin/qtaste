@@ -95,9 +95,11 @@ public class CampaignResult extends Result {
         } else if (nbTestsFailed > 0) {
             setStatus(Status.FAIL);
         } else if (nbTestsNotAvailable > 0) {
+            setStatus(Status.NOT_AVAILABLE);            
+        } else if (nbTestsExecuted == 0) {
             setStatus(Status.NOT_AVAILABLE);
         } else {
-            if (nbTestsExecuted == nbTestsToExecute) {
+            if ( (nbTestsExecuted == nbTestsToExecute) ) {
                 setStatus(Status.SUCCESS);
             } else {
                 // Something went wrong ... Probably SUT was not started properly
