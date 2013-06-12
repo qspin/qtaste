@@ -56,12 +56,13 @@ JMX_PORT=""
 TITLE=""
 PRIORITY=""
 OUTPUT="/dev/null"
-
+NOW=$(date +"%m_%d_%Y-%H_%M_%S")
 
 if [ $# -lt 1 ]; then
  echo "Usage: start_java_process.sh [-jar] <java_main_class_or_jar_and_arguments> -dir <start_command_dir> [-cp <classpath>] [-vmArgs <vm_args>] [-jmxPort <jmx_port>] [-checkAfter <process_start_time>] [-title <title>] [-priority low|belownormal|normal|abovenormal|high|realtime]"
  exit
 fi
+
 
 if [ "$1" = "-jar" ]
 then
@@ -76,7 +77,7 @@ then
    setNiceCommand
 
    cd $WORKINGDIR
-   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$OUTPUT" &
+   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$TITLE.$NOW.out" &
 else
    setArg $2 "$3"
    setArg $4 "$5"
@@ -86,9 +87,9 @@ else
    setArg ${12} "${13}"
    setJMXcommand
    setNiceCommand
-   
+
    cd $WORKINGDIR
-   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$OUTPUT" &
+   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$TITLE.$NOW.out" &
 fi
 
 PID=$!
