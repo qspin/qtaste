@@ -58,6 +58,7 @@ public class TestEngine {
 	protected static Logger logger = Log4jLoggerFactory.getLogger(TestEngine.class);
 	private static TestSuite currentTestSuite;
 	private static boolean needToRestartSUT;
+	private static boolean isRestartingSUT;
 	private static Exec sutStartStopExec = new Exec();
 	private static volatile boolean isStartStopSUTCancellable = false;
 	public static volatile boolean isStartStopSUTCancelled = false;
@@ -158,7 +159,7 @@ public class TestEngine {
 									+ jythonJar + File.pathSeparator + classPath + "\" org.python.util.jython";
 			}
 			String scriptArguments = config.getControlScriptArguments();
-			String startOrStopCommand = scriptFilename + " " + startOrStop + " " + (scriptArguments != null ? scriptArguments : "");
+			String startOrStopCommand = scriptFilename + " " + startOrStop + " " + (scriptArguments != null ? scriptArguments : "") + (isRestartingSUT ? "-restart true" : "");
 			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" + startOrStopCommand + "'");
 			// report the control script
 			try {
@@ -218,7 +219,9 @@ public class TestEngine {
 			tr.start();
 			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
 			reportManager.putEntry(tr);
+			isRestartingSUT = true;
 			boolean returnValue = stopSUT(tr) && startSUT(tr);
+			isRestartingSUT = false;
 			tr.stop();
 			reportManager.refresh();
 			// reportManager.stopReport();

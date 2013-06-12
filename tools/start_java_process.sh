@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start a process and check that it is started
-# usage: start_java_process.sh [-jar] <java_main_class_or_jar_and_arguments> -dir <start_command_dir> [-cp <classpath>] [-vmArgs <vm_args>] [-jmxPort <jmx_port>] [-checkAfter <process_start_time>] [-title <title>] [-priority low|belownormal|normal|abovenormal|high|realtime]
+# usage: start_java_process.sh [-jar] <java_main_class_or_jar_and_arguments> -dir <start_command_dir> [-cp <classpath>] [-vmArgs <vm_args>] [-jmxPort <jmx_port>] [-checkAfter <process_start_time>] [-title <title>] [-priority low|belownormal|normal|abovenormal|high|realtime] [-restart true]
 
 function setArg {
    if [ "$1" = "-cp" ]; then
@@ -19,6 +19,8 @@ function setArg {
       WORKINGDIR=$2
    elif [ "$1" = "-priority" ]; then
       PRIORITY=`echo $2 | tr [:upper:] [:lower:]`
+   elif [ "$1" = "-restart" -a "$2" = "true" ]; then
+      RESTART=true
    fi
 }
 
@@ -56,6 +58,7 @@ JMX_PORT=""
 TITLE=""
 PRIORITY=""
 OUTPUT="/dev/null"
+RESTART=false
 NOW=$(date +"%m_%d_%Y-%H_%M_%S")
 
 if [ $# -lt 1 ]; then
@@ -73,11 +76,20 @@ then
    setArg ${11} "${12}"
    setArg ${13} "${14}"
    setArg ${15} "${16}"
+   setArg ${17} "${18}"
    setJMXcommand
    setNiceCommand
 
    cd $WORKINGDIR
-   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$TITLE.$NOW.out" &
+
+   # if starting again (restart) then backup log file
+   if [ $RESTART -a -f "$OUTPUT" ]; then
+      cp "$OUTPUT" "$TITLE.$NOW.out"
+   fi
+
+   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$OUTPUT" &
+   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$TITLE.$NOW.out" &
+   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 2>&1 | tee "$TITLE.$NOW.out" > "$OUTPUT" &
 else
    setArg $2 "$3"
    setArg $4 "$5"
@@ -85,11 +97,20 @@ else
    setArg $8 "$9"
    setArg ${10} "${11}"
    setArg ${12} "${13}"
+   setArg ${14} "${15}"
    setJMXcommand
    setNiceCommand
 
    cd $WORKINGDIR
-   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$TITLE.$NOW.out" &
+
+   # if starting again (restart) then backup log file
+   if [ $RESTART -a -f "$OUTPUT" ]; then
+      cp "$OUTPUT" "$TITLE.$NOW.out"
+   fi
+
+   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$OUTPUT" &
+   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$TITLE.$NOW.out" &
+   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 2>&1 | tee "$TITLE.$NOW.out" > "$OUTPUT" &
 fi
 
 PID=$!
