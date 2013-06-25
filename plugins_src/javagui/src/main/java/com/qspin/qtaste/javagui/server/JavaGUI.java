@@ -76,11 +76,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	public void takeSnapShot(final String componentName, final String fileName) throws QTasteTestFailException {
-		new Snapshotter().executeCommand(componentName, fileName);
+		new Snapshotter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, fileName);
 	}
 
 	public String getText(String componentName) throws QTasteTestFailException {
-		return new TextGetter().executeCommand(componentName);
+		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 				
 	// TODO: boolean returns is useless and confusing!
