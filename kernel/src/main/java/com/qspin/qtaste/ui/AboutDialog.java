@@ -84,11 +84,6 @@ public class AboutDialog extends JDialog {
             thirdProductsLink.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(kernelReleaseNotesLabel);
         }
-            VersionControlInterface versionControl = VersionControl.getInstance();
-            JLabel testapiVersionLabel = new JLabel("<html><b>TestAPI version:</b> " + versionControl.getTestApiVersion("") + "</html>");
-            testapiVersionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
-            b.add(testapiVersionLabel);
-
         JLabel javaVersionVendor = new JLabel("<html><br><b>Java version:</b> " + System.getProperty("java.version") +
                            " from " + System.getProperty("java.vendor") + "</html>");
         javaVersionVendor.setFont(ResourceManager.getInstance().getStandardFontLight());
