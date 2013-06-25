@@ -20,25 +20,27 @@
 package com.qspin.qtaste.util.versioncontrol.impl;
 
 import com.qspin.qtaste.util.versioncontrol.*;
+import com.qspin.qtaste.config.TestBedConfiguration;
 
 /**
- * DefaultVersionControl is the implementation by default.
+ * DefaultVersionControl is the implementation by default when no SCM tool is configured.
  * @author lvboque
  */
 public class DefaultVersionControl implements VersionControlInterface {
 
-	/**
-	 * @return unversioned
-	 */
+    /** Returns the version of the SUT used in GUI screens and Test Reports
+     * @param path The path to the SUT. (Not used in this context)
+     * @return the version number
+     */
     public String getSUTVersion(String path) {
-        return "unversioned";
+        return TestBedConfiguration.getSUTVersion();
     }
     
-	/**
-	 * @return unversioned
-	 */
+    /** Returns the version of the test API. This information is only used in Test reports. By default, the version of the testapi is the same as the sutVersion.
+     * @param path The path to the testapi. (Not used in this context)
+     * @return the version number
+     */
     public String getTestApiVersion(String path) {
-        return "unversioned";
+        return TestBedConfiguration.getSUTVersion();
     }
-
 }

@@ -202,11 +202,15 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         JPanel sutPanel = new JPanel();
         JLabel sutVersion = new JLabel("SUT version: ");
         sutPanel.add(sutVersion);
-//        m_SUTVersion.setHorizontalAlignment(JTextField.RIGHT);
-        m_SUTVersion.setPreferredSize(new Dimension(m_SUTVersion.getPreferredSize().width*2, m_SUTVersion.getPreferredSize().height));
+        m_SUTVersion.setHorizontalAlignment(JTextField.RIGHT);
+        m_SUTVersion.setPreferredSize(new Dimension(150, m_SUTVersion.getPreferredSize().height));
         sutPanel.add(m_SUTVersion);
         adder.add(sutPanel);
-
+        m_SUTVersion.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {                
+                TestBedConfiguration.setSUTVersion(m_SUTVersion.getText());
+            }
+        });
         //create a 3d row
         adder.addSeparator();
 

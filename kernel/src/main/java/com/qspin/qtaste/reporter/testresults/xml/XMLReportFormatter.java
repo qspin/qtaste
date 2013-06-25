@@ -126,7 +126,7 @@ public class XMLReportFormatter extends XMLFormatter {
     private void generateMainFile(boolean testSuiteEnded) throws FileNotFoundException, IOException {
         NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
-        namesValues.add("###QTaste_TESTAPI_VERSION###", testapiVersion);
+        namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
         namesValues.add("###RESULTS_FILE###", reportFile.getName());
         namesValues.add("###LOG_DATE###", DATE_FORMAT.format(date));
         namesValues.add("###TESTBED###", getTestbedConfigurationName());

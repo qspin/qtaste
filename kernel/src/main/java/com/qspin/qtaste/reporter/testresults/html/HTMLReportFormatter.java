@@ -163,7 +163,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
         NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
 
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
-        namesValues.add("###QTaste_TESTAPI_VERSION###", testapiVersion);
+        namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
 
         namesValues.add("###DATE_OF_REPORT###", DATE_FORMAT.format(generationDate));
         if (currentTestSuite != null && currentTestSuite.getStartExecutionDate() != null) {

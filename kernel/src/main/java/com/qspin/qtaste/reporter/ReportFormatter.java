@@ -47,11 +47,10 @@ public abstract class ReportFormatter {
     protected String reportFileName;
     protected PrintWriter output;
     protected Date startDate, endDate;
-    protected static final String kernelVersion, testapiVersion;
+    protected static final String kernelVersion;
 
     static {
         kernelVersion = com.qspin.qtaste.kernel.Version.getInstance().getFullVersion();
-        testapiVersion = VersionControl.getInstance().getTestApiVersion("");
     }
 
     public ReportFormatter(File reportDirectory, String reportFileName) {
@@ -112,12 +111,23 @@ public abstract class ReportFormatter {
     }
 
     /**
-     * Gets the sut version string corresponding to the sut selected in the the testbed configuration file.
+     * Gets the sut version string corresponding to the sut selected.
      * @return the name of the testbed configuration file
      */
     protected static String getSUTVersion() {
         return TestBedConfiguration.getSUTVersion();
     }
+
+    /**
+     * Gets the testapi version string corresponding to the testapi version depending of the SCM configuration.
+     * @return the name of the testbed configuration file
+     */
+    protected static String getTestAPIVersion() {
+        return VersionControl.getInstance().getTestApiVersion("");
+    }
+
+
+
 
     /**
      * Gets the content of the testbed configuration file.

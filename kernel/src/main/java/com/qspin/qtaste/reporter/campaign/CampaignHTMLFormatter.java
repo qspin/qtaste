@@ -67,7 +67,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
     public void generateHeader() {
         NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
-        namesValues.add("###QTaste_TESTAPI_VERSION###", testapiVersion);
+        namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
         namesValues.add("###SUT_VERSION###", TestBedConfiguration.getSUTVersion());
         namesValues.add("###DATE_OF_REPORT###", DATE_FORMAT.format(generationDate));
         namesValues.add("###DATE_START###", startDate != null ? DATE_FORMAT.format(startDate) : "&nbsp;");
