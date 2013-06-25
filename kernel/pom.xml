@@ -31,7 +31,7 @@
 				</executions>
 				<configuration>
 					<doCheck>false</doCheck>
-					<doUpdate>true</doUpdate>
+					<doUpdate>false</doUpdate>
 					<providerImplementations>
 						<svn>javasvn</svn>
 					</providerImplementations>
