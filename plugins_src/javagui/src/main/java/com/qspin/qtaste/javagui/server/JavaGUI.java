@@ -130,7 +130,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}								    
 
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
-		new KeyPresser().executeCommand(COMPONENT_ENABLED_TIMEOUT, bot, keycode, delay);
+		new KeyPresser().executeCommand(bot, keycode, delay);
 	}
 	
 	public void pressKey(int keycode) throws QTasteTestFailException {
