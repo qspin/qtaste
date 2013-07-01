@@ -16,34 +16,6 @@
     <build>
         <finalName>qtaste-kernel</finalName>
         <plugins>
-            <!-- plugin to retrieve build number -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <doCheck>false</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <providerImplementations>
-                        <svn>javasvn</svn>
-                    </providerImplementations>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.tmatesoft.svnkit</groupId>
-                        <artifactId>svnkit</artifactId>
-                        <version>1.7.4</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
             <!-- plugin to install source artifact -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
