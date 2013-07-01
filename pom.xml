@@ -12,11 +12,11 @@
    <description>QTaste is a generic engine to perform automated integration tests</description>
    <url>https://sourceforge.net/projects/qtaste/</url>
    <licenses>
-	   <license>
-		   <name>LGPL</name>
-		   <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
-		   <distribution>repo</distribution>
-	   </license>
+       <license>
+           <name>LGPL</name>
+           <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+           <distribution>repo</distribution>
+       </license>
    </licenses>
 
   <modules>
@@ -27,11 +27,9 @@
 
    <properties>
       <qtaste-version>1.2.2-RC6</qtaste-version>
+      <maven.build.timestamp.format>ddMMyy-HHmm</maven.build.timestamp.format>
+      <buildNumber>${maven.build.timestamp}</buildNumber>
    </properties>
-
-   <scm>
-      <developerConnection>scm:svn:file://${basedir}</developerConnection>
-   </scm>
 
    <build>
       <plugins>
@@ -81,12 +79,6 @@
 
             <plugin>
                <groupId>org.codehaus.mojo</groupId>
-               <artifactId>buildnumber-maven-plugin</artifactId>
-               <version>1.0-beta-3</version>
-            </plugin>
-
-            <plugin>
-               <groupId>org.codehaus.mojo</groupId>
                <artifactId>exec-maven-plugin</artifactId>
                <version>1.1.1</version>
             </plugin>
@@ -96,13 +88,13 @@
                <artifactId>javancss-maven-plugin</artifactId>
                <version>2.0-beta-2</version>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                	<createChecksum>true</createChecksum>
+                    <createChecksum>true</createChecksum>
                 </configuration>
             </plugin>
          </plugins>
@@ -135,7 +127,7 @@
             </exclusion>
          </exclusions>
       </dependency>
-	 <dependency>
+     <dependency>
             <groupId>com.sun.jdk</groupId>
             <artifactId>jdk-tools</artifactId>
             <version>1.5</version>
@@ -192,11 +184,11 @@
             <version>2.0</version>
          </dependency>
          <dependency>
-            <groupId>javax.scripting</groupId>            
-            <artifactId>jython-engine</artifactId>            
-            <version>20080808</version>         
-        </dependency>         
-        <dependency>            
+            <groupId>javax.scripting</groupId>
+            <artifactId>jython-engine</artifactId>
+            <version>20080808</version>
+        </dependency>
+        <dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>
@@ -220,7 +212,7 @@
             <groupId>org.python</groupId>
             <artifactId>jython</artifactId>
             <version>2.2.1</version>
-         </dependency>        
+         </dependency>
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
@@ -244,7 +236,7 @@
          <dependency>
             <groupId>xpp3</groupId>
             <artifactId>xpp3</artifactId>
-   	        <version>1.1.4c</version>
+            <version>1.1.4c</version>
          </dependency>
       </dependencies>
    </dependencyManagement>
@@ -270,7 +262,7 @@
                      <links>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
                      </links>
-                     
+
                      <aggregate>true</aggregate>
                      <windowtitle>QTaste ${releaseVersion}</windowtitle>
                      <doctitle>QTaste ${releaseVersion}</doctitle>
