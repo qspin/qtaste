@@ -193,7 +193,8 @@ class ControlScript(object):
 				writer.close
 		except:
 			print "error during the param file generation"
-						
+			raise
+
 		for controlAction in self.controlActions:
 			if controlAction.active:
 				controlAction.start()
@@ -602,7 +603,7 @@ class ReplaceInFiles(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(ReplaceInFiles, self).dumpDataType(writer, prefix)
+		super(ReplaceInFiles, self).dumpDataType(prefix, writer)
 		writer.write(prefix + ".findString=string\n")
 		writer.write(prefix + ".replaceString=string\n")
 		writer.write(prefix + ".files=string\n")
@@ -642,7 +643,7 @@ class Rsh(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(RExec, self).dumpDataType(writer, prefix)
+		super(Rsh, self).dumpDataType(prefix, writer)
 		writer.write(prefix + ".startCommand=string\n")
 		writer.write(prefix + ".stopCommand=string\n")
 		writer.write(prefix + ".host=string\n")
@@ -689,7 +690,7 @@ class RExec(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(RExec, self).dumpDataType(writer, prefix)
+		super(RExec, self).dumpDataType(prefix, writer)
 		writer.write(prefix + ".findString=string\n")
 		writer.write(prefix + ".replaceString=string\n")
 		writer.write(prefix + ".files=string\n")
@@ -777,7 +778,7 @@ class RebootRlogin(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(RebootRlogin, self).dumpDataType(writer, prefix)
+		super(RebootRlogin, self).dumpDataType(prefix, writer)
 		writer.write(prefix + ".waitingTime=integer\n")
 		writer.write(prefix + ".host=string\n")
 		writer.write(prefix + ".login=string\n")
@@ -818,7 +819,7 @@ class Sleep(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(Sleep, self).dumpDataType(writer, prefix)
+		super(Sleep, self).dumpDataType(prefix, writer)
 		writer.write(prefix + ".time=integer\n")
 		writer.write(prefix + ".message=string\n")
 
@@ -856,7 +857,7 @@ class OnStart(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(OnStart, self).dumpDataType(writer, prefix)
+		super(OnStart, self).dumpDataType(prefix, writer)
 		controlAction.dumpDataType(prefix, writer)
 
 	def dump(self, writer):
@@ -884,7 +885,7 @@ class OnStop(ControlAction):
 
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
-		super(OnStop, self).dumpDataType(writer, prefix)
+		super(OnStop, self).dumpDataType(prefix, writer)
 		controlAction.dumpDataType(prefix, writer)
 
 	def dump(self, writer):
