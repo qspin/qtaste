@@ -14,11 +14,15 @@ on any platform running java VM 1.6. However, it has been only validated on Wind
 QTaste System Requirements
 ==========================
 
-• Java Virtual Machine (JDK) 1.6 > ( http://java.sun.com/javase/downloads/index.jsp )
+• Java Virtual Machine (JDK) >= 1.6 ( http://java.sun.com/javase/downloads/index.jsp )
+
 • (optional) git command-line client accessible from PATH (“git”), for test script versioning
+
 • At least 100 MB of disk space
+
 • At least 256 MB of system memory (Running with less memory may cause disk swapping which has a severe effect on
 performance. Very large programs may require more RAM for adequate performance.)
+
 • On Linux system, Java VM requires some graphical gnome libraries. These libraries have to be installed. https://
 sourceforge.net/apps/mantisbt/qtaste/view.php?id=3
 
@@ -26,12 +30,19 @@ Installation of the QTaste
 ==========================
 
 The QTaste framework is composed of:
+
 • Test Engine kernel
+
 • Simulators base classes
+
 • Other tools
+
 • Components Test API and Component Implementations
+
 • Test Suites containing test scripts and test data
+
 • Test Campaigns
+
 • Testbeds configurations
 
 The installer available on Github - Releases section  - [https://github.com/qspin/qtaste/releases] contains the QTaste Kernel (sources and
