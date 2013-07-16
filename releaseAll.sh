@@ -18,12 +18,7 @@ if [ "$1" == "-help" ]; then
     echo "Usage: releaseAll.sh [-snapshot] "
     exit
 elif [ "$1" == "-snapshot" ]; then
-    echo "update-versions"
-    # mvn release:clean release:update-versions -P qtaste-all-modules-release
+    mvn release:clean release:update-versions -P qtaste-all-modules-release
 else
-    echo "prepare"
-    # mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release
+    mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release
 fi
-
-
-git commit -am "[ALL] Added shell script to perfom the QTaste releases - releaseAll; Chenges in pom files"
