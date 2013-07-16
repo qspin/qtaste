@@ -8,7 +8,7 @@ rm -f *.class
 popd
 
 # build qtaste
-mvn clean install -P qtaste-build-kernel-first -Denvironment=hosted_ci || exit 1
+mvn clean install -P qtaste-build-kernel-first || exit 1
 
 # build plugins
 pushd plugins_src

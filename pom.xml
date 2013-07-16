@@ -278,13 +278,7 @@
 
    <profiles>
       <profile>
-         <id>qtaste-local-javatools</id>
-         <activation>
-           <property>
-             <name>environment</name>
-             <value>hosted_ci</value>
-           </property>
-         </activation>
+         <id>qtaste-use-local-javatools</id>
          <dependencies>
            <dependency>
              <groupId>com.sun</groupId>
