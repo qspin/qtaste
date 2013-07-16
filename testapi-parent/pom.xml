@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly" or "mvn install assembly:single" in child project -->
-   
+
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>1.2.2-RC6</version>
+      <version>1.2.4-SNAPSHOT</version>
+      <relativePath>..</relativePath>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
@@ -19,7 +18,7 @@
    <modules>
       <module>testapi-deploy</module>
    </modules>
-   
+
    <build>
       <pluginManagement>
          <plugins>
@@ -30,11 +29,11 @@
                <configuration>
                   <descriptors>
                      <descriptor>assemblies/deploy.xml</descriptor>
-		     <!-- deploy.xml available from qtaste-testapi-deploy-->
+             <!-- deploy.xml available from qtaste-testapi-deploy-->
                   </descriptors>
                   <archive>
                      <manifest>
-		   	            <mainClass>com.qspin.qtaste.ui.MainPanel</mainClass>
+                        <mainClass>com.qspin.qtaste.ui.MainPanel</mainClass>
                      </manifest>
                      <manifestEntries>
                         <Implementation-Version>${project.artifactId}-${project.version}</Implementation-Version>
@@ -49,13 +48,13 @@
                   </dependency>
                </dependencies>
             </plugin>
-		 
+
             <!-- plugin to get sources of other testapi dependency projects, for testapi doc generation -->
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
-			
-		      <!-- unpack api sources of other QTaste testapi projects dependencies in target/testapi-dependency-src, for TestAPI doc generation,
+              <inherited>${plugins-inheritance}</inherited>
+              <!-- unpack api sources of other QTaste testapi projects dependencies in target/testapi-dependency-src, for TestAPI doc generation,
                    child project must define all artifacts to include, using includeArtifactIds (comma-separated list) -->
               <executions>
                 <execution>
@@ -84,7 +83,7 @@
                   </goals>
                   <configuration>
                     <classifier>sources</classifier>
-					<includeArtifactIds>qtaste-kernel</includeArtifactIds>
+                    <includeArtifactIds>qtaste-kernel</includeArtifactIds>
                     <excludeTransitive>true</excludeTransitive>
                     <includes>com/qspin/qtaste/kernel/testapi/*.java</includes>
                     <outputDirectory>${project.build.directory}/dependency-kernel-src</outputDirectory>
@@ -103,7 +102,7 @@
                     <goal>unpack-dependencies</goal>
                   </goals>
                   <configuration>
-                    <classifier>javadoc</classifier>				 
+                    <classifier>javadoc</classifier>
                     <includeArtifactIds>qtaste-kernel</includeArtifactIds>
                     <outputDirectory>${project.build.directory}/TestAPI-doc/simulators</outputDirectory>
                     <overWriteReleases>false</overWriteReleases>
@@ -113,12 +112,12 @@
                 </execution>
               </executions>
             </plugin>
-		 
+
             <!-- plugin to generate testapi doc -->
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9</version>
+               <version>2.9</version>
                <configuration>
                  <doclet>com.qspin.qtaste.toolbox.doclet.TestAPIDoclet</doclet>
                  <docletArtifact>
@@ -138,9 +137,9 @@
                      <goal>javadoc</goal>
                    </goals>
                  </execution>
-                </executions>			
+                </executions>
             </plugin>
-         
+
             <!-- plugin to install source artifact -->
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
