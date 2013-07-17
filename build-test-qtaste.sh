@@ -10,5 +10,5 @@ Xvfb :99.0 &
 ./buildAll.sh || exit 1
 
 # Execute qtaste demo after build success:
-# ./executeDemo.sh || exit 1
+./executeDemo.sh || exit 1
 
