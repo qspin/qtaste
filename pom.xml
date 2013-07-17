@@ -161,11 +161,13 @@
             </exclusion>
          </exclusions>
       </dependency>
-     <dependency>
-            <groupId>com.sun.jdk</groupId>
-            <artifactId>jdk-tools</artifactId>
-            <version>1.5</version>
-         </dependency>
+      <dependency>
+         <groupId>com.sun</groupId>
+         <artifactId>tools</artifactId>
+         <version>whatever</version>
+         <scope>system</scope>
+         <systemPath>${java.home}/../lib/tools.jar</systemPath>
+      </dependency>
    </dependencies>
 
    <dependencyManagement>
@@ -277,19 +279,6 @@
    </dependencyManagement>
 
    <profiles>
-      <profile>
-         <id>qtaste-use-local-javatools</id>
-         <dependencies>
-           <dependency>
-             <groupId>com.sun</groupId>
-             <artifactId>tools</artifactId>
-             <version>whatever</version>
-             <scope>system</scope>
-             <systemPath>${java.home}/../lib/tools.jar</systemPath>
-           </dependency>
-        </dependencies>
-      </profile>
-
       <profile>
          <id>qspin-site</id>
          <activation>
