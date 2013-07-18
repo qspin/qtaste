@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>ibiblio.org</id>
+            <name>ibiblio</name>
+            <url>http://repo1.maven.org/maven/mule/dependencies/maven2</url>
+        </repository>
+    </repositories>
+
+  <scm>
+    <url>https://github.com/nfac/qtaste</url>
+    <connection>scm:git:ssh://git@github.com/nfac/qtaste.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/nfac/qtaste.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 
    <groupId>com.qspin.qtaste</groupId>
    <artifactId>qtaste</artifactId>
-   <version>1.2.2-RC6</version>
+   <version>2.0.0-SNAPSHOT</version>
    <packaging>pom</packaging>
    <name>QTaste: QSpin Tailored Automated Test Environment</name>
    <description>QTaste is a generic engine to perform automated integration tests</description>
@@ -26,13 +44,24 @@
    </modules>
 
    <properties>
-      <qtaste-version>1.2.2-RC6</qtaste-version>
+      <qtaste-version>${project.version}</qtaste-version>
       <maven.build.timestamp.format>ddMMyy-HHmm</maven.build.timestamp.format>
       <buildNumber>${maven.build.timestamp}</buildNumber>
+      <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
    <build>
       <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.4.1</version>
+            <configuration>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+                <tagNameFormat>v@{project.version}</tagNameFormat>
+            </configuration>
+        </plugin>
+
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -75,6 +104,11 @@
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-surefire-plugin</artifactId>
                <version>2.4.2</version>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>buildnumber-maven-plugin</artifactId>
+               <version>1.0-beta-3</version>
             </plugin>
 
             <plugin>
@@ -127,11 +161,13 @@
             </exclusion>
          </exclusions>
       </dependency>
-     <dependency>
-            <groupId>com.sun.jdk</groupId>
-            <artifactId>jdk-tools</artifactId>
-            <version>1.5</version>
-         </dependency>
+      <dependency>
+         <groupId>com.sun</groupId>
+         <artifactId>tools</artifactId>
+         <version>whatever</version>
+         <scope>system</scope>
+         <systemPath>${java.home}/../lib/tools.jar</systemPath>
+      </dependency>
    </dependencies>
 
    <dependencyManagement>
@@ -139,12 +175,12 @@
          <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>${qtaste-version}</version>
+            <version>${project.version}</version>
          </dependency>
          <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>${qtaste-version}</version>
+            <version>${project.version}</version>
             <classifier>tests</classifier>
          </dependency>
 
@@ -184,9 +220,10 @@
             <version>2.0</version>
          </dependency>
          <dependency>
-            <groupId>javax.scripting</groupId>
-            <artifactId>jython-engine</artifactId>
-            <version>20080808</version>
+          <groupId>javax.script</groupId>
+          <artifactId>jython-engine</artifactId>
+          <version>1.0</version>
+          <classifier>jdk14</classifier>
         </dependency>
         <dependency>
             <groupId>jfree</groupId>
@@ -204,9 +241,9 @@
             <version>1.2.1</version>
          </dependency>
          <dependency>
-            <groupId>jsyntaxpane</groupId>
-            <artifactId>jsyntaxpane</artifactId>
-            <version>0.9.5-b27</version>
+           <groupId>de.sciss</groupId>
+           <artifactId>jsyntaxpane</artifactId>
+           <version>1.0.0</version>
          </dependency>
          <dependency>
             <groupId>org.python</groupId>
@@ -282,6 +319,45 @@
             </plugins>
          </reporting>
       </profile>
+
+      <profile>
+        <id>qtaste-default-modules</id>
+        <activation>
+            <property>
+                <name>!skip-qtaste-default-modules</name>
+            </property>
+        </activation>
+        <modules>
+            <module>testapi-parent</module>
+            <module>kernel</module>
+            <module>toolbox</module>
+        </modules>
+      </profile>
+
+      <profile>
+        <id>qtaste-all-modules-release</id>
+        <modules>
+            <module>testapi-parent</module>
+            <module>kernel</module>
+            <module>toolbox</module>
+            <module>plugins_src/tools</module>
+            <module>plugins_src/javagui</module>
+            <module>plugins_src/recorder</module>
+            <module>plugins_src/AddonDemo</module>
+            <module>plugins_src/ControlScriptBuilderAddOn</module>
+            <module>demo/testapi</module>
+            <module>izpack</module>
+            <module>doc</module>
+        </modules>
+      </profile>
+
+      <profile>
+        <id>qtaste-skip-for-release</id>
+        <properties>
+            <plugins-inheritance>false</plugins-inheritance>
+        </properties>
+      </profile>
+
    </profiles>
 </project>
 

@@ -2,13 +2,13 @@
 
 find . -name "*.sh" | xargs chmod +x
 
-# build the kernel
-pushd kernel
-./build.sh || exit 1
+#remove previous python compilation classes.
+pushd tools/jython/lib/Lib/
+rm -f *.class
 popd
 
-# build other
-mvn install || exit 1
+# build qtaste
+mvn clean install -P qtaste-build-kernel-first || exit 1
 
 # build plugins
 pushd plugins_src
