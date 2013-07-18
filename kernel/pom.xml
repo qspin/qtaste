@@ -16,6 +16,31 @@
     <build>
         <finalName>qtaste-kernel</finalName>
         <plugins>
+
+            <!-- plugin to retrieve build number -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                            <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <format>{1}, {0,date,yyyy-MM-dd HH:mm:ss}</format>
+                    <items>
+                        <item>timestamp</item>
+                        <item>scmVersion</item>
+                    </items>
+                    <shortRevisionLength>5</shortRevisionLength>
+                </configuration>
+            </plugin>
+
+
             <!-- plugin to install source artifact -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -41,7 +66,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                            <Implementation-Build>SCM revision: ${buildNumber}</Implementation-Build>
                             <Kernel-Implementation-Version>${project.artifactId}-${qtaste-version}</Kernel-Implementation-Version>
                         </manifestEntries>
                     </archive>
@@ -214,7 +239,7 @@
                                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 </manifest>
                                 <manifestEntries>
-                                    <Implementation-Build>${buildNumber}</Implementation-Build>
+                                    <Implementation-Build>SCM revision: ${buildNumber}</Implementation-Build>
                                     <Kernel-Implementation-Version>${project.artifactId}-${qtaste-version}</Kernel-Implementation-Version>
                                 </manifestEntries>
                             </archive>

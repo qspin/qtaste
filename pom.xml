@@ -45,8 +45,8 @@
 
    <properties>
       <qtaste-version>${project.version}</qtaste-version>
-      <maven.build.timestamp.format>ddMMyy-HHmm</maven.build.timestamp.format>
-      <buildNumber>${maven.build.timestamp}</buildNumber>
+      <!-- <maven.build.timestamp.format>ddMMyy-HHmm</maven.build.timestamp.format>
+      <buildNumber>${maven.build.timestamp}</buildNumber> -->
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
