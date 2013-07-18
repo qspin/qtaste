@@ -20,6 +20,7 @@
 package com.qspin.qtaste.ui.tools;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
@@ -149,6 +150,18 @@ public class PythonTestScript {
     public File getTestcaseRequirements() {
     	if (m_ScriptReq==null) {
     		m_ScriptReq = findFileIn(StaticConfiguration.TEST_REQUIREMENTS_FILENAME, m_ScriptFileDir);
+    		if ( m_ScriptReq == null )
+    		{
+    			//create an empty file
+    			try {
+    				m_ScriptReq = new File(m_ScriptFileDir, StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
+    				File templateFile = new File(StaticConfiguration.CONFIG_DIRECTORY + "/templates/TestScript", StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
+    				FileUtilities.copy(templateFile, m_ScriptReq);
+				} catch (IOException e) {
+					m_ScriptReq = null;
+					logger.error(e);
+				}
+    		}
     	}
     	return m_ScriptReq;
     }
