@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
@@ -18,10 +17,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	public Boolean executeCommand(Object... data) throws QTasteTestFailException {
 		setData(data);
 		int timeout = Integer.parseInt(mData[0].toString());
-		long maxTime = new Date().getTime() + 1000 * timeout;
+		long maxTime = System.currentTimeMillis() + 1000 * timeout;
 		String componentName = mData[1].toString();
 		
-		while ( new Date().getTime() < maxTime )
+		while ( System.currentTimeMillis() < maxTime )
 		{
 			component = getComponentByName(componentName);
 			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
@@ -109,7 +108,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			mFoundComponent.requestFocus();
 			return mFoundComponent;
 		}
-		throw new QTasteTestFailException("The component \"" + name + "\" is not found.");
+		return null;
 	}
 
 	protected Component lookForComponent(String name, Component[] components) {
