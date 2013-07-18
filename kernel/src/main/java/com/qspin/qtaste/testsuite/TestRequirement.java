@@ -12,6 +12,7 @@ public final class TestRequirement {
 		mDataIdList = new LinkedList<String>();
 		mData = new HashMap<String, String>();
 		setData(ID, pId);
+		setRequirementDescription("Empty requirement description");
 	}
 	
 	public TestRequirement(TestRequirement pTestRequirement) {
