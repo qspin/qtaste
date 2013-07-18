@@ -80,7 +80,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	public String getText(String componentName) throws QTasteTestFailException {
-		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return new TextGetter().executeCommand(componentName);
 	}
 				
 	// TODO: boolean returns is useless and confusing!
