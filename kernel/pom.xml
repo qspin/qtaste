@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.qspin.qtaste</groupId>
         <artifactId>qtaste</artifactId>
-        <version>1.2.2-RC6</version>
+        <version>1.2.5-SNAPSHOT</version>
+    <relativePath>..</relativePath>
     </parent>
 
     <artifactId>qtaste-kernel</artifactId>
@@ -66,7 +66,7 @@
                 <executions>
                     <execution>
                         <id>generate-simulators-doc</id>
-                        <phase>package</phase>
+                         <phase>install</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -145,8 +145,9 @@
             <artifactId>commons-net</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.scripting</groupId>
-            <artifactId>jython-engine</artifactId>
+          <groupId>javax.script</groupId>
+          <artifactId>jython-engine</artifactId>
+          <classifier>jdk14</classifier>
         </dependency>
         <dependency>
             <groupId>jfree</groupId>
@@ -161,7 +162,7 @@
             <artifactId>forms</artifactId>
         </dependency>
         <dependency>
-            <groupId>jsyntaxpane</groupId>
+            <groupId>de.sciss</groupId>
             <artifactId>jsyntaxpane</artifactId>
         </dependency>
         <dependency>
@@ -191,4 +192,60 @@
         </dependency>
 
     </dependencies>
+
+    <profiles>
+      <profile>
+        <id>qtaste-build-kernel-first</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <executions>
+                      <execution>
+                        <id>kernel</id>
+                        <phase>install</phase>
+                        <goals>
+                          <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifestEntries>
+                                    <Implementation-Build>${buildNumber}</Implementation-Build>
+                                    <Kernel-Implementation-Version>${project.artifactId}-${qtaste-version}</Kernel-Implementation-Version>
+                                </manifestEntries>
+                            </archive>
+                            <descriptors>
+                                <descriptor>src/main/assembly/deploy.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                      </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.3.1</version>
+                    <executions>
+                      <execution>
+                        <id>javadoc</id>
+                        <phase>install</phase>
+                        <goals>
+                          <goal>install</goal>
+                        </goals>
+                        <configuration>
+                            <createChecksum>true</createChecksum>
+                        </configuration>
+                      </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </build>
+      </profile>
+    </profiles>
 </project>

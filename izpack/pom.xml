@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>1.2.2-RC6</version>
+      <version>1.2.5-SNAPSHOT</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
@@ -26,21 +24,21 @@
        <plugin>
          <groupId>org.codehaus.izpack</groupId>
          <artifactId>izpack-maven-plugin</artifactId>
-	 <version>5.0.0-beta10</version>
+     <version>5.0.0-beta10</version>
          <extensions>true</extensions>
-	 <executions>
+     <executions>
             <execution>
               <phase>package</phase>
               <goals>
                 <goal>izpack</goal>
               </goals>
-	      <configuration>
-	        <baseDir>${basedir}</baseDir>
-		<installFile>${basedir}/install.xml</installFile>
-	      </configuration>
+          <configuration>
+            <baseDir>${basedir}</baseDir>
+        <installFile>${basedir}/install.xml</installFile>
+          </configuration>
             </execution>
           </executions>
        </plugin>
-     </plugins>   
+     </plugins>
   </build>
 </project>
