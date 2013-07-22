@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
-    <repositories>
+   <repositories>
         <repository>
             <id>central</id>
             <name>Maven Central</name>
@@ -13,12 +13,17 @@
             <name>ibiblio</name>
             <url>http://repo1.maven.org/maven/mule/dependencies/maven2</url>
         </repository>
-    </repositories>
+        <repository>
+            <id>nuxeo.org</id>
+            <name>nuxeo</name>
+            <url>https://maven-us.nuxeo.org/nexus/content/groups/public/</url>
+        </repository>
+   </repositories>
 
   <scm>
-    <url>https://github.com/nfac/qtaste</url>
-    <connection>scm:git:ssh://git@github.com/nfac/qtaste.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/nfac/qtaste.git</developerConnection>
+    <url>https://github.com/qspin/qtaste</url>
+    <connection>scm:git:ssh://git@github.com/qspin/qtaste.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/qspin/qtaste.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -45,8 +50,6 @@
 
    <properties>
       <qtaste-version>${project.version}</qtaste-version>
-      <!-- <maven.build.timestamp.format>ddMMyy-HHmm</maven.build.timestamp.format>
-      <buildNumber>${maven.build.timestamp}</buildNumber> -->
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
@@ -73,6 +76,23 @@
                    <exclude>**/package-info.java</exclude>
                 </excludes>
             </configuration>
+         </plugin>
+
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0-alpha-2</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>write-project-properties</goal>
+                </goals>
+                <configuration>
+                  <outputFile>./Version.txt</outputFile>
+                </configuration>
+              </execution>
+            </executions>
          </plugin>
       </plugins>
 
@@ -108,9 +128,8 @@
             <plugin>
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>buildnumber-maven-plugin</artifactId>
-               <version>1.0-beta-3</version>
+               <version>1.2</version>
             </plugin>
-
             <plugin>
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>exec-maven-plugin</artifactId>
@@ -220,12 +239,11 @@
             <version>2.0</version>
          </dependency>
          <dependency>
-          <groupId>javax.script</groupId>
-          <artifactId>jython-engine</artifactId>
-          <version>1.0</version>
-          <classifier>jdk14</classifier>
-        </dependency>
-        <dependency>
+            <groupId>javax.script</groupId>
+            <artifactId>jython-engine</artifactId>
+            <version>1.0</version>
+         </dependency>
+         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>

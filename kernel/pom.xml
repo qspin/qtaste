@@ -20,8 +20,7 @@
             <!-- plugin to retrieve build number -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.2</version>
+               <artifactId>buildnumber-maven-plugin</artifactId>
                 <executions>
                     <execution>
                             <phase>validate</phase>
@@ -170,9 +169,8 @@
             <artifactId>commons-net</artifactId>
         </dependency>
         <dependency>
-          <groupId>javax.script</groupId>
-          <artifactId>jython-engine</artifactId>
-          <classifier>jdk14</classifier>
+            <groupId>javax.script</groupId>
+            <artifactId>jython-engine</artifactId>
         </dependency>
         <dependency>
             <groupId>jfree</groupId>
