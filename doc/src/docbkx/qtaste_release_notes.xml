@@ -7,64 +7,21 @@
   <bookinfo>
     <copyright>
       <year>2012</year>
-
       <holder>QSpin SA</holder>
     </copyright>
-
-    <revhistory>
-      <revision>
-        <revnumber>1.0</revnumber>
-
-        <date>02/10/2009</date>
-
-        <revdescription>
-          <para>First version for Open Source Release</para>
-        </revdescription>
-      </revision>
-
-      <revision>
-        <revnumber>1.1</revnumber>
-
-        <date>24/04/2012</date>
-
-        <revdescription>
-          <para>Minor updates for release notes V1.1</para>
-        </revdescription>
-      </revision>
-
-      <revision>
-        <revnumber>1.2</revnumber>
-
-        <date>25/09/2012</date>
-
-        <revdescription>
-          <para>Minor updates for release notes V1.2</para>
-        </revdescription>
-      </revision>
-
-      <revision>
-        <revnumber>1.2.1</revnumber>
-
-        <date>10/10/2012</date>
-
-        <revdescription>
-          <para>Minor updates for release notes V1.2.1</para>
-        </revdescription>
-      </revision>
-    </revhistory>
   </bookinfo>
 
   <chapter>
     <title><emphasis>Release identification</emphasis></title>
-
     <itemizedlist mark="opencircle">
       <listitem override="bullet">
-         Sourceforge subversion tag: QTASTE-1.2.1 
+         QTaste: QSpin Tailored automated system test environment
+      </listitem>
+      <listitem override="bullet">
+         Version: 2.0.0-SNAPSHOT
+
       </listitem>
 
-      <listitem override="bullet">
-         Date: 10/10/2012 
-      </listitem>
     </itemizedlist>
   </chapter>
 
@@ -72,177 +29,87 @@
     <title><emphasis>Release content</emphasis></title>
 
     <section>
-      <title><emphasis>New feature</emphasis></title>
-
-      <itemizedlist mark="opencircle">
-        <listitem override="bullet">
-           No new feature in the patch version 
-        </listitem>
-      </itemizedlist>
+      <title><emphasis>New features</emphasis></title>
+        <itemizedlist mark="opencircle"><listitem override="bullet">None</listitem></itemizedlist>
     </section>
 
     <section>
       <title><emphasis>Resolved issues</emphasis></title>
-
-      <itemizedlist mark="opencircle">
-        <listitem override="bullet">
-           [KERNEL] add windows script to start/stop a service 
-        </listitem>
-
-        <listitem override="bullet">
-           [KERNEL] Compile testapi-parent before kernel code 
-        </listitem>
-
-        <listitem override="bullet">
-           [KERNEL] Remove useless Spring dependencies 
-        </listitem>
-      </itemizedlist>
+        <itemizedlist mark="opencircle"><listitem override="bullet">JavaGUI returns immediatly if a GUI component doens't exists while we expect to return after a timeout<ulink url="https://github.com/qspin/qtaste/issues/32"> (#32)</ulink></listitem></itemizedlist>
     </section>
 
     <section>
-      <title><emphasis>Remaining issues</emphasis></title>
+      <title><emphasis>Other changes</emphasis></title>
+        <itemizedlist mark="opencircle"><listitem override="bullet">Merging branch "releases-versioning": Automated version iteration<ulink url="https://github.com/qspin/qtaste/issues/31"> (#31)</ulink></listitem><listitem override="bullet">Update Kernel build information that appears in About Dialog<ulink url="https://github.com/qspin/qtaste/issues/29"> (#29)</ulink></listitem></itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>Issues</emphasis></title>
 
       <table>
-        <title><emphasis>Viewing Issues (1-7)</emphasis></title>
+        <title><emphasis>Open Issues</emphasis></title>
 
-        <tgroup cols="6">
+        <tgroup cols="5">
           <colspec align="center"/>
 
           <thead>
             <row>
               <entry align="center"><emphasis
-              role="bold">ID</emphasis></entry>
+              role="bold">Issue</emphasis></entry>
 
               <entry align="center"><emphasis
-              role="bold">Category</emphasis></entry>
+              role="bold">Title</emphasis></entry>
 
               <entry align="center"><emphasis
-              role="bold">Severity</emphasis></entry>
-
-              <entry align="center"><emphasis
-              role="bold">Status</emphasis></entry>
+              role="bold">Assign</emphasis></entry>
 
               <entry align="center"><emphasis
               role="bold">Updated</emphasis></entry>
 
               <entry align="center"><emphasis
-              role="bold">Summary</emphasis></entry>
+              role="bold">Milestone</emphasis></entry>
             </row>
           </thead>
-
-          <tbody>
-            <row>
-              <entry><emphasis>0000010</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>TestAPI/Demo
-              </para></entry>
-
-              <entry><emphasis role="bold">major</emphasis></entry>
-
-              <entry>new</entry>
-
-              <entry>2012-10- 10</entry>
-
-              <entry>TestTranslate doesn't work anymore</entry>
-            </row>
-
-            <row>
-              <entry><emphasis>0000009</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>TestAPI/Demo</para></entry>
-
-              <entry><emphasis role="bold">major</emphasis></entry>
-
-              <entry>new</entry>
-
-              <entry>2012-10- 10</entry>
-
-              <entry>Playback demo give sometimes strange results</entry>
-            </row>
-
-            <row>
-              <entry><emphasis>0000008</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>Kernel</para></entry>
-
-              <entry>minor</entry>
-
-              <entry>new</entry>
-
-              <entry>2012-10- 10</entry>
-
-              <entry>Too many duplication of QTaste components version in all
-              pom.xml files</entry>
-            </row>
-
-            <row>
-              <entry><emphasis>0000007</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>Kernel</para></entry>
-
-              <entry>minor</entry>
-
-              <entry>new</entry>
-
-              <entry>2012-09- 24</entry>
-
-              <entry>start_java_process.sh/cmd should be renovated</entry>
-            </row>
-
-            <row>
-              <entry><emphasis>0000006</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>Kernel</para></entry>
-
-              <entry><emphasis role="bold">major</emphasis></entry>
-
-              <entry>new</entry>
-
-              <entry>2012-09- 24</entry>
-
-              <entry>QTaste is not working well if installed in a directory
-              containing spaces</entry>
-            </row>
-
-            <row>
-              <entry><emphasis>0000004</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>TestAPI/Demo</para></entry>
-
-              <entry>minor</entry>
-
-              <entry>new</entry>
-
-              <entry>2012-09- 03</entry>
-
-              <entry>Calculator demo is not working well on some Windows
-              platform</entry>
-            </row>
-
-            <row>
-              <entry><emphasis>0000002</emphasis></entry>
-
-              <entry><emphasis>[qtaste]</emphasis><para>Kernel</para></entry>
-
-              <entry><emphasis role="bold">major</emphasis></entry>
-
-              <entry>new</entry>
-
-              <entry>2012-08- 29</entry>
-
-              <entry>Log level filter</entry>
-            </row>
-          </tbody>
+            <tbody><row><entry><ulink url="https://github.com/qspin/qtaste/issues/33">#33</ulink></entry><entry>Add Issue number to commit messages</entry><entry>None</entry><entry>2013-07-18 13:24:42</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/30">#30</ulink></entry><entry>Generate Req.xml automatically if the file is not present</entry><entry><ulink url="https://github.com/lvboque">lvboque</ulink></entry><entry>2013-07-18 12:43:01</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/28">#28</ulink></entry><entry>Auto-Generate ReleaseNotes</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-17 13:38:11</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/26">#26</ulink></entry><entry>Publish QTaste in Maven public Repo</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-18 08:53:40</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/25">#25</ulink></entry><entry>whoAmI through shortcut</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-17 12:48:42</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/24">#24</ulink></entry><entry>SUT remote agent</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-17 12:52:08</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/23">#23</ulink></entry><entry>jasper report reporting</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-17 12:45:26</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/22">#22</ulink></entry><entry>jdk-tools.jar dependency</entry><entry><ulink url="https://github.com/lvboque">lvboque</ulink></entry><entry>2013-07-18 09:22:39</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/21">#21</ulink></entry><entry>Continuous Integration for QTaste</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-18 11:43:18</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/20">#20</ulink></entry><entry>Possibility to add any user data in the test report</entry><entry>None</entry><entry>2013-07-15 14:14:54</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/18">#18</ulink></entry><entry>Include screenshot(s) into the test report</entry><entry>None</entry><entry>2013-07-15 14:11:42</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/17">#17</ulink></entry><entry>Report structure refactoring</entry><entry>None</entry><entry>2013-07-15 14:10:18</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/15">#15</ulink></entry><entry>Open QuickStartGuide after qtaste installation</entry><entry>None</entry><entry>2013-07-15 14:07:48</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/14">#14</ulink></entry><entry>NullPointerException during file save.</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-15 14:06:03</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/13">#13</ulink></entry><entry>When closing the Run in loop frame, test start</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-15 14:04:04</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/10">#10</ulink></entry><entry>Playback demo give sometimes strange results</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-17 14:53:13</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/9">#9</ulink></entry><entry>Too many duplication of QTaste components version in all pom.xml files</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-18 11:42:00</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/8">#8</ulink></entry><entry>start_java_process.sh/cmd should be renovated</entry><entry>None</entry><entry>2013-07-15 13:54:38</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/7">#7</ulink></entry><entry>QTaste is not working well if installed in a directory containing spaces</entry><entry>None</entry><entry>2013-07-15 13:53:16</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/5">#5</ulink></entry><entry>Calculator demo is not working well on some Windows platform</entry><entry>None</entry><entry>2013-07-15 13:49:00</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/3">#3</ulink></entry><entry>Log level filter</entry><entry>None</entry><entry>2013-07-15 13:45:17</entry><entry>None</entry></row></tbody>
         </tgroup>
       </table>
+
+      <table>
+        <title><emphasis>Closed Issues</emphasis></title>
+
+        <tgroup cols="5">
+          <colspec align="center"/>
+
+          <thead>
+            <row>
+              <entry align="center"><emphasis
+              role="bold">Issue</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Title</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Assign</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Updated</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Milestone</emphasis></entry>
+            </row>
+          </thead>
+            <tbody><row><entry><ulink url="https://github.com/qspin/qtaste/issues/34">#34</ulink></entry><entry>Process info not always correct in stop_process.sh</entry><entry><ulink url="https://github.com/dergo">dergo</ulink></entry><entry>2013-07-23 08:24:38</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/32">#32</ulink></entry><entry>JavaGUI returns immediatly if a GUI component doens't exists while we expect to return after a timeout</entry><entry><ulink url="https://github.com/simjan">simjan</ulink></entry><entry>2013-07-18 12:42:26</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/31">#31</ulink></entry><entry>Merging branch "releases-versioning": Automated version iteration</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-22 14:25:39</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/29">#29</ulink></entry><entry>Update Kernel build information that appears in About Dialog</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-18 13:24:42</entry><entry>2.0.0</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/27">#27</ulink></entry><entry>Update Github repo with last SourceForge</entry><entry><ulink url="https://github.com/nfac">nfac</ulink></entry><entry>2013-07-17 13:28:18</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/19">#19</ulink></entry><entry>Review the documentation chain</entry><entry>None</entry><entry>2013-07-15 14:13:56</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/16">#16</ulink></entry><entry>Some log messages are not filtered out correctly</entry><entry>None</entry><entry>2013-07-15 14:09:30</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/12">#12</ulink></entry><entry>When a test succeed, after a restart, other tests are not run</entry><entry>None</entry><entry>2013-07-15 14:02:51</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/11">#11</ulink></entry><entry>TestTranslate doesn't work anymore</entry><entry>None</entry><entry>2013-07-15 14:00:47</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/6">#6</ulink></entry><entry>TestTranslate demo is not working anymore</entry><entry>None</entry><entry>2013-07-15 13:51:44</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/4">#4</ulink></entry><entry>Testbed configuration popup options are disabled</entry><entry>None</entry><entry>2013-07-15 13:47:10</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/2">#2</ulink></entry><entry>unix scripts permission</entry><entry>None</entry><entry>2013-07-15 13:43:53</entry><entry>None</entry></row><row><entry><ulink url="https://github.com/qspin/qtaste/issues/1">#1</ulink></entry><entry>unix scripts permission</entry><entry>None</entry><entry>2013-07-18 10:37:40</entry><entry>None</entry></row></tbody>
+        </tgroup>
+      </table>
+
     </section>
   </chapter>
 
   <chapter>
     <title><emphasis>Distribution</emphasis></title>
 
-    <para>This version of QTaste is stored on sourceforge. <ulink
-    url="https://sourceforge.net/projects/qtaste"/></para>
+    <para>This version of QTaste is stored on Github: <ulink
+    url="https://github.com/qspin/qtaste"/></para>
   </chapter>
 
   <chapter>
@@ -253,7 +120,7 @@
 
       <itemizedlist mark="opencircle">
         <listitem override="bullet">
-           This document is provided as a PDF file. It explains how to start QTaste and start QTaste demos. It also contains the compilation procedure of the QTaste framework. 
+           This document is provided as a PDF file. It explains how to start QTaste and start QTaste demos. It also contains the compilation procedure of the QTaste framework.
         </listitem>
       </itemizedlist>
     </section>
@@ -263,7 +130,7 @@
 
       <itemizedlist mark="opencircle">
         <listitem override="bullet">
-           This document is provided as a PDF file and is also accessible directly from the QTaste GUI as html (Help Menu). 
+           This document is provided as a PDF file and is also accessible directly from the QTaste GUI as html (Help Menu).
         </listitem>
       </itemizedlist>
     </section>
@@ -273,7 +140,7 @@
 
       <itemizedlist mark="opencircle">
         <listitem override="bullet">
-           This document or accessible through the “About” in the Help menu. 
+           This document or accessible through the “About” in the Help menu.
         </listitem>
       </itemizedlist>
     </section>
@@ -284,27 +151,27 @@
 
     <itemizedlist mark="opencircle">
       <listitem override="bullet">
-         The QTaste test thread can be blocked in some particular conditions and prevent the QTaste kernel to restart it (due to some java Thread.stop() limitation). 
+         The QTaste test thread can be blocked in some particular conditions and prevent the QTaste kernel to restart it (due to some java Thread.stop() limitation).
       </listitem>
 
       <listitem override="bullet">
-         If a TestAPI interface extends another java interface, the generated TestAPI. Documentation doesn’t inherit the javadoc of the extended interface. (workaround: The javadoc have to be recopied in the TestAPI interface). 
+         If a TestAPI interface extends another java interface, the generated TestAPI. Documentation doesn’t inherit the javadoc of the extended interface. (workaround: The javadoc have to be recopied in the TestAPI interface).
       </listitem>
 
       <listitem override="bullet">
-         No example of Simulators is provided. 
+         No example of Simulators is provided.
       </listitem>
 
       <listitem override="bullet">
-         Only Jython is supported as QTaste TestScript scripting language. 
+         Only Jython is supported as QTaste TestScript scripting language.
       </listitem>
 
       <listitem override="bullet">
-         QTaste starts/stops command is not working on Windows XP Home edition as “taskkill” and “tasklist” executables are not provided on this edition. 
+         QTaste starts/stops command is not working on Windows XP Home edition as “taskkill” and “tasklist” executables are not provided on this edition.
       </listitem>
 
       <listitem override="bullet">
-         The calculator demonstration is not working on Windows 7. 
+         The calculator demonstration is not working on Windows 7.
       </listitem>
     </itemizedlist>
   </chapter>

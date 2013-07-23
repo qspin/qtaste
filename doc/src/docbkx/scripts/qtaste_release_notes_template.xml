@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book>
+  <title><emphasis>QTaste Release Notes</emphasis></title>
+
+  <bookinfo>
+    <copyright>
+      <year>2012</year>
+      <holder>QSpin SA</holder>
+    </copyright>
+  </bookinfo>
+
+  <chapter>
+    <title><emphasis>Release identification</emphasis></title>
+    <itemizedlist mark="opencircle">
+      <listitem override="bullet">
+         QTaste: QSpin Tailored automated system test environment
+      </listitem>
+      <listitem override="bullet">
+         Version: {QTasteVersion}
+      </listitem>
+
+    </itemizedlist>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Release content</emphasis></title>
+
+    <section>
+      <title><emphasis>New features</emphasis></title>
+        {QTasteNewFeatures}
+    </section>
+
+    <section>
+      <title><emphasis>Resolved issues</emphasis></title>
+        {QTasteFixedIssues}
+    </section>
+
+    <section>
+      <title><emphasis>Other changes</emphasis></title>
+        {QTasteChanges}
+    </section>
+
+    <section>
+      <title><emphasis>Issues</emphasis></title>
+
+      <table>
+        <title><emphasis>Open Issues</emphasis></title>
+
+        <tgroup cols="5">
+          <colspec align="center"/>
+
+          <thead>
+            <row>
+              <entry align="center"><emphasis
+              role="bold">Issue</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Title</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Assign</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Updated</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Milestone</emphasis></entry>
+            </row>
+          </thead>
+            {GithubOpenIssuesTableBody}
+        </tgroup>
+      </table>
+
+      <table>
+        <title><emphasis>Closed Issues</emphasis></title>
+
+        <tgroup cols="5">
+          <colspec align="center"/>
+
+          <thead>
+            <row>
+              <entry align="center"><emphasis
+              role="bold">Issue</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Title</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Assign</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Updated</emphasis></entry>
+
+              <entry align="center"><emphasis
+              role="bold">Milestone</emphasis></entry>
+            </row>
+          </thead>
+            {GithubClosedIssuesTableBody}
+        </tgroup>
+      </table>
+
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Distribution</emphasis></title>
+
+    <para>This version of QTaste is stored on Github: <ulink
+    url="https://github.com/qspin/qtaste"/></para>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Applicable documents</emphasis></title>
+
+    <section>
+      <title><emphasis>Quick Start Guide</emphasis></title>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           This document is provided as a PDF file. It explains how to start QTaste and start QTaste demos. It also contains the compilation procedure of the QTaste framework.
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste User Manual</emphasis></title>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           This document is provided as a PDF file and is also accessible directly from the QTaste GUI as html (Help Menu).
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title><emphasis>QTaste Release Notes</emphasis></title>
+
+      <itemizedlist mark="opencircle">
+        <listitem override="bullet">
+           This document or accessible through the “About” in the Help menu.
+        </listitem>
+      </itemizedlist>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title><emphasis>Known limitations</emphasis></title>
+
+    <itemizedlist mark="opencircle">
+      <listitem override="bullet">
+         The QTaste test thread can be blocked in some particular conditions and prevent the QTaste kernel to restart it (due to some java Thread.stop() limitation).
+      </listitem>
+
+      <listitem override="bullet">
+         If a TestAPI interface extends another java interface, the generated TestAPI. Documentation doesn’t inherit the javadoc of the extended interface. (workaround: The javadoc have to be recopied in the TestAPI interface).
+      </listitem>
+
+      <listitem override="bullet">
+         No example of Simulators is provided.
+      </listitem>
+
+      <listitem override="bullet">
+         Only Jython is supported as QTaste TestScript scripting language.
+      </listitem>
+
+      <listitem override="bullet">
+         QTaste starts/stops command is not working on Windows XP Home edition as “taskkill” and “tasklist” executables are not provided on this edition.
+      </listitem>
+
+      <listitem override="bullet">
+         The calculator demonstration is not working on Windows 7.
+      </listitem>
+    </itemizedlist>
+  </chapter>
+</book>
