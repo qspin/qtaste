@@ -48,7 +48,7 @@
       <table>
         <title><emphasis>Open Issues</emphasis></title>
 
-        <tgroup cols="5">
+        <tgroup cols="4">
           <colspec align="center"/>
 
           <thead>
@@ -60,10 +60,7 @@
               role="bold">Title</emphasis></entry>
 
               <entry align="center"><emphasis
-              role="bold">Assign</emphasis></entry>
-
-              <entry align="center"><emphasis
-              role="bold">Updated</emphasis></entry>
+              role="bold">Type</emphasis></entry>
 
               <entry align="center"><emphasis
               role="bold">Milestone</emphasis></entry>
@@ -76,7 +73,7 @@
       <table>
         <title><emphasis>Closed Issues</emphasis></title>
 
-        <tgroup cols="5">
+        <tgroup cols="4">
           <colspec align="center"/>
 
           <thead>
@@ -88,10 +85,7 @@
               role="bold">Title</emphasis></entry>
 
               <entry align="center"><emphasis
-              role="bold">Assign</emphasis></entry>
-
-              <entry align="center"><emphasis
-              role="bold">Updated</emphasis></entry>
+              role="bold">Type</emphasis></entry>
 
               <entry align="center"><emphasis
               role="bold">Milestone</emphasis></entry>

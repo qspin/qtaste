@@ -1,3 +1,3 @@
 #! /bin/bash
 
-mvn clean package
+mvn clean resources:resources package

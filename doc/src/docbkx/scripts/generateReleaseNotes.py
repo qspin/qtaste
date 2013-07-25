@@ -40,7 +40,6 @@ def createIssuesItems(aGithubRepo, aQtasteVersion, aState, aLabelName=""):
     if(milestone != None):
         for issue in aGithubRepo.get_issues(milestone=milestone,\
                                             state=aState):
-
             isIssueToBePrinted = False
             if(aLabelName == ""): # Query issues wich are neither features nor bugs
                 isIssueToBePrinted = True
@@ -68,9 +67,8 @@ def createIssuesItems(aGithubRepo, aQtasteVersion, aState, aLabelName=""):
                 #item.text = issue.title
 
                 noneIssuesWereFound = False
-
-
         # End FOR
+
     if(noneIssuesWereFound):
         item = Element('listitem')
         item.set('override', "bullet")
@@ -97,9 +95,6 @@ def createIssuesTableBody(aGithubRepo, aState):
     tbodyStr = ""
     # Iterates through Issues read from GitHub
     for issue in aGithubRepo.get_issues(state=aState):
-        assignTo = "None"
-        if(issue.assignee != None):
-            assignTo = issue.assignee.login
 
         # Add row and append to root
         row = Element('row')
@@ -119,21 +114,16 @@ def createIssuesTableBody(aGithubRepo, aState):
         title.text = issue.title
         row.append(title)
 
-        # Assign
-        assignee = Element('entry')
-        if(assignTo != "None"):
-            assigneeLink = Element('ulink')
-            assigneeLink.set('url', issue.assignee.html_url)
-            assigneeLink.text = assignTo
-            assignee.append(assigneeLink)
-        else:
-            assignee.text = assignTo
-        row.append(assignee)
-
-        # Updated
-        updated = Element('entry')
-        updated.text = str(issue.updated_at)
-        row.append(updated)
+        # Type
+        issueType = Element('entry')
+        strIssueTypes = ""
+        for label in issue.get_labels():
+            if(label.name.startswith("type")):
+                strIssueTypes += label.name.split(":")[1] + " "
+        if(strIssueTypes == ""):
+            strIssueTypes = "Not defined"
+        issueType.text = strIssueTypes
+        row.append(issueType)
 
         # Milestone
         milestone = Element('entry')

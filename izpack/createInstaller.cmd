@@ -1,3 +1,3 @@
 @echo off
 
-mvn clean package
+mvn clean resources:resources package
