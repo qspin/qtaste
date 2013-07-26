@@ -136,11 +136,13 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			LOGGER.debug("checkComponentIsVisible on a null component");
 			return false;
 		}
-		while (currentComponent != null)
+		while (currentComponent != null )
 		{
+			boolean lastRun = currentComponent instanceof Window; //Dialog can have another window as parent.
+			
 			if ( !currentComponent.isVisible() )
 			{
-				if ( c != currentComponent )
+				if ( c == currentComponent )
 				{
 					LOGGER.debug("The component " + c.getName() + " is not visible.");
 				}
@@ -150,7 +152,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				}
 				return false;
 			}
-			currentComponent = currentComponent.getParent();
+			if ( lastRun )
+				break;
+			else
+				currentComponent = currentComponent.getParent();
 		}
 		return true;
 	}
@@ -158,7 +163,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	protected abstract void prepareActions() throws QTasteTestFailException;
 	protected abstract void doActionsInSwingThread()throws QTasteTestFailException;
 
-	private void setData(Object[] data)
+	protected void setData(Object[] data)
 	{
 		this.mData = data;
 	}
