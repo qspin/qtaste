@@ -6,6 +6,11 @@ set QTASTE_ROOT=%~dp0\..
 set PATH=%PATH%;%QTASTE_ROOT%\tools\GnuWin32\bin
 set QTASTEDOC=%QTASTE_ROOT%\doc
 
+rem generate release notes
+pushd src\docbkx\scripts\
+./generateReleaseNotes.py
+popd
+
 rem generate documentation using maven
 call mvn pre-site
 

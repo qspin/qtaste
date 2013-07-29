@@ -15,18 +15,33 @@
    <packaging>jar</packaging>
 
    <properties>
+     <!-- Installer install.xml path -->
+     <installerDirPath>${basedir}/installer</installerDirPath>
+     <installerFileName>install.xml</installerFileName>
      <!-- Installer variables -->
      <info.appName>QTaste</info.appName>
+     <info.appVersion>${parent.version}</info.appVersion>
    </properties>
 
    <build>
+      <resources>
+        <resource>
+          <filtering>true</filtering>
+          <directory>${basedir}</directory>
+          <targetPath>${installerDirPath}</targetPath>
+          <includes>
+            <include>${installerFileName}</include>
+          </includes>
+        </resource>
+      </resources>
+
      <plugins>
        <plugin>
          <groupId>org.codehaus.izpack</groupId>
          <artifactId>izpack-maven-plugin</artifactId>
-     <version>5.0.0-beta10</version>
+         <version>5.0.0-beta10</version>
          <extensions>true</extensions>
-     <executions>
+         <executions>
             <execution>
               <phase>package</phase>
               <goals>
@@ -34,11 +49,12 @@
               </goals>
           <configuration>
             <baseDir>${basedir}</baseDir>
-        <installFile>${basedir}/install.xml</installFile>
+        <installFile>${installerDirPath}/${installerFileName}</installFile>
           </configuration>
             </execution>
           </executions>
        </plugin>
      </plugins>
+
   </build>
 </project>

@@ -30,9 +30,9 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                                        <addonVersion>${project.version}</addonVersion>
-                                        <addonName>${project.name}</addonName>
-                                        <addonDescription>${project.description}</addonDescription>
+                            <addonVersion>${project.version}</addonVersion>
+                            <addonName>${project.name}</addonName>
+                            <addonDescription>${project.description}</addonDescription>
                             <addonMainClass>com.qspin.qtaste.demo.addon.DemoAddOn</addonMainClass>
                         </manifestEntries>
                     </archive>

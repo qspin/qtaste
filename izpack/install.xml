@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
 
-<!-- 
+<!--
     QTaste installation file.
-    
+
     To compile it :
     - go in the <QTASTE_HOME>/izpack directory
     - call "<PATH_TO_IZPACK>/compile install.xml"
@@ -10,29 +10,30 @@
 
 <installation version="1.0">
 
-    <!-- 
+    <!--
         The info section.
         The meaning of the tags should be natural ...
     -->
     <info>
-        <appname>QTaste</appname>
-        <appversion>1.2.2-RC6</appversion>
+        <appname>${info.appName}</appname>
+        <appversion>${info.appVersion}</appversion>
         <authors>
             <author name="David Ergo" email="der@qspin.be"/>
             <author name="Vincent Dubois" email="vdu@qspin.be"/>
             <author name="Laurent Vanboquestal" email="lvb@qspin.be"/>
             <author name="Simon Janssens" email="sja@qspin.be"/>
+            <author name="Nuno Coelho" email="nco@qspin.be"/>
         </authors>
-        <url>http://sourceforge.net/projects/qtaste</url>
+        <url>https://github.com/qspin/qtaste</url>
     </info>
 
-    <!-- 
+    <!--
         The gui preferences indication.
         Sets the installer window to 640x480. It will not be able to change the size.
     -->
     <guiprefs width="640" height="480" resizable="yes"/>
 
-    <!-- 
+    <!--
         The locale section.
         Asks here to include the English and French langpacks.
     -->
@@ -41,7 +42,7 @@
         <langpack iso3="fra"/>
     </locale>
 
-    <!-- 
+    <!--
         The resources section.
         The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
     -->
@@ -51,7 +52,7 @@
         <res id="TargetPanel.dir.windows" src="TargetDir.txt" />
     </resources>
 
-    <!-- 
+    <!--
         The panels section.
         We indicate here which panels we want to use. The order will be respected.
     -->
@@ -59,7 +60,7 @@
         <panel classname="HelloPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
-<!--        <panel classname="TreePacksPanel"/> 
+<!--        <panel classname="TreePacksPanel"/>
 cfr http://jira.codehaus.org/browse/IZPACK-740
 to be rechecked in version 5.0.0-beta11 or later
 -->
@@ -69,7 +70,7 @@ to be rechecked in version 5.0.0-beta11 or later
         <panel classname="ProcessPanel"/>
     </panels>
 
-    <!-- 
+    <!--
         The packs section.
         We specify here our packs.
     -->
@@ -77,258 +78,261 @@ to be rechecked in version 5.0.0-beta11 or later
         <pack name="Kernel" required="yes">
             <description>The kernel files - required to use qtaste</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="bin/*"/>
-		<include name="kernel/target/qtaste-kernel-deploy.jar"/>
-		<include name="lib/**"/>
-		<include name="COPYING"/>
-		<include name="COPYING.LESSER"/>
-		<include name="conf/**"/>
-		<include name="doc/**"/>
-		<include name="tools/**"/>
-		<include name="Testbeds/**"/>
-		<include name="TestSuites/**"/>
-		<include name="plugins/"/>
-		<include name="TestCampaigns/*"/>
-		<exclude name="conf/gui.xml"/>
-		<exclude name="tools/jython/lib/cachedir"/>
-		<exclude name="**/*.class"/>
-		<exclude name="**/Thumbs.db"/>
-		<exclude name="**/*.pdf"/>
-		<exclude name="plugins/**"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
-	    <executable targetfile="$INSTALL_PATH/bin/generate-TestSuites-doc.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>	    
-	    <executable targetfile="$INSTALL_PATH/bin/qtasteUI_start.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/bin/qtaste_campaign_start.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/bin/qtaste_start.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/bin/generate-TestStepsModules-doc.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/bin/generate-TestSuite-doc.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/bin/generate-TestCampaign-doc.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/bin/generate-TestScript-doc.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/TestSuites/TestSuite_QTaste/Run_TestSuite.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/jython/bin/jython_for_komodo.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/jython/bin/jython.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/stop_process.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/stop_java_process.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/start_process.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/start_java_process.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/rexec_with_result.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/rsh_with_result.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	    <executable targetfile="$INSTALL_PATH/tools/cleanup_portmap.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
+        <include name="bin/*"/>
+        <include name="kernel/target/qtaste-kernel-deploy.jar"/>
+        <include name="lib/**"/>
+        <include name="COPYING"/>
+        <include name="COPYING.LESSER"/>
+        <include name="conf/**"/>
+        <include name="doc/pdf/*.pdf"/>
+        <include name="tools/**"/>
+        <include name="Testbeds/**"/>
+        <include name="TestSuites/**"/>
+        <include name="plugins/"/>
+        <include name="TestCampaigns/*"/>
+        <exclude name="conf/gui.xml"/>
+        <exclude name="tools/jython/lib/cachedir"/>
+        <exclude name="**/*.class"/>
+        <exclude name="**/Thumbs.db"/>
+        <exclude name="**/*.pdf"/>
+        <exclude name="plugins/**"/>
+        <exclude name=".git"/>
+        <exclude name=".git/**"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        <include name="tools/PyGithub/**"/>
+        </fileset>
+        <executable targetfile="$INSTALL_PATH/bin/generate-TestSuites-doc.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/qtasteUI_start.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/qtaste_campaign_start.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/qtaste_start.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/generate-TestStepsModules-doc.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/generate-TestSuite-doc.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/generate-TestCampaign-doc.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/bin/generate-TestScript-doc.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/TestSuites/TestSuite_QTaste/Run_TestSuite.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/jython/bin/jython_for_komodo.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/jython/bin/jython.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/stop_process.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/stop_java_process.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/start_process.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/start_java_process.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/rexec_with_result.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/rsh_with_result.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+        <executable targetfile="$INSTALL_PATH/tools/cleanup_portmap.sh" stage="never">
+          <os family="unix"/>
+        </executable>
         </pack>
-	<!-- ignore source packages
+    <!-- ignore source packages
         <pack name="The kernel sources" required="yes" preselected="yes" parent="Kernel">
-	    <description>The source code of the kernel</description>
+        <description>The source code of the kernel</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="pom.xml"/>
-		<include name="clean.*"/>
-		<include name="izpack/install.xml"/>
-		<include name="kernel/src/**"/>
-		<include name="kernel/**"/>
-		<include name="testapi-parent/*"/>
-		<include name="testapi-parent/testapi-deploy/**"/>
-		<include name="toolbox/*"/>
-		<include name="toolbox/testapi/*"/>
-		<include name="toolbox/testapi/src/**"/>
-		<include name="lib/**"/>
-		<exclude name="tools/jython/lib/cachedir"/>
-		<exclude name="tools/jython/lib/**/*.class"/>
-		<exclude name="tools/TestScriptDoc/*.class"/>
-		<exclude name="**/target/**"/>
-		<exclude name="**/Thumbs.db"/>
-		<!- excludes eclipse files -->
-		<!--
-		<exclude name="**/.settings/**"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
+        <include name="pom.xml"/>
+        <include name="clean.*"/>
+        <include name="izpack/install.xml"/>
+        <include name="kernel/src/**"/>
+        <include name="kernel/**"/>
+        <include name="testapi-parent/*"/>
+        <include name="testapi-parent/testapi-deploy/**"/>
+        <include name="toolbox/*"/>
+        <include name="toolbox/testapi/*"/>
+        <include name="toolbox/testapi/src/**"/>
+        <include name="lib/**"/>
+        <exclude name="tools/jython/lib/cachedir"/>
+        <exclude name="tools/jython/lib/**/*.class"/>
+        <exclude name="tools/TestScriptDoc/*.class"/>
+        <exclude name="**/target/**"/>
+        <exclude name="**/Thumbs.db"/>
+        <!- excludes eclipse files -->
+        <!--
+        <exclude name="**/.settings/**"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        </fileset>
         </pack>
-	-->
+    -->
 <!--
-	<pack name="Plugins" required="no" preselected="yes">
-	    <description>The plugins</description>
+    <pack name="Plugins" required="no" preselected="yes">
+        <description>The plugins</description>
         </pack>
-	<pack name="Recoder" required="no" preselected="yes" parent="Plugins">
-	    <description>The recorder agent plugin. This plugin is used to record action in a java GUI and store all events in xml file.</description>
+    <pack name="Recoder" required="no" preselected="yes" parent="Plugins">
+        <description>The recorder agent plugin. This plugin is used to record action in a java GUI and store all events in xml file.</description>
         </pack>
 -->
         <pack name="The recorder binaries" required="yes" preselected="yes" parent="Recoder">
-	    <description>The recorder binaries</description>
+        <description>The recorder binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/SUT/qtaste-recorder-deploy.jar"/>
-	    </fileset>
+        <include name="plugins/SUT/qtaste-recorder-deploy.jar"/>
+        </fileset>
         </pack>
-	<!-- ignore source packages
+    <!-- ignore source packages
         <pack name="The recorder sources" required="yes" preselected="yes" parent="Recoder">
-	    <description>The recorder sources</description>
+        <description>The recorder sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins_src/recorder/src/**"/>
-		<include name="plugins_src/recorder/pom.xml"/>
-		<!- excludes eclipse files -->
-		<!--		
-		<exclude name="**/.settings/**"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
+        <include name="plugins_src/recorder/src/**"/>
+        <include name="plugins_src/recorder/pom.xml"/>
+        <!- excludes eclipse files -->
+        <!--
+        <exclude name="**/.settings/**"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        </fileset>
         </pack>
-	-->
+    -->
 <!--
-	<pack name="Tools" required="no" preselected="yes" parent="Plugins">
-	    <description>The tools plugin. This plugin can convert a recording file to a python script.</description>
+    <pack name="Tools" required="no" preselected="yes" parent="Plugins">
+        <description>The tools plugin. This plugin can convert a recording file to a python script.</description>
         </pack>
 -->
         <pack name="The tools binaries" required="yes" preselected="yes" parent="Tools">
-	    <description>The tools binaries</description>
+        <description>The tools binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/SUT/qtaste-tools-deploy.jar"/>
-	    </fileset>
+        <include name="plugins/SUT/qtaste-tools-deploy.jar"/>
+        </fileset>
         </pack>
 
-	<!-- ignore source packages
+    <!-- ignore source packages
         <pack name="The tools sources" required="yes" preselected="yes" parent="Tools">
-	    <description>The tools sources</description>
+        <description>The tools sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins_src/tools/src/**"/>
-		<include name="plugins_src/tools/pom.xml"/>
-		<!- excludes eclipse files -->
-		<!--
-		<exclude name="**/.settings/**"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
+        <include name="plugins_src/tools/src/**"/>
+        <include name="plugins_src/tools/pom.xml"/>
+        <!- excludes eclipse files -->
+        <!--
+        <exclude name="**/.settings/**"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        </fileset>
         </pack>
-	-->
+    -->
 <!--
-	<pack name="Java GUI" required="no" preselected="yes" parent="Plugins">
-	    <description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
+    <pack name="Java GUI" required="no" preselected="yes" parent="Plugins">
+        <description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
         </pack>
 -->
         <pack name="The Java GUI binaries" required="yes" preselected="yes" parent="Java GUI">
-	    <description>The Java GUI binaries</description>
+        <description>The Java GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/SUT/qtaste-javagui-deploy.jar"/>
-	    </fileset>
+        <include name="plugins/SUT/qtaste-javagui-deploy.jar"/>
+        </fileset>
         </pack>
-	<!-- ignore source packages
+    <!-- ignore source packages
         <pack name="The Java GUI sources" required="yes" preselected="yes" parent="Java GUI">
-	    <description>The Java GUI sources</description>
+        <description>The Java GUI sources</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins_src/javagui/src/**"/>
-		<include name="plugins_src/javagui/pom.xml"/>
-		<!- excludes eclipse files -->
-		<!--
-		<exclude name="**/.settings/**"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
+        <include name="plugins_src/javagui/src/**"/>
+        <include name="plugins_src/javagui/pom.xml"/>
+        <!- excludes eclipse files -->
+        <!--
+        <exclude name="**/.settings/**"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        </fileset>
         </pack>
-	-->
+    -->
 <!--
-	<pack name="Demo" required="no" preselected="yes">
-	    <description>The demonstrations</description>
+    <pack name="Demo" required="no" preselected="yes">
+        <description>The demonstrations</description>
         </pack>
 -->
         <pack name="The demo binaries" required="yes" preselected="yes" parent="Demo">
-	    <description>The demo files - examples</description>
+        <description>The demo files - examples</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
-		<include name="demo/testapi/target/TestAPI-doc/**"/>
-		<include name="demo/pywinauto-0.3.8/**"/>
-		<include name="demo/COPYING"/>
-		<include name="demo/COPYING.LESSER"/>
-		<include name="demo/Testbeds/**"/>
-		<include name="demo/TestSuites/**"/>
-		<include name="demo/selenium-server-*.jar"/>
-		<include name="demo/startUI.*"/>
-		<include name="demo/launchRecording.*"/>
-		<include name="demo/launchConverter.*"/>
-		<include name="demo/TestCampaigns/**"/>
-		<exclude name="**/Thumbs.db"/>
-		<exclude name="**/*.class"/>
-		<!-- excludes eclipse files -->
-		<exclude name="**/.settings"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
-	     <executable targetfile="$INSTALL_PATH/demo/startUI.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	     <executable targetfile="$INSTALL_PATH/demo/launchRecording.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
-	     <executable targetfile="$INSTALL_PATH/demo/launchConverter.sh" stage="never">
-	      <os family="unix"/>
-	    </executable>
+        <include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
+        <include name="demo/testapi/target/TestAPI-doc/**"/>
+        <include name="demo/pywinauto-0.3.8/**"/>
+        <include name="demo/COPYING"/>
+        <include name="demo/COPYING.LESSER"/>
+        <include name="demo/Testbeds/**"/>
+        <include name="demo/TestSuites/**"/>
+        <include name="demo/selenium-server-*.jar"/>
+        <include name="demo/startUI.*"/>
+        <include name="demo/launchRecording.*"/>
+        <include name="demo/launchConverter.*"/>
+        <include name="demo/TestCampaigns/**"/>
+        <exclude name="**/Thumbs.db"/>
+        <exclude name="**/*.class"/>
+        <!-- excludes eclipse files -->
+        <exclude name="**/.settings"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        </fileset>
+         <executable targetfile="$INSTALL_PATH/demo/startUI.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+         <executable targetfile="$INSTALL_PATH/demo/launchRecording.sh" stage="never">
+          <os family="unix"/>
+        </executable>
+         <executable targetfile="$INSTALL_PATH/demo/launchConverter.sh" stage="never">
+          <os family="unix"/>
+        </executable>
         </pack>
-	<!-- ignore source packages
+    <!-- ignore source packages
         <pack name="The demo sources" required="yes" preselected="yes" parent="Demo">
-	    <description>The source code of the demo</description>
+        <description>The source code of the demo</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="demo/testapi/src/**"/>
-		<include name="demo/testapi/pom.xml"/>
-		<include name="demo/build.*"/>
-		<exclude name="**/target/**"/>
-		<exclude name="**/Thumbs.db"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-	    </fileset>
+        <include name="demo/testapi/src/**"/>
+        <include name="demo/testapi/pom.xml"/>
+        <include name="demo/build.*"/>
+        <exclude name="**/target/**"/>
+        <exclude name="**/Thumbs.db"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
+        </fileset>
         </pack>
-	-->
+    -->
         <pack name="Add-on demonstrator" required="yes" preselected="yes" parent="Add-on">
-	    <description>The Add-on demonstrator</description>
+        <description>The Add-on demonstrator</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/qtaste-demo-addon-deploy.jar"/>
-	    </fileset>
+        <include name="plugins/qtaste-demo-addon-deploy.jar"/>
+        </fileset>
         </pack>
         <pack name="ConstrolScript builder Add-On" required="yes" preselected="yes" parent="Add-on">
-	    <description>The ConstrolScript builder Add-On. Allow through the QTaste user interface to active/desactive control script actions.</description>
+        <description>The ConstrolScript builder Add-On. Allow through the QTaste user interface to active/desactive control script actions.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="plugins/ControlScriptBuilderAddOn-deploy.jar"/>
-	    </fileset>
+        <include name="plugins/ControlScriptBuilderAddOn-deploy.jar"/>
+        </fileset>
         </pack>
         <pack name="Docs" required="yes" preselected="yes">
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
-		<include name="doc/*.pdf"/>
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
+        <include name="doc/pdf/*.pdf"/>
+        <exclude name="**/.svn"/>
+        <exclude name="**/.svn/**"/>
             </fileset>
         </pack>
     </packs>

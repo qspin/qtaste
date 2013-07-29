@@ -1,0 +1,7 @@
+*.pyc
+GithubCredentials.py
+/dist/
+/build/
+/MANIFEST
+/PyGithub.egg-info/
+/.coverage

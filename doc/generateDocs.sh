@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# generate release notes
+pushd src/docbkx/scripts/
+./generateReleaseNotes.py
+popd
+
 # generate documentation using maven
 mvn pre-site
 
