@@ -162,6 +162,33 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
 		new TableRowSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue, pOccurenceIndex);		
 	}
+	
+
+	
+	public boolean isPopupDisplayed() throws QTasteException
+	{
+		return new PopupChecker().executeCommand();
+	}
+	
+	public String getPopupText() throws QTasteException
+	{
+		return new PopupTextGetter().executeCommand(true).get(0);
+	}
+	
+	public String[] getAllPopupText() throws QTasteException
+	{
+		return new PopupTextGetter().executeCommand(false).toArray(new String[0]);
+	}
+	
+	public void setPopupValue(String value) throws QTasteException
+	{
+		new PopupTextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, value);
+	}
+	
+	public void clickOnPopupButton(String buttonText) throws QTasteException
+	{
+		new PopupButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, buttonText);
+	}
 
 	@Override
 	public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException{

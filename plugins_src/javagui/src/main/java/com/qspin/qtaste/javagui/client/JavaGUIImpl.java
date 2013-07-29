@@ -154,6 +154,31 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.setComponentEnabledTimeout(pTimeOut);
 	}
 	
+	public boolean isPopupDisplayed() throws QTasteException
+	{
+		return mProxy.isPopupDisplayed();
+	}
+	
+	public String getPopupText() throws QTasteException
+	{
+		return mProxy.getPopupText();
+	}
+	
+	public String[] getAllPopupText() throws QTasteException
+	{
+		return mProxy.getAllPopupText();
+	}
+	
+	public void setPopupValue(String value) throws QTasteException
+	{
+		mProxy.setPopupValue(value);
+	}
+	
+	public void clickOnPopupButton(String buttonText) throws QTasteException
+	{
+		mProxy.clickOnPopupButton(buttonText);
+	}
+	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";

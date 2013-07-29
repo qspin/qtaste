@@ -19,6 +19,8 @@
 
 package com.qspin.qtaste.javagui;
 
+import javax.swing.JOptionPane;
+
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
@@ -34,33 +36,33 @@ public interface JavaGUI {
     * @param pTimeOut the new timeout value in seconds.
     * @throws IllegalArgumentException if the timeout value is negative.
     */
-   public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException;
+   void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException;
 	
    /**
      * Create a snapshot of the specified GUI componentName and save it as the specified filename in the current working directory.
      * @param componentName an identifier of the GUI component.
      * @param fileName the name of the image file.
      */
-   public void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException;
+   void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException;
    
    /**
      * Get the list of all the component names.
 	 * @return an array of String containing all the names of the component of the GUI application.
      */
-   public String [] listComponents() throws QTasteTestFailException;
+   String [] listComponents() throws QTasteTestFailException;
       
    /**
      * Check if a specified component is enabled.
 	 * @return <code>true</code> if the specified component is enabled.
      */
-   public boolean isEnabled(String componentName) throws QTasteTestFailException;
+   boolean isEnabled(String componentName) throws QTasteTestFailException;
       
    /**
      * Click on the specified componentName.
      * @param componentName an identifier of the GUI component.     
 	 * @return <code>true</code> if the action occurs correcly.
      */
-   public boolean clickOnButton(String componentName) throws QTasteTestFailException;
+   boolean clickOnButton(String componentName) throws QTasteTestFailException;
 
     /**
      * Click on the specified componentName during a specified period of time.
@@ -68,14 +70,14 @@ public interface JavaGUI {
 	 * @param pressTime an identifier of the GUI component.     
 	 * @return <code>true</code> if the action occurs correcly.
      */
-   public boolean clickOnButton(String componentName, int pressTime) throws QTasteTestFailException;
+   boolean clickOnButton(String componentName, int pressTime) throws QTasteTestFailException;
    
     /**
      * Get the text used for the specied component.
      * @param componentName an identifier of the GUI component.     
 	 * @return Return the text of the specified componentName.
      */
-   public String getText(String componentName) throws QTasteTestFailException;
+   String getText(String componentName) throws QTasteTestFailException;
    
     /**
      * Set the text for the specied component.
@@ -83,7 +85,7 @@ public interface JavaGUI {
 	 * @param value the new value for the text.
 	 * @return <code>true</code> if the action occurs correcly.
      */
-   public boolean setText(String componentName, String value) throws QTasteTestFailException;
+   boolean setText(String componentName, String value) throws QTasteTestFailException;
     
    
    /**
@@ -92,7 +94,7 @@ public interface JavaGUI {
     * @param tabIndex the tab index (first at 0). 
     * @return <code>true</code> if the action occurs correcly.
     */
-   public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException;
+   boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException;
    
     /**
      * Select the specified componentName.
@@ -101,16 +103,16 @@ public interface JavaGUI {
 	 * @return <code>true</code> if the action occurs correcly.
      */
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?
-   public boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException;
+   boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?   
-   public boolean selectValue(String componentName, String value) throws QTasteTestFailException;
+   boolean selectValue(String componentName, String value) throws QTasteTestFailException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   public boolean selectIndex(String componentName, int index) throws QTasteTestFailException;
+   boolean selectIndex(String componentName, int index) throws QTasteTestFailException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException;
+   boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
    
@@ -119,20 +121,20 @@ public interface JavaGUI {
     * @return the name of the component
     * @throws QTasteTestFailException
     */
-   public String whoAmI() throws QTasteTestFailException;
+   String whoAmI() throws QTasteTestFailException;
    
    /**
     * Set the name of the GUI component that have the focus with the specified name
     * @throws QTasteTestFailException 
     */
-   public void setComponentName(String name) throws QTasteTestFailException;
+   void setComponentName(String name) throws QTasteTestFailException;
    
    /**
     * Send the specified key code to the application
     * @param keycode key code of the key sent to the application.
     * @throws QTasteTestFailException If some internal errors occurs.
     */
-   public void pressKey(int keycode) throws QTasteTestFailException;
+   void pressKey(int keycode) throws QTasteTestFailException;
    
    /**
     * Send the specified key code to the application
@@ -140,23 +142,53 @@ public interface JavaGUI {
     * @param delay delay for the button pressed in milliseconds.
     * @throws QTasteTestFailException If some internal errors occurs. 
     */
-   public void pressKey(int keycode, long delay) throws QTasteTestFailException;
+   void pressKey(int keycode, long delay) throws QTasteTestFailException;
    
    /**
     * Checks if a component with the name exist or not.
     * @param pComponentName The component's name.
     * @return <code>true</code> if the component exist.
     */
-   public boolean exist(String pComponentName);
+   boolean exist(String pComponentName);
    
    /**
     * Counts the number of components that have the enabled state.
     * @param isEnabled <code>false</code> if the disabled components have to be counted.
     * @return The number of components that have the enabled state.
     */
-   public int getEnabledComponentCount(boolean isEnabled);
+   int getEnabledComponentCount(boolean isEnabled);
 
-   public int countTableRows(String pComponentName, String pColumnName, String pColumnValue)throws QTasteException ;
-   public void selectInTable(String pComponentName, String pColumnName, String pColumnValue)throws QTasteException ;
-   public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex)throws QTasteException ;
+   int countTableRows(String pComponentName, String pColumnName, String pColumnValue)throws QTasteException;
+   void selectInTable(String pComponentName, String pColumnName, String pColumnValue)throws QTasteException;
+   void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex)throws QTasteException;
+   
+   /**
+    * Checks if there is at least one popup displayed.
+    * @return <code>true</code> if there is at least one popup.
+    */
+   boolean isPopupDisplayed() throws QTasteException;
+   
+   /**
+    * Retrieves the text (message) of the active popup. 
+    * @return the text (message) of the active popup.
+    */
+   String getPopupText() throws QTasteException;
+   /**
+    * Retrieves all popup texts.
+    * @return all popup texts.
+    */
+   String[] getAllPopupText() throws QTasteException;
+   
+   /**
+    * inserts a value in the active popup field.
+    * @param value the value to insert.
+    * @see {@link JOptionPane#showInputDialog(Object)}
+    */
+   void setPopupValue(String value) throws QTasteException;
+   
+   /**
+    * Clicks on the button with the text in the active popup.
+    * @param buttonText the button text.
+    */
+   void clickOnPopupButton(String buttonText) throws QTasteException;
 }
