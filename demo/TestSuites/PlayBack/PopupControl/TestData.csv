@@ -1,0 +1,4 @@
+COMMENT;TIMEOUT;TAB_IDX;TAB_COMPONENT_NAME;POPUP_VALUE;IS_POPUP_VALUE_NUMERIC;CONFIRM
+Invalid popup Value -> no popup;60;6;TABBED_PANE;Test;false;false
+Ask for 5 popups but do not confirm;120;6;TABBED_PANE;5;true;false
+Open 5 popups;120;6;TABBED_PANE;5;true;true
