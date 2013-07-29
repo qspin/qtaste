@@ -1,3 +1,7 @@
 #! /bin/bash
 
-mvn clean package
+mvn clean resources:resources package
+
+if [ -d "installer" ]; then
+    rm -rf ./installer
+fi

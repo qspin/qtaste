@@ -18,7 +18,7 @@ else
 for(( i = 0 ; i < 5 ; i++ )) do
       kill $PID
       sleep 1s
-      INFO=$(ps -fu $USER | grep "$P_NAME" | grep -v "grep" | grep -v "stop_process_process")
+      INFO=$(ps -fu $USER | grep "$P_NAME" | grep -v "grep" | grep -v "stop_process")
       set -- $INFO
       PID=$2
       if [ -z $PID ]; then
