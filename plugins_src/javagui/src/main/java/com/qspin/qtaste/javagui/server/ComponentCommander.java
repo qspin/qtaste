@@ -4,6 +4,11 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
@@ -101,4 +106,56 @@ abstract class ComponentCommander {
 	protected boolean mFindWithEqual;
 	protected Component mFoundComponent;
 
+	/**
+	 * Finds all popups. A Component is a popup if it's a JDialog, modal and not resizable.
+	 * @return the list of all found popups.
+	 */
+	protected static List<JDialog> findPopups()
+	{
+		//find all popups
+		List<JDialog> popupFound = new ArrayList<JDialog>();
+		for (int w = 0; w < Frame.getWindows().length; w++) {
+			Window window = Frame.getWindows()[w];
+//			LOGGER.debug("parse window - type : " + window.getClass());
+			if ( window instanceof JDialog )
+			{
+				//it's maybe a popup... a popup is modal and not resizable and containt a JOptionPane component.
+				JDialog dialog = (JDialog) window;
+				if ( dialog.isShowing() && dialog.isModal() && !dialog.isResizable() && getJOptionPane(dialog) != null ) 
+				{
+					LOGGER.info("Find a popup with the title '" + dialog.getTitle() +"'.");
+					popupFound.add(dialog);
+				}
+			}
+		}
+		return popupFound;
+	}
+	
+//	private static boolean containJOptionPane(Container cont)
+//	{
+//		for  (Component c : cont.getComponents() )
+//		{
+//			if ( getc instanceof JOptionPane )
+//				return true;
+//			else if ( (c instanceof Container) && containJOptionPane((Container)c) )
+//					return true;
+//		}
+//		return false;
+//	}
+	
+	protected static JOptionPane getJOptionPane(Component c)
+	{
+		if ( c instanceof JOptionPane )
+			return (JOptionPane)c;
+		else if (c instanceof Container )
+		{
+			for ( Component comp :  ((Container)c).getComponents() )
+			{
+				JOptionPane jop = getJOptionPane(comp); 
+				if ( jop != null )
+					return jop;
+			}
+		}
+		return null;		
+	}
 }
