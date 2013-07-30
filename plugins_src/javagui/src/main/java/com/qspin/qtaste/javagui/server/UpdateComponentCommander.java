@@ -106,6 +106,14 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		{
 			mFoundComponent = mFoundComponents.get(0);
 			mFoundComponent.requestFocus();
+			Component parent = mFoundComponent;
+			//active the parent window
+			while ( parent != null && !(parent instanceof Window) )
+			{
+				parent = parent.getParent();
+			}
+			if ( parent != null )
+				((Window)parent).toFront();
 			return mFoundComponent;
 		}
 		return null;
@@ -153,7 +161,9 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				return false;
 			}
 			if ( lastRun )
+			{
 				break;
+			}
 			else
 				currentComponent = currentComponent.getParent();
 		}

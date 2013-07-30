@@ -55,6 +55,15 @@ abstract class ComponentCommander {
 		if ( mFoundComponent != null )
 		{
 			mFoundComponent.requestFocus();
+			Component parent = mFoundComponent.getParent();
+//			//active the parent
+//			while ( parent != null && !(parent instanceof Window) )
+//			{
+//				parent = parent.getParent();
+//			}
+//			if ( parent != null )
+//				((Window)parent).toFront();
+			
 			return mFoundComponent;
 		}
 		throw new QTasteTestFailException("The component \"" + name + "\" is not found.");
@@ -130,18 +139,6 @@ abstract class ComponentCommander {
 		}
 		return popupFound;
 	}
-	
-//	private static boolean containJOptionPane(Container cont)
-//	{
-//		for  (Component c : cont.getComponents() )
-//		{
-//			if ( getc instanceof JOptionPane )
-//				return true;
-//			else if ( (c instanceof Container) && containJOptionPane((Container)c) )
-//					return true;
-//		}
-//		return false;
-//	}
 	
 	protected static JOptionPane getJOptionPane(Component c)
 	{
