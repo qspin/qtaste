@@ -29,7 +29,7 @@ def step1():
 	except:
 		testAPI.stopTest(Status.FAIL, "Fail to insert " + text)
 
-		time.sleep(1)
+	time.sleep(1)
 	
 	if testData.getBooleanValue("COMMAND_RESULT"):
 		result = javaguiMI.getText(component)

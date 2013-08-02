@@ -24,34 +24,30 @@ class TextSetter extends UpdateComponentCommander {
 			forceToLooseFocus(component);						
 		}
 		
-		// Support for Swing		
-		if (component instanceof JTextComponent) {			
-			System.out.println("Swing case");
+		// Support for Swing
+	    if ( component instanceof JFormattedTextField )
+	    {
+			try
+			{
+				JFormattedTextField field = ((JFormattedTextField)component);
+				field.requestFocus();
+				field.setText(value);
+				//launch an exception for invalid input
+				field.commitEdit();
+				//lose focus to format the value
+				forceToLooseFocus(component);
+			}
+			catch (ParseException e)
+			{
+				// Invalid value in field
+				//return false;
+				//TODO: Handle the case of invalid values
+			}
+		}
+		if (component instanceof JTextComponent) {
 			JTextComponent t = (JTextComponent) component;
 			t.setText(value);
-			t.getParent().requestFocus();			
-		}
-		
-		if (component instanceof JTextComponent) {
-		    if ( component instanceof JFormattedTextField ){
-				try {
-					JFormattedTextField field = ((JFormattedTextField)component);
-					field.requestFocus();
-					field.setText(value);
-					//launch an exception for invalid input
-					field.commitEdit();
-					//lose focus to format the value
-					forceToLooseFocus(component);
-					} catch (ParseException e) {
-						// Invalid value in field
-						//return false;
-						//TODO: Handle the case of invalid values
-					}
-				}
-		    else {
-		    	((JTextComponent) component).setText(value);    	
-		    	((JTextComponent) component).requestFocus();		    	
-			}				
+			forceToLooseFocus(component);
 		}
 		//throw new QTasteTestFailException("JavaGUI cannot setText for such component " + c.getClass().getName());
 	}
@@ -63,7 +59,7 @@ class TextSetter extends UpdateComponentCommander {
 			parent.getParent();
 		}
 		if ( parent != null ) {
-			parent.requestFocus();			
+			parent.requestFocus();
 		}
 	}
 
