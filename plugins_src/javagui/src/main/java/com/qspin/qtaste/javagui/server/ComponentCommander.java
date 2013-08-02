@@ -56,13 +56,13 @@ abstract class ComponentCommander {
 		{
 			mFoundComponent.requestFocus();
 			Component parent = mFoundComponent.getParent();
-//			//active the parent
-//			while ( parent != null && !(parent instanceof Window) )
-//			{
-//				parent = parent.getParent();
-//			}
-//			if ( parent != null )
-//				((Window)parent).toFront();
+			//active the parent
+			while ( parent != null && !(parent instanceof Window) )
+			{
+				parent = parent.getParent();
+			}
+			if ( parent != null )
+				((Window)parent).toFront();
 			
 			return mFoundComponent;
 		}
