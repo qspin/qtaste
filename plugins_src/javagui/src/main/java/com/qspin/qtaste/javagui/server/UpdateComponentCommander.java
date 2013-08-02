@@ -7,6 +7,8 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -50,10 +52,34 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	public void run()
 	{
 		try {
+		    setComponentFrameVisible();
 			doActionsInSwingThread();
 		}
 		catch (QTasteTestFailException e) {
 			LOGGER.fatal(e.getMessage(), e);
+		}
+	}
+	
+	private void setComponentFrameVisible()
+	{
+		JFrame newFrame = new JFrame();
+		newFrame.add(new JLabel("boembabies, is this in front ?"));
+		newFrame.pack();
+		newFrame.setVisible(true);
+		newFrame.toFront();
+	    newFrame.setVisible(false);
+	    newFrame.dispose();
+	    
+	    Component parent = component;
+		//active the parent window
+		while ( parent != null && !(parent instanceof Window) )
+		{
+			parent = parent.getParent();
+		}
+		if ( parent != null )
+		{
+			((Window)parent).toFront();
+			((Window)parent).requestFocus();
 		}
 	}
 	

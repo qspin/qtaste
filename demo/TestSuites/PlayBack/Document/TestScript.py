@@ -11,7 +11,7 @@ from qtaste import *
 import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
-javaguiMI = testAPI.getJavaGUI(INSTANCE_ID="PlaybackApp")
+javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 
 importTestScript("TabbedPaneSelection")
 
@@ -22,15 +22,14 @@ def step1():
 	"""
 	
 	doSubSteps(TabbedPaneSelection.changeTab)
-	
 	text = testData.getValue("VALUE")
 	component = testData.getValue("COMPONENT_NAME")
 	try:
-	    javaguiMI.setText(component, text) != testData.getBooleanValue("COMMAND_RESULT")
+		javaguiMI.setText(component, text) != testData.getBooleanValue("COMMAND_RESULT")
 	except:
 		testAPI.stopTest(Status.FAIL, "Fail to insert " + text)
-	
-	time.sleep(1)
+
+		time.sleep(1)
 	
 	if testData.getBooleanValue("COMMAND_RESULT"):
 		result = javaguiMI.getText(component)
