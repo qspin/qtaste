@@ -185,20 +185,22 @@ def main():
             ## Add here more cases, if needed to retrieve more info
         fVersion.close()
 
-
-
     print "reading release notes info from repository ..."
 
-    # Read New Features for current QTasteVersion <=> Milestone
-    strNewFeaturesIssues = createNewFeaturesSection(repo, qtasteVersionForRelease)
-    # Read Bug Fixes for current QTasteVersion <=> Milestone
-    strBugFixesIssues = createBugFixesSection(repo, qtasteVersionForRelease)
-    # Read Other Changes for current QTasteVersion <=> Milestone
-    strChangesIssues = createChangesSection(repo, qtasteVersionForRelease)
-    # Read Open Issues
-    tbodyStrOpenIssues = createIssuesTableBody(repo, "open")
-    # Read Closed Issues
-    tbodyStrClosedIssues = createIssuesTableBody(repo, "closed")
+    try: # Query Github repository
+        # Read New Features for current QTasteVersion <=> Milestone
+        strNewFeaturesIssues = createNewFeaturesSection(repo, qtasteVersionForRelease)
+        # Read Bug Fixes for current QTasteVersion <=> Milestone
+        strBugFixesIssues = createBugFixesSection(repo, qtasteVersionForRelease)
+        # Read Other Changes for current QTasteVersion <=> Milestone
+        strChangesIssues = createChangesSection(repo, qtasteVersionForRelease)
+        # Read Open Issues
+        tbodyStrOpenIssues = createIssuesTableBody(repo, "open")
+        # Read Closed Issues
+        tbodyStrClosedIssues = createIssuesTableBody(repo, "closed")
+    except GithubException as e:
+        print "Could not connect to Github:"
+        sys.exit(e)
 
     # Add the tbody with Remaining issues
     strFile = strFile.format(QTasteVersion=qtasteVersionCurrent,\

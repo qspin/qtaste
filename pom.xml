@@ -2,31 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
-   <repositories>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>http://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>ibiblio.org</id>
-            <name>ibiblio</name>
-            <url>http://repo1.maven.org/maven/mule/dependencies/maven2</url>
-        </repository>
-        <repository>
-            <id>nuxeo.org</id>
-            <name>nuxeo</name>
-            <url>https://maven-us.nuxeo.org/nexus/content/groups/public/</url>
-        </repository>
-   </repositories>
-
   <scm>
     <url>https://github.com/qspin/qtaste</url>
     <connection>scm:git:ssh://git@github.com/qspin/qtaste.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/qspin/qtaste.git</developerConnection>
     <tag>HEAD</tag>
-  </scm>
-
+   </scm>
+  
+   <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+   </parent>
+  
    <groupId>com.qspin.qtaste</groupId>
    <artifactId>qtaste</artifactId>
    <version>2.0.0-SNAPSHOT</version>
@@ -42,6 +30,44 @@
        </license>
    </licenses>
 
+   <developers>
+        <developer>
+          <id>qadmin</id>
+          <name>administrator</name>
+          <email>qadmin@qspin.be</email>
+        </developer>
+        <developer>
+          <id>lvboque</id>
+          <name>Laurent Vanboquestal</name>
+          <email>lvb@qspin.be</email>
+        </developer>
+        <developer>
+          <id>lvboque</id>
+          <name>Laurent Vanboquestal</name>
+          <email>lvb@qspin.be</email>
+        </developer>
+        <developer>
+          <id>nfac</id>
+          <name>Nuno Coelho</name>
+          <email>nco@qspin.be</email>
+        </developer>
+        <developer>
+          <id>simjan</id>
+          <name>Simon Janssens</name>
+          <email>sja@qspin.be</email>
+        </developer>
+        <developer>
+          <id>davidergo</id>
+          <name>David Ergo</name>
+          <email>der@qspin.be</email>
+        </developer>
+        <developer>
+          <id>remy40</id>
+          <name>Remy</name>
+          <email>rba@qspin.be</email>
+        </developer>
+  </developers>
+
   <modules>
       <module>testapi-parent</module>
       <module>kernel</module>
@@ -49,6 +75,7 @@
    </modules>
 
    <properties>
+      <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
       <qtaste-version>${project.version}</qtaste-version>
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
@@ -105,7 +132,6 @@
                <version>2.6.1</version>
             </plugin>
 
-
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-resources-plugin</artifactId>
@@ -149,7 +175,7 @@
                 <version>2.3.1</version>
                 <configuration>
                     <createChecksum>true</createChecksum>
-                </configuration>
+                </configuration>               
             </plugin>
          </plugins>
       </pluginManagement>
@@ -207,6 +233,7 @@
          <!-- EXTERNAL LIBRARIES -->
          <!-- Libraries are ordered by group/artifact. -->
 
+
          <dependency>
           <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
@@ -238,13 +265,8 @@
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>2.0</version>
-         </dependency>
-         <dependency>
-            <groupId>javax.script</groupId>
-            <artifactId>jython-engine</artifactId>
-            <version>1.0</version>
-         </dependency>
-         <dependency>
+         </dependency>      
+		<dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>
@@ -377,6 +399,28 @@
         </properties>
       </profile>
 
+      <profile>
+        <id>release-sign-artifacts</id>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>1.1</version>
+              <executions>
+                <execution>
+                  <id>sign-artifacts</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+      
    </profiles>
 </project>
 

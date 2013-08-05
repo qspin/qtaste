@@ -2,9 +2,14 @@
 
 find . -name "*.sh" | xargs chmod +x
 
-#remove previous python compilation classes.
+# remove previous python compilation classes
 pushd tools/jython/lib/Lib/
 rm -f *.class
+popd
+
+# install kernel 3rd party artifacts
+pushd kernel
+mvn clean -P qtaste-install-3rd-artifacts || exit 1
 popd
 
 # build qtaste
