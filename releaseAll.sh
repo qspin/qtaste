@@ -12,13 +12,29 @@
 # 9) Commit the modified POMs
 # --------------------------------------------------------------------------------------------------------------------
 # usage: releaseAll.sh [-snapshot]
-# optional arg: [-snapshot] only perform the above step 8) - SNAPSHOT version iterates without prompt -
+# optional arg: [-newSnapshot] only perform the above step 8) - SNAPSHOT version iterates without prompt -
+
+# Install kernel 3rd party artifacts
+pushd kernel
+mvn clean -P qtaste-install-3rd-artifacts || exit 1
+popd
 
 if [ "$1" == "-help" ]; then
     echo "Usage: releaseAll.sh [-snapshot] "
     exit
-elif [ "$1" == "-snapshot" ]; then
-    mvn release:clean release:update-versions -P qtaste-all-modules-release
+elif [ "$1" == "-newSnapshot" ]; then
+    mvn release:clean release:update-versions -P qtaste-all-modules-release || exit 1
+elif [ "$1" == "-deploySnapshot" ]; then
+	# Generate PGP Signatures With Maven
+	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1
+
+	# Deploy Snapshots QTaste  
+	mvn clean deploy -P qtaste-all-modules-release
 else
-    mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release
+    mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1
+    
+    # Generate PGP Signatures With Maven
+	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1
+	
+    mvn release:perform -P qtaste-all-modules-release || exit 1
 fi
