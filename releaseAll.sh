@@ -1,6 +1,13 @@
 #! /bin/bash
 
+# Requirements:
+# - A GPG client must is installed on your command line path.
+#   Please download GPG from http://www.gnupg.org/download/, 
+#  follow the instructions and install it to your system. 
+
+
 # Relases a new qtaste version by executing the following steps:
+# Prepare for Release:
 # 1) Check that there are no uncommitted changes in the sources
 # 2) Check that there are no SNAPSHOT dependencies
 # 3) Change the version in the POMs from x-SNAPSHOT to a new version (you will be prompted for the versions to use)
@@ -10,9 +17,21 @@
 # 7) Tag the code in the SCM with a version name (this will be prompted for)
 # 8) Modify the version in the POMs to a new value y-SNAPSHOT (these values will also be prompted for)
 # 9) Commit the modified POMs
+# Perform Release:
+# 1) Checkout from the SCM URL (tag prompted in step 7)
+# 2) Run the predefined Maven goals to release the project:
+#	 -This will stage QTaste (from tag version prompted in step 7) into sonatype, being prepared to be released.
+# To finally release QTaste (from stageg to released) follow step 8a) of tutorial:
+# https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 # --------------------------------------------------------------------------------------------------------------------
-# usage: releaseAll.sh [-snapshot]
-# optional arg: [-newSnapshot] only perform the above step 8) - SNAPSHOT version iterates without prompt -
+# usage: releaseAll.sh [-newSnapshot] [-deploySnapshot] 
+# optional arg: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
+#               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
+#    repository https://oss.sonatype.org/content/repositories/snapshots 
+#
+# Note: Only projects owners have rights to deploy QTaste.
+#		When deploying a Snapshot or Release a Passphrase
+#       will be promped.
 
 # Install kernel 3rd party artifacts
 pushd kernel
