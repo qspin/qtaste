@@ -2,6 +2,7 @@
 
 import sys
 import string
+import os
 sys.path.append('../../../../tools/PyGithub')
 
 from github import Github
@@ -144,6 +145,15 @@ def main():
     print "QTaste: Generating Release Notes"
     print ""
 
+	# Delete the release notes file
+    releaseNotesOutputFilePath = "../qtaste_release_notes.xml"
+    if(os.path.exists(releaseNotesOutputFilePath)):			
+        try:
+            os.remove(releaseNotesOutputFilePath)
+        except OSError as e:
+            print "Cannot generate Release Notes file: being used by the system"
+            sys.exit(e)
+
     try: # Connect to Github repository
         g = Github()
         repo = g.get_repo("qspin/qtaste")
@@ -212,8 +222,7 @@ def main():
 
     print "creating release notes file -> qtaste_release_notes.xml ..."
 
-    # Generate ReleaseNotes XML output file
-    releaseNotesOutputFilePath = "../qtaste_release_notes.xml"
+    # Generate ReleaseNotes XML output file    
     try:
         fOutXml = open(releaseNotesOutputFilePath, 'w')
     except IOError as e:
