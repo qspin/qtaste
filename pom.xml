@@ -400,7 +400,7 @@
       </profile>
 
       <profile>
-        <id>release-sign-artifacts</id>
+        <id>qtaste-generate-signature-artifacts</id>
         <build>
           <plugins>
             <plugin>
