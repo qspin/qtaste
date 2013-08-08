@@ -10,6 +10,10 @@ The QTaste framework is mainly developed in java programming language and python
 on any platform running java VM 1.6. However, it has been only validated on Windows (XP Pro / Vista) and Linux platform
 (OpenSuse 11.04).
 
+Download
+========
+
+[https://github.com/qspin/qtaste/releases/qtaste-v1.2.2-RC6/985/qtaste-izpack-1.2.2-rc6-installer.jar]
 
 QTaste System Requirements
 ==========================
