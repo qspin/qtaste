@@ -179,6 +179,11 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.clickOnPopupButton(buttonText);
 	}
 	
+	@Override
+	public String getComponentColor(String componentName) throws QTasteException {
+		return mProxy.getComponentColor(componentName);
+	}
+	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";

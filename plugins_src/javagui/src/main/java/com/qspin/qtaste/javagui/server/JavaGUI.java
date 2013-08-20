@@ -197,6 +197,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		
 		COMPONENT_ENABLED_TIMEOUT = pTimeOut;
 	}
+
+	@Override
+	public String getComponentColor(String componentName) throws QTasteException {
+		return new ComponentColorGetter().executeCommand(componentName);
+	}
 	
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
 }

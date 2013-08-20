@@ -191,4 +191,11 @@ public interface JavaGUI {
     * @param buttonText the button text.
     */
    void clickOnPopupButton(String buttonText) throws QTasteException;
+   
+   /**
+    * Searches the component identified by the name and returns the components color.
+    * @param componentName the component's name.
+    * @return the found component's color.
+    */
+   String getComponentColor(String componentName) throws QTasteException;
 }
