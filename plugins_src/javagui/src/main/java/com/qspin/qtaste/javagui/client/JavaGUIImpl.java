@@ -180,8 +180,13 @@ public class JavaGUIImpl implements JavaGUI {
 	}
 	
 	@Override
-	public String getComponentColor(String componentName) throws QTasteException {
-		return mProxy.getComponentColor(componentName);
+	public String getComponentBackgroundColor(String componentName) throws QTasteException {
+		return mProxy.getComponentBackgroundColor(componentName);
+	}
+	
+	@Override
+	public String getComponentForegroundColor(String componentName) throws QTasteException {
+		return mProxy.getComponentForegroundColor(componentName);
 	}
 	
 	protected JavaGUI mProxy;

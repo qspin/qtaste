@@ -9,24 +9,22 @@ import javax.swing.text.JTextComponent;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-public class ComponentColorGetter extends ComponentCommander {
+public class ComponentBackgroundColorGetter extends ComponentCommander {
 
 	@Override
 	String executeCommand(Object... data) throws QTasteException {
 		Component c = getComponentByName(data[0].toString());
 		if (c != null) {
-			if (c instanceof JTextComponent) {
-				return getHexadecimalColor(((JTextComponent) c).getForeground());
-			} else if (c instanceof Container) {
+			if (c instanceof Container) {
 				return getHexadecimalColor(((Container) c).getBackground());
 			} else {
-				throw new QTasteTestFailException("It is not possible to retrieve the color of this kind of component " + c.getClass() );
+				throw new QTasteTestFailException("It is not possible to retrieve the background color of this kind of component " + c.getClass() );
 			}
 		}
 		return "";
 	}
 	
-	String getHexadecimalColor(Color c)
+	protected String getHexadecimalColor(Color c)
 	{
 		String colorCode = "#";
 		if ( c.getRed() < 16 )

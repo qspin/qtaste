@@ -193,9 +193,16 @@ public interface JavaGUI {
    void clickOnPopupButton(String buttonText) throws QTasteException;
    
    /**
-    * Searches the component identified by the name and returns the components color.
+    * Searches the component identified by the name and returns the component's background color.
     * @param componentName the component's name.
-    * @return the found component's color.
+    * @return the found component's background color with the RGB color format expressed in hexadecimal.
     */
-   String getComponentColor(String componentName) throws QTasteException;
+   String getComponentBackgroundColor(String componentName) throws QTasteException;
+   
+   /**
+    * Searches the component identified by the name and returns the component's foreground color.
+    * @param componentName the component's name.
+    * @return the found component's foreground color with the RGB color format expressed in hexadecimal.
+    */
+   String getComponentForegroundColor(String componentName) throws QTasteException;
 }

@@ -199,8 +199,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	@Override
-	public String getComponentColor(String componentName) throws QTasteException {
-		return new ComponentColorGetter().executeCommand(componentName);
+	public String getComponentBackgroundColor(String componentName) throws QTasteException {
+		return new ComponentBackgroundColorGetter().executeCommand(componentName);
+	}
+
+	@Override
+	public String getComponentForegroundColor(String componentName) throws QTasteException {
+		return new ComponentForegroundColorGetter().executeCommand(componentName);
 	}
 	
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
