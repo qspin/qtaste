@@ -10,7 +10,8 @@ del /q *.class
 popd
 
 rem build using maven
-call mvn clean install assembly:single || set FAILED=1
+call mvn clean -P qtaste-intall-3rd-artifacts || set FAILED=1
+call mvn install assembly:single || set FAILED=1
 
 
 rem pause if build failed

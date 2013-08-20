@@ -16,7 +16,7 @@
     <build>
         <finalName>qtaste-kernel</finalName>
         <plugins>
-
+	
             <!-- plugin to retrieve build number -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -38,8 +38,7 @@
                     <shortRevisionLength>5</shortRevisionLength>
                 </configuration>
             </plugin>
-
-
+            
             <!-- plugin to install source artifact -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -129,7 +128,8 @@
                     </environmentVariables>
                     <workingDirectory>..</workingDirectory> <!-- run from QTaste root directory -->
                 </configuration>
-            </plugin>
+            </plugin>          
+            
         </plugins>
     </build>
 
@@ -165,13 +165,14 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-net</groupId>
-            <artifactId>commons-net</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.script</groupId>
             <artifactId>jython-engine</artifactId>
+            <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+        </dependency>        
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
@@ -266,9 +267,39 @@
                       </execution>
                     </executions>
                 </plugin>
-
             </plugins>
-        </build>
+        </build>        
       </profile>
+      
+      <profile>
+        <id>qtaste-install-3rd-artifacts</id>
+        <build>
+            <plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.3.1</version>
+					<executions>
+					  <execution>
+						<id>install-local-jython-engine_kernel</id>
+						<phase>pre-clean</phase>						
+						<configuration>
+							<file>${qtaste-parent-dir}/../tools/jython/lib/jython-engine-1.0.jar</file>
+							<repositoryLayout>default</repositoryLayout>
+							<groupId>javax.script</groupId>
+							<artifactId>jython-engine</artifactId>
+							<version>1.0</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					  </execution>					  
+					</executions>
+				</plugin>
+			</plugins>
+		</build>        
+      </profile>      
     </profiles>
 </project>

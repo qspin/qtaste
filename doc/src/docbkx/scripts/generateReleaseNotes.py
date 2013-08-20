@@ -2,6 +2,7 @@
 
 import sys
 import string
+import os
 sys.path.append('../../../../tools/PyGithub')
 
 from github import Github
@@ -144,6 +145,15 @@ def main():
     print "QTaste: Generating Release Notes"
     print ""
 
+	# Delete the release notes file
+    releaseNotesOutputFilePath = "../qtaste_release_notes.xml"
+    if(os.path.exists(releaseNotesOutputFilePath)):			
+        try:
+            os.remove(releaseNotesOutputFilePath)
+        except OSError as e:
+            print "Cannot generate Release Notes file: being used by the system"
+            sys.exit(e)
+
     try: # Connect to Github repository
         g = Github()
         repo = g.get_repo("qspin/qtaste")
@@ -185,20 +195,22 @@ def main():
             ## Add here more cases, if needed to retrieve more info
         fVersion.close()
 
-
-
     print "reading release notes info from repository ..."
 
-    # Read New Features for current QTasteVersion <=> Milestone
-    strNewFeaturesIssues = createNewFeaturesSection(repo, qtasteVersionForRelease)
-    # Read Bug Fixes for current QTasteVersion <=> Milestone
-    strBugFixesIssues = createBugFixesSection(repo, qtasteVersionForRelease)
-    # Read Other Changes for current QTasteVersion <=> Milestone
-    strChangesIssues = createChangesSection(repo, qtasteVersionForRelease)
-    # Read Open Issues
-    tbodyStrOpenIssues = createIssuesTableBody(repo, "open")
-    # Read Closed Issues
-    tbodyStrClosedIssues = createIssuesTableBody(repo, "closed")
+    try: # Query Github repository
+        # Read New Features for current QTasteVersion <=> Milestone
+        strNewFeaturesIssues = createNewFeaturesSection(repo, qtasteVersionForRelease)
+        # Read Bug Fixes for current QTasteVersion <=> Milestone
+        strBugFixesIssues = createBugFixesSection(repo, qtasteVersionForRelease)
+        # Read Other Changes for current QTasteVersion <=> Milestone
+        strChangesIssues = createChangesSection(repo, qtasteVersionForRelease)
+        # Read Open Issues
+        tbodyStrOpenIssues = createIssuesTableBody(repo, "open")
+        # Read Closed Issues
+        tbodyStrClosedIssues = createIssuesTableBody(repo, "closed")
+    except GithubException as e:
+        print "Could not connect to Github:"
+        sys.exit(e)
 
     # Add the tbody with Remaining issues
     strFile = strFile.format(QTasteVersion=qtasteVersionCurrent,\
@@ -210,8 +222,7 @@ def main():
 
     print "creating release notes file -> qtaste_release_notes.xml ..."
 
-    # Generate ReleaseNotes XML output file
-    releaseNotesOutputFilePath = "../qtaste_release_notes.xml"
+    # Generate ReleaseNotes XML output file    
     try:
         fOutXml = open(releaseNotesOutputFilePath, 'w')
     except IOError as e:

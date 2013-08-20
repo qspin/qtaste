@@ -1,11 +1,17 @@
 @echo off
-echo Compiling the kernel ...
-pushd kernel
-call build.cmd
+
+rem remove previous python compilation classes
+pushd ..\tools\jython\lib\Lib\
+del /q *.class
 popd
 
-echo Compiling other stuff ...
-call mvn install
+rem install kernel 3rd party artifacts
+pushd kernel
+call mvn clean -P qtaste-install-3rd-artifacts
+popd
+
+echo Building qtaste ...
+call mvn clean install -P qtaste-build-kernel-first
 
 echo Compiling plugins ...
 pushd plugins_src
