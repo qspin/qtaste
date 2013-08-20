@@ -62,24 +62,40 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	
 	private void setComponentFrameVisible()
 	{
-		JFrame newFrame = new JFrame();
-		newFrame.add(new JLabel("boembabies, is this in front ?"));
-		newFrame.pack();
-		newFrame.setVisible(true);
-		newFrame.toFront();
-	    newFrame.setVisible(false);
-	    newFrame.dispose();
-	    
-	    Component parent = component;
+		LOGGER.trace("Component to use is " + component.getName() );
+		Component parent = component;
 		//active the parent window
-		while ( parent != null && !(parent instanceof Window) )
+		while ( !(parent instanceof Window) )
 		{
 			parent = parent.getParent();
 		}
-		if ( parent != null )
+		LOGGER.trace("parent is a window ? " + (parent instanceof Window) );
+			    
+		if ( !((Window)parent).isActive() )
 		{
+			LOGGER.trace("try to active the window");
+			JFrame newFrame = new JFrame();
+			newFrame.pack();
+			newFrame.setVisible(true);
+			newFrame.toFront();
+	    	newFrame.setVisible(false);
+	    	newFrame.dispose();
 			((Window)parent).toFront();
 			((Window)parent).requestFocus();
+			for ( int i =0; i < 10 ; i++ )
+			{
+				LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
+				if ( ((Window)parent).isActive() )
+					break;
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					LOGGER.warn("Exception during the component search sleep...");
+				}
+			}
+		} else {
+			LOGGER.trace("parent is a window is already active");
 		}
 	}
 	
@@ -92,7 +108,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		//search for all components which contains the name
 		for (int w = 0; w < Frame.getWindows().length; w++) {
 			Window window = Frame.getWindows()[w];
-			LOGGER.debug("parse window");
+//			LOGGER.debug("parse window");
 			if ( checkName(name, window) )
 			{
 				mFoundComponents.add(window);
@@ -155,7 +171,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				mFoundComponents.add(c);
 			}
 			if (c instanceof Container) {
-				LOGGER.trace("Will parse the container " + c.getName() );
+//				LOGGER.trace("Will parse the container " + c.getName() );
 				lookForComponent(name, ((Container) c).getComponents());
 			}
 		}
