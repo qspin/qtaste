@@ -45,6 +45,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
 		
 		prepareActions();
+	    setComponentFrameVisible();
 		SwingUtilities.invokeLater(this);
 		return true;
 	}
@@ -52,7 +53,6 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	public void run()
 	{
 		try {
-		    setComponentFrameVisible();
 			doActionsInSwingThread();
 		}
 		catch (QTasteTestFailException e) {
@@ -73,17 +73,17 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			    
 		if ( !((Window)parent).isActive() )
 		{
-			LOGGER.trace("try to active the window");
-			JFrame newFrame = new JFrame();
-			newFrame.pack();
-			newFrame.setVisible(true);
-			newFrame.toFront();
-	    	newFrame.setVisible(false);
-	    	newFrame.dispose();
-			((Window)parent).toFront();
-			((Window)parent).requestFocus();
 			for ( int i =0; i < 10 ; i++ )
 			{
+				LOGGER.trace("try to active the window");
+				JFrame newFrame = new JFrame();
+				newFrame.pack();
+				newFrame.setVisible(true);
+				newFrame.toFront();
+		    	newFrame.setVisible(false);
+		    	newFrame.dispose();
+				((Window)parent).toFront();
+				((Window)parent).requestFocus();
 				LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
 				if ( ((Window)parent).isActive() )
 					break;
