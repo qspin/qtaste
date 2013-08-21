@@ -49,7 +49,8 @@ class TreeNodeSelector extends UpdateComponentCommander {
 							break;
 						}
 					}
-					if (mPath[i] == null) {
+					if ( (tree.isRootVisible() && mPath[i] == null) || 
+						 (!tree.isRootVisible() && mPath[i+1] == null)) {
 						throw new QTasteTestFailException("Unabled to find node named " + nodeNames[i]);
 					}
 				}
