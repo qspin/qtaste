@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>qtaste-plugin</groupId>
+    <!--<groupId>qtaste-plugin</groupId>-->
     <artifactId>recorder</artifactId>
     <name>QTASTE recorder</name>
     <build>
@@ -85,8 +85,8 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
-        <dependency>
-            <groupId>qtaste-plugin</groupId>
+        <dependency>            
+            <groupId>com.qspin.qtaste</groupId>
             <artifactId>tools</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
