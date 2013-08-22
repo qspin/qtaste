@@ -113,8 +113,8 @@
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
         </dependency>
-        <dependency>
-            <groupId>qtaste-plugin</groupId>
+        <dependency>            
+            <groupId>com.qspin.qtaste</groupId>
             <artifactId>tools</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

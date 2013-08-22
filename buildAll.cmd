@@ -23,12 +23,12 @@ pushd demo
 call build.cmd
 popd
 
+echo generating documentation ...
+pushd doc
+call generateDocs.cmd %*
+popd
+
 echo creation of the installer ...
 pushd izpack
 call createInstaller.cmd
-popd
-
-echo generating documentation ...
-pushd doc
-call generateDocs.cmd
 popd

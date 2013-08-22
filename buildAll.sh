@@ -1,5 +1,9 @@
 #! /bin/bash
 
+# usage: buildAll.sh [-u <username>] [-p <password>]
+# optional args: [-u] Github username
+#                [-p] Password
+
 find . -name "*.sh" | xargs chmod +x
 
 # remove previous python compilation classes
@@ -27,7 +31,7 @@ popd
 
 # generate documentation
 pushd doc
-./generateDocs.sh || exit 1
+./generateDocs.sh $@ || exit 1
 popd
 
 # create installer

@@ -1,11 +1,5 @@
 #! /bin/bash
 
-# Requirements:
-# - A GPG client must is installed on your command line path.
-#   Please download GPG from http://www.gnupg.org/download/, 
-#  follow the instructions and install it to your system. 
-
-
 # Relases a new qtaste version by executing the following steps:
 # Prepare for Release:
 # 1) Check that there are no uncommitted changes in the sources
@@ -25,9 +19,14 @@
 # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 # --------------------------------------------------------------------------------------------------------------------
 # usage: releaseAll.sh [-newSnapshot] [-deploySnapshot] 
-# optional arg: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
+# optional args: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
 #               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
 #    repository https://oss.sonatype.org/content/repositories/snapshots 
+#
+# Requirements for deploySnapshot option:
+# - A GPG client must is installed on your command line path.
+#   Please download GPG from http://www.gnupg.org/download/, 
+#  follow the instructions and install it to your system. 
 #
 # Note: Only projects owners have rights to deploy QTaste.
 #		When deploying a Snapshot or Release a Passphrase
@@ -39,21 +38,18 @@ mvn clean -P qtaste-install-3rd-artifacts || exit 1
 popd
 
 if [ "$1" == "-help" ]; then
-    echo "Usage: releaseAll.sh [-snapshot] "
+    echo "Usage: releaseAll.sh [-snapshot] [-deploySnapshot]"
     exit
 elif [ "$1" == "-newSnapshot" ]; then
     mvn release:clean release:update-versions -P qtaste-all-modules-release || exit 1
 elif [ "$1" == "-deploySnapshot" ]; then
 	# Generate PGP Signatures With Maven
 	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1
-
 	# Deploy Snapshots QTaste  
-	mvn clean deploy -P qtaste-all-modules-release
+	mvn clean deploy -P qtaste-all-modules-release  || exit 1
 else
-    mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1
-    
+    mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
     # Generate PGP Signatures With Maven
-	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1
-	
+	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1	
     mvn release:perform -P qtaste-all-modules-release || exit 1
 fi

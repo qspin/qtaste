@@ -3,6 +3,8 @@
 import sys
 import string
 import os
+import argparse
+import time
 sys.path.append('../../../../tools/PyGithub')
 
 from github import Github
@@ -145,7 +147,13 @@ def main():
     print "QTaste: Generating Release Notes"
     print ""
 
-	# Delete the release notes file
+    # Parsing input parameters
+    parser = argparse.ArgumentParser(description='Generate Release Notes')
+    parser.add_argument('-u', '--user', dest='userGithub', help='Github Username')
+    parser.add_argument('-p', '--pass', dest='passwordGithub', help='Github Password')
+    args = parser.parse_args()
+    
+    # Delete the release notes file (if any)
     releaseNotesOutputFilePath = "../qtaste_release_notes.xml"
     if(os.path.exists(releaseNotesOutputFilePath)):			
         try:
@@ -153,9 +161,27 @@ def main():
         except OSError as e:
             print "Cannot generate Release Notes file: being used by the system"
             sys.exit(e)
-
-    try: # Connect to Github repository
-        g = Github()
+    
+    # Attempt to connect to Github repository        
+    try:
+        # check if some Github credentials were given in order to have authenticated access 
+        # http://developer.github.com/v3/#rate-limiting 
+        # "Basic Authentication or OAuth, you can make up to 5,000 requests per hour. 
+        #  For unauthenticated requests, the rate limit allows you to make up to 60 requests per hour."
+        if(len(sys.argv) > 1 and 
+            not args.userGithub == None and
+            not args.passwordGithub == None):   
+            g = Github(args.userGithub, args.passwordGithub)        
+        else:
+            print "******************************** WARNING *******************************************"
+            print "No Github authentication provided!"
+            print "Github repository will be queried without authentication."
+            print "This could result in failing to retrieve all needed information due to rate limits."
+            print "Please provide your Github credentials for authentication:"
+            print " usage: generateReleaseNotes.py [-u <username>] [-p <password>]"
+            print "*************************************************** ********************************"
+            time.sleep(5)            
+            g = Github()
         repo = g.get_repo("qspin/qtaste")
         print "connecting to repository: " + repo.name + " ..."
     except GithubException as e:

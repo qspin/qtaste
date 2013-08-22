@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# usage: generateDocs.sh [-u <username>] [-p <password>]
+# optional args: [-u] Github username
+#                [-p] Password
+
 # generate release notes
 pushd src/docbkx/scripts/
-./generateReleaseNotes.py
+./generateReleaseNotes.py $@
 popd
 
 # generate documentation using maven
