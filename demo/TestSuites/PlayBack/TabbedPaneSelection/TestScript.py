@@ -14,6 +14,7 @@ import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
+subtitler = testAPI.getSubtitler()
 
 def testChangeTab():
 	"""
@@ -21,6 +22,7 @@ def testChangeTab():
 	@expected  Description of the expected result
 	"""
 	
+	subtitler.setSubtitle("Select the tab", 1)
 	component = testData.getValue("TAB_COMPONENT_NAME")
 	index = testData.getIntValue("TAB_IDX")
 	result = javaguiMI.selectTab(component, index)

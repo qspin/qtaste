@@ -12,6 +12,7 @@ import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
+subtitler = testAPI.getSubtitler()
 
 importTestScript("TabbedPaneSelection")
 
@@ -21,9 +22,12 @@ def step1():
 	@expected  Description of the expected result
 	"""
 	doSubSteps(TabbedPaneSelection.changeTab)
+	subtitler.setSubtitle("Click on the button to make the component invisible")
+	time.sleep(1)
 	javaguiMI.clickOnButton("VISIBILITY_BUTTON")
-	time.sleep(3)
+	time.sleep(1)
 	try:
+		subtitler.setSubtitle("Try to insert a value in the invible text field", 10)
 		javaguiMI.setText("VISIBILITY_TEXT", "pas bien")
 		testAPI.stop(Status.FAIL, "The component should not be visible and the setText() should failed")
 	except :
