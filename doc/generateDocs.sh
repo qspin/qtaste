@@ -6,7 +6,7 @@
 
 # generate release notes
 pushd src/docbkx/scripts/
-./generateReleaseNotes.py $@ || exit 1
+./generateReleaseNotes.py $@
 popd
 
 # generate documentation using maven
