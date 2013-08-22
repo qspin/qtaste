@@ -23,7 +23,7 @@ rem  #	 -This will stage QTaste (from tag version prompted in step 7) into sonat
 rem  # To finally release QTaste (from stageg to released) follow step 8a) of tutorial:
 rem  # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 rem  # --------------------------------------------------------------------------------------------------------------------
-rem  # usage: releaseAll.sh [-snapshot]
+rem  # usage: releaseAll.sh [-snapshot] [-deploySnapshot]
 rem  # optional arg: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
 rem  #               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
 rem  #    repository https://oss.sonatype.org/content/repositories/snapshots 

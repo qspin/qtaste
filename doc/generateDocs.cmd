@@ -8,7 +8,7 @@ set QTASTEDOC=%QTASTE_ROOT%\doc
 
 rem generate release notes
 pushd src\docbkx\scripts\
-./generateReleaseNotes.py
+./generateReleaseNotes.py %*
 popd
 
 rem generate documentation using maven
