@@ -56,6 +56,8 @@ import jsyntaxpane.DefaultSyntaxKit;
 import jsyntaxpane.SyntaxDocument;
 import jsyntaxpane.syntaxkits.PythonSyntaxKit;
 
+import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.debug.BreakPointScript;
 import com.qspin.qtaste.testsuite.impl.JythonTestScript;
@@ -63,7 +65,6 @@ import com.qspin.qtaste.ui.TestCasePane;
 import com.qspin.qtaste.ui.tools.FileNode;
 import com.qspin.qtaste.ui.tools.FileSearch;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -414,12 +415,22 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             loadDateAndTime = file.lastModified();
         } catch (IOException ex) {
             logger.fatal("Cannot save file", ex);
+            JOptionPane.showMessageDialog(
+            		null,
+            		"Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
+            		"Cannot save the file",
+            		JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
                 output.close();                
                 setModified(false);
             } catch (IOException ex) {
                 logger.fatal("Cannot save file", ex);
+                JOptionPane.showMessageDialog(
+                		null,
+                		"Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
+                		"Cannot save the file",
+                		JOptionPane.ERROR_MESSAGE);
             }
         }
     }
