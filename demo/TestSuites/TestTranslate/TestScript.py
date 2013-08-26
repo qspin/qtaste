@@ -44,12 +44,20 @@ def connectToWeb():
 		testAPI.stopTest(Status.FAIL, "Title window name is not as expected. It's '" + title + "' and expects '"+expected+"'" )
 
 def checkTranslation():
+	
+
+
+
+
+
+
 	"""
 	@step      Translate a word specified in the testdata
 	@expected  Check that the translation is correct
 	"""
 	# we can access component using different method (component id, xpath or dom)
 	translate.type("id=source", testData.getValue("WORD"))
+	translate.click("id=gt-submit")
 	time.sleep(2);
 	translations = translate.getText("id=result_box")
 	expectedTranslation = testData.getValue("TRANSLATION")

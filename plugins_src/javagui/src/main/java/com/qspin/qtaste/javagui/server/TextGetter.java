@@ -6,12 +6,12 @@ import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.text.JTextComponent;
 
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
+import com.qspin.qtaste.testsuite.QTasteException;
 
 class TextGetter extends ComponentCommander {
 	
 	@Override
-	public String executeCommand(Object... data) throws QTasteTestFailException {
+	public String executeCommand(Object... data) throws QTasteException {
 		Component c = getComponentByName(data[0].toString());
 		if (c != null) {
 			if (c instanceof JLabel) {

@@ -10,8 +10,8 @@ from qtaste import *
 
 import time
 
-# update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
+subtitler = testAPI.getSubtitler()
 
 importTestScript("TabbedPaneSelection")
 
@@ -21,6 +21,7 @@ def displayFirstPopup():
 	@expected  a popup exist
 	"""
 	doSubSteps(TabbedPaneSelection.changeTab)
+	subtitler.setSubtitle("Click on the <span style=\"color:red;\">Start</span> button", 1.5)
 	javaguiMI.clickOnButton("START_BUTTON")
 	time.sleep(1)
 	if (javaguiMI.isPopupDisplayed() == False):
@@ -34,6 +35,7 @@ def setPopupValue():
 	@expected  If the value is numeric another popup is opened ELSE no opened popup.
 	"""
 	popupValue = testData.getValue("POPUP_VALUE");
+	subtitler.setSubtitle("Set the value '" + popupValue +"' and click on the <span style=\"color:red;\">OK</span> button", 1.5)
 	javaguiMI.setPopupValue(popupValue)
 	javaguiMI.clickOnPopupButton("OK");
 	
@@ -53,14 +55,20 @@ def valueValidation():
 	"""
 	popupValue = testData.getValue("POPUP_VALUE");
 	expectedMessage = "Are you sure you want to display " + popupValue + " popup(s)?"
+	subtitler.setSubtitle("Check the popup message is '" + expectedMessage + "'")
+	time.sleep(2)
 	currentMessage = javaguiMI.getPopupText()
 	
 	if ( expectedMessage != currentMessage ):
 		testAPI.stopTest(Status.FAIL, "The message is not the expected one. get '" + currentMessage + "' but expects '" + expectedMessage +"'.")
 	
 	if ( testData.getBooleanValue("CONFIRM") ):
+		subtitler.setSubtitle("Click on the <span style=\"color:red;\">Yes</span> button")
+		time.sleep(1)
 		javaguiMI.clickOnPopupButton("Yes")
 	else:
+		subtitler.setSubtitle("Click on the <span style=\"color:red;\">No</span> button", 1.5)
+		time.sleep(1)
 		javaguiMI.clickOnPopupButton("No")
 	pass
 
@@ -72,15 +80,18 @@ def countPopupAndClose():
 	if ( testData.getBooleanValue("CONFIRM") ):
 		popupValue = testData.getIntValue("POPUP_VALUE")
 	else:
-		popupValue = 0	
+		popupValue = 0
 	time.sleep(1)
 	
+	subtitler.setSubtitle("Check the number of opened popup")
+	time.sleep(1)
 	current = len(javaguiMI.getAllPopupText())
 	if ( current != popupValue ):
 		testAPI.stopTest(Status.FAIL, str(popupValue) + " popup(s) expected but only " + str(current) + " popup(s) displayed!")
 	
 	i = 0
 	while ( i<popupValue):
+		subtitler.setSubtitle("Click on the <span style=\"color:red;\">OK</span> button", 1.5)
 		javaguiMI.clickOnPopupButton("OK")
 		time.sleep(1)
 		i += 1

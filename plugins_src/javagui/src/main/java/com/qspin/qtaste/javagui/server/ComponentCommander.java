@@ -40,7 +40,7 @@ abstract class ComponentCommander {
 	 * @return the found GUI component.
 	 * @throws QTasteTestFailException If no GUI component is found.
 	 */
-	protected Component getComponentByName(String name) throws QTasteTestFailException {
+	protected Component getComponentByName(String name) throws QTasteException {
 		mFoundComponent = null;
 		mFindWithEqual = false;
 		LOGGER.debug("try to find a component with the name : " + name);

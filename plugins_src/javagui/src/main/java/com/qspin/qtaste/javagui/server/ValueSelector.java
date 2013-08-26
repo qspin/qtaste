@@ -12,12 +12,13 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.ListCellRenderer;
 
+import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 public class ValueSelector extends UpdateComponentCommander {
 
 	@Override
-	protected void prepareActions() throws QTasteTestFailException
+	protected void prepareActions() throws QTasteException
 	{
 		String value = mData[2].toString();
 		if (component instanceof JCheckBox || component instanceof JRadioButton) {

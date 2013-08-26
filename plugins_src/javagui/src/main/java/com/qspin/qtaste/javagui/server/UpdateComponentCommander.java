@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 abstract class UpdateComponentCommander extends ComponentCommander implements Runnable {
 
 	@Override
-	public Boolean executeCommand(Object... data) throws QTasteTestFailException {
+	public Boolean executeCommand(Object... data) throws QTasteException {
 		setData(data);
 		int timeout = Integer.parseInt(mData[0].toString());
 		long maxTime = System.currentTimeMillis() + 1000 * timeout;
@@ -55,7 +55,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		try {
 			doActionsInSwingThread();
 		}
-		catch (QTasteTestFailException e) {
+		catch (QTasteException e) {
 			LOGGER.fatal(e.getMessage(), e);
 		}
 	}
@@ -212,8 +212,8 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		return true;
 	}
 	
-	protected abstract void prepareActions() throws QTasteTestFailException;
-	protected abstract void doActionsInSwingThread()throws QTasteTestFailException;
+	protected abstract void prepareActions() throws QTasteException;
+	protected abstract void doActionsInSwingThread()throws QTasteException;
 
 	protected void setData(Object[] data)
 	{

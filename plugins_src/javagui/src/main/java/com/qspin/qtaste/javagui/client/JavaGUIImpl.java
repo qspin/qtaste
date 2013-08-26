@@ -7,7 +7,6 @@ package com.qspin.qtaste.javagui.client;
 import com.qspin.qtaste.javagui.JavaGUI;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
  * 
@@ -36,62 +35,66 @@ public class JavaGUIImpl implements JavaGUI {
 	   }
    }
 
-	public boolean clickOnButton(String pComponentName) throws QTasteTestFailException {
+	public boolean clickOnButton(String pComponentName) throws QTasteException {
 		return mProxy.clickOnButton(pComponentName);
 	}
 
-	public void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException
+	public void takeSnapShot(String componentName, String fileName) throws QTasteException
 	{
 		mProxy.takeSnapShot(componentName, fileName);		
 	}
 
-	public String[] listComponents() throws QTasteTestFailException
+	public String[] listComponents() throws QTasteException
 	{
 		return mProxy.listComponents();
 	}
 
-	public boolean isEnabled(String componentName) throws QTasteTestFailException
+	public boolean isEnabled(String componentName) throws QTasteException
 	{
 		return mProxy.isEnabled(componentName);
 	}
 
-	public boolean clickOnButton(String componentName, int pressTime) throws QTasteTestFailException
+	public boolean isVisible(String componentName) throws QTasteException
+	{
+		return mProxy.isVisible(componentName);
+	}
+	
+	public boolean clickOnButton(String componentName, int pressTime) throws QTasteException
 	{
 		return mProxy.clickOnButton(componentName, pressTime);
 	}
 
-	public String getText(String componentName) throws QTasteTestFailException
+	public String getText(String componentName) throws QTasteException
 	{
 		return mProxy.getText(componentName);
 	}
 
-	public boolean setText(String componentName, String value) throws QTasteTestFailException
+	public boolean setText(String componentName, String value) throws QTasteException
 	{
 		return mProxy.setText(componentName, value);
 	}
 
-	public boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException
+	public boolean selectComponent(String componentName, boolean value) throws QTasteException
 	{
 		return mProxy.selectComponent(componentName, value);
 	}
 
-	public boolean selectValue(String componentName, String value) throws QTasteTestFailException
+	public boolean selectValue(String componentName, String value) throws QTasteException
 	{
 		return mProxy.selectValue(componentName, value);
 	}
 
-	public boolean selectIndex(String componentName, int index) throws QTasteTestFailException
+	public boolean selectIndex(String componentName, int index) throws QTasteException
 	{
 		return mProxy.selectIndex(componentName, index);
 	}
 
-	public boolean selectNode(String componentName, String nodeName,
-			String nodeSeparator) throws QTasteTestFailException
+	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException
 	{
 		return mProxy.selectNode(componentName, nodeName, nodeSeparator);
 	}
 
-	public boolean selectTab(String tabbedPaneComponentName, int tabIndex)  throws QTasteTestFailException{
+	public boolean selectTab(String tabbedPaneComponentName, int tabIndex)  throws QTasteException{
 		return mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 
@@ -105,11 +108,11 @@ public class JavaGUIImpl implements JavaGUI {
 		}
 	}
 	
-	public String whoAmI() throws QTasteTestFailException {	
+	public String whoAmI() throws QTasteException {	
 		return mProxy.whoAmI();	
     }
 	
-	public void setComponentName(String name) throws QTasteTestFailException {
+	public void setComponentName(String name) throws QTasteException {
 		mProxy.setComponentName(name);
 	}
 	
@@ -118,12 +121,12 @@ public class JavaGUIImpl implements JavaGUI {
 		return (com.qspin.qtaste.javagui.JavaGUI) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
 	
-	public void pressKey(int keycode) throws QTasteTestFailException {
+	public void pressKey(int keycode) throws QTasteException {
 		mProxy.pressKey(keycode);
 		
 	}
 	
-	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
+	public void pressKey(int keycode, long delay) throws QTasteException {
 		mProxy.pressKey(keycode, delay);	
 	}
 	

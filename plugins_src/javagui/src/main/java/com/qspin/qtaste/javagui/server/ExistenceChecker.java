@@ -1,6 +1,6 @@
 package com.qspin.qtaste.javagui.server;
 
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
+import com.qspin.qtaste.testsuite.QTasteException;
 /**
  * Component asker used to check if a component with a specific name exists.
  * 
@@ -18,7 +18,7 @@ class ExistenceChecker extends ComponentCommander {
 	Boolean executeCommand(Object... data) {
 		try{
 			return getComponentByName(data[0].toString()) != null; 
-		} catch (QTasteTestFailException pExc)
+		} catch (QTasteException pExc)
 		{
 			return false;
 		}
