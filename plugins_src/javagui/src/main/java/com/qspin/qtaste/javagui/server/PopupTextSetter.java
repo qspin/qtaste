@@ -24,7 +24,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
 	 * @throws QTasteException
 	 */
 	@Override
-	public Boolean executeCommand(Object... data) throws QTasteTestFailException {
+	public Boolean executeCommand(Object... data) throws QTasteException {
 		setData(data);
 		int timeout = Integer.parseInt(mData[0].toString());
 		long maxTime = System.currentTimeMillis() + 1000 * timeout;

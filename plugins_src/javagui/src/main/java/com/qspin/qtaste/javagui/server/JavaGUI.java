@@ -59,55 +59,59 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	 * true; }
 	 */
 
-	public String[] listComponents() throws QTasteTestFailException {
+	public String[] listComponents() throws QTasteException {
 		return new ComponentLister().executeCommand();
 	}
 
-	public boolean clickOnButton(String componentName) throws QTasteTestFailException {
+	public boolean clickOnButton(String componentName) throws QTasteException {
 		return clickOnButton(componentName, 68);
 	}
 
-	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteTestFailException {
+	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteException {
 		return new ButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, pressTime);
 	}
 
-	public boolean isEnabled(String componentName) throws QTasteTestFailException {
+	public boolean isEnabled(String componentName) throws QTasteException {
 		return new EnabledStateGetter().executeCommand(componentName);
 	}
 
-	public void takeSnapShot(final String componentName, final String fileName) throws QTasteTestFailException {
+	public boolean isVisible(String componentName) throws QTasteException {
+		return new ComponentVisibilityChecker().executeCommand(componentName);
+	}
+
+	public void takeSnapShot(final String componentName, final String fileName) throws QTasteException {
 		new Snapshotter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, fileName);
 	}
 
-	public String getText(String componentName) throws QTasteTestFailException {
+	public String getText(String componentName) throws QTasteException {
 		return new TextGetter().executeCommand(componentName);
 	}
 				
 	// TODO: boolean returns is useless and confusing!
-	public boolean setText(final String componentName, final String value) throws QTasteTestFailException {
+	public boolean setText(final String componentName, final String value) throws QTasteException {
 		return new TextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}	
 	
-	public boolean selectComponent(final String componentName, final boolean value) throws QTasteTestFailException {
+	public boolean selectComponent(final String componentName, final boolean value) throws QTasteException {
 		return new ComponentSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}			
 
-	public boolean selectValue(final String componentName, final String value) throws QTasteTestFailException {
+	public boolean selectValue(final String componentName, final String value) throws QTasteException {
 		return new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}
 
-	public boolean selectIndex(final String componentName, final int index) throws QTasteTestFailException {
+	public boolean selectIndex(final String componentName, final int index) throws QTasteException {
 		return new IndexSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, index);
 	}
 
 	@Override
-	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException {
+	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException {
 		return new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
 	}
 	// Todo: getColor, awt?
 
 	@Override
-	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException {
+	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
 		return new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
 	}
 	

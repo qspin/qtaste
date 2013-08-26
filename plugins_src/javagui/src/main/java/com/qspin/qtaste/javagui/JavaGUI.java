@@ -43,26 +43,32 @@ public interface JavaGUI {
      * @param componentName an identifier of the GUI component.
      * @param fileName the name of the image file.
      */
-   void takeSnapShot(String componentName, String fileName) throws QTasteTestFailException;
+   void takeSnapShot(String componentName, String fileName) throws QTasteException;
    
    /**
      * Get the list of all the component names.
 	 * @return an array of String containing all the names of the component of the GUI application.
      */
-   String [] listComponents() throws QTasteTestFailException;
-      
-   /**
-     * Check if a specified component is enabled.
-	 * @return <code>true</code> if the specified component is enabled.
-     */
-   boolean isEnabled(String componentName) throws QTasteTestFailException;
+   String [] listComponents() throws QTasteException;
+   
+	/**
+	  * Check if a specified component is enabled.
+	  * @return <code>true</code> if the specified component is enabled.
+	  */
+	boolean isEnabled(String componentName) throws QTasteException;
+	
+	/**
+	  * Check if a specified component (and its parent(s)) is visible.
+	  * @return <code>true</code> if the specified component (and all its parents) is visible.
+	  */
+	boolean isVisible(String componentName) throws QTasteException;
       
    /**
      * Click on the specified componentName.
      * @param componentName an identifier of the GUI component.     
 	 * @return <code>true</code> if the action occurs correcly.
      */
-   boolean clickOnButton(String componentName) throws QTasteTestFailException;
+   boolean clickOnButton(String componentName) throws QTasteException;
 
     /**
      * Click on the specified componentName during a specified period of time.
@@ -70,14 +76,14 @@ public interface JavaGUI {
 	 * @param pressTime an identifier of the GUI component.     
 	 * @return <code>true</code> if the action occurs correcly.
      */
-   boolean clickOnButton(String componentName, int pressTime) throws QTasteTestFailException;
+   boolean clickOnButton(String componentName, int pressTime) throws QTasteException;
    
     /**
      * Get the text used for the specied component.
      * @param componentName an identifier of the GUI component.     
 	 * @return Return the text of the specified componentName.
      */
-   String getText(String componentName) throws QTasteTestFailException;
+   String getText(String componentName) throws QTasteException;
    
     /**
      * Set the text for the specied component.
@@ -85,7 +91,7 @@ public interface JavaGUI {
 	 * @param value the new value for the text.
 	 * @return <code>true</code> if the action occurs correcly.
      */
-   boolean setText(String componentName, String value) throws QTasteTestFailException;
+   boolean setText(String componentName, String value) throws QTasteException;
     
    
    /**
@@ -94,7 +100,7 @@ public interface JavaGUI {
     * @param tabIndex the tab index (first at 0). 
     * @return <code>true</code> if the action occurs correcly.
     */
-   boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteTestFailException;
+   boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException;
    
     /**
      * Select the specified componentName.
@@ -103,16 +109,16 @@ public interface JavaGUI {
 	 * @return <code>true</code> if the action occurs correcly.
      */
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?
-   boolean selectComponent(String componentName, boolean value) throws QTasteTestFailException;
+   boolean selectComponent(String componentName, boolean value) throws QTasteException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?   
-   boolean selectValue(String componentName, String value) throws QTasteTestFailException;
+   boolean selectValue(String componentName, String value) throws QTasteException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   boolean selectIndex(String componentName, int index) throws QTasteTestFailException;
+   boolean selectIndex(String componentName, int index) throws QTasteException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteTestFailException;
+   boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
    
@@ -121,20 +127,20 @@ public interface JavaGUI {
     * @return the name of the component
     * @throws QTasteTestFailException
     */
-   String whoAmI() throws QTasteTestFailException;
+   String whoAmI() throws QTasteException;
    
    /**
     * Set the name of the GUI component that have the focus with the specified name
     * @throws QTasteTestFailException 
     */
-   void setComponentName(String name) throws QTasteTestFailException;
+   void setComponentName(String name) throws QTasteException;
    
    /**
     * Send the specified key code to the application
     * @param keycode key code of the key sent to the application.
     * @throws QTasteTestFailException If some internal errors occurs.
     */
-   void pressKey(int keycode) throws QTasteTestFailException;
+   void pressKey(int keycode) throws QTasteException;
    
    /**
     * Send the specified key code to the application
@@ -142,7 +148,7 @@ public interface JavaGUI {
     * @param delay delay for the button pressed in milliseconds.
     * @throws QTasteTestFailException If some internal errors occurs. 
     */
-   void pressKey(int keycode, long delay) throws QTasteTestFailException;
+   void pressKey(int keycode, long delay) throws QTasteException;
    
    /**
     * Checks if a component with the name exist or not.

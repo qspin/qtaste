@@ -2,6 +2,7 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 
+import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
@@ -17,7 +18,7 @@ class EnabledStateGetter extends ComponentCommander {
 	 * @throws QTasteTestFailException if no component is found.
 	 */
 	@Override
-	Boolean executeCommand(Object... data) throws QTasteTestFailException {
+	Boolean executeCommand(Object... data) throws QTasteException {
 		Component c = getComponentByName(data[0].toString());
 		return c==null?false:c.isEnabled();
 	}

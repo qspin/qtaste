@@ -26,6 +26,9 @@ def step1():
 	time.sleep(1)
 	javaguiMI.clickOnButton("VISIBILITY_BUTTON")
 	time.sleep(1)
+	if javaguiMI.isVisible("VISIBILITY_TEXT") != False:
+		testAPI.stop(Status.FAIL, "The component should not be visible")
+		
 	try:
 		subtitler.setSubtitle("Try to insert a value in the invible text field", 10)
 		javaguiMI.setText("VISIBILITY_TEXT", "pas bien")
