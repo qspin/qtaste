@@ -121,13 +121,21 @@ public interface JavaGUI {
    boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
    
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
-   
+
    /**
     * Return the name of the GUI component that have the focus
     * @return the name of the component
     * @throws QTasteTestFailException
     */
    String whoAmI() throws QTasteException;
+   
+   /**
+    * Return the full name of the GUI component identified by the ID
+    * @param name the component ID.
+    * @return the name of the component
+    * @throws QTasteTestFailException
+    */
+   String getRawName(String name) throws QTasteException;
    
    /**
     * Set the name of the GUI component that have the focus with the specified name

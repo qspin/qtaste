@@ -124,6 +124,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().getName();	
 	}
 	
+
+	public String getRawName(String name) throws QTasteException
+	{
+		return new ComponentRawNameGetter().executeCommand(name);
+	}
+	
 	public void setComponentName(String name) throws QTasteTestFailException {
 		try {
 			Thread.sleep(5000);
