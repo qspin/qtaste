@@ -21,7 +21,7 @@
    <packaging>pom</packaging>
    <name>QTaste: QSpin Tailored Automated Test Environment</name>
    <description>QTaste is a generic engine to perform automated integration tests</description>
-   <url>https://sourceforge.net/projects/qtaste/</url>
+   <url>https://github.com/qspin/qtaste</url>
    <licenses>
        <license>
            <name>LGPL</name>
