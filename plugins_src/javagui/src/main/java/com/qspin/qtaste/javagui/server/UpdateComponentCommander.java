@@ -19,10 +19,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	public Boolean executeCommand(Object... data) throws QTasteException {
 		setData(data);
 		int timeout = Integer.parseInt(mData[0].toString());
-		long maxTime = System.currentTimeMillis() + 1000 * timeout;
+		m_maxTime = System.currentTimeMillis() + 1000 * timeout;
 		String componentName = mData[1].toString();
 		
-		while ( System.currentTimeMillis() < maxTime )
+		while ( System.currentTimeMillis() < m_maxTime )
 		{
 			component = getComponentByName(componentName);
 			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
@@ -223,4 +223,5 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	private List<Component> mFoundComponents;
 	protected Object[] mData;
 	protected Component component;
+	protected long m_maxTime;
 }

@@ -25,34 +25,42 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				//root is not present in the list.
 				pathLength += 1;
 			}
-			mPath = new Object[pathLength];
+			mPath = new Object[pathLength];		
 			String value = getNodeText(tree, node);
 			if ( tree.isRootVisible() )
 			{
 				System.out.println("compare node (" + value + ") with root (" + nodeNames[0] + ")");
 			}
-			if (!tree.isRootVisible() || value.equals(nodeNames[0])) {
+			if (!tree.isRootVisible() || value.equals(nodeNames[0]))
+			{
 				mPath[0] = tree.getModel().getRoot();
-				for (int i = 0; i < nodeNames.length; i++) {
-					for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++) {
-						Object child = model.getChild(node, childIndex);
-						value = getNodeText(tree, child);;
-						System.out.println("compare node (" + value + ") with value (" + nodeNames[i] + ")");
-						if (value.equals(nodeNames[i])) {
-							node = child;
-							if ( tree.isRootVisible() )
+				for (int i = 0; i < nodeNames.length; i++)
+				{
+					do
+					{
+						for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++)
+						{
+							Object child = model.getChild(node, childIndex);
+							value = getNodeText(tree, child);;
+							System.out.println("compare node (" + value + ") with value (" + nodeNames[i] + ")");
+							if (value.equals(nodeNames[i]))
 							{
-								mPath[i] = node;
-							} else {
-								mPath[i+1] = node;	
+								node = child;
+								if ( tree.isRootVisible() )
+								{
+									mPath[i] = node;
+								} else {
+									mPath[i+1] = node;	
+								}
+								break;
 							}
+						}
+						if ( (tree.isRootVisible() && mPath[i] != null) || 
+							 (!tree.isRootVisible() && mPath[i+1] != null)) {
 							break;
 						}
-					}
-					if ( (tree.isRootVisible() && mPath[i] == null) || 
-						 (!tree.isRootVisible() && mPath[i+1] == null)) {
-						throw new QTasteTestFailException("Unabled to find node named " + nodeNames[i]);
-					}
+
+					} while ( System.currentTimeMillis() < m_maxTime);
 				}
 			}
 		} else {
