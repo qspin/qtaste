@@ -324,23 +324,30 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
         public void valueChanged(TreeSelectionEvent e) {
 
             TreePath path = e.getNewLeadSelectionPath();
-            if (path != null) {
-                if (path.getParentPath() != null && path.getParentPath().getParentPath() != null) {
+            if (path != null) 
+            {
+                if (path.getParentPath() != null && path.getParentPath().getParentPath() != null) 
+                {
                     DefaultMutableTreeNode tn = (DefaultMutableTreeNode) path.getLastPathComponent();
                     String methodName = (String) tn.getUserObject();
                     String componentName = (String) ((DefaultMutableTreeNode) path.getParentPath().getLastPathComponent()).getUserObject();
                     TestAPI testAPI = TestAPIImpl.getInstance();
                     Method method = testAPI.getMethod(componentName, methodName);
-
+                    
                     String text = "testAPI.get" + componentName + "()." + methodName + "(";
                     boolean argumentAdded = false;
-		    if (method != null) {
+                    if (method != null) {
+                    	if ( !method.getReturnType().equals(Void.TYPE) )
+                        {
+                        	text = "return " + text;
+                        }
                     	for (Class<?> parameterType : method.getParameterTypes()) {
                         	text += parameterType.getSimpleName() + ", ";
                         	argumentAdded = true;
                     	}
-		    }
-                    if (argumentAdded) { // remove last ", " characters
+                	}
+                    if (argumentAdded) 
+                    { // remove last ", " characters
                         text = text.substring(0, text.length() - 2);
                     }
                     text += ")";
