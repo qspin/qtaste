@@ -51,6 +51,8 @@ import javax.swing.tree.TreePath;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.datacollection.collection.ProbeManager;
+import com.qspin.qtaste.kernel.testapi.ComponentsLoader;
+import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.kernel.testapi.TestAPI;
 import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.reporter.testresults.TestResult;
@@ -331,26 +333,36 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
                     DefaultMutableTreeNode tn = (DefaultMutableTreeNode) path.getLastPathComponent();
                     String methodName = (String) tn.getUserObject();
                     String componentName = (String) ((DefaultMutableTreeNode) path.getParentPath().getLastPathComponent()).getUserObject();
+                    
                     TestAPI testAPI = TestAPIImpl.getInstance();
                     Method method = testAPI.getMethod(componentName, methodName);
                     
-                    String text = "testAPI.get" + componentName + "()." + methodName + "(";
                     boolean argumentAdded = false;
+                    String text = "";
+                    String methodParameters = "";
+                    String componentParameter = "";
                     if (method != null) {
                     	if ( !method.getReturnType().equals(Void.TYPE) )
                         {
-                        	text = "return " + text;
+                        	text = "return ";
                         }
+                    	
+                    	Class<?> componentClass = ComponentsLoader.getInstance().getComponentImplementationClass(componentName);
+                    	if ( MultipleInstancesComponent.class.isAssignableFrom(componentClass) )
+                    	{
+                    		componentParameter = "INSTANCE_ID='YOUR_INSTANCE'";
+                    	}
+                    	
                     	for (Class<?> parameterType : method.getParameterTypes()) {
-                        	text += parameterType.getSimpleName() + ", ";
+                    		methodParameters += parameterType.getSimpleName() + ", ";
                         	argumentAdded = true;
                     	}
                 	}
                     if (argumentAdded) 
                     { // remove last ", " characters
-                        text = text.substring(0, text.length() - 2);
+                    	methodParameters = methodParameters.substring(0, methodParameters.length() - 2);
                     }
-                    text += ")";
+                    text += "testAPI.get" + componentName + "(" + componentParameter + ")." + methodName + "( " + methodParameters + ")";
                     mInteractiveText.setText(text);
                 }
             }
