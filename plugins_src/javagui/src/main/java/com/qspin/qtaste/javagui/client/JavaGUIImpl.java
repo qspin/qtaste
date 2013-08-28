@@ -192,6 +192,11 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.getComponentForegroundColor(componentName);
 	}
 	
+	@Override
+	public String getRawName(String name) throws QTasteException {
+		return mProxy.getRawName(name);
+	}
+	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
