@@ -42,11 +42,9 @@ if [ "$1" == "-help" ]; then
     exit
 elif [ "$1" == "-newSnapshot" ]; then
     mvn release:clean release:update-versions -P qtaste-all-modules-release || exit 1
-elif [ "$1" == "-deploySnapshot" ]; then
-	# Generate PGP Signatures With Maven
-	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1
+elif [ "$1" == "-deploySnapshot" ]; then	
 	# Deploy Snapshots QTaste  
-	mvn clean deploy -P qtaste-all-modules-release  || exit 1
+	mvn deploy -P qtaste-all-modules-release  || exit 1
 else
     mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
     # Generate PGP Signatures With Maven
