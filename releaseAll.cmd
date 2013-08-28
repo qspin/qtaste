@@ -42,12 +42,9 @@ if [%1] == [-help] (
 ) else if [%1] == [-newSnapshot] (
     call mvn release:clean release:update-versions -P qtaste-all-modules-release
 
-) else if [%1] == [-deploySnapshot] (
-	rem Generate PGP Signatures With Maven
-	call mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts
-
+) else if [%1] == [-deploySnapshot] (	
 	rem Deploy Snapshots QTaste  
-	call mvn clean deploy -P qtaste-all-modules-release
+	call clean deploy -P qtaste-all-modules-release
 ) else (
     call mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release
     
