@@ -32,6 +32,7 @@
 #		When deploying a Snapshot or Release a Passphrase
 #       will be promped.
 
+
 # Install kernel 3rd party artifacts
 pushd kernel
 mvn clean -P qtaste-install-3rd-artifacts || exit 1
