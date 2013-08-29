@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -154,5 +155,45 @@ abstract class ComponentCommander {
 			}
 		}
 		return null;		
+	}
+	
+	protected void setComponentFrameVisible(Component c)
+	{
+		LOGGER.trace("Component to use is " + c.getName() );
+		Component parent = c;
+		//active the parent window
+		while ( !(parent instanceof Window) )
+		{
+			parent = parent.getParent();
+		}
+		LOGGER.trace("parent is a window ? " + (parent instanceof Window) );
+			    
+		if ( !((Window)parent).isActive() )
+		{
+			for ( int i =0; i < 10 ; i++ )
+			{
+				LOGGER.trace("try to active the window");
+				JFrame newFrame = new JFrame();
+				newFrame.pack();
+				newFrame.setVisible(true);
+				newFrame.toFront();
+		    	newFrame.setVisible(false);
+		    	newFrame.dispose();
+				((Window)parent).toFront();
+				((Window)parent).requestFocus();
+				LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
+//				if ( ((Window)parent).isActive() )
+				if ( true )
+					break;
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					LOGGER.warn("Exception during the component search sleep...");
+				}
+			}
+		} else {
+			LOGGER.trace("parent is a window is already active");
+		}
 	}
 }

@@ -33,6 +33,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
 		{
 			for (JDialog dialog : findPopups() )
 			{
+				setComponentFrameVisible(dialog);
 				if ( !dialog.isVisible() || !dialog.isEnabled() || !dialog.isActive() )
 				{
 					String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";

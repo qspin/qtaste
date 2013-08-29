@@ -7,7 +7,6 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -45,7 +44,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
 		
 		prepareActions();
-	    setComponentFrameVisible();
+	    setComponentFrameVisible(component);
 		SwingUtilities.invokeLater(this);
 		return true;
 	}
@@ -59,46 +58,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			LOGGER.fatal(e.getMessage(), e);
 		}
 	}
-	
-	private void setComponentFrameVisible()
-	{
-		LOGGER.trace("Component to use is " + component.getName() );
-		Component parent = component;
-		//active the parent window
-		while ( !(parent instanceof Window) )
-		{
-			parent = parent.getParent();
-		}
-		LOGGER.trace("parent is a window ? " + (parent instanceof Window) );
-			    
-		if ( !((Window)parent).isActive() )
-		{
-			for ( int i =0; i < 10 ; i++ )
-			{
-				LOGGER.trace("try to active the window");
-				JFrame newFrame = new JFrame();
-				newFrame.pack();
-				newFrame.setVisible(true);
-				newFrame.toFront();
-		    	newFrame.setVisible(false);
-		    	newFrame.dispose();
-				((Window)parent).toFront();
-				((Window)parent).requestFocus();
-				LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
-				if ( ((Window)parent).isActive() )
-					break;
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					LOGGER.warn("Exception during the component search sleep...");
-				}
-			}
-		} else {
-			LOGGER.trace("parent is a window is already active");
-		}
-	}
-	
+
 	protected Component getComponentByName(String name) throws QTasteTestFailException {
 		mFoundComponents = new ArrayList<Component>();
 		mFoundComponent = null;
