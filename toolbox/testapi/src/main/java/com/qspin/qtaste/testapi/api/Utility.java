@@ -62,4 +62,6 @@ public interface Utility extends SingletonComponent {
      * @throws QTasteException if the file specified doesn't exist or its content is not valid
      */
     public Object loadXStreamFile(String xStreamFileName) throws QTasteException;
+    
+    public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException;
 }
