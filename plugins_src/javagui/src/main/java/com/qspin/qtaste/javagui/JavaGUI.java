@@ -62,6 +62,12 @@ public interface JavaGUI {
 	  * @return <code>true</code> if the specified component (and all its parents) is visible.
 	  */
 	boolean isVisible(String componentName) throws QTasteException;
+	
+	/**
+	  * Check if a specified component is editable.
+	  * @return <code>true</code> if the specified component is editable.
+	  */
+	boolean isEditable(String componentName) throws QTasteException;
       
    /**
      * Click on the specified componentName.

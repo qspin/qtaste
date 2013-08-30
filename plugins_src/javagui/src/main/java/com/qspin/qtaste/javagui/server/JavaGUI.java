@@ -82,6 +82,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return new EnabledStateGetter().executeCommand(componentName);
 	}
 
+	public boolean isEditable(String componentName) throws QTasteException {
+		LOGGER.trace("isEditable(\"" + componentName + "\")");
+		return new EditableStateGetter().executeCommand(componentName);
+	}
+
 	public boolean isVisible(String componentName) throws QTasteException {
 		LOGGER.trace("isVisible(\"" + componentName + "\")");
 		return new ComponentVisibilityChecker().executeCommand(componentName);
@@ -267,11 +272,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	@Override
 	public String[] getPopupRawNames() throws QTasteException {
+		LOGGER.trace("getPopupRawNames()");
 		return new PopupRowNameGetter().executeCommand(false).toArray(new String[0]);
 	}
 
 	@Override
 	public String getPopupRawName() throws QTasteException {
+		LOGGER.trace("getPopupRawName()");
 		List<String> names = new PopupRowNameGetter().executeCommand(true);
 		if (names.isEmpty())
 		{
