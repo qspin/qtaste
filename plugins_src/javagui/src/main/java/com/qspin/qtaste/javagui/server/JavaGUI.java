@@ -255,6 +255,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return new ComponentForegroundColorGetter().executeCommand(componentName);
 	}
 	
+	@Override
+	public String dumpTreeContent(String treeComponentName, String separator) throws QTasteException
+	{
+		LOGGER.trace("dumpTreeContent(\"" + treeComponentName + "\", \"" + separator + "\")");
+		return new TreeDumper().executeCommand(treeComponentName, separator);
+	}
+	
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
 	private static Logger LOGGER = Logger.getLogger(JavaGUI.class); 
 }

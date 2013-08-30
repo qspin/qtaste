@@ -197,6 +197,12 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.getRawName(name);
 	}
 	
+	@Override
+	public String dumpTreeContent(String treeComponentName, String separator) throws QTasteException
+	{
+		return mProxy.dumpTreeContent(treeComponentName, separator);
+	}
+	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";

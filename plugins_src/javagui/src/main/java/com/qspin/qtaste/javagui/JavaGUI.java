@@ -120,6 +120,15 @@ public interface JavaGUI {
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
    boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
    
+   /**
+    * Parse a Tree component and create a String with the node content.
+    * @param treeComponentName the tree component's name.
+    * @param separator the string value that will separate node.
+    * @return a String with the node content.
+    * @throws QTasteException
+    */
+   String dumpTreeContent(String treeComponentName, String separator) throws QTasteException;
+   
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
 
    /**
