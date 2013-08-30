@@ -263,5 +263,20 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 	
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
-	private static Logger LOGGER = Logger.getLogger(JavaGUI.class); 
+	private static Logger LOGGER = Logger.getLogger(JavaGUI.class);
+
+	@Override
+	public String[] getPopupRawNames() throws QTasteException {
+		return new PopupRowNameGetter().executeCommand(false).toArray(new String[0]);
+	}
+
+	@Override
+	public String getPopupRawName() throws QTasteException {
+		List<String> names = new PopupRowNameGetter().executeCommand(true);
+		if (names.isEmpty())
+		{
+			throw new QTasteTestFailException("No active popup found!");
+		}
+		return names.get(0);
+	} 
 }

@@ -105,7 +105,7 @@ public interface JavaGUI {
     /**
      * Select the specified componentName.
      * @param componentName an identifier of the GUI component.
-	 * @param value the new value for the text.
+	 * @param value the new ../plugins_src/javagui/src/main/java/com/qspin/qtaste/javagui/server/JavaGUI.javavalue for the text.
 	 * @return <code>true</code> if the action occurs correcly.
      */
    // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters, please specify the context? CheckBox?
@@ -145,6 +145,20 @@ public interface JavaGUI {
     * @throws QTasteTestFailException
     */
    String getRawName(String name) throws QTasteException;
+   
+   /**
+    * Return an array with the full name of all popups
+    * @return an array with the full name of all popups
+    * @throws QTasteTestFailException
+    */
+   String[] getPopupRawNames() throws QTasteException;
+   
+   /**
+    * Return the full name of the active popup.
+    * @return the full name of the active popup.
+    * @throws QTasteTestFailException
+    */
+   String getPopupRawName() throws QTasteException;
    
    /**
     * Set the name of the GUI component that have the focus with the specified name

@@ -202,6 +202,15 @@ public class JavaGUIImpl implements JavaGUI {
 	{
 		return mProxy.dumpTreeContent(treeComponentName, separator);
 	}
+	@Override
+	public String[] getPopupRawNames() throws QTasteException {
+		return mProxy.getPopupRawNames();
+	}
+
+	@Override
+	public String getPopupRawName() throws QTasteException {
+		return mProxy.getPopupRawName();
+	}
 	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
