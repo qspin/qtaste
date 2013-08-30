@@ -206,14 +206,7 @@
                <artifactId>jmxri</artifactId>
             </exclusion>
          </exclusions>
-      </dependency>
-      <dependency>
-         <groupId>com.sun</groupId>
-         <artifactId>tools</artifactId>
-         <version>whatever</version>
-         <scope>system</scope>
-         <systemPath>${java.home}/../lib/tools.jar</systemPath>
-      </dependency>
+      </dependency>      
    </dependencies>
 
    <dependencyManagement>
