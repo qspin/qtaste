@@ -243,6 +243,13 @@ public interface JavaGUI {
    String getComponentBackgroundColor(String componentName) throws QTasteException;
    
    /**
+    * Retrieve the location of the component on the screen.
+    * @param componentName the component's name.
+    * @return the location in pixel. (0, 0) is the upper left corner of the screen.
+    */
+   double[] getComponentLocation(String componentName) throws QTasteException;
+   
+   /**
     * Searches the component identified by the name and returns the component's foreground color.
     * @param componentName the component's name.
     * @return the found component's foreground color with the RGB color format expressed in hexadecimal.

@@ -188,6 +188,11 @@ public class JavaGUIImpl implements JavaGUI {
 	}
 	
 	@Override
+	public double[] getComponentLocation(String componentName) throws QTasteException {
+		return mProxy.getComponentLocation(componentName);
+	}
+	
+	@Override
 	public String getComponentBackgroundColor(String componentName) throws QTasteException {
 		return mProxy.getComponentBackgroundColor(componentName);
 	}

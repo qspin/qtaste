@@ -21,6 +21,7 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.AWTException;
 import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.awt.Robot;
 import java.lang.instrument.Instrumentation;
 import java.util.List;
@@ -247,6 +248,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		
 		COMPONENT_ENABLED_TIMEOUT = pTimeOut;
 	}
+	
+	@Override
+	public double[] getComponentLocation(String componentName) throws QTasteException {
+		LOGGER.trace("getComponentLocation(\"" + componentName + "\")");
+		Point p = new ComponentLocationGetter().executeCommand(componentName);
+		return new double[]{p.getX(), p.getY()};
+	}
 
 	@Override
 	public String getComponentBackgroundColor(String componentName) throws QTasteException {
@@ -266,9 +274,6 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		LOGGER.trace("dumpTreeContent(\"" + treeComponentName + "\", \"" + separator + "\")");
 		return new TreeDumper().executeCommand(treeComponentName, separator);
 	}
-	
-	private static int COMPONENT_ENABLED_TIMEOUT = 10;
-	private static Logger LOGGER = Logger.getLogger(JavaGUI.class);
 
 	@Override
 	public String[] getPopupRawNames() throws QTasteException {
@@ -286,4 +291,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		}
 		return names.get(0);
 	} 
+	
+	private static int COMPONENT_ENABLED_TIMEOUT = 10;
+	private static Logger LOGGER = Logger.getLogger(JavaGUI.class);
 }
