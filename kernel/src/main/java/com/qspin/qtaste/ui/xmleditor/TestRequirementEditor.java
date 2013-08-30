@@ -412,7 +412,7 @@ public class TestRequirementEditor extends JPanel {
 			}
 		});
 
-		m_TestRequirementModel.addTableModelListener(new TableModelListener() {
+		tableListener = new TableModelListener() {
 
 			public void tableChanged(TableModelEvent e) {
 				// build the test data
@@ -422,7 +422,8 @@ public class TestRequirementEditor extends JPanel {
 					}
 				}
 			}
-		});
+		};
+		m_TestRequirementModel.addTableModelListener(tableListener);
 
 		JScrollPane sp = new JScrollPane(m_TestRequirementTable);
 		sp.addMouseListener(new TableMouseListener(null));
