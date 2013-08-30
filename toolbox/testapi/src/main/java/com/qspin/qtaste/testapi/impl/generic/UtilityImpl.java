@@ -19,23 +19,23 @@
 
 package com.qspin.qtaste.testapi.impl.generic;
 
-import com.qspin.qtaste.testsuite.QTasteException;
-import com.qspin.qtaste.testapi.api.Utility;
-import javax.swing.JOptionPane;
-import com.thoughtworks.xstream.XStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
-import javax.swing.JDialog;
-
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.ObjectInputStream;
+
+import javax.imageio.ImageIO;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
+import com.qspin.qtaste.testapi.api.Utility;
+import com.qspin.qtaste.testsuite.QTasteException;
+import com.thoughtworks.xstream.XStream;
 
 /**
  *
@@ -122,5 +122,10 @@ public class UtilityImpl implements Utility {
             }
         }
     }
+
+	@Override
+	public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException {
+		return JOptionPane.showInputDialog(messageToDisplay, defaultValue);
+	}
 
 }
