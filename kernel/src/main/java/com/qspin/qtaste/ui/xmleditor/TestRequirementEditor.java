@@ -129,6 +129,12 @@ public class TestRequirementEditor extends JPanel {
             m_ColIndex = colIndex;
         }
 
+        @Override
+        public boolean isEnabled() {
+            return  !m_ColName.equals(TestRequirement.ID) &&  !m_ColName.equals(TestRequirement.DESCRIPTION);
+        }
+       
+
         @SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
         	String defaultName = (String)m_TestRequirementTable.getColumnModel().getColumn(m_ColIndex).getHeaderValue();
@@ -251,7 +257,7 @@ public class TestRequirementEditor extends JPanel {
 
         @Override
         public boolean isEnabled() {
-            return !m_ColName.equals(TestRequirement.ID) ;
+            return !m_ColName.equals(TestRequirement.ID) && !m_ColName.equals(TestRequirement.DESCRIPTION);
         }
     }
 
@@ -571,12 +577,12 @@ public class TestRequirementEditor extends JPanel {
 				// display the context dialog
 				JPopupMenu menu = new JPopupMenu();
                 menu.add(new AddVariableAction());
-                if (table != null) {
+                if (table != null && table.columnAtPoint(e.getPoint()) != -1) {
                     menu.add(new RenameVariable(table.getColumnName(clickedColumn), clickedColumn));
                     menu.add(new RemoveColumnAction(table.getColumnName(clickedColumn), clickedColumn));
                 }
 				menu.add(new AddRowAction());
-				if (table != null) {
+				if (table != null && table.rowAtPoint(e.getPoint()) != -1 ) {
 					menu.add(new InsertRowAction());
 					menu.add(new DuplicateRowAction());
 					menu.add(new RemoveRowAction());
