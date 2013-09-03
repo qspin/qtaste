@@ -127,18 +127,70 @@ abstract class ComponentCommander {
 		for (int w = 0; w < Frame.getWindows().length; w++) {
 			Window window = Frame.getWindows()[w];
 //			LOGGER.debug("parse window - type : " + window.getClass());
-			if ( window instanceof JDialog )
+			if ( isAPopup(window) )
 			{
 				//it's maybe a popup... a popup is modal and not resizable and containt a JOptionPane component.
 				JDialog dialog = (JDialog) window;
-				if ( dialog.isShowing() && dialog.isModal() && !dialog.isResizable() && getJOptionPane(dialog) != null ) 
-				{
-					LOGGER.info("Find a popup with the title '" + dialog.getTitle() +"'.");
-					popupFound.add(dialog);
-				}
+				LOGGER.info("Find a popup with the title '" + dialog.getTitle() +"'.");
+				popupFound.add(dialog);
 			}
 		}
 		return popupFound;
+	}
+	
+	protected static boolean hasTheFocus(Component c)
+	{
+		if ( c != null )
+		{
+			if ( c.isFocusOwner() )
+				return true;
+			else if ( c instanceof Container )
+			{
+				for ( int i = 0; i < ((Container)c).getComponentCount(); i++ )
+				{
+					if ( hasTheFocus(((Container)c).getComponent(i)) )
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	protected static boolean isAPopup(Component c)
+	{
+		if ( c == null )
+		{
+			LOGGER.trace( "The given component is null!");
+			return false;
+		}
+		if ( !(c instanceof JDialog) )
+		{
+			LOGGER.trace( "The given component is not a JDialog!");
+			return false;
+		}
+		JDialog dialog = (JDialog)c;
+
+		if ( !dialog.isShowing() ) 
+		{
+			LOGGER.info("The given component is not displayed!");
+			return false;
+		}
+		if ( !dialog.isModal() ) 
+		{
+			LOGGER.info("The given component is not modal!");
+			return false;
+		}
+		if ( dialog.isResizable() ) 
+		{
+			LOGGER.info("The given component is rezisable!");
+			return false;
+		}
+		if ( getJOptionPane(dialog) == null ) 
+		{
+			LOGGER.info("The given component does not contain any JOptionPane!");
+			return false;
+		}
+		return true;
 	}
 	
 	protected static JOptionPane getJOptionPane(Component c)
@@ -159,41 +211,27 @@ abstract class ComponentCommander {
 	
 	protected void setComponentFrameVisible(Component c)
 	{
-		LOGGER.trace("Component to use is " + c.getName() );
 		Component parent = c;
 		//active the parent window
 		while ( !(parent instanceof Window) )
 		{
 			parent = parent.getParent();
 		}
-		LOGGER.trace("parent is a window ? " + (parent instanceof Window) );
 			    
 		if ( !((Window)parent).isActive() )
 		{
-			for ( int i =0; i < 10 ; i++ )
-			{
-				LOGGER.trace("try to active the window");
-				JFrame newFrame = new JFrame();
-				newFrame.pack();
-				newFrame.setVisible(true);
-				newFrame.toFront();
-		    	newFrame.setVisible(false);
-		    	newFrame.dispose();
-				((Window)parent).toFront();
-				((Window)parent).requestFocus();
-				LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
-//				if ( ((Window)parent).isActive() )
-				if ( true )
-					break;
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					LOGGER.warn("Exception during the component search sleep...");
-				}
-			}
+			LOGGER.trace("try to active the window of '" + c.getName() + "' cause its window is not active");
+			JFrame newFrame = new JFrame();
+			newFrame.pack();
+			newFrame.setVisible(true);
+			newFrame.toFront();
+	    	newFrame.setVisible(false);
+	    	newFrame.dispose();
+			((Window)parent).toFront();
+			((Window)parent).requestFocus();
+			LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
 		} else {
-			LOGGER.trace("parent is a window is already active");
+			LOGGER.trace("the parent window of '" + c.getName() + "' is already active");
 		}
 	}
 }
