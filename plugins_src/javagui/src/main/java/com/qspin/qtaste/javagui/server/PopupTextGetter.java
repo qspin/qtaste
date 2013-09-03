@@ -29,12 +29,15 @@ public class PopupTextGetter extends ComponentCommander {
 		List<String> texts = new ArrayList<String>();
 		for ( JDialog dialog : findPopups() )
 		{
-			setComponentFrameVisible(dialog);
-			//if only the main popup text is needed, ignored popup without focus
-			if ( onlyWithFocus && !dialog.isActive())
+			if ( onlyWithFocus )
 			{
-				LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
-				continue;
+				setComponentFrameVisible(dialog);
+				// if only the main popup text is needed, ignored popup without focus
+				if ( !hasTheFocus(dialog))
+					{
+					LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
+					continue;
+				}
 			}
 			
 			LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");

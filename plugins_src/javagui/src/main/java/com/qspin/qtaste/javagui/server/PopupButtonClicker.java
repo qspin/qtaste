@@ -35,7 +35,7 @@ public class PopupButtonClicker extends UpdateComponentCommander {
 			{
 				setComponentFrameVisible(dialog);
 				//ignored popup without focus
-				if ( !dialog.isVisible() || !dialog.isEnabled() || !dialog.isActive() )
+				if ( !dialog.isVisible() || !dialog.isEnabled() || !hasTheFocus(dialog) )
 					continue;
 				else
 				{

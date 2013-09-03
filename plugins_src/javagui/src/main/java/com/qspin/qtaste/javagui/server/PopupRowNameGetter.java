@@ -32,7 +32,6 @@ public class PopupRowNameGetter extends ComponentCommander {
 			{
 				setComponentFrameVisible(dialog);
 				// if only the main popup text is needed, ignored popup without focus
-//				if ( !dialog.isActive())
 				if ( !hasTheFocus(dialog))
 					{
 					LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
