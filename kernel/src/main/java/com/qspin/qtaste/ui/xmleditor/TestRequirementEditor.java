@@ -561,9 +561,11 @@ public class TestRequirementEditor extends JPanel {
 					// force selection of clicked cell
 					clickedRow = table.rowAtPoint(e.getPoint());
 					clickedColumn = table.columnAtPoint(e.getPoint());
-					table.setRowSelectionInterval(clickedRow, clickedRow);
-					table.setColumnSelectionInterval(clickedColumn,
-							clickedColumn);
+					if ( clickedColumn != -1 && clickedRow != -1 )
+					{
+						table.setRowSelectionInterval(clickedRow, clickedRow);
+						table.setColumnSelectionInterval(clickedColumn, clickedColumn);
+					}
 				}
 
 				// display the context dialog
