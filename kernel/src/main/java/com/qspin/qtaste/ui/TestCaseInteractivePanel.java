@@ -42,12 +42,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.datacollection.collection.ProbeManager;
@@ -65,7 +67,6 @@ import com.qspin.qtaste.ui.csveditor.TestDataEditor;
 import com.qspin.qtaste.ui.log4j.Log4jPanel;
 import com.qspin.qtaste.ui.log4j.TextAreaAppender;
 import com.qspin.qtaste.ui.tools.ResourceManager;
-import com.qspin.qtaste.ui.tools.SpringUtilities;
 
 /**
  *
@@ -114,16 +115,13 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             mStopInteractiveTestButton.setEnabled(false);
             mStopInteractiveTestButton.addActionListener(stopButtonListener);
 
-            JPanel northP = new JPanel(new SpringLayout());
-            northP.add(mStartInteractiveTestButton);
-            northP.add(mStopInteractiveTestButton);
-            northP.add(new CommonShortcutsPanel());
-
-            try {
-
-                SpringUtilities.makeCompactGrid(northP, 1, 3, 6, 6, 6, 6); //xPad, yPad
-            } catch (Exception exc) {
-            }
+            FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px:grow", "6px, fill:pref, 6px");
+            PanelBuilder builder = new PanelBuilder(layout);
+            CellConstraints cc = new CellConstraints();
+            builder.add(mStartInteractiveTestButton, cc.xy(2, 2));
+            builder.add(mStopInteractiveTestButton, cc.xy(4, 2));
+            builder.add(new CommonShortcutsPanel(), cc.xy(6, 2));
+            JPanel northP = builder.getPanel();
             topPanel.add(northP, BorderLayout.PAGE_START);
 
             mInteractiveText = new JTextField();
