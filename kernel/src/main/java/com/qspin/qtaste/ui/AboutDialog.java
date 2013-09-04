@@ -79,7 +79,7 @@ public class AboutDialog extends JDialog {
         kernelVersionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
         b.add(kernelVersionLabel);
         if (!kernelVersion.equals("unknown") && !kernelVersion.endsWith("SNAPSHOT")) {
-            JLabel kernelReleaseNotesLabel = new URLLabel("<html><blockquote>Release notes</blockquote></html>", "file://" + StaticConfiguration.QTASTE_ROOT + "/doc/QTaste_ReleaseNotes.htm");
+            JLabel kernelReleaseNotesLabel = new URLLabel("<html><blockquote>Release notes</blockquote></html>", "file://" + StaticConfiguration.QTASTE_RELEASE_NOTES_FILE);
             kernelReleaseNotesLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
             thirdProductsLink.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(kernelReleaseNotesLabel);
