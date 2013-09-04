@@ -49,7 +49,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
-import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -62,6 +61,9 @@ import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
@@ -89,7 +91,6 @@ import com.qspin.qtaste.ui.tools.FileNode;
 import com.qspin.qtaste.ui.tools.HTMLDocumentLoader;
 import com.qspin.qtaste.ui.tools.PythonTestScript;
 import com.qspin.qtaste.ui.tools.ResourceManager;
-import com.qspin.qtaste.ui.tools.SpringUtilities;
 import com.qspin.qtaste.ui.xmleditor.TestRequirementEditor;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.ScriptCheckSyntaxValidator;
@@ -319,21 +320,31 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         resultsButton.setToolTipText("View the HTML Test Run Summary Results");
         resultsButton.setName("test run results button");
 
-        JPanel northP = new JPanel(new SpringLayout());
-        northP.add(executeButton);
-        northP.add(saveButton);
-        northP.add(debugButton);
-        northP.add(resultsButton);
-        northP.add(new CommonShortcutsPanel());
-        northP.add(startExecutionButton);
-        northP.add(stepOverExecutionButton);
-        northP.add(stepIntoExecutionButton);
-        northP.add(stopExecutionButton);
-        SpringUtilities.makeCompactGrid(northP,
-                1, 9, //rows, cols
-                6, 6, //initX, initY
-                6, 6);  //xPad, yPad
+        FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow", "6px, fill:pref, 6px");
+        PanelBuilder builder = new PanelBuilder(layout);
+        CellConstraints cc = new CellConstraints();
 
+        int rowIndex = 2;
+        int colIndex = 2;
+        builder.add(executeButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(saveButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(debugButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(resultsButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(new CommonShortcutsPanel(), cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(startExecutionButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(stepOverExecutionButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(stepIntoExecutionButton, cc.xy(colIndex, rowIndex));
+        colIndex += 2;
+        builder.add(stopExecutionButton, cc.xy(colIndex, rowIndex));
+
+        JPanel northP = builder.getPanel();
         add(northP, BorderLayout.NORTH);
         tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
         editorTabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -697,18 +708,31 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 // remove all breakpoints and listeners if any
                 currentPane.removeAllBreakpoints();
                 currentPane = null;
-            }
-            TestDataEditor currentDataPane = getTestDataPane(0);
-            if (currentDataPane != null) {
-                if (currentDataPane.isModified()) {
-
-                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentDataPane.getCurrentCSVFile() + "?'",
-                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                        currentDataPane.save();
-                    }
-                }
-                currentDataPane = null;
-            }
+            } else {
+	            TestDataEditor currentDataPane = getTestDataPane(0);
+	            if (currentDataPane != null) {
+	                if (currentDataPane.isModified()) {
+	
+	                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentDataPane.getCurrentCSVFile() + "?'",
+	                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+	                        currentDataPane.save();
+	                    }
+	                }
+	                currentDataPane = null;
+	            } else {
+	                TestRequirementEditor currentrequirementPane = getTestRequirementPane(0);
+		            if (currentrequirementPane != null) {
+		                if (currentrequirementPane.isModified()) {
+		
+		                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentrequirementPane.getCurrentXMLFile() + "?'",
+		                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+		                    	currentrequirementPane.save();
+		                    }
+		                }
+		                currentrequirementPane = null;
+		            }
+	            }
+            } 
             editorTabbedPane.removeTabAt(0);
         }
     }

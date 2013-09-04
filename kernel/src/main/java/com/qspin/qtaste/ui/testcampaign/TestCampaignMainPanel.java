@@ -20,9 +20,7 @@
 package com.qspin.qtaste.ui.testcampaign;
 
 import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
 import java.awt.Desktop;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -46,15 +44,18 @@ import org.apache.log4j.Logger;
 import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.kernel.campaign.Campaign;
 import com.qspin.qtaste.kernel.campaign.CampaignManager;
+import com.qspin.qtaste.ui.MainPanel;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.treetable.JTreeTable;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.ThreadManager;
-import com.qspin.qtaste.ui.MainPanel;
 
 /**
  *
@@ -89,7 +90,12 @@ public class TestCampaignMainPanel extends JPanel {
         TestCampaignTreeModel model = new TestCampaignTreeModel("Test Campaign");
         treeTable = new JTreeTable(model);
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow", "6px, fill:pref, 6px");
+        PanelBuilder builder = new PanelBuilder(layout);
+        CellConstraints cc = new CellConstraints();
+        
+        int colIndex = 2;
+        
         JLabel label = new JLabel("Campaign:");
         saveMetaCampaignButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/save_32"));
         saveMetaCampaignButton.setToolTipText("Save campaign");
@@ -124,8 +130,10 @@ public class TestCampaignMainPanel extends JPanel {
 
         // add campaigns found in the list
         MetaCampaignFile[] campaigns = populateCampaignList();
-        topPanel.add(label);
-        topPanel.add(metaCampaignComboBox);
+        builder.add(label, cc.xy(colIndex, 2));
+        colIndex+=2;
+        builder.add(metaCampaignComboBox, cc.xy(colIndex, 2));
+        colIndex+=2;
 
         metaCampaignComboBox.addActionListener(new ActionListener() {
 
@@ -197,13 +205,15 @@ public class TestCampaignMainPanel extends JPanel {
             }
         });  
 
-        topPanel.add(addNewMetaCampaignButton);
-        topPanel.add(saveMetaCampaignButton);
-        topPanel.add(runMetaCampaignButton);
-        topPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        builder.add(addNewMetaCampaignButton, cc.xy(colIndex, 2));
+        colIndex+=2;
+        builder.add(saveMetaCampaignButton, cc.xy(colIndex, 2));
+        colIndex+=2;
+        builder.add(runMetaCampaignButton, cc.xy(colIndex, 2));
+        colIndex+=2;
 
         JScrollPane sp = new JScrollPane(treeTable);
-        this.add(topPanel, BorderLayout.NORTH);
+        this.add(builder.getPanel(), BorderLayout.NORTH);
         this.add(sp);
     }
 

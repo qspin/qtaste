@@ -19,15 +19,18 @@
 
 package com.qspin.qtaste.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
+
 import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
@@ -41,7 +44,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 @SuppressWarnings("serial")
 public class CommonShortcutsPanel extends JPanel {
     public CommonShortcutsPanel() {
-        super(new SpringLayout());
+        super(new BorderLayout());
         genUI();
     }
     private void genUI() {
@@ -64,7 +67,7 @@ public class CommonShortcutsPanel extends JPanel {
                 }
             }
         });
-        this.add(showTestAPIButton);
+        this.add(showTestAPIButton, BorderLayout.CENTER);
     }
  
 
