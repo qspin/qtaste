@@ -3,6 +3,7 @@ package com.qspin.qtaste.javagui.server;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
+import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
@@ -228,7 +229,15 @@ abstract class ComponentCommander {
 	    	newFrame.setVisible(false);
 	    	newFrame.dispose();
 			((Window)parent).toFront();
-			((Window)parent).requestFocus();
+			try {
+				LOGGER.trace("current focused window : " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow());
+				((Window)parent).requestFocus();
+				Thread.sleep(1000);
+				LOGGER.trace("focused window after request: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+//			LOGGER.trace("3 current focused window : " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow());
 			LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
 		} else {
 			LOGGER.trace("the parent window of '" + c.getName() + "' is already active");
