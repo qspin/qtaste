@@ -6,6 +6,15 @@ set QTASTE_ROOT=%~dp0\..
 set PATH=%PATH%;%QTASTE_ROOT%\tools\GnuWin32\bin
 set QTASTEDOC=%QTASTE_ROOT%\doc
 
+rem usage: generateDocs.sh [-u <username>] [-p <password>]
+rem optional args: [-u] Github username
+rem                [-p] Password
+
+if [%1] == [-help] (
+    echo usage: generateDocs.sh [-u <username>] [-p <password>]
+    exit 0
+)
+
 rem generate release notes
 pushd src\docbkx\scripts\
 ./generateReleaseNotes.py %*

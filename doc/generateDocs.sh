@@ -4,6 +4,11 @@
 # optional args: [-u] Github username
 #                [-p] Password
 
+if [ "$1" == "-help" ]; then
+    echo "usage: generateDocs.sh [-u <username>] [-p <password>]"
+    exit
+fi
+
 # generate release notes
 pushd src/docbkx/scripts/
 ./generateReleaseNotes.py $@
