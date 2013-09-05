@@ -14,6 +14,10 @@ import com.qspin.qtaste.testsuite.QTasteException;
 
 public final class SubtitlerImpl implements Subtitler, Runnable {
 
+	/**
+	 * Constructor.
+	 * @throws QTasteException
+	 */
 	public SubtitlerImpl() throws QTasteException
 	{
 		super();
@@ -40,6 +44,7 @@ public final class SubtitlerImpl implements Subtitler, Runnable {
 	@Override
 	public void initialize() throws QTasteException
 	{
+		m_abort = false;
 		m_thread = new Thread(this);
 		m_thread.start();
 	}
@@ -58,13 +63,17 @@ public final class SubtitlerImpl implements Subtitler, Runnable {
 	@Override
 	public void setSubtitle(String subtitle, double displayTimeInSecond) {
 		m_subtitle.setText("<html><body>" + subtitle + "</body></html>");
-		setDisplayTime(displayTimeInSecond);
+		m_displayTimeInSec = displayTimeInSecond;
+		m_startTime = System.currentTimeMillis();
 		m_subtitleFrame.toFront();
 		m_subtitleFrame.setVisible(true);
 		System.out.println("change the frame visibility (true)");
 		
 	}
 
+	/**
+	 * while the thread is needed, this method checks every second if the subtitle frame has to be hidden or not. 
+	 */
 	public void run() {
 		while ( !m_abort )
 		{
@@ -82,14 +91,6 @@ public final class SubtitlerImpl implements Subtitler, Runnable {
 			}
 		}
 		m_subtitleFrame.setVisible(false);
-	}
-
-		
-	public void setDisplayTime(double displayTimeInSecond)
-	{
-		m_displayTimeInSec = displayTimeInSecond;
-		m_startTime = System.currentTimeMillis();
-		m_abort = false;
 	}
 	
 	private final JWindow m_subtitleFrame = new JWindow();
