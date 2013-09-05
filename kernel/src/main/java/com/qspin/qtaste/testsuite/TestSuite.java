@@ -96,14 +96,13 @@ public abstract class TestSuite implements TestReportListener {
                         logger.info("Execution " + currentExecution + (numberLoops != -1 && !loopsInHours ? " of " + numberLoops : "") + " of test suite " + getName());
                         if (!executeOnce(debug)) {
                             executionSuccess = false;
-                            break;
                         }
                         if (loopsInHours) {
                             long elapsedTime_ms = System.currentTimeMillis() - startTime_ms;
                             long elapsedTime_h = elapsedTime_ms / 1000 / 3600;
                             continueExecution = elapsedTime_h < numberLoops;
                         } else {
-                            continueExecution = numberLoops == -1 || currentExecution < numberLoops;
+                        	continueExecution = numberLoops == -1 || currentExecution < numberLoops;
                         }
                         currentExecution++;
                     } while (continueExecution);
