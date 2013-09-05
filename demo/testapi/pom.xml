@@ -42,6 +42,19 @@
                  <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
             </configuration>
         </execution>
+                <!-- Unpack JavaGUI in order to generate TestAPI Documentation -->
+        <execution>
+            <id>unpack-javagui-src</id>
+            <phase>package</phase>
+            <goals>
+                <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+                 <classifier>sources</classifier>
+                 <includeArtifactIds>javagui</includeArtifactIds>
+                 <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+            </configuration>
+        </execution>
 
                <execution>
                   <id>unpack-testapi-src</id>
@@ -111,13 +124,13 @@
       </dependency>
       <dependency>
         <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <artifactId>selenium-java-client-driver</artifactId>
         <classifier>sources</classifier>
     </dependency>
     <dependency>
         <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <artifactId>selenium-java-client-driver</artifactId>
     </dependency>
 
@@ -135,7 +148,7 @@
     <dependency>
         <groupId>com.qspin.qtaste.plugin</groupId>
         <artifactId>javagui</artifactId>
-    <version>${qtaste-version}</version>
+        <version>${qtaste-version}</version>
     </dependency>
    </dependencies>
 </project>
