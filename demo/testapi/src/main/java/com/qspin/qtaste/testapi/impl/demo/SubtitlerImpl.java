@@ -12,24 +12,17 @@ import javax.swing.SwingConstants;
 import com.qspin.qtaste.testapi.api.Subtitler;
 import com.qspin.qtaste.testsuite.QTasteException;
 
-public final class SubtitlerImpl implements Subtitler {
+public final class SubtitlerImpl implements Subtitler, Runnable {
 
 	public SubtitlerImpl() throws QTasteException
 	{
-//		// Determine what the default GraphicsDevice can support.
-//		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//		GraphicsDevice gd = ge.getDefaultScreenDevice();
-//
-//		boolean isUniformTranslucencySupported = gd.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.TRANSLUCENT);
-//		boolean isPerPixelTranslucencySupported = gd.isWindowTranslucencySupported(PERPIXEL_TRANSLUCENT);
-//		boolean isShapedWindowSupported = gd.isWindowTranslucencySupported(PERPIXEL_TRANSPARENT);
+		super();
 		
 		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int height = 100;
 		
 		m_subtitleFrame.setPreferredSize(new Dimension(width, height));
 		m_subtitleFrame.setLocation(0, Toolkit.getDefaultToolkit().getScreenSize().height - height);
-//		Color backgroundColor = new Color(50, 0, 0, 230);
 		m_subtitleFrame.setBackground(null);
 		
 		m_subtitleFrame.setLayout(new GridLayout());
@@ -47,77 +40,62 @@ public final class SubtitlerImpl implements Subtitler {
 	@Override
 	public void initialize() throws QTasteException
 	{
+		m_thread = new Thread(this);
+		m_thread.start();
 	}
 
 	@Override
 	public void terminate() throws QTasteException {
 		m_subtitleFrame.setVisible(false);
-		if ( m_t != null && m_visibilityThread.isRunning() )
-		{
-			System.out.println("kill the thread");
-			m_t.stop();
-		}
+		m_abort = true;
 	}
 
 	@Override
 	public void setSubtitle(String subtitle) {
 		setSubtitle(subtitle, 3);
 	}
+	
 	@Override
 	public void setSubtitle(String subtitle, double displayTimeInSecond) {
-		System.out.println("change text to '" + subtitle + "'");
 		m_subtitle.setText("<html><body>" + subtitle + "</body></html>");
-		if ( m_t != null && m_visibilityThread.isRunning() )
-		{
-			System.out.println("kill the thread");
-			m_t.stop();
-		}
-		m_visibilityThread.setDisplayTime(displayTimeInSecond);
-		m_t = new Thread(m_visibilityThread);
-		m_t.start();
+		setDisplayTime(displayTimeInSecond);
+		m_subtitleFrame.toFront();
+		m_subtitleFrame.setVisible(true);
+		System.out.println("change the frame visibility (true)");
+		
 	}
 
-	private final JWindow m_subtitleFrame = new JWindow();
-	private JLabel m_subtitle;
-	private Thread m_t;
-	private final VisibilityThread m_visibilityThread = new VisibilityThread();
-	
-	private class VisibilityThread implements Runnable
-	{
-		VisibilityThread()
+	public void run() {
+		while ( !m_abort )
 		{
-			m_run = false;
-		}
-
-		@Override
-		public void run() {
-			m_run = true;
-			System.out.println("change the frame visibility (true)");
-			m_subtitleFrame.toFront();
-			m_subtitleFrame.setVisible(true);
-			try {
-				System.out.println("wait 3 sec");
-				Thread.sleep((int) (m_displayTimeInSec * 1000));
-				System.out.println("change the frame visibility (false)");
-				m_subtitleFrame.setVisible(false);
+			if ( m_subtitleFrame.isVisible() )
+			{
+				if (System.currentTimeMillis() > (m_startTime + m_displayTimeInSec*1000) )
+				{
+					m_subtitleFrame.setVisible(false);
+				}
+			}
+			try{
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			} finally {
-				m_run = false;
 			}
 		}
-		
-		public boolean isRunning()
-		{
-			return m_run;
-		}
-		
-		public void setDisplayTime(double displayTimeInSecond)
-		{
-			m_displayTimeInSec = displayTimeInSecond;
-		}
-		
-		private boolean m_run;
-		private double m_displayTimeInSec;
+		m_subtitleFrame.setVisible(false);
 	}
+
+		
+	public void setDisplayTime(double displayTimeInSecond)
+	{
+		m_displayTimeInSec = displayTimeInSecond;
+		m_startTime = System.currentTimeMillis();
+		m_abort = false;
+	}
+	
+	private final JWindow m_subtitleFrame = new JWindow();
+	private JLabel m_subtitle;
+	private double m_displayTimeInSec;
+	private long m_startTime;
+	private Thread m_thread;
+	private boolean m_abort = false;
 }
