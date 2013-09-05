@@ -41,8 +41,8 @@ public class StaticConfiguration {
 	public static final String TEST_SUITE_DOC_HTML_FILENAME = "TestSuite-doc.html";
 	public static final String TEST_API_DOC_DIR = "testapi/target/TestAPI-doc";
 	public static final String CONFIG_DIRECTORY = QTASTE_ROOT + "/conf";
-	public static final String QTASTE_USER_MANUAL_FILE = QTASTE_ROOT + "/doc/QTaste_User_Manual.htm";
-	public static final String QTASTE_RELEASE_NOTES_FILE = QTASTE_ROOT + "/doc/QTaste_ReleaseNotes.htm";
+	public static final String QTASTE_USER_MANUAL_FILE = QTASTE_ROOT + "/doc/html/qtaste_user_manual.html";
+	public static final String QTASTE_RELEASE_NOTES_FILE = QTASTE_ROOT + "/doc/html/qtaste_release_notes.html";
 	public static final String TESTBED_CONFIG_DIRECTORY = "Testbeds";
 	public static final String CONTROL_SCRIPTS_DIRECTORY = TESTBED_CONFIG_DIRECTORY + "/ControlScripts";
 	public static final String TESTBED_CONFIG_FILE_EXTENSION = "xml";

@@ -4,6 +4,11 @@
 # optional args: [-u] Github username
 #                [-p] Password
 
+if [ "$1" == "-help" ]; then
+    echo "usage: buildAll.sh [-u <username>] [-p <password>]"
+    exit
+fi
+
 find . -name "*.sh" | xargs chmod +x
 
 # remove previous python compilation classes

@@ -1,5 +1,14 @@
 @echo off
 
+rem usage: buildAll.sh [-u <username>] [-p <password>]
+rem optional args: [-u] Github username
+rem                [-p] Password
+
+if [%1] == [-help] (
+    echo usage: buildAll.sh [-u <username>] [-p <password>]
+    exit 0
+)
+
 rem remove previous python compilation classes
 pushd ..\tools\jython\lib\Lib\
 del /q *.class
