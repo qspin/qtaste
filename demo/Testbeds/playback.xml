@@ -3,7 +3,8 @@
 	<sut_host>localhost</sut_host>
 	
 	<testapi_implementation>		
-		<import>com.qspin.qtaste.javagui.testapi.impl</import>
+		<import>com.qspin.qtaste.testapi.impl.generic</import>
+        <import>com.qspin.qtaste.javagui.testapi.impl</import>
 		<import>com.qspin.qtaste.testapi.impl.demo</import>
 	</testapi_implementation>
 
@@ -16,9 +17,6 @@
 		<JavaGUI id="PlaybackAppBis">
 			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10102/jmxrmi</jmx_url>
 		</JavaGUI>
-		<!--Playback id="PlaybackApp">
-			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
-		</Playback-->
 	</multiple_instances_components>
 	
 	<singleton_components>
