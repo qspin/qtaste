@@ -3,7 +3,6 @@ package com.qspin.qtaste.javagui.server;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.TextComponent;
-import java.awt.TextField;
 import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
@@ -18,7 +17,7 @@ class TextSetter extends UpdateComponentCommander {
 		String value = mData[2].toString();
 										
 		// Support for AWT
-		if (component instanceof TextField) {					
+		if (component instanceof TextComponent) {					
 			TextComponent t = (TextComponent) component;
 			t.setText(value);
 			forceToLooseFocus(component);						

@@ -3,11 +3,10 @@ package com.qspin.qtaste.javagui.server;
 import java.awt.Component;
 import java.awt.Label;
 
-import javax.swing.JCheckBox;
+import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.ListCellRenderer;
@@ -21,7 +20,7 @@ public class ValueSelector extends UpdateComponentCommander {
 	protected void prepareActions() throws QTasteException
 	{
 		String value = mData[2].toString();
-		if (component instanceof JCheckBox || component instanceof JRadioButton) {
+		if (component instanceof AbstractButton) {
 			new ComponentSelector().executeCommand(mData[0].toString(),Integer.parseInt(mData[1].toString()), Boolean.parseBoolean(value));
 		} else if (component instanceof JComboBox) {
 			JComboBox combo = (JComboBox) component;
