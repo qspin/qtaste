@@ -89,7 +89,8 @@
                 <executions>
                     <execution>
                         <id>generate-simulators-doc</id>
-                         <phase>install</phase>
+                         <!--<phase>install</phase>-->
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>

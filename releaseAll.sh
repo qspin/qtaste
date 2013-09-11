@@ -48,7 +48,5 @@ elif [ "$1" == "-deploySnapshot" ]; then
 	mvn deploy -P qtaste-all-modules-release  || exit 1
 else
     mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
-    # Generate PGP Signatures With Maven
-	mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts || exit 1	
     mvn release:perform -P qtaste-all-modules-release || exit 1
 fi
