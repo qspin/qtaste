@@ -36,19 +36,5 @@
       <!-- EXTERNAL LIBRARIES -->
       <!-- Libraries are ordered by group/artifact. -->
 
-      <dependency>
-         <groupId>com.thoughtworks.xstream</groupId>
-         <artifactId>xstream</artifactId>
-         <exclusions>
-            <exclusion>
-               <groupId>xpp3</groupId>
-               <artifactId>xpp3_min</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
-      <dependency>
-         <groupId>xpp3</groupId>
-         <artifactId>xpp3</artifactId>
-      </dependency>
    </dependencies>
 </project>

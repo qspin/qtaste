@@ -55,13 +55,5 @@ public interface Utility extends SingletonComponent {
      */
     public void hideMessageDialog();
 
-    /**
-     * Loads a XSTREAM file and returns the object to the caller.
-     *
-     * @param xStreamFileName the name of the XStream file
-     * @throws QTasteException if the file specified doesn't exist or its content is not valid
-     */
-    public Object loadXStreamFile(String xStreamFileName) throws QTasteException;
-    
     public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException;
 }

@@ -24,10 +24,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.JDialog;
@@ -35,7 +32,6 @@ import javax.swing.JOptionPane;
 
 import com.qspin.qtaste.testapi.api.Utility;
 import com.qspin.qtaste.testsuite.QTasteException;
-import com.thoughtworks.xstream.XStream;
 
 /**
  *
@@ -101,26 +97,6 @@ public class UtilityImpl implements Utility {
 
     public void hideMessageDialog() {
         messageDialog.setVisible(false);
-    }
-
-    public Object loadXStreamFile(String xStreamFileName) throws QTasteException
-    {
-        BufferedReader br = null;
-        {
-            ObjectInputStream inputStream = null;
-            try {
-                File xStreamFile = new File(xStreamFileName);
-                XStream xstream = new XStream();
-                br = new BufferedReader(new FileReader(xStreamFile));
-                inputStream = xstream.createObjectInputStream(br);
-                Object dataObject = inputStream.readObject();
-                inputStream.close();
-                br.close();
-                return dataObject;
-            } catch (Exception ex) {
-                throw new QTasteException(ex.getMessage());
-            }
-        }
     }
 
 	@Override
