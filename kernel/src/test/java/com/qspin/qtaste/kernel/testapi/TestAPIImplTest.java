@@ -60,24 +60,18 @@ public class TestAPIImplTest extends TestCase {
     }
 
     /**
-     * Test of register method, of class TestAPIImpl.
+     * Test of register and getRegisteredComponents method, of class TestAPIImpl.
      */
-    public void testRegister() {
+    public void testRegisterAndGetRegisteredComponents() {
         System.out.println("register");
         String packageName = "JUNIT";
         String component = "JUNIT";
         ComponentFactory factory = null;
         String method = "test";  
-
-        instance.register(packageName, component, factory, method);
-    }
-
-    /**
-     * Test of getRegisteredComponents method, of class TestAPIImpl.
-     */
-    public void testGetRegisteredComponents() {
-        System.out.println("getRegisteredComponents");
         
+        instance.register(packageName, component, factory, method);
+        
+        System.out.println("getRegisteredComponents");
         Collection<String> result = instance.getRegisteredComponents();
         
         assertNotNull(result);
