@@ -1,0 +1,11 @@
+/conf/gui.xml
+/doc/*.html
+/doc/html
+/doc/pdf
+/log
+/plugins/*.jar
+/plugins/SUT
+/reports
+/tools/jython/lib/cachedir
+target
+Version.txt
