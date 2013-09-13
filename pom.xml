@@ -71,7 +71,7 @@
 
    <properties>
       <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
-      <qtaste-version>${project.parent.version}</qtaste-version>
+      <qtaste-version>${project.version}</qtaste-version>
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
@@ -209,12 +209,12 @@
          <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>${qtaste-version}</version>
+            <version>${project.version}</version>
          </dependency>
          <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>${qtaste-version}</version>
+            <version>${project.version}</version>
             <classifier>tests</classifier>
          </dependency>
 
