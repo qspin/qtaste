@@ -71,7 +71,7 @@
 
    <properties>
       <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
-      <qtaste-version>2.1.0-SNAPSHOT</qtaste-version>
+      <qtaste-version>${project.version}</qtaste-version>
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
@@ -267,7 +267,7 @@
          <dependency>
            <groupId>de.sciss</groupId>
            <artifactId>jsyntaxpane</artifactId>
-           <version>1.0.0</version>
+           <version>2.1.0</version>
          </dependency>
          <dependency>
             <groupId>org.python</groupId>
