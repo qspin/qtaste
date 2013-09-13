@@ -71,7 +71,7 @@
 
    <properties>
       <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
-      <qtaste-version>${project.version}</qtaste-version>
+      <qtaste-version>${project.parent.version}</qtaste-version>
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
