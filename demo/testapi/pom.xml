@@ -7,8 +7,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste-testapi-parent</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
-      <relativePath>../../testapi-parent</relativePath>
+      <version>2.1.0-SNAPSHOT</version>      
    </parent>
 
    <artifactId>qtaste-demo-testapi</artifactId>
@@ -113,7 +112,7 @@
       <dependency>
          <groupId>com.qspin.qtaste</groupId>
          <artifactId>qtaste-toolbox-testapi</artifactId>
-         <version>${qtaste-version}</version>
+         <version>2.1.0-SNAPSHOT</version>
       </dependency>
       <!-- EXTERNAL LIBRARIES -->
       <!-- Libraries are ordered by group/artifact. -->
@@ -148,7 +147,7 @@
     <dependency>
         <groupId>com.qspin.qtaste.plugin</groupId>
         <artifactId>javagui</artifactId>
-        <version>${qtaste-version}</version>
+        <version>2.1.0-SNAPSHOT</version>
     </dependency>
    </dependencies>
 </project>
