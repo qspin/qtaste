@@ -20,7 +20,7 @@
      <installerFileName>install.xml</installerFileName>
      <!-- Installer variables -->
      <info.appName>QTaste</info.appName>
-     <info.appVersion>${parent.version}</info.appVersion>
+     <info.appVersion>${project.parent.version}</info.appVersion>
    </properties>
 
    <build>

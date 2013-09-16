@@ -70,8 +70,7 @@
    </modules>
 
    <properties>
-      <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
-      <qtaste-version>2.1.0-SNAPSHOT</qtaste-version>
+      <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>      
       <plugins-inheritance>true</plugins-inheritance>
    </properties>
 

@@ -65,7 +65,7 @@
                         </manifest>
                         <manifestEntries>
                             <Implementation-Build>SCM revision: ${buildNumber}</Implementation-Build>
-                            <Kernel-Implementation-Version>${project.artifactId}-${qtaste-version}</Kernel-Implementation-Version>
+                            <Kernel-Implementation-Version>${project.artifactId}-${project.parent.version}</Kernel-Implementation-Version>
                         </manifestEntries>
                     </archive>
                     <descriptors>
@@ -236,7 +236,7 @@
                                 </manifest>
                                 <manifestEntries>
                                     <Implementation-Build>SCM revision: ${buildNumber}</Implementation-Build>
-                                    <Kernel-Implementation-Version>${project.artifactId}-${qtaste-version}</Kernel-Implementation-Version>
+                                    <Kernel-Implementation-Version>${project.artifactId}-${project.parent.version}</Kernel-Implementation-Version>
                                 </manifestEntries>
                             </archive>
                             <descriptors>
