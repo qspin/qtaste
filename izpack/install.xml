@@ -16,14 +16,7 @@
     -->
     <info>
         <appname>${info.appName}</appname>
-        <appversion>${info.appVersion}</appversion>
-        <authors>
-            <author name="David Ergo" email="der@qspin.be"/>
-            <author name="Vincent Dubois" email="vdu@qspin.be"/>
-            <author name="Laurent Vanboquestal" email="lvb@qspin.be"/>
-            <author name="Simon Janssens" email="sja@qspin.be"/>
-            <author name="Nuno Coelho" email="nco@qspin.be"/>
-        </authors>
+        <appversion>${info.appVersion}</appversion>        
         <url>https://github.com/qspin/qtaste</url>
     </info>
 
