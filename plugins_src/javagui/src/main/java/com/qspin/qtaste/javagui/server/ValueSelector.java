@@ -21,7 +21,7 @@ public class ValueSelector extends UpdateComponentCommander {
 	{
 		String value = mData[2].toString();
 		if (component instanceof AbstractButton) {
-			new ComponentSelector().executeCommand(mData[0].toString(),Integer.parseInt(mData[1].toString()), Boolean.parseBoolean(value));
+			new ComponentSelector().executeCommand(Integer.parseInt(mData[0].toString()),mData[1].toString(), Boolean.parseBoolean(value));
 		} else if (component instanceof JComboBox) {
 			JComboBox combo = (JComboBox) component;
 			ListCellRenderer renderer = combo.getRenderer();
