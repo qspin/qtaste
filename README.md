@@ -53,3 +53,6 @@ The installer available on Github - Releases section  - [https://github.com/qspi
 binaries), the demonstration (sources and binaries) and the documentation.
 To start the installer, just click on the qtaste-izpack-2.1.0-installer.jar [https://github.com/qspin/qtaste/releases/download/v2.1.0/qtaste-izpack-2.1.0-installer.jar]
 
+Useful links
+============
+https://qtaste.ci.cloudbees.com/
