@@ -27,8 +27,7 @@ QTaste System Requirements
 • At least 256 MB of system memory (Running with less memory may cause disk swapping which has a severe effect on
 performance. Very large programs may require more RAM for adequate performance.)
 
-• On Linux system, Java VM requires some graphical gnome libraries. These libraries have to be installed. https://
-sourceforge.net/apps/mantisbt/qtaste/view.php?id=3
+• On Linux system, Java VM requires some graphical gnome libraries. These libraries have to be installed. https://github.com/qspin/qtaste/issues/4
 
 Installation of the QTaste
 ==========================
