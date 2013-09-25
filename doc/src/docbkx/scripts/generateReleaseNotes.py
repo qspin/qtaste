@@ -24,73 +24,123 @@ class QTasteIssue:
         self.milestoneTitle  = aMilestoneTitle
 
 
-def createIssuesItems(aGithubRepo, aQtasteVersion, aState, aLabelName=""):
-    # Create XML output for the queried issues
-    root = Element('itemizedlist')
-    root.set('mark', "opencircle")
+def isValidMilestoneVersion(aQtasteVersion, aMilestoneVersion):
+    #decompose QTaste version into X.Y.Z
+    qtVersion_X = 0
+    qtVersion_Y = 0
+    qtVersion_Z = 0       
+    try:
+        # expected aQtasteVersion string as "X.Y.Z"
+        qtVersion_X = int(aQtasteVersion[0])
+        qtVersion_Y = int(aQtasteVersion[2])
+        qtVersion_Z = int(aQtasteVersion[4])
+    except Exception:
+        pass
+    
+    #decompose Milestone version into X.Y.Z
+    mlVersion_X = 0
+    mlVersion_Y = 0
+    mlVersion_Z = 0    
+    try:
+        # expected milestoneVersion string as "X.Y.Z"
+        mlVersion_X = int(aMilestoneVersion[0])
+        mlVersion_Y = int(aMilestoneVersion[2])
+        mlVersion_Z = int(aMilestoneVersion[4])
+    except Exception:
+        pass
+        
+    if(mlVersion_X == qtVersion_X and\
+       (mlVersion_Y < qtVersion_Y or\
+       (mlVersion_Y == qtVersion_Y and mlVersion_Z <= qtVersion_Z))):
+        return True
+    return False
+
+def createMilestonesItems(aGithubRepo, aQtasteVersion, aState="closed"):
+
     tbodyStr = ""
-
-    # Check if there is such milestone
+    # Check for all milestones versions <= X.Y.Z
     milestone = None
-    for milestoneIt in aGithubRepo.get_milestones():
-        if(milestoneIt.title.startswith(aQtasteVersion)):
-            milestone = milestoneIt
-            break
-
-    # Get all issues for current milestone (if any) which are closed and
-    # labels as "type:new_feature"
-    noneIssuesWereFound = True
-    if(milestone != None):
-        for issue in aGithubRepo.get_issues(milestone=milestone,\
-                                            state=aState):
-            isIssueToBePrinted = False
-            if(aLabelName == ""): # Query issues wich are neither features nor bugs
-                isIssueToBePrinted = True
-                for label in issue.get_labels():
-                    if(label.name.endswith("new_feature") or\
-                       label.name.endswith("bug")):
-                        isIssueToBePrinted =  False
-                        break
-            else:
-                for label in issue.get_labels():
-                    if(label.name == aLabelName):
-                        isIssueToBePrinted = True
-                        break
-
-            if(isIssueToBePrinted):
+    milestoneTitle = ""
+    milestoneStates = ["open", "closed"]
+    for milestoneState in milestoneStates:
+        for milestoneIt in aGithubRepo.get_milestones(state=milestoneState, direction="asc", sort="due_date"):
+            if(isValidMilestoneVersion(aQtasteVersion, milestoneIt.title) == True):                
+                # Create XML output for the queried issues
+                rootNewFeatureItems = Element('itemizedlist')
+                rootNewFeatureItems.set('mark', "opencircle")
+                rootBugItems = Element('itemizedlist')
+                rootBugItems.set('mark', "opencircle")
+                rootOtherItems = Element('itemizedlist')
+                rootOtherItems.set('mark', "opencircle")
+               
+                milestone = milestoneIt
+                milestoneTitle = milestoneIt.title
+                
+                # Get all closed issues for current milestone (if any)
+                noneNewFeatureItemsWereFound = True
+                noneBugItemsWereFound = True
+                noneOtherItemsWereFound = True
+                if(milestone != None):
+                    for issue in aGithubRepo.get_issues(milestone=milestone,\
+                                                        state=aState):
+                        
+                        item = Element('listitem')
+                        item.set('override', "bullet")
+                        issueLink = Element('ulink')
+                        issueLink.set('url', issue.html_url)
+                        issueLink.text = " (#" + str(issue.number) + ")"
+                        item.append(issueLink)
+                        item.text = issue.title                        
+                        
+                        isLabelFound = False
+                        for label in issue.get_labels(): # May have several labels
+                            if(label.name.endswith("new_feature")):
+                                rootNewFeatureItems.append(item)
+                                isLabelFound = True
+                                noneNewFeatureItemsWereFound = False
+                                break
+                            elif(label.name.endswith("bug")):
+                                rootBugItems.append(item)
+                                isLabelFound = True
+                                noneBugItemsWereFound = False
+                                break
+                        # End FOR                
+                        if(isLabelFound == False):
+                            rootOtherItems.append(item)       
+                            noneOtherItemsWereFound = False
+                    # End FOR                    
+                # End IF
+                
+                # Append None Item if no other items were found
                 item = Element('listitem')
                 item.set('override', "bullet")
-                issueLink = Element('ulink')
-                issueLink.set('url', issue.html_url)
-                issueLink.text = " (#" + str(issue.number) + ")"
-                item.append(issueLink)
-                item.text = issue.title
-                root.append(item)
-
-                #item.text = issue.title
-
-                noneIssuesWereFound = False
-        # End FOR
-
-    if(noneIssuesWereFound):
-        item = Element('listitem')
-        item.set('override', "bullet")
-        item.text = "None"
-        root.append(item)
-
-    return tostring(root)
-
-
-def createNewFeaturesSection(aGithubRepo, aQtasteVersion):
-    return createIssuesItems(aGithubRepo, aQtasteVersion,\
-                             "closed", "type:new_feature")
-
-def createBugFixesSection(aGithubRepo, aQtasteVersion):
-    return createIssuesItems(aGithubRepo, aQtasteVersion,\
-                             "closed", "type:bug")
-
-def createChangesSection(aGithubRepo, aQtasteVersion):
-    return createIssuesItems(aGithubRepo, aQtasteVersion, "closed")
+                item.text = "None"
+                if(noneNewFeatureItemsWereFound == True):
+                    rootNewFeatureItems.append(item)
+                if(noneBugItemsWereFound == True):
+                    rootBugItems.append(item)
+                if(noneOtherItemsWereFound == True):
+                    rootOtherItems.append(item)
+                                
+                # Format body string                
+                tbodyStr += "<para><emphasis role='bold'> Version: </emphasis>" + milestoneTitle + "</para>\n"
+                
+                tbodyStr += "<para><emphasis role='bold'>New Features:</emphasis></para>\n"
+                tbodyStr += tostring(rootNewFeatureItems) + "\n"
+                
+                tbodyStr += "<para><emphasis role='bold'>Resolved Issues:</emphasis></para>\n"
+                tbodyStr += tostring(rootBugItems) + "\n"
+                
+                tbodyStr += "<para><emphasis role='bold'>Other Changes:</emphasis></para>\n"
+                tbodyStr += tostring(rootOtherItems) + "\n"
+                                
+                tbodyStr += "<para>________________________________________________________ </para>\n"                
+                
+            # End IF
+        # End FOR - - Milestone Iteration
+    # End FOR - Milestone States
+    
+    return tbodyStr
 
 def createIssuesTableBody(aGithubRepo, aState):
     # create XML output for the queried issues
@@ -223,13 +273,9 @@ def main():
 
     print "reading release notes info from repository ..."
 
-    try: # Query Github repository
-        # Read New Features for current QTasteVersion <=> Milestone
-        strNewFeaturesIssues = createNewFeaturesSection(repo, qtasteVersionForRelease)
-        # Read Bug Fixes for current QTasteVersion <=> Milestone
-        strBugFixesIssues = createBugFixesSection(repo, qtasteVersionForRelease)
-        # Read Other Changes for current QTasteVersion <=> Milestone
-        strChangesIssues = createChangesSection(repo, qtasteVersionForRelease)
+    try: # Query Github repository        
+        # Read Milestones info (<= QTaste version)
+        tbodyStrMilestoneIssues = createMilestonesItems(repo, qtasteVersionForRelease)        
         # Read Open Issues
         tbodyStrOpenIssues = createIssuesTableBody(repo, "open")
         # Read Closed Issues
@@ -238,11 +284,9 @@ def main():
         print "Could not connect to Github:"
         sys.exit(e)
 
-    # Add the tbody with Remaining issues
+    # Format template with input formatted strings
     strFile = strFile.format(QTasteVersion=qtasteVersionCurrent,\
-                             QTasteNewFeatures=strNewFeaturesIssues,\
-                             QTasteFixedIssues=strBugFixesIssues,\
-                             QTasteChanges=strChangesIssues,\
+                             QTasteReleaseContent=tbodyStrMilestoneIssues,\
                              GithubOpenIssuesTableBody=tbodyStrOpenIssues,\
                              GithubClosedIssuesTableBody=tbodyStrClosedIssues)
 
