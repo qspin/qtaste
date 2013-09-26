@@ -25,25 +25,15 @@
   </chapter>
 
   <chapter>
-    <title><emphasis>Release content</emphasis></title>
+    <title><emphasis>Release Content</emphasis></title>
 
     <section>
-      <title><emphasis>New features</emphasis></title>
-        {QTasteNewFeatures}
+      <title><emphasis>Release Notes</emphasis></title>
+        {QTasteReleaseContent}
     </section>
 
     <section>
-      <title><emphasis>Resolved issues</emphasis></title>
-        {QTasteFixedIssues}
-    </section>
-
-    <section>
-      <title><emphasis>Other changes</emphasis></title>
-        {QTasteChanges}
-    </section>
-
-    <section>
-      <title><emphasis>Issues</emphasis></title>
+      <title><emphasis>History</emphasis></title>
 
       <table>
         <title><emphasis>Open Issues</emphasis></title>
@@ -101,8 +91,8 @@
   <chapter>
     <title><emphasis>Distribution</emphasis></title>
 
-    <para>This version of QTaste is stored on Github: <ulink
-    url="https://github.com/qspin/qtaste"/></para>
+    <para>This version of QTaste is available on Github Releases: <ulink
+    url="https://github.com/qspin/qtaste/releases"/></para>
   </chapter>
 
   <chapter>
