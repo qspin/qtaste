@@ -1,5 +1,9 @@
 @echo off
 
+if not exist "..\plugins\SUT" (
+    mkdir ..\plugins\SUT
+)
+
 pushd tools
 call mvn clean install assembly:single
 copy target\*-deploy.jar ..\..\plugins\SUT\
