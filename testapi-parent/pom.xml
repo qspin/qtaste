@@ -66,7 +66,7 @@
                   <configuration>
                     <classifier>sources</classifier>
                     <excludeTransitive>true</excludeTransitive>
-                    <includes>com/qspin/qtaste/testapi/api/*.java</includes>
+                    <includes>**/qtaste/testapi/api/*.java</includes>
                     <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
                     <overWriteReleases>false</overWriteReleases>
                     <overWriteSnapshots>true</overWriteSnapshots>
