@@ -31,10 +31,12 @@ public final class AddOnMetadata {
         	am.setVersion(attributes.getValue(ADDON_VERSION_ATTRIBUTE));
         	am.setDescription(attributes.getValue(ADDON_DESCRIPTION_ATTRIBUTE));
         	am.setMainClass(attributes.getValue(ADDON_MAIN_CLASS_ATTRIBUTE));
-            Class<?> addOnClass = Class.forName(am.getMainClass());
-            if (am.getMainClass() != null && AddOn.class.isAssignableFrom(addOnClass))
+
+            if (am.getMainClass() != null)
             {
-            	return am;			                
+                Class<?> addOnClass = Class.forName(am.getMainClass());
+                if (AddOn.class.isAssignableFrom(addOnClass))
+                	return am;			                
             }
         } catch (MalformedURLException e) {
         	LOGGER.error("Couldn't create jar manifest URL for reading version information: " + e.getMessage());

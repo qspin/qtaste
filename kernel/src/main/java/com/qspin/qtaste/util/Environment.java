@@ -156,6 +156,7 @@ public class Environment {
             mAddOnManager.loadAddOns();
 
         } catch (Exception e) {
+        	e.printStackTrace();
         	LOGGER.error(e);
             TestEngine.shutdown();
             System.exit(1);            
