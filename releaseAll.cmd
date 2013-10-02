@@ -23,9 +23,10 @@ rem  #	 -This will stage QTaste (from tag version prompted in step 7) into sonat
 rem  # To finally release QTaste (from stageg to released) follow step 8a) of tutorial:
 rem  # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 rem  # --------------------------------------------------------------------------------------------------------------------
-rem  # usage: releaseAll.sh [-snapshot] [-deploySnapshot]
+rem  # usage: releaseAll.sh [-snapshot] [-deploySnapshot] [-dryStage]
 rem  # optional arg: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
 rem  #               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
+rem  #               [-dryStage] Stage a release of QTaste without iterating a new version 
 rem  #    repository https://oss.sonatype.org/content/repositories/snapshots 
 rem  #
 rem  # Note: Only projects owners have rights to deploy QTaste.
@@ -45,11 +46,10 @@ if [%1] == [-help] (
 ) else if [%1] == [-deploySnapshot] (	
 	rem Deploy Snapshots QTaste  
 	call clean deploy -P qtaste-all-modules-release
+) else if [%1] == [-dryStage] (	
+    call mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release,qtaste-skip-for-release    
+    call mvn release:perform -P qtaste-all-modules-release || exit 1
 ) else (
-    call mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release
-    
-    rem Generate PGP Signatures With Maven
-	call mvn clean verify -P qtaste-all-modules-release,qtaste-generate-signature-artifacts
-	
+    call mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release    
     call mvn release:perform -P qtaste-all-modules-release || exit 1
 )

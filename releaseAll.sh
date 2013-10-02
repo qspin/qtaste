@@ -18,9 +18,10 @@
 # To finally release QTaste (from stageg to released) follow step 8a) of tutorial:
 # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 # --------------------------------------------------------------------------------------------------------------------
-# usage: releaseAll.sh [-newSnapshot] [-deploySnapshot] 
+# usage: releaseAll.sh [-newSnapshot] [-deploySnapshot] [-dryStage]
 # optional args: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
 #               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
+#               [-dryStage] Stage a release of QTaste without iterating a new version
 #    repository https://oss.sonatype.org/content/repositories/snapshots 
 #
 # Requirements for deploySnapshot option:
@@ -46,6 +47,9 @@ elif [ "$1" == "-newSnapshot" ]; then
 elif [ "$1" == "-deploySnapshot" ]; then	
 	# Deploy Snapshots QTaste  
 	mvn deploy -P qtaste-all-modules-release  || exit 1
+elif [ "$1" == "-dryStage" ]; then	
+    mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
+    mvn release:perform -P qtaste-all-modules-release || exit 1
 else
     mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
     mvn release:perform -P qtaste-all-modules-release || exit 1
