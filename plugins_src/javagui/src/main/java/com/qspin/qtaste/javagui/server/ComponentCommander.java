@@ -210,7 +210,12 @@ abstract class ComponentCommander {
 		return null;		
 	}
 	
-	protected void setComponentFrameVisible(Component c)
+	/**
+	 * Try to active the window containing the component.
+	 * @param c the component contained in the window to active.
+	 * @return <code>true</code> only if the parent window is active at the end of the activation process.
+	 */
+	protected boolean setComponentFrameVisible(Component c)
 	{
 		Component parent = c;
 		//active the parent window
@@ -237,10 +242,18 @@ abstract class ComponentCommander {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-//			LOGGER.trace("3 current focused window : " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow());
-			LOGGER.trace("parent active state ? " + ((Window)parent).isActive() );
+			boolean parentActiveState = !((Window)parent).isActive();
+			LOGGER.trace("parent active state ? " + parentActiveState );
+			if (!parentActiveState)
+			{
+				LOGGER.warn("The window activation process failed!!!");
+				return false;
+			} else {
+				LOGGER.trace("The window activation process is completed!!!");
+			}
 		} else {
 			LOGGER.trace("the parent window of '" + c.getName() + "' is already active");
 		}
+		return true;
 	}
 }
