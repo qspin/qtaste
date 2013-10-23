@@ -30,18 +30,18 @@ class EnabledComponentCounter extends ComponentCommander {
 				superContainers.add(f);
 			}
 		}
-		for( Window f : Frame.getWindows() )
+		for( Window w : Window.getWindows() )
 		{
-			if (!superContainers.contains(f))
+			if (!superContainers.contains(w))
 			{
-				superContainers.add(f);
+				superContainers.add(w);
 			}
 		}
-		for( Window f : Frame.getOwnerlessWindows() )
+		for( Window w : Window.getOwnerlessWindows() )
 		{
-			if (!superContainers.contains(f))
+			if (!superContainers.contains(w))
 			{
-				superContainers.add(f);
+				superContainers.add(w);
 			}
 		}
 		

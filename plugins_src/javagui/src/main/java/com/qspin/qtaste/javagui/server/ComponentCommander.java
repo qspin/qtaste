@@ -47,7 +47,10 @@ abstract class ComponentCommander {
 		mFindWithEqual = false;
 		LOGGER.debug("try to find a component with the name : " + name);
 		// TODO: Think about several component having the same names!
-		for (int w = 0; w < Frame.getWindows().length && !mFindWithEqual; w++) {
+		for (Window window: Window.getWindows()) {
+			if (mFindWithEqual) {
+				break;
+			}
 			Window window = Frame.getWindows()[w];
 			if ( !checkName(name, window) || !mFindWithEqual ) {
 				LOGGER.debug("parse window");
@@ -125,8 +128,7 @@ abstract class ComponentCommander {
 	{
 		//find all popups
 		List<JDialog> popupFound = new ArrayList<JDialog>();
-		for (int w = 0; w < Frame.getWindows().length; w++) {
-			Window window = Frame.getWindows()[w];
+		for (Window window: Window.getWindows()) {
 //			LOGGER.debug("parse window - type : " + window.getClass());
 			if ( isAPopup(window) )
 			{

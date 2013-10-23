@@ -70,8 +70,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		LOGGER.debug("try to find a component with the name : " + name);
 		// TODO: Think about several component having the same names!
 		//search for all components which contains the name
-		for (int w = 0; w < Frame.getWindows().length; w++) {
-			Window window = Frame.getWindows()[w];
+		for (Window window: Window.getWindows()) {
 //			LOGGER.debug("parse window");
 			if ( checkName(name, window) )
 			{
