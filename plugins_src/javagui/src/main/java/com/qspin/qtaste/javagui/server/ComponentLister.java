@@ -47,8 +47,8 @@ final class ComponentLister extends ComponentCommander {
 			list.add(key + "   (number of instance with this name :" + mComponentsMap.get(key).size() + ")");
 		}
 		Collections.sort(list);
-		list.add("Number of ownerless windows : " + Windows.getOwnerlessWindows().length);
-		list.add("Number of windows : " + Windows.getWindows().length);
+		list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
+		list.add("Number of windows : " + Window.getWindows().length);
 		list.add("Number of frames : " + Frame.getFrames().length);
 		String[] result = (String[]) list.toArray(new String[0]);
 		return result;

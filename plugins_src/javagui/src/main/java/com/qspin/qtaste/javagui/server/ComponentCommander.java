@@ -51,7 +51,6 @@ abstract class ComponentCommander {
 			if (mFindWithEqual) {
 				break;
 			}
-			Window window = Frame.getWindows()[w];
 			if ( !checkName(name, window) || !mFindWithEqual ) {
 				LOGGER.debug("parse window");
 				lookForComponent(name, window.getComponents());
