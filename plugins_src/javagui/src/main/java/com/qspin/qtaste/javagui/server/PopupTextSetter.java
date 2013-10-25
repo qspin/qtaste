@@ -52,9 +52,10 @@ public class PopupTextSetter extends UpdateComponentCommander {
 		while ( System.currentTimeMillis() < maxTime )
 		{
 			List<JDialog> popups = findPopups();
+			JDialog targetPupop = null;
 			//If there is only one popup, use this popup and do not check the popup state.
 			if ( popups.size() == 1 )
-				component = popups.get(0);
+				targetPupop = popups.get(0);
 			else
 			{
 				for (JDialog dialog : popups )
@@ -74,22 +75,24 @@ public class PopupTextSetter extends UpdateComponentCommander {
 					}
 					else
 					{
-						component = findTextComponent(dialog);
-						if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-							break;
+						targetPupop = dialog;
 					}
 				}
-				if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-					break;
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					LOGGER.warn("Exception during the component search sleep...");
-				}
 			}
-		}
-		
+			component = findTextComponent(targetPupop);
+			
+			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+				break;
+			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+				break;
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				LOGGER.warn("Exception during the component search sleep...");
+			}
+		}	
+			
 		if (component == null )
 		{
 			throw new QTasteTestFailException("The text field component is not found.");
@@ -99,6 +102,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
 		}
 		if (! checkComponentIsVisible(component))
 			throw new QTasteTestFailException("The text field component is not visible!");
+		
 		
 		prepareActions();
 		SwingUtilities.invokeLater(this);
