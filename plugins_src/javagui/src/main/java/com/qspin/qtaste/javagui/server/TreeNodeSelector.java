@@ -103,10 +103,12 @@ class TreeNodeSelector extends UpdateComponentCommander {
 	}
 
 	@Override
-	protected void doActionsInSwingThread() {
+	protected void doActionsInSwingThread()
+	{
 		JTree tree = (JTree) component;
-		tree.setSelectionPath(new TreePath(mPath));
-		tree.expandPath(new TreePath(mPath));
+		TreePath path = new TreePath(mPath);
+		tree.setSelectionPath(path);
+		tree.expandPath(path);
 		tree.setExpandsSelectedPaths(true);
 	}
 
