@@ -48,11 +48,6 @@ final class ComponentLister extends ComponentCommander {
 	{
 		mComponentsMap = new HashMap<String, List<Component>>();
 		
-		for (Frame frame: Frame.getFrames()) {
-			if (frame.getName() != null) {
-				addToMap(frame);
-			}
-		}
 		for (Window window: Window.getWindows()) {
 			if (window.getName() != null) {
 				addToMap(window);
@@ -68,7 +63,6 @@ final class ComponentLister extends ComponentCommander {
 		Collections.sort(list);
 		list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
 		list.add("Number of windows : " + Window.getWindows().length);
-		list.add("Number of frames : " + Frame.getFrames().length);
 		String[] result = (String[]) list.toArray(new String[0]);
 		return result;
 	}
