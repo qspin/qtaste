@@ -53,7 +53,9 @@ class TreeNodeSelector extends UpdateComponentCommander {
 			if (!tree.isRootVisible() || value.equals(nodeNames[0]))
 			{
 				mPath[0] = tree.getModel().getRoot();
-				for (int i = 0; i < nodeNames.length; i++)
+				// If Root is visible, skip it
+				int i = tree.isRootVisible() ? 1 : 0;
+				for (; i < nodeNames.length; i++)
 				{
 					boolean nodeFound = false;
 					do
