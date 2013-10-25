@@ -42,21 +42,7 @@ class EnabledComponentCounter extends ComponentCommander {
 	Integer executeCommand(Object... data) {
 		int counter = 0;
 		List<Container> superContainers = new ArrayList<Container>();
-		for( Frame f : Frame.getFrames() )
-		{
-			if (!superContainers.contains(f))
-			{
-				superContainers.add(f);
-			}
-		}
 		for( Window w : Window.getWindows() )
-		{
-			if (!superContainers.contains(w))
-			{
-				superContainers.add(w);
-			}
-		}
-		for( Window w : Window.getOwnerlessWindows() )
 		{
 			if (!superContainers.contains(w))
 			{
