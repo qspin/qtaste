@@ -66,7 +66,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	    if (!setComponentFrameVisible(component) )
 	    {
 	    	LOGGER.error("Unable to active the parent window!");
-	    	throw new QTasteException("Unable to active the parent window!");
+	    	//throw new QTasteException("Unable to active the parent window!");
 	    }
 	    
 		SwingUtilities.invokeLater(this);
