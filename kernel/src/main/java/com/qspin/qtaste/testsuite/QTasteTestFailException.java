@@ -20,7 +20,9 @@
 package com.qspin.qtaste.testsuite;
 
 /**
- *
+ * QTasteTestFailException are thrown by testAPI component.
+ * This kind of exception is thrown, for example, when the testAPI is in an invalid state and 
+ * the current cannot be continued.  
  * @author dergo
  */
 @SuppressWarnings("serial")

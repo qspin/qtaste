@@ -29,7 +29,9 @@
 package com.qspin.qtaste.testsuite;
 
 /**
- *
+ * QTasteException represents an error related to the QTaste platform.
+ * The QTaste platform is represented by the kernel itself but also by the
+ * testapi and all test files.
  * @author lvboque
  */
 @SuppressWarnings("serial")
