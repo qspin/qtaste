@@ -21,6 +21,7 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -50,35 +51,42 @@ public class PopupTextSetter extends UpdateComponentCommander {
 		
 		while ( System.currentTimeMillis() < maxTime )
 		{
-			for (JDialog dialog : findPopups() )
+			List<JDialog> popups = findPopups();
+			//If there is only one popup, use this popup and do not check the popup state.
+			if ( popups.size() == 1 )
+				component = popups.get(0);
+			else
 			{
-				setComponentFrameVisible(dialog);
-				if ( !dialog.isVisible() || !dialog.isEnabled() || !dialog.isActive() )
+				for (JDialog dialog : popups )
 				{
-					String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
-					if (!dialog.isVisible())
-						msg += "\t is not visible";
-					if (!dialog.isEnabled())
-						msg += "\t is not enabled";
-					if (!dialog.isActive())
-						msg += "\t is not active";
-					LOGGER.info(msg);
-					continue;
+					setComponentFrameVisible(dialog);
+					if ( !dialog.isVisible() || !dialog.isEnabled() || !dialog.isActive() )
+					{
+						String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
+						if (!dialog.isVisible())
+							msg += "\t is not visible";
+						if (!dialog.isEnabled())
+							msg += "\t is not enabled";
+						if (!dialog.isActive())
+							msg += "\t is not active";
+						LOGGER.info(msg);
+						continue;
+					}
+					else
+					{
+						component = findTextComponent(dialog);
+						if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+							break;
+					}
 				}
-				else
-				{
-					component = findTextComponent(dialog);
-					if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-						break;
+				if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+					break;
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					LOGGER.warn("Exception during the component search sleep...");
 				}
-			}
-			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-				break;
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				LOGGER.warn("Exception during the component search sleep...");
 			}
 		}
 		
@@ -94,6 +102,8 @@ public class PopupTextSetter extends UpdateComponentCommander {
 		
 		prepareActions();
 		SwingUtilities.invokeLater(this);
+		synchronizeThreads();
+		
 		return true;
 	}
 	

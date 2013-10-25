@@ -21,8 +21,8 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.Window;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +68,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	    	LOGGER.error("Unable to active the parent window!");
 	    	throw new QTasteException("Unable to active the parent window!");
 	    }
+	    
 		SwingUtilities.invokeLater(this);
+		synchronizeThreads();
+		
 		return true;
 	}
 	
@@ -89,7 +92,8 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		LOGGER.debug("try to find a component with the name : " + name);
 		// TODO: Think about several component having the same names!
 		//search for all components which contains the name
-		for (Window window: Window.getWindows()) {
+		Window[] windows = Window.getWindows();
+		for (Window window : windows) {
 //			LOGGER.debug("parse window");
 			if ( checkName(name, window) )
 			{
@@ -192,6 +196,28 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				currentComponent = currentComponent.getParent();
 		}
 		return true;
+	}
+	
+	/**
+	 * Will wait the end of the swing event thread with an empty SwingUtilities.invokeAndWait().
+	 */
+	protected void synchronizeThreads()
+	{
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					//Do nothing.
+					//Just there in order to "synchronize" the jmx thread with the swing event thread.
+				}
+			});
+		} catch (InterruptedException e) {
+			//Should not occurred, the Runnable do nothing.
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			//Should not occurred, the Runnable do nothing.
+			e.printStackTrace();
+		}
 	}
 	
 	protected abstract void prepareActions() throws QTasteException;

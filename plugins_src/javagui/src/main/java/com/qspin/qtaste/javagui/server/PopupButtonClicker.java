@@ -21,6 +21,7 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JDialog;
@@ -50,26 +51,33 @@ public class PopupButtonClicker extends UpdateComponentCommander {
 		
 		while ( System.currentTimeMillis() < maxTime )
 		{
-			for (JDialog dialog : findPopups() )
+			List<JDialog> popups = findPopups();
+			//If there is only one popup, use this popup and do not check the popup state.
+			if ( popups.size() == 1 )
+				component = popups.get(0);
+			else
 			{
-				setComponentFrameVisible(dialog);
-				//ignored popup without focus
-				if ( !dialog.isVisible() || !dialog.isEnabled() || !hasTheFocus(dialog) )
-					continue;
-				else
+				for (JDialog dialog : popups )
 				{
-					component = findButtonComponent(dialog, buttonText);
-					if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-						break;
+					setComponentFrameVisible(dialog);
+					//ignored popup without focus
+					if ( !dialog.isVisible() || !dialog.isEnabled() || !hasTheFocus(dialog) )
+						continue;
+					else
+					{
+						component = findButtonComponent(dialog, buttonText);
+						if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+							break;
+					}
 				}
-			}
-			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-				break;
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				LOGGER.warn("Exception during the component search sleep...");
+				if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
+					break;
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					LOGGER.warn("Exception during the component search sleep...");
+				}
 			}
 		}
 		
@@ -85,6 +93,7 @@ public class PopupButtonClicker extends UpdateComponentCommander {
 		
 		prepareActions();
 		SwingUtilities.invokeLater(this);
+		synchronizeThreads();
 		return true;
 	}
 	
