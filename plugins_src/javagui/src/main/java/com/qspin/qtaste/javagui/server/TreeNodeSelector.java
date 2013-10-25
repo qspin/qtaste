@@ -55,6 +55,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				mPath[0] = tree.getModel().getRoot();
 				for (int i = 0; i < nodeNames.length; i++)
 				{
+					boolean nodeFound = false;
 					do
 					{
 						for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++)
@@ -71,19 +72,21 @@ class TreeNodeSelector extends UpdateComponentCommander {
 								} else {
 									mPath[i+1] = node;	
 								}
+								nodeFound = true;
 								break;
 							}
 						}
-						if ( (tree.isRootVisible() && mPath[i] != null) || 
-							 (!tree.isRootVisible() && mPath[i+1] != null)) {
-							break;
-						}
 
-					} while ( System.currentTimeMillis() < m_maxTime);
+					} while ( System.currentTimeMillis() < m_maxTime && !nodeFound);
+					
+					if (!nodeFound)
+					{
+						throw new QTasteTestFailException("Unabled to find node named " + nodeNames[i]);
+					}
 				}
 			}
 		} else {
-			throw new QTasteTestFailException("Unabled to find node named " + nodeNames[0]);
+			throw new QTasteTestFailException("Unabled to find the first node named " + nodeNames[0]);
 		}
 	}
 	
