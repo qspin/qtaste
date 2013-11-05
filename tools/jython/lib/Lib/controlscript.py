@@ -451,7 +451,7 @@ class JavaProcess(ControlAction):
 				updateQTasteRoot = qtasteRootDirectory.replace(":",";")
 				self.classPath = self.classPath.replace(updateQTasteRoot, qtasteRootDirectory)
 				shellScriptArguments += ' -cp "' + self.classPath + '"';
-			if len(self.vmArgs) > 0:
+			if len(vmArgs) > 0:
 				shellScriptArguments += ' -vmArgs "' + vmArgs + '"';
 			if self.jmxPort:
 				shellScriptArguments += ' -jmxPort ' + str(self.jmxPort);
