@@ -51,33 +51,26 @@ public class PopupButtonClicker extends UpdateComponentCommander {
 		
 		while ( System.currentTimeMillis() < maxTime )
 		{
-			List<JDialog> popups = findPopups();
 			JDialog targetPopup = null;
-			//If there is only one popup, use this popup and do not check the popup state.
-			if ( popups.size() == 1 )
-				targetPopup = popups.get(0);
-			else
+			for (JDialog dialog : findPopups() )
 			{
-				for (JDialog dialog : popups )
+				if ( !dialog.isVisible() || !dialog.isEnabled() )
 				{
-					if ( !dialog.isVisible() || !dialog.isEnabled() )
-					{
-						String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
-						if (!dialog.isVisible())
-							msg += "\t is not visible";
-						if (!dialog.isEnabled())
-							msg += "\t is not enabled";
-						LOGGER.info(msg);
-						continue;
-					}
-					if (activateAndFocusComponentWindow(dialog))
-					{
-						targetPopup = dialog;
-					}
-					else
-					{
-						LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
-					}
+					String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
+					if (!dialog.isVisible())
+						msg += "\t is not visible";
+					if (!dialog.isEnabled())
+						msg += "\t is not enabled";
+					LOGGER.info(msg);
+					continue;
+				}
+				if (activateAndFocusComponentWindow(dialog))
+				{
+					targetPopup = dialog;
+				}
+				else
+				{
+					LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
 				}
 			}
 			component = findButtonComponent(targetPopup, buttonText);
