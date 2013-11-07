@@ -63,10 +63,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
 		
 		prepareActions();
-	    if (!setComponentFrameVisible(component) )
+	    if (!activateAndFocusComponentWindow(component) )
 	    {
-	    	LOGGER.error("Unable to active the parent window!");
-	    	//throw new QTasteException("Unable to active the parent window!");
+	    	LOGGER.error("Unable to activate/focus the parent window!");
+	    	//throw new QTasteException("Unable to activate/focus the parent window!");
 	    }
 	    
 		SwingUtilities.invokeLater(this);

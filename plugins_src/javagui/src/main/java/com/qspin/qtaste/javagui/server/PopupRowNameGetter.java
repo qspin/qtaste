@@ -47,15 +47,11 @@ public class PopupRowNameGetter extends ComponentCommander {
 		List<String> texts = new ArrayList<String>();
 		for ( JDialog dialog : findPopups() )
 		{
-			if ( onlyWithFocus )
+			if ( onlyWithFocus && !activateAndFocusComponentWindow(dialog) )
 			{
-				setComponentFrameVisible(dialog);
 				// if only the main popup text is needed, ignored popup without focus
-				if ( !hasTheFocus(dialog))
-					{
-					LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
-					continue;
-				}
+				LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
+				continue;
 			}
 			
 			LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");

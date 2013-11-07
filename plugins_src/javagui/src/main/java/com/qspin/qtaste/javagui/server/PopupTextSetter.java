@@ -60,29 +60,28 @@ public class PopupTextSetter extends UpdateComponentCommander {
 			{
 				for (JDialog dialog : popups )
 				{
-					setComponentFrameVisible(dialog);
-					if ( !dialog.isVisible() || !dialog.isEnabled() || !dialog.isActive() )
+					if ( !dialog.isVisible() || !dialog.isEnabled() )
 					{
 						String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
 						if (!dialog.isVisible())
 							msg += "\t is not visible";
 						if (!dialog.isEnabled())
 							msg += "\t is not enabled";
-						if (!dialog.isActive())
-							msg += "\t is not active";
 						LOGGER.info(msg);
 						continue;
 					}
-					else
+					if (activateAndFocusComponentWindow(dialog))
 					{
 						targetPopup = dialog;
+					}
+					else
+					{
+						LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
 					}
 				}
 			}
 			component = findTextComponent(targetPopup);
 			
-			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-				break;
 			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
 				break;
 			
@@ -136,5 +135,4 @@ public class PopupTextSetter extends UpdateComponentCommander {
 	protected void doActionsInSwingThread() throws QTasteTestFailException {
 		((JTextField)component).setText(mData[1].toString());
 	}
-
 }

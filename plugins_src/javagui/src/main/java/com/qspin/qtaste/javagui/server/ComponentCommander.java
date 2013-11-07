@@ -2,15 +2,20 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -140,24 +145,6 @@ abstract class ComponentCommander {
 		return popupFound;
 	}
 	
-	protected static boolean hasTheFocus(Component c)
-	{
-		if ( c != null )
-		{
-			if ( c.isFocusOwner() )
-				return true;
-			else if ( c instanceof Container )
-			{
-				for ( int i = 0; i < ((Container)c).getComponentCount(); i++ )
-				{
-					if ( hasTheFocus(((Container)c).getComponent(i)) )
-						return true;
-				}
-			}
-		}
-		return false;
-	}
-	
 	protected static boolean isAPopup(Component c)
 	{
 		if ( c == null )
@@ -212,11 +199,11 @@ abstract class ComponentCommander {
 	}
 	
 	/**
-	 * Try to active the window containing the component.
+	 * Try to activate and focus the window containing the component.
 	 * @param c the component contained in the window to active.
 	 * @return <code>true</code> only if the parent window is active at the end of the activation process.
 	 */
-	protected boolean setComponentFrameVisible(Component c)
+	protected boolean activateAndFocusComponentWindow(Component c)
 	{
 		Component parent = c;
 		//active the parent window
@@ -224,37 +211,101 @@ abstract class ComponentCommander {
 		{
 			parent = parent.getParent();
 		}
+		final Window window = (Window) parent;
 			    
-		if ( !((Window)parent).isActive() )
+		if ( !window.isFocused() )
 		{
-			LOGGER.trace("try to active the window of '" + c.getName() + "' cause its window is not active");
-			JFrame newFrame = new JFrame();
-			newFrame.pack();
-			newFrame.setVisible(true);
-			newFrame.toFront();
-	    	newFrame.setVisible(false);
-	    	newFrame.dispose();
-			((Window)parent).toFront();
-			try {
-				LOGGER.trace("current focused window : " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow());
-				((Window)parent).requestFocus();
-				Thread.sleep(1000);
-				LOGGER.trace("focused window after request: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			boolean parentActiveState = !((Window)parent).isActive();
-			LOGGER.trace("parent active state ? " + parentActiveState );
-			if (!parentActiveState)
+			if ( !window.isVisible() )
 			{
-				LOGGER.warn("The window activation process failed!!!");
+				LOGGER.trace("cannot activate and focus the window of '" + c.getName() + "' cause its window is not visible");
 				return false;
-			} else {
-				LOGGER.trace("The window activation process is completed!!!");
 			}
+			LOGGER.trace("try to activate and focus the window of '" + c.getName() + "' cause its window is not focused");
+			final KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+			WindowFocusedListener windowFocusedListener = new WindowFocusedListener(window);
+			window.addWindowFocusListener(windowFocusedListener);
+			SwingUtilities.invokeLater(new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					// try to activate application if not active
+					if (keyboardFocusManager.getActiveWindow() == null)
+					{
+						LOGGER.error("try to activate application");
+						// create and display a new frame to force application activation
+						JFrame newFrame = new JFrame();
+						newFrame.pack();
+						newFrame.setVisible(true);
+						newFrame.toFront();
+						newFrame.setVisible(false);
+						newFrame.dispose();
+					}
+
+					window.toFront();
+
+					LOGGER.trace("current focused window : " + keyboardFocusManager.getFocusedWindow());
+					window.requestFocus();
+				}
+			});
+
+			boolean windowFocused = windowFocusedListener.waitUntilWindowFocused();
+			window.removeWindowFocusListener(windowFocusedListener);
+			LOGGER.trace("window focused ? " + windowFocused );
+			LOGGER.trace("focused window after request: " + keyboardFocusManager.getFocusedWindow());
+			if (!windowFocused)
+			{
+				LOGGER.warn("The window activation/focus process failed!!!");
+				return false;
+			}
+			LOGGER.trace("The window activation/focus process is completed!!!");
 		} else {
-			LOGGER.trace("the parent window of '" + c.getName() + "' is already active");
+			LOGGER.trace("the window of '" + c.getName() + "' is already focused");
 		}
 		return true;
+	}
+
+	/**
+	 * Window listener to wait for window to be focused.
+	 */
+	private static class WindowFocusedListener extends WindowAdapter {
+
+		public WindowFocusedListener(Window window)
+		{
+			mWindowFocused = window.isFocused();
+		}
+
+		@Override
+		public synchronized void windowGainedFocus(WindowEvent event)
+		{
+			mWindowFocused = true;
+			notify();
+		}
+
+		/**
+		 * Waits until window is focused or timeout occurs.
+		 * 
+		 * @return true if window is focused, false otherwise
+		 */
+		public synchronized boolean waitUntilWindowFocused()
+		{
+			if (mWindowFocused)
+			{
+				return true;
+			}
+			try
+			{
+				wait(WINDOW_FOCUSED_TIMEOUT_MS);
+			} catch (InterruptedException e)
+			{
+				// ignore
+			}
+			return mWindowFocused;
+		}
+
+		private static final long WINDOW_FOCUSED_TIMEOUT_MS = 5000; // 5 s
+
+		private volatile boolean mWindowFocused = false;
 	}
 }
