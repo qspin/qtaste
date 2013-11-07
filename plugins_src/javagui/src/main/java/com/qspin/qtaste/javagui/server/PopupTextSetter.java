@@ -52,10 +52,10 @@ public class PopupTextSetter extends UpdateComponentCommander {
 		while ( System.currentTimeMillis() < maxTime )
 		{
 			List<JDialog> popups = findPopups();
-			JDialog targetPupop = null;
+			JDialog targetPopup = null;
 			//If there is only one popup, use this popup and do not check the popup state.
 			if ( popups.size() == 1 )
-				targetPupop = popups.get(0);
+				targetPopup = popups.get(0);
 			else
 			{
 				for (JDialog dialog : popups )
@@ -75,11 +75,11 @@ public class PopupTextSetter extends UpdateComponentCommander {
 					}
 					else
 					{
-						targetPupop = dialog;
+						targetPopup = dialog;
 					}
 				}
 			}
-			component = findTextComponent(targetPupop);
+			component = findTextComponent(targetPopup);
 			
 			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
 				break;
