@@ -90,7 +90,7 @@ def countPopupAndClose():
 		testAPI.stopTest(Status.FAIL, str(popupValue) + " popup(s) expected but only " + str(current) + " popup(s) displayed!")
 	
 	i = 0
-	while ( i<popupValue):
+	while ( len(javaguiMI.getAllPopupText()) > 0 ):
 		subtitler.setSubtitle("Click on the <span style=\"color:red;\">OK</span> button", 1.5)
 		javaguiMI.clickOnPopupButton("OK")
 		time.sleep(1)
