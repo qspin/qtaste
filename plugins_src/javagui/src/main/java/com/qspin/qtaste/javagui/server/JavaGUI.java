@@ -68,14 +68,14 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return new ComponentLister().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
 	}
 
-	public boolean clickOnButton(String componentName) throws QTasteException {
+	public void clickOnButton(String componentName) throws QTasteException {
 		LOGGER.trace("clickOnButton(\"" + componentName + "\")");
-		return clickOnButton(componentName, 68);
+		clickOnButton(componentName, 68);
 	}
 
-	public boolean clickOnButton(final String componentName, final int pressTime) throws QTasteException {
+	public void clickOnButton(final String componentName, final int pressTime) throws QTasteException {
 		LOGGER.trace("clickOnButton(\"" + componentName + "\", " + pressTime + ")");
-		return new ButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, pressTime);
+		new ButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, pressTime);
 	}
 
 	public boolean isEnabled(String componentName) throws QTasteException {
@@ -104,37 +104,37 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 				
 	// TODO: boolean returns is useless and confusing!
-	public boolean setText(final String componentName, final String value) throws QTasteException {
+	public void setText(final String componentName, final String value) throws QTasteException {
 		LOGGER.trace("setText(\"" + componentName + "\", \"" + value + "\")");
-		return new TextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
+		new TextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}	
 	
-	public boolean selectComponent(final String componentName, final boolean value) throws QTasteException {
+	public void selectComponent(final String componentName, final boolean value) throws QTasteException {
 		LOGGER.trace("selectComponent(\"" + componentName + "\", " + value + ")");
-		return new ComponentSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
+		new ComponentSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}			
 
-	public boolean selectValue(final String componentName, final String value) throws QTasteException {
+	public void selectValue(final String componentName, final String value) throws QTasteException {
 		LOGGER.trace("selectValue(\"" + componentName + "\", \"" + value + "\")");
-		return new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
+		new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}
 
-	public boolean selectIndex(final String componentName, final int index) throws QTasteException {
+	public void selectIndex(final String componentName, final int index) throws QTasteException {
 		LOGGER.trace("selectIndex(\"" + componentName + "\", " + index + ")");
-		return new IndexSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, index);
+		new IndexSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, index);
 	}
 
 	@Override
-	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException {
+	public void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException {
 		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodeName + "\", \"" + nodeSeparator + "\")");
-		return new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
+		new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
 	}
 	// Todo: getColor, awt?
 
 	@Override
-	public boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
+	public void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
 		LOGGER.trace("selectTab(\"" + tabbedPaneComponentName + "\", " + tabIndex + ")");
-		return new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
+		new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
 	}
 	
 	public String whoAmI() throws QTasteTestFailException {	

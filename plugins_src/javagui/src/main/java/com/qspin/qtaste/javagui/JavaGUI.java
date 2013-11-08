@@ -98,19 +98,17 @@ public interface JavaGUI {
    /**
      * Click on the specified componentName.
 	 * Can be used on {@link AbstractButton}. (see {@link AbstractButton#doClick()})
-     * @param componentName an identifier of the {@link AbstractButton} component.     
-	 * @return <code>true</code> if the action occurs correctly.
+     * @param componentName an identifier of the {@link AbstractButton} component.
      */
-   boolean clickOnButton(String componentName) throws QTasteException;
+   void clickOnButton(String componentName) throws QTasteException;
 
     /**
      * Click on the specified componentName during a specified period of time.</br>
 	 * Can be used on {@link AbstractButton}. (see {@link AbstractButton#doClick(int)})
      * @param componentName an identifier of the {@link AbstractButton} component.
-	 * @param pressTime an identifier of the {@link AbstractButton} component.     
-	 * @return <code>true</code> if the action occurs correctly.
+	 * @param pressTime an identifier of the {@link AbstractButton} component.
      */
-   boolean clickOnButton(String componentName, int pressTime) throws QTasteException;
+   void clickOnButton(String componentName, int pressTime) throws QTasteException;
    
     /**
      * Get the text used for the specied component.</br>
@@ -134,28 +132,25 @@ public interface JavaGUI {
 	  * </ul>
      * @param componentName an identifier of the GUI component.
 	 * @param value the new value for the text.
-	 * @return <code>true</code> if the action occurs correctly.
      */
-   boolean setText(String componentName, String value) throws QTasteException;
+   void setText(String componentName, String value) throws QTasteException;
     
    
    /**
     * Select the specified tab for the tabbed pane.</br>
 	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
     * @param tabbedPaneComponentName the {@link JTabbedPane} component name
-    * @param tabIndex the tab index (first at 0). 
-    * @return <code>true</code> if the action occurs correctly.
+    * @param tabIndex the tab index (first at 0).
     */
-   boolean selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException;
+   void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException;
    
    /**
     * Set the selection state to the specified component.</br>
 	* Can be used on {@link AbstractButton}. (see {@link AbstractButton#setSelected(boolean)})
     * @param componentName an identifier of the {@link AbstractButton} component.
 	* @param value the new selection state.
-	* @return <code>true</code> if the action occurs correctly.
     */
-   boolean selectComponent(String componentName, boolean value) throws QTasteException;
+   void selectComponent(String componentName, boolean value) throws QTasteException;
 
    /**
     * Select the value for the specified component.</br>
@@ -169,9 +164,8 @@ public interface JavaGUI {
 	  * </ul>
     * @param componentName an identifier of the GUI component.
 	* @param value the value to select.
-	* @return <code>true</code> if the action occurs correctly.
     */   
-   boolean selectValue(String componentName, String value) throws QTasteException;
+   void selectValue(String componentName, String value) throws QTasteException;
    
 
    /**
@@ -183,18 +177,16 @@ public interface JavaGUI {
 	  * </ul>
     * @param componentName an identifier of the GUI component.
 	* @param value the index to select.
-	* @return <code>true</code> if the action occurs correctly.
     */ 
-   boolean selectIndex(String componentName, int index) throws QTasteException;
+   void selectIndex(String componentName, int index) throws QTasteException;
    
    /**
     * Select the node for the specified JTree.</br>
 	* Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
     * @param componentName an identifier of the JTree component.
 	* @param value the node to select.
-	* @return <code>true</code> if the action occurs correctly.
     */ 
-   boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
+   void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
    
    /**
     * Parse a {@link JTree} component and create a String with the node content.</br>
