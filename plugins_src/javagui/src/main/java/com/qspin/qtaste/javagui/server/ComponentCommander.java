@@ -235,7 +235,7 @@ abstract class ComponentCommander {
 					// try to activate application if not active
 					if (keyboardFocusManager.getActiveWindow() == null)
 					{
-						LOGGER.error("try to activate application");
+						LOGGER.trace("try to activate application");
 						// create and display a new frame to force application activation
 						JFrame newFrame = new JFrame();
 						newFrame.pack();
