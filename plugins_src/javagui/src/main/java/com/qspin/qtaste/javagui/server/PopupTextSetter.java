@@ -44,9 +44,8 @@ public class PopupTextSetter extends UpdateComponentCommander {
 	 * @throws QTasteException
 	 */
 	@Override
-	public Boolean executeCommand(Object... data) throws QTasteException {
+	public Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		setData(data);
-		int timeout = Integer.parseInt(mData[0].toString());
 		long maxTime = System.currentTimeMillis() + 1000 * timeout;
 		
 		while ( System.currentTimeMillis() < maxTime )
@@ -134,7 +133,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
 
 	@Override
 	protected void doActionsInSwingThread() throws QTasteTestFailException {
-		((JTextField)component).setText(mData[1].toString());
+		((JTextField)component).setText(mData[0].toString());
 	}
 
 }

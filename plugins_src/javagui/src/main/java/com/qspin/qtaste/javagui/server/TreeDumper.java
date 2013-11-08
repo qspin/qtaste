@@ -34,9 +34,9 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 public class TreeDumper extends ComponentCommander {
 
 	@Override
-	String executeCommand(Object... data) throws QTasteException {
-		Component c = getComponentByName(data[0].toString());
-		String separator = data[1].toString();
+	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+		Component c = getComponentByName(componentName);
+		String separator = data[0].toString();
 		if ( c instanceof JTree )
 		{
 			JTree tree = (JTree) c;
@@ -49,7 +49,7 @@ public class TreeDumper extends ComponentCommander {
 			}
 			return builder.toString();
 		} else {
-			throw new QTasteTestFailException("The component \"" + data[0].toString() + "\" is not a JTree");
+			throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
 		}
 	}
 

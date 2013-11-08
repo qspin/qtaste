@@ -2,7 +2,6 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.util.ArrayList;
@@ -27,11 +26,13 @@ abstract class ComponentCommander {
 
 	/**
 	 * Executes the a command on a component.
+	 * @param timeout
+	 * @param componentName 
 	 * @param data an array of Object
 	 * @return true if the command is successfully performed.
 	 * @throws QTasteException
 	 */
-	abstract Object executeCommand(Object... data) throws QTasteException;
+	abstract Object executeCommand(int timeout, String componentName, Object... data) throws QTasteException;
 	
 	/** used for logging. */
 	protected static final Logger LOGGER = Logger.getLogger(ComponentCommander.class);

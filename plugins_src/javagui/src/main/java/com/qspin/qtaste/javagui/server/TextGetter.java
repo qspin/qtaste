@@ -30,8 +30,8 @@ import com.qspin.qtaste.testsuite.QTasteException;
 class TextGetter extends ComponentCommander {
 	
 	@Override
-	public String executeCommand(Object... data) throws QTasteException {
-		Component c = getComponentByName(data[0].toString());
+	public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JLabel) {
 				return ((JLabel) c).getText();

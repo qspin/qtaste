@@ -19,7 +19,7 @@ class ButtonClicker extends UpdateComponentCommander {
 	 */
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		mPressTime = (Integer)mData[2];
+		mPressTime = (Integer)mData[0];
 	}
 
 	/**

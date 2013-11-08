@@ -42,11 +42,10 @@ public class PopupButtonClicker extends UpdateComponentCommander {
 	 * @throws QTasteException
 	 */
 	@Override
-	public Boolean executeCommand(Object... data) throws QTasteException {
+	public Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		setData(data);
-		int timeout = Integer.parseInt(mData[0].toString());
 		long maxTime = System.currentTimeMillis() + 1000 * timeout;
-		String buttonText = mData[1].toString();
+		String buttonText = mData[0].toString();
 		component = null;
 		
 		while ( System.currentTimeMillis() < maxTime )

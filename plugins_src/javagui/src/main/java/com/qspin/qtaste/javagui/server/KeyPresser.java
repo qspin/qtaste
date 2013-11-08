@@ -27,7 +27,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 class KeyPresser extends ComponentCommander {
 
 	@Override
-	public Object executeCommand(Object... data) throws QTasteTestFailException {
+	public Object executeCommand(int timeout, String componentName, Object... data) throws QTasteTestFailException {
 		Robot bot = (Robot)data[0];
 		int keycode = Integer.parseInt(data[1].toString());
 		long delay = Long.parseLong(data[2].toString());

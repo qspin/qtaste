@@ -21,7 +21,7 @@ class ComponentSelector extends UpdateComponentCommander {
 	 */
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		mSelectState = Boolean.parseBoolean(mData[2].toString());
+		mSelectState = Boolean.parseBoolean(mData[0].toString());
 		if ( !(component instanceof AbstractButton) ){
 			throw new QTasteTestFailException("Unsupported component.");
 		}

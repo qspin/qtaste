@@ -29,7 +29,7 @@ import com.qspin.qtaste.testsuite.QTasteException;
 public class PopupChecker extends ComponentCommander {
 
 	@Override
-	Boolean executeCommand(Object... data) throws QTasteException {
+	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		return !findPopups().isEmpty();
 	}
 }

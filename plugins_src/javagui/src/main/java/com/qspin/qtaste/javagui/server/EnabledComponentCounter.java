@@ -21,7 +21,6 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ class EnabledComponentCounter extends ComponentCommander {
 	 * @return the number of GUI component with the given enabled state.
 	 */
 	@Override
-	Integer executeCommand(Object... data) {
+	Integer executeCommand(int timeout, String componentName, Object... data) {
 		int counter = 0;
 		List<Container> superContainers = new ArrayList<Container>();
 		for( Window w : Window.getWindows() )
@@ -50,7 +49,7 @@ class EnabledComponentCounter extends ComponentCommander {
 			}
 		}
 		
-		boolean isEnable = Boolean.parseBoolean(data[0].toString());
+		boolean isEnable = Boolean.parseBoolean(componentName);
 		for ( Container c : superContainers )
 		{
 			counter += getEnabledComponentCount(isEnable, c);

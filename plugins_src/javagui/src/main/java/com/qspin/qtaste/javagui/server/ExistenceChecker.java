@@ -34,9 +34,9 @@ class ExistenceChecker extends ComponentCommander {
 	 * @return <code>true</code> if a component with this name exists.
 	 */
 	@Override
-	Boolean executeCommand(Object... data) {
+	Boolean executeCommand(int timeout, String componentName, Object... data) {
 		try{
-			return getComponentByName(data[0].toString()) != null; 
+			return getComponentByName(componentName) != null; 
 		} catch (QTasteException pExc)
 		{
 			return false;

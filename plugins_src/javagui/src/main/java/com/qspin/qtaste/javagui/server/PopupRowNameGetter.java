@@ -42,7 +42,7 @@ public class PopupRowNameGetter extends ComponentCommander {
 	 * @throws QTasteException
 	 */
 	@Override
-	List<String> executeCommand(Object... data) throws QTasteException {
+	List<String> executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		boolean onlyWithFocus = (Boolean)data[0];
 		List<String> texts = new ArrayList<String>();
 		for ( JDialog dialog : findPopups() )

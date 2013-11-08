@@ -33,7 +33,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		String[] nodeNames = mData[2].toString().split(mData[3].toString());
+		String[] nodeNames = mData[0].toString().split(mData[1].toString());
 		if (component instanceof JTree && nodeNames.length > 0) {
 			JTree tree = (JTree) component;
 			TreeModel model = tree.getModel();

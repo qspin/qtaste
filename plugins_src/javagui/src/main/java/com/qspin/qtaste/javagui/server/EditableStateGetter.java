@@ -42,8 +42,8 @@ class EditableStateGetter extends ComponentCommander {
 	 * @throws QTasteTestFailException if no component is found.
 	 */
 	@Override
-	Boolean executeCommand(Object... data) throws QTasteException {
-		Component c = getComponentByName(data[0].toString());
+	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+		Component c = getComponentByName(componentName);
 		if ( c == null )
 			return false;
 		

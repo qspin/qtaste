@@ -65,7 +65,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	public String[] listComponents() throws QTasteException {
 		LOGGER.trace("listComponents()");
-		return new ComponentLister().executeCommand();
+		return new ComponentLister().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
 	}
 
 	public boolean clickOnButton(String componentName) throws QTasteException {
@@ -80,17 +80,17 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	public boolean isEnabled(String componentName) throws QTasteException {
 		LOGGER.trace("isEnabled(\"" + componentName + "\")");
-		return new EnabledStateGetter().executeCommand(componentName);
+		return new EnabledStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
 	public boolean isEditable(String componentName) throws QTasteException {
 		LOGGER.trace("isEditable(\"" + componentName + "\")");
-		return new EditableStateGetter().executeCommand(componentName);
+		return new EditableStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
 	public boolean isVisible(String componentName) throws QTasteException {
 		LOGGER.trace("isVisible(\"" + componentName + "\")");
-		return new ComponentVisibilityChecker().executeCommand(componentName);
+		return new ComponentVisibilityChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
 	public void takeSnapShot(final String componentName, final String fileName) throws QTasteException {
@@ -100,7 +100,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	public String getText(String componentName) throws QTasteException {
 		LOGGER.trace("getText(\"" + componentName + "\")");
-		return new TextGetter().executeCommand(componentName);
+		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 				
 	// TODO: boolean returns is useless and confusing!
@@ -151,7 +151,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	public String getRawName(String name) throws QTasteException
 	{
 		LOGGER.trace("getRawName(\"" + name + "\")");
-		return new ComponentRawNameGetter().executeCommand(name);
+		return new ComponentRawNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, name);
 	}
 	
 	public void setComponentName(String name) throws QTasteTestFailException {
@@ -166,7 +166,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
 		LOGGER.trace("pressKey(" + keycode + ", " + delay + ")");
-		new KeyPresser().executeCommand(bot, keycode, delay);
+		new KeyPresser().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, bot, keycode, delay);
 	}
 	
 	public void pressKey(int keycode) throws QTasteTestFailException {
@@ -178,13 +178,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	@Override
 	public boolean exist(String pComponentName) {
 		LOGGER.trace("exist(\"" + pComponentName + "\")");
-		return new ExistenceChecker().executeCommand(pComponentName);
+		return new ExistenceChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName);
 	}
 
 	@Override
 	public int getEnabledComponentCount(boolean isEnabled) {
 		LOGGER.trace("getEnabledComponentCount(" + isEnabled + ")");
-		return new EnabledComponentCounter().executeCommand(isEnabled);
+		return new EnabledComponentCounter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, isEnabled);
 	}
 
 	@Override
@@ -208,13 +208,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	public boolean isPopupDisplayed() throws QTasteException
 	{
 		LOGGER.trace("isPopupDisplayed()");
-		return new PopupChecker().executeCommand();
+		return new PopupChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
 	}
 	
 	public String getPopupText() throws QTasteException
 	{
 		LOGGER.trace("getPopupText()");
-		List<String> texts = new PopupTextGetter().executeCommand(true);
+		List<String> texts = new PopupTextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
 		if (texts.isEmpty())
 		{
 			throw new QTasteTestFailException("No active popup found!");
@@ -225,19 +225,19 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	public String[] getAllPopupText() throws QTasteException
 	{
 		LOGGER.trace("getAllPopupText()");
-		return new PopupTextGetter().executeCommand(false).toArray(new String[0]);
+		return new PopupTextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
 	}
 	
 	public void setPopupValue(String value) throws QTasteException
 	{
 		LOGGER.trace("setPopupValue(\"" + value + "\")");
-		new PopupTextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, value);
+		new PopupTextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, value);
 	}
 	
 	public void clickOnPopupButton(String buttonText) throws QTasteException
 	{
 		LOGGER.trace("clickOnPopupButton(\"" + buttonText + "\")");
-		new PopupButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, buttonText);
+		new PopupButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, buttonText);
 	}
 
 	@Override
@@ -252,39 +252,39 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	@Override
 	public double[] getComponentLocation(String componentName) throws QTasteException {
 		LOGGER.trace("getComponentLocation(\"" + componentName + "\")");
-		Point p = new ComponentLocationGetter().executeCommand(componentName);
+		Point p = new ComponentLocationGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 		return new double[]{p.getX(), p.getY()};
 	}
 
 	@Override
 	public String getComponentBackgroundColor(String componentName) throws QTasteException {
 		LOGGER.trace("getComponentBackgroundColor(\"" + componentName + "\")");
-		return new ComponentBackgroundColorGetter().executeCommand(componentName);
+		return new ComponentBackgroundColorGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
 	@Override
 	public String getComponentForegroundColor(String componentName) throws QTasteException {
 		LOGGER.trace("getComponentForegroundColor(\"" + componentName + "\")");
-		return new ComponentForegroundColorGetter().executeCommand(componentName);
+		return new ComponentForegroundColorGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 	
 	@Override
 	public String dumpTreeContent(String treeComponentName, String separator) throws QTasteException
 	{
 		LOGGER.trace("dumpTreeContent(\"" + treeComponentName + "\", \"" + separator + "\")");
-		return new TreeDumper().executeCommand(treeComponentName, separator);
+		return new TreeDumper().executeCommand(COMPONENT_ENABLED_TIMEOUT, treeComponentName, separator);
 	}
 
 	@Override
 	public String[] getPopupRawNames() throws QTasteException {
 		LOGGER.trace("getPopupRawNames()");
-		return new PopupRowNameGetter().executeCommand(false).toArray(new String[0]);
+		return new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
 	}
 
 	@Override
 	public String getPopupRawName() throws QTasteException {
 		LOGGER.trace("getPopupRawName()");
-		List<String> names = new PopupRowNameGetter().executeCommand(true);
+		List<String> names = new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
 		if (names.isEmpty())
 		{
 			throw new QTasteTestFailException("No active popup found!");
