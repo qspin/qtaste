@@ -25,13 +25,8 @@ def testChangeTab():
 	subtitler.setSubtitle("Select the tab", 1)
 	component = testData.getValue("TAB_COMPONENT_NAME")
 	index = testData.getIntValue("TAB_IDX")
-	result = javaguiMI.selectTab(component, index)
+	javaguiMI.selectTab(component, index)
 	
-	time.sleep(1)
-	
-	if result != 1 :
-		testAPI.stopTest(Status.FAIL, "Fail to set tab " + testData.getValue("TAB_IDX") + " for " + component )
-
 def reset():
 	"""
 	@step      Unselect tab

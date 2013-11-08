@@ -26,8 +26,8 @@ import com.qspin.qtaste.testsuite.QTasteException;
 public class ComponentRawNameGetter extends ComponentCommander {
 
 	@Override
-	String executeCommand(Object... data) throws QTasteException {
-		Component c = getComponentByName(data[0].toString());
+	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+		Component c = getComponentByName(componentName);
 		if (c != null) {
 			return c.getName();
 		}

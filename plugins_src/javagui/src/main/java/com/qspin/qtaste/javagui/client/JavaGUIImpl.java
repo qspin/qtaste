@@ -35,8 +35,8 @@ public class JavaGUIImpl implements JavaGUI {
 	   }
    }
 
-	public boolean clickOnButton(String pComponentName) throws QTasteException {
-		return mProxy.clickOnButton(pComponentName);
+	public void clickOnButton(String pComponentName) throws QTasteException {
+		mProxy.clickOnButton(pComponentName);
 	}
 
 	public void takeSnapShot(String componentName, String fileName) throws QTasteException
@@ -64,9 +64,9 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.isVisible(componentName);
 	}
 	
-	public boolean clickOnButton(String componentName, int pressTime) throws QTasteException
+	public void clickOnButton(String componentName, int pressTime) throws QTasteException
 	{
-		return mProxy.clickOnButton(componentName, pressTime);
+		mProxy.clickOnButton(componentName, pressTime);
 	}
 
 	public String getText(String componentName) throws QTasteException
@@ -74,33 +74,33 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.getText(componentName);
 	}
 
-	public boolean setText(String componentName, String value) throws QTasteException
+	public void setText(String componentName, String value) throws QTasteException
 	{
-		return mProxy.setText(componentName, value);
+		mProxy.setText(componentName, value);
 	}
 
-	public boolean selectComponent(String componentName, boolean value) throws QTasteException
+	public void selectComponent(String componentName, boolean value) throws QTasteException
 	{
-		return mProxy.selectComponent(componentName, value);
+		mProxy.selectComponent(componentName, value);
 	}
 
-	public boolean selectValue(String componentName, String value) throws QTasteException
+	public void selectValue(String componentName, String value) throws QTasteException
 	{
-		return mProxy.selectValue(componentName, value);
+		mProxy.selectValue(componentName, value);
 	}
 
-	public boolean selectIndex(String componentName, int index) throws QTasteException
+	public void selectIndex(String componentName, int index) throws QTasteException
 	{
-		return mProxy.selectIndex(componentName, index);
+		mProxy.selectIndex(componentName, index);
 	}
 
-	public boolean selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException
+	public void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException
 	{
-		return mProxy.selectNode(componentName, nodeName, nodeSeparator);
+		mProxy.selectNode(componentName, nodeName, nodeSeparator);
 	}
 
-	public boolean selectTab(String tabbedPaneComponentName, int tabIndex)  throws QTasteException{
-		return mProxy.selectTab(tabbedPaneComponentName, tabIndex);
+	public void selectTab(String tabbedPaneComponentName, int tabIndex)  throws QTasteException{
+		mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 
 	public void terminate() throws QTasteException

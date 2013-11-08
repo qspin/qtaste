@@ -38,9 +38,9 @@ public class ValueSelector extends UpdateComponentCommander {
 	@Override
 	protected void prepareActions() throws QTasteException
 	{
-		String value = mData[2].toString();
+		String value = mData[0].toString();
 		if (component instanceof AbstractButton) {
-			new ComponentSelector().executeCommand(Integer.parseInt(mData[0].toString()),mData[1].toString(), Boolean.parseBoolean(value));
+			new ComponentSelector().executeCommand(timeout, componentName, Boolean.parseBoolean(value));
 		} else if (component instanceof JComboBox) {
 			JComboBox combo = (JComboBox) component;
 			ListCellRenderer renderer = combo.getRenderer();

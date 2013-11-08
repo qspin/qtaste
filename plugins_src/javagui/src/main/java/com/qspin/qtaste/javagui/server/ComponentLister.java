@@ -44,7 +44,7 @@ final class ComponentLister extends ComponentCommander {
 	 * @return an array of Strings that have the following format : component_name (number of instance : X) 
 	 */
 	@Override
-	String[] executeCommand(Object... data)
+	String[] executeCommand(int timeout, String componentName, Object... data)
 	{
 		mComponentsMap = new HashMap<String, List<Component>>();
 		

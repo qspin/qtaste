@@ -34,11 +34,11 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 abstract class UpdateComponentCommander extends ComponentCommander implements Runnable {
 
 	@Override
-	public Boolean executeCommand(Object... data) throws QTasteException {
+	public Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+		this.timeout = timeout;
+		this.componentName = componentName;
 		setData(data);
-		int timeout = Integer.parseInt(mData[0].toString());
 		m_maxTime = System.currentTimeMillis() + 1000 * timeout;
-		String componentName = mData[1].toString();
 		
 		while ( System.currentTimeMillis() < m_maxTime )
 		{
@@ -231,5 +231,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	private List<Component> mFoundComponents;
 	protected Object[] mData;
 	protected Component component;
+	protected String componentName;
+	protected int timeout;
 	protected long m_maxTime;
 }

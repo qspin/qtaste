@@ -33,8 +33,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 final class TableRowCounter extends ComponentCommander {
 
 	@Override
-	Integer executeCommand(Object... data) throws QTasteException {
-		String componentName = data[1].toString();
+	Integer executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		Component c = getComponentByName(componentName);
 		if ( c == null || !(c instanceof JTable) )
 		{
@@ -42,8 +41,8 @@ final class TableRowCounter extends ComponentCommander {
 		}
 		JTable table = (JTable)c;
 		TableModel model = table.getModel();
-		int columnIndex = getColumnIndex(data[2].toString(), model);
-		return countRows(data[3].toString(), columnIndex, table);
+		int columnIndex = getColumnIndex(data[0].toString(), model);
+		return countRows(data[1].toString(), columnIndex, table);
 	}
 	
 	private int countRows(String pValue, int pColumnIndex, JTable pTable) {
