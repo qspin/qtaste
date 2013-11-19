@@ -24,10 +24,8 @@ def displayFirstPopup():
 	subtitler.setSubtitle("Click on the <span style=\"color:red;\">Start</span> button", 1.5)
 	javaguiMI.clickOnButton("START_BUTTON")
 	time.sleep(1)
-	if (javaguiMI.isPopupDisplayed() == False):
+	if javaguiMI.isPopupDisplayed() == False:
 		testAPI.stopTest(Status.FAIL, "No popup created.")
-	
-	pass
 
 def setPopupValue():
 	"""
@@ -41,12 +39,11 @@ def setPopupValue():
 	
 	time.sleep(1)
 	shouldHavePopup = testData.getBooleanValue("IS_POPUP_VALUE_NUMERIC");
-	if (javaguiMI.isPopupDisplayed() != shouldHavePopup ):
+	if javaguiMI.isPopupDisplayed() != shouldHavePopup:
 		if shouldHavePopup:
 			testAPI.stopTest(Status.FAIL, "Popup should have been created.")
 		else:
 			testAPI.stopTest(Status.FAIL, "Popup should not have been created.")
-	pass
 
 def valueValidation():
 	"""
@@ -59,10 +56,10 @@ def valueValidation():
 	time.sleep(2)
 	currentMessage = javaguiMI.getPopupText()
 	
-	if ( expectedMessage != currentMessage ):
+	if expectedMessage != currentMessage:
 		testAPI.stopTest(Status.FAIL, "The message is not the expected one. get '" + currentMessage + "' but expects '" + expectedMessage +"'.")
 	
-	if ( testData.getBooleanValue("CONFIRM") ):
+	if testData.getBooleanValue("CONFIRM"):
 		subtitler.setSubtitle("Click on the <span style=\"color:red;\">Yes</span> button")
 		time.sleep(1)
 		javaguiMI.clickOnPopupButton("Yes")
@@ -70,14 +67,13 @@ def valueValidation():
 		subtitler.setSubtitle("Click on the <span style=\"color:red;\">No</span> button", 1.5)
 		time.sleep(1)
 		javaguiMI.clickOnPopupButton("No")
-	pass
 
 def countPopupAndClose():
 	"""
 	@step      Check the number of displayed popup and close them.
 	@expected  there is/are the @POPUP_VALUE popup().
 	"""
-	if ( testData.getBooleanValue("CONFIRM") ):
+	if testData.getBooleanValue("CONFIRM"):
 		popupValue = testData.getIntValue("POPUP_VALUE")
 	else:
 		popupValue = 0
@@ -86,22 +82,20 @@ def countPopupAndClose():
 	subtitler.setSubtitle("Check the number of opened popup")
 	time.sleep(1)
 	current = len(javaguiMI.getAllPopupText())
-	if ( current != popupValue ):
+	if current != popupValue:
 		testAPI.stopTest(Status.FAIL, str(popupValue) + " popup(s) expected but only " + str(current) + " popup(s) displayed!")
 	
 	i = 0
-	while ( len(javaguiMI.getAllPopupText()) > 0 ):
+	while len(javaguiMI.getAllPopupText()) > 0:
 		subtitler.setSubtitle("Click on the <span style=\"color:red;\">OK</span> button", 1.5)
 		javaguiMI.clickOnPopupButton("OK")
 		time.sleep(1)
 		i += 1
-		
-	pass
 	
 
 doStep(displayFirstPopup)
 doStep(setPopupValue)
-if (testData.getBooleanValue("IS_POPUP_VALUE_NUMERIC")):
+if testData.getBooleanValue("IS_POPUP_VALUE_NUMERIC"):
 	doStep(valueValidation)
 	countPopupAndClose()
 	

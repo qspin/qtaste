@@ -36,7 +36,6 @@ def step1():
 		javaguiMI.selectInTable(component, columnName, columnValue)
 	else:
 		javaguiMI.selectInTable(component, columnName, columnValue, occurence)
-	pass
 
 
 doStep(step1)

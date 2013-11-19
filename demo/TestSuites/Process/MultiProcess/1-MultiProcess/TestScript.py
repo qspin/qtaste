@@ -52,7 +52,6 @@ def killBoth():
 	time.sleep(2)
 	checkStatus(process1.getStatus(), ProcessStatus.STOPPED)
 	checkStatus(process2.getStatus(), ProcessStatus.STOPPED)
-	pass
 	
 def checkStatus(currentStatus, expectedStatus):
 	if currentStatus != expectedStatus:

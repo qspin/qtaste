@@ -51,7 +51,6 @@ def stopProcess():
 		logger.info(line)
 	for line in process.getStdErr():
 		logger.error(line)
-	pass
 
 def checkStatus(currentStatus, expectedStatus):
 	if currentStatus != expectedStatus:

@@ -22,7 +22,6 @@ def CheckAccessibility():
 		testAPI.stopTest(Status.FAIL, "the component should not be accessible!")
 	except:
 		javaguiMI.clickOnPopupButton("Cancel")
-		pass
 
 doStep(PopupControl.displayFirstPopup)
 doStep(CheckAccessibility)

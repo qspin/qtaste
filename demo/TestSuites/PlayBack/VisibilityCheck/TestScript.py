@@ -35,6 +35,5 @@ def step1():
 		testAPI.stop(Status.FAIL, "The component should not be visible and the setText() should failed")
 	except :
 		javaguiMI.clickOnButton("VISIBILITY_BUTTON")
-	pass
 
 doStep(step1)
