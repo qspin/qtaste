@@ -39,13 +39,13 @@ class Snapshotter extends UpdateComponentCommander {
 			Graphics2D g2 = myImage.createGraphics();
 			component.paint(g2);
 	
-			File file = new File(mData[2].toString());
+			File file = new File(mData[0].toString());
 			file.createNewFile();
 			System.out.println("creating empty file");
 			ImageIO.write(myImage, "jpg", file);				 			
 		}
 		catch (Exception e) {
-			throw new QTasteTestFailException("Error saving snapshot " + mData[2].toString() + ":", e);
+			throw new QTasteTestFailException("Error saving snapshot " + mData[0].toString() + ":", e);
 		}	
 	}
 
