@@ -98,9 +98,15 @@ def addTestCase(testCaseDir, numberRows, selectedRows, testbed, testCasesElem):
     for dir in testCaseDirPath:
         dirElem = elem.find(dir)
         if dirElem is None:
-            elem = et.SubElement(elem, dir)
-        else:
-            elem = dirElem
+            # insert child keeping natural order
+            index = 0
+            for child in list(elem):
+               if child.tag > dir:
+                  break
+               index = index + 1
+            dirElem = et.Element(dir)
+            elem.insert(index, dirElem)
+        elem = dirElem
     # set testCaseDir attribute
     elem.attrib['testCaseDir'] = testCaseDir
 
