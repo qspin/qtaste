@@ -22,6 +22,7 @@ package com.qspin.qtaste.javagui.server;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
+import java.awt.Dialog;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		if (! checkComponentIsVisible(component))
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
 		
+		if (!isAccessible(component)) {
+			throw new QTasteTestFailException("The component \"" + componentName + "\" is not reachable as a modal dialog is opened.");
+		}
+
 		prepareActions();
 	    if (!activateAndFocusComponentWindow(component) )
 	    {
@@ -74,6 +79,21 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		
 		return true;
 	}
+
+	private boolean isAccessible(Component c) {
+		Window[] windows = Window.getWindows();
+		if (windows != null ) {
+			for ( Window w : windows ) {
+				if ( w.isShowing() && w instanceof Dialog && ((Dialog)w).isModal() && !w.isAncestorOf(c)) {
+					if ( w.isShowing() &&  w instanceof Dialog && ((Dialog)w).isModal() && !w.isAncestorOf(c)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
 	
 	public void run()
 	{
