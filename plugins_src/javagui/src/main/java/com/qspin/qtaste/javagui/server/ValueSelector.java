@@ -41,7 +41,9 @@ public class ValueSelector extends UpdateComponentCommander {
 		String value = mData[0].toString();
 		if (component instanceof AbstractButton) {
 			new ComponentSelector().executeCommand(timeout, componentName, Boolean.parseBoolean(value));
-		} else if (component instanceof JComboBox) {
+			return;
+		}
+		if (component instanceof JComboBox) {
 			JComboBox combo = (JComboBox) component;
 			ListCellRenderer renderer = combo.getRenderer();
 			for (int i = 0; i < combo.getItemCount(); i++) { 
@@ -61,13 +63,16 @@ public class ValueSelector extends UpdateComponentCommander {
 				if (itemValue.equals(value)) {
 					mValueToSelect = i;
 				}
-			}
+			}			
 		} else if (component instanceof JSpinner) {
 			mValueToSelect = Double.parseDouble(value);
 		} else if (component instanceof JSlider) {
 			mValueToSelect = Integer.parseInt(value);
 		} else {
 			throw new QTasteTestFailException("component '" + component.getName() + "' (" + component.getClass() + ") found but unused");
+		}
+		if (mValueToSelect == null) {
+			throw new QTasteTestFailException("Value '" + value + "' is not found!");
 		}
 	}
 	@Override
