@@ -19,6 +19,7 @@
 
 package com.qspin.qtaste.javagui.server;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -27,28 +28,28 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
+import com.qspin.qtaste.testsuite.QTasteException;
 
-class Snapshotter extends UpdateComponentCommander {
+class Snapshotter extends ComponentCommander {
 
-	public void doActionsInSwingThread() throws QTasteTestFailException{
+	@Override
+	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		try {
-
+			Component component = getComponentByName(componentName);
 			Dimension size = component.getSize();
 			BufferedImage myImage = new BufferedImage(size.width, size.height, 
 													  BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2 = myImage.createGraphics();
 			component.paint(g2);
 	
-			File file = new File(mData[0].toString());
+			File file = new File(data[0].toString());
 			file.createNewFile();
 			System.out.println("creating empty file");
 			ImageIO.write(myImage, "jpg", file);				 			
 		}
 		catch (Exception e) {
-			throw new QTasteTestFailException("Error saving snapshot " + mData[0].toString() + ":", e);
-		}	
+			throw new QTasteTestFailException("Error saving snapshot " + data[0].toString() + ":", e);
+		}
+		return "";
 	}
-
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {}
 }
