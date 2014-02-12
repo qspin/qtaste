@@ -40,6 +40,22 @@ def step1():
 			
 	time.sleep(1)
 
+def checkList():
+	"""
+	@step      Check the content of the list
+	@expected  Description of the expected result
+	"""	
+	actualList = javaguiMI.getListContent("LIST")
+	if len(actualList) != 5:
+		testAPI.stopTest(Status.FAIL, "Expected to get 5 elements in the list but got %d" %(len(actualList)))
+	expectedList = ["Mickey Mouse (70)", "Tintin Milou (40)", "Louis XVII (30)", "Elisabeth II (80)", "Milou Tintin (40)"]
+	i = 0
+	for e in expectedList:
+		if actualList[i] != expectedList[i]:
+			testAPI.stopTest(Status.FAIL, "Expected to get %s at indice %d in the list but got %s" %(expectedList[i], i, actualList[i]))
+		i = i + 1
+
+
 def reset():
 	"""
 	@step      Reset component state
@@ -49,4 +65,5 @@ def reset():
 	component = testData.getValue("COMPONENT_NAME")
 
 doStep(step1)
+doStep(checkList)
 doStep(reset)

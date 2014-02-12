@@ -198,7 +198,14 @@ public interface JavaGUI {
     */
    String dumpTreeContent(String treeComponentName, String separator) throws QTasteException;
    
-   // TODO: Should it be selectComponent? what is the purpose of value? Please Document parameters
+   /**
+    * Return the content of the list identified by the specified componentName.</br>
+    * Can be used on {@link JComboBox} or  {@link JList}.
+    * @param componentName the specified component name.
+    * @return a String [] containing the values of the list.
+    * @throws QTasteTestFailException
+    */
+   String [] getListContent(String componentName) throws QTasteException;   
 
    /**
     * Return the name of the {@link Component} that have the focus.</br>

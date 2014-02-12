@@ -221,6 +221,10 @@ public class JavaGUIImpl implements JavaGUI {
 	public String getPopupRawName() throws QTasteException {
 		return mProxy.getPopupRawName();
 	}
+
+	public String [] getListContent(String componentName) throws QTasteException {
+		return mProxy.getListContent(componentName);
+	}
 	
 	protected JavaGUI mProxy;
 	protected JMXClient mClient;
