@@ -80,7 +80,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		return true;
 	}
 
-	private boolean isAccessible(Component c) {
+	protected boolean isAccessible(Component c) {
 		Window[] windows = Window.getWindows();
 		if (windows != null ) {
 			for ( Window w : windows ) {
