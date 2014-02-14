@@ -29,7 +29,7 @@ import javax.swing.tree.TreePath;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-class TreeNodeSelector extends UpdateComponentCommander {
+class TreeNodeSelector extends UpdateComponentCommander {	
 
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
@@ -44,7 +44,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				//root is not present in the list.
 				pathLength += 1;
 			}
-			mPath = new Object[pathLength];		
+			Object [] lmPath = new Object[pathLength];		
 			String value = getNodeText(tree, node);
 			if ( tree.isRootVisible() )
 			{
@@ -52,7 +52,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 			}
 			if (!tree.isRootVisible() || value.equals(nodeNames[0]))
 			{
-				mPath[0] = tree.getModel().getRoot();
+				lmPath[0] = tree.getModel().getRoot();
 				// If Root is visible, skip it
 				int i = tree.isRootVisible() ? 1 : 0;
 				for (; i < nodeNames.length; i++)
@@ -70,11 +70,12 @@ class TreeNodeSelector extends UpdateComponentCommander {
 								node = child;
 								if ( tree.isRootVisible() )
 								{
-									mPath[i] = node;
+									lmPath[i] = node;
 								} else {
-									mPath[i+1] = node;	
+									lmPath[i+1] = node;	
 								}
 								nodeFound = true;
+								mPath = lmPath;
 								break;
 							}
 						}
@@ -110,12 +111,18 @@ class TreeNodeSelector extends UpdateComponentCommander {
 	@Override
 	protected void doActionsInSwingThread()
 	{
-		JTree tree = (JTree) component;
-		TreePath path = new TreePath(mPath);
-		tree.setSelectionPath(path);
-		tree.expandPath(path);
-		tree.setExpandsSelectedPaths(true);
+		try {
+			prepareActions();
+			JTree tree = (JTree) component;
+			TreePath path = new TreePath(mPath);
+			tree.expandPath(path);
+			tree.setExpandsSelectedPaths(true);			
+			tree.setSelectionPath(path);			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	protected Object[] mPath;
+	protected volatile Object[] mPath;
 }
