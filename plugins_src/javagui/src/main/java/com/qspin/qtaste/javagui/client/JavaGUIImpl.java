@@ -225,8 +225,18 @@ public class JavaGUIImpl implements JavaGUI {
 	public String [] getListContent(String componentName) throws QTasteException {
 		return mProxy.getListContent(componentName);
 	}
-	
-	protected JavaGUI mProxy;
+
+    @Override
+    public String getSelectedValue(String componentName) throws QTasteException {
+        return mProxy.getSelectedValue(componentName);
+    }
+
+    @Override
+    public String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException {
+        return mProxy.getSelectedNode(componentName, nodeSeparator);
+    }
+
+    protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
 	private static final Class<?> BEAN_INTERFACE = com.qspin.qtaste.javagui.JavaGUI.class;

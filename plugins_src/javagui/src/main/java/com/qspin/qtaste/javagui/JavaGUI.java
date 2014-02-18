@@ -127,8 +127,8 @@ public interface JavaGUI {
      * Set the text for the specified component.</br>
 	  * Can be used on :
 	  * <ul>
-	  * <li>{@link TextComponent} (see {@link TextComponent#setText()})</li>
-	  * <li>{@link JTextComponent} (see {@link JTextComponent#setText()})</li>
+	  * <li>{@link TextComponent} (see {@link TextComponent#setText(String)})</li>
+	  * <li>{@link JTextComponent} (see {@link JTextComponent#setText(String)})</li>
 	  * </ul>
      * @param componentName an identifier of the GUI component.
 	 * @param value the new value for the text.
@@ -167,6 +167,21 @@ public interface JavaGUI {
     */   
    void selectValue(String componentName, String value) throws QTasteException;
    
+  /**
+    * Return the currently selected value for the specified component.</br>
+    * Can be used on :
+    * <ul>
+    * <li>{@link AbstractButton} (see {@link #selectComponent(String, boolean)})</li>
+    * <li>{@link JComboBox} (see {@link JComboBox#setSelectedIndex(int)})</li>
+    * <li>{@link JList} (see {@link JList#setSelectedIndex(int)})</li>
+    * <li>{@link JSpinner} (see {@link JSpinner#setValue(Object)})</li>
+    * <li>{@link JSlider} (see {@link JSlider#setValue(int)})</li>
+    * </ul>
+    * @param componentName an identifier of the component.
+    * @return the currenlty selected value
+    */ 
+   String getSelectedValue(String componentName) throws QTasteException;
+
 
    /**
     * Select the index for the specified component.</br>
@@ -176,17 +191,26 @@ public interface JavaGUI {
 	  * <li>{@link JList} (see {@link JList#setSelectedIndex(int)})</li>
 	  * </ul>
     * @param componentName an identifier of the GUI component.
-	* @param value the index to select.
+	* @param index the index to select.
     */ 
    void selectIndex(String componentName, int index) throws QTasteException;
    
    /**
     * Select the node for the specified JTree.</br>
-	* Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
+    * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
     * @param componentName an identifier of the JTree component.
-	* @param value the node to select.
+    * @param nodeName the node to select.
+    * @param nodeSeparator the node separator used in the value parameter.
     */ 
    void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
+
+  /**
+    * Return the currently selected node for the specified JTree.</br>
+    * Can be used on {@link JTree}.
+    * @param componentName an identifier of the JTree component.
+    * @param nodeSeparator the node separator used in the value parameter.
+    */ 
+   String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException;
    
    /**
     * Parse a {@link JTree} component and create a String with the node content.</br>

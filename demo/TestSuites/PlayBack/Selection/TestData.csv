@@ -1,7 +1,7 @@
 COMMENT;JAVAGUI_INSTANCE_NAME;TAB_IDX;TAB_COMPONENT_NAME;INDEX;COMPONENT_NAME;VALUE
 Select 3rth element in a List;PlaybackApp;2;TABBED_PANE;3;LIST;
 Select 2nd element in a combo box;PlaybackApp;2;TABBED_PANE;2;COMBO_BOX;
-Select the value 3 in a spinner;PlaybackApp;2;TABBED_PANE;-1;SPINNER;3
-Select the value -25 in a slider;PlaybackApp;2;TABBED_PANE;-1;SLIDER;-25
+Select the value 3 in a spinner;PlaybackApp;2;TABBED_PANE;-1;SPINNER;3.0
+Select the value 10 in a slider;PlaybackApp;2;TABBED_PANE;-1;SLIDER;10
 Select element "Elisabeth II (80)" in a combo box;PlaybackApp;2;TABBED_PANE;-1;COMBO_BOX;Elisabeth II (80)
 Select element "Tintin Milou (40)" in a List;PlaybackApp;2;TABBED_PANE;-1;LIST;Tintin Milou (40)

@@ -37,6 +37,9 @@ def step1():
 			javaguiMI.selectValue(component, value)
 		except:
 			testAPI.stopTest(Status.FAIL, "Fail to select value '" + value + "' in " + component + "'")
+		actualSelection = javaguiMI.getSelectedValue(component)
+		if value != actualSelection:
+			testAPI.stopTest(Status.FAIL, "Expected to see '" + value + "' selected in '" + component + "' but got '" + actualSelection + "'")
 			
 	time.sleep(1)
 

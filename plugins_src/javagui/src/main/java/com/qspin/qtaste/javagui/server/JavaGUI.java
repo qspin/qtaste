@@ -119,6 +119,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}
 
+	public String getSelectedValue(String componentName) throws QTasteException {
+		LOGGER.trace("getSelectValue(\"" + componentName + "\")");
+		return new ValueGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
 	public void selectIndex(final String componentName, final int index) throws QTasteException {
 		LOGGER.trace("selectIndex(\"" + componentName + "\", " + index + ")");
 		new IndexSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, index);
@@ -129,7 +134,15 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodeName + "\", \"" + nodeSeparator + "\")");
 		new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
 	}
+
+	public String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException {
+		LOGGER.trace("getSelectedNode(\"" + componentName + "\", \"" + nodeSeparator + "\")");
+		return new TreeNodeGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeSeparator);	
+	}
+
 	// Todo: getColor, awt?
+
+
 
 	@Override
 	public void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
