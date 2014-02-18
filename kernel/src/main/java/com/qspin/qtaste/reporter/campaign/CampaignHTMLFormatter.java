@@ -139,7 +139,17 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 // generate index file                
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
-                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + new File(outputDir).toURI().relativize(reportFile.toURI()).getPath() + "\"/></head><body><a href=\"" + this.reportFile.getName() + "\">Redirection</a></body></html>");
+                String pathToReport = new File(outputDir).toURI().relativize(reportFile.toURI()).getPath();
+                index.println("<html>"
+            		+ 			"<head>"
+            		+ 				"<meta http-equiv=\"refresh\" content=\"0; url=" + pathToReport + "\"/>"
+    				+ 			"</head>"
+    				+ 			"<body>"
+    				+ 				"<a href=\"" + pathToReport + "\">"
+					+ 					"Redirection"
+					+ 				"</a>"
+					+ 			"</body>"
+					+ 		 "</html>");
                 index.close();
             }
         } catch (IOException e) {

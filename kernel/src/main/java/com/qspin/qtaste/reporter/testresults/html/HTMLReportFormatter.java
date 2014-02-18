@@ -532,8 +532,19 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 currentTestSuite = TestEngine.getCurrentTestSuite();
                 // generate index file
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
+                String pathToReport = new File(outputDir).toURI().relativize(reportFile.toURI()).getPath();
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
-                index.println("<html><head><meta http-equiv=\"refresh\" content=\"0; url=" + new File(outputDir).toURI().relativize(reportFile.toURI()).getPath() + "\"/></head><body><a href=\"" + reportFile.getName() + "\">Redirection</a></body></html>");
+                index.println(
+                		"<html>"
+        				+	"<head>"
+                		+ 		"<meta http-equiv=\"refresh\" content=\"0; url=" + pathToReport + "\"/>"
+        				+ 	"</head>"
+        				+ 	"<body>"
+        				+ 		"<a href=\"" + pathToReport + "\">"
+						+ 			"Redirection"
+						+ 		"</a>"
+						+ 	"</body>"
+						+ "</html>");
                 index.close();
                 copyImages(reportFile.getParentFile());
             }
