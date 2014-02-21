@@ -7,8 +7,7 @@ technologies. For that reason, the test api has to be “tailored” in order to
 
 
 The QTaste framework is mainly developed in java programming language and python. So by definition, it can be installed
-on any platform running java VM 1.6. However, it has been only validated on Windows (XP Pro / Vista) and Linux platform
-(OpenSuse 11.04).
+on any platform running java VM 1.7. However, it has been only validated on Windows (XP Pro / Vista) and Linux platform.
 
 Download
 ========
@@ -18,7 +17,7 @@ Download
 QTaste System Requirements
 ==========================
 
-• Java Virtual Machine (JDK) >= 1.6 ( http://java.sun.com/javase/downloads/index.jsp )
+• Java Virtual Machine (JDK) >= 1.7 ( http://java.sun.com/javase/downloads/index.jsp )
 
 • (optional) git command-line client accessible from PATH (“git”), for test script versioning
 
