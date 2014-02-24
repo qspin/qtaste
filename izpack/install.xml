@@ -324,6 +324,8 @@ to be rechecked in version 5.0.0-beta11 or later
             <description>The documentation files in pdf format.</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
         <include name="doc/pdf/*.pdf"/>
+        <include name="doc/html/*"/>
+        <include name="doc/third_products/*"/>
         <exclude name="**/.svn"/>
         <exclude name="**/.svn/**"/>
             </fileset>
