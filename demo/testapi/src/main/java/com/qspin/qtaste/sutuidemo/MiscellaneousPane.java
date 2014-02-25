@@ -1,13 +1,17 @@
 package com.qspin.qtaste.sutuidemo;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 class MiscellaneousPane extends JPanel {
 
@@ -19,14 +23,22 @@ class MiscellaneousPane extends JPanel {
 	
 	private void genUI()
 	{
-		setLayout(new GridLayout(2,1));
-		add(mButton);
+
+		FormLayout layout = new FormLayout("3dlu:grow, 150dlu, 3dlu:grow", 
+										   "3dlu, pref, 3dlu, pref, 3dlu:grow");
+		PanelBuilder builder = new PanelBuilder(layout);
+		CellConstraints cc = new CellConstraints();
+		
+		builder.add(mButton, cc.xy(2, 2));
 		mButton.setName("VISIBILITY_BUTTON");
 		mButton.addActionListener(new MyAction());
-		add(mSecondContainer);
-		mSecondContainer.setBackground(Color.red);
+		builder.add(mSecondContainer, cc.xy(2, 4));
+		mSecondContainer.setBorder(BorderFactory.createTitledBorder("Visibility pane"));
 		mSecondContainer.add(mText);
 		mText.setName("VISIBILITY_TEXT");
+
+		setLayout(new BorderLayout());
+		add(builder.getPanel(), BorderLayout.CENTER);
 	}
 	
 	private JButton mButton = new JButton("Click on me");

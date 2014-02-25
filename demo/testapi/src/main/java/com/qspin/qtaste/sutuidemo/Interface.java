@@ -63,7 +63,6 @@ final class Interface extends JFrame {
 				System.out.println("Starting SUT GUI");
 				new Interface();
 				System.out.println("SUT GUI started");
-				System.err.println("not an error, just a simple test");
 			}
 		});
 	}

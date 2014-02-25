@@ -66,12 +66,16 @@ final class ListDumper extends ComponentCommander {
 		if ( c instanceof Label )
 		{
 			return ((Label)c).getText();
-		}
-		if ( c instanceof JLabel )
+		} 
+		else if ( c instanceof JLabel )
 		{
 			return ((JLabel)c).getText();
 		}
-		return item.toString();
+		else
+		{
+			LOGGER.warn("Unknown label type : " + c.getClass());
+			return item.toString();
+		}
 	}
 
 }

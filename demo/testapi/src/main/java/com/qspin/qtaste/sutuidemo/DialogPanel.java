@@ -1,12 +1,16 @@
 package com.qspin.qtaste.sutuidemo;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public final class DialogPanel extends JPanel {
 
@@ -21,8 +25,14 @@ public final class DialogPanel extends JPanel {
 	private void genUI()
 	{
 		prepareComponent();
-		setLayout(new GridLayout(NUMBER_OF_COMPONENT,2, 5, 5));
-		add(mStart);
+		FormLayout layout = new FormLayout("3dlu:grow, pref, 3dlu:grow", 
+										   "3dlu:grow, pref, 3dlu:grow");
+		PanelBuilder builder = new PanelBuilder(layout);
+		CellConstraints cc = new CellConstraints();
+		
+		builder.add(mStart, cc.xy(2,2));
+		setLayout(new BorderLayout());
+		add(builder.getPanel(), BorderLayout.CENTER);
 	}
 
 	private void prepareComponent()

@@ -1,15 +1,18 @@
 package com.qspin.qtaste.sutuidemo;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.text.NumberFormat;
 
 import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 final class DocumentPanel extends JPanel {
 
@@ -25,15 +28,23 @@ final class DocumentPanel extends JPanel {
 	private void genUI()
 	{
 		prepareComponent();
-		setLayout(new GridLayout(NUMBER_OF_COMPONENT,2, 5, 5));
-		add(new JLabel("JTextField :"));
-		add(mTextField);
-		add(new JLabel("JFormattedTextField :"));
-		add(mFormattedTextField);
-		add(new JLabel("JPasswordField :"));
-		add(mPasswordField);
-		add(new JLabel("JTextArea :"));
-		add(new JScrollPane(mTextArea));
+
+		FormLayout layout = new FormLayout("3dlu:grow, right:pref, 3dlu, pref, 3dlu:grow", 
+										   "3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu:grow");
+		PanelBuilder builder = new PanelBuilder(layout);
+		CellConstraints cc = new CellConstraints();
+		
+		builder.addLabel("JTextField :", cc.xy(2,2));
+		builder.add(mTextField, cc.xy(4,2));
+		builder.addLabel("JFormattedTextField :", cc.xy(2,4));
+		builder.add(mFormattedTextField, cc.xy(4,4));
+		builder.addLabel("JPasswordField :", cc.xy(2,6));
+		builder.add(mPasswordField, cc.xy(4,6));
+		builder.addLabel("JTextArea :", cc.xy(2,8));
+		builder.add(new JScrollPane(mTextArea), cc.xy(4,8));
+
+		setLayout(new BorderLayout());
+		add(builder.getPanel(), BorderLayout.CENTER);
 	}
 	
 	private void prepareComponent()

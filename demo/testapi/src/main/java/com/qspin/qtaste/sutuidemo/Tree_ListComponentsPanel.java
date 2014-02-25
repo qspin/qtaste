@@ -1,10 +1,14 @@
 package com.qspin.qtaste.sutuidemo;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class Tree_ListComponentsPanel extends JPanel {
 
@@ -18,10 +22,18 @@ public class Tree_ListComponentsPanel extends JPanel {
 	
 	private void genUI()
 	{
-		setLayout(new GridLayout(1, 2));
 		prepareComponents();
-		add(mTree);
-		add(mTree2);
+
+		FormLayout layout = new FormLayout("3dlu, fill:pref:grow, 3dlu, fill:pref:grow, 3dlu", 
+										   "3dlu, fill:pref:grow, 3dlu");
+		PanelBuilder builder = new PanelBuilder(layout);
+		CellConstraints cc = new CellConstraints();
+		
+		builder.add(mTree, cc.xy(2,2));
+		builder.add(mTree2, cc.xy(4,2));
+
+		setLayout(new BorderLayout());
+		add(builder.getPanel(), BorderLayout.CENTER);
 	}
 	
 	private void prepareComponents()

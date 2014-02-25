@@ -1,6 +1,6 @@
 package com.qspin.qtaste.sutuidemo;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,9 +8,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class JavaComplexComponent extends JPanel {
 	
@@ -25,11 +28,18 @@ public class JavaComplexComponent extends JPanel {
 	private void genUI()
 	{
 		prepareComponent();
-		setLayout(new GridLayout(NUMBER_OF_COMPONENT,2, 5, 5));
-		add(m_JCC);
-		add(new JLabel("Empty"));
-		add(m_selectedFile);
-		add(m_openJFC);
+
+		FormLayout layout = new FormLayout("3dlu, pref:grow, 3dlu, pref, 3dlu", 
+										   "3dlu, pref, 3dlu, pref, 3dlu:grow");
+		PanelBuilder builder = new PanelBuilder(layout);
+		CellConstraints cc = new CellConstraints();
+		
+		builder.add(m_JCC, cc.xyw(2, 2, 3));
+		builder.add(m_selectedFile, cc.xy(2, 4));
+		builder.add(m_openJFC, cc.xy(4, 4));
+
+		setLayout(new BorderLayout());
+		add(builder.getPanel(), BorderLayout.CENTER);
 	}
 	
 	private void prepareComponent()

@@ -1,6 +1,6 @@
 package com.qspin.qtaste.sutuidemo;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,8 +19,8 @@ final class TablePanel extends JPanel {
 	private void genUI()
 	{
 		prepareComponent();
-		setLayout(new GridLayout(NUMBER_OF_COMPONENT,1, 5, 5));
-		add(new JScrollPane(mTable));
+		setLayout(new BorderLayout());
+		add(new JScrollPane(mTable), BorderLayout.CENTER);
 	}
 	
 	private void prepareComponent()

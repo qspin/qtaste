@@ -23,7 +23,7 @@
         <exclude>javax.scripting:jython-engine</exclude>
         <exclude>jfree:jfreechart</exclude>
         <exclude>com.jgoodies:bindings</exclude>
-        <exclude>com.jgoodies:forms</exclude>
+	<!-- <exclude>com.jgoodies:forms</exclude> -->
         <exclude>jsyntaxpane:jsyntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
         <exclude>org.python:jython</exclude>
