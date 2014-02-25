@@ -236,6 +236,11 @@ public class JavaGUIImpl implements JavaGUI {
         return mProxy.getSelectedNode(componentName, nodeSeparator);
     }
 
+	@Override
+	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException {
+		mProxy.selectFileThroughFileChooser(fileChooserComponentName, filepath, buttonText);
+	}
+
     protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";

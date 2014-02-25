@@ -24,6 +24,7 @@ import java.awt.TextComponent;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -383,4 +384,14 @@ public interface JavaGUI {
     * @return the found component's foreground color with the RGB color format expressed in hexadecimal.
     */
    String getComponentForegroundColor(String componentName) throws QTasteException;
+   
+   /**
+    * Selects a file with a {@link JFileChooser}. Finds the file chooser with its name, set the file path in the text 
+    * field and click on the button with the specified text.
+    * @param fileChooserComponentName The JFileChooser's name.
+    * @param filepath The path to the file to select.
+    * @param buttonText The button's text.
+    * @throws QTasteException If No file JFilechooser with the specified name is found; If the text field is not found; If no button with the text exist.
+    */
+   void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException;
 }

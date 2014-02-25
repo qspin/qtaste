@@ -45,6 +45,8 @@ final class Interface extends JFrame {
 		mTabbedPane.insertTab(DialogPanel.COMPONENT_NAME, null, new DialogPanel(), null, index++);
 		System.out.println("insert " + MiscellaneousPane.COMPONENT_NAME + " at " + index);
 		mTabbedPane.insertTab(MiscellaneousPane.COMPONENT_NAME, null, new MiscellaneousPane(), null, index++);
+		System.out.println("insert " + JavaComplexComponent.COMPONENT_NAME + " at " + index);
+		mTabbedPane.insertTab(JavaComplexComponent.COMPONENT_NAME, null, new JavaComplexComponent(), null, index++);
 		mTabbedPane.setSelectedIndex(-1);
 		
 		add(mTabbedPane, BorderLayout.CENTER);

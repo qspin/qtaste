@@ -296,13 +296,13 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	public String getPopupRawName() throws QTasteException {
 	      LOGGER.trace("getPopupRawName()");
-               List<String> names = new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
-               if (names.isEmpty())
-               {
-                       throw new QTasteTestFailException("No active popup found!");
-               }
-               return names.get(0);
-        }
+           List<String> names = new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
+           if (names.isEmpty())
+           {
+                   throw new QTasteTestFailException("No active popup found!");
+           }
+           return names.get(0);
+    }
 
 
 	@Override
@@ -310,6 +310,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		LOGGER.trace("getListContent(" + componentName + ")");
 		return new ListDumper().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	} 
+
+	@Override
+	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException {
+		LOGGER.trace("selectFileThroughFileChooser('" + fileChooserComponentName + "', '" + filepath + "', '" + buttonText + "')");
+		new FileChooserFileSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, fileChooserComponentName, filepath, buttonText);
+	}
 	
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
 	private static Logger LOGGER = Logger.getLogger(JavaGUI.class);
