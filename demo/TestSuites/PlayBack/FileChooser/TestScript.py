@@ -29,7 +29,7 @@ def selectFile():
 	@step Base on test data, set the file to select and click on the "Open" button.
 	@expected The result text field contains the file name.
 	"""
-	fileName = testData.getValue("FILE_NAME")
+	fileName = testData.getValue("FILENAME")
 	component = testData.getValue("COMPONENT_NAME")
 	javaguiMI.selectFileThroughFileChooser(component, fileName, "Open")
 	value = javaguiMI.getText("FILECHOOSER_RESULT")
@@ -37,7 +37,7 @@ def selectFile():
 	if ( value == fileName):
 		pass
 	else:
-		testAPI.stopTest(Status.FAIL, "The expected value is " + fileName + " but the curretn is : " + value)
+		testAPI.stopTest(Status.FAIL, "The expected value is " + fileName + " but the current is : " + value)
 
 def reset():
 	"""
