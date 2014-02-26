@@ -47,6 +47,7 @@ public class StaticConfiguration {
 	public static final String CONTROL_SCRIPTS_DIRECTORY = TESTBED_CONFIG_DIRECTORY + "/ControlScripts";
 	public static final String TESTBED_CONFIG_FILE_EXTENSION = "xml";
 	public static final String LAST_SELECTED_TESTBED_PROPERTY = "last_selected_testbed";
+	public static final String IGNORE_CONTROL_SCRIPT_PROPERTY = "ignore_control_script";
 	public static final String DEFAULT_TESTSUITES_DIR = "TestSuites";
 	public static final String CAMPAIGN_DIRECTORY = "TestCampaigns";
 	public static final String CAMPAIGN_FILE_EXTENSION = "xml";

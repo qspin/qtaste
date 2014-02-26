@@ -196,6 +196,14 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             public void actionPerformed(ActionEvent e) {
                 TestEngine.setIgnoreControlScript(ignoreControlScript());
                 setControlTestbedButtonsEnabled();
+                
+                GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
+                guiConfiguration.setProperty(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, m_ignoreControlScript.isSelected());
+                try {
+                    guiConfiguration.save();
+                } catch (ConfigurationException ex) {
+                    logger.error("Error while saving GUI configuration: " + ex.getMessage());
+                }
             }
         });
         adder.add(m_ignoreControlScript);
@@ -283,6 +291,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
         refreshTestBed();
         refreshData();
+        m_ignoreControlScript.setSelected(GUIConfiguration.getInstance().getBoolean(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, false));
 
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
