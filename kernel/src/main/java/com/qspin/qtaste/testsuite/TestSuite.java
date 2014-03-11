@@ -104,6 +104,7 @@ public abstract class TestSuite implements TestReportListener {
                         } else {
                         	continueExecution = numberLoops == -1 || currentExecution < numberLoops;
                         }
+                        continueExecution &= !this.abortedByUser;
                         currentExecution++;
                     } while (continueExecution);
                 } else {
