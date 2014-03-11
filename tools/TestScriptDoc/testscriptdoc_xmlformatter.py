@@ -290,8 +290,6 @@ class PythonDocGenerator:
 					self.allImportedModulesStepsDoc[stepsDocFileName] = stepsDocDict
 					self.allImportedModulesStepsTables[stepsDocFileName] = stepsTablesDict
 					return (stepsDocDict, stepsTablesDict)
-				else:
-					print "xml file '" + stepsDocFileName + "' doesn't exist!"
 		return (None, None)
 
 	def _addExecutedSteps(self, stepsTable, selectorStart, selectorEnd):
