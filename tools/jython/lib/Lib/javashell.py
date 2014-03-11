@@ -138,10 +138,16 @@ def _getOsType( os=None ):
                System.getProperty( "os.name" ))
 
     _osTypeMap = (
-        ( "nt", ( 'nt', 'Windows NT', 'Windows NT 4.0', 'WindowsNT',
-                  'Windows 2000', 'Windows 2003', 'Windows XP', 'Windows CE',
-                  'Windows Vista', 'Windows 7' )),
         ( "dos", ( 'dos', 'Windows 95', 'Windows 98', 'Windows ME' )),
+#		to avoid multiple modification for all further windows release,
+#		replace the original code
+#		( "nt", ( 'nt', 'Windows NT', 'Windows NT 4.0', 'WindowsNT',
+#		  'Windows 2000', 'Windows 2003', 'Windows XP', 'Windows CE',
+#		  'Windows Vista', 'Windows 7', 'Windows 8' )),
+
+# 		with this one, more simple.
+		( "nt", ( 'nt', 'Windows' )),
+
         ( "mac", ( 'mac', 'MacOS', 'Darwin' )),
         ( "None", ( 'None', )),
         )
