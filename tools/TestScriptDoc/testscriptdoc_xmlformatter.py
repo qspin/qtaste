@@ -218,7 +218,9 @@ class PythonDocGenerator:
 		directory = os.path.realpath(filename)
 		testSuitesDirectory = os.path.realpath(self.rootTestSuitesDir)
 		pythonLibDirectories = []
-		while directory != testSuitesDirectory:
+		previous = ""
+		while directory != testSuitesDirectory and directory != previous:
+			previous = str(directory)
 			directory = os.path.dirname(directory)
 			pythonLibDir = directory + os.sep + "pythonlib"
 			if (os.path.isdir(pythonLibDir)):
@@ -288,6 +290,8 @@ class PythonDocGenerator:
 					self.allImportedModulesStepsDoc[stepsDocFileName] = stepsDocDict
 					self.allImportedModulesStepsTables[stepsDocFileName] = stepsTablesDict
 					return (stepsDocDict, stepsTablesDict)
+				else:
+					print "xml file '" + stepsDocFileName + "' doesn't exist!"
 		return (None, None)
 
 	def _addExecutedSteps(self, stepsTable, selectorStart, selectorEnd):

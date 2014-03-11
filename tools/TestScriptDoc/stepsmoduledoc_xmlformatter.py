@@ -115,7 +115,7 @@ if __name__ == '__main__':
 		checkForModifiedFiles(fileOrDir, modifiedFiles)
 	if modifiedFiles:
 		print 'Generating test steps doc for files:', ', '.join(modifiedFiles)
-		sys.argv[1:]= ['-f', '-s', '-O' + moduleName]
+		sys.argv[1:]= ['-f', '-s', '-Ostepsmoduledoc_xmlformatter']
 		sys.argv.extend(modifiedFiles)
 		execfile(JYTHON_HOME + '/Lib/pythondoc.py')
 	else:
