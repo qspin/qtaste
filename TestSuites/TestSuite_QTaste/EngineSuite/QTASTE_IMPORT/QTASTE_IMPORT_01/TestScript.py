@@ -1,3 +1,4 @@
+##
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
 #    This file is part of QTaste framework.
@@ -14,7 +15,7 @@
 #
 #    You should have received a copy of the GNU Lesser General Public License
 #    along with QTaste. If not, see <http://www.gnu.org/licenses/>.
-
+##
 
 from qtaste import *
 from lib import *
