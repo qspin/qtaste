@@ -31,8 +31,8 @@ translate = testAPI.getSelenium(INSTANCE_ID='TranslateApp')
 
 def connectToWeb():
 	"""
-	@step      Connection to Yahoo babel fish text translation website
-	@expected  Check that we are on the Yahoo babel fish website
+	@step      Connection to Google Translation website
+	@expected  Check that we are on the Google Translation website
 	"""
 	translate.openBrowser(testData.getValue("BROWSER"))
 	translate.setTimeout("50000")
@@ -44,13 +44,6 @@ def connectToWeb():
 		testAPI.stopTest(Status.FAIL, "Title window name is not as expected. It's '" + title + "' and expects '"+expected+"'" )
 
 def checkTranslation():
-	
-
-
-
-
-
-
 	"""
 	@step      Translate a word specified in the testdata
 	@expected  Check that the translation is correct
