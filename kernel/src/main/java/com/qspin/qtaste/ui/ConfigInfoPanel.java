@@ -291,7 +291,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
         refreshTestBed();
         refreshData();
-        m_ignoreControlScript.setSelected(GUIConfiguration.getInstance().getBoolean(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, false));
+        if ( GUIConfiguration.getInstance().getBoolean(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, false) )
+        	m_ignoreControlScript.doClick();
 
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 

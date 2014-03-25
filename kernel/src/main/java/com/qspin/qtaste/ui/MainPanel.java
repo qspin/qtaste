@@ -182,6 +182,8 @@ public class MainPanel extends JFrame {
             JLabel iconlabel = new JLabel(topLeftLogo);
 
             mHeaderPanel = new ConfigInfoPanel(this);
+            mTestCasePanel = new TestCasePane(this);
+            
             mHeaderPanel.init();
 
             GridBagLineAdder centeradder = new GridBagLineAdder(center);
@@ -199,7 +201,6 @@ public class MainPanel extends JFrame {
 
             mRightPanels = new JPanel(new CardLayout());
             
-            mTestCasePanel = new TestCasePane(this);
             mRightPanels.add(mTestCasePanel, "Test Cases");
 
             mTestCampaignPanel = new TestCampaignMainPanel(this);
