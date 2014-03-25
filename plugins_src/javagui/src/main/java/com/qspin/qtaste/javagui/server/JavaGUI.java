@@ -142,12 +142,16 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	// Todo: getColor, awt?
 
-
-
 	@Override
 	public void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
 		LOGGER.trace("selectTab(\"" + tabbedPaneComponentName + "\", " + tabIndex + ")");
 		new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
+	}
+	
+	@Override
+	public void selectTabTitled(String tabbedPaneComponentName, String tabTitle) throws QTasteException {
+		LOGGER.trace("selectTabTitled(\"" + tabbedPaneComponentName + "\", \"" + tabTitle + "\")");
+		new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabTitle);
 	}
 	
 	public String whoAmI() throws QTasteTestFailException {	

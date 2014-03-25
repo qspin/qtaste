@@ -103,6 +103,10 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 
+	public void selectTabTitled(String tabbedPaneComponentName, String tabTitle)  throws QTasteException{
+		mProxy.selectTabTitled(tabbedPaneComponentName, tabTitle);
+	}
+
 	public void terminate() throws QTasteException
 	{
 		try {

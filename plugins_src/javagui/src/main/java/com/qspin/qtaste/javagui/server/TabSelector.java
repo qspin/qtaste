@@ -26,16 +26,27 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 class TabSelector extends UpdateComponentCommander {
 
 	protected int mTabIndex;
+	protected String mTabTitle;
 
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
-		mTabIndex = Integer.parseInt(mData[0].toString());
+		if ( mData.length == 0 || mData[0] == null )
+			throw new QTasteTestFailException("No tab index or tab title provided!");
+		if ( mData[0] instanceof String)
+			mTabTitle = mData[0].toString();
+		else
+			mTabIndex = Integer.parseInt(mData[0].toString());
 	}
 
 	@Override
 	protected void doActionsInSwingThread() {
 		if (component != null && component instanceof JTabbedPane) {
-			((JTabbedPane)component).setSelectedIndex(mTabIndex);
+			int index = -1;
+			if ( mTabTitle != null )
+				index = ((JTabbedPane)component).indexOfTab(mTabTitle);
+			else
+				index = mTabIndex;
+			((JTabbedPane)component).setSelectedIndex(index);
 		}
 	}
 

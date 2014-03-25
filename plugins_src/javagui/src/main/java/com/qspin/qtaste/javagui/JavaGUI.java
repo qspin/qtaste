@@ -136,7 +136,6 @@ public interface JavaGUI {
      */
    void setText(String componentName, String value) throws QTasteException;
     
-   
    /**
     * Select the specified tab for the tabbed pane.</br>
 	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
@@ -144,6 +143,14 @@ public interface JavaGUI {
     * @param tabIndex the tab index (first at 0).
     */
    void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException;
+   
+   /**
+    * Select the specified tab for the tabbed pane.</br>
+	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
+    * @param tabbedPaneComponentName the {@link JTabbedPane} component name
+    * @param tabTitle the tab title.
+    */
+   void selectTabTitled(String tabbedPaneComponentName, String tabTitle) throws QTasteException;
    
    /**
     * Set the selection state to the specified component.</br>
