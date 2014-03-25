@@ -1,4 +1,6 @@
-COMMENT;JAVAGUI_INSTANCE_NAME;TAB_COMPONENT_NAME;TAB_IDX
-select DOCUMENTtab;PlaybackApp;TABBED_PANE;0
-select CHOOSE tab;PlaybackAppBis;TABBED_PANE;1
-select no tab;PlaybackApp;TABBED_PANE;-1
+COMMENT;JAVAGUI_INSTANCE_NAME;TAB_COMPONENT_NAME;TAB_IDX;TAB_TITLE
+select DOCUMENT tab (From index);PlaybackApp;TABBED_PANE;0;
+select DOCUMENT tab (From title);PlaybackAppBis;TABBED_PANE;;DOCUMENT_PANEL
+select CHOOSE tab (From index);PlaybackAppBis;TABBED_PANE;1;
+select CHOOSE tab (From title);PlaybackApp;TABBED_PANE;;CHOOSE_PANEL
+select no tab;PlaybackApp;TABBED_PANE;-1;

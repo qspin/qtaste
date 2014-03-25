@@ -24,9 +24,13 @@ def testChangeTab():
 	
 	subtitler.setSubtitle("Select the tab", 1)
 	component = testData.getValue("TAB_COMPONENT_NAME")
-	index = testData.getIntValue("TAB_IDX")
-	javaguiMI.selectTab(component, index)
-	
+	title = testData.getValue("TAB_TITLE")
+	if title is None or len(title) == 0:
+		index = testData.getIntValue("TAB_IDX")
+		javaguiMI.selectTab(component, index)
+	else:
+		javaguiMI.selectTabTitled(component, title)
+
 def reset():
 	"""
 	@step      Unselect tab
@@ -41,4 +45,5 @@ def reset():
 changeTab=[(1, testChangeTab)]
 
 doStep(testChangeTab)
+time.sleep(1)
 doStep(reset)
