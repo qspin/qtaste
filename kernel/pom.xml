@@ -205,13 +205,11 @@
             <artifactId>svnkit</artifactId>
             <version>1.7.4-v1</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>tools</artifactId>
-            <version>whatever</version>
-            <scope>system</scope>
-            <systemPath>${java.home}/../lib/tools.jar</systemPath>
-         </dependency>
+         <dependency>
+	      <groupId>org.netbeans.external</groupId>
+	      <artifactId>nb-javac-api</artifactId>
+	      <version>RELEASE80</version>
+	 </dependency>
     </dependencies>
 
     <profiles>
@@ -274,7 +272,23 @@
 						<goals>
 							<goal>install-file</goal>
 						</goals>
-					  </execution>					  
+					  </execution>
+					  <execution>
+						<id>install-local-javadoc</id>
+						<phase>pre-clean</phase>						
+						<configuration>
+							<file>${qtaste-parent-dir}/../tools/Plugins/javadoc/nb-javac-api-RELEASE80.jar</file>
+							<repositoryLayout>default</repositoryLayout>
+							<groupId>org.netbeans.external</groupId>
+							<artifactId>nb-javac-api</artifactId>
+							<version>RELEASE80</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					  </execution>
 					</executions>
 				</plugin>
 			</plugins>
