@@ -5,6 +5,7 @@
 		<reporters>
 			<format>HTML</format>
 			<format>GUI</format>
+			<format>XML</format>
 		</reporters>
 
 		<html_settings>
