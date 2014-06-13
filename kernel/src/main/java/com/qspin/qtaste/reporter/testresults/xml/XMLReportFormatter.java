@@ -89,19 +89,21 @@ public class XMLReportFormatter extends XMLFormatter {
 
     @Override
     public void startReport(Date timeStamp, String name) {
+        super.startReport(timeStamp, name);
+
         if (date == null) {
             date = new Date();
         }
         fileName = outputDir + File.separator;
-        fileName += new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(timeStamp) + File.separator;
+        fileName += new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(timeStamp) + File.separator;
         fileName += String.format(FILE_NAME_FORMAT, date);
-        reportFile = new File(fileName);
-        if ( !reportFile.getParentFile().exists() )
+        File file = new File(fileName);
+        if ( !file.getParentFile().exists() )
         {
-        	reportFile.getParentFile().mkdirs();
+        	file.getParentFile().mkdirs();
         }
-        if (reportFile.exists()) {
-        	reportFile.delete();
+        if (file.exists()) {
+        	file.delete();
         }
 
         try {
@@ -111,11 +113,12 @@ public class XMLReportFormatter extends XMLFormatter {
         }
 
         currentTestSuite = TestEngine.getCurrentTestSuite();
-
     }
 
     @Override
     public void stopReport() {
+        super.stopReport();
+
         try {
             generateMainFile(true);
         } catch (Exception e) {
@@ -127,7 +130,7 @@ public class XMLReportFormatter extends XMLFormatter {
         NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
         namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
-        namesValues.add("###RESULTS_FILE###", reportFile.getName());
+        namesValues.add("###RESULTS_FILE###", reportFileName);
         namesValues.add("###LOG_DATE###", DATE_FORMAT.format(date));
         namesValues.add("###TESTBED###", getTestbedConfigurationName());
         namesValues.add("###TESTBED_CONFIGURATION_FILE_NAME###", getTestbedConfigurationFileName());
