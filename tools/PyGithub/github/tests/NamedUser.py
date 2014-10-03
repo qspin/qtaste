@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import Framework
 
@@ -83,14 +92,6 @@ class NamedUser(Framework.TestCase):
         self.assertEqual(self.user.type, "User")
         self.assertEqual(self.user.url, "https://api.github.com/users/jacquev6")
 
-    def testCreateGist(self):
-        gist = self.user.create_gist(True, {"foobar.txt": github.InputFileContent("File created by PyGithub")}, "Gist created by PyGithub on a NamedUser")
-        self.assertEqual(gist.description, "Gist created by PyGithub on a NamedUser")
-
-    def testCreateGistWithoutDescription(self):
-        gist = self.user.create_gist(True, {"foobar.txt": github.InputFileContent("File created by PyGithub")})
-        self.assertEqual(gist.description, None)
-
     def testGetGists(self):
         self.assertListKeyEqual(self.user.get_gists(), lambda g: g.description, ["Gist created by PyGithub", "FairThreadPoolPool.cpp", "How to error 500 Github API v3, as requested by Rick (GitHub Staff)", "Cadfael: order of episodes in French DVD edition"])
 
@@ -99,6 +100,10 @@ class NamedUser(Framework.TestCase):
 
     def testGetFollowing(self):
         self.assertListKeyEqual(self.user.get_following(), lambda f: f.login, ["nvie", "schacon", "jamis", "chad", "unclebob", "dabrahams", "jnorthrup", "brugidou", "regisb", "walidk", "tanzilli", "fjardon", "r3c", "sdanzan", "vineus", "cjuniet", "gturri", "ant9000", "asquini", "claudyus", "jardon-u", "s-bernard", "kamaradclimber", "Lyloa"])
+
+    def testHasInFollowing(self):
+        nvie = self.g.get_user("nvie")
+        self.assertTrue(self.user.has_in_following(nvie))
 
     def testGetOrgs(self):
         self.assertListKeyEqual(self.user.get_orgs(), lambda o: o.login, ["BeaverSoftware"])

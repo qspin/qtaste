@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import github.GithubObject
 
@@ -28,7 +38,7 @@ class GitBlob(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._content)
-        return self._NoneIfNotSet(self._content)
+        return self._content.value
 
     @property
     def encoding(self):
@@ -36,7 +46,7 @@ class GitBlob(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._encoding)
-        return self._NoneIfNotSet(self._encoding)
+        return self._encoding.value
 
     @property
     def sha(self):
@@ -44,7 +54,7 @@ class GitBlob(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._sha)
-        return self._NoneIfNotSet(self._sha)
+        return self._sha.value
 
     @property
     def size(self):
@@ -52,7 +62,7 @@ class GitBlob(github.GithubObject.CompletableGithubObject):
         :type: integer
         """
         self._completeIfNotSet(self._size)
-        return self._NoneIfNotSet(self._size)
+        return self._size.value
 
     @property
     def url(self):
@@ -60,7 +70,7 @@ class GitBlob(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._url)
-        return self._NoneIfNotSet(self._url)
+        return self._url.value
 
     def _initAttributes(self):
         self._content = github.GithubObject.NotSet
@@ -71,17 +81,12 @@ class GitBlob(github.GithubObject.CompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "content" in attributes:  # pragma no branch
-            assert attributes["content"] is None or isinstance(attributes["content"], (str, unicode)), attributes["content"]
-            self._content = attributes["content"]
+            self._content = self._makeStringAttribute(attributes["content"])
         if "encoding" in attributes:  # pragma no branch
-            assert attributes["encoding"] is None or isinstance(attributes["encoding"], (str, unicode)), attributes["encoding"]
-            self._encoding = attributes["encoding"]
+            self._encoding = self._makeStringAttribute(attributes["encoding"])
         if "sha" in attributes:  # pragma no branch
-            assert attributes["sha"] is None or isinstance(attributes["sha"], (str, unicode)), attributes["sha"]
-            self._sha = attributes["sha"]
+            self._sha = self._makeStringAttribute(attributes["sha"])
         if "size" in attributes:  # pragma no branch
-            assert attributes["size"] is None or isinstance(attributes["size"], (int, long)), attributes["size"]
-            self._size = attributes["size"]
+            self._size = self._makeIntAttribute(attributes["size"])
         if "url" in attributes:  # pragma no branch
-            assert attributes["url"] is None or isinstance(attributes["url"], (str, unicode)), attributes["url"]
-            self._url = attributes["url"]
+            self._url = self._makeStringAttribute(attributes["url"])

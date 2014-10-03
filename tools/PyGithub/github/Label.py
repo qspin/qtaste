@@ -1,19 +1,29 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2013 martinqt m.ki2@laposte.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2013 martinqt <m.ki2@laposte.net>                                  #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import urllib
 
@@ -31,7 +41,7 @@ class Label(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._color)
-        return self._NoneIfNotSet(self._color)
+        return self._color.value
 
     @property
     def name(self):
@@ -39,7 +49,7 @@ class Label(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._name)
-        return self._NoneIfNotSet(self._name)
+        return self._name.value
 
     @property
     def url(self):
@@ -47,23 +57,21 @@ class Label(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._url)
-        return self._NoneIfNotSet(self._url)
+        return self._url.value
 
     def delete(self):
         """
-        :calls: `DELETE /repos/:user/:repo/labels/:name <http://developer.github.com/v3/todo>`_
+        :calls: `DELETE /repos/:owner/:repo/labels/:name <http://developer.github.com/v3/issues/labels>`_
         :rtype: None
         """
         headers, data = self._requester.requestJsonAndCheck(
             "DELETE",
-            self.url,
-            None,
-            None
+            self.url
         )
 
     def edit(self, name, color):
         """
-        :calls: `PATCH /repos/:user/:repo/labels/:name <http://developer.github.com/v3/todo>`_
+        :calls: `PATCH /repos/:owner/:repo/labels/:name <http://developer.github.com/v3/issues/labels>`_
         :param name: string
         :param color: string
         :rtype: None
@@ -77,8 +85,7 @@ class Label(github.GithubObject.CompletableGithubObject):
         headers, data = self._requester.requestJsonAndCheck(
             "PATCH",
             self.url,
-            None,
-            post_parameters
+            input=post_parameters
         )
         self._useAttributes(data)
 
@@ -93,11 +100,8 @@ class Label(github.GithubObject.CompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "color" in attributes:  # pragma no branch
-            assert attributes["color"] is None or isinstance(attributes["color"], (str, unicode)), attributes["color"]
-            self._color = attributes["color"]
+            self._color = self._makeStringAttribute(attributes["color"])
         if "name" in attributes:  # pragma no branch
-            assert attributes["name"] is None or isinstance(attributes["name"], (str, unicode)), attributes["name"]
-            self._name = attributes["name"]
+            self._name = self._makeStringAttribute(attributes["name"])
         if "url" in attributes:  # pragma no branch
-            assert attributes["url"] is None or isinstance(attributes["url"], (str, unicode)), attributes["url"]
-            self._url = attributes["url"]
+            self._url = self._makeStringAttribute(attributes["url"])

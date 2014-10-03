@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import github.GithubObject
 
@@ -28,7 +38,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._accesskeyid)
-        return self._NoneIfNotSet(self._accesskeyid)
+        return self._accesskeyid.value
 
     @property
     def acl(self):
@@ -36,7 +46,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._acl)
-        return self._NoneIfNotSet(self._acl)
+        return self._acl.value
 
     @property
     def bucket(self):
@@ -44,7 +54,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._bucket)
-        return self._NoneIfNotSet(self._bucket)
+        return self._bucket.value
 
     @property
     def content_type(self):
@@ -52,7 +62,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._content_type)
-        return self._NoneIfNotSet(self._content_type)
+        return self._content_type.value
 
     @property
     def created_at(self):
@@ -60,7 +70,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: datetime.datetime
         """
         self._completeIfNotSet(self._created_at)
-        return self._NoneIfNotSet(self._created_at)
+        return self._created_at.value
 
     @property
     def description(self):
@@ -68,7 +78,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._description)
-        return self._NoneIfNotSet(self._description)
+        return self._description.value
 
     @property
     def download_count(self):
@@ -76,7 +86,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: integer
         """
         self._completeIfNotSet(self._download_count)
-        return self._NoneIfNotSet(self._download_count)
+        return self._download_count.value
 
     @property
     def expirationdate(self):
@@ -84,7 +94,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: datetime.datetime
         """
         self._completeIfNotSet(self._expirationdate)
-        return self._NoneIfNotSet(self._expirationdate)
+        return self._expirationdate.value
 
     @property
     def html_url(self):
@@ -92,7 +102,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._html_url)
-        return self._NoneIfNotSet(self._html_url)
+        return self._html_url.value
 
     @property
     def id(self):
@@ -100,7 +110,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: integer
         """
         self._completeIfNotSet(self._id)
-        return self._NoneIfNotSet(self._id)
+        return self._id.value
 
     @property
     def mime_type(self):
@@ -108,7 +118,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._mime_type)
-        return self._NoneIfNotSet(self._mime_type)
+        return self._mime_type.value
 
     @property
     def name(self):
@@ -116,7 +126,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._name)
-        return self._NoneIfNotSet(self._name)
+        return self._name.value
 
     @property
     def path(self):
@@ -124,7 +134,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._path)
-        return self._NoneIfNotSet(self._path)
+        return self._path.value
 
     @property
     def policy(self):
@@ -132,7 +142,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._policy)
-        return self._NoneIfNotSet(self._policy)
+        return self._policy.value
 
     @property
     def prefix(self):
@@ -140,7 +150,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._prefix)
-        return self._NoneIfNotSet(self._prefix)
+        return self._prefix.value
 
     @property
     def redirect(self):
@@ -148,7 +158,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: bool
         """
         self._completeIfNotSet(self._redirect)
-        return self._NoneIfNotSet(self._redirect)
+        return self._redirect.value
 
     @property
     def s3_url(self):
@@ -156,7 +166,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._s3_url)
-        return self._NoneIfNotSet(self._s3_url)
+        return self._s3_url.value
 
     @property
     def signature(self):
@@ -164,7 +174,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._signature)
-        return self._NoneIfNotSet(self._signature)
+        return self._signature.value
 
     @property
     def size(self):
@@ -172,7 +182,7 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: integer
         """
         self._completeIfNotSet(self._size)
-        return self._NoneIfNotSet(self._size)
+        return self._size.value
 
     @property
     def url(self):
@@ -180,18 +190,16 @@ class Download(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._url)
-        return self._NoneIfNotSet(self._url)
+        return self._url.value
 
     def delete(self):
         """
-        :calls: `DELETE /repos/:user/:repo/downloads/:id <http://developer.github.com/v3/todo>`_
+        :calls: `DELETE /repos/:owner/:repo/downloads/:id <http://developer.github.com/v3/repos/downloads>`_
         :rtype: None
         """
         headers, data = self._requester.requestJsonAndCheck(
             "DELETE",
-            self.url,
-            None,
-            None
+            self.url
         )
 
     def _initAttributes(self):
@@ -218,62 +226,42 @@ class Download(github.GithubObject.CompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "accesskeyid" in attributes:  # pragma no branch
-            assert attributes["accesskeyid"] is None or isinstance(attributes["accesskeyid"], (str, unicode)), attributes["accesskeyid"]
-            self._accesskeyid = attributes["accesskeyid"]
+            self._accesskeyid = self._makeStringAttribute(attributes["accesskeyid"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "acl" in attributes:  # pragma no branch
-            assert attributes["acl"] is None or isinstance(attributes["acl"], (str, unicode)), attributes["acl"]
-            self._acl = attributes["acl"]
+            self._acl = self._makeStringAttribute(attributes["acl"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "bucket" in attributes:  # pragma no branch
-            assert attributes["bucket"] is None or isinstance(attributes["bucket"], (str, unicode)), attributes["bucket"]
-            self._bucket = attributes["bucket"]
+            self._bucket = self._makeStringAttribute(attributes["bucket"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "content_type" in attributes:  # pragma no branch
-            assert attributes["content_type"] is None or isinstance(attributes["content_type"], (str, unicode)), attributes["content_type"]
-            self._content_type = attributes["content_type"]
+            self._content_type = self._makeStringAttribute(attributes["content_type"])
         if "created_at" in attributes:  # pragma no branch
-            assert attributes["created_at"] is None or isinstance(attributes["created_at"], (str, unicode)), attributes["created_at"]
-            self._created_at = self._parseDatetime(attributes["created_at"])
+            self._created_at = self._makeDatetimeAttribute(attributes["created_at"])
         if "description" in attributes:  # pragma no branch
-            assert attributes["description"] is None or isinstance(attributes["description"], (str, unicode)), attributes["description"]
-            self._description = attributes["description"]
+            self._description = self._makeStringAttribute(attributes["description"])
         if "download_count" in attributes:  # pragma no branch
-            assert attributes["download_count"] is None or isinstance(attributes["download_count"], (int, long)), attributes["download_count"]
-            self._download_count = attributes["download_count"]
+            self._download_count = self._makeIntAttribute(attributes["download_count"])
         if "expirationdate" in attributes:  # pragma no branch
-            assert attributes["expirationdate"] is None or isinstance(attributes["expirationdate"], (str, unicode)), attributes["expirationdate"]
-            self._expirationdate = self._parseDatetime(attributes["expirationdate"])
+            self._expirationdate = self._makeDatetimeAttribute(attributes["expirationdate"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "html_url" in attributes:  # pragma no branch
-            assert attributes["html_url"] is None or isinstance(attributes["html_url"], (str, unicode)), attributes["html_url"]
-            self._html_url = attributes["html_url"]
+            self._html_url = self._makeStringAttribute(attributes["html_url"])
         if "id" in attributes:  # pragma no branch
-            assert attributes["id"] is None or isinstance(attributes["id"], (int, long)), attributes["id"]
-            self._id = attributes["id"]
+            self._id = self._makeIntAttribute(attributes["id"])
         if "mime_type" in attributes:  # pragma no branch
-            assert attributes["mime_type"] is None or isinstance(attributes["mime_type"], (str, unicode)), attributes["mime_type"]
-            self._mime_type = attributes["mime_type"]
+            self._mime_type = self._makeStringAttribute(attributes["mime_type"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "name" in attributes:  # pragma no branch
-            assert attributes["name"] is None or isinstance(attributes["name"], (str, unicode)), attributes["name"]
-            self._name = attributes["name"]
+            self._name = self._makeStringAttribute(attributes["name"])
         if "path" in attributes:  # pragma no branch
-            assert attributes["path"] is None or isinstance(attributes["path"], (str, unicode)), attributes["path"]
-            self._path = attributes["path"]
+            self._path = self._makeStringAttribute(attributes["path"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "policy" in attributes:  # pragma no branch
-            assert attributes["policy"] is None or isinstance(attributes["policy"], (str, unicode)), attributes["policy"]
-            self._policy = attributes["policy"]
+            self._policy = self._makeStringAttribute(attributes["policy"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "prefix" in attributes:  # pragma no branch
-            assert attributes["prefix"] is None or isinstance(attributes["prefix"], (str, unicode)), attributes["prefix"]
-            self._prefix = attributes["prefix"]
+            self._prefix = self._makeStringAttribute(attributes["prefix"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "redirect" in attributes:  # pragma no branch
-            assert attributes["redirect"] is None or isinstance(attributes["redirect"], bool), attributes["redirect"]
-            self._redirect = attributes["redirect"]
+            self._redirect = self._makeBoolAttribute(attributes["redirect"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "s3_url" in attributes:  # pragma no branch
-            assert attributes["s3_url"] is None or isinstance(attributes["s3_url"], (str, unicode)), attributes["s3_url"]
-            self._s3_url = attributes["s3_url"]
+            self._s3_url = self._makeStringAttribute(attributes["s3_url"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "signature" in attributes:  # pragma no branch
-            assert attributes["signature"] is None or isinstance(attributes["signature"], (str, unicode)), attributes["signature"]
-            self._signature = attributes["signature"]
+            self._signature = self._makeStringAttribute(attributes["signature"])  # pragma no cover (was covered only by create_download, which has been removed)
         if "size" in attributes:  # pragma no branch
-            assert attributes["size"] is None or isinstance(attributes["size"], (int, long)), attributes["size"]
-            self._size = attributes["size"]
+            self._size = self._makeIntAttribute(attributes["size"])
         if "url" in attributes:  # pragma no branch
-            assert attributes["url"] is None or isinstance(attributes["url"], (str, unicode)), attributes["url"]
-            self._url = attributes["url"]
+            self._url = self._makeStringAttribute(attributes["url"])

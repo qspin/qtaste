@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import github.GithubObject
 
@@ -27,21 +37,21 @@ class GitAuthor(github.GithubObject.NonCompletableGithubObject):
         """
         :type: datetime.datetime
         """
-        return self._NoneIfNotSet(self._date)
+        return self._date.value
 
     @property
     def email(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._email)
+        return self._email.value
 
     @property
     def name(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._name)
+        return self._name.value
 
     def _initAttributes(self):
         self._date = github.GithubObject.NotSet
@@ -50,11 +60,8 @@ class GitAuthor(github.GithubObject.NonCompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "date" in attributes:  # pragma no branch
-            assert attributes["date"] is None or isinstance(attributes["date"], (str, unicode)), attributes["date"]
-            self._date = self._parseDatetime(attributes["date"])
+            self._date = self._makeDatetimeAttribute(attributes["date"])
         if "email" in attributes:  # pragma no branch
-            assert attributes["email"] is None or isinstance(attributes["email"], (str, unicode)), attributes["email"]
-            self._email = attributes["email"]
+            self._email = self._makeStringAttribute(attributes["email"])
         if "name" in attributes:  # pragma no branch
-            assert attributes["name"] is None or isinstance(attributes["name"], (str, unicode)), attributes["name"]
-            self._name = attributes["name"]
+            self._name = self._makeStringAttribute(attributes["name"])

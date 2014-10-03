@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import datetime
 
@@ -27,28 +36,28 @@ class Github(Framework.TestCase):
 
     def testLegacySearchRepos(self):
         repos = self.g.legacy_search_repos("github api v3")
-        self.assertListKeyBegin(repos, lambda r: r.name, ["octokit", "github-v3-api", "github_v3_api"])
-        self.assertEqual(repos[0].full_name, "pengwynn/octokit")
+        self.assertListKeyBegin(repos, lambda r: r.name, ["github", "octonode", "PyGithub"])
+        self.assertEqual(repos[0].full_name, "peter-murach/github")
 
         # Attributes retrieved from legacy API without lazy completion call
-        self.assertEqual(repos[1].created_at, datetime.datetime(2011, 6, 23, 22, 52, 33))
-        self.assertEqual(repos[1].name, "github-v3-api")
-        self.assertEqual(repos[1].watchers, 35)
-        self.assertTrue(repos[1].has_downloads)
-        self.assertEqual(repos[3].homepage, "http://peter-murach.github.com/github")
-        self.assertEqual(repos[1].url, "/repos/jwilger/github-v3-api")
-        self.assertFalse(repos[1].fork)
-        self.assertTrue(repos[1].has_issues)
-        self.assertFalse(repos[1].has_wiki)
-        self.assertEqual(repos[1].forks, 13)
-        self.assertEqual(repos[1].size, 212)
-        self.assertFalse(repos[1].private)
-        self.assertEqual(repos[1].open_issues, 2)
-        self.assertEqual(repos[3].pushed_at, datetime.datetime(2012, 6, 28, 21, 26, 31))
-        self.assertEqual(repos[1].description, "Ruby Client for the GitHub v3 API")
-        self.assertEqual(repos[1].language, "Ruby")
-        self.assertEqual(repos[1].owner.login, "jwilger")
-        self.assertEqual(repos[1].owner.url, "/users/jwilger")
+        self.assertEqual(repos[2].created_at, datetime.datetime(2012, 2, 25, 12, 53, 47))
+        self.assertEqual(repos[2].name, "PyGithub")
+        self.assertEqual(repos[2].watchers, 365)
+        self.assertTrue(repos[2].has_downloads)
+        self.assertEqual(repos[2].homepage, "http://jacquev6.github.io/PyGithub")
+        self.assertEqual(repos[2].url, "/repos/jacquev6/PyGithub")
+        self.assertFalse(repos[2].fork)
+        self.assertTrue(repos[2].has_issues)
+        self.assertFalse(repos[2].has_wiki)
+        self.assertEqual(repos[2].forks, 102)
+        self.assertEqual(repos[2].size, 11373)
+        self.assertFalse(repos[2].private)
+        self.assertEqual(repos[2].open_issues, 14)
+        self.assertEqual(repos[2].pushed_at, datetime.datetime(2014, 3, 16, 17, 1, 56))
+        self.assertEqual(repos[2].description, "Python library implementing the full Github API v3")
+        self.assertEqual(repos[2].language, "Python")
+        self.assertEqual(repos[2].owner.login, "jacquev6")
+        self.assertEqual(repos[2].owner.url, "/users/jacquev6")
 
     def testLegacySearchReposPagination(self):
         repos = self.g.legacy_search_repos("document")
@@ -96,8 +105,23 @@ class Github(Framework.TestCase):
         self.assertEqual(hook.events, ["push"])
         self.assertEqual(hook.schema, [["string", "url"], ["string", "token"], ["string", "project_id"], ["string", "milestone_id"], ["string", "category_id"]])
 
+    def testGetEmojis(self):
+        emojis = self.g.get_emojis()
+        first = emojis.get("+1")
+        self.assertEqual(first, "https://github.global.ssl.fastly.net/images/icons/emoji/+1.png?v5")
+
+    def testGetHook(self):
+        hook = self.g.get_hook("activecollab")
+        self.assertEqual(hook.name, "activecollab")
+        self.assertEqual(hook.supported_events, ["push"])
+        self.assertEqual(hook.events, ["push"])
+        self.assertEqual(hook.schema, [["string", "url"], ["string", "token"], ["string", "project_id"], ["string", "milestone_id"], ["string", "category_id"]])
+
     def testGetRepoFromFullName(self):
         self.assertEqual(self.g.get_repo("jacquev6/PyGithub").description, "Python library implementing the full Github API v3")
+
+    def testGetRepoFromId(self):
+        self.assertEqual(self.g.get_repo(3544490).description, "Python library implementing the full Github API v3")
 
     def testGetGitignoreTemplates(self):
         self.assertEqual(self.g.get_gitignore_templates(), ["Actionscript", "Android", "AppceleratorTitanium", "Autotools", "Bancha", "C", "C++", "CFWheels", "CMake", "CSharp", "CakePHP", "Clojure", "CodeIgniter", "Compass", "Concrete5", "Coq", "Delphi", "Django", "Drupal", "Erlang", "ExpressionEngine", "Finale", "ForceDotCom", "FuelPHP", "GWT", "Go", "Grails", "Haskell", "Java", "Jboss", "Jekyll", "Joomla", "Jython", "Kohana", "LaTeX", "Leiningen", "LemonStand", "Lilypond", "Lithium", "Magento", "Maven", "Node", "OCaml", "Objective-C", "Opa", "OracleForms", "Perl", "PlayFramework", "Python", "Qooxdoo", "Qt", "R", "Rails", "RhodesRhomobile", "Ruby", "Scala", "Sdcc", "SeamGen", "SketchUp", "SugarCRM", "Symfony", "Symfony2", "SymphonyCMS", "Target3001", "Tasm", "Textpattern", "TurboGears2", "Unity", "VB.Net", "Waf", "Wordpress", "Yii", "ZendFramework", "gcov", "nanoc", "opencart"])
@@ -119,3 +143,9 @@ class Github(Framework.TestCase):
 
     def testGetUsersSince(self):
         self.assertListKeyBegin(self.g.get_users(since=1000), lambda u: u.login, ["sbecker"])
+
+    def testGetRepos(self):
+        self.assertListKeyBegin(self.g.get_repos(), lambda r: r.name, ["grit", "merb-core", "rubinius", "god", "jsawesome", "jspec", "exception_logger", "ambition"])
+
+    def testGetReposSince(self):
+        self.assertListKeyBegin(self.g.get_repos(since=1000), lambda r: r.name, ["jquery-humanize-messages-plugin", "4slicer", "fixture-scenarios", "mongrel_proctitle", "rails-plugins"])

@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import github.GithubObject
 
@@ -27,42 +37,42 @@ class GitTreeElement(github.GithubObject.NonCompletableGithubObject):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._mode)
+        return self._mode.value
 
     @property
     def path(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._path)
+        return self._path.value
 
     @property
     def sha(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._sha)
+        return self._sha.value
 
     @property
     def size(self):
         """
         :type: integer
         """
-        return self._NoneIfNotSet(self._size)
+        return self._size.value
 
     @property
     def type(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._type)
+        return self._type.value
 
     @property
     def url(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._url)
+        return self._url.value
 
     def _initAttributes(self):
         self._mode = github.GithubObject.NotSet
@@ -74,20 +84,14 @@ class GitTreeElement(github.GithubObject.NonCompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "mode" in attributes:  # pragma no branch
-            assert attributes["mode"] is None or isinstance(attributes["mode"], (str, unicode)), attributes["mode"]
-            self._mode = attributes["mode"]
+            self._mode = self._makeStringAttribute(attributes["mode"])
         if "path" in attributes:  # pragma no branch
-            assert attributes["path"] is None or isinstance(attributes["path"], (str, unicode)), attributes["path"]
-            self._path = attributes["path"]
+            self._path = self._makeStringAttribute(attributes["path"])
         if "sha" in attributes:  # pragma no branch
-            assert attributes["sha"] is None or isinstance(attributes["sha"], (str, unicode)), attributes["sha"]
-            self._sha = attributes["sha"]
+            self._sha = self._makeStringAttribute(attributes["sha"])
         if "size" in attributes:  # pragma no branch
-            assert attributes["size"] is None or isinstance(attributes["size"], (int, long)), attributes["size"]
-            self._size = attributes["size"]
+            self._size = self._makeIntAttribute(attributes["size"])
         if "type" in attributes:  # pragma no branch
-            assert attributes["type"] is None or isinstance(attributes["type"], (str, unicode)), attributes["type"]
-            self._type = attributes["type"]
+            self._type = self._makeStringAttribute(attributes["type"])
         if "url" in attributes:  # pragma no branch
-            assert attributes["url"] is None or isinstance(attributes["url"], (str, unicode)), attributes["url"]
-            self._url = attributes["url"]
+            self._url = self._makeStringAttribute(attributes["url"])

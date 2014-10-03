@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import github.GithubObject
 
@@ -30,7 +40,7 @@ class GitRef(github.GithubObject.CompletableGithubObject):
         :type: :class:`github.GitObject.GitObject`
         """
         self._completeIfNotSet(self._object)
-        return self._NoneIfNotSet(self._object)
+        return self._object.value
 
     @property
     def ref(self):
@@ -38,7 +48,7 @@ class GitRef(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._ref)
-        return self._NoneIfNotSet(self._ref)
+        return self._ref.value
 
     @property
     def url(self):
@@ -46,23 +56,21 @@ class GitRef(github.GithubObject.CompletableGithubObject):
         :type: string
         """
         self._completeIfNotSet(self._url)
-        return self._NoneIfNotSet(self._url)
+        return self._url.value
 
     def delete(self):
         """
-        :calls: `DELETE /repos/:user/:repo/git/refs/:ref <http://developer.github.com/v3/todo>`_
+        :calls: `DELETE /repos/:owner/:repo/git/refs/:ref <http://developer.github.com/v3/git/refs>`_
         :rtype: None
         """
         headers, data = self._requester.requestJsonAndCheck(
             "DELETE",
-            self.url,
-            None,
-            None
+            self.url
         )
 
     def edit(self, sha, force=github.GithubObject.NotSet):
         """
-        :calls: `PATCH /repos/:user/:repo/git/refs/:ref <http://developer.github.com/v3/todo>`_
+        :calls: `PATCH /repos/:owner/:repo/git/refs/:ref <http://developer.github.com/v3/git/refs>`_
         :param sha: string
         :param force: bool
         :rtype: None
@@ -77,8 +85,7 @@ class GitRef(github.GithubObject.CompletableGithubObject):
         headers, data = self._requester.requestJsonAndCheck(
             "PATCH",
             self.url,
-            None,
-            post_parameters
+            input=post_parameters
         )
         self._useAttributes(data)
 
@@ -89,11 +96,8 @@ class GitRef(github.GithubObject.CompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "object" in attributes:  # pragma no branch
-            assert attributes["object"] is None or isinstance(attributes["object"], dict), attributes["object"]
-            self._object = None if attributes["object"] is None else github.GitObject.GitObject(self._requester, attributes["object"], completed=False)
+            self._object = self._makeClassAttribute(github.GitObject.GitObject, attributes["object"])
         if "ref" in attributes:  # pragma no branch
-            assert attributes["ref"] is None or isinstance(attributes["ref"], (str, unicode)), attributes["ref"]
-            self._ref = attributes["ref"]
+            self._ref = self._makeStringAttribute(attributes["ref"])
         if "url" in attributes:  # pragma no branch
-            assert attributes["url"] is None or isinstance(attributes["url"], (str, unicode)), attributes["url"]
-            self._url = attributes["url"]
+            self._url = self._makeStringAttribute(attributes["url"])

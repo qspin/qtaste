@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2012 Vincent Jacques vincent@vincent-jacques.net
-# Copyright 2012 Zearin zearin@gonk.net
-# Copyright 2013 Vincent Jacques vincent@vincent-jacques.net
-
-# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/
-
-# PyGithub is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License along with PyGithub.  If not, see <http://www.gnu.org/licenses/>.
+# ########################## Copyrights and license ############################
+#                                                                              #
+# Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
+# Copyright 2012 Zearin <zearin@gonk.net>                                      #
+# Copyright 2013 AKFish <akfish@gmail.com>                                     #
+# Copyright 2013 Vincent Jacques <vincent@vincent-jacques.net>                 #
+#                                                                              #
+# This file is part of PyGithub. http://jacquev6.github.com/PyGithub/          #
+#                                                                              #
+# PyGithub is free software: you can redistribute it and/or modify it under    #
+# the terms of the GNU Lesser General Public License as published by the Free  #
+# Software Foundation, either version 3 of the License, or (at your option)    #
+# any later version.                                                           #
+#                                                                              #
+# PyGithub is distributed in the hope that it will be useful, but WITHOUT ANY  #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    #
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more #
+# details.                                                                     #
+#                                                                              #
+# You should have received a copy of the GNU Lesser General Public License     #
+# along with PyGithub. If not, see <http://www.gnu.org/licenses/>.             #
+#                                                                              #
+# ##############################################################################
 
 import github.GithubObject
 
@@ -27,28 +37,28 @@ class Plan(github.GithubObject.NonCompletableGithubObject):
         """
         :type: integer
         """
-        return self._NoneIfNotSet(self._collaborators)
+        return self._collaborators.value
 
     @property
     def name(self):
         """
         :type: string
         """
-        return self._NoneIfNotSet(self._name)
+        return self._name.value
 
     @property
     def private_repos(self):
         """
         :type: integer
         """
-        return self._NoneIfNotSet(self._private_repos)
+        return self._private_repos.value
 
     @property
     def space(self):
         """
         :type: integer
         """
-        return self._NoneIfNotSet(self._space)
+        return self._space.value
 
     def _initAttributes(self):
         self._collaborators = github.GithubObject.NotSet
@@ -58,14 +68,10 @@ class Plan(github.GithubObject.NonCompletableGithubObject):
 
     def _useAttributes(self, attributes):
         if "collaborators" in attributes:  # pragma no branch
-            assert attributes["collaborators"] is None or isinstance(attributes["collaborators"], (int, long)), attributes["collaborators"]
-            self._collaborators = attributes["collaborators"]
+            self._collaborators = self._makeIntAttribute(attributes["collaborators"])
         if "name" in attributes:  # pragma no branch
-            assert attributes["name"] is None or isinstance(attributes["name"], (str, unicode)), attributes["name"]
-            self._name = attributes["name"]
+            self._name = self._makeStringAttribute(attributes["name"])
         if "private_repos" in attributes:  # pragma no branch
-            assert attributes["private_repos"] is None or isinstance(attributes["private_repos"], (int, long)), attributes["private_repos"]
-            self._private_repos = attributes["private_repos"]
+            self._private_repos = self._makeIntAttribute(attributes["private_repos"])
         if "space" in attributes:  # pragma no branch
-            assert attributes["space"] is None or isinstance(attributes["space"], (int, long)), attributes["space"]
-            self._space = attributes["space"]
+            self._space = self._makeIntAttribute(attributes["space"])
