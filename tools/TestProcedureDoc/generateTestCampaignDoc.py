@@ -189,16 +189,18 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
             htmlTreeBuilder = HTMLTreeBuilder()
             htmlTreeBuilder.feed(testStepsTable)
             testStepsTableHtmlTree = htmlTreeBuilder.close()
-            for trElem in testStepsTableHtmlTree.findall('tr'):                    
+            for trElem in testStepsTableHtmlTree.findall('tr'):
                 if REMOVE_STEP_NAME_COLUMN:
-                    del trElem[1]                    
+                    del trElem[1]
                 if ADD_STEP_RESULT_COLUMN:
                     tag = trElem[0].tag
                     if tag == "th":
                         et.SubElement(trElem, tag, {'width':'3%'}).text = 'Result'
                     elif tag == "td":
-                        et.SubElement(trElem, tag).text = ' ' # non-breakable space
-            testStepsTable = et.tostring(testStepsTableHtmlTree, 'iso-8859-1') 
+                        et.SubElement(trElem, tag).text = '?' # non-breakable space
+            testStepsTable = et.tostring(testStepsTableHtmlTree, 'iso-8859-1')
+            # remove the xml declaration tag (not needed)
+            testStepsTable = testStepsTable.replace("<?xml version='1.0' encoding='iso-8859-1'?>\n", "")
         if DUPLICATE_STEPS_PER_TEST_DATA_ROW:
             contentBeforeSteps = content[:testStepsTableMatch.start(0)]
             testDataContent = content[testStepsTableMatch.end(1):]
@@ -249,6 +251,8 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
         testScriptDocFile.close()
     except:
         print 'Warning: error while reading', testScriptDocFileName
+        print 'Exception:', sys.exc_info()[0], sys.exc_info()[1]
+        print sys.exc_info()[2]
         raise
         aggregatedDocFile.write('<h%d>%s</h%d><p>Couldn\'t read test script doc file %s.</p>\n\n' % (level+1, testCaseName, level+1, testScriptDocFileName))
         if testScriptDocFile:
