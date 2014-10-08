@@ -35,6 +35,11 @@ public final class TestRequirement {
 		return getData(ID);
 	}
 
+	public String getIdEscapeXml()
+	{
+		return StringEscapeUtils.escapeXml(getData(ID));
+	}
+
 	public String getDescription()
 	{
 		return getData(DESCRIPTION);

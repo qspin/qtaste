@@ -204,7 +204,7 @@ public class TestRequirementEditor extends JPanel {
 				output.newLine();
 				output.write("\t<" + XMLFile.REQUIREMENT_ELEMENT + " ");
 				output.append(XMLFile.REQUIREMENT_ID + "=\"" );
-				output.append(req.getId());
+				output.append(req.getIdEscapeXml());
 				output.append("\">");
 
 				for ( String dataId : req.getDataId() )
