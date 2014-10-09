@@ -8,7 +8,7 @@
 # Precondition: must be run from QTaste root directory and qtaste-kernel-deploy.jar must be in CLASSPATH
 ##
 
-import sys, re, os.path, os.sep, codecs
+import sys, re, os.path, os.sep
 from sets import Set
 try:
     import xml.etree.ElementTree as et
@@ -57,7 +57,7 @@ def generateTestCasesDoc(campaignFileName):
 
     # generate aggregated doc file
     aggregatedDocFileName = os.path.splitext(campaignFileName)[0] + '-doc.html'
-    aggregatedDocFile = codecs.open(aggregatedDocFileName, 'w', 'utf-8')
+    aggregatedDocFile = open(aggregatedDocFileName, 'wb')
     aggregatedDocFile.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">\n')
     aggregatedDocFile.write('<html xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xdt="http://www.w3.org/2005/xpath-datatypes">\n')
     aggregatedDocFile.write('<head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Aggregated test cases documentation for test campaign %s</title></head>\n<body>\n' % os.path.splitext(os.path.basename(campaignFileName))[0])
@@ -183,13 +183,13 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
     testScriptDocFileName = testCaseDir + os.sep + StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME
     testScriptDocFile = None
     try:
-        testScriptDocFile = codecs.open(testScriptDocFileName, 'r', 'utf-8')
+        testScriptDocFile = open(testScriptDocFileName, 'rb')
         content = testScriptDocFile.read()
         content = REMOVE_HTML_HEADERS_PATTERN.match(content).group(1)
         testStepsTableMatch = TEST_STEPS_TABLE_PATTERN.search(content)
         testStepsTable = testStepsTableMatch.group(1)
         if REMOVE_STEP_NAME_COLUMN or ADD_STEP_RESULT_COLUMN:
-            htmlTreeBuilder = HTMLTreeBuilder()
+            htmlTreeBuilder = HTMLTreeBuilder(encoding = 'utf-8')
             htmlTreeBuilder.feed(testStepsTable)
             testStepsTableHtmlTree = htmlTreeBuilder.close()
             for trElem in testStepsTableHtmlTree.findall('tr'):

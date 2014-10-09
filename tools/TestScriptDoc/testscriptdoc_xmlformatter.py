@@ -153,7 +153,7 @@ class PythonDocGenerator:
 	# and executed steps (self.executedSteps)
 	def _parseTestScriptFile(self, filename):
 		import re
-		file = codecs.open(filename, 'r', 'utf-8')
+		file = open(filename, 'r')
 		self.executedSteps = []
 		self.declaredSteps = {}
 		self.declaredStepsTables = {}
