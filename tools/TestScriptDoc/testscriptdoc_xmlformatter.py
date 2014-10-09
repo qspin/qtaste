@@ -4,7 +4,7 @@
 # If testsuite_dir is defined, a TestSuite-doc.xml file will be generated in this directory
 ##
 
-import string, os, re
+import string, os, re, codecs
 
 try:
 	import xml.etree.ElementTree as et
@@ -39,7 +39,7 @@ class PythonDocGenerator:
 	def __init__(self, options):
 		self.encoding = options.get('encoding')
 		if not self.encoding:
-			self.encoding = 'iso-8859-1'
+			self.encoding = 'utf-8'
 		self.createTestSuiteDoc = options.has_key('testsuite_dir')
 		if self.createTestSuiteDoc:
 			self.testSuiteDir = os.path.abspath(options.get('testsuite_dir'))
@@ -153,7 +153,7 @@ class PythonDocGenerator:
 	# and executed steps (self.executedSteps)
 	def _parseTestScriptFile(self, filename):
 		import re
-		file = open(filename)
+		file = codecs.open(filename, 'r', 'utf-8')
 		self.executedSteps = []
 		self.declaredSteps = {}
 		self.declaredStepsTables = {}

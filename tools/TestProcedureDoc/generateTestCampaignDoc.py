@@ -1,4 +1,6 @@
-import os.path
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 ##
 # QTaste aggregated test cases documentation generator for test procedure document.
 # Usage: jython tools/TestProcedureDoc/generateTestCampaignDoc.py <test_campaign_file.xml>
@@ -6,7 +8,7 @@ import os.path
 # Precondition: must be run from QTaste root directory and qtaste-kernel-deploy.jar must be in CLASSPATH
 ##
 
-import sys, os, re
+import sys, re, os.path, os.sep, codecs
 from sets import Set
 try:
     import xml.etree.ElementTree as et
@@ -40,6 +42,7 @@ REMOVE_STEP_NAME_COLUMN = TestEngineConfiguration.getInstance().getBoolean('repo
 ADD_STEP_RESULT_COLUMN = TestEngineConfiguration.getInstance().getBoolean('reporting.test_campaign_doc.add_step_result_column', False)
 DUPLICATE_STEPS_PER_TEST_DATA_ROW = TestEngineConfiguration.getInstance().getBoolean('reporting.test_campaign_doc.duplicate_steps_per_test_data_row', False)
 
+
 ##
 # Read an QTaste test campaign file and generate the aggregated test cases doc file.
 # @param campaignFileName the test campaign file name
@@ -54,7 +57,7 @@ def generateTestCasesDoc(campaignFileName):
 
     # generate aggregated doc file
     aggregatedDocFileName = os.path.splitext(campaignFileName)[0] + '-doc.html'
-    aggregatedDocFile = open(aggregatedDocFileName, 'w')
+    aggregatedDocFile = codecs.open(aggregatedDocFileName, 'w', 'utf-8')
     aggregatedDocFile.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">\n')
     aggregatedDocFile.write('<html xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xdt="http://www.w3.org/2005/xpath-datatypes">\n')
     aggregatedDocFile.write('<head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Aggregated test cases documentation for test campaign %s</title></head>\n<body>\n' % os.path.splitext(os.path.basename(campaignFileName))[0])
@@ -180,8 +183,8 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
     testScriptDocFileName = testCaseDir + os.sep + StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME
     testScriptDocFile = None
     try:
-        testScriptDocFile = open(testScriptDocFileName)
-        content = open(testScriptDocFileName).read()
+        testScriptDocFile = codecs.open(testScriptDocFileName, 'r', 'utf-8')
+        content = testScriptDocFile.read()
         content = REMOVE_HTML_HEADERS_PATTERN.match(content).group(1)
         testStepsTableMatch = TEST_STEPS_TABLE_PATTERN.search(content)
         testStepsTable = testStepsTableMatch.group(1)
@@ -197,10 +200,8 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
                     if tag == "th":
                         et.SubElement(trElem, tag, {'width':'3%'}).text = 'Result'
                     elif tag == "td":
-                        et.SubElement(trElem, tag).text = '?' # non-breakable space
-            testStepsTable = et.tostring(testStepsTableHtmlTree, 'iso-8859-1')
-            # remove the xml declaration tag (not needed)
-            testStepsTable = testStepsTable.replace("<?xml version='1.0' encoding='iso-8859-1'?>\n", "")
+                        et.SubElement(trElem, tag).text = ' ' # non-breakable space
+            testStepsTable = et.tostring(testStepsTableHtmlTree, 'utf-8')
         if DUPLICATE_STEPS_PER_TEST_DATA_ROW:
             contentBeforeSteps = content[:testStepsTableMatch.start(0)]
             testDataContent = content[testStepsTableMatch.end(1):]
