@@ -20,7 +20,7 @@ def displayFirstPopup():
 	@step      Click on the button to create the first popup
 	@expected  a popup exist
 	"""
-	doSubSteps(TabbedPaneSelection.changeTab)
+	doSubSteps(TabbedPaneSelection.changeTabById)
 	subtitler.setSubtitle("Click on the <span style=\"color:red;\">Start</span> button", 1.5)
 	javaguiMI.clickOnButton("START_BUTTON")
 	time.sleep(1)

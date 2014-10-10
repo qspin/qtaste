@@ -21,7 +21,7 @@ def step1():
 	@expected  Description of the expected result
 	"""
 	
-	doSubSteps(TabbedPaneSelection.changeTab)
+	doSubSteps(TabbedPaneSelection.changeTabById)
 	subtitler.setSubtitle(testData.getValue("COMMENT") + " the value '" + testData.getValue("VALUE") + "'")
 	time.sleep(1)
 	text = testData.getValue("VALUE")

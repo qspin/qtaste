@@ -21,7 +21,7 @@ def step1():
 	@step      Description of the actions done for this step
 	@expected  Description of the expected result
 	"""
-	doSubSteps(TabbedPaneSelection.changeTab)
+	doSubSteps(TabbedPaneSelection.changeTabByTitle)
 	subtitler.setSubtitle("Click on the button to make the component invisible")
 	time.sleep(1)
 	javaguiMI.clickOnButton("VISIBILITY_BUTTON")

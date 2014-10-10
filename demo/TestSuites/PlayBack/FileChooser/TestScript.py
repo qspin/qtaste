@@ -20,7 +20,7 @@ def openFileChooser():
 	@expected  The JFileChooser is displayed (not tested).
 	"""
 	
-	doSubSteps(TabbedPaneSelection.changeTab)
+	doSubSteps(TabbedPaneSelection.changeTabById)
 	javaguiMI.clickOnButton("OPEN_FILECHOOSER")
 	time.sleep(1)
 	
