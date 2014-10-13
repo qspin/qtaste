@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><campaign name="AllLinuxDemo">
-<run testbed="playback.xml">
-<testsuite directory="TestSuites/PlayBack/SelectionInTable"/>
-<testsuite directory="TestSuites/PlayBack/SelectionInTree"/>
-</run>
+    <run testbed="demo_web.xml">
+        <testsuite directory="TestSuites/TestTranslate"/>
+    </run>
+    <run testbed="playback.xml">
+        <testsuite directory="TestSuites/PlayBack"/>
+    </run>
+    <run testbed="process.xml">
+        <testsuite directory="TestSuites/Process"/>
+    </run>
 </campaign>
