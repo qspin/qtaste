@@ -6,7 +6,7 @@ import os
 import argparse
 import time
 import collections
-sys.path.append('../../../../tools/PyGithub')
+sys.path.append('./lib/PyGithub')
 
 import config
 from github import Github
