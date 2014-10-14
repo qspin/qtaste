@@ -25,8 +25,10 @@
 package com.qspin.qtaste.testsuite.impl;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -172,7 +174,7 @@ public class TestDataImpl implements TestData, Serializable {
             hashFiles.remove(key);
         }
     }
-    
+
     public boolean contains(String key) {
         return hash.containsKey(key);
     }
@@ -214,8 +216,8 @@ public class TestDataImpl implements TestData, Serializable {
         }
 
         try {
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-            byte[] buffer = new byte[(int) f.length()];
+        	BufferedReader bis = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+        	char[] buffer = new char[(int) f.length()];
             bis.read(buffer);
             bis.close();
             logger.debug("Loaded file: " + f.getPath() + " size:" + buffer.length);
@@ -240,7 +242,7 @@ public class TestDataImpl implements TestData, Serializable {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
-    
+
     public boolean isSelected() {
         return isSelected;
     }

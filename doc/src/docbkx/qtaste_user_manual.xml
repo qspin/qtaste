@@ -2210,6 +2210,15 @@
         <para>First step is to validate your script before trusting its
         results.</para>
       </section>
+
+      <section>
+        <title><emphasis>Encoding</emphasis></title>
+         <para>It is recommended to TestScript.py be encoded as UTF-8 when edited with external editors.
+         Otherwise, if spectial charachers are used in documentation tags (e.g. @step)
+         then qtaste will not generate the documentation properly.
+         The QTaste source editor already save TestScript.py file as UTF-8.</para>
+      </section>
+
     </section>
 
     <section>
@@ -2300,6 +2309,14 @@
         python syntax (see Test data).</para>
       </section>
     </section>
+
+    <section>
+        <title><emphasis>Test data encoding</emphasis></title>
+         <para>Is recommended to CSV data file be encoded as UTF-8 when edited with external editors.
+         Otherwise QTaste will not generate the documentation properly when special characters are used.
+         The QTaste GUI CSV editor already handle CSV files with UTF-8 encoding for this purpose.</para>
+    </section>
+
   </chapter>
 
   <chapter>

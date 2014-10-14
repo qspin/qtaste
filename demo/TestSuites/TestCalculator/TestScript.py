@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
 #    This file is part of QTaste framework.
@@ -31,25 +33,25 @@ expectedResult = testData.getValue("RESULT")
 operator = testData.getValue("OPERATOR")
 
 def pressDigitButtons(numberStr):
-	for i in numberStr:
-		calculator.pressButton("Calculator", "_" + i)
+    for i in numberStr:
+        calculator.pressButton("Calculator", "_" + i)
 
 def testCalculator():
-	"""
-	@step      Perform a simple computation using the Windows calculator
-	@expected  Compare the result provided by the calculator with the expected results
-	"""
-	sessionID = calculator.startApplication("calc")
-	calculator.pressButton("Calculator", "CE")
-	pressDigitButtons(number1)
-	calculator.pressButton("Calculator", "_" + operator)
-	pressDigitButtons(number2)
-	calculator.pressButton("Calculator", "_=")
-	text = calculator.getText("Calculator", "Edit").strip()
-	text = text.replace(".",",")
-	expectedResult = testData.getValue("RESULT")
-	if text != expectedResult:
-		testAPI.stopTest(Status.FAIL, "Expected to get " + expectedResult + " but got " + text)
-	calculator.stopApplication()
+    """
+    @step      Perform a simple computation using the Windows calculator
+    @expected  Compare the result provided by the calculator with the expected results
+    """
+    sessionID = calculator.startApplication("calc")
+    calculator.pressButton("Calculator", "CE")
+    pressDigitButtons(number1)
+    calculator.pressButton("Calculator", "_" + operator)
+    pressDigitButtons(number2)
+    calculator.pressButton("Calculator", "_=")
+    text = calculator.getText("Calculator", "Edit").strip()
+    text = text.replace(".",",")
+    expectedResult = testData.getValue("RESULT")
+    if text != expectedResult:
+        testAPI.stopTest(Status.FAIL, "Expected to get " + expectedResult + " but got " + text)
+    calculator.stopApplication()
 
 doStep(testCalculator)

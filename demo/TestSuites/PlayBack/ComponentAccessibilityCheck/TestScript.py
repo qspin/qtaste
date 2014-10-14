@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 ##
 # ComponentAccessibilityCheck.
 # <p>
@@ -13,16 +15,16 @@ importTestScript("PopupControl")
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 
 def CheckAccessibility():
-	"""
-	@step      Try to click on the START button
-	@expected  An exception is thrown cause a popup is displayed and it's not possible to click on the button
-	"""
-	try:
-		javaguiMI.clickOnButton("START_BUTTON")
-		testAPI.stopTest(Status.FAIL, "the component should not be accessible!")
-	except:
-		# This example may fails depending on the default language!
-		javaguiMI.clickOnPopupButton("OK")
+    """
+    @step      Try to click on the START button
+    @expected  An exception is thrown cause a popup is displayed and it's not possible to click on the button
+    """
+    try:
+        javaguiMI.clickOnButton("START_BUTTON")
+        testAPI.stopTest(Status.FAIL, "the component should not be accessible!")
+    except:
+        # This example may fails depending on the default language!
+        javaguiMI.clickOnPopupButton("OK")
 
 doStep(PopupControl.displayFirstPopup)
 doStep(CheckAccessibility)

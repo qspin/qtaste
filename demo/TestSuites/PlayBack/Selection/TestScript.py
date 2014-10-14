@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 ##
 # Playback/Selection test.
 # <p>

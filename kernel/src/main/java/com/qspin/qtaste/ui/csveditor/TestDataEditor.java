@@ -39,6 +39,8 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -154,7 +156,9 @@ public class TestDataEditor extends JPanel {
         BufferedWriter output = null;
         try {
             String outputFile = path + File.separator + StaticConfiguration.TEST_DATA_FILENAME;
-            output = new BufferedWriter(new FileWriter(new File(outputFile)));
+
+            //output = new BufferedWriter(new FileWriter(new File(outputFile)));
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),"UTF-8"));
 
             // retrieve the header
             for (int col = 1; col < colCount; col++) {
@@ -174,7 +178,7 @@ public class TestDataEditor extends JPanel {
                     	output.append("");
                     else
                     	output.append(m_TestDataModel.getValueAt(row, columnIndex).toString());
-                    	
+
 
                 }
                 output.append('\n');
@@ -233,12 +237,12 @@ public class TestDataEditor extends JPanel {
             m_TestDataTable.doLayout();
             m_TestDataModel.addTableModelListener(tableListener);
             m_TestDataTable.getColumnModel().addColumnModelListener(m_TableColumnModelListener);
-            
+
         } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
     }
-    
+
     public void setFileName(String fileName) {
     	currentCSVFile = fileName;
     }
@@ -304,7 +308,7 @@ public class TestDataEditor extends JPanel {
         }
 
     }
-    
+
     private void genUI() {
         getActionMap().put("Save", new SaveAction());
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK), "Save");
@@ -337,35 +341,35 @@ public class TestDataEditor extends JPanel {
             public Component prepareEditor(TableCellEditor editor, int row, int column)
             {
                Component c = super.prepareEditor(editor, row, column);
-   
+
                if (c instanceof JTextComponent)
                {
                   ((JTextField) c).selectAll();
                }
-   
+
                return c;
             }
-            
+
             // select entire rows when selecting first column (row id)
             @Override
             public void columnSelectionChanged(ListSelectionEvent e)
             {
-               if (e.getFirstIndex() == 0 && e.getValueIsAdjusting()) 
+               if (e.getFirstIndex() == 0 && e.getValueIsAdjusting())
                {
                   setColumnSelectionInterval(1, getColumnCount() - 1);
-               } 
+               }
                else
                {
                   super.columnSelectionChanged(e);
                }
             }
         };
-        m_TestDataTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);         
-        
+        m_TestDataTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
         m_TestDataModel = new TestDataTableModel(m_TestDataTable);
-        
+
         m_TestDataTable.setModel(m_TestDataModel);
-        
+
         m_TableColumnModelListener = new MyTableColumnModelListener();
         m_TestDataTable.setSurrendersFocusOnKeystroke(true);
         m_TestDataTable.setColumnSelectionAllowed(true);
@@ -454,7 +458,7 @@ public class TestDataEditor extends JPanel {
     public String getCurrentCSVFile() {
         return currentCSVFile;
     }
-    
+
     private void copySelectionToClipboard()
     {
        StringBuffer stringBuffer = new StringBuffer();
@@ -475,7 +479,7 @@ public class TestDataEditor extends JPanel {
        StringSelection stringSelection  = new StringSelection(stringBuffer.toString());
        m_systemClipboard.setContents(stringSelection, stringSelection);
     }
-    
+
     private void pasteSelectionFromClipboard()
     {
        int startRow = (m_TestDataTable.getSelectedRows())[0];
@@ -510,7 +514,7 @@ public class TestDataEditor extends JPanel {
          logger.warn("Error while pasting clipboard content into test data editor", e);
       }
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
@@ -685,16 +689,16 @@ public class TestDataEditor extends JPanel {
             m_TestDataTable.getTableHeader().repaint();
             //computeColumnWidths();
             Vector<String> v = (Vector<String>)m_TestDataModel.getColumnIdentifiers();
-            int columnIndex = m_TestDataTable.getColumnModel().getColumn(m_ColIndex).getModelIndex();            
+            int columnIndex = m_TestDataTable.getColumnModel().getColumn(m_ColIndex).getModelIndex();
             v.set(columnIndex, varName);
             m_TestDataModel.setColumnIdentifiers(v);
             m_TestDataModel.fireTableCellUpdated(TableModelEvent.HEADER_ROW, columnIndex);
             // rename column in the model
 
-            setModified(true);            
+            setModified(true);
         }
-    }    
-    
+    }
+
     class AddVariableAction extends AbstractAction {
 
         public AddVariableAction() {
@@ -819,11 +823,11 @@ public class TestDataEditor extends JPanel {
         }
     }
 
-    
+
     private void addNewRow() {
     	addNewRow(-1);
     }
-    
+
     private void insertNewRow() {
        int rowIndex = m_TestDataTable.getSelectedRow();
        if (rowIndex == -1) {
@@ -841,7 +845,7 @@ public class TestDataEditor extends JPanel {
        }
        setModified(true);
      }
-     
+
     private void addNewRow(int rowToCopyIndex) {
         Object[] dataValues = new String[m_TestDataModel.getColumnCount()];
         dataValues[0] = Integer.toString(m_TestDataModel.getRowCount() + 1);
@@ -873,7 +877,7 @@ public class TestDataEditor extends JPanel {
                     getPreferredSize().getWidth() + hspace;
 		            TableColumn hcol = m_TestDataTable.getColumn(m_TestDataTable.getColumnName(i));
 		            hcol.setHeaderRenderer(new MyTableHeaderRenderer());
-            
+
         }
 
         //check if cell values fit in their cells and if not
@@ -942,17 +946,17 @@ public class TestDataEditor extends JPanel {
             public TestDataTableCellEditor()
             {
                  super( new JTextField() );
-                 
+
                  getComponent().addFocusListener( this );
                  getComponent().addKeyListener(this);
             }
             public void focusGained( FocusEvent e )
-            {   
+            {
             }
             public void focusLost( FocusEvent e )
-            {  
+            {
             }
-            
+
             protected void fireEditingStopped()
             {
                if (isModified)
@@ -966,7 +970,7 @@ public class TestDataEditor extends JPanel {
             }
 
         public void keyTyped(KeyEvent e) {
-            
+
         }
 
         public void keyPressed(KeyEvent e) {
@@ -1025,7 +1029,7 @@ public class TestDataEditor extends JPanel {
 
 
     }
-    
+
     public class MyTableColumnModelListener implements TableColumnModelListener {
 
 		@Override
@@ -1035,7 +1039,7 @@ public class TestDataEditor extends JPanel {
 		@Override
 		public void columnMarginChanged(ChangeEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -1053,8 +1057,8 @@ public class TestDataEditor extends JPanel {
 		@Override
 		public void columnSelectionChanged(ListSelectionEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
-    	
+
     }
 }
