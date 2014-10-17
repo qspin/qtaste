@@ -54,11 +54,11 @@ public class ProbeManager {
             logger.info("Starting ProbeManager:");
             if (numberUsers == 0) {
                 TestBedConfiguration config = TestBedConfiguration.getInstance();
-                List<String> l = config.getList("probe_manager.probe");
+                List<Object> l = config.getList("probe_manager.probe");
                 if (l != null) {
 
-                    for (Iterator<String> i = l.iterator(); i.hasNext();) {
-                        String probeName = i.next();
+                    for (Iterator<Object> i = l.iterator(); i.hasNext();) {
+                        String probeName = (String) i.next();
                         logger.info("Starting probe:" + probeName);
                         try {
                             Class<?> probeClass = Class.forName(probeName);
