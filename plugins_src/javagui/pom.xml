@@ -14,7 +14,8 @@
     <name>QTASTE javagui</name>
 
     <properties>
-        <preMainClass>com.qspin.qtaste.javagui.server.JavaGUI</preMainClass>
+        <!-- <preMainClass>com.qspin.qtaste.structureanalyzer.Analyzer</preMainClass> -->
+        <preMainClass>com.qspin.qtaste.javagui.server.JavaGUI</preMainClass> 
     </properties>
     <build>
         <finalName>qtaste-javagui</finalName>

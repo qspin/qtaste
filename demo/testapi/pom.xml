@@ -155,8 +155,19 @@
 			<version>2.2.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>forms</artifactId>
-			</dependency>
+            <groupId>unknown</groupId>
+            <artifactId>bcprov-jdk16-146</artifactId>
+            <version>16-146</version>
+        </dependency>
+        <dependency>
+            <groupId>unknown</groupId>
+            <artifactId>Opc.Ua.Stack</artifactId>
+            <version>1.01.330.14</version>
+        </dependency>
+        <dependency>
+            <groupId>Prosys</groupId>
+            <artifactId>OPC-UA-Java-SDK-Client-Server-Evaluation</artifactId>
+            <version>1.4.8-8731</version>
+        </dependency>
 	</dependencies>
 </project>

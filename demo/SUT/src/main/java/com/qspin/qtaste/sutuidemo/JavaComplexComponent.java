@@ -50,7 +50,6 @@ public class JavaComplexComponent extends JPanel {
 		m_selectedFile.setName("FILECHOOSER_RESULT");
 		m_openJFC.setName("OPEN_FILECHOOSER");
 		m_openJFC.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				m_JFC = new JFileChooser();
 				m_JFC.setBorder(BorderFactory.createTitledBorder("JFileChooser"));
