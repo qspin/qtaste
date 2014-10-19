@@ -74,6 +74,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.io.XMLFile;
@@ -81,7 +82,7 @@ import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- * 
+ *
  * @author simjan
  */
 @SuppressWarnings("serial")
@@ -133,7 +134,7 @@ public class TestRequirementEditor extends JPanel {
         public boolean isEnabled() {
             return  !m_ColName.equals(TestRequirement.ID) &&  !m_ColName.equals(TestRequirement.DESCRIPTION);
         }
-       
+
 
         @SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
@@ -150,7 +151,7 @@ public class TestRequirementEditor extends JPanel {
             m_TestRequirementTable.getTableHeader().repaint();
             //computeColumnWidths();
             Vector<String> v = (Vector<String>)m_TestRequirementModel.getColumnIdentifiers();
-            int columnIndex = m_TestRequirementTable.getColumnModel().getColumn(m_ColIndex).getModelIndex();            
+            int columnIndex = m_TestRequirementTable.getColumnModel().getColumn(m_ColIndex).getModelIndex();
             v.set(columnIndex, varName);
             m_TestRequirementModel.setColumnIdentifiers(v);
             // update requirement data ID
@@ -160,10 +161,10 @@ public class TestRequirementEditor extends JPanel {
             }
             m_TestRequirementModel.fireTableCellUpdated(TableModelEvent.HEADER_ROW, columnIndex);
 
-            setModified(true);            
+            setModified(true);
         }
-    }    
-    
+    }
+
     class AddVariableAction extends AbstractAction {
 
         public AddVariableAction() {
@@ -187,7 +188,7 @@ public class TestRequirementEditor extends JPanel {
             return true;
         }
     }
-    
+
     public void save() {
 		File xmlFile = new File(currentXMLFile);
 		String path = xmlFile.getParent();
@@ -203,18 +204,18 @@ public class TestRequirementEditor extends JPanel {
 				output.newLine();
 				output.write("\t<" + XMLFile.REQUIREMENT_ELEMENT + " ");
 				output.append(XMLFile.REQUIREMENT_ID + "=\"" );
-				output.append(req.getId());
+				output.append(req.getIdEscapeXml());
 				output.append("\">");
-				
+
 				for ( String dataId : req.getDataId() )
 				{
-					if ( dataId.equals(TestRequirement.ID) ) 
+					if ( dataId.equals(TestRequirement.ID) )
 					{
 						continue;
 					}
 					output.newLine();
 					output.append("\t\t<" + dataId.replace(" ", XMLFile.SPACE_REPLACEMENT) + ">" );
-					output.append(req.getData(dataId));
+					output.append(req.getDataEscapeXml(dataId));
 					output.append("</" + dataId.replace(" ", XMLFile.SPACE_REPLACEMENT) + ">");
 				}
 
@@ -787,7 +788,7 @@ public class TestRequirementEditor extends JPanel {
 			}
 			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				// if current row is the last one
-				if (m_TestRequirementTable.getSelectedRow() == 
+				if (m_TestRequirementTable.getSelectedRow() ==
 						m_TestRequirementTable.getRowCount() - 1) {
 					addNewRow();
 				}

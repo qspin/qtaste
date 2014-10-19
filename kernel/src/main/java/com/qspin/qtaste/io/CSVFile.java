@@ -38,7 +38,7 @@ import java.util.List;
 
 /**
  * This class is responsible to build a different kind of data structures from a CSV file
- * 
+ *
  * @author lvboque
  */
 public class CSVFile
@@ -69,7 +69,7 @@ public class CSVFile
       this.csvInputStream = csvInputStreamFile;
       this.name = name;
       dataSet = new ArrayList<LinkedHashMap<String, String>>();
-      columnNames = new ArrayList<String>();      
+      columnNames = new ArrayList<String>();
    }
 
    public String getName()
@@ -79,7 +79,7 @@ public class CSVFile
 
    /**
     * Return a list of HashMap of Name/Value from the CSV file
-    * 
+    *
     * @return the list of HashMap of Name/Value read from the CSV file
     * @throws java.io.FileNotFoundException If the CSV file is not found
     * @throws java.io.IOException If an error occurs reading the CSV file
@@ -92,7 +92,7 @@ public class CSVFile
 
    /**
     * Return a HashMap mapping the specified keyField with a HashMap of names/values
-    * 
+    *
     * @param keyField the keyField
     * @return a HashMap the hashmap
     * @throws java.io.FileNotFoundException If the CSV file is not found
@@ -120,7 +120,7 @@ public class CSVFile
 
    /**
     * Return a list of the column names of a CSV file
-    * 
+    *
     * @return a list of the column names read from the CSV file
     * @throws java.io.FileNotFoundException If the CSV file is not found
     * @throws java.io.IOException If an error occurs while reading the CSV File
@@ -135,7 +135,9 @@ public class CSVFile
    {
       if (!alreadyParsed)
       {
-         BufferedReader csvBuffer = new BufferedReader(new InputStreamReader(csvInputStream));
+         //BufferedReader csvBuffer = new BufferedReader(new InputStreamReader(csvInputStream));
+         BufferedReader csvBuffer = new BufferedReader(new InputStreamReader(csvInputStream, "UTF-8"));
+
          String csvLine;
          while ((csvLine = csvBuffer.readLine()) != null)
          {

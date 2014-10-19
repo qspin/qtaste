@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
 #    This file is part of QTaste framework.
@@ -30,38 +32,38 @@ import string
 translate = testAPI.getSelenium(INSTANCE_ID='TranslateApp')
 
 def connectToWeb():
-	"""
-	@step      Connection to Google Translation website
-	@expected  Check that we are on the Google Translation website
-	"""
-	translate.openBrowser(testData.getValue("BROWSER"))
-	translate.setTimeout("50000")
-	translate.open("?hl=fr")
-	translate.waitForPageToLoad("15000")
-	title = translate.getTitle()
-	expected = "Google"+chr(160)+"Traduction"
-	if title != expected:
-		testAPI.stopTest(Status.FAIL, "Title window name is not as expected. It's '" + title + "' and expects '"+expected+"'" )
+    """
+    @step      Connection to Google Translation website
+    @expected  Check that we are on the Google Translation website
+    """
+    translate.openBrowser(testData.getValue("BROWSER"))
+    translate.setTimeout("50000")
+    translate.open("?hl=fr")
+    translate.waitForPageToLoad("15000")
+    title = translate.getTitle()
+    expected = "Google"+chr(160)+"Traduction"
+    if title != expected:
+        testAPI.stopTest(Status.FAIL, "Title window name is not as expected. It's '" + title + "' and expects '"+expected+"'" )
 
 def checkTranslation():
-	"""
-	@step      Translate a word specified in the testdata
-	@expected  Check that the translation is correct
-	"""
-	# we can access component using different method (component id, xpath or dom)
-	translate.type("id=source", testData.getValue("WORD"))
-	translate.click("id=gt-submit")
-	time.sleep(2);
-	translations = translate.getText("id=result_box")
-	expectedTranslation = testData.getValue("TRANSLATION")
-	translate.closeBrowser()
-	found = False
-	for translation in translations.split("\n"):
-		if translation == expectedTranslation:
-			found = True
-			break
-	if ( found == False ):
-		testAPI.stopTest(Status.FAIL, "Expected to get " + expectedTranslation + " but got " + translations)
+    """
+    @step      Translate a word specified in the testdata
+    @expected  Check that the translation is correct
+    """
+    # we can access component using different method (component id, xpath or dom)
+    translate.type("id=source", testData.getValue("WORD"))
+    translate.click("id=gt-submit")
+    time.sleep(2);
+    translations = translate.getText("id=result_box")
+    expectedTranslation = testData.getValue("TRANSLATION")
+    translate.closeBrowser()
+    found = False
+    for translation in translations.split("\n"):
+        if translation == expectedTranslation:
+            found = True
+            break
+    if ( found == False ):
+        testAPI.stopTest(Status.FAIL, "Expected to get " + expectedTranslation + " but got " + translations)
 
 doStep(connectToWeb)
 doStep(checkTranslation)

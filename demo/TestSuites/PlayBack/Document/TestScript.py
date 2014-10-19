@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 ##
 # Playback/Document test.
 # <p>
@@ -16,39 +18,39 @@ subtitler = testAPI.getSubtitler()
 importTestScript("TabbedPaneSelection")
 
 def step1():
-	"""
-	@step      Description of the actions done for this step
-	@expected  Description of the expected result
-	"""
-	
-	doSubSteps(TabbedPaneSelection.changeTab)
-	subtitler.setSubtitle(testData.getValue("COMMENT") + " the value '" + testData.getValue("VALUE") + "'")
-	time.sleep(1)
-	text = testData.getValue("VALUE")
-	component = testData.getValue("COMPONENT_NAME")
-	try:
-		javaguiMI.setText(component, text) != testData.getBooleanValue("COMMAND_RESULT")
-	except:
-		testAPI.stopTest(Status.FAIL, "Fail to insert " + text)
+    """
+    @step      Description of the actions done for this step
+    @expected  Description of the expected result
+    """
 
-	time.sleep(1)
-	
-	if testData.getBooleanValue("COMMAND_RESULT"):
-		result = javaguiMI.getText(component)
-		text = testData.getValue("FIELD_CONTENT")
-		if result != text:
-			testAPI.stopTest(Status.FAIL, "Fail to insert " + text + " but insert '" + result + "'")
-			
+    doSubSteps(TabbedPaneSelection.changeTabById)
+    subtitler.setSubtitle(testData.getValue("COMMENT") + " the value '" + testData.getValue("VALUE") + "'")
+    time.sleep(1)
+    text = testData.getValue("VALUE")
+    component = testData.getValue("COMPONENT_NAME")
+    try:
+        javaguiMI.setText(component, text) != testData.getBooleanValue("COMMAND_RESULT")
+    except:
+        testAPI.stopTest(Status.FAIL, "Fail to insert " + text)
+
+    time.sleep(1)
+
+    if testData.getBooleanValue("COMMAND_RESULT"):
+        result = javaguiMI.getText(component)
+        text = testData.getValue("FIELD_CONTENT")
+        if result != text:
+            testAPI.stopTest(Status.FAIL, "Fail to insert " + text + " but insert '" + result + "'")
+
 
 def reset():
-	"""
-	@step      Reset component state
-	@expected  Description of the expected result
-	"""
-	
-	component = testData.getValue("COMPONENT_NAME")
-	value = ""
-	javaguiMI.setText(component, value)
+    """
+    @step      Reset component state
+    @expected  Description of the expected result
+    """
+
+    component = testData.getValue("COMPONENT_NAME")
+    value = ""
+    javaguiMI.setText(component, value)
 
 doStep(step1)
 doStep(reset)

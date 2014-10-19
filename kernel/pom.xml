@@ -200,11 +200,6 @@
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.tmatesoft.svnkit</groupId>
-            <artifactId>svnkit</artifactId>
-            <version>1.7.4-v1</version>
-        </dependency>
          <dependency>
 	      <groupId>org.netbeans.external</groupId>
 	      <artifactId>nb-javac-api</artifactId>

@@ -40,7 +40,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		this.componentName = componentName;
 		setData(data);
 		m_maxTime = System.currentTimeMillis() + 1000 * timeout;
-		
+
 		while ( System.currentTimeMillis() < m_maxTime )
 		{
 			component = getComponentByName(componentName);
@@ -52,7 +52,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 				LOGGER.warn("Exception during the component search sleep...");
 			}
 		}
-		
+
 		if (component == null )
 		{
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not found.");
@@ -62,7 +62,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		}
 		if (! checkComponentIsVisible(component))
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not visible!");
-		
+
 		if (!isAccessible(component)) {
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not reachable as a modal dialog is opened.");
 		}
@@ -73,10 +73,10 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	    	LOGGER.error("Unable to activate/focus the parent window!");
 	    	//throw new QTasteException("Unable to activate/focus the parent window!");
 	    }
-	    
+
 		SwingUtilities.invokeLater(this);
 		synchronizeThreads();
-		
+
 		return true;
 	}
 
@@ -94,7 +94,6 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		return true;
 	}
 
-	
 	public void run()
 	{
 		try {
@@ -122,7 +121,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			lookForComponent(name, window.getComponents());
 		}
 		LOGGER.trace( mFoundComponents.size() + " component(s) found with the contains");
-		
+
 		//if equals the remove others
 		if ( mFindWithEqual )
 		{
@@ -137,7 +136,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			}
 			LOGGER.trace( mFoundComponents.size() + " component(s) found with the equals");
 		}
-		
+
 		//Remove invisible components
 		for (int i=0; i<mFoundComponents.size(); )
 		{
@@ -149,7 +148,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			}
 		}
 		LOGGER.trace( mFoundComponents.size() + " visible component(s) found");
-		
+
 		if ( !mFoundComponents.isEmpty() )
 		{
 			mFoundComponent = mFoundComponents.get(0);
@@ -183,7 +182,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		}
 		return null;
 	}
-	
+
 	protected boolean checkComponentIsVisible(Component c)
 	{
 		Component currentComponent = c;
@@ -195,7 +194,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		while (currentComponent != null )
 		{
 			boolean lastRun = currentComponent instanceof Window; //Dialog can have another window as parent.
-			
+
 			if ( !currentComponent.isVisible() )
 			{
 				if ( c == currentComponent )
@@ -217,7 +216,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Will wait the end of the swing event thread with an empty SwingUtilities.invokeAndWait().
 	 */
@@ -239,7 +238,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected abstract void prepareActions() throws QTasteException;
 	protected abstract void doActionsInSwingThread()throws QTasteException;
 
@@ -247,7 +246,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	{
 		this.mData = data;
 	}
-	
+
 	private List<Component> mFoundComponents;
 	protected Object[] mData;
 	protected Component component;

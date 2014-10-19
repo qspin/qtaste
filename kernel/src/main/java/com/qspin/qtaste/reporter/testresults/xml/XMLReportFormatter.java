@@ -18,6 +18,9 @@ along with QTaste. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.qspin.qtaste.reporter.testresults.xml;
 
+import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.config.TestEngineConfiguration;
+import com.qspin.qtaste.reporter.testresults.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,13 +34,9 @@ import java.util.Date;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.reporter.XMLFormatter;
-import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResultImpl.StepResult;
-import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NamesValuesList;
@@ -90,20 +89,22 @@ public class XMLReportFormatter extends XMLFormatter {
 
     @Override
     public void startReport(Date timeStamp, String name) {
+        super.startReport(timeStamp, name);
+
         if (date == null) {
             date = new Date();
         }
         fileName = outputDir + File.separator;
         fileName += new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(timeStamp) + File.separator;
         fileName += String.format(FILE_NAME_FORMAT, date);
-        reportFile = new File(fileName);
-        if ( !reportFile.getParentFile().exists() )
+        File file = new File(fileName);
+        if ( !file.getParentFile().exists() )
         {
-        	reportFile.getParentFile().mkdirs();
+        	file.getParentFile().mkdirs();
         }
-        if (reportFile.exists()) {
-        	reportFile.delete();
-        } 
+        if (file.exists()) {
+        	file.delete();
+        }
 
         try {
             generateMainFile(false);
@@ -112,11 +113,12 @@ public class XMLReportFormatter extends XMLFormatter {
         }
 
         currentTestSuite = TestEngine.getCurrentTestSuite();
-
     }
 
     @Override
     public void stopReport() {
+        super.stopReport();
+
         try {
             generateMainFile(true);
         } catch (Exception e) {
@@ -128,7 +130,7 @@ public class XMLReportFormatter extends XMLFormatter {
         NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
         namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
-        namesValues.add("###RESULTS_FILE###", reportFile.getName());
+        namesValues.add("###RESULTS_FILE###", reportFileName);
         namesValues.add("###LOG_DATE###", DATE_FORMAT.format(date));
         namesValues.add("###TESTBED###", getTestbedConfigurationName());
         namesValues.add("###TESTBED_CONFIGURATION_FILE_NAME###", getTestbedConfigurationFileName());
@@ -171,18 +173,12 @@ public class XMLReportFormatter extends XMLFormatter {
             namesValues.add("###TESTS_RETRIES###", "");
         }
 
-        String content = "";
-        for (TestResult tr : TestResultsReportManager.getInstance().getResults()) {
-        	content += writeTestResult(tr);
-        }
-        namesValues.add("&results;", content);
-        
         output = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
         substituteAndWriteFile(templateContent, namesValues);
         output.close();
     }
 
-    private String writeTestResult(TestResult tr) {
+    private void writeTestResult(TestResult tr) {
         try {
             NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
             namesValues.add("###TEST_CASE###", tr.getId());
@@ -236,10 +232,10 @@ public class XMLReportFormatter extends XMLFormatter {
                 stepsContent += getSubstitutedTemplateContent(rowStepsTemplateContent, stepsNamesValues);
             }
             namesValues.add("###STEPS###", stepsContent); // default 
-            return getSubstitutedTemplateContent(rowTemplateContent, namesValues);
+            substituteAndWriteFile(rowTemplateContent, namesValues);
+            output.flush();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        return "";
     }
 }

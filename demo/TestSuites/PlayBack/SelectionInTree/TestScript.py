@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 ##
 # Playback/Selection test.
 # <p>
@@ -16,22 +18,22 @@ subtitler = testAPI.getSubtitler()
 importTestScript("TabbedPaneSelection")
 
 def step1():
-	"""
-	@step      Description of the actions done for this step
-	@expected  Description of the expected result
-	"""
-	
-	doSubSteps(TabbedPaneSelection.changeTab)
-	subtitler.setSubtitle(testData.getValue("COMMENT"))
-	
-	component = testData.getValue("COMPONENT_NAME")
-	value = testData.getValue("VALUE")
-	javaguiMI.selectNode(component, value, "\!")
-	actualSelection = javaguiMI.getSelectedNode(component, "!")
-	if actualSelection != value:
-		testAPI.stopTest(Status.FAIL, "Expected to see value '" + value + "' selected in " + component + "' but got '" + actualSelection + "'")
-			
-	time.sleep(1)
+    """
+    @step      Description of the actions done for this step
+    @expected  Description of the expected result
+    """
+
+    doSubSteps(TabbedPaneSelection.changeTabById)
+    subtitler.setSubtitle(testData.getValue("COMMENT"))
+
+    component = testData.getValue("COMPONENT_NAME")
+    value = testData.getValue("VALUE")
+    javaguiMI.selectNode(component, value, "\!")
+    actualSelection = javaguiMI.getSelectedNode(component, "!")
+    if actualSelection != value:
+        testAPI.stopTest(Status.FAIL, "Expected to see value '" + value + "' selected in " + component + "' but got '" + actualSelection + "'")
+
+    time.sleep(1)
 
 
 doStep(step1)

@@ -9,7 +9,7 @@ import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
- * 
+ *
  */
 public class JavaGUIImpl implements JavaGUI {
 
@@ -20,7 +20,7 @@ public class JavaGUIImpl implements JavaGUI {
 		}
 		initialize();
 	}
-   
+
    public void initialize() throws QTasteException
    {
 	   try
@@ -41,7 +41,7 @@ public class JavaGUIImpl implements JavaGUI {
 
 	public void takeSnapShot(String componentName, String fileName) throws QTasteException
 	{
-		mProxy.takeSnapShot(componentName, fileName);		
+		mProxy.takeSnapShot(componentName, fileName);
 	}
 
 	public String[] listComponents() throws QTasteException
@@ -63,7 +63,7 @@ public class JavaGUIImpl implements JavaGUI {
 	{
 		return mProxy.isVisible(componentName);
 	}
-	
+
 	public void clickOnButton(String componentName, int pressTime) throws QTasteException
 	{
 		mProxy.clickOnButton(componentName, pressTime);
@@ -103,8 +103,12 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}
 
-	public void selectTabTitled(String tabbedPaneComponentName, String tabTitle)  throws QTasteException{
+	public void selectTabTitled(String tabbedPaneComponentName, String tabTitle) throws QTasteException{
 		mProxy.selectTabTitled(tabbedPaneComponentName, tabTitle);
+	}
+
+	public void selectTabId(String tabbedPaneComponentName, String tabComponentId) throws QTasteException{
+		mProxy.selectTabId(tabbedPaneComponentName, tabComponentId);
 	}
 
 	public void terminate() throws QTasteException
@@ -116,29 +120,29 @@ public class JavaGUIImpl implements JavaGUI {
 			throw new QTasteException(e.getMessage());
 		}
 	}
-	
-	public String whoAmI() throws QTasteException {	
-		return mProxy.whoAmI();	
+
+	public String whoAmI() throws QTasteException {
+		return mProxy.whoAmI();
     }
-	
+
 	public void setComponentName(String name) throws QTasteException {
 		mProxy.setComponentName(name);
 	}
-	
-	
+
+
 	private JavaGUI getProxy() throws Exception {
 		return (com.qspin.qtaste.javagui.JavaGUI) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
-	
+
 	public void pressKey(int keycode) throws QTasteException {
 		mProxy.pressKey(keycode);
-		
+
 	}
-	
+
 	public void pressKey(int keycode, long delay) throws QTasteException {
-		mProxy.pressKey(keycode, delay);	
+		mProxy.pressKey(keycode, delay);
 	}
-	
+
 	public boolean exist(String pComponentName) {
 		return mProxy.exist(pComponentName);
 	}
@@ -165,52 +169,52 @@ public class JavaGUIImpl implements JavaGUI {
 	public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException {
 		mProxy.setComponentEnabledTimeout(pTimeOut);
 	}
-	
+
 	public boolean isPopupDisplayed() throws QTasteException
 	{
 		return mProxy.isPopupDisplayed();
 	}
-	
+
 	public String getPopupText() throws QTasteException
 	{
 		return mProxy.getPopupText();
 	}
-	
+
 	public String[] getAllPopupText() throws QTasteException
 	{
 		return mProxy.getAllPopupText();
 	}
-	
+
 	public void setPopupValue(String value) throws QTasteException
 	{
 		mProxy.setPopupValue(value);
 	}
-	
+
 	public void clickOnPopupButton(String buttonText) throws QTasteException
 	{
 		mProxy.clickOnPopupButton(buttonText);
 	}
-	
+
 	@Override
 	public double[] getComponentLocation(String componentName) throws QTasteException {
 		return mProxy.getComponentLocation(componentName);
 	}
-	
+
 	@Override
 	public String getComponentBackgroundColor(String componentName) throws QTasteException {
 		return mProxy.getComponentBackgroundColor(componentName);
 	}
-	
+
 	@Override
 	public String getComponentForegroundColor(String componentName) throws QTasteException {
 		return mProxy.getComponentForegroundColor(componentName);
 	}
-	
+
 	@Override
 	public String getRawName(String name) throws QTasteException {
 		return mProxy.getRawName(name);
 	}
-	
+
 	@Override
 	public String dumpTreeContent(String treeComponentName, String separator) throws QTasteException
 	{
@@ -249,5 +253,5 @@ public class JavaGUIImpl implements JavaGUI {
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";
 	private static final Class<?> BEAN_INTERFACE = com.qspin.qtaste.javagui.JavaGUI.class;
-			
+
 }

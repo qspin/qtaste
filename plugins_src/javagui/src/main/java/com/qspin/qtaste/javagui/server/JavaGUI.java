@@ -38,13 +38,13 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  * @author lvboque
  */
 public class JavaGUI extends JMXAgent implements JavaGUIMBean {
-	
+
 	public static void premain(String agentArgs, Instrumentation inst) {
 		new JavaGUI();
 	}
-	
+
 	private Robot bot;
-	
+
 	public JavaGUI() {
 		init();
 		try {
@@ -55,7 +55,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		}
 		//new Thread(ComponentNamer.getInstance()).start();
 	}
-		
+
 	/*
 	 * public boolean clickOnButton(String name) { Component c =
 	 * getComponentByName(name); if (c == null) { return false; } if (c
@@ -102,17 +102,17 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		LOGGER.trace("getText(\"" + componentName + "\")");
 		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
-				
+
 	// TODO: boolean returns is useless and confusing!
 	public void setText(final String componentName, final String value) throws QTasteException {
 		LOGGER.trace("setText(\"" + componentName + "\", \"" + value + "\")");
 		new TextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
-	}	
-	
+	}
+
 	public void selectComponent(final String componentName, final boolean value) throws QTasteException {
 		LOGGER.trace("selectComponent(\"" + componentName + "\", " + value + ")");
 		new ComponentSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
-	}			
+	}
 
 	public void selectValue(final String componentName, final String value) throws QTasteException {
 		LOGGER.trace("selectValue(\"" + componentName + "\", \"" + value + "\")");
@@ -137,7 +137,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 
 	public String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException {
 		LOGGER.trace("getSelectedNode(\"" + componentName + "\", \"" + nodeSeparator + "\")");
-		return new TreeNodeGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeSeparator);	
+		return new TreeNodeGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeSeparator);
 	}
 
 	// Todo: getColor, awt?
@@ -145,51 +145,57 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	@Override
 	public void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
 		LOGGER.trace("selectTab(\"" + tabbedPaneComponentName + "\", " + tabIndex + ")");
-		new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
+		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_INDEX).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
 	}
-	
+
 	@Override
 	public void selectTabTitled(String tabbedPaneComponentName, String tabTitle) throws QTasteException {
-		LOGGER.trace("selectTabTitled(\"" + tabbedPaneComponentName + "\", \"" + tabTitle + "\")");
-		new TabSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabTitle);
+		LOGGER.trace("selectTabNamed(\"" + tabbedPaneComponentName + "\", \"" + tabTitle + "\")");
+		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_TITLE).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabTitle);
 	}
-	
-	public String whoAmI() throws QTasteTestFailException {	
-		LOGGER.trace("whoAmI()");	
+
+	@Override
+	public void selectTabId(String tabbedPaneComponentName, String tabComponentId) throws QTasteException {
+		LOGGER.trace("selectTabId(\"" + tabbedPaneComponentName + "\", \"" + tabComponentId + "\")");
+		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_COMPONENT_ID).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabComponentId);
+	}
+
+	public String whoAmI() throws QTasteTestFailException {
+		LOGGER.trace("whoAmI()");
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e) { 
+		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}		
-		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().getName();	
+		}
+		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().getName();
 	}
-	
+
 
 	public String getRawName(String name) throws QTasteException
 	{
 		LOGGER.trace("getRawName(\"" + name + "\")");
 		return new ComponentRawNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, name);
 	}
-	
+
 	public void setComponentName(String name) throws QTasteTestFailException {
 		LOGGER.trace("setComponentName(\"" + name + "\")");
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e) { 
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().setName(name);		
-	}								    
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().setName(name);
+	}
 
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
 		LOGGER.trace("pressKey(" + keycode + ", " + delay + ")");
 		new KeyPresser().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, bot, keycode, delay);
 	}
-	
+
 	public void pressKey(int keycode) throws QTasteTestFailException {
 		LOGGER.trace("pressKey(" + keycode + ")");
 		// 68 is the default delay for a keypress
-		pressKey(keycode, 68);		
+		pressKey(keycode, 68);
 	}
 
 	@Override
@@ -219,15 +225,15 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	@Override
 	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
 		LOGGER.trace("selectInTable(\"" + pComponentName + "\", \"" + pColumnName + "\", \"" + pColumnValue + "\", " + pOccurenceIndex + ")");
-		new TableRowSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue, pOccurenceIndex);		
+		new TableRowSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue, pOccurenceIndex);
 	}
-	
+
 	public boolean isPopupDisplayed() throws QTasteException
 	{
 		LOGGER.trace("isPopupDisplayed()");
 		return new PopupChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
 	}
-	
+
 	public String getPopupText() throws QTasteException
 	{
 		LOGGER.trace("getPopupText()");
@@ -238,19 +244,19 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		}
 		return texts.get(0);
 	}
-	
+
 	public String[] getAllPopupText() throws QTasteException
 	{
 		LOGGER.trace("getAllPopupText()");
 		return new PopupTextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
 	}
-	
+
 	public void setPopupValue(String value) throws QTasteException
 	{
 		LOGGER.trace("setPopupValue(\"" + value + "\")");
 		new PopupTextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, value);
 	}
-	
+
 	public void clickOnPopupButton(String buttonText) throws QTasteException
 	{
 		LOGGER.trace("clickOnPopupButton(\"" + buttonText + "\")");
@@ -262,10 +268,10 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		LOGGER.trace("setComponentEnabledTimeout(" + pTimeOut + ")");
 		if (pTimeOut < 0)
 			throw new IllegalArgumentException("Cannot set a negative timeout value. Try to set " + pTimeOut);
-		
+
 		COMPONENT_ENABLED_TIMEOUT = pTimeOut;
 	}
-	
+
 	@Override
 	public double[] getComponentLocation(String componentName) throws QTasteException {
 		LOGGER.trace("getComponentLocation(\"" + componentName + "\")");
@@ -284,7 +290,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		LOGGER.trace("getComponentForegroundColor(\"" + componentName + "\")");
 		return new ComponentForegroundColorGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
-	
+
 	@Override
 	public String dumpTreeContent(String treeComponentName, String separator) throws QTasteException
 	{
@@ -308,19 +314,18 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
            return names.get(0);
     }
 
-
 	@Override
 	public String[] getListContent(String componentName) throws QTasteException {
 		LOGGER.trace("getListContent(" + componentName + ")");
 		return new ListDumper().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
-	} 
+	}
 
 	@Override
 	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException {
 		LOGGER.trace("selectFileThroughFileChooser('" + fileChooserComponentName + "', '" + filepath + "', '" + buttonText + "')");
 		new FileChooserFileSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, fileChooserComponentName, filepath, buttonText);
 	}
-	
+
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
 	private static Logger LOGGER = Logger.getLogger(JavaGUI.class);
 }

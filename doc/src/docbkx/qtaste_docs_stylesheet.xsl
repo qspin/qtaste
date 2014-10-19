@@ -9,36 +9,36 @@
 <xsl:param name="section.label.includes.component.label" select="1"/>
 
 <xsl:attribute-set name="component.title.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level1.properties"
                    use-attribute-sets="section.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level2.properties"
                    use-attribute-sets="section.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level3.properties"
                    use-attribute-sets="section.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level4.properties"
                    use-attribute-sets="section.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level5.properties"
                    use-attribute-sets="section.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level6.properties"
                    use-attribute-sets="section.properties">
-  <xsl:attribute name="color">#000099</xsl:attribute>
+  <xsl:attribute name="color">#01ABCE</xsl:attribute>
 </xsl:attribute-set>
 
 <!-- Defining Titles Font Color -->
 <xsl:template match="db:title/db:emphasis">
-  <fo:inline color="#000099">
+  <fo:inline color="#01ABCE">
      <xsl:apply-templates/>
   </fo:inline>
 </xsl:template>
@@ -90,7 +90,7 @@
       <!-- Add copyrights and current page number -->
       <xsl:when test="$position = 'center'">
         <fo:block font-size="9pt" text-align="left">
-          <xsl:text>&#x00A9; 2012 QSpin SA</xsl:text>
+          <xsl:text>&#x00A9; 2014 QSpin SA</xsl:text>
         </fo:block>
         <fo:block> </fo:block>
         <fo:block font-size="8pt" text-align="left">
@@ -103,9 +103,9 @@
           <fo:page-number/>
         </fo:block>
       </xsl:when>
-      <!-- Add QSpin Watch Figure-->
+      <!-- Add QSpin Logo Figure-->
       <xsl:when test="$position = 'left'">
-          <fo:external-graphic content-height="1.30in" content-width="scale-to-fit" src="url(res/qspin_watch.png)">
+          <fo:external-graphic content-height="1.00in" content-width="1.50in" src="url(res/qspin_logo.png)">
             <xsl:call-template name="fo-external-image"/>
           </fo:external-graphic>
       </xsl:when>

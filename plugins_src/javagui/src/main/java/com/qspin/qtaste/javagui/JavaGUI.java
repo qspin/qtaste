@@ -44,14 +44,14 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  * @author lvboque
  */
 public interface JavaGUI {
-  
+
    /**
-    * Change the COMPONENT_ENABLED_TIMEOUT used when JavaGUI searches a fully active component. 
+    * Change the COMPONENT_ENABLED_TIMEOUT used when JavaGUI searches a fully active component.
     * @param pTimeOut the new timeout value in seconds.
     * @throws IllegalArgumentException if the timeout value is negative.
     */
    void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException;
-	
+
    /**
      * Create a snapshot of the specified GUI componentName and save it as the specified filename in the current working directory.</br>
 	  * Can be used on all {@link Component}.
@@ -59,13 +59,13 @@ public interface JavaGUI {
      * @param fileName the name of the image file.
      */
    void takeSnapShot(String componentName, String fileName) throws QTasteException;
-   
+
    /**
      * Get the list of all the component names.
 	 * @return an array of String containing all the names of the component of the GUI application.
      */
    String [] listComponents() throws QTasteException;
-   
+
 	/**
 	  * Check if a specified component is enabled.</br>
 	  * Can be used on all {@link Component}. (see {@link Component#isEnabled()})
@@ -73,7 +73,7 @@ public interface JavaGUI {
 	  * @return <code>true</code> if the specified component is enabled.
 	  */
 	boolean isEnabled(String componentName) throws QTasteException;
-	
+
 	/**
 	  * Check if a specified component (and its parent(s)) is visible.</br>
 	  * Can be used on all {@link Component}. (see {@link Component#isVisible()})
@@ -81,7 +81,7 @@ public interface JavaGUI {
 	  * @return <code>true</code> if the specified component (and all its parents) is visible.
 	  */
 	boolean isVisible(String componentName) throws QTasteException;
-	
+
 	/**
 	  * Check if a specified component is editable.</br>
 	  * Can be used on :
@@ -95,7 +95,7 @@ public interface JavaGUI {
 	  * @return <code>true</code> if the specified component is editable.
 	  */
 	boolean isEditable(String componentName) throws QTasteException;
-      
+
    /**
      * Click on the specified componentName.
 	 * Can be used on {@link AbstractButton}. (see {@link AbstractButton#doClick()})
@@ -110,7 +110,7 @@ public interface JavaGUI {
 	 * @param pressTime an identifier of the {@link AbstractButton} component.
      */
    void clickOnButton(String componentName, int pressTime) throws QTasteException;
-   
+
     /**
      * Get the text used for the specied component.</br>
 	  * Can be used on :
@@ -119,11 +119,11 @@ public interface JavaGUI {
 	  * <li>{@link JLabel} (see {@link JLabel#getText()})</li>
 	  * <li>{@link AbstractButton} (see {@link AbstractButton#getText()})</li>
 	  * </ul>
-     * @param componentName an identifier of the GUI component.     
+     * @param componentName an identifier of the GUI component.
 	 * @return Return the text of the specified componentName.
      */
    String getText(String componentName) throws QTasteException;
-   
+
     /**
      * Set the text for the specified component.</br>
 	  * Can be used on :
@@ -135,7 +135,7 @@ public interface JavaGUI {
 	 * @param value the new value for the text.
      */
    void setText(String componentName, String value) throws QTasteException;
-    
+
    /**
     * Select the specified tab for the tabbed pane.</br>
 	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
@@ -143,7 +143,7 @@ public interface JavaGUI {
     * @param tabIndex the tab index (first at 0).
     */
    void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException;
-   
+
    /**
     * Select the specified tab for the tabbed pane.</br>
 	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
@@ -151,7 +151,15 @@ public interface JavaGUI {
     * @param tabTitle the tab title.
     */
    void selectTabTitled(String tabbedPaneComponentName, String tabTitle) throws QTasteException;
-   
+
+   /**
+    * Select the specified tab for the tabbed pane.</br>
+	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
+    * @param tabbedPaneComponentName the {@link JTabbedPane} component name
+    * @param tabComponentId the tab component Id Name.
+    */
+   void selectTabId(String tabbedPaneComponentName, String tabComponentId) throws QTasteException;
+
    /**
     * Set the selection state to the specified component.</br>
 	* Can be used on {@link AbstractButton}. (see {@link AbstractButton#setSelected(boolean)})
@@ -172,9 +180,9 @@ public interface JavaGUI {
 	  * </ul>
     * @param componentName an identifier of the GUI component.
 	* @param value the value to select.
-    */   
+    */
    void selectValue(String componentName, String value) throws QTasteException;
-   
+
   /**
     * Return the currently selected value for the specified component.</br>
     * Can be used on :
@@ -187,7 +195,7 @@ public interface JavaGUI {
     * </ul>
     * @param componentName an identifier of the component.
     * @return the currenlty selected value
-    */ 
+    */
    String getSelectedValue(String componentName) throws QTasteException;
 
 
@@ -200,16 +208,16 @@ public interface JavaGUI {
 	  * </ul>
     * @param componentName an identifier of the GUI component.
 	* @param index the index to select.
-    */ 
+    */
    void selectIndex(String componentName, int index) throws QTasteException;
-   
+
    /**
     * Select the node for the specified JTree.</br>
     * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
     * @param componentName an identifier of the JTree component.
     * @param nodeName the node to select.
     * @param nodeSeparator the node separator used in the value parameter.
-    */ 
+    */
    void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
 
   /**
@@ -217,9 +225,9 @@ public interface JavaGUI {
     * Can be used on {@link JTree}.
     * @param componentName an identifier of the JTree component.
     * @param nodeSeparator the node separator used in the value parameter.
-    */ 
+    */
    String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException;
-   
+
    /**
     * Parse a {@link JTree} component and create a String with the node content.</br>
 	* Can be used on {@link JTree}.
@@ -229,7 +237,7 @@ public interface JavaGUI {
     * @throws QTasteException
     */
    String dumpTreeContent(String treeComponentName, String separator) throws QTasteException;
-   
+
    /**
     * Return the content of the list identified by the specified componentName.</br>
     * Can be used on {@link JComboBox} or  {@link JList}.
@@ -237,7 +245,7 @@ public interface JavaGUI {
     * @return a String [] containing the values of the list.
     * @throws QTasteTestFailException
     */
-   String [] getListContent(String componentName) throws QTasteException;   
+   String [] getListContent(String componentName) throws QTasteException;
 
    /**
     * Return the name of the {@link Component} that have the focus.</br>
@@ -246,7 +254,7 @@ public interface JavaGUI {
     * @throws QTasteTestFailException
     */
    String whoAmI() throws QTasteException;
-   
+
    /**
     * Return the full name of the {@link Component} identified by the ID.</br>
 	* Can be used on all {@link Component}. (see {@link Component#getName()()})
@@ -255,43 +263,43 @@ public interface JavaGUI {
     * @throws QTasteTestFailException
     */
    String getRawName(String name) throws QTasteException;
-   
+
    /**
     * Return an array with the full name of all popups.
     * @return an array with the full name of all popups
     * @throws QTasteTestFailException
     */
    String[] getPopupRawNames() throws QTasteException;
-   
+
    /**
     * Return the full name of the active popup.
     * @return the full name of the active popup.
     * @throws QTasteTestFailException
     */
    String getPopupRawName() throws QTasteException;
-   
+
    /**
     * Set the name of the GUI component that have the focus with the specified name.
-    * @throws QTasteTestFailException 
+    * @throws QTasteTestFailException
     */
    @Deprecated
    void setComponentName(String name) throws QTasteException;
-   
+
    /**
     * Send the specified key code to the application.
     * @param keycode key code of the key sent to the application.
     * @throws QTasteTestFailException If some internal errors occurs.
     */
    void pressKey(int keycode) throws QTasteException;
-   
+
    /**
     * Send the specified key code to the application.
     * @param keycode key code of the key sent to the application.
     * @param delay delay for the button pressed in milliseconds.
-    * @throws QTasteTestFailException If some internal errors occurs. 
+    * @throws QTasteTestFailException If some internal errors occurs.
     */
    void pressKey(int keycode, long delay) throws QTasteException;
-   
+
    /**
     * Checks if a component with the name exist or not.</br>
 	* Can be used on all {@link Component}.
@@ -299,7 +307,7 @@ public interface JavaGUI {
     * @return <code>true</code> if the component exist.
     */
    boolean exist(String pComponentName);
-   
+
    /**
     * Counts the number of components that have the enabled state.</br>
 	* Can be used on all {@link Component}. (see {@link Component#isEnabled()})
@@ -307,7 +315,7 @@ public interface JavaGUI {
     * @return The number of components that have the enabled state.
     */
    int getEnabledComponentCount(boolean isEnabled);
-   
+
    /**
     * Counts the number of rows that have the value in the column.
 	* Can be used on {@link JTable}.
@@ -334,40 +342,40 @@ public interface JavaGUI {
     * @param pOccurenceIndex The occurrence index to select.
     */
    void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex)throws QTasteException;
-   
+
    /**
     * Checks if there is at least one popup displayed.
     * @return <code>true</code> if there is at least one popup.
     */
    boolean isPopupDisplayed() throws QTasteException;
-   
+
    /**
     * Retrieves the text (message) of the active popup.</br>
-    * @see JOptionPane#getMessage() 
+    * @see JOptionPane#getMessage()
     * @return the text (message) of the active popup.
     */
    String getPopupText() throws QTasteException;
-   
+
    /**component
     * Retrieves all popup texts.</br>
-    * @see JOptionPane#getMessage() 
+    * @see JOptionPane#getMessage()
     * @return all popup texts.
     */
    String[] getAllPopupText() throws QTasteException;
-   
+
    /**
     * inserts a value in the active popup field.
     * @param value the value to insert.
     * @see {@link JOptionPane#showInputDialog(Object)}
     */
    void setPopupValue(String value) throws QTasteException;
-   
+
    /**
     * Clicks on the button with the text in the active popup.
     * @param buttonText the button text.
     */
    void clickOnPopupButton(String buttonText) throws QTasteException;
-   
+
    /**
     * Searches the component identified by the name and returns the component's background color.</br>
 	* Can be used on all {@link Component}. (see {@link Component#getBackground()})
@@ -375,7 +383,7 @@ public interface JavaGUI {
     * @return the found component's background color with the RGB color format expressed in hexadecimal.
     */
    String getComponentBackgroundColor(String componentName) throws QTasteException;
-   
+
    /**
     * Retrieve the location of the component on the screen. </br>
 	* Can be used on all {@link Component}. (see {@link Component#getLocationOnScreen()})
@@ -383,7 +391,7 @@ public interface JavaGUI {
     * @return the location in pixel. (0, 0) is the upper left corner of the screen.
     */
    double[] getComponentLocation(String componentName) throws QTasteException;
-   
+
    /**
     * Searches the component identified by the name and returns the component's foreground color.</br>
 	* Can be used on {@link JTextComponent}. (see {@link JTextComponent#getForeground()})
@@ -391,9 +399,9 @@ public interface JavaGUI {
     * @return the found component's foreground color with the RGB color format expressed in hexadecimal.
     */
    String getComponentForegroundColor(String componentName) throws QTasteException;
-   
+
    /**
-    * Selects a file with a {@link JFileChooser}. Finds the file chooser with its name, set the file path in the text 
+    * Selects a file with a {@link JFileChooser}. Finds the file chooser with its name, set the file path in the text
     * field and click on the button with the specified text.
     * @param fileChooserComponentName The JFileChooser's name.
     * @param filepath The path to the file to select.

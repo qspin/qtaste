@@ -101,6 +101,9 @@ import site
 # stuff we use in this module
 import glob, os, re, string, sys, tokenize
 
+# need to import encodings otherwise for some obscure reason, only the first used encoding will be found
+import encodings
+
 # make sure elementtree is available
 try:
     try:

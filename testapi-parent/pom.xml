@@ -63,6 +63,62 @@
                </dependencies>
             </plugin>
 
+            <!-- alternative plugin to build deploy jar file, including version information -->
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-shade-plugin</artifactId>
+               <version>2.3</version>
+               <configuration>
+                  <outputFile>${project.build.directory}/qtaste-testapi-deploy.jar</outputFile>
+                  <transformers>
+                     <transformer
+                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                        <resource>META-INF/spring.handlers</resource>
+                     </transformer>
+                     <transformer
+                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                        <resource>META-INF/spring.schemas</resource>
+                     </transformer>
+                     <transformer
+                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                        <resource>META-INF/spring.tooling</resource>
+                     </transformer>
+                     <transformer
+                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                        <file>${project.build.directory}/generated-resources/versions/META-INF/${project.groupId}/${project.artifactId}.version</file>
+                        <resource>META-INF/assembly.version</resource>
+                     </transformer>
+                     <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                  </transformers>
+                  <artifactSet>
+                     <excludes>
+                        <!-- exclude all artifacts included in QTaste-kernel (including transitive dependencies) -->
+                        <exclude>com.qspin.qtaste:qtaste-kernel</exclude>
+                        <exclude>commons-collections:commons-collections</exclude>
+                        <exclude>commons-configuration:commons-configuration</exclude>
+                        <exclude>commons-digester:commons-digester</exclude>
+                        <exclude>commons-beanutils:commons-beanutils</exclude>
+                        <exclude>commons-lang:commons-lang</exclude>
+                        <exclude>commons-logging:commons-logging</exclude>
+                        <exclude>commons-net:commons-net</exclude>
+                        <exclude>javax.scripting:jython-engine</exclude>
+                        <exclude>jfree:jfreechart</exclude>
+                        <exclude>jfree:jcommon</exclude>
+                        <exclude>com.jgoodies:bindings</exclude>
+                        <exclude>com.jgoodies:forms</exclude>
+                        <exclude>de.sciss:jsyntaxpane</exclude>
+                        <exclude>log4j:log4j</exclude>
+                        <exclude>org.python:jython</exclude>
+                        <exclude>xalan:xalan</exclude>
+                        <exclude>xalan:serializer</exclude>
+                        <exclude>xerces:xercesImpl</exclude>
+                        <exclude>xml-apis:xml-apis</exclude>
+                        <exclude>org.netbeans.external:nb-javac-api</exclude>
+                     </excludes>
+                  </artifactSet>
+               </configuration>
+            </plugin>
+
             <!-- plugin to get sources of other testapi dependency projects, for testapi doc generation -->
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>

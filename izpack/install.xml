@@ -16,7 +16,7 @@
     -->
     <info>
         <appname>${info.appName}</appname>
-        <appversion>${info.appVersion}</appversion>        
+        <appversion>${info.appVersion}</appversion>
         <url>https://github.com/qspin/qtaste</url>
     </info>
 
@@ -93,7 +93,6 @@ to be rechecked in version 5.0.0-beta11 or later
         <exclude name=".git/**"/>
         <exclude name="**/.svn"/>
         <exclude name="**/.svn/**"/>
-        <include name="tools/PyGithub/**"/>
         </fileset>
         <executable targetfile="$INSTALL_PATH/bin/generate-TestSuites-doc.sh" stage="never">
           <os family="unix"/>

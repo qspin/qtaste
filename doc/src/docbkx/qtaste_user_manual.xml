@@ -6,7 +6,7 @@
 
   <bookinfo>
     <copyright>
-      <year>2012</year>
+      <year>2014</year>
 
       <holder>QSpin SA</holder>
     </copyright>
@@ -2109,8 +2109,8 @@
           <para>Some libraries required by QTaste are not available on a
           public maven repository, so the qtaste_mvn_missing_dependencies.zip
           has to be uncompressed in the maven2 repository directory (i.e:
-          ~/.m2/repository on linux). (Available on SourceForge <ulink
-          url="http://sourceforge.net/projects/qtaste/files/">http://sourceforge.net/projects/qtaste/files/</ulink>)</para>
+          ~/.m2/repository on linux). (Available on GitHub <ulink
+          url="https://github.com/qspin/qtaste">https://github.com/qspin/qtaste</ulink>)</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2131,9 +2131,9 @@
       This procedure does not take into account the installation of the SUT as
       this step are specific to the system to be tested.</para>
 
-      <para>Retrieve the QTaste source code from source forge available on
+      <para>Retrieve the QTaste source code from GitHub available on
       <ulink
-      url="http://sourceforge.net/projects/qtaste/">http://sourceforge.net/projects/qtaste/</ulink></para>
+      url="https://github.com/qspin/qtaste">https://github.com/qspin/qtaste</ulink></para>
 
       <section>
         <title><emphasis>QTaste compilation</emphasis></title>
@@ -2210,6 +2210,15 @@
         <para>First step is to validate your script before trusting its
         results.</para>
       </section>
+
+      <section>
+        <title><emphasis>Encoding</emphasis></title>
+         <para>It is recommended to TestScript.py be encoded as UTF-8 when edited with external editors.
+         Otherwise, if spectial charachers are used in documentation tags (e.g. @step)
+         then qtaste will not generate the documentation properly.
+         The QTaste source editor already save TestScript.py file as UTF-8.</para>
+      </section>
+
     </section>
 
     <section>
@@ -2300,6 +2309,14 @@
         python syntax (see Test data).</para>
       </section>
     </section>
+
+    <section>
+        <title><emphasis>Test data encoding</emphasis></title>
+         <para>Is recommended to CSV data file be encoded as UTF-8 when edited with external editors.
+         Otherwise QTaste will not generate the documentation properly when special characters are used.
+         The QTaste GUI CSV editor already handle CSV files with UTF-8 encoding for this purpose.</para>
+    </section>
+
   </chapter>
 
   <chapter>
@@ -2392,7 +2409,7 @@
         policy in order to publish the appropriate test results.</para>
 
         <para>A verb may stop a test execution and set the test result to
-        “failed” by throwing an QTasteTestFailException, or to not available
+        “failed” by throwing an QTasteTestFailException, or to "not available"
         by throwing any other exception.</para>
       </section>
 
@@ -2471,7 +2488,7 @@
     <section>
       <title><emphasis>Logging levels</emphasis></title>
 
-      <para>We defined some “recommendations” for the usage of logs severity
+      <para>We defined some recommendations for the usage of logs severity
       levels:</para>
 
       <informaltable>
@@ -2480,13 +2497,13 @@
             <row>
               <entry>Level of logs</entry>
 
-              <entry>Used to</entry>
+              <entry>Usage</entry>
             </row>
 
             <row>
               <entry>FATAL</entry>
 
-              <entry>Used to report unexpected and unrecoverable errors. (no
+              <entry>Unexpected and unrecoverable errors. (no
               guarantee that the Test Engine execution will behave
               correctly)</entry>
             </row>
@@ -2508,20 +2525,20 @@
             <row>
               <entry>INFO</entry>
 
-              <entry>Used to log what the Test Engine has done</entry>
+              <entry>Log what the Test Engine does</entry>
             </row>
 
             <row>
               <entry>DEBUG</entry>
 
-              <entry>Used for debugging purpose while using the test
+              <entry>Debugging purpose while using the test
               engine.</entry>
             </row>
 
             <row>
               <entry>TRACE</entry>
 
-              <entry>Used for debugging purpose during development phases of
+              <entry>Debugging purpose during development phases of
               components.</entry>
             </row>
           </tbody>
@@ -2540,7 +2557,8 @@
         <listitem>
           <para>The configuration files of the QTaste framework are stored in
           XML files located under the “conf” directory. The tag names used in
-          the XML files are case sensitive.</para>
+          the XML files are case sensitive. When a search for "smartsockets" is
+          performed:</para>
 
           <screen>&lt;smartsockets&gt;&lt;/smartsockets&gt;   is valid
 &lt;SmartSockets&gt;&lt;/SmartSockets&gt;   is not valid</screen>
@@ -2560,8 +2578,8 @@
           <para>Entity can be added to avoid repetition of settings or block
           of configuration.</para>
 
-          <para>The following configuration file shows a block of
-          configuration stored in the file called “component_web.inc”.</para>
+          <para>The following configuration file, called “component_web.inc”,
+          shows a block of configuration.</para>
 
           <screen>&lt;!-- defines the Selenium component --&gt;
 &lt;!-- &gt;${selenium_host} must have been previously defined --&gt;
@@ -2693,9 +2711,7 @@ will be presented as “smartsockets.host” in the description tables.</screen>
               <entry>OPTIONAL</entry>
 
               <entry>This tag point to a script that will be used to start or
-              stop the SUT once the test engine is started/stopped.This tag
-              point to a script that will be used to start or stop the SUT
-              once the test engine is started/stopped.</entry>
+              stop the SUT once the test engine is started/stopped.</entry>
             </row>
 
             <row>
@@ -2882,10 +2898,10 @@ The example here upper performs 2 actions:</literallayout>
              workingDir=sutDir+"/Selenium",
              checkAfter=5)</screen>
 
-          <para>This example will start a native process using the executable
-          file "python.exe" with arguments specified in args variable. This
-          native process is being launched having as working directory equals
-          to the variable sutDir and the controls script will check if the
+          <para>This example will start a java process using the jar
+          file "selenium-server.jar" with arguments specified in args variable. This
+          java process is being launched having as working directory equals
+          to the variable sutDir/Selenium and the controls script will check if the
           process still exits after 5 seconds.</para>
         </section>
 
@@ -2908,20 +2924,19 @@ The example here upper performs 2 actions:</literallayout>
         <section>
           <title><emphasis>ReplaceInFiles class</emphasis></title>
 
-          <screen>RExec(startCommand="start.csh",
-      stopCommand="stop.csh",
-      host="myhost",
-      use="user",
-      password="userPassword")</screen>
+          <screen>ReplaceInFiles(findString="day",
+       replaceString="night",
+       files="*schedule*")</screen>
         </section>
 
         <section>
           <title><emphasis>RExec class</emphasis></title>
 
-          <screen>RLogin(command='"sp cuStartup"',
-       host=host,
-       login="QTaste",
-       log4jconf="Testbeds/ControlScripts/x.log4j.properties")])</screen>
+          <screen>RExec(startCommand="start.csh",
+      stopCommand="stop.csh",
+      host="myhost",
+      login="user",
+      password="userPassword")</screen>
         </section>
 
         <section>
@@ -2930,7 +2945,7 @@ The example here upper performs 2 actions:</literallayout>
           <screen>RLogin(command='"sp cuStartup"',
        host=host,
        login="QTaste",
-       log4jconf="Testbeds/ControlScripts/x.log4j.properties")])</screen>
+       log4jconf="Testbeds/ControlScripts/x.log4j.properties"))</screen>
         </section>
       </section>
 
@@ -2958,20 +2973,20 @@ The example here upper performs 2 actions:</literallayout>
 
       <para>QTaste scripts are written in Python language v2.2 and interpreted
       by Jython v2.2.1, (http://www.jython.org). Any Python feature supported
-      by Jython v2.2.1 is thus supported by the QTaste.</para>
+      by Jython v2.2.1 is thus supported by QTaste.</para>
 
-      <para>The pythonlib subdirectories of all the directories from the test
-      script directory up to the TestSuites directory are automatically added,
-      in that order, to the Python path so that custom Python modules can
-      easily be imported from those directories, using the Python import
-      directive.</para>
+      <para>A scan of all the (sub)directories from "test script" to "TestSuites"
+      is performed. If there is a directory called pythonlib, it is automatically
+      added, in the order of the scan, to the Python path.
+      The developer can then import custom Python modules from those directories
+      using the Python "import" directive.</para>
 
       <para>If some specific python modules have to be written, they can be
       added to the python class path just by adding the directory to the
       QTASTE_JYTHON_LIB environment variable. QTaste will automatically check
-      this variable and use it if it’s defined.</para>
+      this variable and use it if defined.</para>
 
-      <para>This allows for easy script reusability (see Module
+      <para>This eases the reusability of the python scripts (see Module
       import).</para>
 
       <section>
@@ -3377,7 +3392,7 @@ except QTasteTestFailException:
         <para>Steps must be executed by calling the doStep() function or the
         doSteps() function, which must be imported from the QTaste module,
         e.g. using “from qtaste import *”, rather than calling the step
-        functions directly. This enables the QTaste to detect the beginning
+        functions directly. This enables QTaste to detect the beginning
         and end of steps, and compute the elapsed time.</para>
 
         <para>The doStep() function, allows to execute one step, passing an

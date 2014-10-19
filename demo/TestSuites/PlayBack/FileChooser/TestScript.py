@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 ##
 # Playback/FileChooser test.
 # <p>
@@ -15,39 +17,39 @@ javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_N
 importTestScript("TabbedPaneSelection")
 
 def openFileChooser():
-	"""
-	@step      Open the JFileChooser by clicking on the open button.
-	@expected  The JFileChooser is displayed (not tested).
-	"""
-	
-	doSubSteps(TabbedPaneSelection.changeTab)
-	javaguiMI.clickOnButton("OPEN_FILECHOOSER")
-	time.sleep(1)
-	
+    """
+    @step      Open the JFileChooser by clicking on the open button.
+    @expected  The JFileChooser is displayed (not tested).
+    """
+
+    doSubSteps(TabbedPaneSelection.changeTabById)
+    javaguiMI.clickOnButton("OPEN_FILECHOOSER")
+    time.sleep(1)
+
 def selectFile():
-	"""
-	@step Base on test data, set the file to select and click on the "Open" button.
-	@expected The result text field contains the file name.
-	"""
-	fileName = testData.getValue("FILENAME")
-	component = testData.getValue("COMPONENT_NAME")
-	javaguiMI.selectFileThroughFileChooser(component, fileName, "Open")
-	value = javaguiMI.getText("FILECHOOSER_RESULT")
-	time.sleep(1)
-	if ( value == fileName):
-		pass
-	else:
-		testAPI.stopTest(Status.FAIL, "The expected value is " + fileName + " but the current is : " + value)
+    """
+    @step Base on test data, set the file to select and click on the "Open" button.
+    @expected The result text field contains the file name.
+    """
+    fileName = testData.getValue("FILENAME")
+    component = testData.getValue("COMPONENT_NAME")
+    javaguiMI.selectFileThroughFileChooser(component, fileName, "Open")
+    value = javaguiMI.getText("FILECHOOSER_RESULT")
+    time.sleep(1)
+    if ( value == fileName):
+        pass
+    else:
+        testAPI.stopTest(Status.FAIL, "The expected value is " + fileName + " but the current is : " + value)
 
 def reset():
-	"""
-	@step      Reset component state
-	@expected  The result text field is empty.
-	"""
-	
-	component = "FILECHOOSER_RESULT"
-	value = ""
-	javaguiMI.setText(component, value)
+    """
+    @step      Reset component state
+    @expected  The result text field is empty.
+    """
+
+    component = "FILECHOOSER_RESULT"
+    value = ""
+    javaguiMI.setText(component, value)
 
 doStep(openFileChooser)
 doStep(selectFile)
