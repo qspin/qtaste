@@ -315,7 +315,13 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
          * Invoked when an action occurs.
          */
         public void actionPerformed(ActionEvent e) {
-            executeCommand(mInteractiveText.getText());
+        	final String command = mInteractiveText.getText();
+            new Thread(new Runnable() {
+            	@Override
+            		public void run() {
+            			executeCommand(command);
+            		}
+            }).start();
         }
     }
 
