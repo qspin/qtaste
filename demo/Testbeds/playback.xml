@@ -20,7 +20,8 @@
 	</multiple_instances_components>
 	
 	<singleton_components>
-		<Subtitler></Subtitler>
+		<Utility/>
+		<Subtitler/>
 	</singleton_components>
 	
 </testbed_configuration>
