@@ -572,15 +572,20 @@ public class TestDataEditor extends JPanel {
                 if (table != null) {
                     // force selection of clicked cell
                     clickedRow = table.rowAtPoint(e.getPoint());
+                    if (clickedRow != -1) {
+                    	table.setRowSelectionInterval(clickedRow, clickedRow);
+                    }
                     clickedColumn = table.columnAtPoint(e.getPoint());
-                    table.setRowSelectionInterval(clickedRow, clickedRow);
-                    table.setColumnSelectionInterval(clickedColumn, clickedColumn);
+                    if (clickedColumn != -1) {
+                    	table.setColumnSelectionInterval(clickedColumn, clickedColumn);
+                    }
                 }
 
+                boolean isCellSelected = ((clickedRow != -1) && (clickedColumn != -1));
                 // display the context dialog
                 JPopupMenu menu = new JPopupMenu();
                 menu.add(new AddVariableAction());
-                if (table != null) {
+                if (table != null && isCellSelected) {
                     menu.add(new RenameVariable(table.getColumnName(clickedColumn), clickedColumn));
                     menu.add(new RemoveVariableAction(table.getColumnName(clickedColumn), clickedColumn));
                 }
@@ -588,7 +593,7 @@ public class TestDataEditor extends JPanel {
                     menu.add(new LoadFromFileAction());
                 } else {
                     menu.add(new AddRowAction());
-                    if (table != null) {
+                    if (table != null && isCellSelected) {
                         menu.add(new InsertRowAction());
                         menu.add(new DuplicateRowAction());
                         menu.add(new RemoveRowAction());

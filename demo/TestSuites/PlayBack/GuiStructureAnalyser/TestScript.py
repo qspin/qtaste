@@ -3,7 +3,7 @@
 ##
 # Playback/GuiStructureAnalyser test.
 # <p>
-# Open a Java GUI App and print all the components to a XML file.
+# Open a Java GUI App and print the name of all the components to a XML file.
 #
 ##
 
@@ -19,7 +19,7 @@ outputXmlFile = testData.getValue("XML_FILE_PATH")
 
 def printGuiStructureToFile():
     """
-    @step      Open a GUI and print all components to XML file
+    @step      Open a GUI and print the name of all components to XML file.
     @expected  The XML file with the structure of the selected GUI is created.
     """
 
