@@ -249,6 +249,12 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.selectFileThroughFileChooser(fileChooserComponentName, filepath);
 	}
 
+	@Override
+	public void analyzeStructure(String fileName) throws QTasteException
+	{
+		mProxy.analyzeStructure(fileName);
+	}
+
     protected JavaGUI mProxy;
 	protected JMXClient mClient;
 	private static final String BEAN_NAME = "com.qspin.qtaste.javagui.server:type=JavaGUI";

@@ -408,4 +408,10 @@ public interface JavaGUI {
     * @throws QTasteException If No file JFilechooser with the specified name is found; If the text field is not found; If no button with the text exist.
     */
    void selectFileThroughFileChooser(String fileChooserComponentName, String filepath) throws QTasteException;
+
+   /**
+    * Analyze the structure of a java application and save it in the specified filename in the current working directory.
+    * @param fileName the name of the image file.
+    */
+    void analyzeStructure(String fileName) throws QTasteException;
 }

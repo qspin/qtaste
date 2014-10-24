@@ -326,6 +326,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		new FileChooserFileSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, fileChooserComponentName, filepath);
 	}
 
+	@Override
+	public void analyzeStructure(final String fileName) throws QTasteException {
+		LOGGER.trace("analyzeStructure(\"" + fileName + "\")");
+		new StructureAnalyzer().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, fileName);
+	}
+
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;
 	private static Logger LOGGER = Logger.getLogger(JavaGUI.class);
 }
