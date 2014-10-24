@@ -154,9 +154,5 @@
 			<artifactId>javagui</artifactId>
 			<version>2.2.2-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>forms</artifactId>
-			</dependency>
 	</dependencies>
 </project>

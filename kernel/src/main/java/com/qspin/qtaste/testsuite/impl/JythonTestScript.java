@@ -109,7 +109,7 @@ public class JythonTestScript extends TestScript implements Executable {
     private Bindings bindings;
     private static ScriptEngineManager engineManager = new ScriptEngineManager();
     private static ScriptEngine engine = engineManager.getEngineByName("python");
-    private static List<String> platform;
+    private static List<Object> platform;
     private static Bindings globalBindings;
     private static String scriptDebuggerClassCode;
     private TestScriptBreakpointHandler testScriptBreakPointEventHandler = TestScriptBreakpointHandler.getInstance();
@@ -121,7 +121,7 @@ public class JythonTestScript extends TestScript implements Executable {
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
             public void onConfigurationChange() {
-                List<String> newPlatform;
+                List<Object> newPlatform;
                 TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
                 if (testbedConfig != null) {
                     newPlatform = testbedConfig.getList("testapi_implementation.import");

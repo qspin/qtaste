@@ -48,7 +48,7 @@ public class ComponentsLoader {
     private static ComponentsLoader instance = null;
     private static Logger logger = Log4jLoggerFactory.getLogger(ComponentsLoader.class);
     private TestAPI api;
-    private List<String> testapiImplementation;
+    private List<Object> testapiImplementation;
     // key is the component name, value is the class implementing the component
     private HashMap<String, Class<?>> componentMap;
 
@@ -68,7 +68,7 @@ public class ComponentsLoader {
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
             public void onConfigurationChange() {
-                List<String> newTestAPIimplementation;
+                List<Object> newTestAPIimplementation;
                 TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
                 if (testbedConfig != null) {
                     newTestAPIimplementation = testbedConfig.getList("testapi_implementation.import");
@@ -82,7 +82,7 @@ public class ComponentsLoader {
         });
     }
 
-    private void initialize(List<String> testAPIimplementation) {
+    private void initialize(List<Object> testAPIimplementation) {
         componentMap.clear();
         api.unregisterAllMethods();
 	testapiImplementation = testAPIimplementation;
@@ -93,8 +93,8 @@ public class ComponentsLoader {
         MultipleInstancesComponentFactory.getInstance();
 
         if (testAPIimplementation != null) {
-            for (Iterator<String> testAPIIter = testAPIimplementation.iterator(); testAPIIter.hasNext() ; ) {
-                register(testAPIIter.next(), Component.class);
+            for (Iterator<Object> testAPIIter = testAPIimplementation.iterator(); testAPIIter.hasNext() ; ) {
+                register((String) testAPIIter.next(), Component.class);
             }
         }
     }

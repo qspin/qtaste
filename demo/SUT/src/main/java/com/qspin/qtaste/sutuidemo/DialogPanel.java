@@ -77,7 +77,6 @@ public final class DialogPanel extends JPanel {
 						final String msg = "Popup number " + (i+1);
 						Thread t = new Thread(new Runnable() {
 							
-							@Override
 							public void run() {
 								JOptionPane.showMessageDialog(null, msg, "POPUP", JOptionPane.INFORMATION_MESSAGE);
 							}

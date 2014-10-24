@@ -17,6 +17,7 @@ do
 done
 
 PLUGINS="AddonDemo ControlScriptBuilderAddOn"
+#PLUGINS="RemoteAgentManager"
 
 targetDir=../plugins/
 

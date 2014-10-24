@@ -23,14 +23,15 @@
         <exclude>javax.scripting:jython-engine</exclude>
         <exclude>jfree:jfreechart</exclude>
         <exclude>com.jgoodies:bindings</exclude>
-	<!-- <exclude>com.jgoodies:forms</exclude> -->
-        <exclude>jsyntaxpane:jsyntaxpane</exclude>
+        <exclude>com.jgoodies:forms</exclude>
+        <exclude>de.sciss:jsyntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
         <exclude>org.python:jython</exclude>
         <exclude>xalan:xalan</exclude>
         <exclude>xalan:serializer</exclude>
         <exclude>xerces:xercesImpl</exclude>
         <exclude>xml-apis:xml-apis</exclude>
+        <exclude>org.netbeans.external:nb-javac-api</exclude>
       </excludes>
     </dependencySet>
   </dependencySets>
