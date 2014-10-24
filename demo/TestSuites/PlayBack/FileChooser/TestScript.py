@@ -33,7 +33,7 @@ def selectFile():
     """
     fileName = testData.getValue("FILENAME")
     component = testData.getValue("COMPONENT_NAME")
-    javaguiMI.selectFileThroughFileChooser(component, fileName, "Open")
+    javaguiMI.selectFileThroughFileChooser(component, fileName)
     value = javaguiMI.getText("FILECHOOSER_RESULT")
     time.sleep(1)
     if ( value == fileName):
