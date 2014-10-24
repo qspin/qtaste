@@ -321,9 +321,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	@Override
-	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException {
-		LOGGER.trace("selectFileThroughFileChooser('" + fileChooserComponentName + "', '" + filepath + "', '" + buttonText + "')");
-		new FileChooserFileSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, fileChooserComponentName, filepath, buttonText);
+	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath) throws QTasteException {
+		LOGGER.trace("selectFileThroughFileChooser('" + fileChooserComponentName + "', '" + filepath + "')");
+		new FileChooserFileSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, fileChooserComponentName, filepath);
 	}
 
 	private static int COMPONENT_ENABLED_TIMEOUT = 10;

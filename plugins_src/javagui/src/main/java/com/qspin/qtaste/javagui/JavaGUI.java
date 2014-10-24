@@ -405,8 +405,7 @@ public interface JavaGUI {
     * field and click on the button with the specified text.
     * @param fileChooserComponentName The JFileChooser's name.
     * @param filepath The path to the file to select.
-    * @param buttonText The button's text.
     * @throws QTasteException If No file JFilechooser with the specified name is found; If the text field is not found; If no button with the text exist.
     */
-   void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException;
+   void selectFileThroughFileChooser(String fileChooserComponentName, String filepath) throws QTasteException;
 }

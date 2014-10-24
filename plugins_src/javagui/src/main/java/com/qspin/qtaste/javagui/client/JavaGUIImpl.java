@@ -245,8 +245,8 @@ public class JavaGUIImpl implements JavaGUI {
     }
 
 	@Override
-	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath, String buttonText) throws QTasteException {
-		mProxy.selectFileThroughFileChooser(fileChooserComponentName, filepath, buttonText);
+	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath) throws QTasteException {
+		mProxy.selectFileThroughFileChooser(fileChooserComponentName, filepath);
 	}
 
     protected JavaGUI mProxy;
