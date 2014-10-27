@@ -29,9 +29,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
-                        <manifest>
-                            <mainClass>com.qspin.qtaste.demo.addon.DemoAddOn</mainClass>
-                        </manifest>
                         <manifestEntries>
                                     <addonVersion>${project.parent.version}</addonVersion>
                                         <addonName>${project.name}</addonName>
@@ -39,9 +36,6 @@
                             <addonMainClass>com.qspin.qtaste.controlscriptbuilder.ControlScriptBuilderAddOn</addonMainClass>
                         </manifestEntries>
                     </archive>
-                    <descriptors>
-                        <descriptor>src/main/assembly/deploy.xml</descriptor>
-                    </descriptors>
                 </configuration>
             </plugin>
         </plugins>
