@@ -29,10 +29,13 @@ import javax.swing.tree.TreePath;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-class TreeNodeSelector extends UpdateComponentCommander {	
+class TreeNodeSelector extends UpdateComponentCommander {
 
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
+	}
+
+	protected void prepareDoActions() throws QTasteTestFailException {
 		String[] nodeNames = mData[0].toString().split(mData[1].toString());
 		if (component instanceof JTree && nodeNames.length > 0) {
 			JTree tree = (JTree) component;
@@ -44,7 +47,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				//root is not present in the list.
 				pathLength += 1;
 			}
-			Object [] lmPath = new Object[pathLength];		
+			Object [] lmPath = new Object[pathLength];
 			String value = getNodeText(tree, node);
 			if ( tree.isRootVisible() )
 			{
@@ -72,7 +75,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 								{
 									lmPath[i] = node;
 								} else {
-									lmPath[i+1] = node;	
+									lmPath[i+1] = node;
 								}
 								nodeFound = true;
 								mPath = lmPath;
@@ -81,7 +84,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 						}
 
 					} while ( System.currentTimeMillis() < m_maxTime && !nodeFound);
-					
+
 					if (!nodeFound)
 					{
 						throw new QTasteTestFailException("Unabled to find node named " + nodeNames[i]);
@@ -92,7 +95,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 			throw new QTasteTestFailException("Unabled to find the first node named " + nodeNames[0]);
 		}
 	}
-	
+
 	private String getNodeText(JTree tree, Object node)
 	{
 		Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
@@ -112,12 +115,12 @@ class TreeNodeSelector extends UpdateComponentCommander {
 	protected void doActionsInSwingThread()
 	{
 		try {
-			prepareActions();
+			prepareDoActions();
 			JTree tree = (JTree) component;
 			TreePath path = new TreePath(mPath);
 			tree.expandPath(path);
-			tree.setExpandsSelectedPaths(true);			
-			tree.setSelectionPath(path);			
+			tree.setExpandsSelectedPaths(true);
+			tree.setSelectionPath(path);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
