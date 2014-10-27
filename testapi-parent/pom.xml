@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly" or "mvn install assembly:single" in child project -->
-   
+
    <repositories>
     <repository>
         <id>sonatype-nexus-snapshots</id>
@@ -123,6 +123,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
+              <version>2.9</version>
               <inherited>${plugins-inheritance}</inherited>
               <!-- unpack api sources of other QTaste testapi projects dependencies in target/testapi-dependency-src, for TestAPI doc generation,
                    child project must define all artifacts to include, using includeArtifactIds (comma-separated list) -->
