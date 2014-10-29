@@ -113,6 +113,10 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         }
     }
 
+    public boolean isStartingOrStoppingTestbed() {
+    	return isStartingOrStoppingTestbed;
+    }
+
     public void setTestSuite(String testSuiteName) {
         this.testSuiteName = testSuiteName;
     }
@@ -196,7 +200,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             public void actionPerformed(ActionEvent e) {
                 TestEngine.setIgnoreControlScript(ignoreControlScript());
                 setControlTestbedButtonsEnabled();
-                
+
                 GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
                 guiConfiguration.setProperty(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, m_ignoreControlScript.isSelected());
                 try {
@@ -215,7 +219,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         sutPanel.add(m_SUTVersion);
         adder.add(sutPanel);
         m_SUTVersion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {                
+            public void actionPerformed(ActionEvent e) {
                 TestBedConfiguration.setSUTVersion(m_SUTVersion.getText());
             }
         });
@@ -225,7 +229,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         //1st column - 3d row
         adder.add(new JLabel("Reporting Format:"));
         adder.add(mTestReportingFormat);
-       
+
         //2d column - 3d row
         // add a button to manually start the testbed
         m_startTestbed.addActionListener(new ActionListener() {
@@ -331,7 +335,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             }
             else
             {
-            	reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));	
+            	reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));
             }
             reportManager.putEntry(tr);
             if (start) {

@@ -93,9 +93,9 @@ public class TestCampaignMainPanel extends JPanel {
         FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow", "6px, fill:pref, 6px");
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
-        
+
         int colIndex = 2;
-        
+
         JLabel label = new JLabel("Campaign:");
         saveMetaCampaignButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/save_32"));
         saveMetaCampaignButton.setToolTipText("Save campaign");
@@ -105,7 +105,7 @@ public class TestCampaignMainPanel extends JPanel {
                 if (selectedCampaign == null) {
                     logger.warn("No Campaign created");
                     return;
-                }                
+                }
                 treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
             }
         });
@@ -146,7 +146,7 @@ public class TestCampaignMainPanel extends JPanel {
 	                    if (new File(selectedCampaign.getFileName()).exists()) {
 	                        treeTable.load(selectedCampaign.getFileName());
 	                    }
-	                    
+
 	                    GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
 	                    guiConfiguration.setProperty(LAST_SELECTED_CAMPAIGN_PROPERTY, selectedCampaign.getCampaignName());
 	                    try {
@@ -173,7 +173,7 @@ public class TestCampaignMainPanel extends JPanel {
         if (!setLastSelectedCampaign && metaCampaignComboBox.getItemCount() > 0) {
             metaCampaignComboBox.setSelectedIndex(0);
         }
-        
+
         runMetaCampaignButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/running_32"));
         runMetaCampaignButton.setToolTipText("Run campaign");
         runMetaCampaignButton.addActionListener(new ActionListener() {
@@ -184,7 +184,7 @@ public class TestCampaignMainPanel extends JPanel {
                         logger.warn("No Campaign created");
                         return;
                     }
-                    
+
                     // first save the current campaign if needed
                     if (treeTable.hasChanged()) {
                         treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
@@ -192,7 +192,7 @@ public class TestCampaignMainPanel extends JPanel {
 
                     // set SUT version
                     TestBedConfiguration.setSUTVersion(parent.getSUTVersion());
-                    
+
                     testExecutionHandler = new CampaignExecutionThread(selectedCampaign.getFileName());
                     Thread t = new Thread(testExecutionHandler);
                     t.start();
@@ -203,7 +203,7 @@ public class TestCampaignMainPanel extends JPanel {
                     logger.error(ex.getMessage(), ex);
                 }
             }
-        });  
+        });
 
         builder.add(addNewMetaCampaignButton, cc.xy(colIndex, 2));
         colIndex+=2;
@@ -217,6 +217,10 @@ public class TestCampaignMainPanel extends JPanel {
         this.add(sp);
     }
 
+    public void setExecuteButtonsEnabled(boolean enabled) {
+    	runMetaCampaignButton.setEnabled(enabled);
+    }
+
     private MetaCampaignFile[] populateCampaignList() {
     	// clear the list
     	metaCampaignComboBox.removeAllItems();
@@ -225,13 +229,13 @@ public class TestCampaignMainPanel extends JPanel {
             metaCampaignComboBox.addItem(campaigns[i]);
         }
         return campaigns;
-		
+
 	}
 
 	public JTreeTable getTreeTable() {
         return treeTable;
     }
-    
+
     public CampaignExecutionThread getExecutionThread() {
         return testExecutionHandler;
     }
@@ -253,7 +257,7 @@ public class TestCampaignMainPanel extends JPanel {
 
     /**
      * Add a test campaign to the test campaigns combobox.
-     * 
+     *
      * @param campaignName test campaign name
      * @return index of the added test campaign in the combobox or -1 if not added
      */
@@ -310,28 +314,28 @@ public class TestCampaignMainPanel extends JPanel {
 	                	}
                 	}
                 	else {
-                		JOptionPane.showMessageDialog(null, 
-                				"Error during generation of TPO file", 
+                		JOptionPane.showMessageDialog(null,
+                				"Error during generation of TPO file",
                 				"Error", JOptionPane.ERROR_MESSAGE);
-                	
+
                 	}
                 }
-                
+
             } catch (PyException ex) {
                 logger.error(ex.getMessage(), ex);
-        		JOptionPane.showMessageDialog(null, 
-        				"Error during generation of TPO file\n" + ex.getMessage(), 
+        		JOptionPane.showMessageDialog(null,
+        				"Error during generation of TPO file\n" + ex.getMessage(),
         				"Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
-        		JOptionPane.showMessageDialog(null, 
-        				"Error during generation of TPO file\n" + ex.getMessage(), 
+        		JOptionPane.showMessageDialog(null,
+        				"Error during generation of TPO file\n" + ex.getMessage(),
         				"Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
     }
-    
+
     public class CampaignExecutionThread implements Runnable {
 
         private String xmlFileName;
@@ -346,7 +350,7 @@ public class TestCampaignMainPanel extends JPanel {
         }
 
         public void run() {
-            // listen to events 
+            // listen to events
             SwingUtilities.invokeLater(new UpdateButtons());
             isExecuting = true;
 
@@ -381,5 +385,5 @@ public class TestCampaignMainPanel extends JPanel {
             }
         }
     }
-        
+
 }

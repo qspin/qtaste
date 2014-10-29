@@ -291,7 +291,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
             }
         }
     }
-   
+
     protected void setTestCaseSource(final File f, final boolean activateSourceTab) {
         testCasePane.loadTestCaseSource(f, activateSourceTab, true);
     }
@@ -353,8 +353,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 //  regenerate the doc if file date of script > file date of doc
                 PythonTestScript script = fn.getPythonTestScript();
                 boolean generateDoc =  testCasePane.isDocTabSelected() && !script.isDocSynchronized();
-                
-                if (generateDoc) {                	
+
+                if (generateDoc) {
                     testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     script.generateDoc();
                     // Generate the documentation
@@ -681,7 +681,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         @Override
         public boolean isEnabled() {
-            return true;
+        	return !getTestCasePane().isExecuting &&
+                	getTestCasePane().isEnabledToExecute;
         }
     }
 
@@ -698,7 +699,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         @Override
         public boolean isEnabled() {
-            return true;
+            return !getTestCasePane().isExecuting &&
+            	getTestCasePane().isEnabledToExecute;
         }
     }
 
@@ -833,7 +835,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 	            {
 	            	tcDataPane.setFileName(fn.getPythonTestScript().getTestcaseData().getCanonicalPath());
 	            }
-	            
+
 	            TCTreeNode parentTreeNode = (TCTreeNode)tn.getParent();
 	            parentTreeNode.removeAllChildren();
 	            FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
@@ -845,7 +847,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 			} catch (IOException e1) {
 				logger.error(e1.getMessage());
 			}
-            
+
 
         }
 
@@ -895,7 +897,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			getTestCasePane().importTestSuites();
-			
+
 		}
     }
 
@@ -928,7 +930,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 	            }
 	            // update the tree view
 	            // add the tree
-	
+
 	            tn.removeAllChildren();
 	            addTreeToDir(fn.getFile(), tn);
 	            ((DefaultTreeModel) getModel()).reload(tn);
