@@ -75,7 +75,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 /**
  *
  * @author vdubois
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class MainPanel extends JFrame {
@@ -93,7 +93,7 @@ public class MainPanel extends JFrame {
     private JPanel mRightPanels;
     private TestCasePane mTestCasePanel;
     private TestCampaignMainPanel mTestCampaignPanel;
-    
+
     public MainPanel(String testSuiteDir, int numberLoops, boolean loopsInHour) {
         super();
         setTitle(title);
@@ -156,19 +156,19 @@ public class MainPanel extends JFrame {
     public JPanel getTabsPanel() {
         return mRightPanels;
     }
-    
+
     public TestCasePane getTestCasePanel() {
         return mTestCasePanel;
     }
-    
+
     public ConfigInfoPanel getHeaderPanel() {
         return mHeaderPanel;
     }
-    
+
     public TestCampaignMainPanel getTestCampaignPanel() {
         return mTestCampaignPanel;
     }
-    
+
     public void genUI() {
         try {
             getContentPane().setLayout(new BorderLayout());
@@ -183,7 +183,8 @@ public class MainPanel extends JFrame {
 
             mHeaderPanel = new ConfigInfoPanel(this);
             mTestCasePanel = new TestCasePane(this);
-            
+            mTestCampaignPanel = new TestCampaignMainPanel(this);
+
             mHeaderPanel.init();
 
             GridBagLineAdder centeradder = new GridBagLineAdder(center);
@@ -200,10 +201,8 @@ public class MainPanel extends JFrame {
             //    - Interactive: ability to invoke QTaste verbs one by one
 
             mRightPanels = new JPanel(new CardLayout());
-            
-            mRightPanels.add(mTestCasePanel, "Test Cases");
 
-            mTestCampaignPanel = new TestCampaignMainPanel(this);
+            mRightPanels.add(mTestCasePanel, "Test Cases");
             mRightPanels.add(mTestCampaignPanel, "Test Campaign");
 
             final TestCaseInteractivePanel testInterractivePanel = new TestCaseInteractivePanel();
@@ -215,12 +214,12 @@ public class MainPanel extends JFrame {
             TestCaseTree tct = new TestCaseTree(mTestCasePanel);
             JScrollPane sp2 = new JScrollPane(tct);
             mTreeTabsPanel.addTab("Test Cases", sp2);
-            
+
             // add tree view for test campaign definition
             com.qspin.qtaste.ui.testcampaign.TestCaseTree mtct = new com.qspin.qtaste.ui.testcampaign.TestCaseTree(mTestCampaignPanel.getTreeTable());
             JScrollPane sp3 = new JScrollPane(mtct);
             mTreeTabsPanel.addTab("Test Campaign", sp3);
-            
+
             genMenu(tct);
 
             // add another tab contain used for Interactive mode
@@ -245,10 +244,10 @@ public class MainPanel extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     if (e.getID()== TestCampaignMainPanel.RUN_ID) {
                         if (e.getActionCommand().equals(TestCampaignMainPanel.STARTED_CMD)) {
-                            // open the tab test cases 
+                            // open the tab test cases
                         	mTreeTabsPanel.setSelectedIndex(0);
                             mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
-                            // update the buttons                            
+                            // update the buttons
                             mTestCasePanel.setExecutingTestCampaign(true, ((TestCampaignMainPanel)e.getSource()).getExecutionThread());
                             mTestCasePanel.updateButtons();
                         }
@@ -265,7 +264,7 @@ public class MainPanel extends JFrame {
             GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
             int mainHorizontalSplitDividerLocation= guiConfiguration.getInt(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY, 285);
             splitPane.setDividerLocation(mainHorizontalSplitDividerLocation);
-            
+
             splitPane.addPropertyChangeListener(new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals("dividerLocation")) {
@@ -282,7 +281,7 @@ public class MainPanel extends JFrame {
                     }
                 }
             });
-            
+
             topanel.add(iconlabel, BorderLayout.WEST);
             topanel.add(center);
 
@@ -368,7 +367,7 @@ public class MainPanel extends JFrame {
             }
         });
         tools.add(deleteResults);
-        
+
         JMenu fileMenu = new JMenu("File");
         JMenuItem importTestSuites = new JMenuItem("Import TestSuites");
         importTestSuites.addActionListener(new ActionListener() {
@@ -376,11 +375,11 @@ public class MainPanel extends JFrame {
             public void actionPerformed(ActionEvent e) {
                //
             	mTestCasePanel.importTestSuites();
-            	
+
             }
         });
         fileMenu.add(importTestSuites);
-        
+
         JMenu help = new JMenu("Help");
         help.setMnemonic(KeyEvent.VK_H);
         JMenuItem about = new JMenuItem("About", KeyEvent.VK_A);
@@ -391,7 +390,7 @@ public class MainPanel extends JFrame {
             }
         });
         help.add(about);
-        
+
         JMenuItem ateUserManuel = new JMenuItem("User Manual");
         ateUserManuel.addActionListener(new ActionListener() {
 
@@ -400,7 +399,7 @@ public class MainPanel extends JFrame {
             }
         });
         help.add(ateUserManuel);
-        
+
         //menuBar.add(tools); // not to be used at this time!!!!!!!!!
         //menuBar.add(fileMenu);
         menuBar.add(help);
@@ -417,6 +416,6 @@ public class MainPanel extends JFrame {
             logger.error("Unable to open QTaste user manual document at the following location:'" +
                     StaticConfiguration.QTASTE_USER_MANUAL_FILE + "'");
         }
-        
+
     }
 }
