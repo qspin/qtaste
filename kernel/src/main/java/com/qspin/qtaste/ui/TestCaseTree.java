@@ -672,7 +672,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 runDlg.setAlwaysOnTop(true);
                 runDlg.setVisible(true);
                 if (!runDlg.IsCancelled) {
-                    getTestCasePane().runTestSuite(false, runDlg.getNumberOfLoops(), runDlg.isLoopsInHours());
+                    getTestCasePane().runTestSuite(false, runDlg.getNumberOfLoops(), runDlg.isLoopsInTime());
                 }
             } else {
                 getTestCasePane().runTestSuite(false);

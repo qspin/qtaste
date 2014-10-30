@@ -44,7 +44,7 @@ public abstract class TestSuite implements TestReportListener {
     private static Logger logger = Log4jLoggerFactory.getLogger(TestSuite.class);
     protected String name;
     protected int numberLoops = 1;
-    protected boolean loopsInHours = false;
+    protected boolean loopsInTime = false;
     private Date startExecutionDate;
     private Date stopExecutionDate;
     private int nbTestsToExecute = 0;
@@ -69,14 +69,14 @@ public abstract class TestSuite implements TestReportListener {
 
     /**
      * Executes the test suite once in specified debug mode.
-     * 
+     *
      * @param debug true if in debug mode, false otherwise
      * @return true if execution successful, false otherwise (aborted)
      */
     public abstract boolean executeOnce(boolean debug);
 
     /** Executes a test suite, the number of times specified by numberLoops/loopsInHours.
-     * 
+     *
      * @param debug true to execute in debug mode, false otherwise
      * @param initializeTestEngine true to initialize/terminate the test engine, false otherwise
      * @return true if execution successful, false otherwise (aborted)
@@ -88,19 +88,19 @@ public abstract class TestSuite implements TestReportListener {
         reportTestSuiteStarted();
         if (nbTestsToExecute != 0) {
             if (!initializeTestEngine || TestEngine.initialize()) {
-                if (numberLoops != 1 || loopsInHours) {
+                if (numberLoops != 1 || loopsInTime) {
                     boolean continueExecution = true;
                     int currentExecution = 1;
                     long startTime_ms = System.currentTimeMillis();
                     do {
-                        logger.info("Execution " + currentExecution + (numberLoops != -1 && !loopsInHours ? " of " + numberLoops : "") + " of test suite " + getName());
+                        logger.info("Execution " + currentExecution + (numberLoops != -1 && !loopsInTime ? " of " + numberLoops : "") + " of test suite " + getName());
                         if (!executeOnce(debug)) {
                             executionSuccess = false;
                         }
-                        if (loopsInHours) {
+                        if (loopsInTime) {
                             long elapsedTime_ms = System.currentTimeMillis() - startTime_ms;
-                            long elapsedTime_h = elapsedTime_ms / 1000 / 3600;
-                            continueExecution = elapsedTime_h < numberLoops;
+                            long elapsedTime_m = elapsedTime_ms / 1000 / 60;
+                            continueExecution = elapsedTime_m < numberLoops;
                         } else {
                         	continueExecution = numberLoops == -1 || currentExecution < numberLoops;
                         }
@@ -130,18 +130,18 @@ public abstract class TestSuite implements TestReportListener {
 
     public void reportTestSuiteStarted() {
         TestResultsReportManager.getInstance().refresh();
-        
+
         for (TestReportListener testReportListener: testReportListeners) {
             testReportListener.reportTestSuiteStarted();
-        }        
+        }
     }
 
     public void reportTestSuiteStopped() {
         TestResultsReportManager.getInstance().refresh();
-        
+
         for (TestReportListener testReportListener: testReportListeners) {
             testReportListener.reportTestSuiteStopped();
-        }        
+        }
     }
 
     public boolean isAbortedByUser() {
@@ -160,9 +160,9 @@ public abstract class TestSuite implements TestReportListener {
      */
     public void setExecutionLoops(int numberLoops, boolean loopsInHours) {
         this.numberLoops = numberLoops;
-        this.loopsInHours = loopsInHours;
+        this.loopsInTime = loopsInHours;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -202,7 +202,7 @@ public abstract class TestSuite implements TestReportListener {
             default:
                 logger.error("Invalid status: " + status);
         }
-        
+
         for (TestReportListener testReportListener: testReportListeners) {
             testReportListener.reportTestResult(status);
         }
@@ -210,12 +210,12 @@ public abstract class TestSuite implements TestReportListener {
 
     public void reportTestRetry() {
         nbTestsRetries++;
-        
+
         for (TestReportListener testResultListener: testReportListeners) {
             testResultListener.reportTestRetry();
         }
     }
-    
+
     public int getNbTestsPassed() {
         return nbTestsPassed;
     }
@@ -235,7 +235,7 @@ public abstract class TestSuite implements TestReportListener {
     public void addTestReportListener(TestReportListener listener) {
         testReportListeners.add(listener);
     }
-    
+
     public void removeTestReportListener(TestReportListener listener) {
         testReportListeners.remove(listener);
     }

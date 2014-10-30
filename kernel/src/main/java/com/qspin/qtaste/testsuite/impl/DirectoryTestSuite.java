@@ -79,7 +79,7 @@ public class DirectoryTestSuite extends TestSuite {
     }
 
     public int computeNumberTestsToExecute() {
-        if (numberLoops == -1 || loopsInHours) {
+        if (numberLoops == -1 || loopsInTime) {
             return -1;
         } else {
             int numberTestsToExecute = 0;
