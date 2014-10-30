@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -56,6 +57,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -118,19 +120,19 @@ public class Log4jPanel extends JPanel {
     public void clearLogs() {
         m_LogModel.setRowCount(0);
     }
-    
+
     public void selectAndScrollToTestCase(TestResult tr) {
     	if (tr==null) return;
     	if (tr.getTestData()==null) return;
         int index = -1;
         String startTime = new Time(tr.getStartDate().getTime()).toString();
-        String startMessage;        
+        String startMessage;
         if (tr.getRetryCount() > 0) {
             startMessage = "Retrying test script: " + tr.getName() + " (row " + tr.getTestData().getRowId() + ") after SUT restart";
         } else {
             startMessage = "Executing test script: " + tr.getName() + " (row " + tr.getTestData().getRowId() + ")";
         }
-        
+
         // search for last log line with corresponding time
         for (int i = m_LogTable.getRowCount()-1; i >= 0; i--) {
             if (m_LogTable.getValueAt(i, LOG_TIME).equals(startTime)) {
@@ -138,7 +140,7 @@ public class Log4jPanel extends JPanel {
                 break;
             }
         }
-        
+
         // search for start message
         for (int i = index; i >= 0; i--) {
             if (m_LogTable.getValueAt(i, LOG_MESSAGE).equals(startMessage)) {
@@ -150,7 +152,7 @@ public class Log4jPanel extends JPanel {
         if (index != -1) {
             // select row
             m_LogTable.setRowSelectionInterval(index, index);
-        
+
             // scroll to row
             m_UserScrollPosition = true;
             Rectangle visibleRect = m_LogTable.getCellRect(index, 0, true);
@@ -160,7 +162,7 @@ public class Log4jPanel extends JPanel {
             m_LogTable.clearSelection();
         }
     }
-    
+
     private JCheckBox addFilterLogCheckBox(String type, String name, String methodName, boolean defaultValue) {
         m_FilterMethod.put(type, methodName);
         JCheckBox checkBox = new JCheckBox(name);
@@ -365,7 +367,16 @@ public class Log4jPanel extends JPanel {
             constraint.weightx = 0.0;
             constraint.weighty = 0.0;
             add(m_LevelAndMessageFilterPanel, constraint);
-            add(m_SourceFilterPanel, constraint);
+
+            constraint.ipady = 10;
+            constraint.insets = new Insets(0,0,4,0);
+            add(new JScrollPane(m_SourceFilterPanel,
+            		  ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
+            		  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED),
+            		constraint);
+
+            constraint.ipady = 0;
+            constraint.insets = new Insets(0,0,0,0);
             constraint.fill = GridBagConstraints.BOTH;
             constraint.gridheight = GridBagConstraints.REMAINDER;
             constraint.weightx = 1.0;
@@ -380,14 +391,14 @@ public class Log4jPanel extends JPanel {
         m_TreeLogTable  = new JTreeTable(m_TreeLogModel);
         this.add(new JScrollPane(m_TreeLogTable));
         this.add(m_FilterPanel, BorderLayout.NORTH);
-        
+
         JScrollPane scrollPane = (JScrollPane) m_TreeLogTable.getParent().getParent();
         SpringUtilities.makeCompactGrid(m_FilterPanel, 1, m_FilterCheckBoxes.size(), 5, 5, 2, 2);
          */
         } catch (SecurityException ex) {
             logger.error(ex);
         }
-        
+
         // disable tooltip auto-dismiss
         ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
     }
@@ -640,14 +651,14 @@ public class Log4jPanel extends JPanel {
     /////////////////////////////////////////////////////////////////////////////////////
     public class TableMouseListener extends MouseAdapter {
 
-        private void evaluatePopup(MouseEvent e) { 
+        private void evaluatePopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
                 // force selection of clicked row if not selected
                 int clickedRow = m_LogTable.rowAtPoint(e.getPoint());
                 if (!m_LogTable.isRowSelected(clickedRow)) {
                     m_LogTable.setRowSelectionInterval(clickedRow, clickedRow);
                 }
-                
+
                 // display the context dialog
                 JPopupMenu menu = new JPopupMenu();
                 menu.add(new ClearAction());
