@@ -52,37 +52,37 @@ import com.qspin.qtaste.ui.tools.FileMask;
 public class FileUtilities {
 
 	private static Logger logger = Log4jLoggerFactory.getLogger(FileUtilities.class);
-	    
+
 	public static File[] listSortedFiles(File directory, FileMask fileMask) {
 		File[] fList = directory.listFiles(fileMask);
 		if (fList==null) return fList;
 		// sort testbed by alphabetic order (ignoring case)
 		Arrays.sort(fList, new Comparator<File>() {
-		
+
 		    public int compare(File o1, File o2) {
 		        return o1.getName().compareToIgnoreCase(o2.getName());
 		    }
 		});
 		return  fList;
 	}
-	
+
 	public static File[] listSortedFiles(File directory) {
 		return listSortedFiles(directory, null);
 	}
-	
+
 	public static File[] listSortedFiles(File directory, FileFilter filter) {
 		File[] fList = directory.listFiles(filter);
 		if (fList==null) return fList;
 		// sort testbed by alphabetic order (ignoring case)
 		Arrays.sort(fList, new Comparator<File>() {
-		
+
 		    public int compare(File o1, File o2) {
 		        return o1.getName().compareToIgnoreCase(o2.getName());
 		    }
 		});
 		return  fList;
 	}
-	
+
 	public static void copy(String sourceName, String destName) {
 	    try {
 	        File sourceFile = new File(sourceName);
@@ -94,24 +94,24 @@ public class FileUtilities {
 	        logger.error("Impossible to copy source file '" +sourceName + "' to '" + destName + "'");
 	    }
 	}
-	
-	/** Fast & simple file copy. 
+
+	/** Fast & simple file copy.
 	 * @param source source file
-	 * @param dest destination file or directory  
+	 * @param dest destination file or directory
 	 */
 	public static void copy(File source, File dest) throws IOException {
 		if (dest.isDirectory()) {
 			dest = new File(dest + File.separator + source.getName());
 		}
-		
+
 		FileChannel in = null, out = null;
-	    try {          
+	    try {
 	         in = new FileInputStream(source).getChannel();
 	         out = new FileOutputStream(dest).getChannel();
-	 
+
 	         long size = in.size();
 	         MappedByteBuffer buf = in.map(FileChannel.MapMode.READ_ONLY, 0, size);
-	 
+
 	         out.write(buf);
 	    } finally {
 	         if (in != null)  in.close();
@@ -148,6 +148,14 @@ public class FileUtilities {
 		}
 	}
 
+	public static boolean deleteFile(File path) {
+		if( path.exists() ) {
+			return path.delete();
+	    }
+
+		return false;
+	}
+
 	/**
 	 * Reads file content.
 	 * @param filename name of the file to read
@@ -166,7 +174,7 @@ public class FileUtilities {
 	    }
 	    return content.toString();
 	}
-	
+
 	public static void copyResourceFile(Class<?> clazz, String sourceResourceFileName, String destFileName) throws URISyntaxException, IOException {
     	InputStream srcFileStream = clazz.getResourceAsStream(sourceResourceFileName);
         if (srcFileStream == null) {
@@ -178,11 +186,11 @@ public class FileUtilities {
 		if (destFile.isDirectory()) {
 			destFile = new File(destFile + File.separator + sourceResourceFileName.substring(sourceResourceFileName.lastIndexOf('/') + 1));
 		}
-		
+
 		FileChannel out = null;
 	    try {
 	         out = new FileOutputStream(destFile).getChannel();
-	         
+
 	         byte[] buf = new byte [srcFileStream.available()];
 	         while (srcFileStream.available() > 0) {
 	        	 int size = srcFileStream.read(buf);
@@ -193,7 +201,7 @@ public class FileUtilities {
 	         if (out != null) out.close();
 	    }
 	}
-	
+
 	public static void copyResourceFiles(Class<?> clazz, String sourceResourceDirName, String destDirName) throws URISyntaxException, IOException {
         // create directories if any
         File destDirFile = new File(destDirName);
@@ -203,18 +211,18 @@ public class FileUtilities {
 		for (String resourceFileName: resourceFileNames) {
 			resourceFileName = sourceResourceDirName + "/" + resourceFileName;
 			copyResourceFile(clazz, resourceFileName, destDirName);
-		}		
+		}
 	}
 
 	/**
 	 * List directory files in a resource folder. Not recursive.
 	 * Works for regular files and also JARs.
-	 * 
+	 *
 	 * @param clazz Any java class that lives in the same place as the resources you want.
 	 * @param resourceDirName resource folder path.
 	 * @return the full path name of each folder file, not the full paths.
-	 * @throws URISyntaxException 
-	 * @throws IOException 
+	 * @throws URISyntaxException
+	 * @throws IOException
 	 */
 	public static String[] listResourceFiles(Class<?> clazz, String resourceDirName) throws URISyntaxException, IOException {
 		if (!resourceDirName.endsWith("/")) {
@@ -235,7 +243,7 @@ public class FileUtilities {
 	    		fileNames[i] = entries[i].toString();
 	    	}
 	    	return fileNames;
-	    } 
+	    }
 
 	    if (dirURL.getProtocol().equals("jar")) {
 	        String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
@@ -255,8 +263,8 @@ public class FileUtilities {
 	        	}
 	        }
 	        return result.toArray(new String[result.size()]);
-	      } 
-	        
+	      }
+
 	      throw new UnsupportedOperationException("Cannot list files for URL "+dirURL);
 	  }
 }

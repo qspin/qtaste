@@ -21,8 +21,11 @@ package com.qspin.qtaste.ui.testcampaign;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -36,6 +39,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
@@ -120,6 +124,13 @@ public class TestCampaignMainPanel extends JPanel {
                 if (newCampaign != null && newCampaign.length() > 0) {
                     int index = addTestCampaign(newCampaign);
                     metaCampaignComboBox.setSelectedIndex(index);
+                    MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
+                    selectedCampaign = currentSelectedCampaign;
+                    if (selectedCampaign != null) {
+                    	treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
+                    }
+                    metaCampaignComboBox.validate();
+                    metaCampaignComboBox.repaint();
                 }
             }
         });
@@ -134,6 +145,13 @@ public class TestCampaignMainPanel extends JPanel {
         colIndex+=2;
         builder.add(metaCampaignComboBox, cc.xy(colIndex, 2));
         colIndex+=2;
+
+        // add test campaign mouse listener, for the Rename and Remove actions
+        TestcampaignMouseListener testcampaignMouseListener = new TestcampaignMouseListener();
+        java.awt.Component[] mTestcampaignListComponents = metaCampaignComboBox.getComponents();
+        for (int i = 0; i < mTestcampaignListComponents.length; i++) {
+        	mTestcampaignListComponents[i].addMouseListener(testcampaignMouseListener);
+        }
 
         metaCampaignComboBox.addActionListener(new ActionListener() {
 
@@ -154,6 +172,8 @@ public class TestCampaignMainPanel extends JPanel {
 	                    } catch (ConfigurationException ex) {
 	                        logger.error("Error while saving GUI configuration: " + ex.getMessage(), ex);
 	                    }
+	                } else {
+	                	treeTable.removeAll();
 	                }
                 }
             }
@@ -382,6 +402,87 @@ public class TestCampaignMainPanel extends JPanel {
                         al.actionPerformed(new ActionEvent(TestCampaignMainPanel.this, RUN_ID, STOPPED_CMD));
                     }
                 }
+            }
+        }
+    }
+
+    public class TestcampaignMouseListener extends MouseAdapter {
+
+        private void evaluatePopup(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                // display the context dialog
+                JPopupMenu menu = new JPopupMenu();
+                menu.add(new RenameCampaignAction());
+                menu.add(new RemoveCampaignAction());
+
+                Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), metaCampaignComboBox);
+                menu.show(metaCampaignComboBox, pt.x, pt.y);
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            evaluatePopup(e);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            evaluatePopup(e);
+        }
+
+		class RenameCampaignAction extends AbstractAction {
+
+            public RenameCampaignAction() {
+                super("Rename Campaign");
+            }
+
+            public void actionPerformed(ActionEvent e) {
+            	MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
+            	String input = JOptionPane.showInputDialog(null,
+                        "Give the new name of the test " + currentSelectedCampaign.getCampaignName(),
+                        currentSelectedCampaign.getCampaignName()
+                        );
+                if (input==null) return;
+
+                boolean result = currentSelectedCampaign.renameFile(input);
+                if (!result) {
+                	logger.error("Impossible to rename " + currentSelectedCampaign.getFileName() + " to " + input);
+                	return;
+                }
+                metaCampaignComboBox.validate();
+                metaCampaignComboBox.repaint();
+            }
+        }
+
+		class RemoveCampaignAction extends AbstractAction {
+
+            public RemoveCampaignAction() {
+                super("Remove Campaign");
+            }
+
+            public void actionPerformed(ActionEvent e) {
+            	MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
+
+            	if (JOptionPane.showConfirmDialog(null, "Are you sure to remove the campaign '" + currentSelectedCampaign.getCampaignName() + "'",
+            			"Confirmation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) ==
+                        JOptionPane.OK_OPTION)
+                {
+            		// delete file
+            		currentSelectedCampaign.removeFile();
+            		// remove from combo box
+            		metaCampaignComboBox.removeItemAt(metaCampaignComboBox.getSelectedIndex());
+            		if (metaCampaignComboBox.getItemCount() > 0) {
+                        metaCampaignComboBox.setSelectedIndex(0);
+                        currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
+                        selectedCampaign = currentSelectedCampaign;
+                    } else {
+                    	selectedCampaign =  null;
+                    	metaCampaignComboBox.setSelectedIndex(-1);
+                    }
+
+                }
+                metaCampaignComboBox.validate();
+                metaCampaignComboBox.repaint();
             }
         }
     }

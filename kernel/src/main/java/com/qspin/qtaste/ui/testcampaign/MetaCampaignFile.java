@@ -39,7 +39,7 @@ public class MetaCampaignFile {
 
     private File file;
     private String campaignName;
-    
+
     static public MetaCampaignFile[] getExistingCampaigns() {
         ArrayList<MetaCampaignFile> campaignArray = new ArrayList<MetaCampaignFile>();
         File campaignDir = new File (StaticConfiguration.CAMPAIGN_DIRECTORY);
@@ -57,7 +57,7 @@ public class MetaCampaignFile {
     public MetaCampaignFile(String fileName) {
         file = new File(StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + fileName + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
         campaignName = fileName;
-    } 
+    }
 
     public String toString() {
         return getCampaignName();
@@ -69,5 +69,36 @@ public class MetaCampaignFile {
     public String getFileName() {
         return file.getPath();
     }
-    
+
+    public File getFile() {
+    	return file;
+    }
+
+    public boolean renameFile(String campaign) {
+    	boolean ret = false;
+    	if (file == null)
+    		return ret;
+
+    	File newFile = new File(StaticConfiguration.CAMPAIGN_DIRECTORY +
+    			File.separator + campaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
+    	ret = file.renameTo(newFile);
+    	if (ret) {
+    		file = newFile;
+    		campaignName = campaign;
+    	}
+
+    	return ret;
+    }
+
+    public boolean removeFile() {
+    	if (file == null)
+    		return false;
+    	if (FileUtilities.deleteFile(file)) {
+    		campaignName = "";
+    		return true;
+    	}
+
+    	return false;
+    }
+
 }
