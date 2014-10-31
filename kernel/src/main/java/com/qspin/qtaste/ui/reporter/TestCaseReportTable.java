@@ -98,11 +98,12 @@ public class TestCaseReportTable {
     protected JTextArea stackTrace;
     protected TestCaseInteractivePanel tcInteractivePanel;
     public static final int STATUS = 0;
-    public static final int TEST_CASE = 1;
-    public static final int DETAILS = 2;
-    public static final int RESULT = 3;
-    public static final int EXEC_TIME = 4;
-    public static final int TC = 5;
+    public static final int TESTBED = 1;
+    public static final int TEST_CASE = 2;
+    public static final int DETAILS = 3;
+    public static final int RESULT = 4;
+    public static final int EXEC_TIME = 5;
+    public static final int TC = 6;
     protected ImageIcon passedImg,  failedImg,  runningImg,  snapShotImg,  naImg;
     private boolean interactive;
     private boolean userScrollPosition = false;
@@ -163,7 +164,7 @@ public class TestCaseReportTable {
         final String detailsColumnProperty = tableLayoutProperty + ".details";
         final String resultColumnProperty = tableLayoutProperty + ".result";
 
-        tcModel = new DefaultTableModel(new Object[]{"Status", "Test Case", "Details", "Result", "Time", "."}, 0) {
+        tcModel = new DefaultTableModel(new Object[]{"Status", "Testbed", "Test Case", "Details", "Result", "Time", "."}, 0) {
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -190,7 +191,7 @@ public class TestCaseReportTable {
         };
         tcTable.setColumnSelectionAllowed(false);
 
-        int tcWidth, tcStatusWidth, tcDetailsWidth, tcResultWidth;
+        int tcWidth, tcStatusWidth, tcTestbedWidth, tcDetailsWidth, tcResultWidth;
         GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
         List<?> list = guiConfiguration.configurationsAt(tableLayoutProperty);
         if (!list.isEmpty()) {
@@ -222,6 +223,7 @@ public class TestCaseReportTable {
         tcTableColumnModel.getColumn(TEST_CASE).setPreferredWidth(tcWidth);
         tcTableColumnModel.getColumn(STATUS).setPreferredWidth(tcStatusWidth);
         tcTableColumnModel.getColumn(STATUS).setMaxWidth(40);
+        tcTableColumnModel.getColumn(TESTBED).setPreferredWidth(120);
         tcTableColumnModel.getColumn(DETAILS).setPreferredWidth(tcDetailsWidth);
         tcTableColumnModel.getColumn(EXEC_TIME).setPreferredWidth(80);
         tcTableColumnModel.getColumn(EXEC_TIME).setMinWidth(80);
@@ -328,6 +330,10 @@ public class TestCaseReportTable {
             if (tr.getStatus() != TestResult.Status.RUNNING) {
                 cols[EXEC_TIME] = tr.getFormattedElapsedTime(true);
             }
+
+            TestBedConfiguration testbed = TestBedConfiguration.getInstance();
+            cols[TESTBED] = testbed.getFile().getName().replace("." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION, "");
+
             cols[TC] = tr;
             //tcModel.addRow(cols);
             Integer rowNum = new Integer(tcModel.getRowCount());
@@ -407,6 +413,10 @@ public class TestCaseReportTable {
         TestResult.Status testCaseStatus = tr.getStatus();
         ImageIcon statusImg = getImage(testCaseStatus);
         tcModel.setValueAt(statusImg, rowNum, STATUS);
+
+        TestBedConfiguration testbed = TestBedConfiguration.getInstance();
+        tcModel.setValueAt(testbed.getFile().getName().replace("." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION, ""),
+        		rowNum, TESTBED);
 
         if ((testCaseStatus == TestResult.Status.FAIL) || ((testCaseStatus == TestResult.Status.NOT_AVAILABLE))) {
             int selectedRow = tcTable.getSelectedRow();
@@ -587,7 +597,7 @@ public class TestCaseReportTable {
                 if (interactive) {
                     menu.add(new ClearListAction());
                     menu.add(new ClearAllListAction());
-                	menu.add(new ReExecuteCommandsAction());          	
+                	menu.add(new ReExecuteCommandsAction());
                 } else {
                 	menu.add(new ReExecuteTestsAction());
                 	menu.add(new GenerateTestCampaignAction());
@@ -595,7 +605,7 @@ public class TestCaseReportTable {
                 /*
                 if (table.getName().equals("tcTable")) {
                     menu.addSeparator();
-                	menu.add(new SaveAsAction(table));                    
+                	menu.add(new SaveAsAction(table));
                 }
                 */
                 Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), tcTable);
@@ -683,7 +693,7 @@ public class TestCaseReportTable {
         public GenerateTestCampaignAction() {
             super("Generate test campaign from failed tests");
         }
-    	
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// get the current testbed
@@ -710,9 +720,9 @@ public class TestCaseReportTable {
                    JOptionPane.showMessageDialog(null, "Campaign file has been saved in " + fileName +  ".", "Information", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
-            
+
 		}
-    	
+
     }
     class ReExecuteTestsAction extends AbstractAction {
 
@@ -754,7 +764,7 @@ public class TestCaseReportTable {
             };
             reExecuteTestsThread.start();
         }
-                
+
         @Override
         public boolean isEnabled() {
             if (tcPane.isExecuting) {
@@ -773,14 +783,14 @@ public class TestCaseReportTable {
         }
     }
 
-    
-    class ReExecuteCommandsAction extends AbstractAction{ 
 
-        public ReExecuteCommandsAction(){ 
-            super("Re-execute command(s)"); 
-        } 
+    class ReExecuteCommandsAction extends AbstractAction{
 
-        public void actionPerformed(ActionEvent e){ 
+        public ReExecuteCommandsAction(){
+            super("Re-execute command(s)");
+        }
+
+        public void actionPerformed(ActionEvent e){
         	int[] selectedRows = tcTable.getSelectedRows();
         	final String[] commands = new String[selectedRows.length];
             for (int i = 0; i < selectedRows.length; i++) {
@@ -790,7 +800,7 @@ public class TestCaseReportTable {
             new Thread() {
             	@Override
             	public void run() {
-            
+
             		for (final String command: commands) {
 		                try {
 							SwingUtilities.invokeAndWait(new Runnable() {
@@ -804,9 +814,9 @@ public class TestCaseReportTable {
             		}
             	}
             }.start();
-        } 
+        }
 
-        public boolean isEnabled(){ 
+        public boolean isEnabled(){
         	int[] selectedRows = tcTable.getSelectedRows();
             for (int i = 0; i < selectedRows.length; i++) {
                 String tc = (String) tcModel.getValueAt(selectedRows[i], TestCaseReportTable.TEST_CASE);
@@ -817,9 +827,9 @@ public class TestCaseReportTable {
             }
 
             return true;
-        } 
+        }
     }
-    
+
 
     /**
      * Table cell renderer.
@@ -832,7 +842,7 @@ public class TestCaseReportTable {
             JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             // set text alignment
-            if ((column == STATUS) || (column == EXEC_TIME)) {
+            if ((column == STATUS) || (column == EXEC_TIME) || (column == TESTBED)) {
                 cell.setHorizontalAlignment(CENTER);
             } else {
                 cell.setHorizontalAlignment(LEFT);
