@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly"
+        or "mvn install assembly:single" -->
+
+    <parent>
+        <groupId>com.qspin.qtaste</groupId>
+        <artifactId>qtaste-testapi-parent</artifactId>
+        <version>2.2.2-SNAPSHOT</version>
+        <relativePath>../../testapi-parent</relativePath>
+    </parent>
+
+    <groupId>com.qspin.qtaste</groupId>
+    <artifactId>qtaste-neptis-testapi</artifactId>
+    <packaging>jar</packaging>
+    <name>QTaste Test API for Prosys OPC-UA</name>
+    <version>2.2.2-SNAPSHOT</version>
+
+    <build>
+        <finalName>qtaste-testapi</finalName>
+        <plugins>
+            <!-- plugin to build deploy jar file, including version information -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+
+            <!-- plugin to get sources of other testapi dependency projects, for testapi
+                doc generation -->
+            <!--plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-testapi-src</id>
+                        <configuration>
+                            <includeArtifactIds>qtaste-toolbox-testapi</includeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin-->
+<!-- plugin to get sources of other testapi dependency projects, for testapi
+                doc generation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                   <!-- Unpack Toolbox to generate Documentation -->
+                   <execution>
+                      <id>unpack-testapi-src</id>
+                      <configuration>
+                         <includeArtifactIds>qtaste-toolbox-testapi</includeArtifactIds>
+                      </configuration>
+                   </execution>
+                    <!-- Unpack selenium in order to generate TestAPI Documentation -->
+                    <execution>
+                        <id>unpack-selenium-src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <includeArtifactIds>selenium-java-client-driver</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Unpack JavaGUI in order to generate TestAPI Documentation -->
+                    <execution>
+                        <id>unpack-javagui-src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <includeArtifactIds>javagui</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- plugin to generate testapi doc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+            <!-- plugin to install source artifact -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>apache-releases</id>
+            <name>Apache Releases</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+                 <repository>
+      <id>oosnmpRepo</id>
+      <name>oosnmp.com Repository</name>
+      <url>https://oosnmp.net/dist/release</url>
+    </repository>
+    </repositories>
+    <dependencies>
+        <!-- QTaste kernel -->
+        <dependency>
+            <groupId>com.qspin.qtaste</groupId>
+            <artifactId>qtaste-kernel</artifactId>
+            <version>2.2.2-SNAPSHOT</version>
+        </dependency>
+
+        <!-- other QTaste testapi projects -->
+        <dependency>
+            <groupId>com.qspin.qtaste</groupId>
+            <artifactId>qtaste-toolbox-testapi</artifactId>
+            <version>2.2.2-SNAPSHOT</version>
+        </dependency>
+        <!-- EXTERNAL LIBRARIES -->
+        <!-- Libraries are ordered by group/artifact. -->
+        <dependency>
+            <groupId>unknown</groupId>
+            <artifactId>bcprov-jdk15on-147</artifactId>
+            <version>15on-147</version>
+        </dependency>
+        <dependency>
+            <groupId>unknown</groupId>
+            <artifactId>Opc.Ua.Stack</artifactId>
+            <version>1.02.335.7</version>
+        </dependency>
+        <dependency>
+            <groupId>Prosys</groupId>
+            <artifactId>OPC-UA-Java-SDK-Binary</artifactId>
+            <version>2.0.2-275</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+            <version>1.0.2</version>
+            <artifactId>selenium-java-client-driver</artifactId>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+            <version>1.0.2</version>
+            <artifactId>selenium-java-client-driver</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+            <version>1.0.1</version>
+            <artifactId>selenium-java-client-driver</artifactId>
+            <classifier>javadoc</classifier>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.30</version>
+        </dependency>
+        <dependency>
+                <groupId>org.snmp4j</groupId>
+                <artifactId>snmp4j</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+    </dependencies>
+</project>
