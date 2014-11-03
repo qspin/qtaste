@@ -55,5 +55,18 @@ public interface Utility extends SingletonComponent {
      */
     public void hideMessageDialog();
 
+    /**
+     * Shows a input dialog window to user input a String value.
+     *
+     * @param message the message to be displayed in the dialog
+     * @param defaultValue default value for the user input
+     */
     public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException;
+
+    /**
+     * Shows a confirmation input dialog window (Yes/No).
+     *
+     * @param message the message to be displayed in the dialog
+     */
+    public boolean getUserConfirmation(String messageToDisplay) throws QTasteException;
 }

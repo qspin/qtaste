@@ -88,12 +88,12 @@ public abstract class TestScript implements Executable {
         final String INTERACTIVE_REPORT_NAME = "Interactive";
         boolean returnStatus = true;
         TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-        if (testSuite == null && 
+        if (testSuite == null &&
         		(reportManager.getReportName() == null ||  reportManager.getReportName().equals(INTERACTIVE_REPORT_NAME)) ) {
             reportManager.startReport(new Date(), INTERACTIVE_REPORT_NAME);
         }
         testResults = new LinkedList<TestResult>();
-        
+
         for (TestData data : ds.getData()) {
             if (data.isSelected()) {
                 data.setTestCaseDirectory(fileName.toString());
@@ -126,7 +126,7 @@ public abstract class TestScript implements Executable {
 
                     int timeout = DEFAULT_TIMEOUT;
                     if (debug) {
-                        logger.info("Not using test timeout because running in debug mode");                    	
+                        logger.info("Not using test timeout because running in debug mode");
                     } else {
 	                    try {
 	                        timeout = data.getIntValue("TIMEOUT");
@@ -156,6 +156,10 @@ public abstract class TestScript implements Executable {
 
                     taskThread.start();
                     boolean taskThreadTerminated = taskThread.waitForEnd();
+                    //TODO: Issue #141: "... handle the test timeout by subtracting the time passed while the pop-up is displayed"
+                    // One possibility is to implement a Timeout manager to be able to change timeout behavior while thread is still running.
+                    // In this case, this shall be available from e.g. Utility (open input pop-up).
+                    // One idea to implement the timeout mechanism is to use conditional variables + mutex.
 
                     reportManager.refresh();
 
@@ -170,7 +174,7 @@ public abstract class TestScript implements Executable {
                     }
 
                     status = testResult.getStatus();
-                    if (status != TestResult.Status.SUCCESS) 
+                    if (status != TestResult.Status.SUCCESS)
                     {
                         if (status == TestResult.Status.FAIL) {
                            needToRetry = TestEngine.setNeedToRestartSUT();
@@ -237,13 +241,13 @@ public abstract class TestScript implements Executable {
 
     public void handleQTasteException(QTasteException e, TestResult result) {
     	String message = null;
-    	
+
     	if (e instanceof QTasteTestFailException) {
             result.setStatus(TestResult.Status.FAIL);
-            message = e.getMessage();    		
+            message = e.getMessage();
     	} else if (e instanceof QTasteDataException) {
             result.setStatus(TestResult.Status.NOT_AVAILABLE);
-            message = e.getMessage();    		
+            message = e.getMessage();
     	} else {
             result.setStatus(TestResult.Status.NOT_AVAILABLE);
             message = e.getMessage();
@@ -253,9 +257,9 @@ public abstract class TestScript implements Executable {
                     break;
                 }
                 message += "\nat " + elements[i].getClassName() + "." + elements[i].getMethodName() + "(" + elements[i].getFileName() + ":" + elements[i].getLineNumber() + ")";
-            }    		
+            }
     	}
-    	
+
     	result.stop();
         result.setExtraResultDetails(message);
     }

@@ -70,7 +70,7 @@ public class UtilityImpl implements Utility {
 			throw new QTasteException("Error in createScreenshot: " + e.getMessage());
 		}
 	}
-	
+
     public void showMessageDialog(String title, String message, boolean modal) {
         if (messageDialog == null) {
             optionPane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE);
@@ -102,6 +102,40 @@ public class UtilityImpl implements Utility {
 	@Override
 	public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException {
 		return JOptionPane.showInputDialog(messageToDisplay, defaultValue);
+	}
+
+	@Override
+	public boolean getUserConfirmation(String messageToDisplay) throws QTasteException {
+		if (messageDialog == null) {
+            optionPane = new JOptionPane(messageToDisplay, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+            messageDialog = optionPane.createDialog("Input");
+            messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        } else {
+            messageDialog.setTitle("Input");
+            optionPane.setMessage(messageToDisplay);
+        }
+        // don't set modal to true now, because we use the setAlwaysOnTop(true)/setAlwaysOnTop(false)
+        // trick to get the focus, but we don't really want an "AlwaysOnTop" window
+        messageDialog.setModal(false);
+        messageDialog.pack();
+        messageDialog.setAlwaysOnTop(true);
+        messageDialog.setVisible(true);
+        messageDialog.setAlwaysOnTop(false);
+
+        messageDialog.setVisible(false);
+        messageDialog.setModal(true);
+        messageDialog.setVisible(true);
+
+        // Get selected option value
+        Object selectedValue = optionPane.getValue();
+        if(selectedValue == null) {
+        	return false;
+        }
+        if(selectedValue instanceof Integer) {
+        	return ( ((Integer)selectedValue).intValue() == JOptionPane.YES_OPTION);
+        }
+
+        return false;
 	}
 
 }
