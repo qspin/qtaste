@@ -60,9 +60,15 @@
                     </execution>
 
                     <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
                         <id>unpack-testapi-src</id>
                         <configuration>
+                            <classifier>sources</classifier>
                             <includeArtifactIds>qtaste-toolbox-testapi</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
