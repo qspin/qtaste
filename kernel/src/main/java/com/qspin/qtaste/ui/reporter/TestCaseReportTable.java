@@ -37,6 +37,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -98,10 +99,10 @@ public class TestCaseReportTable {
     protected JTextArea stackTrace;
     protected TestCaseInteractivePanel tcInteractivePanel;
     public static final int STATUS = 0;
-    public static final int TESTBED = 1;
-    public static final int TEST_CASE = 2;
-    public static final int DETAILS = 3;
-    public static final int RESULT = 4;
+    public static final int TEST_CASE = 1;
+    public static final int DETAILS = 2;
+    public static final int RESULT = 3;
+    public static final int TESTBED = 4;
     public static final int EXEC_TIME = 5;
     public static final int TC = 6;
     protected ImageIcon passedImg,  failedImg,  runningImg,  snapShotImg,  naImg;
@@ -162,9 +163,10 @@ public class TestCaseReportTable {
         final String statusColumnProperty = tableLayoutProperty + ".status";
         final String testCaseColumnProperty = tableLayoutProperty + ".test_case";
         final String detailsColumnProperty = tableLayoutProperty + ".details";
+        final String testbedColumnProperty = tableLayoutProperty + ".testbed";
         final String resultColumnProperty = tableLayoutProperty + ".result";
 
-        tcModel = new DefaultTableModel(new Object[]{"Status", "Testbed", "Test Case", "Details", "Result", "Time", "."}, 0) {
+        tcModel = new DefaultTableModel(new Object[]{"Status", "Test Case", "Details", "Result", "Testbed", "Time", "."}, 0) {
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -191,24 +193,48 @@ public class TestCaseReportTable {
         };
         tcTable.setColumnSelectionAllowed(false);
 
-        int tcWidth, tcStatusWidth, tcTestbedWidth, tcDetailsWidth, tcResultWidth;
+        int tcWidth = interactive ? 360 : 480;
+        int tcStatusWidth = 40;
+        int tcTestbedWidth = 100;
+        int tcDetailsWidth = 360;
+        int tcResultWidth = 150;
         GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
         List<?> list = guiConfiguration.configurationsAt(tableLayoutProperty);
         if (!list.isEmpty()) {
-            tcWidth = guiConfiguration.getInt(testCaseColumnProperty);
-            tcStatusWidth = guiConfiguration.getInt(statusColumnProperty);
-            tcDetailsWidth = guiConfiguration.getInt(detailsColumnProperty);
+            try {
+            	tcWidth = guiConfiguration.getInt(testCaseColumnProperty);
+            } catch (NoSuchElementException ex) {
+            	guiConfiguration.setProperty(testCaseColumnProperty, tcWidth);
+            }
+            try {
+            	tcStatusWidth = guiConfiguration.getInt(statusColumnProperty);
+            } catch (NoSuchElementException ex) {
+            	guiConfiguration.setProperty(statusColumnProperty, tcStatusWidth);
+            }
+            try {
+            	tcDetailsWidth = guiConfiguration.getInt(detailsColumnProperty);
+            } catch (NoSuchElementException ex) {
+            	guiConfiguration.setProperty(detailsColumnProperty, tcDetailsWidth);
+            }
+            try {
+            	tcTestbedWidth = guiConfiguration.getInt(testbedColumnProperty);
+            } catch (NoSuchElementException ex) {
+            	guiConfiguration.setProperty(testbedColumnProperty, tcTestbedWidth);
+            }
             if (interactive) {
-                tcResultWidth = guiConfiguration.getInt(resultColumnProperty);
+            	try {
+            		tcResultWidth = guiConfiguration.getInt(resultColumnProperty);
+                } catch (NoSuchElementException ex) {
+                	guiConfiguration.setProperty(resultColumnProperty, tcResultWidth);
+                }
             }
         } else {
             tcWidth = interactive ? 360 : 480;
-            tcStatusWidth = 40;
-            tcDetailsWidth = 360;
-            tcResultWidth = 150;
+
             guiConfiguration.setProperty(testCaseColumnProperty, tcWidth);
             guiConfiguration.setProperty(statusColumnProperty, tcStatusWidth);
             guiConfiguration.setProperty(detailsColumnProperty, tcDetailsWidth);
+            guiConfiguration.setProperty(testbedColumnProperty, tcTestbedWidth);
             if (interactive) {
                 guiConfiguration.setProperty(resultColumnProperty, tcResultWidth);
             }
@@ -223,11 +249,11 @@ public class TestCaseReportTable {
         tcTableColumnModel.getColumn(TEST_CASE).setPreferredWidth(tcWidth);
         tcTableColumnModel.getColumn(STATUS).setPreferredWidth(tcStatusWidth);
         tcTableColumnModel.getColumn(STATUS).setMaxWidth(40);
-        tcTableColumnModel.getColumn(TESTBED).setPreferredWidth(120);
         tcTableColumnModel.getColumn(DETAILS).setPreferredWidth(tcDetailsWidth);
-        tcTableColumnModel.getColumn(EXEC_TIME).setPreferredWidth(80);
-        tcTableColumnModel.getColumn(EXEC_TIME).setMinWidth(80);
-        tcTableColumnModel.getColumn(EXEC_TIME).setMaxWidth(80);
+        tcTableColumnModel.getColumn(TESTBED).setPreferredWidth(tcTestbedWidth);
+        tcTableColumnModel.getColumn(EXEC_TIME).setPreferredWidth(70);
+        tcTableColumnModel.getColumn(EXEC_TIME).setMinWidth(70);
+        tcTableColumnModel.getColumn(EXEC_TIME).setMaxWidth(70);
         tcTableColumnModel.removeColumn(tcTableColumnModel.getColumn(TC));
         if (!interactive) {
             tcTable.getSelectionModel().addListSelectionListener(new TCResultsSelectionListeners());
@@ -247,15 +273,17 @@ public class TestCaseReportTable {
             public void columnMarginChanged(ChangeEvent e) {
                 try {
                     // save the current layout
+                	int tcStatusWidth = tcTable.getColumnModel().getColumn(STATUS).getWidth();
                     int tcWidth = tcTable.getColumnModel().getColumn(TEST_CASE).getWidth();
-                    int tcStatusWidth = tcTable.getColumnModel().getColumn(STATUS).getWidth();
                     int tcDetailsWidth = tcTable.getColumnModel().getColumn(DETAILS).getWidth();
                     int tcResultWidth = tcTable.getColumnModel().getColumn(RESULT).getWidth();
+                    int tcTestbedWidth = tcTable.getColumnModel().getColumn(TESTBED).getWidth();
                     // save it into the settings
                     GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-                    guiConfiguration.setProperty(testCaseColumnProperty, tcWidth);
                     guiConfiguration.setProperty(statusColumnProperty, tcStatusWidth);
+                    guiConfiguration.setProperty(testCaseColumnProperty, tcWidth);
                     guiConfiguration.setProperty(detailsColumnProperty, tcDetailsWidth);
+                    guiConfiguration.setProperty(testbedColumnProperty, tcTestbedWidth);
                     if (interactive) {
                         guiConfiguration.setProperty(resultColumnProperty, tcResultWidth);
                     }
@@ -328,7 +356,7 @@ public class TestCaseReportTable {
             }
             cols[STATUS] = getImage(tr.getStatus());
             if (tr.getStatus() != TestResult.Status.RUNNING) {
-                cols[EXEC_TIME] = tr.getFormattedElapsedTime(true);
+                cols[EXEC_TIME] = tr.getFormattedElapsedTime(false);
             }
 
             TestBedConfiguration testbed = TestBedConfiguration.getInstance();
@@ -389,7 +417,7 @@ public class TestCaseReportTable {
         if (lastRow >= 0) {
             TestResult tr = (TestResult) tcModel.getValueAt(lastRow, TC);
             if (tr.getStatus() == TestResult.Status.RUNNING) {
-                tcModel.setValueAt(tr.getFormattedElapsedTime(true), lastRow, EXEC_TIME);
+                tcModel.setValueAt(tr.getFormattedElapsedTime(false), lastRow, EXEC_TIME);
             }
         }
     }
@@ -404,7 +432,7 @@ public class TestCaseReportTable {
             return;
         }
         tcModel.setValueAt(convertToUniqueTc(tr), rowNum, TEST_CASE);
-        tcModel.setValueAt(tr.getFormattedElapsedTime(true), rowNum, EXEC_TIME);
+        tcModel.setValueAt(tr.getFormattedElapsedTime(false), rowNum, EXEC_TIME);
         tcModel.setValueAt(tr.getExtraResultDetails(), rowNum, DETAILS);
         if (tr.getReturnValue() != null) {
             tcModel.setValueAt(tr.getReturnValue(), rowNum, RESULT);
