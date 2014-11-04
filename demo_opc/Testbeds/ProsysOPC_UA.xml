@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <testbed_configuration>
-    <server_host>  IP ADDRESS </server_host>
+    <server_host>localhost</server_host>
     <testapi_implementation>
         <import>com.qspin.qtaste.testapi.impl.demo</import>
     </testapi_implementation>
 
     <multiple_instances_components>
         <OPC id="OpcDemo">
-            <opc_url> SCADA SERVER URL </opc_url>
-            <opc_prefix> PREFIX OF VARAIBLES </opc_prefix>
+            <opc_url>opc.tcp://${server_host}:4096/ignition_opc_ia_server</opc_url>
+            <opc_prefix>[AB1]Global.</opc_prefix>
         </OPC>
     </multiple_instances_components>
 
