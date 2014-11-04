@@ -110,11 +110,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-                 <repository>
-      <id>oosnmpRepo</id>
-      <name>oosnmp.com Repository</name>
-      <url>https://oosnmp.net/dist/release</url>
-    </repository>
     </repositories>
     <dependencies>
         <!-- QTaste kernel -->
@@ -147,33 +142,5 @@
             <artifactId>OPC-UA-Java-SDK-Binary</artifactId>
             <version>2.0.2-275</version>
         </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-            <version>1.0.2</version>
-            <artifactId>selenium-java-client-driver</artifactId>
-            <classifier>sources</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-            <version>1.0.2</version>
-            <artifactId>selenium-java-client-driver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-            <version>1.0.1</version>
-            <artifactId>selenium-java-client-driver</artifactId>
-            <classifier>javadoc</classifier>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.30</version>
-        </dependency>
-        <dependency>
-                <groupId>org.snmp4j</groupId>
-                <artifactId>snmp4j</artifactId>
-                <version>2.3.1</version>
-            </dependency>
     </dependencies>
 </project>
