@@ -38,7 +38,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
@@ -73,6 +72,7 @@ import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -328,6 +328,19 @@ public class TestDataEditor extends JPanel {
                 {
                    return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
                 }
+            }
+
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JTableHeader(columnModel) {
+                    public String getToolTipText(MouseEvent e) {
+                        java.awt.Point p = e.getPoint();
+                        int index = columnModel.getColumnIndexAtX(p.x);
+                        int realIndex =
+                                columnModel.getColumn(index).getModelIndex();
+                        return getColumnName(realIndex);
+                    }
+                };
             }
 
             // first column (row id) is read-only

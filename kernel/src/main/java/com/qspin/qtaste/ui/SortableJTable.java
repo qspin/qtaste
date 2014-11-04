@@ -21,7 +21,10 @@
 */
 package com.qspin.qtaste.ui;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 
 import com.qspin.qtaste.ui.tools.TableSorter;
 
@@ -31,5 +34,18 @@ public class SortableJTable extends JTable{
     public SortableJTable(TableSorter tableModel){
         super(tableModel);
         tableModel.setTableHeader(getTableHeader());
+    }
+
+    @Override
+    protected JTableHeader createDefaultTableHeader() {
+        return new JTableHeader(columnModel) {
+            public String getToolTipText(MouseEvent e) {
+                java.awt.Point p = e.getPoint();
+                int index = columnModel.getColumnIndexAtX(p.x);
+                int realIndex =
+                        columnModel.getColumn(index).getModelIndex();
+                return SortableJTable.this.getModel().getColumnName(realIndex);
+            }
+        };
     }
 }

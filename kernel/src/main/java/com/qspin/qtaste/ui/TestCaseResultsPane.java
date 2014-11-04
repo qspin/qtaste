@@ -43,6 +43,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import com.qspin.qtaste.reporter.campaign.CampaignReportManager;
 import com.qspin.qtaste.testsuite.TestScript;
@@ -118,20 +119,20 @@ public class TestCaseResultsPane extends JSplitPane {
     public String getDefaultRun() {
         return "Run" + runIndex;
     }
-    
+
     public Log4jPanel getLog4jPanel() {
         return tcLogsPane;
-    }    
+    }
 
     private void initResultsTable() {
         runTabbedPane.addMouseListener(new MouseAdapter() {
-            private void evaluatePopup(MouseEvent e) { 
+            private void evaluatePopup(MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     JPopupMenu popupMenu = new JPopupMenu();
                     popupMenu.add(new TabRemoveAction());
                     Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), TestCaseResultsPane.this);
-                    popupMenu.show(TestCaseResultsPane.this, pt.x, pt.y);                    
-                    
+                    popupMenu.show(TestCaseResultsPane.this, pt.x, pt.y);
+
                 }
             }
 
@@ -145,7 +146,7 @@ public class TestCaseResultsPane extends JSplitPane {
                 evaluatePopup(e);
             }
         });
-        
+
 
         runIndex++;
         this.addRunTab("Run" + runIndex);
@@ -158,18 +159,18 @@ public class TestCaseResultsPane extends JSplitPane {
     }
 
     public void resetTables() {
-        // 
+        //
         results.clear();
         //stackTrace.setText("");
         int tabIndex = this.getTabIndex("Run1");
         if (tabIndex==-1) return;
-        
+
         Object reportObject = runTabbedPane.getClientProperty("TestCaseReportTable_" + runTabbedPane.getTitleAt(tabIndex));
         if (reportObject instanceof TestCaseReportTable) {
             TestCaseReportTable reportTable = (TestCaseReportTable)reportObject;
             reportTable.resetTable();
         }
-        
+
         tcLogsPane.clearLogs();
     }
 
@@ -249,6 +250,19 @@ public class TestCaseResultsPane extends JSplitPane {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JTableHeader(columnModel) {
+                    public String getToolTipText(MouseEvent e) {
+                        java.awt.Point p = e.getPoint();
+                        int index = columnModel.getColumnIndexAtX(p.x);
+                        int realIndex =
+                                columnModel.getColumn(index).getModelIndex();
+                        return getColumnName(realIndex);
+                    }
+                };
+            }
         };
 
 
@@ -266,16 +280,16 @@ public class TestCaseResultsPane extends JSplitPane {
             ntcReasonTable.setDefaultRenderer(Class.forName("java.lang.Object"), new TableReasonCellRenderer());
         } catch (ClassNotFoundException ex) {
         }
-        
+
         ntcReasonTable.setRowSelectionAllowed(false);
         ntcReasonTable.setName("ntcReasonTable");
         ntcReasonTable.addMouseListener(new TableMouseListener(ntcReasonTable));
 
         nstackTrace.setRows(5);
-        
+
         // add runTabbed panel
         JSplitPane resultMainpanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        
+
         JPanel reasonMainPanel = new JPanel(new BorderLayout());
         JScrollPane reasonScrollPane = new JScrollPane(ntcReasonTable);
         reasonScrollPane.setPreferredSize(new Dimension(100, 100));
@@ -294,25 +308,25 @@ public class TestCaseResultsPane extends JSplitPane {
 
 
         resultMainpanel.setResizeWeight(0.5);
-        
+
         resultMainpanel.setTopComponent(new JScrollPane(ntcTable.getTable()));
         resultMainpanel.setBottomComponent(reasonMainPanel);
-        
+
         runTabbedPane.putClientProperty("TestCaseReportTable_" + tabName, ntcTable);
-        runTabbedPane.addTab(tabName, resultMainpanel);        
+        runTabbedPane.addTab(tabName, resultMainpanel);
         this.runTabbedPane.setSelectedIndex(this.runTabbedPane.getTabCount() -1);
     }
-    
+
     public void refreshCampaign() {
     }
-    
+
     public void startCampaign(String name) {
         addRunTab(name);
         tcLogsPane.clearLogs();
     }
-    
+
     public void stopCampaign() {
-        
+
      // get the current Campaign
         String report = CampaignReportManager.getInstance().getReportName();
         if (report==null) return;
@@ -327,7 +341,7 @@ public class TestCaseResultsPane extends JSplitPane {
             return;
         }
     }
-    
+
     public String getCurrentRunName() {
         int selectedIndex = runTabbedPane.getSelectedIndex();
         if (selectedIndex >= 0) {
@@ -336,7 +350,7 @@ public class TestCaseResultsPane extends JSplitPane {
             return "";
         }
     }
-    
+
     public class TabRemoveAction extends AbstractAction {
 
         public TabRemoveAction() {
@@ -346,7 +360,7 @@ public class TestCaseResultsPane extends JSplitPane {
         public boolean isEnabled() {
             if (runTabbedPane.getSelectedIndex()>0)
                 return true;
-            else 
+            else
                 return false;
         }
 
@@ -358,7 +372,7 @@ public class TestCaseResultsPane extends JSplitPane {
             }
         }
     }
-    
+
     public class TableMouseListener extends MouseAdapter {
         protected JTable table;
 
@@ -372,7 +386,7 @@ public class TestCaseResultsPane extends JSplitPane {
                 // go to the test case source file editor at the error file
                 if (table.getName().equals("ntcReasonTable")) {
                     // get the TR
-                    // TO DO needs to open the correct document 
+                    // TO DO needs to open the correct document
                     // at this time, the current testscript file is opened
                     int rowIndex = table.rowAtPoint(e.getPoint());
                     if (rowIndex != -1) {

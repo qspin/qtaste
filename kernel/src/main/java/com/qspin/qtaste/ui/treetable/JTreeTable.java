@@ -45,6 +45,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -66,9 +67,9 @@ import com.qspin.qtaste.ui.tools.TristateCheckBox;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- * This example shows how to create a simple JTreeTable component, 
- * by using a JTree as a renderer (and editor) for the cells in a 
- * particular column in the JTable.  
+ * This example shows how to create a simple JTreeTable component,
+ * by using a JTree as a renderer (and editor) for the cells in a
+ * particular column in the JTable.
  *
  * @author vdubois
  */
@@ -100,27 +101,27 @@ public class JTreeTable extends JTable {
             }
         });
 
-        // Create the tree. It will be used as a renderer and editor. 
+        // Create the tree. It will be used as a renderer and editor.
         tree = new TreeTableCellRenderer(treeTableModel);
 
         TCTreeListener listener = new TCTreeListener();
         addMouseListener(listener);
         addMouseMotionListener(listener);
 
-        // Install a tableModel representing the visible rows in the tree. 
+        // Install a tableModel representing the visible rows in the tree.
         super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
 
-        // Force the JTable and JTree to share their row selection models. 
+        // Force the JTable and JTree to share their row selection models.
 
         tree.setSelectionModel(new DefaultTreeSelectionModel() {
-            // Extend the implementation of the constructor, as if: 
+            // Extend the implementation of the constructor, as if:
 	/*  public this()*/ {
                 setSelectionModel(listSelectionModel);
             }
         });
-        // Make the tree and table row heights the same. 
+        // Make the tree and table row heights the same.
         tree.setRowHeight(getRowHeight());
-        // Install the tree editor renderer and editor. 
+        // Install the tree editor renderer and editor.
         setDefaultRenderer(TreeTableModel.class, tree);
         setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());
 
@@ -154,6 +155,19 @@ public class JTreeTable extends JTable {
         setShowGrid(false);
         setIntercellSpacing(new Dimension(0, 0));
         displayNecessaryColumns();
+    }
+
+    @Override
+    protected JTableHeader createDefaultTableHeader() {
+        return new JTableHeader(columnModel) {
+            public String getToolTipText(MouseEvent e) {
+                java.awt.Point p = e.getPoint();
+                int index = columnModel.getColumnIndexAtX(p.x);
+                int realIndex =
+                        columnModel.getColumn(index).getModelIndex();
+                return JTreeTable.this.getModel().getColumnName(realIndex);
+            }
+        };
     }
 
     public void displayNecessaryColumns() {
@@ -192,7 +206,7 @@ public class JTreeTable extends JTable {
     }
 
     public void expandSelected() {
-    	
+
     	DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         TCTreeNode rootNode = (TCTreeNode) model.getRoot();
         expandSelected(rootNode);
@@ -322,18 +336,18 @@ public class JTreeTable extends JTable {
 
     }
 
-    /* Workaround for BasicTableUI anomaly. Make sure the UI never tries to 
-     * paint the editor. The UI currently uses different techniques to 
-     * paint the renderers and editors and overriding setBounds() below 
-     * is not the right thing to do for an editor. Returning -1 for the 
-     * editing row in this case, ensures the editor is never painted. 
+    /* Workaround for BasicTableUI anomaly. Make sure the UI never tries to
+     * paint the editor. The UI currently uses different techniques to
+     * paint the renderers and editors and overriding setBounds() below
+     * is not the right thing to do for an editor. Returning -1 for the
+     * editing row in this case, ensures the editor is never painted.
      */
     public int getEditingRow() {
         return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;
     }
 
-    // 
-    // The renderer used to display the tree nodes, a JTree.  
+    //
+    // The renderer used to display the tree nodes, a JTree.
     //
     public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
@@ -368,8 +382,8 @@ public class JTreeTable extends JTable {
         }
     }
 
-    // 
-    // The editor used to interact with tree nodes, a JTree.  
+    //
+    // The editor used to interact with tree nodes, a JTree.
     //
     public class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
@@ -424,10 +438,10 @@ public class JTreeTable extends JTable {
     /////////////////////////////////////////////////////////////////////////////////////
     public class TCTreeListener extends MouseAdapter {
     	JPopupMenu menu;
-    	
+
         private void evaluatePopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                // show the pop-up menu... 
+                // show the pop-up menu...
                 menu = new JPopupMenu();
                 menu.add(new SelectAllAction(true));
                 menu.add(new SelectAllAction(false));
@@ -483,7 +497,7 @@ public class JTreeTable extends JTable {
         		selectRow(e);
         	}
         }
-        
+
         private void selectRow(MouseEvent e) {
             Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), JTreeTable.this);
             int row = tree.getClosestRowForLocation(pt.x, pt.y);
@@ -496,7 +510,7 @@ public class JTreeTable extends JTable {
 	        TreePath[] selectedPaths = tree.getSelectionPaths();
 	        for (TreePath selectedPath : selectedPaths) {
 	            TCTreeNode node = (TCTreeNode) selectedPath.getLastPathComponent();
-	            // 
+	            //
 	            //remove it from the model
 	            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
 	            model.removeTestSuite(node);
@@ -558,7 +572,7 @@ public class JTreeTable extends JTable {
             okButton.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    // remove the columns 
+                    // remove the columns
                     for (int index = 0; index < lm.getSize(); index++) {
                         String testbedName = (String) lm.getElementAt(index);
 
@@ -620,7 +634,7 @@ public class JTreeTable extends JTable {
 
         public void actionPerformed(ActionEvent e) {
             // select all (or unselect) all columns of the selected tree
-            // get selected path            
+            // get selected path
             TreePath selectedPath = tree.getSelectionPath();
             if (selectedPath == null) {
                 return;

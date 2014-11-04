@@ -318,7 +318,7 @@ public class Log4jPanel extends JPanel {
                             if (realIndex == LOG_LOGGER) {
                                return "Logger name";
                             } else {
-                               return null;
+                               return m_LogTable.getModel().getColumnName(realIndex);
                             }
                         }
                     };
