@@ -78,7 +78,7 @@ import com.qspin.qtaste.ui.tools.PythonTestScript;
 import com.qspin.qtaste.ui.tools.TestCaseTreeCellRenderer;
 import com.qspin.qtaste.ui.tools.TestScriptCreation;
 import com.qspin.qtaste.ui.tools.TestSuiteRunDialog;
-import com.qspin.qtaste.util.DeleteDirectory;
+import com.qspin.qtaste.util.DirectoryUtilities;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
@@ -871,7 +871,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 {
                     // remove the test script directory
                     File testScriptFile = fn.getFile();
-                    boolean deleted = DeleteDirectory.deleteDirectory(testScriptFile);
+                    boolean deleted = DirectoryUtilities.deleteDirectory(testScriptFile);
                     if (deleted)
                     {
                         TCTreeNode parentTreeNode = (TCTreeNode)tn.getParent();

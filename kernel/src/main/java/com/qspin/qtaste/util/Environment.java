@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.python.util.PythonInterpreter;
 
+import com.qspin.qtaste.util.DirectoryUtilities;
 import com.qspin.qtaste.addon.AddOnManager;
 import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
@@ -35,12 +36,12 @@ public class Environment {
 		}
 		return _INSTANCE;
 	}
-	
+
 	public void initializeEnvironment(String[] pArgs) throws Exception
 	{
         try {
         	Locale.setDefault(Locale.ENGLISH);
-        	
+
         	// Log4j Configuration
             PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
 
@@ -52,6 +53,11 @@ public class Environment {
             if ((pArgs.length != 0) && (pArgs.length != 2) && (pArgs.length != 4) && (pArgs.length != 6) && (pArgs.length != 8)) {
                 showUsage();
             }
+
+            // create TestCampaigns, TestSuites and Testbeds folders (if not exists yet)
+            DirectoryUtilities.createDirectory(new File(StaticConfiguration.DEFAULT_TESTSUITES_DIR));
+            DirectoryUtilities.createDirectory(new File(StaticConfiguration.CAMPAIGN_DIRECTORY));
+            DirectoryUtilities.createDirectory(new File(StaticConfiguration.TESTBED_CONFIG_DIRECTORY));
 
             GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
 
@@ -139,14 +145,14 @@ public class Environment {
                 }
                 TestBedConfiguration.setConfigFile(testbedConfigFileName);
             }
-            
+
             // start the log4j server
             Log4jServer.getInstance().start();
-            
+
             // initialize the Python interpreter (used for Doc generation)
             Properties props = new Properties();
-            //Le chemin des librairies python            
-            
+            //Le chemin des librairies python
+
             props.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
             props.setProperty("python.path", StaticConfiguration.JYTHON_LIB + File.pathSeparator + StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR);
             PythonInterpreter.initialize(System.getProperties(), props, new String[]{""});
@@ -159,15 +165,15 @@ public class Environment {
         	e.printStackTrace();
         	LOGGER.error(e);
             TestEngine.shutdown();
-            System.exit(1);            
+            System.exit(1);
         }
 	}
-	
+
 	public JMenuBar getMainMenuBar()
 	{
 		return mMainPanel.getJMenuBar();
 	}
-	
+
 	public void addTreeTabPane(String pTitle, JTree pTree, JPanel pPanel)
 	{
 		JScrollPane js = new JScrollPane();
@@ -175,17 +181,17 @@ public class Environment {
 		mMainPanel.getTreeTabsPanel().addTab(pTitle, js);
 		mMainPanel.getTabsPanel().add(pTitle, pPanel);
 	}
-	
+
 	public AddOnManager getAddOnManager()
 	{
 		return mAddOnManager;
 	}
-	
+
 	public MainPanel getMainFrame()
 	{
 		return mMainPanel;
 	}
-	
+
 	public void addTestEditor(JScrollPane pEditor, String pEditorTitle)
 	{
 		mMainPanel.getTestCasePanel().addTabPane(pEditor, pEditorTitle);
@@ -199,12 +205,12 @@ public class Environment {
         TestEngine.shutdown();
         System.exit(1);
     }
-	
+
 	protected Environment(){}
-	
+
 	protected MainPanel mMainPanel;
 	protected AddOnManager mAddOnManager;
-	
+
 	protected static Environment _INSTANCE;
 	protected static Logger LOGGER = Logger.getLogger(Environment.class);
 }

@@ -31,7 +31,21 @@ import java.io.File;
  * @author vdubois
  */
 
-public class DeleteDirectory {
+public class DirectoryUtilities {
+
+  static public boolean createDirectory(File path) {
+	  boolean result = false;
+	  if (!path.exists()) {
+	    try{
+	    	path.mkdir();
+	        result = true;
+	     } catch(SecurityException se){
+	       return false;
+	     }
+	  }
+	  return result;
+  }
+
 
   static public boolean deleteDirectory(File path) {
     if( path.exists() ) {
