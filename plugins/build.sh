@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PLUGINS="tools javagui recorder"
+PLUGINS="javagui"
 
 for PLUGIN in $PLUGINS
 do

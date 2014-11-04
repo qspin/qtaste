@@ -28,19 +28,6 @@
 			</unpackOptions>
 		</dependencySet>
 		<dependencySet>
-			<unpack>true</unpack>
-			<includes>
-				<include>qtaste-plugin:tools</include>
-			</includes>
-			
-			<unpackOptions>
-				<excludes>
-					<exclude>TestScript.py</exclude>
-					<exclude>META-INF/*</exclude>
-				</excludes>
-			</unpackOptions>
-		</dependencySet>
-		<dependencySet>
 			<outputDirectory/>
 			<unpack>true</unpack>
 			<includes>

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PLUGINS="tools javagui recorder"
+PLUGINS="javagui"
 
 targetDir=../plugins/SUT
 if [ ! -d "$targetDir" ]
@@ -16,7 +16,7 @@ do
 	popd
 done
 
-PLUGINS="AddonDemo ControlScriptBuilderAddOn"
+PLUGINS=""
 #PLUGINS="RemoteAgentManager"
 
 targetDir=../plugins/
