@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>
+
+   <testapi_implementation>		
+		<import>com.qspin.qtaste.testapi.impl.generic</import>
+        <import>com.qspin.qtaste.javagui.testapi.impl</import>
+		<import>com.qspin.qtaste.testapi.impl.demo</import>
+	</testapi_implementation>
+
+	<singleton_components>
+		<Utility/>
+	</singleton_components>
+	
+</testbed_configuration>
