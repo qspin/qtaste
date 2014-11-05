@@ -31,9 +31,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -44,14 +43,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -64,11 +60,11 @@ public class TestSuiteRunDialog extends JDialog {
 
     private JRadioButton  mNumberofLoopsOption = new JRadioButton ("Number of loops:");
     private JRadioButton  mNumberofLoopsInTimeOption = new JRadioButton ("Loop during time:");
-    private JTextField mNumberOfLoopsTextArea = new JFormattedTextField(createFormatter("###"));
+    private JFormattedTextField mNumberOfLoopsTextArea;
 
-    private JFormattedTextField mNumberOfLoopsInHoursTextArea = new JFormattedTextField(createFormatter("###"));
+    private JFormattedTextField mNumberOfLoopsInHoursTextArea;
     private JLabel mNumberOfLoopsInHoursLabel = new JLabel("h");
-    private JFormattedTextField mNumberOfLoopsInMinutesTextArea = new JFormattedTextField(createFormatter("###"));
+    private JFormattedTextField mNumberOfLoopsInMinutesTextArea;
     private JLabel mNumberOfLoopsInMinutesLabel = new JLabel("m");
 
     private JButton okButton = new JButton("Ok");
@@ -116,20 +112,29 @@ public class TestSuiteRunDialog extends JDialog {
         return mNumberofLoopsInTimeOption.isSelected();
     }
 
-    protected MaskFormatter createFormatter(String s) {
-        MaskFormatter formatter = null;
-        try {
-            formatter = new MaskFormatter(s);
-        } catch (java.text.ParseException exc) {
-            System.err.println("formatter is bad: " + exc.getMessage());
-            System.exit(-1);
-        }
-        return formatter;
-    }
-
     private void genUI() {
 
         this.setLayout(new GridBagLayout());
+
+        NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+        numberFormat.setMinimumIntegerDigits(0);
+        numberFormat.setMaximumIntegerDigits(3);
+        NumberFormatter formatter = new NumberFormatter(numberFormat) {
+        	// This is to fix a known bug: allow null value/empty text on JFormattedTextField
+        	@Override
+        	public Object stringToValue(String string)
+                     throws ParseException {
+                     if (string == null || string.length() == 0) {
+                         return null;
+                     }
+                     return super.stringToValue(string);
+                 }
+        };
+        formatter.setValueClass(Integer.class);
+        formatter.setAllowsInvalid(false);
+        mNumberOfLoopsTextArea = new JFormattedTextField(formatter);
+        mNumberOfLoopsInHoursTextArea = new JFormattedTextField(formatter);
+        mNumberOfLoopsInMinutesTextArea = new JFormattedTextField(formatter);
 
         ButtonGroup group = new ButtonGroup();
         group.add(mNumberofLoopsOption);
