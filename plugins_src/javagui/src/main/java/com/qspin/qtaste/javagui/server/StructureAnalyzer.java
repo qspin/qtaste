@@ -49,7 +49,7 @@ final class StructureAnalyzer extends ComponentCommander {
 				Window windows = Frame.getWindows()[i];
 				analyzeComponent(windows, 1);
 			}
-			mWriter.write("");
+			mWriter.write("</root>");
 			mWriter.flush();
 			mWriter.close();
 		} catch (IOException e) {
@@ -99,19 +99,19 @@ final class StructureAnalyzer extends ComponentCommander {
 		{
 			writeComponent("<component class=\"" + componentClass.getName() + "\" name=\""+ pComponent.getName() + "\""
 					+ ((componentText != null && componentText.equals(""))?"":" text=\"" + componentText + "\"")
-					+ "/>", pLevel);
+					+ ">", pLevel);
 			for ( int i=0; i<((Container)pComponent).getComponentCount(); ++i )
 			{
 				Component c = ((Container)pComponent).getComponent(i);
 				analyzeComponent(c, pLevel+1);
 			}
-			writeComponent("", pLevel);
+			writeComponent("</component>", pLevel);
 		}
 		else
 		{
-			writeComponent("<component class=\"" + componentClass.getName() + "\" name=\""+ pComponent.getName() + "\"" +
-				((componentText != null && componentText.equals(""))?"":" text=\"" + componentText + "\"")
-				+ "/>", pLevel);
+			writeComponent("<component class=\"" + componentClass.getName() + "\" name=\""+ pComponent.getName() + "\""
+					+ ((componentText != null && componentText.equals(""))?"":" text=\"" + componentText + "\"")
+					+ "></component>", pLevel);
 		}
 	}
 
@@ -122,14 +122,14 @@ final class StructureAnalyzer extends ComponentCommander {
 		mWriter = new BufferedWriter( new FileWriter(fileName));
 		mWriter.write("<?xml version=\"1.0\"?>");
 		mWriter.newLine();
-		mWriter.write("");
+		mWriter.write("<root>");
 		mWriter.newLine();
 	}
 
 	protected void writeComponent(String pText, int pLevel) throws IOException {
 		StringBuilder builder = new StringBuilder();
-		for ( int i=0; i<pLevel; ++i) {
-			builder.append(" ");
+		for ( int i=0; i<pLevel; ++i){
+			builder.append("   ");
 		}
 		builder.append(pText);
 		mWriter.write(builder.toString());
