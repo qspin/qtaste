@@ -22,11 +22,13 @@ package com.qspin.qtaste.ui.tools;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import javax.swing.JOptionPane;
@@ -141,12 +143,13 @@ public class TestScriptCreation {
     {
             BufferedReader input = null;
             StringBuilder contents = new StringBuilder();
-            input = new BufferedReader(new FileReader(new File(templateName)));
+            input = new BufferedReader(new InputStreamReader(new FileInputStream(templateName), "UTF-8"));
             String line = null; //not declared within while loop
             while ((line = input.readLine()) != null) {
                 contents.append(line);
                 contents.append(System.getProperty("line.separator"));
             }
+            input.close();
             // replace the template by the specific items
             return contents.toString();
     }

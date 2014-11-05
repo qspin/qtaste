@@ -172,6 +172,7 @@ public class FileUtilities {
 	        content.append(line);
 	        content.append(eol);
 	    }
+	    reader.close();
 	    return content.toString();
 	}
 
