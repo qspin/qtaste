@@ -257,9 +257,13 @@ public class TestCaseResultsPane extends JSplitPane {
                     public String getToolTipText(MouseEvent e) {
                         java.awt.Point p = e.getPoint();
                         int index = columnModel.getColumnIndexAtX(p.x);
-                        int realIndex =
-                                columnModel.getColumn(index).getModelIndex();
-                        return getColumnName(realIndex);
+                        try {
+	                        int realIndex =
+	                                columnModel.getColumn(index).getModelIndex();
+	                        return getColumnName(realIndex);
+                        } catch (Exception ex){
+                        	return null;
+                        }
                     }
                 };
             }
