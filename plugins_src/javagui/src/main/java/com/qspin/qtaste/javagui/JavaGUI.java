@@ -366,7 +366,7 @@ public interface JavaGUI {
    /**
     * inserts a value in the active popup field.
     * @param value the value to insert.
-    * @see {@link JOptionPane#showInputDialog(Object)}
+    * @see JOptionPane#showInputDialog(Object)
     */
    void setPopupValue(String value) throws QTasteException;
 
