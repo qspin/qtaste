@@ -152,7 +152,7 @@
 
         <dependency>
             <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-            <version>1.0.2</version>
+            <version>1.0.1</version>
             <artifactId>selenium-java-client-driver</artifactId>
             <classifier>javadoc</classifier>
         </dependency>
