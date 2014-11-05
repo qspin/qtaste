@@ -41,8 +41,10 @@
                         </goals>
                         <configuration>
                             <classifier>sources</classifier>
+                            <excludeTransitive>true</excludeTransitive>
                             <includeArtifactIds>selenium-java-client-driver</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                            <silent>true</silent>
                         </configuration>
                     </execution>
                     <!-- Unpack JavaGUI in order to generate TestAPI Documentation -->
@@ -54,8 +56,11 @@
                         </goals>
                         <configuration>
                             <classifier>sources</classifier>
+                            <excludeTransitive>true</excludeTransitive>
                             <includeArtifactIds>javagui</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <silent>true</silent>
                         </configuration>
                     </execution>
 
@@ -66,9 +71,7 @@
                         </goals>
                         <id>unpack-testapi-src</id>
                         <configuration>
-                            <classifier>sources</classifier>
                             <includeArtifactIds>qtaste-toolbox-testapi</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -150,12 +153,6 @@
             <artifactId>selenium-java-client-driver</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-            <version>1.0.1</version>
-            <artifactId>selenium-java-client-driver</artifactId>
-            <classifier>javadoc</classifier>
-        </dependency>
         <dependency>
             <groupId>org.apache.xmlrpc</groupId>
             <version>3.1.2</version>

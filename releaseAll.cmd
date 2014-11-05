@@ -47,9 +47,9 @@ if [%1] == [-help] (
 	rem Deploy Snapshots QTaste  
 	call clean deploy -P qtaste-all-modules-release
 ) else if [%1] == [-dryStage] (	
-    call mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release,qtaste-skip-for-release    
+    call mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release
     call mvn release:perform -P qtaste-all-modules-release || exit 1
 ) else (
-    call mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release    
+    call mvn release:clean release:prepare -P qtaste-all-modules-release
     call mvn release:perform -P qtaste-all-modules-release || exit 1
 )

@@ -124,7 +124,6 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
               <version>2.9</version>
-              <inherited>${plugins-inheritance}</inherited>
               <!-- unpack api sources of other QTaste testapi projects dependencies in target/testapi-dependency-src, for TestAPI doc generation,
                    child project must define all artifacts to include, using includeArtifactIds (comma-separated list) -->
               <executions>
@@ -139,10 +138,8 @@
                     <excludeTransitive>true</excludeTransitive>
                     <includes>**/qtaste/**/testapi/api/*.java</includes>
                     <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
-                    <overWriteReleases>false</overWriteReleases>
                     <overWriteSnapshots>true</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
-                    <silent>false</silent>
+                    <silent>true</silent>
                   </configuration>
                 </execution>
 
@@ -158,10 +155,8 @@
                     <excludeTransitive>true</excludeTransitive>
                     <includes>com/qspin/qtaste/kernel/testapi/*.java</includes>
                     <outputDirectory>${project.build.directory}/dependency-kernel-src</outputDirectory>
-                    <overWriteReleases>false</overWriteReleases>
                     <overWriteSnapshots>true</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
-                    <silent>false</silent>
+                    <silent>true</silent>
                   </configuration>
                 </execution>
 
@@ -175,10 +170,10 @@
                   <configuration>
                     <classifier>javadoc</classifier>
                     <includeArtifactIds>qtaste-kernel</includeArtifactIds>
+                    <excludeTransitive>true</excludeTransitive>
                     <outputDirectory>${project.build.directory}/TestAPI-doc/simulators</outputDirectory>
-                    <overWriteReleases>false</overWriteReleases>
                     <overWriteSnapshots>true</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <silent>true</silent>
                   </configuration>
                 </execution>
               </executions>

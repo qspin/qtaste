@@ -72,7 +72,6 @@
    <properties>
       <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
       <qtaste-version>${project.version}</qtaste-version>
-      <plugins-inheritance>true</plugins-inheritance>
    </properties>
 
    <build>
@@ -379,13 +378,6 @@
             <module>izpack</module>
             <module>doc</module>
         </modules>
-      </profile>
-
-      <profile>
-        <id>qtaste-skip-for-release</id>
-        <properties>
-            <plugins-inheritance>false</plugins-inheritance>
-        </properties>
       </profile>
 
       <profile>

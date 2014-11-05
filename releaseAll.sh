@@ -48,9 +48,9 @@ elif [ "$1" == "-deploySnapshot" ]; then
 	# Deploy Snapshots QTaste  
 	mvn deploy -P qtaste-all-modules-release  || exit 1
 elif [ "$1" == "-dryStage" ]; then	
-    mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
+    mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release || exit 1
     mvn release:perform -P qtaste-all-modules-release || exit 1
 else
-    mvn release:clean release:prepare -P qtaste-all-modules-release,qtaste-skip-for-release || exit 1    
+    mvn release:clean release:prepare -P qtaste-all-modules-release || exit 1
     mvn release:perform -P qtaste-all-modules-release || exit 1
 fi
