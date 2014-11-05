@@ -374,11 +374,7 @@
             <module>testapi-parent</module>
             <module>kernel</module>
             <module>toolbox</module>
-            <module>plugins_src/tools</module>
             <module>plugins_src/javagui</module>
-            <module>plugins_src/recorder</module>
-            <module>plugins_src/AddonDemo</module>
-            <module>plugins_src/ControlScriptBuilderAddOn</module>
             <module>demo/testapi</module>
             <module>izpack</module>
             <module>doc</module>
