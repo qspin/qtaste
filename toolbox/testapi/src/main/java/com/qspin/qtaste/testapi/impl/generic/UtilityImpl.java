@@ -72,14 +72,11 @@ public class UtilityImpl implements Utility {
 	}
 
     public void showMessageDialog(String title, String message, boolean modal) {
-        if (messageDialog == null) {
-            optionPane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE);
-            messageDialog = optionPane.createDialog(title);
-            messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        } else {
-            messageDialog.setTitle(title);
-            optionPane.setMessage(message);
-        }
+
+    	optionPane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE);
+        messageDialog = optionPane.createDialog(title);
+        messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+
         // don't set modal to true now, because we use the setAlwaysOnTop(true)/setAlwaysOnTop(false)
         // trick to get the focus, but we don't really want an "AlwaysOnTop" window
         messageDialog.setModal(false);
@@ -106,14 +103,11 @@ public class UtilityImpl implements Utility {
 
 	@Override
 	public boolean getUserConfirmation(String messageToDisplay) throws QTasteException {
-		if (messageDialog == null) {
-            optionPane = new JOptionPane(messageToDisplay, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
-            messageDialog = optionPane.createDialog("Input");
-            messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-        } else {
-            messageDialog.setTitle("Input");
-            optionPane.setMessage(messageToDisplay);
-        }
+
+		optionPane = new JOptionPane(messageToDisplay, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+        messageDialog = optionPane.createDialog("Input");
+        messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+
         // don't set modal to true now, because we use the setAlwaysOnTop(true)/setAlwaysOnTop(false)
         // trick to get the focus, but we don't really want an "AlwaysOnTop" window
         messageDialog.setModal(false);
