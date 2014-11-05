@@ -133,8 +133,8 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     private TestExecutionThread testExecutionHandler = null;
     private TestCampaignMainPanel.CampaignExecutionThread testCampaignExecutionHandler = null;
     private TestScriptBreakpointHandler breakPointEventHandler;
-    public boolean isExecuting;
-    public boolean isEnabledToExecute;
+    public boolean isExecuting = false;
+    public boolean isEnabledToExecute = true;
     private String currentSelectedTestsuite = "TestSuite";
     private FileNode currentSelectedFileNode = null;
     protected DumpPythonResultEventHandler pythonResultEventHandler = DumpPythonResultEventHandler.getInstance();
