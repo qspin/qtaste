@@ -23,9 +23,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import javax.swing.JOptionPane;
 
@@ -44,12 +46,12 @@ public class TestScriptCreation {
     private static Logger logger = Log4jLoggerFactory.getLogger(TestScriptCreation.class);
     private String TEMPLATE_DIR = StaticConfiguration.CONFIG_DIRECTORY + "/templates/TestScript";
     private String mTestName, mTestSuiteDir;
-    
+
     public TestScriptCreation(String testName, String testSuiteDir) {
         mTestName = testName;
         mTestSuiteDir = testSuiteDir;
     }
-    
+
     public void copyTestSuite(String sourceTestDir) {
         String sourceFileName = sourceTestDir + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
         String destFileName = mTestSuiteDir + File.separator + mTestName + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
@@ -66,7 +68,7 @@ public class TestScriptCreation {
         // copy TestData files
         copyTestData(sourceTestDir, mTestSuiteDir + File.separator + mTestName);
     }
-    
+
     public void createTestSuite() {
         BufferedWriter output = null;
         String testSuiteDirectoryName = mTestSuiteDir + File.separator + mTestName;
@@ -83,19 +85,19 @@ public class TestScriptCreation {
             String templateFile = TEMPLATE_DIR + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
             String strContents = getTemplateContent(templateFile);
             strContents = strContents.replace("[$TEST_NAME]", mTestName);
-            
+
             File outputFile = new File(outputFileName);
             outputFile.getParentFile().mkdirs();
-            output = new BufferedWriter(new FileWriter(outputFile));
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),"UTF-8"));
             output.append(strContents);
             output.close();
-            
+
             // copy the TestData files
             copyTestData(TEMPLATE_DIR, testSuiteDirectoryName);
             // create empty requirement xml file
         	copyTestRequirement(TEMPLATE_DIR, testSuiteDirectoryName);
-        } catch (FileNotFoundException ex) {           
-        } catch (IOException ex) {           
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
         } finally {
             if (output != null ) {
                 try {
@@ -108,7 +110,7 @@ public class TestScriptCreation {
             }
         }
     }
-    
+
     private void copyTestData(String sourceDir, String DestDir) {
         String testDataFileNameWithoutExtension = StaticConfiguration.TEST_DATA_FILENAME.substring(0, StaticConfiguration.TEST_DATA_FILENAME.lastIndexOf('.'));
 
@@ -116,7 +118,7 @@ public class TestScriptCreation {
         String testDataSourceFileName = sourceDir + File.separator + testDataFileNameWithoutExtension + extension;
         String testDataDestFileName = DestDir + File.separator + testDataFileNameWithoutExtension + extension;
         FileUtilities.copy(testDataSourceFileName, testDataDestFileName);
-        
+
         extension = ".xls";
         testDataSourceFileName = sourceDir + File.separator + testDataFileNameWithoutExtension + extension;
         if (new File(testDataSourceFileName).exists()) {
@@ -124,7 +126,7 @@ public class TestScriptCreation {
 	        FileUtilities.copy(testDataSourceFileName, testDataDestFileName);
         }
     }
-    
+
     private void copyTestRequirement(String sourceDir, String DestDir) {
     	logger.debug("Create test requirement XML file");
         String testRequirementSourceFileName = sourceDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
@@ -134,7 +136,7 @@ public class TestScriptCreation {
 	        FileUtilities.copy(testRequirementSourceFileName, testRequirementDestFileName);
         }
     }
-    
+
     private String getTemplateContent(String templateName) throws FileNotFoundException, IOException
     {
             BufferedReader input = null;

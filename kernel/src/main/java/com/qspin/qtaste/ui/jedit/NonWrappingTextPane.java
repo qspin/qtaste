@@ -28,8 +28,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -408,8 +410,9 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
     public void save() {
         BufferedWriter output = null;
         try {
-            File file = new File(getFileName());            
-            output = new BufferedWriter(new FileWriter(file));
+            File file = new File(getFileName());
+            //output = new BufferedWriter(new FileWriter(file)); //TODO Remove loc
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
             output.append(getText());
             output.close();
             loadDateAndTime = file.lastModified();
@@ -422,7 +425,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             		JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
-                output.close();                
+                output.close();
                 setModified(false);
             } catch (IOException ex) {
                 logger.fatal("Cannot save file", ex);

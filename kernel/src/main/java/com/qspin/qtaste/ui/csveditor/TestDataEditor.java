@@ -157,7 +157,6 @@ public class TestDataEditor extends JPanel {
         try {
             String outputFile = path + File.separator + StaticConfiguration.TEST_DATA_FILENAME;
 
-            //output = new BufferedWriter(new FileWriter(new File(outputFile)));
             output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),"UTF-8"));
 
             // retrieve the header

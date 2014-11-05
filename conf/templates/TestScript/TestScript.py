@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 ##
 # [$TEST_NAME].
 # <p>
@@ -9,10 +11,10 @@
 from qtaste import *
 
 def step1():
-	"""
-	@step      Description of the actions done for this step
-	@expected  Description of the expected result
-	"""
-	pass
+    """
+    @step      Description of the actions done for this step
+    @expected  Description of the expected result
+    """
+    pass
 
 doStep(step1)
