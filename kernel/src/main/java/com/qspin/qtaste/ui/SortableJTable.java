@@ -42,13 +42,12 @@ public class SortableJTable extends JTable{
             public String getToolTipText(MouseEvent e) {
                 java.awt.Point p = e.getPoint();
                 int index = columnModel.getColumnIndexAtX(p.x);
-                try {
-	                int realIndex =
-	                        columnModel.getColumn(index).getModelIndex();
-	                return SortableJTable.this.getModel().getColumnName(realIndex);
-                } catch (Exception ex) {
+                if (index < 0) {
                 	return null;
                 }
+                int realIndex =
+                        columnModel.getColumn(index).getModelIndex();
+                return SortableJTable.this.getModel().getColumnName(realIndex);
             }
         };
     }

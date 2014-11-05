@@ -314,15 +314,14 @@ public class Log4jPanel extends JPanel {
                         public String getToolTipText(MouseEvent e) {
                             java.awt.Point p = e.getPoint();
                             int index = columnModel.getColumnIndexAtX(p.x);
-                            try {
-	                            int realIndex = columnModel.getColumn(index).getModelIndex();
-	                            if (realIndex == LOG_LOGGER) {
-	                               return "Logger name";
-	                            } else {
-	                               return m_LogTable.getModel().getColumnName(realIndex);
-	                            }
-                            } catch (Exception ex){
+                            if (index < 0) {
                             	return null;
+                            }
+                            int realIndex = columnModel.getColumn(index).getModelIndex();
+                            if (realIndex == LOG_LOGGER) {
+                               return "Logger name";
+                            } else {
+                               return m_LogTable.getModel().getColumnName(realIndex);
                             }
                         }
                     };
