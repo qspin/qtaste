@@ -2,8 +2,8 @@
 
 rem  # Requirements:
 rem  # - A GPG client must is installed on your command line path.
-rem  #   Please download GPG from http://www.gnupg.org/download/, 
-rem  #  follow the instructions and install it to your system. 
+rem  #   Please download GPG from http://www.gnupg.org/download/,
+rem  #  follow the instructions and install it to your system.
 
 rem  # Relases a new qtaste version by executing the following steps:
 rem  # Prepare for Release:
@@ -19,18 +19,18 @@ rem  # 9) Commit the modified POMs
 rem  # Perform Release:
 rem  # 1) Checkout from the SCM URL (tag prompted in step 7)
 rem  # 2) Run the predefined Maven goals to release the project:
-rem  #	 -This will stage QTaste (from tag version prompted in step 7) into sonatype, being prepared to be released.
+rem  #   -This will stage QTaste (from tag version prompted in step 7) into sonatype, being prepared to be released.
 rem  # To finally release QTaste (from stageg to released) follow step 8a) of tutorial:
 rem  # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 rem  # --------------------------------------------------------------------------------------------------------------------
 rem  # usage: releaseAll.sh [-snapshot] [-deploySnapshot] [-dryStage]
 rem  # optional arg: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
-rem  #               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
-rem  #               [-dryStage] Stage a release of QTaste without iterating a new version 
-rem  #    repository https://oss.sonatype.org/content/repositories/snapshots 
+rem  #               [-deploySnapshot] Deploy snapshot QTaste artifacts into
+rem  #               [-dryStage] Stage a release of QTaste without iterating a new version
+rem  #    repository https://oss.sonatype.org/content/repositories/snapshots
 rem  #
 rem  # Note: Only projects owners have rights to deploy QTaste.
-rem  #		 When deploying a Snapshot or Release a Passphrase
+rem  #       When deploying a Snapshot or Release a Passphrase
 rem  #       will be promped.
 
 rem Install kernel 3rd party artifacts
@@ -43,12 +43,12 @@ if [%1] == [-help] (
 ) else if [%1] == [-newSnapshot] (
     call mvn release:clean release:update-versions -P qtaste-all-modules-release
 
-) else if [%1] == [-deploySnapshot] (	
-	rem Deploy Snapshots QTaste  
-	call clean deploy -P qtaste-all-modules-release
-) else if [%1] == [-dryStage] (	
+) else if [%1] == [-deploySnapshot] (
+    rem Deploy Snapshots QTaste
+    call clean deploy -P qtaste-all-modules-release
+) else if [%1] == [-dryStage] (
     call mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release
-    call mvn release:perform -P qtaste-all-modules-release || exit 1
+    call mvn release:perform -DdryRun -P qtaste-all-modules-release || exit 1
 ) else (
     call mvn release:clean release:prepare -P qtaste-all-modules-release
     call mvn release:perform -P qtaste-all-modules-release || exit 1

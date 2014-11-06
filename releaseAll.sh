@@ -14,23 +14,23 @@
 # Perform Release:
 # 1) Checkout from the SCM URL (tag prompted in step 7)
 # 2) Run the predefined Maven goals to release the project:
-#	 -This will stage QTaste (from tag version prompted in step 7) into sonatype, being prepared to be released.
+#    -This will stage QTaste (from tag version prompted in step 7) into sonatype, being prepared to be released.
 # To finally release QTaste (from stageg to released) follow step 8a) of tutorial:
 # https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
 # --------------------------------------------------------------------------------------------------------------------
 # usage: releaseAll.sh [-newSnapshot] [-deploySnapshot] [-dryStage]
 # optional args: [-newSnapshot] only perform the above step 8) -> SNAPSHOT version iterates without prompt <-
-#               [-deploySnapshot] Deploy snapshot QTaste artifacts into 
+#               [-deploySnapshot] Deploy snapshot QTaste artifacts into
 #               [-dryStage] Stage a release of QTaste without iterating a new version
-#    repository https://oss.sonatype.org/content/repositories/snapshots 
+#    repository https://oss.sonatype.org/content/repositories/snapshots
 #
 # Requirements for deploySnapshot option:
 # - A GPG client must is installed on your command line path.
-#   Please download GPG from http://www.gnupg.org/download/, 
-#  follow the instructions and install it to your system. 
+#   Please download GPG from http://www.gnupg.org/download/,
+#  follow the instructions and install it to your system.
 #
 # Note: Only projects owners have rights to deploy QTaste.
-#		When deploying a Snapshot or Release a Passphrase
+#       When deploying a Snapshot or Release a Passphrase
 #       will be promped.
 
 
@@ -44,12 +44,12 @@ if [ "$1" == "-help" ]; then
     exit
 elif [ "$1" == "-newSnapshot" ]; then
     mvn release:clean release:update-versions -P qtaste-all-modules-release || exit 1
-elif [ "$1" == "-deploySnapshot" ]; then	
-	# Deploy Snapshots QTaste  
-	mvn deploy -P qtaste-all-modules-release  || exit 1
-elif [ "$1" == "-dryStage" ]; then	
+elif [ "$1" == "-deploySnapshot" ]; then
+    # Deploy Snapshots QTaste
+    mvn deploy -P qtaste-all-modules-release  || exit 1
+elif [ "$1" == "-dryStage" ]; then
     mvn release:clean release:prepare -DdryRun -P qtaste-all-modules-release || exit 1
-    mvn release:perform -P qtaste-all-modules-release || exit 1
+    mvn release:perform -DdryRun -P qtaste-all-modules-release || exit 1
 else
     mvn release:clean release:prepare -P qtaste-all-modules-release || exit 1
     mvn release:perform -P qtaste-all-modules-release || exit 1
