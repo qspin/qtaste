@@ -67,8 +67,6 @@ public final class SubtitlerImpl implements Subtitler, Runnable {
 		m_startTime = System.currentTimeMillis();
 		m_subtitleFrame.toFront();
 		m_subtitleFrame.setVisible(true);
-		System.out.println("change the frame visibility (true)");
-		
 	}
 
 	/**
