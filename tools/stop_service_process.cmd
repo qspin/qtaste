@@ -4,7 +4,7 @@ rem usage: stop_service_process <serviceName>
 
 setlocal enableDelayedExpansion 
 
-set SERVICE_NAME=%~1
+set SERVICE_NAME="%~1"
 
 net stop %SERVICE_NAME%
 
