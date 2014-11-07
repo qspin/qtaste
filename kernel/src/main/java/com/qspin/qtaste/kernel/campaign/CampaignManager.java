@@ -73,7 +73,7 @@ public class CampaignManager implements TestReportListener {
     }
 
     /**
-     * Read the xml campaign file 
+     * Read the xml campaign file
      * @param fileName the xml campaign file
      * @return an object describing the campaign
      * @throws java.lang.Exception
@@ -167,7 +167,7 @@ public class CampaignManager implements TestReportListener {
         try
         {
 	        createReport();
-	
+
 	        for (CampaignRun run : currentCampaign.getRuns()) {
 	            currentTestBed = run.getTestbed();
 	            String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0, currentTestBed.lastIndexOf('.'));
@@ -190,6 +190,10 @@ public class CampaignManager implements TestReportListener {
         	currentCampaign = null;
         }
         return campaignResult;
+    }
+
+    public void stopByUser() {
+    	TestEngine.getCurrentTestSuite().setAbortedByUser(true);
     }
 
     private void updateReport() {
@@ -222,7 +226,7 @@ public class CampaignManager implements TestReportListener {
     }
 
     public void reportTestSuiteStopped() {
-        updateReport();        
+        updateReport();
     }
 
     public void reportTestResult(TestResult.Status status) {

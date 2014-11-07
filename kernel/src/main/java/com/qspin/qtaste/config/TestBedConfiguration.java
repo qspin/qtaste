@@ -43,6 +43,8 @@ public class TestBedConfiguration extends XMLConfiguration {
     private static List<ConfigurationChangeHandler> configurationChangeHandlers = new ArrayList<ConfigurationChangeHandler>();
     private static long lastModifiedTime;
     private static String sutVersion;
+    private static volatile boolean isStartedManually = false;
+    private static volatile boolean isRunning = false;
 
     private TestBedConfiguration() throws ConfigurationException {
         super(configFile);
@@ -69,6 +71,37 @@ public class TestBedConfiguration extends XMLConfiguration {
             logger.fatal("Cannot load configuration", e);
             return null;
         }
+    }
+
+    /**
+     * Set Running Mode and define if was started manually
+     * @param define if testbed started with ignore control script or manually
+     */
+    public static void setAsRunning(boolean startedManually) {
+    	isStartedManually = startedManually;
+        isRunning = true;
+    }
+
+    /**
+     * Set as Not Running
+     */
+    public static void setAsStopped() {
+    	isStartedManually = false;
+    	isRunning = false;
+    }
+
+    /**
+     * Return if testbed is Running
+     */
+    public static boolean isRunning() {
+    	return isRunning;
+    }
+
+    /**
+     * Return if testbed was started manually
+     */
+    public static boolean isStartedManually() {
+    	return isRunning && isStartedManually;
     }
 
     /**
@@ -120,7 +153,7 @@ public class TestBedConfiguration extends XMLConfiguration {
     public boolean hasControlScript() {
     	return containsKey("control_script");
     }
-    
+
     /**
      * Return the file name of the control script or null if none.
      * @return the file name of the control script or null if none.
@@ -132,7 +165,7 @@ public class TestBedConfiguration extends XMLConfiguration {
         }
         return scriptFilename;
     }
-    
+
     /**
      * Return the arguments of the control script or null if none.
      * @return the arguments of the control script or null if none.
@@ -140,14 +173,14 @@ public class TestBedConfiguration extends XMLConfiguration {
     public String getControlScriptArguments() {
         return getString("control_script.arguments");
     }
-    
+
     /**
      * Return the id of the default instance
      * @return id of the default instance
      * @throws java.util.NoSuchElementException
      *             if the configuration key is not available.
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a int value.    
+     *             if the value associated to the configuration key is convertible into a int value.
      */
     public String getDefaultInstanceId() {
         return getString("multiple_instances_components[@default]");
@@ -161,7 +194,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      */
     public int getMIIndex(String instanceId, String component) {
         for (int i = 0; i <= instance.getMaxIndex("multiple_instances_components." + component); i++) {
-            String id = instance.getString("multiple_instances_components." + component + "(" + i + ") [@id]");            
+            String id = instance.getString("multiple_instances_components." + component + "(" + i + ") [@id]");
             if (id == null)
                 return -1;
             if (id.equals(instanceId)) {
@@ -176,7 +209,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @param instanceId The instance Id id
      * @param component The component name.
      * @param key The Configuration key
-     * @return The value of the parameter identified by the key or null if the key is not present    
+     * @return The value of the parameter identified by the key or null if the key is not present
      */
     public String getMIString(String instanceId, String component, String key) {
         int index = getMIIndex(instanceId, component);
@@ -205,7 +238,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @throws java.util.NoSuchElementException
      *             if the configuration key is not available.
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a int value.    
+     *             if the value associated to the configuration key is convertible into a int value.
      */
     public int getMIInt(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -220,7 +253,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @param defaultValue The default value if the configuration key is not available
      * @return The value of the parameter identified by the key or defaultValue if the key is not present
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a int value.    
+     *             if the value associated to the configuration key is convertible into a int value.
      */
     public int getMIInt(String instanceId, String component, String key, int defaultValue) throws ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -236,7 +269,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @throws java.util.NoSuchElementException
      *             if the configuration key is not available.
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a boolean value.    
+     *             if the value associated to the configuration key is convertible into a boolean value.
      */
     public boolean getMIBoolean(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -251,7 +284,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @param defaultValue The default value if the configuration key is not available
      * @return The value of the parameter identified by the key or defaultValue if the key is not present
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a boolean value.    
+     *             if the value associated to the configuration key is convertible into a boolean value.
      */
     public boolean getMIBoolean(String instanceId, String component, String key, boolean defaultValue) throws ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -267,7 +300,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @throws java.util.NoSuchElementException
      *             if the configuration key is not available.
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a short value.    
+     *             if the value associated to the configuration key is convertible into a short value.
      */
     public short getMIShort(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -282,7 +315,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      * @param defaultValue The default value if the configuration key is not available
      * @return The value of the parameter identified by the key or defaultValue if the key is not present
      * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a short value.    
+     *             if the value associated to the configuration key is convertible into a short value.
      */
     public short getMIShort(String instanceId, String component, String key, short defaultValue) throws ConversionException {
         int index = getMIIndex(instanceId, component);

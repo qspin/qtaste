@@ -157,6 +157,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         parent.getTestCasePanel().setExecuteButtonsEnabled(!isExecutingTestCaseOrStartingOrStoppingTestbed);
         parent.getTestCampaignPanel().setExecuteButtonsEnabled(!isExecutingTestCaseOrStartingOrStoppingTestbed);
         mTestbedList.setEnabled(!isExecutingTestCaseOrStartingOrStoppingTestbed);
+        m_ignoreControlScript.setEnabled(!isExecutingTestCaseOrStartingOrStoppingTestbed);
     }
 
     public void init() {

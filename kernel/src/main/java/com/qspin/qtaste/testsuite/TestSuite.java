@@ -53,7 +53,7 @@ public abstract class TestSuite implements TestReportListener {
     private int nbTestsFailed = 0;
     private int nbTestsNotAvailable = 0;
     private int nbTestsRetries = 0;
-    private boolean abortedByUser = false;
+    private volatile boolean abortedByUser = false;
     private List<TestReportListener> testReportListeners = new LinkedList<TestReportListener>();
 
     /** Creates a new instance of TestSuite */
@@ -113,7 +113,6 @@ public abstract class TestSuite implements TestReportListener {
             } else {
             	executionSuccess = false;
             }
-            this.abortedByUser = TestEngine.isStartStopSUTCancelled;
             if (initializeTestEngine) {
                 TestEngine.terminate();
             }

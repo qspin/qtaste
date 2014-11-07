@@ -365,6 +365,8 @@ public class TestCampaignMainPanel extends JPanel {
         }
 
         public void stop() {
+        	CampaignManager campaignManager = CampaignManager.getInstance();
+        	campaignManager.stopByUser(); // Flag to terminate all loaded test suites
             ThreadGroup root = Thread.currentThread().getThreadGroup();
             ThreadManager.stopThread(root, 0);
         }

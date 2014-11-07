@@ -447,8 +447,10 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         } else if (testCampaignExecutionHandler != null) {
             testCampaignExecutionHandler.stop();
         }
-        TestEngine.cancelStartStopSUT();
 
+        if (!TestBedConfiguration.isStartedManually()) {
+        	TestEngine.cancelStartStopSUT();
+        }
     }
 
     public boolean checkScriptsSyntax() {

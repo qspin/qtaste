@@ -50,7 +50,7 @@ import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
  * This is the main entry point for the TestEngine application
- * 
+ *
  * @author lvboque
  */
 public class TestEngine {
@@ -66,7 +66,7 @@ public class TestEngine {
 
 	/**
 	 * Execute a test suite.
-	 * 
+	 *
 	 * @param testSuite
 	 *            the test suite to execute
 	 * @return true if execution successful, false otherwise (aborted)
@@ -77,7 +77,7 @@ public class TestEngine {
 
 	/**
 	 * Execute a test suite.
-	 * 
+	 *
 	 * @param testSuite
 	 *            the test suite to execute
 	 * @param debug
@@ -94,7 +94,7 @@ public class TestEngine {
         }
         else
         {
-        	reportManager.startReport(new Date(), testSuite.getName());	
+        	reportManager.startReport(new Date(), testSuite.getName());
         }
 		boolean executionSuccess = testSuite.execute(debug, true);
 		reportManager.stopReport();
@@ -115,10 +115,12 @@ public class TestEngine {
 	}
 
 	public static boolean startSUT(TestResult tr) {
+		TestBedConfiguration.setAsRunning(ignoreControlScript);
 		return startOrStopSUT(true, tr);
 	}
 
 	public static boolean stopSUT(TestResult tr) {
+		TestBedConfiguration.setAsStopped();
 		return startOrStopSUT(false, tr);
 	}
 
@@ -155,7 +157,7 @@ public class TestEngine {
 				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
 				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
 				scriptEngine = "java -Dpython.path=" + jythonJar + File.pathSeparator + jythonLib  + File.pathSeparator + additionnalJythonLib
-								    + " -cp \"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator 
+								    + " -cp \"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator
 									+ jythonJar + File.pathSeparator + classPath + "\" org.python.util.jython";
 			}
 			String scriptArguments = config.getControlScriptArguments();
@@ -237,7 +239,7 @@ public class TestEngine {
 
 	/**
 	 * Set need to restart SUT.
-	 * 
+	 *
 	 * @return value of needToRestartSUT, which may be set to false if no
 	 *         control_script declared
 	 */
