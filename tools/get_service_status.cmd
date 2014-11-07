@@ -11,7 +11,7 @@ if [%1] == [] (
   set EXIT_CODE=-2
   GOTO END
 )
-set SERVICE_NAME=%~1
+set SERVICE_NAME="%~1"
 
 call sc query %SERVICE_NAME%
 
