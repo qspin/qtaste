@@ -570,17 +570,16 @@ class ServiceProcess(ControlAction):
 			#shellScriptArguments.append(self.description)
 		else:
 			shellScriptArguments = '"' + self.serviceName + '" -title "' + self.description + '"';
+			print "command : start_service_process " + shellScriptArguments
+			ControlAction.executeShellScript("start_service_process", shellScriptArguments);
 		
-		ControlAction.executeShellScript("start_service_process", shellScriptArguments);
-		print
-
 	def stop(self):
 		print "Stopping " + self.description + "...";
-		shellScriptArguments = self.serviceName
 		if _OS.getType() != _OS.Type.WINDOWS:
 			print "Not yet implemented!"
 			#ControlAction.executeShellScript("stop_service_process", '"' + shellScriptArguments + '"')
 		else:
+			shellScriptArguments = '"' + self.serviceName + '"'
 			print "command : stop_service_process " + shellScriptArguments
 			ControlAction.executeShellScript("stop_service_process", shellScriptArguments)
 
