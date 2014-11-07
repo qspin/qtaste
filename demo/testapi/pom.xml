@@ -20,12 +20,6 @@
     <build>
         <finalName>qtaste-testapi</finalName>
         <plugins>
-            <!-- plugin to build deploy jar file, including version information -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-
             <!-- plugin to get sources of other testapi dependency projects, for testapi
                 doc generation -->
             <plugin>
@@ -86,12 +80,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-enforcer-plugin</artifactId>
-              <version>1.3.1</version>
             </plugin>
         </plugins>
     </build>
