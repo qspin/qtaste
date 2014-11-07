@@ -4,7 +4,7 @@ rem usage: start_service_process <serviceName>
 
 setlocal enableDelayedExpansion 
 
-set SERVICE_NAME=%~1
+set SERVICE_NAME="%~1"
 
 net start %SERVICE_NAME%
 
