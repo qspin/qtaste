@@ -41,19 +41,13 @@ public interface Utility extends SingletonComponent {
     public void createScreenshot(String fileName) throws QTasteException;
 
     /**
-     * Shows a message dialog window displaying information to the tester, modal or not (modeless) as specified.
-     * If the dialog is modal, the test is suspended until the dialog window is closed.
+     * Shows a modal message dialog window displaying information to the tester.
+     * The test is suspended until the dialog window is closed.
      *
      * @param title the title of the dialog window
      * @param message the message to be displayed in the dialog
-     * @param modal true if the dialog window must be modal, false otherwise
      */
-    public void showMessageDialog(String title, String message, boolean modal);
-
-    /**
-     * Hides the modeless message window displayed using {@link #showMessageDialog}.
-     */
-    public void hideMessageDialog();
+    public void showMessageDialog(String title, String message) throws QTasteException;
 
     /**
      * Shows a input dialog window to user input a String value.
@@ -61,12 +55,13 @@ public interface Utility extends SingletonComponent {
      * @param message the message to be displayed in the dialog
      * @param defaultValue default value for the user input
      */
-    public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException;
+    public String getUserStringValue(String message, Object defaultValue) throws QTasteException;
 
     /**
-     * Shows a confirmation input dialog window (Yes/No).
+     * Shows a confirmation dialog window (Yes/No).
      *
+     * @param title the title of the dialog window
      * @param message the message to be displayed in the dialog
      */
-    public boolean getUserConfirmation(String messageToDisplay) throws QTasteException;
+    public boolean getUserConfirmation(String title, String message) throws QTasteException;
 }
