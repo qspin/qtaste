@@ -423,7 +423,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
         this.fileName = fileName.getCanonicalFile().getAbsoluteFile();
 
-        String version = VersionControl.getInstance().getTestApiVersion(fileName.getParentFile().getPath());
+        String version = VersionControl.getInstance().getSUTVersion(fileName.getParentFile().getPath());
         //String version = parseVersion(fileName.getParentFile().getPath());
         setVersion(version);
 
