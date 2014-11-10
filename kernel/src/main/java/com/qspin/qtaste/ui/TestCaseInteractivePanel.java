@@ -19,6 +19,7 @@
 
 package com.qspin.qtaste.ui;
 
+import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -280,6 +281,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
                     if (!ts.getTestDataSet().getData().isEmpty()) {
                         testResult.setReturnValue(returnValue);
                     }
+                    TestResultsReportManager.getInstance().refresh();
                 }
             } catch (IOException ex) {
                 //
