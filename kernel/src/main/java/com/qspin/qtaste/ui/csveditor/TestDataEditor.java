@@ -318,15 +318,10 @@ public class TestDataEditor extends JPanel {
                 Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
                 int colIndex = columnAtPoint(p);
-                if (colIndex == 0)
-                {
-                   // no tooltip on first column (row id)
-                   return null;
-                }
-                else
-                {
-                   return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
-                }
+				if (colIndex < 0) {
+					return null;
+				}
+				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
             }
 
             @Override

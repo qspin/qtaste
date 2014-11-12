@@ -328,12 +328,10 @@ public class TestRequirementEditor extends JPanel {
 				Point p = e.getPoint();
 				int rowIndex = rowAtPoint(p);
 				int colIndex = columnAtPoint(p);
-				if (colIndex == 0) {
-					// no tooltip on first column (row id)
+				if (colIndex < 0) {
 					return null;
-				} else {
-					return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
 				}
+				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
 			}
 
 			// overwrite cell content when typing on a selected cell
