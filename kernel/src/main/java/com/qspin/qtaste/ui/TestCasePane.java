@@ -442,8 +442,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     public void stopExecution() {
         stopDebug();
         stopExecution = true;
+        TestEngine.setAbortedByUser(); // Flag to terminate test suites
         if (testExecutionHandler != null) {
-            testExecutionHandler.stop();
+        	testExecutionHandler.stop();
         } else if (testCampaignExecutionHandler != null) {
             testCampaignExecutionHandler.stop();
         }
@@ -1005,10 +1006,11 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 }
             }
         }
-        DirectoryTestSuite testSuite = new DirectoryTestSuite(testSuiteDir);
-        //testSuite.selectRows(dataRows);
-        testSuite.setExecutionLoops(numberLoops, loopsInHours);
-        runTestSuite(testSuite, debug);
+        DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteDir);
+        if (testSuite != null) {
+        	testSuite.setExecutionLoops(numberLoops, loopsInHours);
+            runTestSuite(testSuite, debug);
+        }
     }
 
     public void setTestSuiteDirectory(String dir) {
@@ -1154,10 +1156,11 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             isExecuting = true;
 
             try {
-                TestEngine.execute(testSuite, debug);
+        		TestEngine.execute(testSuite, debug);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
+            	TestEngine.tearDown();
                 isExecuting = false;
                 SwingUtilities.invokeLater(new UpdateButtons());
                 testExecutionHandler = null;

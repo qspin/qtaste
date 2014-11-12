@@ -42,6 +42,7 @@ import org.xml.sax.SAXException;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.io.CSVFile;
 import com.qspin.qtaste.io.XMLFile;
+import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.testsuite.TestRequirement;
 import com.qspin.qtaste.testsuite.TestScript;
 import com.qspin.qtaste.testsuite.TestSuite;
@@ -58,14 +59,28 @@ public class DirectoryTestSuite extends TestSuite {
     private List<TestScript> testScripts = new ArrayList<TestScript>();
     private File directory;
 
+    public static DirectoryTestSuite createDirectoryTestSuite(String strDirectory) {
+    	DirectoryTestSuite ts = new DirectoryTestSuite(strDirectory);
+    	if (!ts.init(strDirectory) || TestEngine.isAbortedByUser()) {
+    		return null;
+    	}
+    	return ts;
+    }
+
     /**
      * Create a Directory TestSuite with the specified root directory.
      * @param strDirectory the directory root
      */
-    public DirectoryTestSuite(String strDirectory) {
+    private DirectoryTestSuite(String strDirectory) {
         super(strDirectory);
         directory = new File(strDirectory);
-        addTestScripts(directory);
+    }
+
+    private boolean init(String strDirectory) {
+    	if (directory == null) {
+    		return false;
+    	}
+        return addTestScripts(directory);
     }
 
     /**
@@ -92,11 +107,10 @@ public class DirectoryTestSuite extends TestSuite {
     }
 
     public boolean executeOnce(boolean debug) {
-    	boolean result = true; 
+    	boolean result = true;
         for (TestScript testScript : testScripts) {
             if (!testScript.execute(debug)) {
                 if (testScript.isAbortedByUser()) {
-                    setAbortedByUser(true);
                     return false;
                 }
                 result = false;
@@ -113,8 +127,11 @@ public class DirectoryTestSuite extends TestSuite {
      * Add test scripts from given directory and its sub-directories.
      * @param directory directory from which to start adding test scripts
      */
-    private void addTestScripts(File directory) {
-        File scriptFile = new File(directory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
+    private boolean addTestScripts(File directory) {
+    	if (TestEngine.isAbortedByUser()) {
+    		return false;
+    	}
+    	File scriptFile = new File(directory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
         File csvFile = new File(directory + File.separator + StaticConfiguration.TEST_DATA_FILENAME);
         File xmlFile = new File(directory + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
         if (scriptFile.exists() && csvFile.exists()) {
@@ -158,9 +175,13 @@ public class DirectoryTestSuite extends TestSuite {
                     }
                 });
                 for (File subdir : subdirectories) {
-                    addTestScripts(subdir);
+                    if (!addTestScripts(subdir)) {
+                    	break;
+                    }
                 }
             }
         }
+
+        return true;
     }
 }

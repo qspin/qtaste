@@ -291,10 +291,12 @@ public class MainPanel extends JFrame {
 
             this.setExtendedState(Frame.MAXIMIZED_BOTH);
             if (mTestSuiteDir != null) {
-                DirectoryTestSuite testSuite = new DirectoryTestSuite(mTestSuiteDir);
-                testSuite.setExecutionLoops(mNumberLoops, mLoopsInHour);
-                setTestSuite(testSuite.getName());
-                mTestCasePanel.runTestSuite(testSuite, false);
+                DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(mTestSuiteDir);
+                if (testSuite != null) {
+                	testSuite.setExecutionLoops(mNumberLoops, mLoopsInHour);
+                    setTestSuite(testSuite.getName());
+                    mTestCasePanel.runTestSuite(testSuite, false);
+                }
             }
             setVisible(true);
         //treeTabs.setMinimumSize(new Dimension(100, this.HEIGHT));

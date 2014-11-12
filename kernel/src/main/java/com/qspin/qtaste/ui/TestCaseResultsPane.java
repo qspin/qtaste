@@ -243,6 +243,9 @@ public class TestCaseResultsPane extends JSplitPane {
                 Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
                 int colIndex = columnAtPoint(p);
+				if (colIndex < 0) {
+					return null;
+				}
                 return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
             }
 

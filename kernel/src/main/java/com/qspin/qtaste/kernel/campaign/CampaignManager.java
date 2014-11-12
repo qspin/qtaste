@@ -169,20 +169,23 @@ public class CampaignManager implements TestReportListener {
 	        createReport();
 
 	        for (CampaignRun run : currentCampaign.getRuns()) {
-	            currentTestBed = run.getTestbed();
-	            String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0, currentTestBed.lastIndexOf('.'));
-	            TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
-	            currentTestSuite = new MetaTestSuite(testSuiteName, run.getTestsuites());
-	            currentTestSuite.addTestReportListener(this);
-	            campaignResult &= TestEngine.execute(currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
-	            boolean abortedByUser = currentTestSuite.isAbortedByUser();
-	            currentTestSuite.removeTestReportListener(this);
-	            currentTestSuite = null;
-	            if (abortedByUser) {
+	        	if (TestEngine.isAbortedByUser()) {
 	                break;
 	            }
+	        	currentTestBed = run.getTestbed();
+	            String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0, currentTestBed.lastIndexOf('.'));
+	            TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
+	            currentTestSuite = MetaTestSuite.createMetaTestSuite(testSuiteName, run.getTestsuites());
+	            if (currentTestSuite == null) {
+	            	continue;
+	            }
+	            currentTestSuite.addTestReportListener(this);
+	            campaignResult &= TestEngine.execute(currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
+	            currentTestSuite.removeTestReportListener(this);
+	            currentTestSuite = null;
 	        }
 	        CampaignReportManager.getInstance().stopReport();
+	        TestEngine.tearDown();
         }
         finally
         {
@@ -190,10 +193,6 @@ public class CampaignManager implements TestReportListener {
         	currentCampaign = null;
         }
         return campaignResult;
-    }
-
-    public void stopByUser() {
-    	TestEngine.getCurrentTestSuite().setAbortedByUser(true);
     }
 
     private void updateReport() {

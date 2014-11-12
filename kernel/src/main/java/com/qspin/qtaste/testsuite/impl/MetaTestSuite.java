@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.qspin.qtaste.kernel.campaign.TestSuiteParams;
+import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.testsuite.TestScript;
 import com.qspin.qtaste.testsuite.TestSuite;
 
@@ -44,17 +45,42 @@ public class MetaTestSuite extends TestSuite {
      * @param name the test suite name
      * @param testSuitesParams the list of test suites parameters
      */
-    public MetaTestSuite(String name, List<TestSuiteParams> testSuitesParams) {
+    public static MetaTestSuite createMetaTestSuite(String name, List<TestSuiteParams> testSuitesParams) {
+    	MetaTestSuite ts = new MetaTestSuite(name);
+    	if (!ts.init(testSuitesParams) || TestEngine.isAbortedByUser()) {
+    		return null;
+    	}
+    	return ts;
+    }
+
+    /**
+     * Create a Meta TestSuite.
+     * @param name the test suite name
+     * @param testSuitesParams the list of test suites parameters
+     */
+    private MetaTestSuite(String name) {
         super(name);
-        for (TestSuiteParams testSuiteParams: testSuitesParams) {
-            DirectoryTestSuite testSuite = new DirectoryTestSuite(testSuiteParams.getDirectory());
-            testSuite.selectRows(testSuiteParams.getSelectedDataRows());
+    }
+
+
+    private boolean init(List<TestSuiteParams> testSuitesParams) {
+    	for (TestSuiteParams testSuiteParams: testSuitesParams) {
+        	if (TestEngine.isAbortedByUser()) {
+        		return false;
+        	}
+        	DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteParams.getDirectory());
+        	if (testSuite == null) {
+        		continue;
+        	}
+        	testSuite.selectRows(testSuiteParams.getSelectedDataRows());
             testSuite.setExecutionLoops(testSuiteParams.getCount(), testSuiteParams.loopInHours());
             testSuite.addTestReportListener(this);
             testSuites.add(testSuite);
         }
+
+    	return true;
     }
-    
+
     @Override
     protected void finalize() {
         for (TestSuite testSuite : testSuites) {
@@ -80,14 +106,13 @@ public class MetaTestSuite extends TestSuite {
             return numberTestsToExecute;
         }
     }
-    
+
     @Override
     public boolean executeOnce(boolean debug) {
     	boolean result = true;
         for (TestSuite testSuite : testSuites) {
             if (!testSuite.execute(debug, false)) {
-                if (testSuite.isAbortedByUser()) {
-                    setAbortedByUser(true);
+                if (TestEngine.isAbortedByUser()) {
                     return false;
                 }
                 result = false;

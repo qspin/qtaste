@@ -55,6 +55,7 @@ import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.kernel.campaign.Campaign;
 import com.qspin.qtaste.kernel.campaign.CampaignManager;
+import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.ui.MainPanel;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.treetable.JTreeTable;
@@ -365,9 +366,7 @@ public class TestCampaignMainPanel extends JPanel {
         }
 
         public void stop() {
-        	CampaignManager campaignManager = CampaignManager.getInstance();
-        	campaignManager.stopByUser(); // Flag to terminate all loaded test suites
-            ThreadGroup root = Thread.currentThread().getThreadGroup();
+        	ThreadGroup root = Thread.currentThread().getThreadGroup();
             ThreadManager.stopThread(root, 0);
         }
 

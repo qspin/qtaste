@@ -414,9 +414,9 @@ public class JythonTestScript extends TestScript implements Executable {
                 "        self.set_continue()\n";
     }
 
-    /** Creates a new instance of PythonTestScript 
-     * @throws FileNotFoundException 
-     * @throws IOException 
+    /** Creates a new instance of PythonTestScript
+     * @throws FileNotFoundException
+     * @throws IOException
      */
     public JythonTestScript(List<LinkedHashMap<String, String>> data, List<TestRequirement> requirements, File fileName, File testSuiteDirectory, TestSuite testSuite) throws IOException {
         super(fileName.getParentFile(), testSuiteDirectory, fileName.getParentFile().getName(), new TestDataSet(data), requirements, testSuite);
@@ -470,7 +470,7 @@ public class JythonTestScript extends TestScript implements Executable {
     }
 
     /**
-     * Parses a PythonDoc comment and returns a map of tag names to descriptions 
+     * Parses a PythonDoc comment and returns a map of tag names to descriptions
      * @param pythonDoc a PythonDoc comment
      * @return a map of tag names to descriptions; the description before tags
      *         is mapped to an empty tag name
@@ -576,7 +576,7 @@ public class JythonTestScript extends TestScript implements Executable {
     public static List<String> getAdditionalPythonPath(File file) {
         List<String> pythonlibs = new ArrayList<String>();
 	//add librairies references by the environment variable
-	for ( String additionnalPath : StaticConfiguration.JYTHON_LIB.split(File.pathSeparator) ) 
+	for ( String additionnalPath : StaticConfiguration.JYTHON_LIB.split(File.pathSeparator) )
 	{
 	    File directory = new File(additionnalPath);
             pythonlibs.add(directory.toString());
@@ -682,6 +682,11 @@ public class JythonTestScript extends TestScript implements Executable {
             bindings.remove("QTasteException");
             bindings.remove("QTasteDataException");
             bindings.remove("QTasteTestFailException");
+
+            // Check if test was aborted by user before execute testscript.py
+            if (TestEngine.isAbortedByUser()) {
+            	return false;
+            }
 
             if (!debug) {
                 engine.eval("execfile(r'" + fileName + "', globals())");
@@ -1005,7 +1010,7 @@ public class JythonTestScript extends TestScript implements Executable {
                     logger.info("Test case stopped at file " + fileName + " line " + lineNumber);
 
                     // Stop the script executioncanonicalName until the Condition 'startCondition' has been reached
-                    //   Actually, this startCondition is set by the GUI 
+                    //   Actually, this startCondition is set by the GUI
                     breakpointMgr.stop();
                     logger.debug("beakpoint start is called with action " + action.toString());
                     switch (action) {
@@ -1056,9 +1061,8 @@ public class JythonTestScript extends TestScript implements Executable {
 
         /**
          * doAction This function is used to perform actions while the script has been stopped
-         * @param event 
+         * @param event
          */
-        // 
         public void doAction(TestScriptBreakpointEvent event) {
             action = event.getAction();
             logger.debug("Received action in Jython testscript: " + event.getAction().toString());

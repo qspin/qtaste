@@ -63,6 +63,24 @@ public class TestEngine {
 	private static volatile boolean isStartStopSUTCancellable = false;
 	public static volatile boolean isStartStopSUTCancelled = false;
 	private static volatile boolean ignoreControlScript = false;
+	private static volatile boolean abortedByUser = false;
+
+	/**
+	 * Check if Test was aborted by user.
+	 *
+	 * @return true if test was aborted by the user, false otherwise (aborted)
+	 */
+	public static boolean isAbortedByUser() {
+        return abortedByUser;
+    }
+
+	/**
+	 * Set as current Test sequence is aborted by user.
+	 */
+    public static void setAbortedByUser() {
+		logger.info("Test aborted by user");
+        abortedByUser = true;
+    }
 
 	/**
 	 * Execute a test suite.
@@ -128,8 +146,8 @@ public class TestEngine {
 	 * Cancels start/stop of SUT. SUT stop in terminate() is not cancellable.
 	 */
 	public static void cancelStartStopSUT() {
-		logger.info("Cancel start/stop SUT");
 		if (isStartStopSUTCancellable) {
+			logger.info("Cancel start/stop SUT");
 			isStartStopSUTCancelled = true;
 			sutStartStopExec.kill();
 		}
@@ -252,6 +270,10 @@ public class TestEngine {
 		return needToRestartSUT;
 	}
 
+	/**
+	 * Initialize Test Engine by starting the test bed
+	 *
+	 */
 	public static boolean initialize() {
 		if (useControlScript()) {
 			isStartStopSUTCancellable = true;
@@ -276,10 +298,13 @@ public class TestEngine {
 		return true;
 	}
 
+	/**
+	 * Terminate Test Engine by stopping all Probes and Test bed.
+	 *
+	 */
 	public static void terminate() {
 		// Stop all the probes
 		ProbeManager.getInstance().stop();
-		logger.info("TestEngine terminated");
 
 		isStartStopSUTCancellable = false;
 		isStartStopSUTCancelled = false;
@@ -294,6 +319,20 @@ public class TestEngine {
 			tr.stop();
 			reportManager.refresh();
 		}
+
+		logger.info("TestEngine terminated");
+	}
+
+	/**
+	 * Reset Test Engine configuration and close any opened probe.
+	 *
+	 */
+	public static void tearDown() {
+		// Stop all the probes
+		ProbeManager.getInstance().stop();
+		abortedByUser = false;
+		isStartStopSUTCancellable = false;
+		isStartStopSUTCancelled = false;
 	}
 
 	public static void shutdown() {
@@ -405,8 +444,7 @@ public class TestEngine {
 			properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
 			properties.setProperty("python.path", StaticConfiguration.JYTHON_LIB);
 			PythonInterpreter.initialize(System.getProperties(), properties, new String[] { "" });
-
-			TestSuite testSuite = new DirectoryTestSuite(testSuiteDir);
+			TestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteDir);
 			testSuite.setExecutionLoops(numberLoops, loopsInHours);
 			executionResult = execute(testSuite);
 		} finally {

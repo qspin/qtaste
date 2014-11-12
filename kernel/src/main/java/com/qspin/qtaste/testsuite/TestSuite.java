@@ -53,7 +53,6 @@ public abstract class TestSuite implements TestReportListener {
     private int nbTestsFailed = 0;
     private int nbTestsNotAvailable = 0;
     private int nbTestsRetries = 0;
-    private volatile boolean abortedByUser = false;
     private List<TestReportListener> testReportListeners = new LinkedList<TestReportListener>();
 
     /** Creates a new instance of TestSuite */
@@ -84,6 +83,9 @@ public abstract class TestSuite implements TestReportListener {
     public boolean execute(boolean debug, boolean initializeTestEngine) {
         boolean executionSuccess = true;
         nbTestsToExecute = computeNumberTestsToExecute();
+        if (TestEngine.isAbortedByUser()) {
+        	return false;
+        }
         startExecutionDate = new Date();
         reportTestSuiteStarted();
         if (nbTestsToExecute != 0) {
@@ -104,7 +106,7 @@ public abstract class TestSuite implements TestReportListener {
                         } else {
                         	continueExecution = numberLoops == -1 || currentExecution < numberLoops;
                         }
-                        continueExecution &= !this.abortedByUser;
+                        continueExecution &= !TestEngine.isAbortedByUser();
                         currentExecution++;
                     } while (continueExecution);
                 } else {
@@ -141,14 +143,6 @@ public abstract class TestSuite implements TestReportListener {
         for (TestReportListener testReportListener: testReportListeners) {
             testReportListener.reportTestSuiteStopped();
         }
-    }
-
-    public boolean isAbortedByUser() {
-        return abortedByUser;
-    }
-
-    public void setAbortedByUser(boolean value) {
-        abortedByUser = value;
     }
 
     /**

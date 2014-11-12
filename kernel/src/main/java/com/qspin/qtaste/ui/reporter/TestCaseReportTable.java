@@ -188,7 +188,10 @@ public class TestCaseReportTable {
                 Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
                 int colIndex = columnAtPoint(p);
-                return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
+				if (colIndex < 0) {
+					return null;
+				}
+				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
             }
         };
         tcTable.setColumnSelectionAllowed(false);
@@ -782,15 +785,16 @@ public class TestCaseReportTable {
                 testSuiteParams.setDataRows(testCases.getValue());
                 testSuitesParams.add(testSuiteParams);
             }
-            final TestSuite testSuite = new MetaTestSuite("Test(s) re-execution", testSuitesParams);
-            Thread reExecuteTestsThread = new Thread() {
-
-                @Override
-                public void run() {
-                    tcPane.runTestSuite(testSuite, false);
-                }
-            };
-            reExecuteTestsThread.start();
+            final TestSuite testSuite = MetaTestSuite.createMetaTestSuite("Test(s) re-execution", testSuitesParams);
+            if (testSuite != null) {
+            	Thread reExecuteTestsThread = new Thread() {
+                    @Override
+                    public void run() {
+                        tcPane.runTestSuite(testSuite, false);
+                    }
+                };
+                reExecuteTestsThread.start();
+            }
         }
 
         @Override
