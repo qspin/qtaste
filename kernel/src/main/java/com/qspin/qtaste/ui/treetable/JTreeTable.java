@@ -139,8 +139,8 @@ public class JTreeTable extends JTable {
 
                     // update status of the parent row and its model
                     TreePath currentPath = tree.getPathForRow(editorCell.getCurrentRow());
-                    updateChildCells(currentPath, JTreeTable.this.convertColumnIndexToModel(editorCell.getCurrentColumn()));
-                    updateParentCells(editorCell.getCurrentRow(), JTreeTable.this.convertColumnIndexToModel(editorCell.getCurrentColumn()));
+                    updateChildCells(currentPath, editorCell.getCurrentColumn());
+                    updateParentCells(editorCell.getCurrentRow(), editorCell.getCurrentColumn());
                 }
             }
 
@@ -243,7 +243,7 @@ public class JTreeTable extends JTable {
 	        TCTreeNode node = (TCTreeNode) treePath.getLastPathComponent();
 	        // only applicable if the child is a JTreeNode (otherwise there is no parent (rootNode)
 	        if (node.getUserObject() instanceof JTreeNode) {
-	            String testbedName = model.getColumnName(col);
+	            String testbedName = getColumnName(col);
 	            model.updateParent((JTreeNode) node.getUserObject(), testbedName);
 	        }
     	}
@@ -308,7 +308,7 @@ public class JTreeTable extends JTable {
 	        } // it can be different is user didn't expand the tree view
 
 
-	        String testbedName = model.getColumnName(col);
+	        String testbedName = getColumnName(col);
 	        if (fNode != null) {
 	            model.updateChild(fNode, testbedName);
 	            return;
@@ -461,11 +461,25 @@ public class JTreeTable extends JTable {
         @Override
         public void mouseClicked(MouseEvent e) {
             if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
-                // do select All
-                SelectAllAction action = new SelectAllAction(true);
-                action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "SelectAll"));
+                TreePath selectedPath = tree.getSelectionPath();
+                if (selectedPath == null) {
+                    return;
+                }
+                Object obj = selectedPath.getLastPathComponent();
+                if (obj instanceof TCTreeNode) {
+                    TCTreeNode treeNode = (TCTreeNode) obj;
+                    boolean areAllTestbedsSelected = true;
+                    for (int i = 1; i < JTreeTable.this.getColumnCount(); i++) {
+                        if (mTreeTableModel.getValueAt(treeNode, convertColumnIndexToModel(i)) != TristateCheckBox.SELECTED)
+                        {
+                            areAllTestbedsSelected = false;
+                        }
+                    }
+                    // do Select All if some testbeds are not selected, Unselect All otherwise
+                    SelectAllAction action = new SelectAllAction(!areAllTestbedsSelected);
+                    action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, action.getName()));
+                }
             }
-
         }
 
         @Override
@@ -596,10 +610,8 @@ public class JTreeTable extends JTable {
                                     		TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
                                     		model.removeTestbed(colName);
                                     	}
-
                                     }
                                     break;
-
                                 }
                             }
                         }
@@ -633,6 +645,10 @@ public class JTreeTable extends JTable {
         public SelectAllAction(boolean select) {
             super(select ? "Select all" : "Unselect all");
             this.select = select;
+        }
+
+        public String getName() {
+            return (String) getValue(NAME);
         }
 
         public void actionPerformed(ActionEvent e) {

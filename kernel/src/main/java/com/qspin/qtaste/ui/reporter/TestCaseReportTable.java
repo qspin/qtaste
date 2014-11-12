@@ -832,17 +832,8 @@ public class TestCaseReportTable {
             new Thread() {
             	@Override
             	public void run() {
-
             		for (final String command: commands) {
-		                try {
-							SwingUtilities.invokeAndWait(new Runnable() {
-								public void run() {
-							        tcInteractivePanel.executeCommand(command);
-								}
-							});
-						} catch (Exception e) {
-							logger.error("Error while executing interactive command: " + e.getMessage());
-						}
+            			tcInteractivePanel.executeCommand(command);
             		}
             	}
             }.start();

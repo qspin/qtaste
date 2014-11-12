@@ -27,11 +27,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import com.qspin.qtaste.testapi.api.Utility;
 import com.qspin.qtaste.testsuite.QTasteException;
+import org.apache.commons.lang.mutable.MutableBoolean;
 
 /**
  *
@@ -39,23 +40,16 @@ import com.qspin.qtaste.testsuite.QTasteException;
  */
 public class UtilityImpl implements Utility {
 
-    private JOptionPane optionPane;
-    private JDialog messageDialog;
-
     public UtilityImpl() throws Exception {
         initialize();
     }
 
     public void initialize() throws QTasteException {
+        // nothing to do
     }
 
     public void terminate() throws QTasteException {
-        if (messageDialog != null) {
-            optionPane = null;
-            messageDialog.setVisible(false);
-            messageDialog.dispose();
-            messageDialog = null;
-        }
+        // nothing to do
     }
 
     public void createScreenshot(String fileName) throws QTasteException {
@@ -71,65 +65,65 @@ public class UtilityImpl implements Utility {
 		}
 	}
 
-    public void showMessageDialog(String title, String message, boolean modal) {
-
-    	optionPane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE);
-        messageDialog = optionPane.createDialog(title);
-        messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-
-        // don't set modal to true now, because we use the setAlwaysOnTop(true)/setAlwaysOnTop(false)
-        // trick to get the focus, but we don't really want an "AlwaysOnTop" window
-        messageDialog.setModal(false);
-        messageDialog.pack();
-        messageDialog.setAlwaysOnTop(true);
-        messageDialog.setVisible(true);
-        messageDialog.setAlwaysOnTop(false);
-
-        if (modal) {
-            messageDialog.setVisible(false);
-            messageDialog.setModal(true);
-            messageDialog.setVisible(true);
+    public void showMessageDialog(final String title, final String message) throws QTasteException  {
+        try
+        {
+            SwingUtilities.invokeAndWait(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            throw new QTasteException("Error while showing message dialog", e);
         }
     }
 
-    public void hideMessageDialog() {
-        messageDialog.setVisible(false);
+    @Override
+    public String getUserStringValue(final String message, final Object defaultValue) throws QTasteException {
+        final StringBuilder valueBuilder = new StringBuilder();
+        try
+        {
+            SwingUtilities.invokeAndWait(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    String value = JOptionPane.showInputDialog(message, defaultValue);
+                    valueBuilder.append(value);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            throw new QTasteException("Error while showing user input dialog", e);
+        }
+        return valueBuilder.toString();
     }
 
-	@Override
-	public String getUserStringValue(String messageToDisplay, Object defaultValue) throws QTasteException {
-		return JOptionPane.showInputDialog(messageToDisplay, defaultValue);
-	}
-
-	@Override
-	public boolean getUserConfirmation(String messageToDisplay) throws QTasteException {
-
-		optionPane = new JOptionPane(messageToDisplay, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
-        messageDialog = optionPane.createDialog("Input");
-        messageDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-
-        // don't set modal to true now, because we use the setAlwaysOnTop(true)/setAlwaysOnTop(false)
-        // trick to get the focus, but we don't really want an "AlwaysOnTop" window
-        messageDialog.setModal(false);
-        messageDialog.pack();
-        messageDialog.setAlwaysOnTop(true);
-        messageDialog.setVisible(true);
-        messageDialog.setAlwaysOnTop(false);
-
-        messageDialog.setVisible(false);
-        messageDialog.setModal(true);
-        messageDialog.setVisible(true);
-
-        // Get selected option value
-        Object selectedValue = optionPane.getValue();
-        if(selectedValue == null) {
-        	return false;
+    @Override
+    public boolean getUserConfirmation(final String title, final String message) throws QTasteException {
+        final MutableBoolean confirmed = new MutableBoolean();
+        try
+        {
+            SwingUtilities.invokeAndWait(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    int result = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+                    confirmed.setValue(result == JOptionPane.YES_OPTION);
+                }
+            });
         }
-        if(selectedValue instanceof Integer) {
-        	return ( ((Integer)selectedValue).intValue() == JOptionPane.YES_OPTION);
+        catch (Exception e)
+        {
+            throw new QTasteException("Error while showing user confirmation dialog", e);
         }
-
-        return false;
-	}
-
+        return confirmed.booleanValue();
+    }
 }
