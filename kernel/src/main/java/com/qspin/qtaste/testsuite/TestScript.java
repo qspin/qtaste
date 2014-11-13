@@ -104,6 +104,10 @@ public abstract class TestScript implements Executable {
                 boolean needToRetry = false;
                 // Retry the script "RETRY_COUNTER" times in case of failure
                 do {
+                	if (TestEngine.isAbortedByUser()) {
+                        return false;
+                	}
+
                     if (TestEngine.needToRestartSUT()) {
                         logger.info("SUT has to be restarted");
                         if (!TestEngine.restartSUT()) {
@@ -193,6 +197,7 @@ public abstract class TestScript implements Executable {
                 return false;
             }
         }
+
         return returnStatus;
     }
 
@@ -345,6 +350,12 @@ public abstract class TestScript implements Executable {
         @Override
         public void run() {
             execute(data, result, debug);
+
+            if (TestEngine.isAbortedByUser()) {
+	            result.setStatus(TestResult.Status.NOT_AVAILABLE);
+	            result.setExtraResultDetails("Test aborted by the user");
+            }
+
             result.stop();
         }
     }

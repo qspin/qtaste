@@ -110,7 +110,7 @@ public class DirectoryTestSuite extends TestSuite {
     	boolean result = true;
         for (TestScript testScript : testScripts) {
             if (!testScript.execute(debug)) {
-                if (testScript.isAbortedByUser()) {
+                if (testScript.isAbortedByUser() || TestEngine.isAbortedByUser()) {
                     return false;
                 }
                 result = false;
