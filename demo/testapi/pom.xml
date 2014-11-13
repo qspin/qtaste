@@ -152,4 +152,21 @@
             <version>2.2.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- exclude junit from ws-commons-util which has an erroneous compile scope dependency to it -->
+            <dependency>
+                <groupId>org.apache.ws.commons.util</groupId>
+                <artifactId>ws-commons-util</artifactId>
+                <version>1.0.2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
