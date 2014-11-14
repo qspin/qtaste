@@ -439,8 +439,12 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         add(tabbedPane, BorderLayout.CENTER);
     }
 
+    public void enableStopButton(boolean status) {
+    	stopExecutionButton.setEnabled(status);
+    }
+
     public void stopExecution() {
-    	stopExecutionButton.setEnabled(false);
+    	enableStopButton(false);
     	stopDebug();
         stopExecution = true;
         TestEngine.setAbortedByUser(); // Flag to terminate test suites
@@ -1040,7 +1044,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         isExecuting = true;
         stopExecution = false;
         stopExecutionButton.setVisible(true);
-        stopExecutionButton.setEnabled(true);
+        enableStopButton(true);
 
         parent.getHeaderPanel().setControlTestbedButtonsEnabled();
         parent.getTestCampaignPanel().setExecuteButtonsEnabled(!isExecuting);
