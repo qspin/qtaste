@@ -185,10 +185,10 @@ public class CampaignManager implements TestReportListener {
 	            currentTestSuite = null;
 	        }
 	        CampaignReportManager.getInstance().stopReport();
-	        TestEngine.tearDown();
         }
         finally
         {
+        	TestEngine.tearDown();
         	campaignStartTimeStamp = null;
         	currentCampaign = null;
         }
