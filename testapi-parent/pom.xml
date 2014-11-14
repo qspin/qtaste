@@ -41,10 +41,10 @@
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-assembly-plugin</artifactId>
                <configuration>
-                  <descriptors>
-                     <descriptor>assemblies/deploy.xml</descriptor>
-             <!-- deploy.xml available from qtaste-testapi-deploy-->
-                  </descriptors>
+                  <descriptorRefs>
+                     <descriptorRef>testapi-deploy</descriptorRef>
+                     <!-- testapi-deploy is provided by qtaste-testapi-deploy-->
+                  </descriptorRefs>
                   <archive>
                      <manifest>
                         <mainClass>com.qspin.qtaste.ui.MainPanel</mainClass>
