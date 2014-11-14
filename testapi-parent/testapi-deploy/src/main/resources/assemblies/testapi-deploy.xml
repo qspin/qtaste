@@ -1,5 +1,5 @@
 <assembly>
-  <id>deploy</id>
+  <id>testapi-deploy</id>
   <formats>
     <format>jar</format>
   </formats>
