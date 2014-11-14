@@ -43,8 +43,6 @@ public class TestBedConfiguration extends XMLConfiguration {
     private static List<ConfigurationChangeHandler> configurationChangeHandlers = new ArrayList<ConfigurationChangeHandler>();
     private static long lastModifiedTime;
     private static String sutVersion;
-    private static volatile boolean isStartedManually = false;
-    private static volatile boolean isRunning = false;
 
     private TestBedConfiguration() throws ConfigurationException {
         super(configFile);
@@ -71,37 +69,6 @@ public class TestBedConfiguration extends XMLConfiguration {
             logger.fatal("Cannot load configuration", e);
             return null;
         }
-    }
-
-    /**
-     * Set Running Mode and define if was started manually
-     * @param define if testbed started with ignore control script or manually
-     */
-    public static void setAsRunning(boolean startedManually) {
-    	isStartedManually = startedManually;
-        isRunning = true;
-    }
-
-    /**
-     * Set as Not Running
-     */
-    public static void setAsStopped() {
-    	isStartedManually = false;
-    	isRunning = false;
-    }
-
-    /**
-     * Return if testbed is Running
-     */
-    public static boolean isRunning() {
-    	return isRunning;
-    }
-
-    /**
-     * Return if testbed was started manually
-     */
-    public static boolean isStartedManually() {
-    	return isRunning && isStartedManually;
     }
 
     /**

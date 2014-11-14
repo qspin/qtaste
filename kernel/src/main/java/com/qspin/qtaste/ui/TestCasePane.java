@@ -449,7 +449,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             testCampaignExecutionHandler.stop();
         }
 
-        if (!TestBedConfiguration.isStartedManually()) {
+        if (!TestEngine.isSUTStartedManually()) {
         	TestEngine.cancelStartStopSUT();
         }
     }
@@ -1244,4 +1244,5 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             return false;
         }
     }
+
 }

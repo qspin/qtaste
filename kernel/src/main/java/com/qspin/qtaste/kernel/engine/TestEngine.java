@@ -64,6 +64,8 @@ public class TestEngine {
 	public static volatile boolean isStartStopSUTCancelled = false;
 	private static volatile boolean ignoreControlScript = false;
 	private static volatile boolean abortedByUser = false;
+	private static volatile boolean isSUTStartedManually = false;
+    private static volatile boolean isSUTRunning = false;
 
 	/**
 	 * Check if Test was aborted by user.
@@ -80,6 +82,37 @@ public class TestEngine {
     public static void setAbortedByUser() {
 		logger.info("Test aborted by user");
         abortedByUser = true;
+    }
+
+    /**
+     * Set Running Mode and define if was started manually
+     * @param define if testbed started with ignore control script or manually
+     */
+    private static void setSUTAsRunning(boolean startedManually) {
+    	isSUTStartedManually = startedManually;
+        isSUTRunning = true;
+    }
+
+    /**
+     * Set as Not Running
+     */
+    private static void setSUTAsStopped() {
+    	isSUTStartedManually = false;
+    	isSUTRunning = false;
+    }
+
+    /**
+     * Return if testbed is Running
+     */
+    public static boolean isSUTRunning() {
+    	return isSUTRunning;
+    }
+
+    /**
+     * Return if testbed was started manually
+     */
+    public static boolean isSUTStartedManually() {
+    	return isSUTRunning && isSUTStartedManually;
     }
 
 	/**
@@ -133,12 +166,15 @@ public class TestEngine {
 	}
 
 	public static boolean startSUT(TestResult tr) {
-		TestBedConfiguration.setAsRunning(ignoreControlScript);
-		return startOrStopSUT(true, tr);
+		boolean status = startOrStopSUT(true, tr);
+		if (status) {
+			setSUTAsRunning(ignoreControlScript);
+		}
+		return status;
 	}
 
 	public static boolean stopSUT(TestResult tr) {
-		TestBedConfiguration.setAsStopped();
+		setSUTAsStopped();
 		return startOrStopSUT(false, tr);
 	}
 
@@ -158,7 +194,7 @@ public class TestEngine {
 		String startOrStop = start ? "start" : "stop";
 		TestBedConfiguration config = TestBedConfiguration.getInstance();
 		if (hasControlScript()) {
-			if (isStartStopSUTCancelled) {
+			if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
 				if (tr != null) {
 					tr.setStatus(Status.FAIL);
 					tr.setExtraResultDetails("SUT " + startOrStop + " command cancelled");
@@ -190,10 +226,7 @@ public class TestEngine {
 				String startOrStopFullCommand = (scriptEngine != null ? scriptEngine + " " + startOrStopCommand : startOrStopCommand);
 				logger.trace("FULL COMMAND : '" + startOrStopFullCommand + "'");
 				int exitCode = sutStartStopExec.exec(startOrStopFullCommand, env, output);
-				if (exitCode == 0) {
-					logger.info("SUT " + (start ? "started" : "stopped"));
-					return true;
-				} else if (isStartStopSUTCancelled) {
+				if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
 					String errMsg = "SUT " + startOrStop + " command cancelled";
 					logger.info(errMsg);
 					if (tr != null) {
@@ -201,6 +234,9 @@ public class TestEngine {
 						tr.setExtraResultDetails(errMsg);
 					}
 					return false;
+				} else if (exitCode == 0) {
+					logger.info("SUT " + (start ? "started" : "stopped"));
+					return true;
 				} else {
 					String errMsg = "SUT " + startOrStop + " command '" + startOrStopCommand + "' exited with error code " + exitCode + ". Output:\n" + output.toString();
 					logger.error(errMsg);
@@ -278,14 +314,17 @@ public class TestEngine {
 		if (useControlScript()) {
 			isStartStopSUTCancellable = true;
 			isStartStopSUTCancelled = false;
+			boolean success = true;
 
 			TestResult tr = new TestResultImpl("Start SUT", null, null, 1, 1);
 			tr.setTestScriptVersion("-");
 			tr.start();
 			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
 			reportManager.putEntry(tr);
-			stopSUT(null);
-			boolean success = startSUT(tr);
+			success &= stopSUT(tr);
+			if (success) {
+				success &= startSUT(tr);
+			}
 			tr.stop();
 			reportManager.refresh();
 			if (!success) {

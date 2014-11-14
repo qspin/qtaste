@@ -83,12 +83,9 @@ public abstract class TestSuite implements TestReportListener {
     public boolean execute(boolean debug, boolean initializeTestEngine) {
         boolean executionSuccess = true;
         nbTestsToExecute = computeNumberTestsToExecute();
-        if (TestEngine.isAbortedByUser()) {
-        	return false;
-        }
         startExecutionDate = new Date();
         reportTestSuiteStarted();
-        if (nbTestsToExecute != 0) {
+        if (nbTestsToExecute != 0 || !TestEngine.isAbortedByUser()) {
             if (!initializeTestEngine || TestEngine.initialize()) {
                 if (numberLoops != 1 || loopsInTime) {
                     boolean continueExecution = true;
