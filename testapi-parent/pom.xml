@@ -42,8 +42,8 @@
                <artifactId>maven-assembly-plugin</artifactId>
                <configuration>
                   <descriptorRefs>
-                     <descriptorRef>testapi-deploy</descriptorRef>
-                     <!-- testapi-deploy is provided by qtaste-testapi-deploy-->
+                     <descriptorRef>deploy</descriptorRef>
+                     <!-- deploy is provided by qtaste-testapi-deploy-->
                   </descriptorRefs>
                   <archive>
                      <manifest>
