@@ -64,6 +64,7 @@ public class TestEngine {
 	public static volatile boolean isStartStopSUTCancelled = false;
 	private static volatile boolean ignoreControlScript = false;
 	private static volatile boolean abortedByUser = false;
+	private static volatile boolean isSUTStartingManually = false;
 	private static volatile boolean isSUTStartedManually = false;
     private static volatile boolean isSUTRunning = false;
 
@@ -166,9 +167,15 @@ public class TestEngine {
 	}
 
 	public static boolean startSUT(TestResult tr) {
+		return startSUT(tr, false);
+	}
+
+	public static boolean startSUT(TestResult tr, boolean manually) {
 		isStartStopSUTCancellable = true;
+		isSUTStartingManually = manually;
 		boolean status = startOrStopSUT(true, tr);
 		if (status) {
+			isSUTStartingManually = false;
 			setSUTAsRunning(ignoreControlScript);
 		}
 		return status;
@@ -185,9 +192,8 @@ public class TestEngine {
 	public static void cancelStartStopSUT() {
 		if (isStartStopSUTCancellable) {
 			logger.info("Cancel start/stop SUT");
-			if (!isSUTRunning) {
+			if (isSUTStartingManually) {
 				stopSUT(null);
-				tearDown();
 			}
 			isStartStopSUTCancelled = true;
 			sutStartStopExec.kill();

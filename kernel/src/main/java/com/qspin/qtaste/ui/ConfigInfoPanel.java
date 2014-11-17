@@ -342,8 +342,10 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             	reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));
             }
             reportManager.putEntry(tr);
-            if (start && TestEngine.stopSUT(tr)) {
-                TestEngine.startSUT(tr);
+            TestEngine.tearDown();
+            if (start) {
+            	TestEngine.stopSUT(null);
+                TestEngine.startSUT(tr, true);
             } else {
                 TestEngine.stopSUT(tr);
             }

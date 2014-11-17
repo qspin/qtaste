@@ -456,7 +456,12 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         }
 
         if (!TestEngine.isSUTStartedManually()) {
-        	TestEngine.cancelStartStopSUT();
+            Thread t = new Thread(new Runnable() {
+            	public void run() {
+                	TestEngine.cancelStartStopSUT();
+                }
+            });
+            t.start();
         }
     }
 
@@ -1115,6 +1120,10 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         SwingUtilities.invokeLater(new UpdateButtons());
     }
 
+    public void updateButtons(boolean enableStopButton) {
+        SwingUtilities.invokeLater(new UpdateButtons(enableStopButton));
+    }
+
     public void setSelectedTab(int index) {
         tabbedPane.setSelectedIndex(index);
     }
@@ -1129,9 +1138,22 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     public class UpdateButtons implements Runnable {
 
+    	private boolean enableStopButton;
+
+    	public UpdateButtons() {
+    		this.enableStopButton = false;
+    	}
+
+    	public UpdateButtons(final boolean enableStopButton) {
+    		this.enableStopButton = enableStopButton;
+    	}
+
         public void run() {
             executeButton.setEnabled(!isExecuting);
             stopExecutionButton.setVisible(isExecuting);
+            if (this.enableStopButton) {
+            	stopExecutionButton.setEnabled(true);
+            }
             debugButton.setEnabled(!isExecuting);
             parent.getHeaderPanel().setControlTestbedButtonsEnabled();
             parent.getTestCampaignPanel().setExecuteButtonsEnabled(!isExecuting);

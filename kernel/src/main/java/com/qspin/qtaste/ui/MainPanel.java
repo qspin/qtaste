@@ -249,7 +249,7 @@ public class MainPanel extends JFrame {
                             mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
                             // update the buttons
                             mTestCasePanel.setExecutingTestCampaign(true, ((TestCampaignMainPanel)e.getSource()).getExecutionThread());
-                            mTestCasePanel.updateButtons();
+                            mTestCasePanel.updateButtons(true);
                         }
                         if (e.getActionCommand().equals(TestCampaignMainPanel.STOPPED_CMD)) {
                             mTestCasePanel.setExecutingTestCampaign(false, null);
