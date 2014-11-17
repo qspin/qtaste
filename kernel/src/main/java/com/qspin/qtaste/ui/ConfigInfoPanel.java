@@ -88,6 +88,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     private boolean isStartingOrStoppingTestbed;
     private static final Logger logger = Log4jLoggerFactory.getLogger(ConfigInfoPanel.class);
 
+
     /**
      * Label with hyphen.
      */
@@ -239,6 +240,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             public void actionPerformed(ActionEvent e) {
                 isStartingOrStoppingTestbed = true;
                 setControlTestbedButtonsEnabled();
+                parent.getTestCasePanel().setStopButtonEnabled(true, true);
                 parent.getTestCasePanel().showTestcaseResultsTab();
                 TestBedConfiguration.setSUTVersion(getSUTVersion());
                 new SUTStartStopThread("start").start();
@@ -340,8 +342,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             	reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));
             }
             reportManager.putEntry(tr);
-            if (start) {
-                TestEngine.stopSUT(null);
+            if (start && TestEngine.stopSUT(tr)) {
                 TestEngine.startSUT(tr);
             } else {
                 TestEngine.stopSUT(tr);
@@ -355,6 +356,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
                 public void run() {
                     isStartingOrStoppingTestbed = false;
                     setControlTestbedButtonsEnabled();
+                    parent.getTestCasePanel().setStopButtonEnabled(false, false);
+                    TestEngine.tearDown();
                 }
             });
         }

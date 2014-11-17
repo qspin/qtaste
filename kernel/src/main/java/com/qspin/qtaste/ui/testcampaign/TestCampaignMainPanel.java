@@ -206,7 +206,7 @@ public class TestCampaignMainPanel extends JPanel {
                         return;
                     }
 
-                    parent.getTestCasePanel().enableStopButton(true);
+                    parent.getTestCasePanel().setStopButtonEnabled(true, true);
 
                     // first save the current campaign if needed
                     if (treeTable.hasChanged()) {

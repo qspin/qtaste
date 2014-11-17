@@ -166,6 +166,7 @@ public class TestEngine {
 	}
 
 	public static boolean startSUT(TestResult tr) {
+		isStartStopSUTCancellable = true;
 		boolean status = startOrStopSUT(true, tr);
 		if (status) {
 			setSUTAsRunning(ignoreControlScript);
@@ -179,11 +180,15 @@ public class TestEngine {
 	}
 
 	/**
-	 * Cancels start/stop of SUT. SUT stop in terminate() is not cancellable.
+	 * Cancels start/stop of SUT. SUT stop in terminate() if is not cancellable.
 	 */
 	public static void cancelStartStopSUT() {
 		if (isStartStopSUTCancellable) {
 			logger.info("Cancel start/stop SUT");
+			if (!isSUTRunning) {
+				stopSUT(null);
+				tearDown();
+			}
 			isStartStopSUTCancelled = true;
 			sutStartStopExec.kill();
 		}
@@ -367,8 +372,6 @@ public class TestEngine {
 	 *
 	 */
 	public static void tearDown() {
-		// Stop all the probes
-		ProbeManager.getInstance().stop();
 		abortedByUser = false;
 		isStartStopSUTCancellable = false;
 		isStartStopSUTCancelled = false;
