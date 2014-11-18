@@ -134,6 +134,31 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>apache-releases</id>
+            <name>Apache Releases</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>bits-netbeans</id>
+            <name>Bits NetBeans</name>
+            <url>http://bits.netbeans.org/nexus/content/groups/netbeans/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <!-- EXTERNAL LIBRARIES -->
@@ -203,8 +228,8 @@
          <dependency>
           <groupId>org.netbeans.external</groupId>
           <artifactId>nb-javac-api</artifactId>
-          <version>RELEASE80</version>
-     </dependency>
+          <version>RELEASE801</version>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -260,22 +285,6 @@
                             <groupId>javax.script</groupId>
                             <artifactId>jython-engine</artifactId>
                             <version>1.0</version>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                      </execution>
-                      <execution>
-                        <id>install-local-javadoc</id>
-                        <phase>pre-clean</phase>
-                        <configuration>
-                            <file>${qtaste-parent-dir}/../tools/Plugins/javadoc/nb-javac-api-RELEASE80.jar</file>
-                            <repositoryLayout>default</repositoryLayout>
-                            <groupId>org.netbeans.external</groupId>
-                            <artifactId>nb-javac-api</artifactId>
-                            <version>RELEASE80</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
