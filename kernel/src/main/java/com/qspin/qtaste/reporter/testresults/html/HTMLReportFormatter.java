@@ -338,10 +338,10 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
                     namesValues.add("###TEST_SCRIPT###", testcaseName);
                     String testScriptVersion = tr.getTestScriptVersion();
-                    if (testScriptVersion != null) {
-                        namesValues.add("###TEST_SCRIPT_VERSION###", testScriptVersion);
+                    if (testScriptVersion == null || testScriptVersion.equalsIgnoreCase("undefined")) {
+                    	namesValues.add("###TEST_SCRIPT_VERSION###", "");
                     } else {
-                        namesValues.add("###TEST_SCRIPT_VERSION###", "<i>undefined</i>");
+                    	namesValues.add("###TEST_SCRIPT_VERSION###", "<b>Version:</b> "+testScriptVersion);
                     }
 
                     output.print("</table>");
@@ -358,11 +358,14 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     	substituteAndWriteFile(templateContents.get("testStartStopScript"), namesValues);
                     } else {
                     	String requirementColumn = generateRequirementColumn(tr);
-                        if( !requirementColumn.equalsIgnoreCase("Not specified"))
+                        if (!requirementColumn.equalsIgnoreCase("Not specified"))
                         {
                             NamesValuesList<String, String> requirementValue = new NamesValuesList<String, String>();
                             requirementValue.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
-                            requirementColumn = getSubstitutedTemplateContent(templateContents.get("testRequirement"), requirementValue);
+                            requirementColumn = "<p><h4>Verified requirement(s)</h4>" +
+                            					getSubstitutedTemplateContent(templateContents.get("testRequirement"), requirementValue);
+                        } else {
+                        	requirementColumn = "";
                         }
                         namesValues.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
                         substituteAndWriteFile(templateContents.get("testScript"), namesValues);
