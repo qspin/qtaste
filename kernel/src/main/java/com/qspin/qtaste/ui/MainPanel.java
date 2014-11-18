@@ -62,6 +62,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
+import com.qspin.qtaste.ui.TestCasePane.UpdateButtons;
 import com.qspin.qtaste.ui.config.MainConfigFrame;
 import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
@@ -244,9 +245,22 @@ public class MainPanel extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     if (e.getID()== TestCampaignMainPanel.RUN_ID) {
                         if (e.getActionCommand().equals(TestCampaignMainPanel.STARTED_CMD)) {
-                            // open the tab test cases
-                        	mTreeTabsPanel.setSelectedIndex(0);
-                            mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
+                        	// open the tab test cases
+                        	Thread t = new Thread(new Runnable() {
+                            	public void run() {
+                            		try {
+                                        SwingUtilities.invokeAndWait(new Runnable() {
+                                        	public void run() {
+                                            	mTreeTabsPanel.setSelectedIndex(0);
+                                                mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
+                                            }
+                                        });
+                                    }
+                                    catch (Exception e) {}
+                                }
+                            });
+                            t.start();
+
                             // update the buttons
                             mTestCasePanel.setExecutingTestCampaign(true, ((TestCampaignMainPanel)e.getSource()).getExecutionThread());
                             mTestCasePanel.updateButtons(true);
