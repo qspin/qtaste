@@ -107,6 +107,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
             templates.put("start", template_root + File.separator + "report_start_template.html");
             templates.put("end", template_root + File.separator + "report_end_template.html");
             templates.put("testScript", template_root + File.separator + "report_testscript_template.html");
+            templates.put("testStartStopScript", template_root + File.separator + "report_testscript_startstop_template.html");
             templates.put("testScriptRowResult", template_root + File.separator + "report_testscript_row_result.html");
             templates.put("dataColumn", template_root + File.separator + "report_test_data_column.html");
             templates.put("requirementColumn", template_root + File.separator + "report_test_requirement_column.html");
@@ -121,7 +122,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
             logger.fatal("Exception initialising the HTML report:" + e);
         }
     }
-    
+
     private static void copyImages(File targetDirectory)
     {
     	try{
@@ -129,7 +130,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
 	        if (!new File(template_root).isAbsolute()) {
 	            template_root = StaticConfiguration.QTASTE_ROOT + File.separator + template_root;
 	        }
-	        
+
 	        // copy images to report directory
 	        String[] imagesExtensions = {"gif", "jpg", "png"};
 	        FileUtilities.copyFiles(template_root, targetDirectory.getAbsolutePath(), new FileMask(imagesExtensions));
@@ -138,7 +139,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
 	    }
     }
 
-    
+
     public HTMLReportFormatter(String reportName) throws FileNotFoundException, IOException {
         super(HTMLReportFormatter.templates, new File(outputDir), String.format(FILE_NAME_FORMAT, new Date()));
 
@@ -149,7 +150,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
         this.generateDataColumn = config.getBoolean("reporting.html_settings.generate_test_data");
         this.generateStepsRows = config.getBoolean("reporting.html_settings.generate_steps_rows");
         if (!this.generateStepsRows) {
-            // remove the hyperlink 
+            // remove the hyperlink
             String content = this.templateContents.get("testResult");
             content = this.templateContents.get("testScriptRowResult").replace("<a href=\"javascript:showHide('###ROW_ID###')\">###TEST_ID###</a>", "###TEST_ID###");
             this.templateContents.remove("testScriptRowResult");
@@ -325,7 +326,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     continue;
                 }
 
-                if (testcaseName.equals("Restart SUT") && !reportReStartSUT) {
+                if (testcaseName.equals("(Re)start SUT") && !reportReStartSUT) {
                     continue;
                 }
 
@@ -351,17 +352,21 @@ public class HTMLReportFormatter extends HTMLFormatter {
                         namesValues.add("###DATA_COLUMN###", "");
                     }
 
-
-                    String requirementColumn = generateRequirementColumn(tr);
-                    if( !requirementColumn.equalsIgnoreCase("Not specified"))
-                    {
-                        NamesValuesList<String, String> requirementValue = new NamesValuesList<String, String>();
-                        requirementValue.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
-                        requirementColumn = getSubstitutedTemplateContent(templateContents.get("testRequirement"), requirementValue);	
+                    if (testcaseName.equals("Start SUT") ||
+                		testcaseName.equals("(Re)start SUT") ||
+                		testcaseName.equals("Stop SUT")) {
+                    	substituteAndWriteFile(templateContents.get("testStartStopScript"), namesValues);
+                    } else {
+                    	String requirementColumn = generateRequirementColumn(tr);
+                        if( !requirementColumn.equalsIgnoreCase("Not specified"))
+                        {
+                            NamesValuesList<String, String> requirementValue = new NamesValuesList<String, String>();
+                            requirementValue.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
+                            requirementColumn = getSubstitutedTemplateContent(templateContents.get("testRequirement"), requirementValue);
+                        }
+                        namesValues.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
+                        substituteAndWriteFile(templateContents.get("testScript"), namesValues);
                     }
-                    namesValues.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
-                    
-                    substituteAndWriteFile(templateContents.get("testScript"), namesValues);
                     previousTestSuiteName = testcaseName;
                 }
 				// TODO: Convert String into HTML String
@@ -401,27 +406,27 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     case NOT_EXECUTED:
                         namesValues.add("###RESULT_PICTURE###", NE_IMAGE);
                         namesValues.add("###RESULT_TEXT###", NE_TEXT);
-                        namesValues.add("###TC-STATUS###", "tc-ok"); // default 
+                        namesValues.add("###TC-STATUS###", "tc-ok"); // default
                         break;
 
                     case RUNNING:
                         namesValues.add("###RESULT_PICTURE###", RUN_IMAGE);
                         namesValues.add("###RESULT_TEXT###", RUN_TEXT);
-                        namesValues.add("###TC-STATUS###", "tc-ok"); // default 
+                        namesValues.add("###TC-STATUS###", "tc-ok"); // default
                         break;
 
                     case NOT_AVAILABLE:
                         namesValues.add("###RESULT_PICTURE###", NA_IMAGE);
                         namesValues.add("###RESULT_TEXT###", NA_TEXT);
-                        namesValues.add("###TC-STATUS###", "tc-ok"); // default 
+                        namesValues.add("###TC-STATUS###", "tc-ok"); // default
                         break;
 
                     case SUCCESS:
-                        if (tr.getTestData() != null) // if null -> stop/start/restart SUT 
+                        if (tr.getTestData() != null) // if null -> stop/start/restart SUT
                         {
-                            namesValues.add("###TC-STATUS###", "tc-ok"); // default 
+                            namesValues.add("###TC-STATUS###", "tc-ok"); // default
                         } else {
-                            namesValues.add("###TC-STATUS###", "tc-SUT"); // default 
+                            namesValues.add("###TC-STATUS###", "tc-SUT"); // default
                         }
 
                         namesValues.add("###RESULT_PICTURE###", OK_IMAGE);
@@ -440,9 +445,9 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 NamesValuesList<String, String> dataValues = new NamesValuesList<String, String>();
                 dataValues.add("###DATA_TEMPLATE###", dataColumn);
                 dataColumn = getSubstitutedTemplateContent(templateContents.get("testData"), dataValues);
-                
+
                 namesValues.add("###DATA_CONTENT###", dataColumn);
-                
+
 				// add step entries if any
                 String stepsContent = "";
 
@@ -461,41 +466,41 @@ public class HTMLReportFormatter extends HTMLFormatter {
                             case NOT_EXECUTED:
                                 stepsNamesValues.add("###STEP_RESULT_PICTURE###", NA_IMAGE);
                                 stepsNamesValues.add("###STEP_RESULT_TEXT###", NA_TEXT);
-                                stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default 
+                                stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default
                                 break;
 
                             case RUNNING:
                                 if (tr.getStatus() == TestResult.Status.FAIL) {
                                     stepsNamesValues.add("###STEP_RESULT_PICTURE###", KO_IMAGE);
                                     stepsNamesValues.add("###STEP_RESULT_TEXT###", KO_TEXT);
-                                    stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default 
+                                    stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default
                                 } else if (tr.getStatus() == TestResult.Status.NOT_AVAILABLE) {
                                     stepsNamesValues.add("###STEP_RESULT_PICTURE###", KO_IMAGE);
                                     stepsNamesValues.add("###STEP_RESULT_TEXT###", KO_TEXT);
-                                    stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default 
+                                    stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default
                                 } else {
                                     stepsNamesValues.add("###STEP_RESULT_PICTURE###", RUN_IMAGE);
                                     stepsNamesValues.add("###STEP_RESULT_TEXT###", RUN_TEXT);
-                                    stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default 
+                                    stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default
                                 }
 
                                 break;
                             case NOT_AVAILABLE:
                                 stepsNamesValues.add("###STEP_RESULT_PICTURE###", NA_IMAGE);
                                 stepsNamesValues.add("###STEP_RESULT_TEXT###", NA_TEXT);
-                                stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default 
+                                stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default
                                 break;
 
                             case SUCCESS:
                                 stepsNamesValues.add("###STEP_RESULT_PICTURE###", OK_IMAGE);
                                 stepsNamesValues.add("###STEP_RESULT_TEXT###", OK_TEXT);
-                                stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default 
+                                stepsNamesValues.add("###STEP_STATUS###", "tc-ok"); // default
                                 break;
 
                             case FAIL:
                                 stepsNamesValues.add("###STEP_RESULT_PICTURE###", KO_IMAGE);
                                 stepsNamesValues.add("###STEP_RESULT_TEXT###", KO_TEXT);
-                                stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default 
+                                stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default
                                 break;
 
                         }
@@ -506,7 +511,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     }
 
                     namesValues.add("###STEPS###", stepsContent); // default
-                    namesValues.add("###STEP_CONTENT###", getSubstitutedTemplateContent(templateContents.get("stepsHeader"), namesValues)); // default 
+                    namesValues.add("###STEP_CONTENT###", getSubstitutedTemplateContent(templateContents.get("stepsHeader"), namesValues)); // default
                 } else {
                     namesValues.add("###STEP_CONTENT###", ""); // do not generate the steps content
                 }
