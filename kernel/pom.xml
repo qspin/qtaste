@@ -225,10 +225,9 @@
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
         </dependency>
-         <dependency>
+        <dependency>
           <groupId>org.netbeans.external</groupId>
           <artifactId>nb-javac-api</artifactId>
-          <version>RELEASE801</version>
         </dependency>
     </dependencies>
 
