@@ -100,6 +100,7 @@ public class Log4jPanel extends JPanel {
     private TableRowSorter<TableModel> m_LogSorterTable;
     private Log4jRowFilter m_LogFilter;
     private JPanel m_LevelAndMessageFilterPanel, m_SourceFilterPanel;
+    private JScrollPane m_SourceScrollPane;
     private boolean m_UserScrollPosition = false;
     private Stack<String> m_currentStepStack = new Stack<String>();
     private Collection<String> m_applications = new HashSet<String>();
@@ -304,7 +305,10 @@ public class Log4jPanel extends JPanel {
                     Point p = e.getPoint();
                     int rowIndex = rowAtPoint(p);
                     int colIndex = columnAtPoint(p);
-                    return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
+    				if (colIndex < 0) {
+    					return null;
+    				}
+    				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
                 }
 
                 //Implement table header tool tips.
@@ -373,10 +377,10 @@ public class Log4jPanel extends JPanel {
 
             constraint.ipady = 10;
             constraint.insets = new Insets(0,0,4,0);
-            add(new JScrollPane(m_SourceFilterPanel,
+            m_SourceScrollPane = new JScrollPane(m_SourceFilterPanel,
             		  ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
-            		  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED),
-            		constraint);
+            		  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            add(m_SourceScrollPane, constraint);
 
             constraint.ipady = 0;
             constraint.insets = new Insets(0,0,0,0);
@@ -419,7 +423,7 @@ public class Log4jPanel extends JPanel {
                     m_applications.add(application);
                     addFilterLogCheckBox("Source", application, "filterMessageSource", true);
                     SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size() + 1, 5, -5, 2, 2);
-                    m_SourceFilterPanel.validate();
+                    m_SourceScrollPane.validate();
                 }
             }
             cols[LOG_SOURCE] = application;
