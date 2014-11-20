@@ -245,27 +245,18 @@ public class MainPanel extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     if (e.getID()== TestCampaignMainPanel.RUN_ID) {
                         if (e.getActionCommand().equals(TestCampaignMainPanel.STARTED_CMD)) {
-                        	// open the tab test cases
-                        	Thread t = new Thread(new Runnable() {
-                            	public void run() {
-                            		try {
-                                        SwingUtilities.invokeAndWait(new Runnable() {
-                                        	public void run() {
-                                            	mTreeTabsPanel.setSelectedIndex(0);
-                                                mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
-                                            }
-                                        });
-                                    }
-                                    catch (Exception e) {}
+                            // open the tab test cases
+                            SwingUtilities.invokeLater(new Runnable() {
+                                public void run() {
+                                    mTreeTabsPanel.setSelectedIndex(0);
+                                    mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
                                 }
                             });
-                            t.start();
 
                             // update the buttons
                             mTestCasePanel.setExecutingTestCampaign(true, ((TestCampaignMainPanel)e.getSource()).getExecutionThread());
                             mTestCasePanel.updateButtons(true);
-                        }
-                        if (e.getActionCommand().equals(TestCampaignMainPanel.STOPPED_CMD)) {
+                        } else if (e.getActionCommand().equals(TestCampaignMainPanel.STOPPED_CMD)) {
                             mTestCasePanel.setExecutingTestCampaign(false, null);
                             mTestCasePanel.updateButtons();
                         }

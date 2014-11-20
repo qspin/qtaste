@@ -22,6 +22,8 @@ package com.qspin.qtaste.ui.reporter;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.SwingUtilities;
+
 import com.qspin.qtaste.ui.TestCaseResultsPane;
 
 
@@ -57,20 +59,31 @@ public class TestCampaignReporter  {
     }
    
     public void refresh() {
-        for (TestCaseResultsPane panel : reportListeners) {
-            panel.refreshCampaign();
-        }
+       SwingUtilities.invokeLater(new Runnable() {
+          public void run() {
+             for (TestCaseResultsPane panel : reportListeners) {
+                panel.refreshCampaign();
+             }
+          }
+       });
     }
-    public void startReport(Date timeStamp, String name) {
-        for (TestCaseResultsPane panel : reportListeners) {
-            panel.startCampaign(name);
-        }
-    }
-    
-    public void stopReport() {        
-        for (TestCaseResultsPane panel : reportListeners) {
-            panel.stopCampaign();
-        }
+    public void startReport(Date timeStamp, final String name) {
+       SwingUtilities.invokeLater(new Runnable() {
+          public void run() {
+             for (TestCaseResultsPane panel : reportListeners) {
+                panel.startCampaign(name);
+             }
+          }
+       });
     }
 
+    public void stopReport() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                for (TestCaseResultsPane panel : reportListeners) {
+                    panel.stopCampaign();
+                }
+            }
+        });
+    }
 }
