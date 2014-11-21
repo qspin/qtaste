@@ -66,7 +66,7 @@ import github.StatsCommitActivity
 import github.StatsCodeFrequency
 import github.StatsParticipation
 import github.StatsPunchCard
-
+import github.Release
 
 class Repository(github.GithubObject.CompletableGithubObject):
     """
@@ -1565,6 +1565,23 @@ class Repository(github.GithubObject.CompletableGithubObject):
             self.url + "/languages"
         )
         return data
+
+    def get_releases(self):
+        """
+        Calls the `GET /repos/:owner/:repo/releases <http://developer.github.com/v3/repos/releases#list-releases-for-a-repository>`__ end point.
+
+        This is the only method calling this end point.
+
+        :param per_page: optional :class:`int`
+        :rtype: :class:`.PaginatedList` of :class:`~.Release.Release`
+        """
+        url_parameters = dict()
+        return github.PaginatedList.PaginatedList(
+            github.Release.Release,
+            self._requester,
+            self.url + "/releases",
+            url_parameters
+        )
 
     def get_milestone(self, number):
         """

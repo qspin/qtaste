@@ -99,24 +99,6 @@
             </configuration>
          </plugin>
 
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0-alpha-2</version>
-            <inherited>false</inherited>
-            <executions>
-              <execution>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>write-project-properties</goal>
-                </goals>
-                <configuration>
-                  <outputFile>./Version.txt</outputFile>
-                </configuration>
-              </execution>
-            </executions>
-         </plugin>
-
          <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-enforcer-plugin</artifactId>

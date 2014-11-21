@@ -205,6 +205,15 @@ def createIssuesTableBody(aListOfIssues, aState):
 
     return tbodyStr
 
+def getReleases(aGithubRepo):
+    releases = aGithubRepo.get_releases()
+    releasesDict = {}
+    for releaseIt in releases:
+        releasesDict[releaseIt.tag_name] = releaseIt
+    releasesSortedList = []
+    releasesSortedList.append(collections.OrderedDict(sorted(releasesDict.items(),reverse=True)).items())
+
+    return releasesSortedList[0]
 
 def main():
     print "------------------------------------------------------------"
@@ -215,6 +224,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generate Release Notes')
     parser.add_argument('-u', '--user', dest='userGithub', help='Github Username')
     parser.add_argument('-p', '--pass', dest='passwordGithub', help='Github Password')
+    parser.add_argument('-r', '--release', dest='releaseName', help='Release Name')
     args = parser.parse_args()
 
     # Delete the release notes file (if any)
@@ -224,6 +234,8 @@ def main():
         except OSError as e:
             print "Cannot generate Release Notes file: being used by the system"
             sys.exit(e)
+
+    isReleaseGivenByUser = (len(sys.argv) > 1 and not args.releaseName == None)
 
     # Attempt to connect to Github repository
     try:
@@ -265,24 +277,21 @@ def main():
     # Read App version (if available)
     appCurrentVersion = ""
     appVersionForRelease = ""
-    try:
-        fVersion = open(config.VersionFile, 'r')
-    except IOError:
-        print 'None', config.AppName, 'version found: cannot open ', config.VersionFile
-    else:
-        for line in fVersion:
-            # Ignore lines startwith '#' char
-            if(line.startswith('#')):
-                continue
-            # check for current version
-            elif(line.startswith(config.VersionTag)):
-                appCurrentVersion = line.split('=')[1]
-                # release version only takes the first 5 characters: "X.Y.Z"
-                appVersionForRelease = line.split('=')[1][:5]
-            ## Add here more cases, if needed to retrieve more info
-        fVersion.close()
 
-    print "reading release notes info from repository ..."
+    if(isReleaseGivenByUser):
+        appCurrentVersion = args.releaseName
+        appVersionForRelease = args.releaseName
+    else:
+        releases = getReleases(repo) #get releaser ordered by out date
+        if (len(releases) == 0):
+            print "No version was provided by user (use -r or --release <version>) nor found at Github."
+            sys.exit(1)
+        appCurrentVersion = releases[0][0]
+        appVersionForRelease = releases[0][0]
+        if (appVersionForRelease.startswith('v')):
+            appVersionForRelease = appVersionForRelease[1:]
+
+    print "reading release notes info from repository for version", appCurrentVersion, "..."
 
     try: # Query Github repository
         # Read Milestones info (<= current version)
