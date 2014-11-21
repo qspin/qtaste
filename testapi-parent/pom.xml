@@ -20,7 +20,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.2</version>
       <relativePath>..</relativePath>
    </parent>
 
@@ -58,7 +58,7 @@
                   <dependency>
                      <groupId>com.qspin.qtaste</groupId>
                      <artifactId>qtaste-testapi-deploy</artifactId>
-                     <version>2.2.2-SNAPSHOT</version>
+                     <version>2.2.2</version>
                   </dependency>
                </dependencies>
             </plugin>
@@ -70,20 +70,16 @@
                <configuration>
                   <outputFile>${project.build.directory}/qtaste-testapi-deploy.jar</outputFile>
                   <transformers>
-                     <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                     <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                         <resource>META-INF/spring.handlers</resource>
                      </transformer>
-                     <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                     <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                         <resource>META-INF/spring.schemas</resource>
                      </transformer>
-                     <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                     <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                         <resource>META-INF/spring.tooling</resource>
                      </transformer>
-                     <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                     <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
                         <file>${project.build.directory}/generated-resources/versions/META-INF/${project.groupId}/${project.artifactId}.version</file>
                         <resource>META-INF/assembly.version</resource>
                      </transformer>

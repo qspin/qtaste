@@ -7,7 +7,7 @@
    <parent>
       <groupId>com.qspin.qtaste</groupId>
       <artifactId>qtaste-testapi-parent</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.2</version>
       <relativePath>../../testapi-parent</relativePath>
    </parent>
 

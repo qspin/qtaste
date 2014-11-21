@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Note: to build testapi deploy jar, execute "mvn validate assembly:assembly"
@@ -9,7 +8,7 @@
     <parent>
         <groupId>com.qspin.qtaste</groupId>
         <artifactId>qtaste-testapi-parent</artifactId>
-        <version>2.2.2-SNAPSHOT</version>
+        <version>2.2.2</version>
         <relativePath>../../testapi-parent</relativePath>
     </parent>
 
@@ -113,14 +112,14 @@
         <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>2.2.2-SNAPSHOT</version>
+            <version>2.2.2</version>
         </dependency>
 
         <!-- other QTaste testapi projects -->
         <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-toolbox-testapi</artifactId>
-            <version>2.2.2-SNAPSHOT</version>
+            <version>2.2.2</version>
         </dependency>
         <!-- EXTERNAL LIBRARIES -->
         <!-- Libraries are ordered by group/artifact. -->
@@ -149,7 +148,7 @@
         <dependency>
             <groupId>com.qspin.qtaste.plugin</groupId>
             <artifactId>javagui</artifactId>
-            <version>2.2.2-SNAPSHOT</version>
+            <version>2.2.2</version>
         </dependency>
     </dependencies>
 
