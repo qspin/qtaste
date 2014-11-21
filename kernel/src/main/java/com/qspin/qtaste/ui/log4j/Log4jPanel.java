@@ -374,13 +374,16 @@ public class Log4jPanel extends JPanel {
             constraint.weighty = 0.0;
             add(m_LevelAndMessageFilterPanel, constraint);
 
+            constraint.gridwidth = GridBagConstraints.WEST;
             constraint.ipady = 10;
-            constraint.insets = new Insets(0,0,4,0);
+            constraint.insets = new Insets(0,5,4,0);
             m_SourceScrollPane = new JScrollPane(m_SourceFilterPanel,
             		  ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
             		  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            add(new JLabel("Source: "));
-			add(m_SourceScrollPane, constraint);
+            add(new JLabel("Source: "), constraint);
+            constraint.gridwidth = GridBagConstraints.REMAINDER;
+            constraint.insets = new Insets(0,0,4,0);
+            add(m_SourceScrollPane, constraint);
 
             constraint.ipady = 0;
             constraint.insets = new Insets(0,0,0,0);
@@ -391,7 +394,7 @@ public class Log4jPanel extends JPanel {
             add(new JScrollPane(m_LogTable), constraint);
 
             SpringUtilities.makeCompactGrid(m_LevelAndMessageFilterPanel, 1, m_LevelFilterCheckBoxes.size() + m_SourceFilterCheckBoxes.size() + 1, 5, 5, 2, 0);
-            SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), 5, -5, 2, 2);
+            SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), -3, -4, 2, 2);
 
         /*
         m_TreeLogModel = new Log4JTableModel();
@@ -422,7 +425,7 @@ public class Log4jPanel extends JPanel {
                 if (!m_applications.contains(application)) {
                     m_applications.add(application);
                     addFilterLogCheckBox("Source", application, "filterMessageSource", true);
-                    SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), 5, -5, 2, 2);
+                    SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), -3, -4, 2, 2);
                     m_SourceScrollPane.validate();
                 }
             }
