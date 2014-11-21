@@ -266,7 +266,6 @@ public class Log4jPanel extends JPanel {
             addFilterLogCheckBox("Level", "Error", "doLogLevelFilter", true);
             addFilterLogCheckBox("Level", "Fatal", "doLogLevelFilter", true);
             final JCheckBox testCaseOrVerbCheckBox = addFilterLogCheckBox("TestCaseOrVerb", "Test case or verb", "filterMessageTestCaseOrVerb", true);
-            m_SourceFilterPanel.add(new JLabel("Source: "));
             final JCheckBox qtasteCheckBox = addFilterLogCheckBox("Source", "QTaste", "filterMessageSource", true);
 
             // when selecting "Invoking" force "QTaste" to be selected
@@ -380,7 +379,8 @@ public class Log4jPanel extends JPanel {
             m_SourceScrollPane = new JScrollPane(m_SourceFilterPanel,
             		  ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
             		  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            add(m_SourceScrollPane, constraint);
+            add(new JLabel("Source: "));
+			add(m_SourceScrollPane, constraint);
 
             constraint.ipady = 0;
             constraint.insets = new Insets(0,0,0,0);
@@ -391,7 +391,7 @@ public class Log4jPanel extends JPanel {
             add(new JScrollPane(m_LogTable), constraint);
 
             SpringUtilities.makeCompactGrid(m_LevelAndMessageFilterPanel, 1, m_LevelFilterCheckBoxes.size() + m_SourceFilterCheckBoxes.size() + 1, 5, 5, 2, 0);
-            SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size() + 1, 5, -5, 2, 2);
+            SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), 5, -5, 2, 2);
 
         /*
         m_TreeLogModel = new Log4JTableModel();
@@ -422,7 +422,7 @@ public class Log4jPanel extends JPanel {
                 if (!m_applications.contains(application)) {
                     m_applications.add(application);
                     addFilterLogCheckBox("Source", application, "filterMessageSource", true);
-                    SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size() + 1, 5, -5, 2, 2);
+                    SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), 5, -5, 2, 2);
                     m_SourceScrollPane.validate();
                 }
             }
