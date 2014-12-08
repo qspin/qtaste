@@ -1,3 +1,5 @@
+# encoding= utf-8
+
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
 #    This file is part of QTaste framework.
@@ -37,6 +39,8 @@ def Step1():
 	"""
 	try:
 		filecontent = testData.getFileContentAsString("FILE_DATA")
+		filecontent = testData.getFileContentAsString("FILE_DATA", "UTF-8")
+		filecontent = testData.getFileContentAsString("FILE_DATA", "ISO-8859-1")
 	except QTasteDataException, e:
 		logger.error("exception thrown: " + e.getMessage())
 		testAPI.stopTest(Status.FAIL, "Exception thrown: " + e.getMessage())

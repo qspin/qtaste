@@ -3134,6 +3134,13 @@ The example here upper performs 2 actions:</literallayout>
         </listitem>
 
         <listitem>
+          <para>String getFileContentAsString(String name, String encoding)</para>
+
+          <para>Returns the file content of the test data file with given name
+          (starting with “FILE_”), as a string formatted for the given encoding set</para>
+        </listitem>
+
+        <listitem>
           <para>void setValue(String name, String value)</para>
 
           <para>Sets the value of the test data with given name to given

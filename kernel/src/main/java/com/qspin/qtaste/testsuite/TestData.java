@@ -71,11 +71,21 @@ public interface TestData {
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
+     * The encoding of the output string is as defined by file.
      * @param key a key in the container, starting with "FILE_"
      * @return a string containing the content of the file to which the specified key is mapped in this container.
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
      */
     public String getFileContentAsString(String key) throws QTasteDataException;
+
+    /**
+     * Return the content of the file to which the specified key is mapped in this container, as a string.
+     * @param key a key in the container, starting with "FILE_"
+     * @param encoding the encoding for the returned string (e.g: 'UTF-8', 'ISO-8859-1')
+     * @return a string containing the content of the file to which the specified key is mapped in this container.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
+     */
+    public String getFileContentAsString(String key, String encoding) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
@@ -86,7 +96,7 @@ public interface TestData {
     public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException;
 
     /**
-     * Maps the specified key to the specified value in this container. Neither the key not the value can be null.     
+     * Maps the specified key to the specified value in this container. Neither the key not the value can be null.
      * @param key a key in the container
      * @param value the value
      * @throws com.qspin.qtaste.testsuite.QTasteDataException
@@ -102,11 +112,11 @@ public interface TestData {
     /**
      * Checks if this container contains a value for the specified key.
      * @param key the key to be checked
-     * @return true if a value is contained for the specified key, 
+     * @return true if a value is contained for the specified key,
      *         false otherwise
      */
     public boolean contains(String key);
-    
+
     /**
      * Dump all the content of the container to a String
      * @return the String
@@ -116,35 +126,35 @@ public interface TestData {
     /**
      * Force the keys starting with "FILE_" to be loaded (or reloaded) into this container.
      * The content of a file can be retrieved using the getByteArrayValue method.
-     * Normally, this method should not be called as it is done at the execution of the TestScript.     
+     * Normally, this method should not be called as it is done at the execution of the TestScript.
      */
     public void loadFileIfAny();
 
     public LinkedHashMap<String, String> getDataHash();
 
     /**
-     * 
+     *
      * @return diretory containing the testcase
      */
     public String getTestCaseDirectory();
 
     /**
-     * Set the testcase directory to the directory value 
+     * Set the testcase directory to the directory value
      */
     public void setTestCaseDirectory(String directory);
-    
+
     /**
      * Get the data row id.
      * @return the data row id
      */
     public int getRowId();
-    
+
     /**
      * Set if the data is selected or not (default is selected).
      * @param selected true if the data is selected, false otherwise
      */
     public void setSelected(boolean selected);
-    
+
     /**
      * Check if the data is selected or not.
      * @return true if the data is selected, false otherwise

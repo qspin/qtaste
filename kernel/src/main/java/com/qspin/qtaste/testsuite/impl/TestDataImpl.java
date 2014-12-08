@@ -25,12 +25,11 @@
 package com.qspin.qtaste.testsuite.impl;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -71,11 +70,13 @@ public class TestDataImpl implements TestData, Serializable {
         this.hashFiles = new HashMap<String, Object>();
     }
 
-    public LinkedHashMap<String, String> getDataHash() {
+    @Override
+	public LinkedHashMap<String, String> getDataHash() {
         return hash;
     }
 
-    public String getValue(String key) throws QTasteDataException {
+    @Override
+	public String getValue(String key) throws QTasteDataException {
         if (!hash.containsKey(key)) {
             if (key.equals("INSTANCE_ID")) {
                 try {
@@ -100,7 +101,8 @@ public class TestDataImpl implements TestData, Serializable {
         return value;
     }
 
-    public int getIntValue(String key) throws QTasteDataException {
+    @Override
+	public int getIntValue(String key) throws QTasteDataException {
         try {
             return Integer.parseInt(getValue(key));
         } catch (NumberFormatException e) {
@@ -108,7 +110,8 @@ public class TestDataImpl implements TestData, Serializable {
         }
     }
 
-    public double getDoubleValue(String key) throws QTasteDataException {
+    @Override
+	public double getDoubleValue(String key) throws QTasteDataException {
         try {
             return Double.parseDouble(getValue(key));
         } catch (NumberFormatException e) {
@@ -116,7 +119,8 @@ public class TestDataImpl implements TestData, Serializable {
         }
     }
 
-    public boolean getBooleanValue(String key) throws QTasteDataException {
+    @Override
+	public boolean getBooleanValue(String key) throws QTasteDataException {
         String value = getValue(key);
         if (value.equalsIgnoreCase("true")) {
             return true;
@@ -138,7 +142,8 @@ public class TestDataImpl implements TestData, Serializable {
         }
     }
 
-    public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException {
+    @Override
+	public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException {
         String value = getValue(key);
         try {
             return new DoubleWithPrecision(value);
@@ -147,7 +152,8 @@ public class TestDataImpl implements TestData, Serializable {
         }
     }
 
-    public byte[] getFileContentAsByteArray(String key) throws QTasteDataException {
+    @Override
+	public byte[] getFileContentAsByteArray(String key) throws QTasteDataException {
         getValue(key); // to check if data exists
         if (hashFiles.containsKey(key)) {
             byte[] array = (byte[]) hashFiles.get(key);
@@ -157,29 +163,43 @@ public class TestDataImpl implements TestData, Serializable {
         }
     }
 
-    public String getFileContentAsString(String key) throws QTasteDataException {
+    @Override
+	public String getFileContentAsString(String key) throws QTasteDataException {
         return new String(getFileContentAsByteArray(key));
     }
 
-    public void setValue(String key, String value) throws QTasteDataException {
+    @Override
+	public String getFileContentAsString(String key, String encoding) throws QTasteDataException {
+    	try {
+    		return new String(getFileContentAsByteArray(key), encoding);
+    	} catch (UnsupportedEncodingException e) {
+    		throw new QTasteDataException("Unsupported encoding: " + encoding);
+    	}
+    }
+
+    @Override
+	public void setValue(String key, String value) throws QTasteDataException {
         if (key.startsWith("FILE_")) {
             loadFile(key, value);
         }
         hash.put(key, value);
     }
 
-    public void remove(String key) {
+    @Override
+	public void remove(String key) {
         hash.remove(key);
         if (key.startsWith("FILE_")) {
             hashFiles.remove(key);
         }
     }
 
-    public boolean contains(String key) {
+    @Override
+	public boolean contains(String key) {
         return hash.containsKey(key);
     }
 
-    public String dump() {
+    @Override
+	public String dump() {
         TreeSet<String> sortedKeys = new TreeSet<String>(hash.keySet());
         String result = new String("{");
         Iterator<String> iKey = sortedKeys.iterator();
@@ -194,7 +214,8 @@ public class TestDataImpl implements TestData, Serializable {
         return result;
     }
 
-    public void loadFileIfAny() {
+    @Override
+	public void loadFileIfAny() {
         // Load files defined in testdata if any
         Iterator<String> i = hash.keySet().iterator();
         while (i.hasNext()) {
@@ -216,8 +237,9 @@ public class TestDataImpl implements TestData, Serializable {
         }
 
         try {
-        	BufferedReader bis = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
-        	char[] buffer = new char[(int) f.length()];
+        	BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+        	byte[] buffer = new byte[(int) f.length()];
+
             bis.read(buffer);
             bis.close();
             logger.debug("Loaded file: " + f.getPath() + " size:" + buffer.length);
@@ -227,23 +249,28 @@ public class TestDataImpl implements TestData, Serializable {
         }
     }
 
-    public void setTestCaseDirectory(String directory) {
+    @Override
+	public void setTestCaseDirectory(String directory) {
         testCaseDirectory = directory;
     }
 
-    public String getTestCaseDirectory() {
+    @Override
+	public String getTestCaseDirectory() {
         return testCaseDirectory;
     }
 
-    public int getRowId() {
+    @Override
+	public int getRowId() {
         return rowId;
     }
 
-    public void setSelected(boolean selected) {
+    @Override
+	public void setSelected(boolean selected) {
         isSelected = selected;
     }
 
-    public boolean isSelected() {
+    @Override
+	public boolean isSelected() {
         return isSelected;
     }
 }

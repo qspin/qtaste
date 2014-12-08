@@ -120,7 +120,8 @@ public class JythonTestScript extends TestScript implements Executable {
         initializeEmbeddedJython();
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
-            public void onConfigurationChange() {
+            @Override
+			public void onConfigurationChange() {
                 List<Object> newPlatform;
                 TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
                 if (testbedConfig != null) {
@@ -603,7 +604,8 @@ public class JythonTestScript extends TestScript implements Executable {
         return getAdditionalPythonPath(fileName);
     }
 
-    public boolean execute(TestData data, TestResult result, final boolean debug) {
+    @Override
+	public boolean execute(TestData data, TestResult result, final boolean debug) {
         // Interpret the file
         testData = data;
         testResult = result;
@@ -1063,7 +1065,8 @@ public class JythonTestScript extends TestScript implements Executable {
          * doAction This function is used to perform actions while the script has been stopped
          * @param event
          */
-        public void doAction(TestScriptBreakpointEvent event) {
+        @Override
+		public void doAction(TestScriptBreakpointEvent event) {
             action = event.getAction();
             logger.debug("Received action in Jython testscript: " + event.getAction().toString());
             try {
@@ -1278,6 +1281,10 @@ public class JythonTestScript extends TestScript implements Executable {
 
         public String getFileContentAsString(String name) throws QTasteDataException {
             return testData.getFileContentAsString(name);
+        }
+
+        public String getFileContentAsString(String name, String encoding) throws QTasteDataException {
+        	return testData.getFileContentAsString(name, encoding);
         }
 
         public void setValue(String name, String value) throws QTasteDataException {
