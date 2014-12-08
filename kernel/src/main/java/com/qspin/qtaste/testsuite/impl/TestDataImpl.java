@@ -24,12 +24,13 @@
  */
 package com.qspin.qtaste.testsuite.impl;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -165,15 +166,21 @@ public class TestDataImpl implements TestData, Serializable {
 
     @Override
 	public String getFileContentAsString(String key) throws QTasteDataException {
-        return new String(getFileContentAsByteArray(key));
+    	try {
+    		return new String(getFileContentAsByteArray(key), "UTF-8");
+    	} catch (UnsupportedEncodingException e) {
+    		throw new QTasteDataException("Error while decoding the content of file " + key
+    				                    + ": Unsupported charset UTF-8");
+    	}
     }
 
     @Override
-	public String getFileContentAsString(String key, String encoding) throws QTasteDataException {
+	public String getFileContentAsString(String key, String charset) throws QTasteDataException {
     	try {
-    		return new String(getFileContentAsByteArray(key), encoding);
+    		return new String(getFileContentAsByteArray(key), charset);
     	} catch (UnsupportedEncodingException e) {
-    		throw new QTasteDataException("Unsupported encoding: " + encoding);
+    		throw new QTasteDataException("Error while decoding the content of file " + key
+                    + ": Unsupported charset " + charset);
     	}
     }
 
@@ -231,18 +238,14 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     private void loadFile(String key, String filename) throws QTasteDataException {
-        File f = new File(filename);
-        if (!f.isAbsolute()) {
-            f = new File(this.getTestCaseDirectory() + File.separator + filename);
+        Path filePath = Paths.get(filename);
+    	if (!filePath.isAbsolute()) {
+    		filePath = Paths.get(this.getTestCaseDirectory() + File.separator + filename);
         }
 
         try {
-        	BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-        	byte[] buffer = new byte[(int) f.length()];
-
-            bis.read(buffer);
-            bis.close();
-            logger.debug("Loaded file: " + f.getPath() + " size:" + buffer.length);
+        	byte[] buffer = Files.readAllBytes(filePath);
+            logger.debug("Loaded file: " + filePath.toString() + " size:" + buffer.length);
             hashFiles.put(key, buffer);
         } catch (IOException e) {
             throw new QTasteDataException(e.getMessage());

@@ -1283,8 +1283,8 @@ public class JythonTestScript extends TestScript implements Executable {
             return testData.getFileContentAsString(name);
         }
 
-        public String getFileContentAsString(String name, String encoding) throws QTasteDataException {
-        	return testData.getFileContentAsString(name, encoding);
+        public String getFileContentAsString(String name, String charset) throws QTasteDataException {
+        	return testData.getFileContentAsString(name, charset);
         }
 
         public void setValue(String name, String value) throws QTasteDataException {

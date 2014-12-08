@@ -71,7 +71,7 @@ public interface TestData {
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
-     * The encoding of the output string is as defined by file.
+     * By default, the content of the file is decoded using UTF-8 charset.
      * @param key a key in the container, starting with "FILE_"
      * @return a string containing the content of the file to which the specified key is mapped in this container.
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
@@ -80,12 +80,13 @@ public interface TestData {
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
+     * The content of the file is decoded using the given charset.
      * @param key a key in the container, starting with "FILE_"
-     * @param encoding the encoding for the returned string (e.g: 'UTF-8', 'ISO-8859-1')
+     * @param charset the character set used to decode the content of the file (e.g: 'UTF-8', 'ISO-8859-1')
      * @return a string containing the content of the file to which the specified key is mapped in this container.
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
      */
-    public String getFileContentAsString(String key, String encoding) throws QTasteDataException;
+    public String getFileContentAsString(String key, String charset) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container

@@ -3130,14 +3130,17 @@ The example here upper performs 2 actions:</literallayout>
           <para>String getFileContentAsString(String name)</para>
 
           <para>Returns the file content of the test data file with given name
-          (starting with “FILE_”), as a string</para>
+          (starting with “FILE_”), as a string.
+          By default, the content of the file is decoded using UTF-8 charset.</para>
         </listitem>
 
         <listitem>
-          <para>String getFileContentAsString(String name, String encoding)</para>
+          <para>String getFileContentAsString(String name, String charset)</para>
 
           <para>Returns the file content of the test data file with given name
-          (starting with “FILE_”), as a string formatted for the given encoding set</para>
+          (starting with “FILE_”), as a string.
+          The content of the file is decoded using the given charset. 
+          (e.g: 'UTF-8', 'ISO-8859-1')</para>
         </listitem>
 
         <listitem>
