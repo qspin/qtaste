@@ -16,17 +16,17 @@
 # - NativeProcess: derived from ControlAction where start and stop methods are implemented
 #	This class is initialized with following parameters:
 #		- description: name of the native process (title of the window) 
-#		-executable: native process to execute
-#		-args (optional): arguments to pass to the application or None if no argument
-#		-workingDir: working directory to start process in, defaults to QTaste root directory
-#		-checkAfter (optional): number of seconds after which to check if process still exist or None to not check
+#		- executable: native process to execute
+#		- args (optional): arguments to pass to the application or None if no argument
+#		- workingDir: working directory to start process in, defaults to QTaste root directory
+#		- checkAfter (optional): number of seconds after which to check if process still exist or None to not check
 #		- start: method called by ControlScript when the ControlScript needs to start NativeProcess
 #		- stop: method called by ControlScript when the ControlScript needs to stop NativeProcess
 #
 # - ServiceProcess: derived from ControlAction where start and stop methods are implemented
 #	This class is initialized with following parameters:
 #		- description: name of the native process (title of the window) 
-#		-serviceName: name of the service to control
+#		- serviceName: name of the service to control
 #		- start: method called by ControlScript when the ControlScript needs to start NativeProcess
 #		- stop: method called by ControlScript when the ControlScript needs to stop NativeProcess
 #
@@ -88,7 +88,6 @@
 #		- waitingTime: default is 60 seconds. Sleeping time before continuing to the control script.
 #
 ##
-
 
 import os as _os, sys as _sys, re as _re, time as _time
 import datetime as _datetime
@@ -294,6 +293,28 @@ class ControlAction(object):
 	# shell script extension
 	shellScriptExtension = _IF(_OS.getType() == _OS.Type.WINDOWS, ".cmd", ".sh")
 
+class Command(ControlAction):
+   """ Control script action for executing a command. """
+   def __init__(self, description, startCommand, stopCommand):
+      """
+      Initializes Command object.
+      @param startCommand command to execute on start (string or strings list)
+      @param stopCommand command to execute on stop (string or strings list)
+      """
+      ControlAction.__init__(self, description)
+      self.startCommand = startCommand
+      self.stopCommand = stopCommand
+
+   def execute(self, command):
+      print 'Executing "%s"' % command;
+      ControlAction.executeCommand(command)
+      print
+
+   def start(self):
+      self.execute(self.startCommand)
+
+   def stop(self):
+      self.execute(self.stopCommand)
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
@@ -460,7 +481,6 @@ class JavaProcess(ControlAction):
 			if self.priority:
 				shellScriptArguments += ' -priority ' + self.priority;
 		
-		print(str(shellScriptArguments))
 		ControlAction.executeShellScript("start_java_process", shellScriptArguments);
 		print 
 
@@ -532,11 +552,13 @@ class NativeProcess(ControlAction):
 	def stop(self):
 		print "Stopping " + self.description + "...";
 		shellScriptArguments = self.executable
-		shellScriptArguments = shellScriptArguments + " " + self.args
-		if _OS.getType() != _OS.Type.WINDOWS:
-			ControlAction.executeShellScript("stop_process", '"' + shellScriptArguments + '"')
-		else:
-			ControlAction.executeShellScript("stop_process", shellScriptArguments)
+		if self.args is not None and len(self.args.strip()) > 0:
+			shellScriptArguments = shellScriptArguments + " \"" + self.args + "\""
+			
+#		if _OS.getType() != _OS.Type.WINDOWS:
+		ControlAction.executeShellScript("stop_process", shellScriptArguments)
+#		else:
+#			ControlAction.executeShellScript("stop_process", shellScriptArguments)
 
 class ServiceProcess(ControlAction):
 	""" Control script action for starting/stopping a service process """
@@ -570,17 +592,17 @@ class ServiceProcess(ControlAction):
 			#shellScriptArguments.append(self.description)
 		else:
 			shellScriptArguments = '"' + self.serviceName + '" -title "' + self.description + '"';
-			print "command : start_service_process " + shellScriptArguments
-			ControlAction.executeShellScript("start_service_process", shellScriptArguments);
 		
+		ControlAction.executeShellScript("start_service_process", shellScriptArguments);
+		print
+
 	def stop(self):
 		print "Stopping " + self.description + "...";
+		shellScriptArguments = self.serviceName
 		if _OS.getType() != _OS.Type.WINDOWS:
 			print "Not yet implemented!"
 			#ControlAction.executeShellScript("stop_service_process", '"' + shellScriptArguments + '"')
 		else:
-			shellScriptArguments = '"' + self.serviceName + '"'
-			print "command : stop_service_process " + shellScriptArguments
 			ControlAction.executeShellScript("stop_service_process", shellScriptArguments)
 
 class ReplaceInFiles(ControlAction):
@@ -857,7 +879,7 @@ class OnStart(ControlAction):
 	def dumpDataType(self, prefix, writer):
 		""" Method called on start. It dumps the data type. to be overridden by subclasses """
 		super(OnStart, self).dumpDataType(prefix, writer)
-		controlAction.dumpDataType(prefix, writer)
+		self.controlAction.dumpDataType(prefix, writer)
 
 	def dump(self, writer):
 		""" Method called on start. It dump the control action parameter in the writer, to be overridden by subclasses """
