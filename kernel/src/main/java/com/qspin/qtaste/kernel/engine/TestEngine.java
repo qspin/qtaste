@@ -24,12 +24,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ArrayList;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.apache.commons.lang.StringUtils;
+
 import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
@@ -213,30 +217,63 @@ public class TestEngine {
 				return false;
 			}
 
+			// build the engine script command as a list to avoid mistakes with spaces (see ticket #7)
 			String scriptFilename = config.getControlScriptFileName();
-			String scriptEngine = null;
+			List<String> scriptEngineCommand = new ArrayList<String>();
+
 			if (scriptFilename.endsWith(".py")) {
 				final String jythonHome = StaticConfiguration.JYTHON_HOME;
 				final String jythonJar = jythonHome + "/jython.jar";
 				final String jythonLib = StaticConfiguration.JYTHON_LIB.trim();
 				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
 				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
-				scriptEngine = "java -Dpython.path=" + jythonJar + File.pathSeparator + jythonLib  + File.pathSeparator + additionnalJythonLib
-								    + " -cp \"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator
-									+ jythonJar + File.pathSeparator + classPath + "\" org.python.util.jython";
+				
+				scriptEngineCommand.add("java");
+				scriptEngineCommand.add("-Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + "\"" + jythonLib 
+								 + "\"" + File.pathSeparator + "\"" + additionnalJythonLib + "\"");
+				scriptEngineCommand.add("-cp");
+				scriptEngineCommand.add("\"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator
+								 + jythonJar + File.pathSeparator + classPath + "\"");
+				scriptEngineCommand.add("org.python.util.jython");
+
+				logger.trace("script engine command: " + StringUtils.join(scriptEngineCommand, " "));
 			}
+			
+			// then, build the 'start or stop' command as a list
+			List<String> startOrStopCommand = new ArrayList<String>();
+			
+			startOrStopCommand.add(scriptFilename);
+			startOrStopCommand.add(startOrStop);
+			
 			String scriptArguments = config.getControlScriptArguments();
-			String startOrStopCommand = scriptFilename + " " + startOrStop + " " + (scriptArguments != null ? scriptArguments : "") + (isRestartingSUT ? "-restart true" : "");
-			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" + startOrStopCommand + "'");
+			if (scriptArguments != null) {
+				startOrStopCommand.add(scriptArguments);
+			}
+
+			if (isRestartingSUT) {
+				startOrStopCommand.add("-restart true");
+			}
+			
+			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" + 
+						StringUtils.join(startOrStopCommand, " ") + "'");
+
 			// report the control script
 			try {
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				Map<String, String> env = new HashMap<String, String>(
-						System.getenv());
+				Map<String, String> env = new HashMap<String, String>(System.getenv());
 				env.put("TESTBED", config.getFileName());
-				String startOrStopFullCommand = (scriptEngine != null ? scriptEngine + " " + startOrStopCommand : startOrStopCommand);
-				logger.trace("FULL COMMAND : '" + startOrStopFullCommand + "'");
-				int exitCode = sutStartStopExec.exec(startOrStopFullCommand, env, output);
+
+				// build the full command to execute
+				List<String> startOrStopFullCommand = new ArrayList<String>();
+				startOrStopFullCommand.addAll(scriptEngineCommand);
+				startOrStopFullCommand.addAll(startOrStopCommand);
+				
+				logger.trace("FULL COMMAND : '" + StringUtils.join(startOrStopFullCommand, " ") + "'");
+
+				// execute the full command
+				int exitCode = sutStartStopExec.exec(startOrStopFullCommand.toArray(new String[startOrStopFullCommand.size()]), 
+													 env, output);
+				
 				if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
 					String errMsg = "SUT " + startOrStop + " command cancelled";
 					logger.info(errMsg);
