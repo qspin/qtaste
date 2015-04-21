@@ -1,4 +1,7 @@
 COMMENT;JAVAGUI_INSTANCE_NAME;TAB_COMPONENT_NAME;TAB_IDX;TAB_TITLE;TAB_ID
 select DOCUMENT tab;PlaybackApp;TABBED_PANE;0;DOCUMENT_PANEL;DOCUMENT_PANEL
 select CHOOSE tab;PlaybackAppBis;TABBED_PANE;1;CHOOSE_PANEL;CHOOSE_PANEL
-select no tab;PlaybackApp;TABBED_PANE;-1;;
+select out of lower bound tab (FAIL expected);PlaybackApp;TABBED_PANE;-2;;
+select out of higher bound tab (FAIL expected);PlaybackApp;TABBED_PANE;123;;
+select wrong name tab (FAIL expected);PlaybackApp;TABBED_PANE;0;WRONG_NAME;
+select wrong id tab (FAIL expected);PlaybackApp;TABBED_PANE;0;CHOOSE_PANEL;WRONG_ID
