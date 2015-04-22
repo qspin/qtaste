@@ -127,10 +127,12 @@ class TreeNodeSelector extends UpdateComponentCommander {
 		if (nodeComponent instanceof JLabel) {
 			System.out.println("component extend JLabel");
 			return ((JLabel) nodeComponent).getText();
-		} else if (nodeComponent instanceof Label) {
+		} 
+		else if (nodeComponent instanceof Label) {
 			System.out.println("component extend TextComponent");
 			return ((Label) nodeComponent).getText();
-		} else {
+		} 
+		else {
 			System.out.println("component extend something else");
 			return node.toString();
 		}
