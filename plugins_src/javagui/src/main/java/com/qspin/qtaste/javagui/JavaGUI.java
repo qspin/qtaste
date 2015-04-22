@@ -215,10 +215,10 @@ public interface JavaGUI {
     * Select the node for the specified JTree.</br>
     * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
     * @param componentName an identifier of the JTree component.
-    * @param nodeName the node to select.
-    * @param nodeSeparator the node separator used in the value parameter.
+    * @param nodePath the path to the node to select.
+    * @param nodePathSeparator the separator used in the node path to separate node path elements.
     */
-   void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
+   void selectNode(String componentName, String nodePath, String nodePathSeparator) throws QTasteException;
 
   /**
     * Return the currently selected node for the specified JTree.</br>
