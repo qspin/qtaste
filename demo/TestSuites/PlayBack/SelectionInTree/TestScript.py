@@ -28,8 +28,8 @@ def step1():
 
     component = testData.getValue("COMPONENT_NAME")
     value = testData.getValue("VALUE")
-    javaguiMI.selectNode(component, value, "\!")
-    actualSelection = javaguiMI.getSelectedNode(component, "!")
+    javaguiMI.selectNode(component, value, ".")
+    actualSelection = javaguiMI.getSelectedNode(component, ".")
     if actualSelection != value:
         testAPI.stopTest(Status.FAIL, "Expected to see value '" + value + "' selected in " + component + "' but got '" + actualSelection + "'")
 
