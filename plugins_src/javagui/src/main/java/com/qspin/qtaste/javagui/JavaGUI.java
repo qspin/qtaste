@@ -184,17 +184,17 @@ public interface JavaGUI {
    void selectValue(String componentName, String value) throws QTasteException;
 
   /**
-    * Return the currently selected value for the specified component.</br>
+    * Return the current selected value for the specified component.</br>
     * Can be used on :
     * <ul>
-    * <li>{@link AbstractButton} (see {@link #selectComponent(String, boolean)})</li>
-    * <li>{@link JComboBox} (see {@link JComboBox#setSelectedIndex(int)})</li>
-    * <li>{@link JList} (see {@link JList#setSelectedIndex(int)})</li>
-    * <li>{@link JSpinner} (see {@link JSpinner#setValue(Object)})</li>
-    * <li>{@link JSlider} (see {@link JSlider#setValue(int)})</li>
+    * <li>{@link AbstractButton} (see {@link AbstractButton#getText()})</li>
+    * <li>{@link JComboBox} (see {@link JComboBox#getSelectedItem()})</li>
+    * <li>{@link JList} (see {@link JList#getSelectedValue()})</li>
+    * <li>{@link JSpinner} (see {@link JSpinner#getModel()#getValue()})</li>
+    * <li>{@link JSlider} (see {@link JSlider#getModel()#getValue()})</li>
     * </ul>
     * @param componentName an identifier of the component.
-    * @return the currenlty selected value
+    * @return the current selected value
     */
    String getSelectedValue(String componentName) throws QTasteException;
 
