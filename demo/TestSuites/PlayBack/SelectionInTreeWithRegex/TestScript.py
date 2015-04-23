@@ -30,13 +30,12 @@ def step1():
     value = testData.getValue("VALUE")
 
     javaguiMI.clearNodeSelection(component)
-    javaguiMI.selectNode(component, value, ".")
-    actualSelection = javaguiMI.getSelectedNode(component, ".")
+
+    javaguiMI.selectNodeRe(component, value, "!")
+    actualSelection = javaguiMI.getSelectedNode(component, "!")
 
     if actualSelection is None:
         testAPI.stopTest(Status.FAIL, "Unable to get the selected node. No node is selected.")
-    elif actualSelection != value:
-	    testAPI.stopTest(Status.FAIL, "Expected to see value '" + value + "' selected in " + component + "' but got '" + actualSelection + "'")
 
     time.sleep(1)
 

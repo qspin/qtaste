@@ -99,6 +99,16 @@ public class JavaGUIImpl implements JavaGUI {
 		mProxy.selectNode(componentName, nodePath, nodePathSeparator);
 	}
 
+	public void selectNodeRe(String componentName, String nodePath, String nodePathSeparator) throws QTasteException
+	{
+		mProxy.selectNodeRe(componentName, nodePath, nodePathSeparator);
+	}
+
+	public void clearNodeSelection(String componentName) throws QTasteException
+	{
+		mProxy.clearNodeSelection(componentName);
+	}
+
 	public void selectTab(String tabbedPaneComponentName, int tabIndex)  throws QTasteException{
 		mProxy.selectTab(tabbedPaneComponentName, tabIndex);
 	}

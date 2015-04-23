@@ -31,11 +31,55 @@ import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.qspin.qtaste.javagui.server.TabSelector.SelectorIdentifier;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class TreeNodeSelector extends UpdateComponentCommander {
 
+	/**
+	 * Type of node selection
+	 */
+	public enum SelectorIdentifier {
+	    SELECT_BY_STRING,
+	    SELECT_BY_REGEX,
+	    CLEAR_SELECTION
+	}
+	
+	private SelectorIdentifier mSelectorIdentifier;	/**< type of node selection */
+	protected volatile Object[] mPath;	/**< tree path built in prepareDoActions() to select the node */
+
+	/**
+	 * Constructor.
+	 * @param selectorIdentifier type of node selection
+	 */
+	public TreeNodeSelector(SelectorIdentifier selectorIdentifier) {
+		mSelectorIdentifier = selectorIdentifier;
+	}
+
+	/**
+	 * Compare a node path element (provided as argument of the selectNode method) to a node name (from a JTree).
+	 * @param nodePathElement the node path element to compare with the node name
+	 * @param nodeName the node name
+	 * @return true if both match, false otherwise.
+	 */
+	protected boolean compareNodeNames(String nodePathElement, String nodeName) {
+		boolean comparisonResult = false;
+		
+		switch (mSelectorIdentifier) {
+			case SELECT_BY_REGEX:
+				comparisonResult = Pattern.matches(nodePathElement, nodeName);	
+				break;
+			
+			case SELECT_BY_STRING:
+			default:
+				comparisonResult = nodePathElement.equals(nodeName);
+				break;
+		}
+		
+		return comparisonResult;
+	}
+	
 	@Override
 	protected void prepareActions() throws QTasteTestFailException {
 	}
@@ -70,7 +114,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 			{
 				String rootNodeText = getNodeText(tree, treeModel.getRoot());
 				
-				if (!rootNodeText.equals(nodePathElements[0])) {
+				if (!compareNodeNames(nodePathElements[0], rootNodeText)) {
 					LOGGER.trace("rootNodeText: " + rootNodeText + " != nodePathElement: " + nodePathElements[0]);
 					throw new QTasteTestFailException("Unable to select a node with the following path : " + nodePath);
 				}
@@ -89,8 +133,8 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				
 				for (int currentChildIndex = 0; currentChildIndex < treeModel.getChildCount(currentNode); currentChildIndex++) {
 					Object currentChild = treeModel.getChild(currentNode, currentChildIndex);
-					
-					if (getNodeText(tree, currentChild).equals(nodePathElements[currentNodePathItemIndex])) {
+
+					if (compareNodeNames(nodePathElements[currentNodePathItemIndex], getNodeText(tree, currentChild))) {
 						currentNode = currentChild;
 						treePath.add(currentNode);
 						bFound = true;
@@ -140,13 +184,17 @@ class TreeNodeSelector extends UpdateComponentCommander {
 
 	@Override
 	protected void doActionsInSwingThread() throws QTasteException {
-		prepareDoActions();
 		JTree tree = (JTree) component;
-		TreePath path = new TreePath(mPath);
-		tree.expandPath(path);
-		tree.setExpandsSelectedPaths(true);
-		tree.setSelectionPath(path);
-	}
 
-	protected volatile Object[] mPath;
+		if (mSelectorIdentifier == SelectorIdentifier.CLEAR_SELECTION) {
+			tree.clearSelection();
+		}
+		else {
+			prepareDoActions();
+			TreePath path = new TreePath(mPath);
+			tree.expandPath(path);
+			tree.setExpandsSelectedPaths(true);
+			tree.setSelectionPath(path);
+		}
+	}
 }
