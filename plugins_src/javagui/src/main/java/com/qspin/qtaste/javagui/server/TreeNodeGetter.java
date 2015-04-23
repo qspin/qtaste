@@ -45,7 +45,7 @@ public class TreeNodeGetter extends ComponentCommander {
             
             // check if a node has been selected
             if (selectedPath == null) {
-            	throw new QTasteTestFailException("No node selected");
+            	return null;
             }
             
             // if the tree root is not visible, ignore it
