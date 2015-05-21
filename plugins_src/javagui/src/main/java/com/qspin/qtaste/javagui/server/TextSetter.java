@@ -41,10 +41,9 @@ class TextSetter extends UpdateComponentCommander {
 			t.setText(value);
 			forceToLooseFocus(component);						
 		}
-		
 		// Support for Swing
-	    if ( component instanceof JFormattedTextField )
-	    {
+		else if (component instanceof JFormattedTextField)
+		{
 			try
 			{
 				JFormattedTextField field = ((JFormattedTextField)component);
@@ -62,7 +61,7 @@ class TextSetter extends UpdateComponentCommander {
 				//TODO: Handle the case of invalid values
 			}
 		}
-		if (component instanceof JTextComponent) {
+		else if (component instanceof JTextComponent) {
 			JTextComponent t = (JTextComponent) component;
 			t.setText(value);
 			forceToLooseFocus(component);
@@ -74,7 +73,7 @@ class TextSetter extends UpdateComponentCommander {
 		Container parent= c.getParent();
 		while ( parent != null && !parent.isFocusable() )
 		{
-			parent.getParent();
+			parent = parent.getParent();
 		}
 		if ( parent != null ) {
 			parent.requestFocus();
