@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -166,12 +167,7 @@ public class TestDataImpl implements TestData, Serializable {
 
     @Override
 	public String getFileContentAsString(String key) throws QTasteDataException {
-    	try {
-    		return new String(getFileContentAsByteArray(key), "UTF-8");
-    	} catch (UnsupportedEncodingException e) {
-    		throw new QTasteDataException("Error while decoding the content of file " + key
-    				                    + ": Unsupported charset UTF-8");
-    	}
+    	return new String(getFileContentAsByteArray(key), StandardCharsets.UTF_8);
     }
 
     @Override

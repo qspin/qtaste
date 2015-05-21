@@ -1,2 +1,2 @@
-COMMENT;TIMEOUT;FILE_DATA;FILECONTENT
-Load file. Expected test result: Passed;240;data/data.txt;This is the content of the data file.
+COMMENT;TIMEOUT;FILE_DATA_UTF_8;FILE_DATA_ISO_8859_1;FILECONTENT
+Load file. Expected test result: Passed;240;data/data_utf-8.txt;data/data_iso-8859-1.txt;This is the content of the data file (eacute: é).

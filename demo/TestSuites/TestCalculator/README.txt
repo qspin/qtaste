@@ -16,7 +16,7 @@ Pre-Requisites
 ==============
 - python 2.5 installed and available in the PATH environment variable (the console should starts if you type python in a command prompt)
   Available on http://www.python.org/download/releases/2.5/
-- JDK 1.6
+- JDK 1.7
 
 
 Running The Client

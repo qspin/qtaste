@@ -19,7 +19,7 @@ Pre-Requisites
 - Depending on the configuration of the bugzilla environment, the testbed configuration file has to be adapter to fit the name of the db and 
   match the dbuser/dbpassword
 - Internet Explorer (6.X or 7.X). Please notice that the selenium version used doesn't support well IE8
-- JDK 1.6
+- JDK 1.7
 
 
 Running The Client
