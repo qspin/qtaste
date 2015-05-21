@@ -45,7 +45,7 @@ class MiscellaneousPane extends JPanel {
 	private JPanel mSecondContainer = new JPanel();
 	private JTextField mText = new JTextField(30);
 	
-	public static final String COMPONENT_NAME = "MISCEALLANEOUS";
+	public static final String COMPONENT_NAME = "MISCELLANEOUS";
 	
 	private class MyAction implements ActionListener
 	{
