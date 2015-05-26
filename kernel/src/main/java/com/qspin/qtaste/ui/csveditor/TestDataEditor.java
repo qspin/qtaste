@@ -215,6 +215,7 @@ public class TestDataEditor extends JPanel {
             for (String name : columnNames) {
                 m_TestDataModel.addColumn(name);
             }
+            m_TestDataTable.createDefaultColumnsFromModel();
 
             int rowCount = 0;
             for (LinkedHashMap<String, String> csvData : csvDataSet) {
@@ -258,6 +259,7 @@ public class TestDataEditor extends JPanel {
             m_TestDataModel.addColumn(dataEntry.getKey());
             dataRow.add(dataEntry.getValue());
         }
+        m_TestDataTable.createDefaultColumnsFromModel();
         m_TestDataModel.addRow(dataRow.toArray());
         for (int i=0; i < m_TestDataModel.getColumnCount();i++) {
             m_TestDataTable.getColumn(m_TestDataTable.getColumnName(i)).setCellEditor(new TestDataTableCellEditor());
@@ -273,14 +275,9 @@ public class TestDataEditor extends JPanel {
                 if (dataHash.containsKey(header)) {
                     dataHash.remove(header);
                 }
-
-                setTestData(m_TestData);
-                computeColumnWidths();
-            } else {
-
-                removeColumnAndData(m_TestDataTable, colIndex);
-                computeColumnWidths();
             }
+            removeColumnAndData(m_TestDataTable, colIndex);
+            computeColumnWidths();
             setModified(true);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -295,9 +292,10 @@ public class TestDataEditor extends JPanel {
                 m_TestData.setValue(header, header);
             }
             m_TestDataModel.addColumn(header);
-            TableColumn hcol = m_TestDataTable.getColumn(header);
+            TableColumn hcol = new TableColumn(m_TestDataModel.getColumnCount()-1);
             hcol.setHeaderRenderer(new MyTableHeaderRenderer());
             hcol.setCellEditor(new TestDataTableCellEditor());
+            m_TestDataTable.addColumn(hcol);
             computeColumnWidths();
             setModified(true);
         // now add the needed rows
@@ -375,6 +373,7 @@ public class TestDataEditor extends JPanel {
             }
         };
         m_TestDataTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        m_TestDataTable.setAutoCreateColumnsFromModel(false);
 
         m_TestDataModel = new TestDataTableModel(m_TestDataTable);
 
