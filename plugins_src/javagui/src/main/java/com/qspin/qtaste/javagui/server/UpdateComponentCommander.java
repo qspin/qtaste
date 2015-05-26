@@ -240,7 +240,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	}
 
 	protected abstract void prepareActions() throws QTasteException;
-	protected abstract void doActionsInSwingThread()throws QTasteException;
+	protected abstract void doActionsInSwingThread() throws QTasteException;
 
 	protected void setData(Object[] data)
 	{

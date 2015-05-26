@@ -130,9 +130,9 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	@Override
-	public void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException {
-		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodeName + "\", \"" + nodeSeparator + "\")");
-		new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
+	public void selectNode(String componentName, String nodePath, String nodePathSeparator) throws QTasteException {
+		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodePath + "\", \"" + nodePathSeparator + "\")");
+		new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodePath, nodePathSeparator);
 	}
 
 	public String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException {
