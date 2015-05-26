@@ -261,10 +261,14 @@ public class TestDataEditor extends JPanel {
         }
         m_TestDataTable.createDefaultColumnsFromModel();
         m_TestDataModel.addRow(dataRow.toArray());
-        for (int i=0; i < m_TestDataModel.getColumnCount();i++) {
-            m_TestDataTable.getColumn(m_TestDataTable.getColumnName(i)).setCellEditor(new TestDataTableCellEditor());
 
+        Enumeration<TableColumn> columns = m_TestDataTable.getColumnModel().getColumns();
+        while (columns.hasMoreElements()) {
+            TableColumn hcol = columns.nextElement();
+            hcol.setHeaderRenderer(new MyTableHeaderRenderer());
+            hcol.setCellEditor(new TestDataTableCellEditor());
         }
+        computeColumnWidths();
     }
 
     public void removeTestData(String header, int colIndex) {
@@ -886,16 +890,14 @@ public class TestDataEditor extends JPanel {
 
         //computes headers widths
         for (int i = 0; i < cols; i++) {
-            w[i] = (int) m_TestDataTable.getDefaultRenderer(String.class).
-                    getTableCellRendererComponent(m_TestDataTable, m_TestDataTable.getColumnName(i), false, false, -1, i).
+            String columnName = m_TestDataTable.getColumnName(i);
+            w[i] = (int) m_TestDataTable.getColumn(columnName).getHeaderRenderer().
+                    getTableCellRendererComponent(m_TestDataTable, columnName, false, false, -1, i).
                     getPreferredSize().getWidth() + hspace;
-		            TableColumn hcol = m_TestDataTable.getColumn(m_TestDataTable.getColumnName(i));
-		            hcol.setHeaderRenderer(new MyTableHeaderRenderer());
-
         }
 
         //check if cell values fit in their cells and if not
-        //keep in w[i] the necessary with
+        //keep in w[i] the necessary width
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Object o = model.getValueAt(i, j);
