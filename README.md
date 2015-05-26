@@ -50,7 +50,3 @@ The QTaste framework is composed of:
 The installer available on Github - Releases section  - [https://github.com/qspin/qtaste/releases] contains the QTaste Kernel (sources and
 binaries), the demonstration (sources and binaries) and the documentation.
 To start the installer, just click on the qtaste-izpack-2.2.2-installer.jar [https://github.com/qspin/qtaste/releases/download/v2.2.2/qtaste-izpack-2.2.2-installer.jar]
-
-Useful links
-============
-https://qtaste.ci.cloudbees.com/
