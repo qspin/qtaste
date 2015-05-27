@@ -1,0 +1,6 @@
+COMMENT;JAVAGUI_INSTANCE_NAME;TAB_ID;TAB_COMPONENT_NAME;COMPONENT_NAME;VALUE
+Select "Elisabeth II (80)" node;PlaybackApp;TREE_LIST_PANEL;TABBED_PANE;TREE;Person!Old!Elisabeth.*
+Select "Louis XVII (30)" node;PlaybackApp;TREE_LIST_PANEL;TABBED_PANE;TREE_2;Young!Louis.*
+Path with root node but root node not displayed (Fail expected);PlaybackApp;TREE_LIST_PANEL;TABBED_PANE;TREE_2;Person!Young!Louis XVII (30)
+Unexistent node (Fail expected);PlaybackApp;TREE_LIST_PANEL;TABBED_PANE;TREE_2;Young!Napoleon
+Invalid separator (Fail expected);PlaybackApp;TREE_LIST_PANEL;TABBED_PANE;TREE_2;Young/Louis XVII (30)

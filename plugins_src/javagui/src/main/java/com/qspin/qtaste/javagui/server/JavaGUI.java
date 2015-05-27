@@ -130,11 +130,23 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	}
 
 	@Override
-	public void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException {
-		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodeName + "\", \"" + nodeSeparator + "\")");
-		new TreeNodeSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeName, nodeSeparator);
+	public void selectNode(String componentName, String nodePath, String nodePathSeparator) throws QTasteException {
+		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodePath + "\", \"" + nodePathSeparator + "\")");
+		new TreeNodeSelector(TreeNodeSelector.SelectorIdentifier.SELECT_BY_STRING).executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodePath, nodePathSeparator);
 	}
 
+	@Override
+	public void selectNodeRe(String componentName, String nodePath, String nodePathSeparator) throws QTasteException {
+		LOGGER.trace("selectNodeRe(\"" + componentName + "\", \"" + nodePath + "\", \"" + nodePathSeparator + "\")");
+		new TreeNodeSelector(TreeNodeSelector.SelectorIdentifier.SELECT_BY_REGEX).executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodePath, nodePathSeparator);
+	}
+	
+	@Override
+	public void clearNodeSelection(String componentName) throws QTasteException {
+		LOGGER.trace("clearNodeSelection(\"" + componentName + "\")");
+		new TreeNodeSelector(TreeNodeSelector.SelectorIdentifier.CLEAR_SELECTION).executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+	
 	public String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException {
 		LOGGER.trace("getSelectedNode(\"" + componentName + "\", \"" + nodeSeparator + "\")");
 		return new TreeNodeGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeSeparator);

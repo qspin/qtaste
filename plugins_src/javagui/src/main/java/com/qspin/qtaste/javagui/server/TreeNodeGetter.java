@@ -33,32 +33,40 @@ public class TreeNodeGetter extends ComponentCommander {
 	
 	@Override
 	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		String separator = data[0].toString();
-		if ( c instanceof JTree )
+		Component component = getComponentByName(componentName);
+		String    separator = data[0].toString();
+
+		if (component instanceof JTree)
 		{
-			JTree tree = (JTree) c;
+			JTree    tree = (JTree) component;
             TreePath selectedPath = tree.getSelectionPath();
-            String returnedValue = "";
+            String   nodePath = "";
+            int      currentTreePathIndex = 0;
             
-            for(int i=0; i < selectedPath.getPath().length; i++)
-            {
-            	//Ignore root if tree root is not visible
-            	if (i==0 && !tree.isRootVisible())
-            	{
-            		continue;
-            	}
-            	
-            	//add the separator after each previous node
-            	if (!returnedValue.isEmpty())
-            	{
-            		returnedValue += separator;
-            	}
-            	
-            	//apply the renderer on the node and update the value to return
-            	returnedValue += getNodeText(tree, selectedPath.getPath()[i]);
+            // check if a node has been selected
+            if (selectedPath == null) {
+            	return null;
             }
-            return returnedValue;
+            
+            // if the tree root is not visible, ignore it
+            if (!tree.isRootVisible()) {
+            	currentTreePathIndex++;
+            }
+            
+            // loop on the tree path to build the node path string
+            Object[] treePath = selectedPath.getPath();
+            for(; currentTreePathIndex < treePath.length - 1; currentTreePathIndex++)
+            {
+            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
+        		nodePath += separator;
+            }
+
+            // add the last node text without separator
+            if (currentTreePathIndex < treePath.length) {
+            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
+            }
+            
+            return nodePath;
 
 		} else {
 			throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");

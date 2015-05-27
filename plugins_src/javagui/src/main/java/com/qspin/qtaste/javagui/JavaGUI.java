@@ -213,13 +213,37 @@ public interface JavaGUI {
 
    /**
     * Select the node for the specified JTree.</br>
+    * In this method, node names in the node path are simple strings.</br>
+    * If you need more flexibility, see {@link selectNodeRe} which supports regular expressions.</br>
     * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
     * @param componentName an identifier of the JTree component.
-    * @param nodeName the node to select.
-    * @param nodeSeparator the node separator used in the value parameter.
+    * @param nodePath the path to the node to select. This is a string composed by node names, separated by a separator.
+    * @param nodePathSeparator the separator used in the node path to separate node path elements.
+    * @throws QTasteException
     */
-   void selectNode(String componentName, String nodeName, String nodeSeparator) throws QTasteException;
+   void selectNode(String componentName, String nodePath, String nodePathSeparator) throws QTasteException;
 
+   /**
+    * Select the node for the specified JTree.</br>
+    * In this method, node names in the node path are regular expressions. </br>
+    * Be careful if you use some special regex characters.</br>
+    * Be careful to choose a node path separator which is not a special regex character.</br>
+    * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
+    * @param componentName an identifier of the JTree component.
+    * @param nodePath the path to the node to select. This is a string composed by node names, separated by a separator.
+    * 		 	 	  Here, node path elements are regular expressions.
+    * @param nodePathSeparator the separator used in the node path to separate node path elements.
+    * @throws QTasteException
+    */
+   void selectNodeRe(String componentName, String nodePath, String nodePathSeparator) throws QTasteException;
+
+   /**
+    * Clear the JTree selection.
+    * @param componentName an identifier of the JTree component.
+    * @throws QTasteException
+    */
+   void clearNodeSelection(String componentName) throws QTasteException;
+   
   /**
     * Return the currently selected node for the specified JTree.</br>
     * Can be used on {@link JTree}.
