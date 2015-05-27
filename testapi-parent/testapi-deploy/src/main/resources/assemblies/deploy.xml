@@ -20,13 +20,12 @@
         <exclude>commons-lang:commons-lang</exclude>
         <exclude>commons-logging:commons-logging</exclude>
         <exclude>commons-net:commons-net</exclude>
-        <exclude>javax.scripting:jython-engine</exclude>
         <exclude>jfree:jfreechart</exclude>
         <exclude>com.jgoodies:bindings</exclude>
         <exclude>com.jgoodies:forms</exclude>
         <exclude>de.sciss:jsyntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
-        <exclude>org.python:jython</exclude>
+        <exclude>org.python:jython-standalone</exclude>
         <exclude>xalan:xalan</exclude>
         <exclude>xalan:serializer</exclude>
         <exclude>xerces:xercesImpl</exclude>

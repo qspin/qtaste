@@ -14,11 +14,6 @@ pushd ..\tools\jython\lib\Lib\
 del /q *.class
 popd
 
-rem install kernel 3rd party artifacts
-pushd kernel
-call mvn clean -P qtaste-install-3rd-artifacts
-popd
-
 echo Building qtaste ...
 call mvn clean install -P qtaste-build-kernel-first
 

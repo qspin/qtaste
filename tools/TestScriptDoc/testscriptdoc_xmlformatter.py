@@ -126,7 +126,7 @@ class PythonDocGenerator:
         for i in range(len(self.executedSteps)):
             stepId, stepName = self.executedSteps[i]
             declaredStep = self.declaredSteps.get(stepName)
-            if declaredStep:
+            if declaredStep is not None:
                 self._addStep(steps, stepId, declaredStep)
             else:
                 print 'Warning: function step ' + stepName + ' of test script ' + testScriptName + ' is used in doStep() but not declared or not documented with @step tag'
