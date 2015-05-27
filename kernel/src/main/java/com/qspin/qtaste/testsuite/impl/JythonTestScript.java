@@ -53,7 +53,7 @@ import org.python.core.PyException;
 import org.python.core.PyFunction;
 import org.python.core.PyInstance;
 import org.python.core.PyInteger;
-import org.python.core.PyInstance;
+import org.python.core.PyJavaInstance;
 import org.python.core.PyList;
 import org.python.core.PyObject;
 import org.python.core.PyString;
@@ -241,6 +241,7 @@ public class JythonTestScript extends TestScript implements Executable {
         try {
             String code =
                     "import os as __os\n" +
+                    "from com.sun.script.jython import JythonScope as __JythonScope\n" +
                     "from com.qspin.qtaste.testsuite.impl import JythonTestScript as __JythonTestScript\n" +
                     "__isInTestScriptImport = 0\n" +
                     "def isInTestScriptImport():\n" +
@@ -288,6 +289,7 @@ public class JythonTestScript extends TestScript implements Executable {
                     "import time as __time, sys as __sys\n" +
                     "from java.lang import ThreadDeath as __ThreadDeath\n" +
                     "from java.lang.reflect import UndeclaredThrowableException as __UndeclaredThrowableException\n" +
+                    "from com.sun.script.jython import JythonScope as __JythonScope\n" +
                     "from com.qspin.qtaste.testsuite import QTasteTestFailException\n" +
                     "import com.qspin.qtaste.reporter.testresults.TestResult.Status as __TestResultStatus\n" +
                     "def doStep(idOrFunc, func=None):\n" +
@@ -342,6 +344,7 @@ public class JythonTestScript extends TestScript implements Executable {
         try {
             String code =
                     "import sys as __sys\n" +
+                    "from com.sun.script.jython import JythonScope as __JythonScope\n" +
                     "def __findStepIndex(table, id):\n" +
                     "   for index in range(len(table)):\n" +
                     "       stepId = str(table[index][0])\n" +
@@ -838,7 +841,7 @@ public class JythonTestScript extends TestScript implements Executable {
         // handle ThreadDeath exception
         if (cause instanceof PyException) {
             PyException pe = (PyException) cause;
-            if (pe.value instanceof PyInstance) {
+            if (pe.value instanceof PyJavaInstance) {
                 Object javaError = pe.value.__tojava__(Throwable.class);
                 if (javaError != null && javaError != Py.NoConversion) {
                     if (javaError instanceof ThreadDeath) {
@@ -882,7 +885,7 @@ public class JythonTestScript extends TestScript implements Executable {
             }
         } else if (cause instanceof PyException) {
             PyException pe = (PyException) cause;
-            if (pe.value instanceof PyInstance) {
+            if (pe.value instanceof PyJavaInstance) {
                 // check  if exception is UndeclaredThrowableException
                 // in this case status is "failed" and message is taken from cause exception
                 Object javaError = pe.value.__tojava__(Throwable.class);
@@ -1094,6 +1097,7 @@ public class JythonTestScript extends TestScript implements Executable {
                 Object variableValue = globalContext.get(variableName);
                 if (!variableName.startsWith("__") &&
                         !(variableValue instanceof PySystemState) &&
+                        !(variableValue instanceof com.sun.script.jython.JythonScriptEngine) &&
                         !(variableValue instanceof javax.script.SimpleScriptContext) &&
                         !variableName.equals("javax.script.filename")
                         //                    (!(variableValue instanceof PyClass)) &&
@@ -1228,8 +1232,8 @@ public class JythonTestScript extends TestScript implements Executable {
                 debugVar = dumpJavaObject(o, debugVar);
             }
             return debugVar;
-        } else if (value instanceof PyInstance) {
-            PyInstance pythonValue = (PyInstance) value;
+        } else if (value instanceof PyJavaInstance) {
+            PyJavaInstance pythonValue = (PyJavaInstance) value;
             Object javaObject = pythonValue.__tojava__(Object.class);
             if (javaObject instanceof ArrayList) {
                 ArrayList<?> javaObjectArray = (ArrayList<?>) javaObject;

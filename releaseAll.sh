@@ -34,6 +34,11 @@
 #       will be promped.
 
 
+# Install kernel 3rd party artifacts
+pushd kernel
+mvn clean -P qtaste-install-3rd-artifacts || exit 1
+popd
+
 if [ "$1" == "-help" ]; then
     echo "Usage: releaseAll.sh [-snapshot] [-deploySnapshot]"
     exit

@@ -181,6 +181,11 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.script</groupId>
+            <artifactId>jython-engine</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
         </dependency>
@@ -202,7 +207,7 @@
         </dependency>
         <dependency>
             <groupId>org.python</groupId>
-            <artifactId>jython-standalone</artifactId>
+            <artifactId>jython</artifactId>
         </dependency>
         <dependency>
             <groupId>xalan</groupId>
@@ -255,6 +260,36 @@
                                 <descriptor>src/main/assembly/deploy.xml</descriptor>
                             </descriptors>
                         </configuration>
+                      </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+      </profile>
+
+      <profile>
+        <id>qtaste-install-3rd-artifacts</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <executions>
+                      <execution>
+                        <id>install-local-jython-engine_kernel</id>
+                        <phase>pre-clean</phase>
+                        <configuration>
+                            <file>${qtaste-parent-dir}/../tools/jython/lib/jython-engine-1.0.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>javax.script</groupId>
+                            <artifactId>jython-engine</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
                       </execution>
                     </executions>
                 </plugin>

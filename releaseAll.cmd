@@ -33,6 +33,11 @@ rem  # Note: Only projects owners have rights to deploy QTaste.
 rem  #       When deploying a Snapshot or Release a Passphrase
 rem  #       will be promped.
 
+rem Install kernel 3rd party artifacts
+pushd kernel
+call mvn clean -P qtaste-install-3rd-artifacts
+popd
+
 if [%1] == [-help] (
     echo usage: releaseAll.cmd [-snapshot]
 ) else if [%1] == [-newSnapshot] (
