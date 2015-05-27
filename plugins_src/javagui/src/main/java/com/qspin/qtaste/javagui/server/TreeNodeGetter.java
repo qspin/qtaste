@@ -21,9 +21,11 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Label;
+import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -31,46 +33,80 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 public class TreeNodeGetter extends ComponentCommander {
 	
+	private String m_commandResult;
+	private QTasteException m_commandError;
+	
 	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component component = getComponentByName(componentName);
-		String    separator = data[0].toString();
-
-		if (component instanceof JTree)
+	String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
+		try
 		{
-			JTree    tree = (JTree) component;
-            TreePath selectedPath = tree.getSelectionPath();
-            String   nodePath = "";
-            int      currentTreePathIndex = 0;
-            
-            // check if a node has been selected
-            if (selectedPath == null) {
-            	return null;
-            }
-            
-            // if the tree root is not visible, ignore it
-            if (!tree.isRootVisible()) {
-            	currentTreePathIndex++;
-            }
-            
-            // loop on the tree path to build the node path string
-            Object[] treePath = selectedPath.getPath();
-            for(; currentTreePathIndex < treePath.length - 1; currentTreePathIndex++)
-            {
-            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
-        		nodePath += separator;
-            }
-
-            // add the last node text without separator
-            if (currentTreePathIndex < treePath.length) {
-            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
-            }
-            
-            return nodePath;
-
-		} else {
-			throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					try
+					{
+						Component component = getComponentByName(componentName);
+						LOGGER.trace("Component : " + component);
+						String separator = data[0].toString();
+		
+						if (component instanceof JTree)
+						{
+							JTree    tree = (JTree) component;
+				            TreePath selectedPath = tree.getSelectionPath();
+				            String   nodePath = "";
+				            int      currentTreePathIndex = 0;
+				            
+				            // check if a node has been selected
+				            if (selectedPath == null) {
+				            	LOGGER.debug("No node selected");
+				            	m_commandResult = null;
+				            	return;
+				            }
+				            
+				            // if the tree root is not visible, ignore it
+				            if (!tree.isRootVisible()) {
+				            	currentTreePathIndex++;
+				            }
+				            
+				            // loop on the tree path to build the node path string
+				            Object[] treePath = selectedPath.getPath();
+				            LOGGER.debug("array : " + Arrays.toString(treePath));
+				            for(; currentTreePathIndex < treePath.length - 1; currentTreePathIndex++)
+				            {
+				            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
+				        		nodePath += separator;
+				            }
+		
+				            // add the last node text without separator
+				            if (currentTreePathIndex < treePath.length) {
+				            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
+				            }
+				            
+				            m_commandResult = nodePath;
+				            return;
+		
+						} else {
+							throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
+						}
+					}
+					catch(QTasteException ex)
+					{
+						m_commandError = ex;
+					}
+				}
+			});
 		}
+		catch(Exception ex)
+		{
+			LOGGER.fatal(ex.getMessage(), ex);
+		}
+		
+		if(  m_commandError != null )
+		{
+			throw m_commandError;
+		}
+		
+		return m_commandResult;
 	}
 		
 	private String getNodeText(JTree tree, Object node)

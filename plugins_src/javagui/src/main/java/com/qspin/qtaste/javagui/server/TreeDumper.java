@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.TreeModel;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -33,24 +34,46 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 public class TreeDumper extends ComponentCommander {
 
+	private String m_commandResult;
+	private QTasteException m_commandError;
+	
 	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		String separator = data[0].toString();
-		if ( c instanceof JTree )
+	String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
+		final Component c = getComponentByName(componentName);
+		try
 		{
-			JTree tree = (JTree) c;
-			List<String> dump = new ArrayList<String>();
-			dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
-			StringBuilder builder = new StringBuilder();
-			for (String s : dump)
-			{
-				builder.append(s + "\n");
-			}
-			return builder.toString();
-		} else {
-			throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
+			SwingUtilities.invokeAndWait(new Runnable() {
+				
+				@Override
+				public void run() {
+					String separator = data[0].toString();
+					if ( c instanceof JTree )
+					{
+						JTree tree = (JTree) c;
+						List<String> dump = new ArrayList<String>();
+						dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
+						StringBuilder builder = new StringBuilder();
+						for (String s : dump)
+						{
+							builder.append(s + "\n");
+						}
+						m_commandResult =  builder.toString();
+					} else {
+						m_commandError = new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
+					}
+				}
+			});
 		}
+		catch(Exception ex)
+		{
+			LOGGER.fatal(ex.getMessage(), ex);
+		}
+		
+		if ( m_commandError != null )
+		{
+			throw m_commandError;
+		}
+		return m_commandResult;
 	}
 
 	protected void dumpNode(List<String> dump, JTree tree, Object node, int level, String prefix, String separator)
