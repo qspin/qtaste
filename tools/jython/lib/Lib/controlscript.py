@@ -41,6 +41,9 @@ arguments = _sys.argv[2:]
 # QTaste root directory
 qtasteRootDirectory = _os.path.abspath(_os.getenv("QTASTE_ROOT") + "/")
 
+# QTaste win32 tools directory
+qtasteWin32ToolsDirectory = _os.path.abspath(qtasteRootDirectory + "\\tools\\win32\\")
+
 #**************************************************************
 # Generic Classes
 #**************************************************************
@@ -405,7 +408,12 @@ class NativeProcess(ControlAction):
 
         # add process priority
         if (_OS.getType() == _OS.Type.WINDOWS):
-            command.extend(["START", "/B", "/{}".format(self.priority), "/C"])
+            command.extend(["%COMSPEC%", "/B"])
+            
+            if self.priority is not None:
+                command.append("/{}".format(self.priority))
+                
+            command.append("/C")
         else:
             command.extend(["nice", "-n", str(self.getPriorityNumber())])
 
@@ -441,8 +449,10 @@ class NativeProcess(ControlAction):
             return False
 
         # get the child process PID
-        # TODO: adapt for Windows
-        pid = _subprocess.check_output("ps --no-headers -o %p --ppid {}".format(process.pid), shell=True)
+        if (_OS.getType() == _OS.Type.WINDOWS):
+			pid = str(process.pid)
+        else:
+            pid = _subprocess.check_output("ps --no-headers -o %p --ppid {}".format(process.pid), shell=True)
 
         # save the PID in the file
         try:
@@ -455,24 +465,14 @@ class NativeProcess(ControlAction):
             
         return True
         
-    def stop(self):
-        """ 
-        Stop the process 
+    def _posix_stop(self, pid):
+
         """
-        pid = None
-        
-        try:
-            # get the PID
-            pidFile = open(self.getProcessPidFilename(), "r")
-            pid = pidFile.read()
-            pid = int(pid)
-            pidFile.close()
-
-            # remove the file
-            _os.remove(self.getProcessPidFilename())
-        except:
-            print "Unable to get the PID from the file %s" % self.getProcessPidFilename()
-
+        Stop a POSIX process.
+        First, try to stop it properly, using the SIGTERM signal. If it doesn't work, kill it using the SIGKILL signal.
+        @param pid the PID of the process
+        """
+    
         # kill the process
         if pid is not None:
 
@@ -486,9 +486,8 @@ class NativeProcess(ControlAction):
                 try:
                     _os.kill(pid, _signal.SIGTERM)
                 except:
-                    print "Unable to kill the process with PID {}".format(pid)
-                    return
-
+                    pass
+                
                 # ... and check if the process has been killed
                 try:
                     _os.kill(pid, 0)
@@ -501,9 +500,43 @@ class NativeProcess(ControlAction):
                 try:
                     _os.kill(pid, _signal.SIGKILL)
                 except:
-                    print "Unable to kill the process with PID {}".format(pid)
+                    pass
+                    
+    def _win32_stop(self, pid):
+        """ 
+        Stop a WIN32 process 
+        @param pid the PID of the process
+        """
+        if pid is not None:
+            FNULL = open(_os.devnull, 'w')
+            _subprocess.call(qtasteWin32ToolsDirectory + _os.sep + "pskill.exe -t {}".format(pid), stdout=FNULL, stderr=FNULL)
+            FNULL.close()
+   
+    def stop(self):
+        """ 
+        Stop the process 
+        """
+        pid = None
         
+        # get the PID from the PID file
+        try:
+            pidFile = open(self.getProcessPidFilename(), "r")
+            pid = pidFile.read()
+            pid = int(pid)
+            pidFile.close()
 
+            # remove the file
+            _os.remove(self.getProcessPidFilename())
+        except:
+            return
+
+        # then, stop the process
+        if pid is not None:
+            if (_OS.getType() == _OS.Type.WINDOWS):
+                self._win32_stop(pid)
+            else:
+                self._posix_stop(pid)
+        
 #**************************************************************
 # Command classes
 #**************************************************************
