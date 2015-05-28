@@ -41,9 +41,6 @@ arguments = _sys.argv[2:]
 # QTaste root directory
 qtasteRootDirectory = _os.path.abspath(_os.getenv("QTASTE_ROOT") + "/")
 
-# QTaste win32 tools directory
-qtasteWin32ToolsDirectory = _os.path.abspath(qtasteRootDirectory + "\\tools\\win32\\")
-
 #**************************************************************
 # Generic Classes
 #**************************************************************
@@ -491,6 +488,7 @@ class NativeProcess(ControlAction):
                 # ... and check if the process has been killed
                 try:
                     _os.kill(pid, 0)
+                    _time.sleep(0.3)
                     count += 1
                 except:
                     killed = True
@@ -509,9 +507,25 @@ class NativeProcess(ControlAction):
         """
         if pid is not None:
             FNULL = open(_os.devnull, 'w')
-            _subprocess.call(qtasteWin32ToolsDirectory + _os.sep + "pskill.exe -t {}".format(pid), stdout=FNULL, stderr=FNULL)
+
+            # first, try to stop the process properly
+            killed = False
+            count=0
+
+            while not killed and count < 5:
+                # stop the process ...
+                if _subprocess.call("taskkill /T /PID {}".format(pid), stdout=FNULL, stderr=FNULL, shell=True) == 0:
+                    killed = True
+                else:
+                    count += 1
+                    _time.sleep(0.3)
+
+            # if it's not possible, kill it
+            if not killed:
+                _subprocess.call("taskkill /F /T /PID {}".format(pid), stdout=FNULL, stderr=FNULL, shell=True)
+
             FNULL.close()
-   
+                 
     def stop(self):
         """ 
         Stop the process 
