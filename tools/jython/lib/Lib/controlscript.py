@@ -337,11 +337,11 @@ class NativeProcess(ControlAction):
         ControlAction.__init__(self, description, active)
         
         self.executable  = executable
-        self.args     = args
+        self.args        = self.listifyArguments(args)
         self.workingDir  = _os.path.abspath(workingDir)
         self.checkAfter  = checkAfter
         self.priority    = priority
-        self.outFilename = _os.path.abspath(outFilename)
+        self.outFilename = outFilename
 
     def getProcessPidFilename(self):
         """
@@ -431,7 +431,7 @@ class NativeProcess(ControlAction):
         # move into the new working directory
         if self.workingDir is not None:
             _os.chdir(self.workingDir)
-
+            
         # launch the process
         # Note: 
         #    Here, command must be a string because, according to the documentation :
