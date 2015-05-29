@@ -11,6 +11,7 @@ class DoNothing(ControlAction):
 	def start(self):
 		print "Do nothing on start"
 		print
+		return True
 
 	def stop(self):
 		print "Do nothing on stop"

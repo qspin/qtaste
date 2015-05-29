@@ -28,15 +28,18 @@ from com.qspin.qtaste.tcom.rlogin import RLogin as _RLogin
 _Logger.getRootLogger().setLevel(_Level.WARN)
 
 # check script arguments
-if len(_sys.argv) <= 1 or _sys.argv[1].lower() not in ['start', 'stop']:
-    print >> _sys.stderr, "Invalid syntax: the first argument of a control script must be 'start' or 'stop'"
+if len(_sys.argv) <= 2 or _sys.argv[1].lower() not in ['start', 'stop']:
+    print >> _sys.stderr, "Invalid syntax: the first argument of a control script must be 'start' or 'stop' and the second one must be an UUID"
     _sys.exit(-1)
 
 # the control script action 'start' or 'stop' is provided as argument of the script
 start = (_sys.argv[1].lower() == 'start')
 
+# unique identifier of the current QTaste instance
+qtasteUUID = _sys.argv[2]
+
 # others scripts arguments
-arguments = _sys.argv[2:]
+arguments = _sys.argv[3:]
 
 # QTaste root directory
 qtasteRootDirectory = _os.path.abspath(_os.getenv("QTASTE_ROOT") + "/")
@@ -345,7 +348,7 @@ class NativeProcess(ControlAction):
         Get the name of the file to store the current process PID.
         @return a normalized path.
         """
-        return _os.path.abspath(_tempfile.gettempdir() + "/qtaste_ca_" + str(self.caID) + ".pid")
+        return _os.path.abspath(_tempfile.gettempdir() + "/qtaste_ca_" + qtasteUUID + "_" + str(self.caID) + ".pid")
 
     def getPriorityNumber(self):
         """
@@ -424,6 +427,10 @@ class NativeProcess(ControlAction):
         # add output redirection
         if self.outFilename is not None:
             command.append("> {}".format(self.outFilename))
+
+        # move into the new working directory
+        if self.workingDir is not None:
+            _os.chdir(self.workingDir)
 
         # launch the process
         # Note: 

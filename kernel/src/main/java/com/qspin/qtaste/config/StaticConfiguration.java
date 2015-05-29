@@ -21,6 +21,7 @@ package com.qspin.qtaste.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Class containing static configuration, like static paths and filenames.
@@ -30,6 +31,7 @@ import java.io.IOException;
 public class StaticConfiguration {
 
 	public static final String QTASTE_ROOT = getQTasteRoot();
+	public static final String QTASTE_UUID = UUID.randomUUID().toString();
 	public static final String JYTHON_HOME = QTASTE_ROOT + "/tools/jython/lib";
 	public static final String JYTHON_LIB = JYTHON_HOME + "/Lib";
 	public static final String TEST_SCRIPT_FILENAME = "TestScript.py";

@@ -12,8 +12,7 @@ class StartError(ControlAction):
 
 	def start(self):
 		print "Exit with error 1 on start"
-		sys.exit(1)
-		print
+		return False
 
 	def stop(self):
 		print "Do nothing on stop"

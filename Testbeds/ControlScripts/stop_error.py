@@ -13,6 +13,7 @@ class StopError(ControlAction):
 	def start(self):
 		print "Do nothing on start"
 		print
+		return True
 
 	def stop(self):
 		print "Exit with error 1 on stop"
