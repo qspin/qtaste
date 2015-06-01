@@ -27,19 +27,19 @@ from com.qspin.qtaste.tcom.rlogin import RLogin as _RLogin
 # set log4j logger level to WARN
 _Logger.getRootLogger().setLevel(_Level.WARN)
 
+# conditional expression
+_IF = lambda a,b,c:(a and [b] or [c])[0]
+
 # check script arguments
-if len(_sys.argv) <= 2 or _sys.argv[1].lower() not in ['start', 'stop']:
-    print >> _sys.stderr, "Invalid syntax: the first argument of a control script must be 'start' or 'stop' and the second one must be an UUID"
+if len(_sys.argv) <= 1 or _sys.argv[1].lower() not in ['start', 'stop']:
+    print >> _sys.stderr, "Invalid syntax: the first argument of a control script must be 'start' or 'stop'"
     _sys.exit(-1)
 
 # the control script action 'start' or 'stop' is provided as argument of the script
 start = (_sys.argv[1].lower() == 'start')
 
-# unique identifier of the current QTaste instance
-qtasteUUID = _sys.argv[2]
-
 # others scripts arguments
-arguments = _sys.argv[3:]
+arguments = _sys.argv[2:]
 
 # QTaste root directory
 qtasteRootDirectory = _os.path.abspath(_os.getenv("QTASTE_ROOT") + "/")
@@ -102,8 +102,7 @@ class ControlScript(object):
         # start all control actions
         for controlAction in self.controlActions:
             if controlAction.active:
-                if not controlAction.start():
-                    _sys.exit(-1)
+                controlAction.start()
     
     def stop(self):
         """ 
@@ -139,15 +138,14 @@ class ControlAction(object):
     def start(self):
         """ 
         Method called during control script start.
-        This is an abstract method that must be overridden. 
-        @return True if the control script action has been successfully started, False otherwise.
+        This method must be overridden. 
         """
-        return True
+        pass
 
     def stop(self):
         """ 
         Method called during control script stop.
-        This is an abstract method that must be overridden. 
+        This method must be overridden. 
         """
         pass
     
@@ -229,19 +227,6 @@ class ControlAction(object):
         else:
             return ' '.join(arguments)
 
-    def escapeString(string):
-        """
-        Escape special characters in string
-        @param string string to escape
-        @return string with special characters escaped
-        """
-        if (_OS.getType() == _OS.Type.WINDOWS):
-            # under Windows, escape '"' characters in command
-            return string.replace('"', r'\"')
-        else:
-            return string
-
-
 #--------------------------------------------------------------
 class Command(ControlAction):
     """ 
@@ -291,10 +276,11 @@ class Command(ControlAction):
     def start(self):
         """ 
         If a start command has been defined, execute it
-        @return True if the command has returned 0, False otherwise.
         """
         if self.startCommand:
-            return (self.execute(self.startCommand) == 0)
+            returnCode = self.execute(self.startCommand) 
+            if returnCode != 0:
+                _sys.exit(returnCode)
 
     def stop(self):
         """ 
@@ -348,11 +334,12 @@ class NativeProcess(ControlAction):
         Get the name of the file to store the current process PID.
         @return a normalized path.
         """
-        return _os.path.abspath(_tempfile.gettempdir() + "/qtaste_ca_" + qtasteUUID + "_" + str(self.caID) + ".pid")
+        return _os.path.abspath(_tempfile.gettempdir() + "/qtaste_ca_" + str(self.caID) + ".pid")
 
-    def getPriorityNumber(self):
+    def getNiceValue(self):
         """
-        
+        Convert the priority into a value for the POSIX nice command.
+        @return the nice value.
         """
         
         if self.priority == 'low':
@@ -372,17 +359,16 @@ class NativeProcess(ControlAction):
 
         return 0
         
-        
     def dumpDataType(self, prefix, writer):
         """ 
         @see ControlAction.dumpDataType()
         """
         super(NativeProcess, self).dumpDataType(prefix, writer)
         self.dumpTypeItem(writer, prefix, "executable",  "string")       
-        self.dumpTypeItem(writer, prefix, "args",      "stringList")       
+        self.dumpTypeItem(writer, prefix, "args",        "stringList")       
         self.dumpTypeItem(writer, prefix, "workingDir",  "string")       
         self.dumpTypeItem(writer, prefix, "checkAfter",  "integer")       
-        self.dumpTypeItem(writer, prefix, "priority",      "string")
+        self.dumpTypeItem(writer, prefix, "priority",    "string")
         self.dumpTypeItem(writer, prefix, "outFilename", "string")
     
     def dump(self, writer):
@@ -391,17 +377,18 @@ class NativeProcess(ControlAction):
         """
         super(NativeProcess, self).dump(writer)
         self.dumpItem(writer, "executable",  self.executable)
-        self.dumpItem(writer, "args",      ' '.join(self.args))
+        self.dumpItem(writer, "args",        ' '.join(self.args))
         self.dumpItem(writer, "workingDir",  self.workingDir)
         self.dumpItem(writer, "checkAfter",  self.checkAfter)
-        self.dumpItem(writer, "priority",      self.priority)
+        self.dumpItem(writer, "priority",    self.priority)
         self.dumpItem(writer, "outFilename", self.outFilename)
 
     def start(self):
         """ 
         Start the native process.
-        @return True if the process has been successfully started, False otherwise.
         """
+
+        print "Starting %s ..." % self.description
         
         # build the complete command
         command = list()
@@ -415,7 +402,7 @@ class NativeProcess(ControlAction):
                 
             command.append("/C")
         else:
-            command.extend(["nice", "-n", str(self.getPriorityNumber())])
+            command.extend(["nice", "-n", str(self.getNiceValue())])
 
         # add the process executable
         command.append(self.executable)
@@ -442,7 +429,7 @@ class NativeProcess(ControlAction):
         # check if the process is alive
         if process.poll() is not None:
             print "Error: The process has exited with error code {}".format(process.returncode)
-            return False
+            _sys.exit(-1) 
             
         # wait for some seconds...
         _time.sleep(self.checkAfter)
@@ -450,8 +437,8 @@ class NativeProcess(ControlAction):
         # then, check agains if the process is alive
         if process.poll() is not None:
             print "Error: The process has exited with error code {}".format(process.returncode)
-            return False
-
+            _sys.exit(-1) 
+            
         # get the child process PID
         if (_OS.getType() == _OS.Type.WINDOWS):
 			pid = str(process.pid)
@@ -465,10 +452,8 @@ class NativeProcess(ControlAction):
             pidFile.close()
         except:
             print "Unable to save the PID in the file {}".format(self.getProcessPidFilename())
-            return False
+            _sys.exit(-1) 
             
-        return True
-        
     def _posix_stop(self, pid):
 
         """
@@ -476,7 +461,6 @@ class NativeProcess(ControlAction):
         First, try to stop it properly, using the SIGTERM signal. If it doesn't work, kill it using the SIGKILL signal.
         @param pid the PID of the process
         """
-    
         # kill the process
         if pid is not None:
 
@@ -538,7 +522,9 @@ class NativeProcess(ControlAction):
         Stop the process 
         """
         pid = None
-        
+
+        print "Stopping %s ..." % self.description
+
         # get the PID from the PID file
         try:
             pidFile = open(self.getProcessPidFilename(), "r")
@@ -606,15 +592,17 @@ class RExec(Command):
         Execute a command on a remote host
         @param command command to execute
         """
+        if command:
+            print "Remotely executing '%s' on %s using rexec" % (command, self.host) 
 
-        print "Remotely executing '%s' on %s using rexec" % (command, self.host) 
+            # add rexec parameters to the command        
+            fullCommand = ["rexec", "-l", self.login, "-p", self.password, self.host]
+            fullCommand.extend(self.listifyArguments(command))
 
-        # add rexec parameters to the command        
-        fullCommand = ["rexec", "-l", self.login, "-p", self.password, self.host]
-        fullCommand.extend(self.listifyArguments(command))
-
-        # and execute the full command
-        return super(RExec, self).execute(fullCommand)
+            # and execute the full command
+            return super(RExec, self).execute(fullCommand)
+            
+        return -1
 
 #--------------------------------------------------------------
 class ReplaceInFiles(Command):
@@ -658,12 +646,16 @@ class ReplaceInFiles(Command):
         """ 
         Replace the 'findString' by the 'replaceString' in all file(s)
         Command only executed on start, because a "dummy_start" start command has been defined.
-        @return 0
+        @return -1 when the regex are not a valid, 0 otherwise
         """
-        for line in fileinput.input(self.files, inplace=True):
-            print re.sub(self.findString, self.replaceString, line),
-
-        #RBA: handle exception ?    
+        print "Replacing", repr(self.findString), "by", repr(self.replaceString), "in", self.stringifyArguments(self.files)
+        
+        try:
+            for line in fileinput.input(self.files, inplace=True):
+                print re.sub(self.findString, self.replaceString, line),
+        except re.error:
+            return -1
+                
         return 0
     
 #--------------------------------------------------------------
@@ -705,14 +697,102 @@ class Rsh(Command):
         """
         Execute the command on the remote host using rsh
         """
+        if command:
+            print 'Remotely executing "%s" on %s using rsh' % (command, self.host) 
+
+            # add rsh parameters to the command        
+            fullCommand = ["rsh", "-l", self.login, self.host]
+            fullCommand.extend(self.listifyArguments(command))
+
+            # and execute the full command
+            return super(Rsh, self).execute(fullCommand)    
+
+            
+        return -1
         
-        # add rsh parameters to the command        
-        fullCommand = ["rsh", "-l", self.login, self.host]
-        fullCommand.extend(self.listifyArguments(command))
+    #--------------------------------------------------------------
+    class Ssh(Command):
+	""" 
+    Control script action for executing a command on a remote host using SSH 
+    """
+	def __init__(self, host, login, startCommand=None, stopCommand=None, active=True):
+		"""
+		Initialize Ssh object.
+		@param host remote host
+		@param login remote user login
+		@param startCommand command to execute on start, or None
+		@param stopCommand command to execute on stop, or None
+		"""
+		Command.__init__(self, "Remote command execution using ssh", startCommand, stopCommand, active)
+		self.host = host
+		self.login = login
 
-        # and execute the full command
-        return super(Rsh, self).execute(fullCommand)    
+	def dumpDataType(self, prefix, writer):
+        """ 
+        @see ControlAction.dumpDataType()
+        """
+        super(Ssh, self).dumpDataType(prefix, writer)
+        self.dumpTypeItem(writer, prefix, "host",  "string")
+        self.dumpTypeItem(writer, prefix, "login", "string")
 
+	def dump(self, writer):
+        """ 
+        @see ControlAction.dump()
+        """
+        super(Ssh, self).dump(writer)
+        self.dumpItem(writer, "host",  self.host)
+        self.dumpItem(writer, "login", self.login)
+
+	def execute(self, command):
+        """
+        Execute the command on the remote host using ssh
+        """
+		if command:
+			print 'Remotely executing "%s" on %s using ssh' % (command, self.host)
+            ssh = _IF(_OS.getType() == _OS.Type.WINDOWS, qtasteRootDirectory + "tools/tools4ever/T4eSsh", "ssh")
+            return super(Rsh, self).execute([ssh, self.host, "-l", self.login, command])    
+
+        return -1
+
+    #--------------------------------------------------------------
+    class ShellCommand(Command):
+        """ 
+        Control script action for executing a shell command. 
+        """
+        def __init__(self, startCommand=None, stopCommand=None, shell=_IF(_OS.getType() == _OS.Type.WINDOWS, "cmd", "bash"), active=True):
+            """
+            Initializes ShellCommand object.
+            @param startCommand shell command to execute on start, or None
+            @param stopCommand shell command to execute on stop, or None
+            @param shell the shell to use (default is "bash" on Linux, "cmd" on Windows)
+            """
+            Command.__init__(self, "Command execution using " + shell, startCommand, stopCommand, active)
+            self.shell = shell
+
+        def dumpDataType(self, prefix, writer):
+            """ 
+            @see ControlAction.dumpDataType()
+            """
+            super(ShellCommand, self).dumpDataType(prefix, writer)
+            self.dumpTypeItem(writer, prefix, "shell", "string")
+
+        def dump(self, writer):
+            """ 
+            @see ControlAction.dump()
+            """
+            super(Ssh, self).dump(writer)
+            self.dumpItem(writer, "shell",  self.shell)
+
+        def execute(self, command):
+            """
+            Execute the shell command
+            """
+            if command:
+                print 'Executing "%s" using %s' % (command, self.shell)
+                return super(Ssh, self).execute([self.shell, _IF(_OS.getType() == _OS.Type.WINDOWS, "/c", "-c"), command])
+
+            return -1
+     
 #**************************************************************
 # Process classes
 #**************************************************************
@@ -791,7 +871,10 @@ class JavaProcess(NativeProcess):
         return normalizedClassPath
 
     def _buildProcessArguments(self):
-        """ """
+        """ 
+        Build the list of process arguments
+        @return the list of process arguments
+        """
         command = []
 
         # add classpath
@@ -834,10 +917,10 @@ class JavaProcess(NativeProcess):
         """
         super(JavaProcess, self).dump(writer)
         self.dumpItem(writer, "mainClassOrJar",   self.mainClassOrJar)
-        self.dumpItem(writer, "args",           self.mainArgs)
-        self.dumpItem(writer, "classPath",       self.classPath)
-        self.dumpItem(writer, "vmArgs",       self.stringifyArguments(self.vmArgs))
-        self.dumpItem(writer, "jmxPort",       self.jmxPort)
+        self.dumpItem(writer, "args",             self.mainArgs)
+        self.dumpItem(writer, "classPath",        self.classPath)
+        self.dumpItem(writer, "vmArgs",           self.stringifyArguments(self.vmArgs))
+        self.dumpItem(writer, "jmxPort",          self.jmxPort)
         self.dumpItem(writer, "jacocoArguments",  self.jacocoArgument)
         self.dumpItem(writer, "javaGUIArguments", self.javaGUIArgument)
 
@@ -847,10 +930,10 @@ class JavaProcess(NativeProcess):
         """
         super(JavaProcess, self).dumpDataType(prefix, writer)
         self.dumpTypeItem(writer, prefix, "mainClassOrJar",   "string")
-        self.dumpTypeItem(writer, prefix, "args",           "string|list")
-        self.dumpTypeItem(writer, prefix, "classPath",       "string")
-        self.dumpTypeItem(writer, prefix, "vmArgs",       "string|list")
-        self.dumpTypeItem(writer, prefix, "jmxPort",       "integer")
+        self.dumpTypeItem(writer, prefix, "args",             "string|list")
+        self.dumpTypeItem(writer, prefix, "classPath",        "string")
+        self.dumpTypeItem(writer, prefix, "vmArgs",           "string|list")
+        self.dumpTypeItem(writer, prefix, "jmxPort",          "integer")
         self.dumpTypeItem(writer, prefix, "jacocoArguments",  "string")
         self.dumpTypeItem(writer, prefix, "javaGUIArguments", "string")
 
@@ -1017,9 +1100,8 @@ class RebootRlogin(ControlAction):
         if self.rlogin.connect() and self.rlogin.reboot():
             print "Waiting for %g seconds while %s is rebooting..." % (self.waitingTime, self.host)
             _time.sleep(self.waitingTime)
-            return True
-
-        return False
+        else:
+            _sys.exit(-1)
     
 #--------------------------------------------------------------
 class OnStart(ControlAction):
@@ -1054,7 +1136,7 @@ class OnStart(ControlAction):
         """
         Do the start action on start.
         """
-        return self.controlAction.start()
+        self.controlAction.start()
 
 #--------------------------------------------------------------
 class OnStop(ControlAction):
@@ -1140,7 +1222,6 @@ class Sleep(ControlAction):
 
     def start(self):
         self.execute()
-        return True
 
     def stop(self):
         self.execute()

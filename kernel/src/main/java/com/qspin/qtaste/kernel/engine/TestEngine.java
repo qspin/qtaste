@@ -244,7 +244,6 @@ public class TestEngine {
 			
 			startOrStopCommand.add(scriptFilename);
 			startOrStopCommand.add(startOrStop);
-			startOrStopCommand.add(StaticConfiguration.QTASTE_UUID);
 			
 			String scriptArguments = config.getControlScriptArguments();
 			if (scriptArguments != null) {
