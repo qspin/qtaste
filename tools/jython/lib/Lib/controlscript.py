@@ -16,8 +16,7 @@ import tempfile as _tempfile
 import traceback
 
 from org.apache.log4j import Logger as _Logger, Level as _Level
-from com.qspin.qtaste.util import OS as _OS, Exec as _Exec
-from com.qspin.qtaste.config import TestBedConfiguration as _TestBedConfiguration
+from com.qspin.qtaste.util import OS as _OS
 from com.qspin.qtaste.tcom.rlogin import RLogin as _RLogin
 
 #**************************************************************
@@ -270,8 +269,8 @@ class Command(ControlAction):
         @see ControlAction.dump()
         """
         super(Command, self).dump(writer)
-        self.dumpItem(writer, "startCommand", listifyArguments(self.startCommand))
-        self.dumpItem(writer, "stopCommand",  listifyArguments(self.stopCommand))
+        self.dumpItem(writer, "startCommand", self.listifyArguments(self.startCommand))
+        self.dumpItem(writer, "stopCommand",  self.listifyArguments(self.stopCommand))
 
     def start(self):
         """ 
@@ -377,7 +376,7 @@ class NativeProcess(ControlAction):
         """
         super(NativeProcess, self).dump(writer)
         self.dumpItem(writer, "executable",  self.executable)
-        self.dumpItem(writer, "args",        ' '.join(self.args))
+        self.dumpItem(writer, "args",        self.stringifyArguments(self.args))
         self.dumpItem(writer, "workingDir",  self.workingDir)
         self.dumpItem(writer, "checkAfter",  self.checkAfter)
         self.dumpItem(writer, "priority",    self.priority)
@@ -418,6 +417,8 @@ class NativeProcess(ControlAction):
         # move into the new working directory
         if self.workingDir is not None:
             _os.chdir(self.workingDir)
+
+        print "command %s" % ' '.join(command)
             
         # launch the process
         # Note: 
@@ -432,7 +433,8 @@ class NativeProcess(ControlAction):
             _sys.exit(-1) 
             
         # wait for some seconds...
-        _time.sleep(self.checkAfter)
+        if self.checkAfter:
+            _time.sleep(self.checkAfter)
         
         # then, check agains if the process is alive
         if process.poll() is not None:
@@ -441,7 +443,7 @@ class NativeProcess(ControlAction):
             
         # get the child process PID
         if (_OS.getType() == _OS.Type.WINDOWS):
-			pid = str(process.pid)
+            pid = str(process.pid)
         else:
             pid = _subprocess.check_output("ps --no-headers -o %p --ppid {}".format(process.pid), shell=True)
 
@@ -651,9 +653,9 @@ class ReplaceInFiles(Command):
         print "Replacing", repr(self.findString), "by", repr(self.replaceString), "in", self.stringifyArguments(self.files)
         
         try:
-            for line in fileinput.input(self.files, inplace=True):
-                print re.sub(self.findString, self.replaceString, line),
-        except re.error:
+            for line in _fileinput.input(self.files, inplace=True):
+                print _re.sub(self.findString, self.replaceString, line),
+        except _re.error:
             return -1
                 
         return 0
@@ -710,24 +712,24 @@ class Rsh(Command):
             
         return -1
         
-    #--------------------------------------------------------------
-    class Ssh(Command):
-	""" 
-    Control script action for executing a command on a remote host using SSH 
+#--------------------------------------------------------------
+class Ssh(Command):
+    """ 
+    Control script action for executing a command on a remote host using SSH
     """
-	def __init__(self, host, login, startCommand=None, stopCommand=None, active=True):
-		"""
-		Initialize Ssh object.
-		@param host remote host
-		@param login remote user login
-		@param startCommand command to execute on start, or None
-		@param stopCommand command to execute on stop, or None
-		"""
-		Command.__init__(self, "Remote command execution using ssh", startCommand, stopCommand, active)
-		self.host = host
-		self.login = login
+    def __init__(self, host, login, startCommand=None, stopCommand=None, active=True):
+        """
+        Initialize Ssh object.
+        @param host remote host
+        @param login remote user login
+        @param startCommand command to execute on start, or None
+        @param stopCommand command to execute on stop, or None
+        """
+        Command.__init__(self, "Remote command execution using ssh", startCommand, stopCommand, active)
+        self.host = host
+        self.login = login
 
-	def dumpDataType(self, prefix, writer):
+    def dumpDataType(self, prefix, writer):
         """ 
         @see ControlAction.dumpDataType()
         """
@@ -735,7 +737,7 @@ class Rsh(Command):
         self.dumpTypeItem(writer, prefix, "host",  "string")
         self.dumpTypeItem(writer, prefix, "login", "string")
 
-	def dump(self, writer):
+    def dump(self, writer):
         """ 
         @see ControlAction.dump()
         """
@@ -743,55 +745,65 @@ class Rsh(Command):
         self.dumpItem(writer, "host",  self.host)
         self.dumpItem(writer, "login", self.login)
 
-	def execute(self, command):
+    def execute(self, command):
         """
         Execute the command on the remote host using ssh
         """
-		if command:
-			print 'Remotely executing "%s" on %s using ssh' % (command, self.host)
+        if command:
+            print 'Remotely executing "%s" on %s using ssh' % (command, self.host)
             ssh = _IF(_OS.getType() == _OS.Type.WINDOWS, qtasteRootDirectory + "tools/tools4ever/T4eSsh", "ssh")
             return super(Rsh, self).execute([ssh, self.host, "-l", self.login, command])    
 
         return -1
 
-    #--------------------------------------------------------------
-    class ShellCommand(Command):
-        """ 
-        Control script action for executing a shell command. 
+#--------------------------------------------------------------
+class ShellCommand(Command):
+    """ 
+    Control script action for executing a shell command. 
+    """
+    def __init__(self, startCommand=None, stopCommand=None, shell=_IF(_OS.getType() == _OS.Type.WINDOWS, "cmd", "bash"), active=True):
         """
-        def __init__(self, startCommand=None, stopCommand=None, shell=_IF(_OS.getType() == _OS.Type.WINDOWS, "cmd", "bash"), active=True):
-            """
-            Initializes ShellCommand object.
-            @param startCommand shell command to execute on start, or None
-            @param stopCommand shell command to execute on stop, or None
-            @param shell the shell to use (default is "bash" on Linux, "cmd" on Windows)
-            """
-            Command.__init__(self, "Command execution using " + shell, startCommand, stopCommand, active)
-            self.shell = shell
+        Initializes ShellCommand object.
+        @param startCommand shell command to execute on start, or None
+        @param stopCommand shell command to execute on stop, or None
+        @param shell the shell to use (default is "bash" on Linux, "cmd" on Windows)
+        """
+        Command.__init__(self, "Command execution using " + shell, startCommand, stopCommand, active)
+        self.shell = shell
 
-        def dumpDataType(self, prefix, writer):
-            """ 
-            @see ControlAction.dumpDataType()
-            """
-            super(ShellCommand, self).dumpDataType(prefix, writer)
-            self.dumpTypeItem(writer, prefix, "shell", "string")
+    def dumpDataType(self, prefix, writer):
+        """ 
+        @see ControlAction.dumpDataType()
+        """
+        super(ShellCommand, self).dumpDataType(prefix, writer)
+        self.dumpTypeItem(writer, prefix, "shell", "string")
 
-        def dump(self, writer):
-            """ 
-            @see ControlAction.dump()
-            """
-            super(Ssh, self).dump(writer)
-            self.dumpItem(writer, "shell",  self.shell)
+    def dump(self, writer):
+        """ 
+        @see ControlAction.dump()
+        """
+        super(ShellCommand, self).dump(writer)
+        self.dumpItem(writer, "shell",  self.shell)
 
-        def execute(self, command):
-            """
-            Execute the shell command
-            """
-            if command:
-                print 'Executing "%s" using %s' % (command, self.shell)
-                return super(Ssh, self).execute([self.shell, _IF(_OS.getType() == _OS.Type.WINDOWS, "/c", "-c"), command])
+    def execute(self, command):
+        """
+        Execute the shell command
+        """
+        if command:
+            print 'Executing "%s" using %s' % (command, self.shell)
+            
+            # build shell option according to the shell used
+            if _OS.getType() == _OS.Type.WINDOWS:
+                if "powershell" in self.shell:
+                    shellOption = "-command"
+                else:
+                    shellOption = "/c"
+            else:
+                shellOption = "-c"
+            
+            return super(ShellCommand, self).execute([self.shell, shellOption, command])
 
-            return -1
+        return -1
      
 #**************************************************************
 # Process classes
