@@ -240,7 +240,7 @@ public class TestBedConfiguration extends XMLConfiguration {
      */
     public boolean getMIBoolean(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
-        return instance.getBoolean("multiple_instances_components." + component +" (" + index + ")." + key);
+        return instance.getBoolean("multiple_instances_components." + component +"(" + index + ")." + key);
     }
 
     /**
