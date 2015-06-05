@@ -187,7 +187,7 @@ public interface JavaGUI {
     * Return the current selected value for the specified component.</br>
     * Can be used on :
     * <ul>
-    * <li>{@link AbstractButton} (see {@link AbstractButton#getText()})</li>
+    * <li>{@link AbstractButton} (see {@link AbstractButton#isSelected()})</li>
     * <li>{@link JComboBox} (see {@link JComboBox#getSelectedItem()})</li>
     * <li>{@link JList} (see {@link JList#getSelectedValue()})</li>
     * <li>{@link JSpinner} (see {@link JSpinner#getModel()#getValue()})</li>
