@@ -5,3 +5,9 @@ Select the value 3 in a spinner;PlaybackApp;SELECTION_PANEL;TABBED_PANE;-1;SPINN
 Select the value 10 in a slider;PlaybackApp;SELECTION_PANEL;TABBED_PANE;-1;SLIDER;10
 Select element "Elisabeth II (80)" in a combo box;PlaybackApp;SELECTION_PANEL;TABBED_PANE;-1;COMBO_BOX;Elisabeth II (80)
 Select element "Tintin Milou (40)" in a List;PlaybackApp;SELECTION_PANEL;TABBED_PANE;-1;LIST;Tintin Milou (40)
+Select a check box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;-1;CHECK_BOX;true
+Select a radio box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;-1;RADIO_BUTTON;true
+Select a toggle button;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;-1;TOGGLE_BUTTON;true
+Unselect a check box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;-1;CHECK_BOX;false
+Unselect a radio box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;-1;RADIO_BUTTON;false
+Unselect a toggle button;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;-1;TOGGLE_BUTTON;false

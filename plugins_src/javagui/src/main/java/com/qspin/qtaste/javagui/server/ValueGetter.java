@@ -48,7 +48,7 @@ public class ValueGetter extends ComponentCommander {
             return Integer.toString(((JSlider) component).getModel().getValue());
         }
 		else if (component instanceof AbstractButton) {
-			return ((AbstractButton)component).getText();
+			return Boolean.toString(((AbstractButton)component).isSelected());
 		}
 		
 		throw new QTasteTestFailException("The component \"" + componentName + "\" is not a supported");
