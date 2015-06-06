@@ -43,6 +43,16 @@ arguments = _sys.argv[2:]
 # QTaste root directory
 qtasteRootDirectory = _os.path.abspath(_os.getenv("QTASTE_ROOT") + "/")
 
+# QTaste control script debug flag
+verbose = _os.environ.get('QTASTE_CONTROL_SCRIPT_VERBOSE')
+
+def print_verbose(message):
+    """
+    Print a message if the verbose mode is activated
+    """
+    if verbose:
+        print message
+
 #**************************************************************
 # Generic Classes
 #**************************************************************
@@ -253,7 +263,8 @@ class Command(ControlAction):
         @param command command to execute (a string or a strings list)
         @return the code returned by the command
         """
-        print 'Executing "%s"' % self.stringifyArguments(command)
+        print "Executing '{}' ...".format(self.description)
+        print_verbose('Command: "%s"' % self.stringifyArguments(command))
         return _subprocess.call(command)
 
     def dumpDataType(self, prefix, writer):
@@ -387,7 +398,7 @@ class NativeProcess(ControlAction):
         Start the native process.
         """
 
-        print "Starting %s ..." % self.description
+        print "Starting '%s' ..." % self.description
         
         # build the complete command
         command = list()
@@ -418,7 +429,7 @@ class NativeProcess(ControlAction):
         if self.workingDir is not None:
             _os.chdir(self.workingDir)
 
-        print "command %s" % ' '.join(command)
+        print_verbose("full native process command: {}".format(' '.join(command)))
             
         # launch the process
         # Note: 
@@ -525,7 +536,7 @@ class NativeProcess(ControlAction):
         """
         pid = None
 
-        print "Stopping %s ..." % self.description
+        print "Stopping '%s' ..." % self.description
 
         # get the PID from the PID file
         try:
@@ -595,7 +606,7 @@ class RExec(Command):
         @param command command to execute
         """
         if command:
-            print "Remotely executing '%s' on %s using rexec" % (command, self.host) 
+            print_verbose("Remotely executing '%s' on %s using rexec" % (command, self.host))
 
             # add rexec parameters to the command        
             fullCommand = ["rexec", "-l", self.login, "-p", self.password, self.host]
@@ -650,11 +661,12 @@ class ReplaceInFiles(Command):
         Command only executed on start, because a "dummy_start" start command has been defined.
         @return -1 when the regex are not a valid, 0 otherwise
         """
-        print "Replacing", repr(self.findString), "by", repr(self.replaceString), "in", self.stringifyArguments(self.files)
+        print_verbose("Replacing {} by {} in {}".format(repr(self.findString), repr(self.replaceString), self.stringifyArguments(self.files)))
         
         try:
-            for line in _fileinput.input(self.files, inplace=True):
-                print _re.sub(self.findString, self.replaceString, line),
+            for aFile in self.listifyArguments(self.files):
+                for line in _fileinput.input(aFile, inplace=True):
+                    print _re.sub(self.findString, self.replaceString, line),
         except _re.error:
             return -1
                 
@@ -700,7 +712,7 @@ class Rsh(Command):
         Execute the command on the remote host using rsh
         """
         if command:
-            print 'Remotely executing "%s" on %s using rsh' % (command, self.host) 
+            print_verbose('Remotely executing "%s" on %s using rsh' % (command, self.host))
 
             # add rsh parameters to the command        
             fullCommand = ["rsh", "-l", self.login, self.host]
@@ -750,7 +762,7 @@ class Ssh(Command):
         Execute the command on the remote host using ssh
         """
         if command:
-            print 'Remotely executing "%s" on %s using ssh' % (command, self.host)
+            print_verbose('Remotely executing "%s" on %s using ssh' % (command, self.host))
             ssh = _IF(_OS.getType() == _OS.Type.WINDOWS, qtasteRootDirectory + "tools/tools4ever/T4eSsh", "ssh")
             return super(Rsh, self).execute([ssh, self.host, "-l", self.login, command])    
 
@@ -790,7 +802,7 @@ class ShellCommand(Command):
         Execute the shell command
         """
         if command:
-            print 'Executing "%s" using %s' % (command, self.shell)
+            print_verbose('Executing "%s" using %s' % (command, self.shell))
             
             # build shell option according to the shell used
             if _OS.getType() == _OS.Type.WINDOWS:
@@ -1107,10 +1119,10 @@ class RebootRlogin(ControlAction):
         @return True if the reboot succeed, false otherwise.
         """
         
-        print "Rebooting %s..." % self.host
+        print_verbose("Rebooting %s..." % self.host)
 
         if self.rlogin.connect() and self.rlogin.reboot():
-            print "Waiting for %g seconds while %s is rebooting..." % (self.waitingTime, self.host)
+            print_verbose("Waiting for %g seconds while %s is rebooting..." % (self.waitingTime, self.host))
             _time.sleep(self.waitingTime)
         else:
             _sys.exit(-1)
@@ -1225,9 +1237,9 @@ class Sleep(ControlAction):
 
         # print the message
         if self.message is None:
-            print "Sleeping", str(self.time), "seconds..." 
+            print_verbose("Sleeping {} seconds...".format(str(self.time))) 
         else:
-            print self.message
+            print_verbose(self.message)
 
         #sleep
         _time.sleep(self.time)
