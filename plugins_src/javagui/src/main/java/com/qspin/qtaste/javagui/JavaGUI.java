@@ -226,13 +226,13 @@ public interface JavaGUI {
    /**
     * Select the node for the specified JTree.</br>
     * In this method, node names in the node path are regular expressions. </br>
-    * Be careful if you use some special regex characters.</br>
-    * Be careful to choose a node path separator which is not a special regex character.</br>
+    * Be careful if you use some special regex characters in the node path separator.</br>
     * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
     * @param componentName an identifier of the JTree component.
     * @param nodePath the path to the node to select. This is a string composed by node names, separated by a separator.
     * 		 	 	  Here, node path elements are regular expressions.
-    * @param nodePathSeparator the separator used in the node path to separate node path elements.
+    * @param nodePathSeparator the separator used in the node path to separate node path elements. 
+    * 						   It is processed as a regular expression.
     * @throws QTasteException
     */
    void selectNodeRe(String componentName, String nodePath, String nodePathSeparator) throws QTasteException;
