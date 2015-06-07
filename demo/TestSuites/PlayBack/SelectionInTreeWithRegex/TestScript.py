@@ -16,7 +16,7 @@ subtitler = testAPI.getSubtitler()
 subtitler.setSubtitle(testData.getValue("COMMENT"))
 
 # select the tab with tree components
-javaguiMI.selectTabId("TABBED_PANE", "TREE_LIST_PANEL")
+javaguiMI.selectTabTitled("TABBED_PANE", "TREE_LIST_PANEL")
 
 # get test data
 component 	  = testData.getValue("COMPONENT_NAME")
