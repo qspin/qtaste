@@ -140,7 +140,7 @@ public interface JavaGUI {
     * Select the specified tab for the tabbed pane.</br>
 	 * Can be used on {@link JTabbedPane}. (see {@link JTabbedPane#setSelectedIndex(int)})
     * @param tabbedPaneComponentName the {@link JTabbedPane} component name
-    * @param tabIndex the tab index (first at 0).
+    * @param tabIndex the tab index (first at 0, -1 means no tab should be selected).
     */
    void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException;
 
