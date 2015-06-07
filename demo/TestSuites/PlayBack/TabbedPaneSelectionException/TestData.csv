@@ -1,0 +1,5 @@
+COMMENT;TEST_CASE_ID;JAVAGUI_INSTANCE_NAME;TAB_COMPONENT_NAME
+select out of lower bound tab (FAIL expected);1;PlaybackApp;TABBED_PANE
+select out of higher bound tab (FAIL expected);2;PlaybackApp;TABBED_PANE
+select wrong name tab (FAIL expected);3;PlaybackApp;TABBED_PANE
+select wrong id tab (FAIL expected);4;PlaybackApp;TABBED_PANE
