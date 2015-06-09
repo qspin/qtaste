@@ -183,7 +183,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 	}
 
 	@Override
-	protected void doActionsInSwingThread() throws QTasteException {
+	protected void doActionsInSwingThread() throws QTasteTestFailException {
 		JTree tree = (JTree) component;
 
 		if (mSelectorIdentifier == SelectorIdentifier.CLEAR_SELECTION) {
