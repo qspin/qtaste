@@ -35,6 +35,7 @@ class TabSelector extends UpdateComponentCommander {
 
     private SelectorIdentifier mSelectorIdentifier;
     protected int mTabIndex;
+    protected String mTabIdentifier;
 
     public TabSelector(SelectorIdentifier aSelectorIdentifier) {
         mSelectorIdentifier = aSelectorIdentifier;
@@ -51,46 +52,53 @@ class TabSelector extends UpdateComponentCommander {
         switch (mSelectorIdentifier) {
             case SELECT_BY_INDEX:
                 mTabIndex = Integer.parseInt(mData[0].toString());
-
-                if (mTabIndex < -1 || mTabIndex >= ((JTabbedPane)component).getTabCount()) {
-                    throw new QTasteTestFailException("Tab index " + mTabIndex + " out of bounds.");
-                }
                 break;
 
             case SELECT_BY_TITLE:
-                String tabTitle = mData[0].toString();
-
-                mTabIndex = ((JTabbedPane)component).indexOfTab(tabTitle);
-
-                if (mTabIndex < 0) {
-                    throw new QTasteTestFailException("Unable to find tab titled '" + tabTitle + "'");
-                }
-                break;
-                
             case SELECT_BY_COMPONENT_ID:
-                String componentName = mData[0].toString();
-                mTabIndex = -1;
-                int count = ((JTabbedPane)component).getTabCount();
-                for (int i = 0; i < count; i++) {
-                    Component cmpIter = ((JTabbedPane)component).getComponentAt(i);
-                    if (componentName.equals(cmpIter.getName())) {
-                        mTabIndex = count;
-                        break;
-                    }
-                }
-
-                if (mTabIndex < 0) {
-                    throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
-                }
-                break;
-
-            default:
+                mTabIdentifier = mData[0].toString();
                 break;
         }
     }
 
     @Override
-    protected void doActionsInSwingThread() {
+    protected void doActionsInSwingThread() throws QTasteTestFailException {
+    	
+        switch (mSelectorIdentifier) {
+        case SELECT_BY_INDEX:
+            if (mTabIndex < -1 || mTabIndex >= ((JTabbedPane)component).getTabCount()) {
+                throw new QTasteTestFailException("Tab index " + mTabIndex + " out of bounds.");
+            }
+            break;
+
+        case SELECT_BY_TITLE:
+            mTabIndex = ((JTabbedPane)component).indexOfTab(mTabIdentifier);
+
+            if (mTabIndex < 0) {
+                throw new QTasteTestFailException("Unable to find tab titled '" + mTabIdentifier + "'");
+            }
+            break;
+            
+        case SELECT_BY_COMPONENT_ID:
+            mTabIndex = -1;
+            int count = ((JTabbedPane)component).getTabCount();
+            for (int i = 0; i < count; i++) {
+                Component cmpIter = ((JTabbedPane)component).getComponentAt(i);
+                if ( cmpIter.getName() != null && cmpIter.getName().equals(mTabIdentifier) ) {
+                	mTabIndex = ((JTabbedPane)component).indexOfComponent(cmpIter);
+                	break;
+                }
+            }
+
+            if (mTabIndex < 0) {
+                throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
+            }
+            break;
+
+        default:
+            throw new QTasteTestFailException("Bad selector identifier");
+        }
+    	
         if (component != null && component instanceof JTabbedPane) {
             ((JTabbedPane)component).setSelectedIndex(mTabIndex);
         }
