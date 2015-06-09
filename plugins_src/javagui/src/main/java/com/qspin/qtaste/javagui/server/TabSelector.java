@@ -85,7 +85,6 @@ class TabSelector extends UpdateComponentCommander {
             for (int i = 0; i < count; i++) {
                 Component cmpIter = ((JTabbedPane)component).getComponentAt(i);
                 if ( cmpIter.getName() != null && cmpIter.getName().equals(mTabIdentifier) ) {
-//                	mTabIndex = ((JTabbedPane)component).indexOfComponent(cmpIter);
                 	mTabIndex = i;
                 	break;
                 }

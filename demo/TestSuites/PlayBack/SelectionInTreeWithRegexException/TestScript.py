@@ -38,17 +38,20 @@ def step1():
     @step      select a node according to test data
     @expected  a QTasteTestFailException with a message
     """
+    exception = False
+
     try:
         javaguiMI.selectNodeRe(component, value, separator)
     except QTasteTestFailException, e:
-        if e.message == expectedMsg:
-            return
-        else:
+	    exception = True
+        if e.message != expectedMsg:
             testAPI.stopTest(Status.FAIL, "Expected message : '" + expectedMsg + "' but got : '" + e.message + "'")
     except e:
+        exception = False
         testAPI.stopTest(Status.FAIL, "Unexpected exception : " + repr(e))
 
-    testAPI.stopTest(Status.FAIL, "No exception")
+    if not exception:
+        testAPI.stopTest(Status.FAIL, "No exception")
 
 doStep(reset)
 doStep(step1)
