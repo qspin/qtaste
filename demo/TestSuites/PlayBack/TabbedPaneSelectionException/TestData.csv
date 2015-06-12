@@ -1,0 +1,5 @@
+COMMENT;TEST_CASE_ID;JAVAGUI_INSTANCE_NAME;TAB_COMPONENT_NAME
+select out of lower bound tab;1;PlaybackApp;TABBED_PANE
+select out of higher bound tab;2;PlaybackApp;TABBED_PANE
+select wrong name tab;3;PlaybackApp;TABBED_PANE
+select wrong id tab;4;PlaybackApp;TABBED_PANE

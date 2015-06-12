@@ -98,7 +98,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 		String[] nodePathElements = nodePath.split(Pattern.quote(nodePathSeparator));
 		
 		if (nodePathElements.length <= 0) {
-			throw new QTasteTestFailException("Unable to split the node path in elements (nodePath: " + nodePath + " separator: " + nodePathSeparator + ").");
+			throw new QTasteTestFailException("Unable to split the node path in elements (nodePath: '" + nodePath + "' separator: '" + nodePathSeparator + "')");
 		}
 
 		LOGGER.trace("nodePath: " + nodePath + " separator: " + nodePathSeparator + " splitted in " + nodePathElements.length + " element(s).");
@@ -116,7 +116,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				
 				if (!compareNodeNames(nodePathElements[0], rootNodeText)) {
 					LOGGER.trace("rootNodeText: " + rootNodeText + " != nodePathElement: " + nodePathElements[0]);
-					throw new QTasteTestFailException("Unable to select a node with the following path : " + nodePath);
+					throw new QTasteTestFailException("Unable to select a node with the following path : '" + nodePath + "'");
 				}
 
 				currentNodePathItemIndex++;
@@ -145,7 +145,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 				// check if the current node path element has been found in the current node children list
 				if (!bFound) {
 					LOGGER.trace(nodePathElements[currentNodePathItemIndex] + " not found in the tree.");
-					throw new QTasteTestFailException("Unable to select a node with the following path : " + nodePath);
+					throw new QTasteTestFailException("Unable to select a node with the following path : '" + nodePath + "'");
 				}
 			}
 			
@@ -169,21 +169,21 @@ class TreeNodeSelector extends UpdateComponentCommander {
 	private String getNodeText(JTree tree, Object node) {
 		Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
 		if (nodeComponent instanceof JLabel) {
-			System.out.println("component extend JLabel");
+			LOGGER.trace("component extend JLabel");
 			return ((JLabel) nodeComponent).getText();
 		} 
 		else if (nodeComponent instanceof Label) {
-			System.out.println("component extend TextComponent");
+			LOGGER.trace("component extend TextComponent");
 			return ((Label) nodeComponent).getText();
 		} 
 		else {
-			System.out.println("component extend something else");
+			LOGGER.trace("component extend something else");
 			return node.toString();
 		}
 	}
 
 	@Override
-	protected void doActionsInSwingThread() throws QTasteException {
+	protected void doActionsInSwingThread() throws QTasteTestFailException {
 		JTree tree = (JTree) component;
 
 		if (mSelectorIdentifier == SelectorIdentifier.CLEAR_SELECTION) {
