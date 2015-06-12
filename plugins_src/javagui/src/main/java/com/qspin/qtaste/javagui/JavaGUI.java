@@ -69,10 +69,18 @@ public interface JavaGUI {
 	/**
 	  * Check if a specified component is enabled.</br>
 	  * Can be used on all {@link Component}. (see {@link Component#isEnabled()})
-      * @param componentName an identifier of the {@link Component}.
+     * @param componentName an identifier of the {@link Component}.
 	  * @return <code>true</code> if the specified component is enabled.
 	  */
 	boolean isEnabled(String componentName) throws QTasteException;
+
+	/**
+	  * Check if a specified component is selected.</br>
+	  * Can be used on all {@link AbstractButton}. (see {@link AbstractButton#isEnabled()})
+      * @param componentName an identifier of the {@link AbstractButton}.
+	  * @return <code>true</code> if the specified component is selected.
+	  */
+	boolean isSelected(String componentName) throws QTasteException;
 
 	/**
 	  * Check if a specified component (and its parent(s)) is visible.</br>

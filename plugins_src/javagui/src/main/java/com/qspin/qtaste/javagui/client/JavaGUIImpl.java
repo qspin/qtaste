@@ -54,6 +54,11 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.isEnabled(componentName);
 	}
 
+	public boolean isSelected(String componentName) throws QTasteException
+	{
+		return mProxy.isSelected(componentName);
+	}
+
 	public boolean isEditable(String componentName) throws QTasteException
 	{
 		return mProxy.isEditable(componentName);
