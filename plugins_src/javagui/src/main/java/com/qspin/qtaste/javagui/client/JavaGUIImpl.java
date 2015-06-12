@@ -54,6 +54,11 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.isEnabled(componentName);
 	}
 
+	public boolean isSelected(String componentName) throws QTasteException
+	{
+		return mProxy.isSelected(componentName);
+	}
+
 	public boolean isEditable(String componentName) throws QTasteException
 	{
 		return mProxy.isEditable(componentName);
@@ -72,6 +77,11 @@ public class JavaGUIImpl implements JavaGUI {
 	public String getText(String componentName) throws QTasteException
 	{
 		return mProxy.getText(componentName);
+	}
+
+	public String getToolTip(String componentName) throws QTasteException
+	{
+		return mProxy.getToolTip(componentName);
 	}
 
 	public void setText(String componentName, String value) throws QTasteException

@@ -83,6 +83,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return new EnabledStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
+	public boolean isSelected(String componentName) throws QTasteException {
+		LOGGER.trace("isSelected(\"" + componentName + "\")");
+		return new SelectedStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
 	public boolean isEditable(String componentName) throws QTasteException {
 		LOGGER.trace("isEditable(\"" + componentName + "\")");
 		return new EditableStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
@@ -101,6 +106,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	public String getText(String componentName) throws QTasteException {
 		LOGGER.trace("getText(\"" + componentName + "\")");
 		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public String getToolTip(String componentName) throws QTasteException {
+		LOGGER.trace("getToolTip(\"" + componentName + "\")");
+		return new ToolTipGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
 	// TODO: boolean returns is useless and confusing!

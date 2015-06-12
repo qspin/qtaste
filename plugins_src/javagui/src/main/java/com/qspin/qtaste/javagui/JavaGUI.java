@@ -69,10 +69,18 @@ public interface JavaGUI {
 	/**
 	  * Check if a specified component is enabled.</br>
 	  * Can be used on all {@link Component}. (see {@link Component#isEnabled()})
-      * @param componentName an identifier of the {@link Component}.
+     * @param componentName an identifier of the {@link Component}.
 	  * @return <code>true</code> if the specified component is enabled.
 	  */
 	boolean isEnabled(String componentName) throws QTasteException;
+
+	/**
+	  * Check if a specified component is selected.</br>
+	  * Can be used on all {@link AbstractButton}. (see {@link AbstractButton#isEnabled()})
+      * @param componentName an identifier of the {@link AbstractButton}.
+	  * @return <code>true</code> if the specified component is selected.
+	  */
+	boolean isSelected(String componentName) throws QTasteException;
 
 	/**
 	  * Check if a specified component (and its parent(s)) is visible.</br>
@@ -112,7 +120,7 @@ public interface JavaGUI {
    void clickOnButton(String componentName, int pressTime) throws QTasteException;
 
     /**
-     * Get the text used for the specied component.</br>
+     * Get the text used for the specified component.</br>
 	  * Can be used on :
 	  * <ul>
 	  * <li>{@link JTextComponent} (see {@link JTextComponent#getText()})</li>
@@ -124,6 +132,14 @@ public interface JavaGUI {
      */
    String getText(String componentName) throws QTasteException;
 
+   /**
+    * Retrieve the tooltip associated with the component.
+    * @param componentName The tooltip owner.
+    * @return The associated tooltip. Can be <code>null</code>.
+    * @throws QTasteException If the component cannot be found.
+    */
+   String getToolTip(String componentName) throws QTasteException;
+   
     /**
      * Set the text for the specified component.</br>
 	  * Can be used on :

@@ -1,0 +1,3 @@
+COMMENT;TAB_COMPONENT_NAME;TAB_ID;COMPONENT_ID;EXPECTED_TOOLTIP;JAVAGUI_INSTANCE_NAME
+Check the tabbed pane tooltip;TABBED_PANE;DOCUMENT_PANEL;TABBED_PANE;ToolTip from the JTabbedPane;PlaybackApp
+Check text field tooltip;TABBED_PANE;DOCUMENT_PANEL;TEXT_FIELD;ToolTip from the JTextField;PlaybackApp
