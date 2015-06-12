@@ -29,6 +29,7 @@ final class Interface extends JFrame {
 		int index = 0;
 		mTabbedPane = new JTabbedPane();
 		mTabbedPane.setName("TABBED_PANE");
+		mTabbedPane.setToolTipText("ToolTip from the JTabbedPane");
 		System.out.println("insert " + DocumentPanel.COMPONENT_NAME + " at " + index);
 		mTabbedPane.insertTab(DocumentPanel.COMPONENT_NAME, null, new DocumentPanel(), null, index++);
 		System.out.println("insert " + ChoosePanel.COMPONENT_NAME + " at " + index);

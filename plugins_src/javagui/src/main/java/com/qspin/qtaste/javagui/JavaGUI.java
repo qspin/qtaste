@@ -112,7 +112,7 @@ public interface JavaGUI {
    void clickOnButton(String componentName, int pressTime) throws QTasteException;
 
     /**
-     * Get the text used for the specied component.</br>
+     * Get the text used for the specified component.</br>
 	  * Can be used on :
 	  * <ul>
 	  * <li>{@link JTextComponent} (see {@link JTextComponent#getText()})</li>
@@ -124,6 +124,14 @@ public interface JavaGUI {
      */
    String getText(String componentName) throws QTasteException;
 
+   /**
+    * Retrieve the tooltip associated with the component.
+    * @param componentName The tooltip owner.
+    * @return The associated tooltip. Can be <code>null</code>.
+    * @throws QTasteException If the component cannot be found.
+    */
+   String getToolTip(String componentName) throws QTasteException;
+   
     /**
      * Set the text for the specified component.</br>
 	  * Can be used on :

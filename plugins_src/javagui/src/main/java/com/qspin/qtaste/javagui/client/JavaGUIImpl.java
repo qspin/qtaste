@@ -74,6 +74,11 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.getText(componentName);
 	}
 
+	public String getToolTip(String componentName) throws QTasteException
+	{
+		return mProxy.getToolTip(componentName);
+	}
+
 	public void setText(String componentName, String value) throws QTasteException
 	{
 		mProxy.setText(componentName, value);

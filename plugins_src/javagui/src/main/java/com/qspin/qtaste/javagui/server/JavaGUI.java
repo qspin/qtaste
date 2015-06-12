@@ -103,6 +103,11 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
+	public String getToolTip(String componentName) throws QTasteException {
+		LOGGER.trace("getToolTip(\"" + componentName + "\")");
+		return new ToolTipGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
 	// TODO: boolean returns is useless and confusing!
 	public void setText(final String componentName, final String value) throws QTasteException {
 		LOGGER.trace("setText(\"" + componentName + "\", \"" + value + "\")");

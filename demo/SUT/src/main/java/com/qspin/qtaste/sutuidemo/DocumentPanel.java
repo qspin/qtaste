@@ -50,6 +50,7 @@ final class DocumentPanel extends JPanel {
 	private void prepareComponent()
 	{
 		mTextField.setName("TEXT_FIELD");
+		mTextField.setToolTipText("ToolTip from the JTextField");
 		mFormattedTextField.setName("FORMATTED_TEXT_FIELD");
 		mPasswordField.setName("PASSWORD_FIELD");
 		mTextArea.setName("TEXT_AREA");
