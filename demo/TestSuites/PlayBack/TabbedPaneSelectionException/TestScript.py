@@ -20,6 +20,9 @@ subtitler = testAPI.getSubtitler()
 component  = testData.getValue("TAB_COMPONENT_NAME")
 testCaseId = testData.getValue("TEST_CASE_ID")
 
+wrongID = 'A12'
+wrongTitle = 'TOTOTUTU'
+
 def reset():
     """
     @step      Unselect tab
@@ -46,9 +49,9 @@ def tabByIndex_outOfLowBound():
         exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
+    except:
         exception = True
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")
@@ -70,9 +73,9 @@ def tabByIndex_outOfHighBound():
         exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
+    except:
         exception = True
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")
@@ -83,7 +86,6 @@ def tabByTitle_wrongTitle():
     @expected  a QTasteTestFailException with a message
     """
     exception = False
-    wrongTitle = 'TOTOTUTU'
     expectedMessage = "Unable to find tab titled '" + wrongTitle + "'"
 
     subtitler.setSubtitle("Select a tab with the title '" + wrongTitle + "'", 1)
@@ -94,9 +96,9 @@ def tabByTitle_wrongTitle():
         exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
+    except:
         exception = True
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")
@@ -107,7 +109,6 @@ def tabById_wrongId():
     @expected  a QTasteTestFailException with a message
     """
     exception = False
-    wrongID = 'A12'
     expectedMessage = "Unable to find the component named '" + wrongID + "'"
 
     subtitler.setSubtitle("Select a tab with the ID '" + wrongID + "'", 1)
@@ -118,9 +119,9 @@ def tabById_wrongId():
         exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
+    except:
         exception = True
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")
@@ -134,9 +135,17 @@ if testCaseId == "2":
     doStep(tabByIndex_outOfHighBound)
 
 if testCaseId == "3":
+    wrongID = 'A12'
     doStep(tabByTitle_wrongTitle)
 
 if testCaseId == "4":
+    wrongTitle = 'TOTOTUTU'
     doStep(tabById_wrongId)
 	
+if testCaseId == "5":
+    wrongTitle = ''
+    wrongID = ''
+    doStep(tabById_wrongId)
+    doStep(tabByTitle_wrongTitle)
+
 time.sleep(1)

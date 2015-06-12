@@ -1,4 +1,4 @@
 COMMENT;COMPONENT_NAME;VALUE;SEPARATOR;EXPECTED_MESSAGE;JAVAGUI_INSTANCE_NAME
-Path with root node but root node not displayed;TREE_2;Person!Young!Louis*;!;Unable to select a node with the following path : 'Person.Young.Louis XVII (30)';PlaybackApp
-Unexistent node;TREE_2;Young!Napo*;!;Unable to select a node with the following path : 'Young.Napoleon';PlaybackApp
-Invalid separator;TREE_2;Young/Louis XVII (30);!;Unable to split the node path in elements (nodePath: 'Young/Louis XVII (30)' separator: '.');PlaybackApp
+Path with root node but root node not displayed;TREE_2;Person!Young!Louis*;!;Unable to select a node with the following path : 'Person!Young!Louis*';PlaybackApp
+Unexistent node;TREE_2;Young!Napo*;!;Unable to select a node with the following path : 'Young!Napo*';PlaybackApp
+Invalid separator;TREE_2;Young/Louis XVII (30);!;Unable to select a node with the following path : 'Young/Louis XVII (30)';PlaybackApp

@@ -43,12 +43,12 @@ def step1():
     try:
         javaguiMI.selectNodeRe(component, value, separator)
     except QTasteTestFailException, e:
-	    exception = True
+        exception = True
         if e.message != expectedMsg:
             testAPI.stopTest(Status.FAIL, "Expected message : '" + expectedMsg + "' but got : '" + e.message + "'")
-    except e:
+    except:
         exception = False
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : " + repr(e))
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")

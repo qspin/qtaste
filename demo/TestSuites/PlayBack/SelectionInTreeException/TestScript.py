@@ -46,9 +46,9 @@ def step1():
         exception = True
         if e.message != expectedMsg:
             testAPI.stopTest(Status.FAIL, "Expected message : '" + expectedMsg + "' but got : '" + e.message + "'")
-    except e:
+    except:
         exception = True
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : " + repr(e))
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
     
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")
