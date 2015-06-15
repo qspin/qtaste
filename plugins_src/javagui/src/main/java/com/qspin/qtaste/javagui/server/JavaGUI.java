@@ -83,12 +83,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		return new EnabledStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
-/*
+
 	public boolean isSelected(String componentName) throws QTasteException {
 		LOGGER.trace("isSelected(\"" + componentName + "\")");
 		return new SelectedStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
-*/
+
 	public boolean isEditable(String componentName) throws QTasteException {
 		LOGGER.trace("isEditable(\"" + componentName + "\")");
 		return new EditableStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
