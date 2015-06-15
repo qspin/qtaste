@@ -79,16 +79,18 @@ class TreeNodeSelector extends UpdateComponentCommander {
 		
 		return comparisonResult;
 	}
-	
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {
-	}
 
 	/**
 	 * Build a tree path (an array of objects) from a node path string and a node path separator.
 	 * @throws QTasteTestFailException
 	 */
-	protected void prepareDoActions() throws QTasteTestFailException {
+	protected void prepareActions() throws QTasteTestFailException {
+	
+		if (mSelectorIdentifier == SelectorIdentifier.CLEAR_SELECTION) {
+			// nothing special to do for CLEAR_SELECTION action
+			return;
+		}
+		
 		String nodePath = mData[0].toString();
 		String nodePathSeparator = mData[1].toString();
 		
@@ -97,7 +99,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 		// Here, the token 'nodePathSeparator' is escaped using the Pattern.quote() method.
 		String[] nodePathElements = nodePath.split(Pattern.quote(nodePathSeparator));
 		
-		if (nodePathElements.length <= 0) {
+		if (nodePathElements.length == 0) {
 			throw new QTasteTestFailException("Unable to split the node path in elements (nodePath: '" + nodePath + "' separator: '" + nodePathSeparator + "')");
 		}
 
@@ -190,7 +192,6 @@ class TreeNodeSelector extends UpdateComponentCommander {
 			tree.clearSelection();
 		}
 		else {
-			prepareDoActions();
 			TreePath path = new TreePath(mPath);
 			tree.expandPath(path);
 			tree.setExpandsSelectedPaths(true);

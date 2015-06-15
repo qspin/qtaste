@@ -1,4 +1,5 @@
 package com.qspin.qtaste.testapi.api;
+import  com.qspin.qtaste.testsuite.QTasteException;
 
 import com.qspin.qtaste.kernel.testapi.SingletonComponent;
 
@@ -14,7 +15,7 @@ public interface Subtitler extends SingletonComponent {
 	 * Same as setSubtitle(subtitle, 3)
 	 * @param subtitle The message to display.
 	 */
-	void setSubtitle(String subtitle);
+	void setSubtitle(String subtitle) throws QTasteException;
 	
 	/**
 	 * Displays the subtitle for maximum the specified number of seconds.
@@ -22,5 +23,5 @@ public interface Subtitler extends SingletonComponent {
 	 * @param subtitle The message to display.
 	 * @param displayTimeInSecond The maximum display time.
 	 */
-	void setSubtitle(String subtitle, double displayTimeInSecond);
+	void setSubtitle(String subtitle, double displayTimeInSecond) throws QTasteException;
 }

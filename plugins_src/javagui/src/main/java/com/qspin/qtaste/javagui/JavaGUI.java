@@ -80,7 +80,7 @@ public interface JavaGUI {
       * @param componentName an identifier of the {@link AbstractButton}.
 	  * @return <code>true</code> if the specified component is selected.
 	  */
-	boolean isSelected(String componentName) throws QTasteException;
+//	boolean isSelected(String componentName) throws QTasteException;
 
 	/**
 	  * Check if a specified component (and its parent(s)) is visible.</br>

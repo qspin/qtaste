@@ -36,8 +36,10 @@ def testChangeTabByTitle():
     """
     subtitler.setSubtitle("Select the tab by title", 1)
     title = testData.getValue("TAB_TITLE")
-    javaguiMI.selectTabTitled(component, title)
 
+    if title != '':
+        javaguiMI.selectTabTitled(component, title)
+	
 def testChangeTabById():
     """
     @step      Description of the actions done for this step
@@ -45,7 +47,9 @@ def testChangeTabById():
     """
     subtitler.setSubtitle("Select the tab by id", 1)
     id = testData.getValue("TAB_ID")
-    javaguiMI.selectTabId(component, id)
+
+    if id != '':
+        javaguiMI.selectTabId(component, id)
 
 def reset():
     """

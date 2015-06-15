@@ -1,3 +1,4 @@
 COMMENT;COMPONENT_NAME;VALUE;EXPECTED_VALUE;JAVAGUI_INSTANCE_NAME
 Select "Elisabeth II (80)" node;TREE;Person!Old!Elisabeth.*;Person!Old!Elisabeth II (80);PlaybackApp
 Select "Louis XVII (30)" node;TREE_2;Young!Louis.*;Young!Louis XVII (30);PlaybackApp
+Select "Elisabeth II (80)" node;TREE;P[eai]rs+o{1,2}n!O[lL]d!Elis.beth\sII\s\(\d{2}\);Person!Old!Elisabeth II (80);PlaybackApp

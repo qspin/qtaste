@@ -20,6 +20,9 @@ subtitler = testAPI.getSubtitler()
 component  = testData.getValue("TAB_COMPONENT_NAME")
 testCaseId = testData.getValue("TEST_CASE_ID")
 
+wrongID = 'A12'
+wrongTitle = 'TOTOTUTU'
+
 def reset():
     """
     @step      Unselect tab
@@ -34,6 +37,7 @@ def tabByIndex_outOfLowBound():
     @step      Select a tab by index with an index lower than the lower bound
     @expected  a QTasteTestFailException with a message
     """
+    exception = False
     wrongIndex = -2
     expectedMessage = 'Tab index ' + str(wrongIndex) + ' out of bounds.'
 
@@ -42,18 +46,22 @@ def tabByIndex_outOfLowBound():
     try:
         javaguiMI.selectTab(component, wrongIndex)
     except QTasteTestFailException, e:
+        exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+    except:
+        exception = True
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
-    time.sleep(1)
+    if not exception:
+        testAPI.stopTest(Status.FAIL, "No exception")
 
 def tabByIndex_outOfHighBound():
     """
     @step      Select a tab by index with an index upper than the lower bound
     @expected  a QTasteTestFailException with a message
     """
+    exception = False
     wrongIndex = 1234
     expectedMessage = 'Tab index ' + str(wrongIndex) + ' out of bounds.'
 
@@ -62,19 +70,22 @@ def tabByIndex_outOfHighBound():
     try:
         javaguiMI.selectTab(component, wrongIndex)
     except QTasteTestFailException, e:
+        exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+    except:
+        exception = True
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
-    time.sleep(1)
+    if not exception:
+        testAPI.stopTest(Status.FAIL, "No exception")
     
 def tabByTitle_wrongTitle():
     """
     @step      Select a tab by title with a wrong title
     @expected  a QTasteTestFailException with a message
     """
-    wrongTitle = 'TOTOTUTU'
+    exception = False
     expectedMessage = "Unable to find tab titled '" + wrongTitle + "'"
 
     subtitler.setSubtitle("Select a tab with the title '" + wrongTitle + "'", 1)
@@ -82,19 +93,22 @@ def tabByTitle_wrongTitle():
     try:
         javaguiMI.selectTabTitled(component, wrongTitle)
     except QTasteTestFailException, e:
+        exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+    except:
+        exception = True
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
-    time.sleep(1)
+    if not exception:
+        testAPI.stopTest(Status.FAIL, "No exception")
     
 def tabById_wrongId():
     """
     @step      Select a tab by ID with a wrong ID
     @expected  a QTasteTestFailException with a message
     """
-    wrongID = 'A12'
+    exception = False
     expectedMessage = "Unable to find the component named '" + wrongID + "'"
 
     subtitler.setSubtitle("Select a tab with the ID '" + wrongID + "'", 1)
@@ -102,12 +116,15 @@ def tabById_wrongId():
     try:
         javaguiMI.selectTabId(component, wrongID)
     except QTasteTestFailException, e:
+        exception = True
         if e.message != expectedMessage:
             testAPI.stopTest(Status.FAIL, "Expected to get the exception message'" + expectedMessage + "' but got '" + e.message + "'")
-    except e:
-        testAPI.stopTest(Status.FAIL, "Unexpected exception : '" + repr(e) + "'")
+    except:
+        exception = True
+        testAPI.stopTest(Status.FAIL, "Unexpected exception")
 
-    time.sleep(1)
+    if not exception:
+        testAPI.stopTest(Status.FAIL, "No exception")
 
 doStep(reset)
 
@@ -118,9 +135,17 @@ if testCaseId == "2":
     doStep(tabByIndex_outOfHighBound)
 
 if testCaseId == "3":
+    wrongID = 'A12'
     doStep(tabByTitle_wrongTitle)
 
 if testCaseId == "4":
+    wrongTitle = 'TOTOTUTU'
     doStep(tabById_wrongId)
 	
+if testCaseId == "5":
+    wrongTitle = ''
+    wrongID = ''
+    doStep(tabById_wrongId)
+    doStep(tabByTitle_wrongTitle)
+
 time.sleep(1)

@@ -483,9 +483,15 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 	                }
                 }
             }
+            
             TestDataEditor tabDataPane = this.getTestDataPane(i);
             if (tabDataPane != null && tabDataPane.isModified()) {
                 tabDataPane.save();
+            }
+            
+            TestRequirementEditor requirementPane = this.getTestRequirementPane(i);
+            if (requirementPane != null && requirementPane.isModified()) {
+            	requirementPane.save();
             }
         }
 
