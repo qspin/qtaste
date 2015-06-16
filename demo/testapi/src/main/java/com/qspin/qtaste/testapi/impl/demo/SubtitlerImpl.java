@@ -108,18 +108,18 @@ public final class SubtitlerImpl implements Subtitler {
 	/**
 	 * Set the current subtitle and the display time.
 	 * @param subtitle the new subtitle
-	 * @param displayTimeInSecond the time while the subtitle is displayed.
+	 * @param displayTimeMaxInSecond the maximum time while the subtitle is displayed.
 	 * @throws QTasteException
 	 */
 	@Override
-	public void setSubtitle(final String subtitle, final double displayTimeInSecond) throws QTasteException {
+	public void setSubtitle(final String subtitle, final double displayTimeMaxInSecond) throws QTasteException {
 		
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					m_subtitle.setText("<html><body>" + subtitle + "</body></html>");
 					
-					m_timer.setInitialDelay((int)(displayTimeInSecond * 1000));
+					m_timer.setInitialDelay((int)(displayTimeMaxInSecond * 1000));
 					m_timer.restart();
 					
 					m_subtitleFrame.toFront();
