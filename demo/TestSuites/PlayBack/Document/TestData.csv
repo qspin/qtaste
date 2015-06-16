@@ -1,13 +1,13 @@
-COMMENT;JAVAGUI_INSTANCE_NAME;TAB_ID;TAB_COMPONENT_NAME;COMPONENT_NAME;COMMAND_RESULT;VALUE;FIELD_CONTENT
-insert in text field;PlaybackApp;DOCUMENT_PANEL;TABBED_PANE;TEXT_FIELD;true;test;test
-insert in password field;PlaybackApp;DOCUMENT_PANEL;TABBED_PANE;PASSWORD_FIELD;true;passWord;passWord
-insert in text area;PlaybackApp;DOCUMENT_PANEL;TABBED_PANE;TEXT_AREA;true;This is a \n test;This is a \n test
-insert wrong value in formatted text field;PlaybackApp;DOCUMENT_PANEL;TABBED_PANE;FORMATTED_TEXT_FIELD;false;test;
-insert in formatted text field;PlaybackApp;DOCUMENT_PANEL;TABBED_PANE;FORMATTED_TEXT_FIELD;true;5%;5%
-insert in formatted text field (format change value);PlaybackApp;DOCUMENT_PANEL;TABBED_PANE;FORMATTED_TEXT_FIELD;true;11.5%;12%
-insert in text field;PlaybackAppBis;DOCUMENT_PANEL;TABBED_PANE;TEXT_FIELD;true;test;test
-insert in password field;PlaybackAppBis;DOCUMENT_PANEL;TABBED_PANE;PASSWORD_FIELD;true;passWord;passWord
-insert in text area;PlaybackAppBis;DOCUMENT_PANEL;TABBED_PANE;TEXT_AREA;true;This is a \n test;This is a \n test
-insert wrong value in formatted text field;PlaybackAppBis;DOCUMENT_PANEL;TABBED_PANE;FORMATTED_TEXT_FIELD;false;test;
-insert in formatted text field;PlaybackAppBis;DOCUMENT_PANEL;TABBED_PANE;FORMATTED_TEXT_FIELD;true;5%;5%
-insert in formatted text field (format change value);PlaybackAppBis;DOCUMENT_PANEL;TABBED_PANE;FORMATTED_TEXT_FIELD;true;11.5%;12%
+COMMENT;JAVAGUI_INSTANCE_NAME;COMPONENT_NAME;COMMAND_RESULT;VALUE;FIELD_CONTENT
+insert in text field;PlaybackApp;TEXT_FIELD;true;test;test
+insert in password field;PlaybackApp;PASSWORD_FIELD;true;passWord;passWord
+insert in text area;PlaybackApp;TEXT_AREA;true;This is a \n test;This is a \n test
+insert wrong value in formatted text field;PlaybackApp;FORMATTED_TEXT_FIELD;false;test;
+insert in formatted text field;PlaybackApp;FORMATTED_TEXT_FIELD;true;5%;5%
+insert in formatted text field (format change value);PlaybackApp;FORMATTED_TEXT_FIELD;true;11.5%;12%
+insert in text field;PlaybackAppBis;TEXT_FIELD;true;test;test
+insert in password field;PlaybackAppBis;PASSWORD_FIELD;true;passWord;passWord
+insert in text area;PlaybackAppBis;TEXT_AREA;true;This is a \n test;This is a \n test
+insert wrong value in formatted text field;PlaybackAppBis;FORMATTED_TEXT_FIELD;false;test;
+insert in formatted text field;PlaybackAppBis;FORMATTED_TEXT_FIELD;true;5%;5%
+insert in formatted text field (format change value);PlaybackAppBis;FORMATTED_TEXT_FIELD;true;11.5%;12%

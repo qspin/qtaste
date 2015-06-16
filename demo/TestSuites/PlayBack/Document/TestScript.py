@@ -15,7 +15,6 @@ import time
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 subtitler = testAPI.getSubtitler()
-importTestScript("TabbedPaneSelection")
 
 def step1():
     """
@@ -23,7 +22,7 @@ def step1():
     @expected  Description of the expected result
     """
 
-    doSubSteps(TabbedPaneSelection.changeTabById)
+    javaguiMI.selectTabId("TABBED_PANE", "DOCUMENT_PANEL")
     subtitler.setSubtitle(testData.getValue("COMMENT") + " the value '" + testData.getValue("VALUE") + "'")
     time.sleep(1)
     text = testData.getValue("VALUE")
