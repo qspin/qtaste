@@ -3,11 +3,14 @@
 ##
 # PlayBack/TabbedPaneSelection.
 # <p>
-# Description of the test.
+# Test tabbed pane selection.
 #
 # @data COMMENT [String] Comment for the test
+# @data JAVAGUI_INSTANCE_NAME [String] instance of the JavaGUI to control
 # @data TAB_COMPONENT_NAME [String] The ID of the TAB selector to be controlled
-# @data TAB_IDX [Int] The indice of the tab to be selected
+# @data TAB_IDX [Int] The indice of the tab to be selected (-1 means unselect tab)
+# @data TAB_TITLE [String] The title of the tab to select
+# @data TAB_ID [String] The id of the tab to select
 ##
 
 from qtaste import *
@@ -22,28 +25,40 @@ component = testData.getValue("TAB_COMPONENT_NAME")
 
 def testChangeTabByIndex():
     """
-    @step      Description of the actions done for this step
-    @expected  Description of the expected result
+    @step      select a new tab by index
+    @expected  the tab with a the specified index is selected
     """
     subtitler.setSubtitle("Select the tab by index", 1)
     index = testData.getIntValue("TAB_IDX")
     javaguiMI.selectTab(component, index)
+    selectedIndex = javaguiMI.getSelectedTabIndex(component)
+
+    if (index != selectedIndex):
+        testAPI.stopTest(Status.FAIL, "Expected selected tab index : '" + index + "' but got : '" + selectedIndex + "'")
+
+    time.sleep(1)
 
 def testChangeTabByTitle():
     """
-    @step      Description of the actions done for this step
-    @expected  Description of the expected result
+    @step      select a new tab by title
+    @expected  the tab with a the specified title is selected
     """
     subtitler.setSubtitle("Select the tab by title", 1)
     title = testData.getValue("TAB_TITLE")
 
     if title != '':
         javaguiMI.selectTabTitled(component, title)
+        selectedTitle = javaguiMI.getSelectedTabTitle(component)
+
+        if (title != selectedTitle):
+            testAPI.stopTest(Status.FAIL, "Expected selected tab title : '" + title + "' but got : '" + selectedTitle + "'")
+
+    time.sleep(1)
 	
 def testChangeTabById():
     """
-    @step      Description of the actions done for this step
-    @expected  Description of the expected result
+    @step      select a new tab by ID
+    @expected  the tab with a the specified ID is selected
     """
     subtitler.setSubtitle("Select the tab by id", 1)
     id = testData.getValue("TAB_ID")
@@ -51,26 +66,35 @@ def testChangeTabById():
     if id != '':
         javaguiMI.selectTabId(component, id)
 
-def reset():
+        selectedId = javaguiMI.getSelectedTabId(component)
+
+        if (id != selectedId):
+            testAPI.stopTest(Status.FAIL, "Expected selected tab title : '" + id + "' but got : '" + selectedId + "'")
+
+    time.sleep(1)
+
+def unselectTab():
     """
     @step      Unselect tab
-    @expected  Description of the expected result
+    @expected  No tab is selected
     """
     subtitler.setSubtitle("Unselect the tab", 1)
     index = -1
     javaguiMI.selectTab(component, index)
+    selectedIndex = javaguiMI.getSelectedTabIndex(component)
+
+    if (index != selectedIndex):
+        testAPI.stopTest(Status.FAIL, "Expected selected tab index : '" + index + "' but got : '" + selectedIndex + "'")
+
     time.sleep(1)
 
 changeTabByTitle=[(1, testChangeTabByTitle)]
 changeTabById=[(1, testChangeTabById)]
 
-doStep(reset)
+doStep(unselectTab)
 doStep(testChangeTabByIndex)
-time.sleep(1)
-doStep(reset)
+doStep(unselectTab)
 doStep(testChangeTabByTitle)
-time.sleep(1)
-doStep(reset)
+doStep(unselectTab)
 doStep(testChangeTabById)
-time.sleep(1)
-doStep(reset)
+doStep(unselectTab)

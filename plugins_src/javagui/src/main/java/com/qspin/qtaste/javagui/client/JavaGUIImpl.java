@@ -130,6 +130,18 @@ public class JavaGUIImpl implements JavaGUI {
 	public void selectTabId(String tabbedPaneComponentName, String tabComponentId) throws QTasteException{
 		mProxy.selectTabId(tabbedPaneComponentName, tabComponentId);
 	}
+	
+	public int getSelectedTabIndex(String tabbedPaneComponentName) throws QTasteException {
+		return mProxy.getSelectedTabIndex(tabbedPaneComponentName);
+	}
+
+	public String getSelectedTabTitle(String tabbedPaneComponentName) throws QTasteException {
+		return mProxy.getSelectedTabTitle(tabbedPaneComponentName);
+	}
+
+	public String getSelectedTabId(String tabbedPaneComponentName) throws QTasteException {
+		return mProxy.getSelectedTabId(tabbedPaneComponentName);
+	}	
 
 	public void terminate() throws QTasteException
 	{

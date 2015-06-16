@@ -183,6 +183,24 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_COMPONENT_ID).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabComponentId);
 	}
 
+	@Override
+	public int getSelectedTabIndex(String tabbedPaneComponentName) throws QTasteException {
+		LOGGER.trace("getSelectedTabIndex(\"" + tabbedPaneComponentName + "\")");
+		return Integer.parseInt(new TabGetter(TabGetter.InfoSelector.GET_INDEX).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName));
+	}
+	
+	@Override
+	public String getSelectedTabTitle(String tabbedPaneComponentName) throws QTasteException {
+		LOGGER.trace("getSelectedTabTitle(\"" + tabbedPaneComponentName + "\")");
+		return new TabGetter(TabGetter.InfoSelector.GET_TITLE).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName);
+	}
+	
+	@Override
+	public String getSelectedTabId(String tabbedPaneComponentName) throws QTasteException {
+		LOGGER.trace("getSelectedTabId(\"" + tabbedPaneComponentName + "\")");
+		return new TabGetter(TabGetter.InfoSelector.GET_COMPONENT_ID).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName);
+	}
+	
 	public String whoAmI() throws QTasteTestFailException {
 		LOGGER.trace("whoAmI()");
 		try {
