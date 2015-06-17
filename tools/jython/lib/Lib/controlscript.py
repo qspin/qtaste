@@ -848,8 +848,8 @@ class JavaProcess(NativeProcess):
         self.mainClassOrJar  = mainClassOrJar
         self.mainArgs        = self.listifyArguments(args)
         self.classPath       = self._normalizeClassPath(classPath)
-        self.vmArgs      = self.listifyArguments(vmArgs)
-        self.jmxPort      = jmxPort
+        self.vmArgs          = self.listifyArguments(vmArgs)
+        self.jmxPort         = jmxPort
         self.jacocoArgument  = None
         self.javaGUIArgument = None
 
@@ -931,7 +931,7 @@ class JavaProcess(NativeProcess):
         
         # add main argument(s)
         if self.mainArgs:
-            command.extend(command, self.mainArgs)
+            command.extend(self.mainArgs)
 
         return command
 
