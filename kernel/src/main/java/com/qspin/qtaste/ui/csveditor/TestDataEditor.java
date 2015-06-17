@@ -154,6 +154,13 @@ public class TestDataEditor extends JPanel {
         File csvFile = new File(currentCSVFile);
         String path = csvFile.getParent();
         BufferedWriter output = null;
+
+		// if the table is being edited, validate the modification before saving data
+		if (m_TestDataTable.isEditing()) {
+			m_TestDataTable.getCellEditor().stopCellEditing();
+		}
+
+		// save test data
         try {
             String outputFile = path + File.separator + StaticConfiguration.TEST_DATA_FILENAME;
 
