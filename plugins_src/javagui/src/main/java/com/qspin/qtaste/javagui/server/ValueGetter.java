@@ -32,13 +32,13 @@ public class ValueGetter extends ComponentCommander {
 		Component component = getComponentByName(componentName);
         
 		if (component instanceof JComboBox) {
-            JComboBox combo = (JComboBox) component;
-            ListCellRenderer renderer = combo.getRenderer();
+            JComboBox<?> combo = (JComboBox<?>) component;
+            ListCellRenderer<?> renderer = combo.getRenderer();
             return getItemText(combo.getModel().getSelectedItem(), renderer);
         } 
 		else if (component instanceof JList) {
-			JList list = (JList) component;
-			ListCellRenderer renderer = list.getCellRenderer();
+			JList<?> list = (JList<?>) component;
+			ListCellRenderer<?> renderer = list.getCellRenderer();
             return getItemText(list.getSelectedValue(), renderer);
 		} 
 		else if (component instanceof JSpinner) {
