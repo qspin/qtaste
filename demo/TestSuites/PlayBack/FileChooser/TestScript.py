@@ -14,7 +14,6 @@ import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
-importTestScript("TabbedPaneSelection")
 
 def openFileChooser():
     """
@@ -22,7 +21,7 @@ def openFileChooser():
     @expected  The JFileChooser is displayed (not tested).
     """
 
-    doSubSteps(TabbedPaneSelection.changeTabById)
+    javaguiMI.selectTabId("TABBED_PANE", "COMPLEX_JAVA_COMP")
     javaguiMI.clickOnButton("OPEN_FILECHOOSER")
     time.sleep(1)
 

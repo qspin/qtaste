@@ -193,6 +193,13 @@ public class TestRequirementEditor extends JPanel {
 		File xmlFile = new File(currentXMLFile);
 		String path = xmlFile.getParent();
 		BufferedWriter output = null;
+
+		// if the table is being edited, validate the modification before saving data
+		if (m_TestRequirementTable.isEditing()) {
+			m_TestRequirementTable.getCellEditor().stopCellEditing();
+		}
+
+		// save the requirements
 		try {
 			String outputFile = path + File.separator
 					+ StaticConfiguration.TEST_REQUIREMENTS_FILENAME;

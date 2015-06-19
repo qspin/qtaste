@@ -15,14 +15,12 @@ import time
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 subtitler = testAPI.getSubtitler()
 
-importTestScript("TabbedPaneSelection")
-
 def displayFirstPopup():
     """
     @step      Click on the button to create the first popup
     @expected  a popup exist
     """
-    doSubSteps(TabbedPaneSelection.changeTabById)
+    javaguiMI.selectTabId("TABBED_PANE", "DIALOG_PANEL")
     subtitler.setSubtitle("Click on the <span style=\"color:red;\">Start</span> button", 1.5)
     javaguiMI.clickOnButton("START_BUTTON")
     time.sleep(1)

@@ -24,6 +24,7 @@ package com.qspin.qtaste.ui;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Point;
+import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -40,6 +41,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -49,8 +51,13 @@ import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
+import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
@@ -58,12 +65,17 @@ import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeWillExpandListener;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
@@ -561,6 +573,104 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         ds.startDrag(dge, DragSource.DefaultCopyDrop, trans, this);
     }
 
+    /**
+     * Get the option pane component from the component tree.
+     * @param parent the component to check.
+     * @return the option pane.
+     */
+    protected JOptionPane getOptionPane(JComponent parent) {
+        JOptionPane pane = null;
+        if (!(parent instanceof JOptionPane)) {
+            pane = getOptionPane((JComponent)parent.getParent());
+        } else {
+            pane = (JOptionPane) parent;
+        }
+        return pane;
+    }
+
+    /**
+     * Show an input dialog to enter a new script name.
+     * This input dialog is initialized with the selected script name and 
+     * disables the 'OK' button while the new script name is empty or is the
+     * same than the previous one.
+     * @param title title of the input dialog
+     * @param message message to display inside the input dialog
+     * @param initialValue initial value for the text field.
+     * @return the new script name or null.
+     */
+    public String showOptionDialog(final String title, final String message, final String initialValue) {
+        	  JPanel     panel  	= new JPanel();
+        final JButton    okayBtn   	= new JButton("Ok");
+        final JButton    cancelBtn 	= new JButton("Cancel");
+        final JTextField textField  = new JTextField(initialValue);
+        	  String 	 newName    = null;
+
+        // create a custom panel to display the message and the text field
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(new JLabel(message));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField);
+
+        // configure button action listeners to return the button instance when it is clicked.
+        okayBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane pane = getOptionPane((JComponent)e.getSource());
+                pane.setValue(okayBtn);
+            }
+        });
+        okayBtn.setEnabled(false);
+
+        cancelBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane pane = getOptionPane((JComponent)e.getSource());
+                pane.setValue(cancelBtn);
+            }
+        });
+
+        // configure the text field document listener to check that the new text entered is 
+        // not empty and is not equal to the initial value.
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            protected void update() {
+            	okayBtn.setEnabled(!textField.getText().equals(initialValue) && (textField.getText().length() > 0));
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
+            }
+        });
+
+        // show the custom option dialog
+        int result = JOptionPane.showOptionDialog(null, 
+							                     panel, 
+							                     title, 
+							                     JOptionPane.OK_CANCEL_OPTION,
+							                     JOptionPane.QUESTION_MESSAGE, 
+							                     null, 
+							                     new Object[]{okayBtn, cancelBtn}, 
+							                     okayBtn);
+        
+        // showOptionDialog returns the index of the clicked button in the options array
+        // here, 0 means 'OK' button and 1 means 'Cancel' button
+        if (result == 0) {
+        	newName = textField.getText();
+        }
+        
+        return newName;
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
@@ -801,13 +911,12 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
             String testName = tn.toString();
             FileNode fn = (FileNode) tn.getUserObject();
-            String input = JOptionPane.showInputDialog(null,
-                    "Give the new name of the test " + testName,
-                    //"Test name:",
-                    //JOptionPane.QUESTION_MESSAGE
-                    testName
-                    );
-            if (input==null) return;
+
+            String input = showOptionDialog("Rename the script " + testName,
+            								"Give the new name of the test " + testName,
+            								testName);
+            
+            if (input == null) return;
 
             // if doc tab is opened, ensure close it first
             testCasePane.getDocPane().setText("");
@@ -908,12 +1017,14 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         }
 
         public void actionPerformed(ActionEvent e) {
-            String input = JOptionPane.showInputDialog(null,
-                    "Give the name of the test",
-                    "Test name:",
-                    JOptionPane.QUESTION_MESSAGE);
-            if (input==null) return;
             TCTreeNode tn = getSelectedTreeNode();
+            String testName = tn.toString();
+        	
+        	String input = showOptionDialog("Create a script from " + testName,
+					"Give the new name of the test",
+					testName);
+        	
+            if (input == null) return;
 
 			try {
 	            FileNode fn = (FileNode) tn.getUserObject();

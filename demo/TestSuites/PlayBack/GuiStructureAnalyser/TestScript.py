@@ -13,7 +13,6 @@ import os.remove
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
-importTestScript("TabbedPaneSelection")
 
 outputXmlFile = testData.getValue("XML_FILE_PATH")
 
@@ -23,7 +22,7 @@ def printGuiStructureToFile():
     @expected  The XML file with the structure of the selected GUI is created.
     """
 
-    doSubSteps(TabbedPaneSelection.changeTabById)
+    javaguiMI.selectTabId("TABBED_PANE", "COMPLEX_JAVA_COMP")
     javaguiMI.analyzeStructure(outputXmlFile)
     if not (os.path.isfile(outputXmlFile)):
         testAPI.stopTest(Status.FAIL, "No XML file was created at location [" + outputXmlFile + "]")

@@ -16,14 +16,12 @@ import time
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 subtitler = testAPI.getSubtitler()
 
-importTestScript("TabbedPaneSelection")
-
 def step1():
     """
     @step      Description of the actions done for this step
     @expected  Description of the expected result
     """
-    doSubSteps(TabbedPaneSelection.changeTabByTitle)
+    javaguiMI.selectTabTitled("TABBED_PANE", "MISCELLANEOUS")
     subtitler.setSubtitle("Click on the button to make the component invisible")
     time.sleep(1)
     javaguiMI.clickOnButton("VISIBILITY_BUTTON")

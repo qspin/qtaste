@@ -14,15 +14,13 @@ import time
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 subtitler = testAPI.getSubtitler()
 
-importTestScript("TabbedPaneSelection")
-
 def step1():
     """
     @step      Description of the actions done for this step
     @expected  Description of the expected result
     """
 
-    doSubSteps(TabbedPaneSelection.changeTabById)
+    javaguiMI.selectTabId("TABBED_PANE", "CHOOSE_PANEL")
     subtitler.setSubtitle(testData.getValue("COMMENT"))
 
     component = testData.getValue("COMPONENT_NAME")

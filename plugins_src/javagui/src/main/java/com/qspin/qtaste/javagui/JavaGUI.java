@@ -177,6 +177,33 @@ public interface JavaGUI {
    void selectTabId(String tabbedPaneComponentName, String tabComponentId) throws QTasteException;
 
    /**
+    * Get the index of the current selected tab in the tabbed pane.
+	* Can be used on {@link JTabbedPane}.
+    * @param tabbedPaneComponentName the {@link JTabbedPane} component name
+    * @return the current selected tab index. If not found, -1 is returned.
+    * @throws QTasteException
+    */
+	public int getSelectedTabIndex(String tabbedPaneComponentName) throws QTasteException;	
+
+	/**
+    * Get the title of the current selected tab in the tabbed pane.
+	* Can be used on {@link JTabbedPane}.
+    * @param tabbedPaneComponentName the {@link JTabbedPane} component name
+    * @return the current selected tab title. If not found, null is returned.
+    * @throws QTasteException
+	 */
+	public String getSelectedTabTitle(String tabbedPaneComponentName) throws QTasteException;
+
+	/**
+    * Get the component ID of the current selected tab in the tabbed pane.
+	* Can be used on {@link JTabbedPane}.
+    * @param tabbedPaneComponentName the {@link JTabbedPane} component name
+    * @return the current selected tab component ID. If not found, null is returned.
+    * @throws QTasteException
+	 */
+	public String getSelectedTabId(String tabbedPaneComponentName) throws QTasteException;
+   
+   /**
     * Set the selection state to the specified component.</br>
 	* Can be used on {@link AbstractButton}. (see {@link AbstractButton#setSelected(boolean)})
     * @param componentName an identifier of the {@link AbstractButton} component.

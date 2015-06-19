@@ -1,5 +1,5 @@
-COMMENT;VALUE;NOT_VALUE;TAB_ID;COMPONENT_NAME;TAB_COMPONENT_NAME;JAVAGUI_INSTANCE_NAME
-Check Check box;true;false;CHOOSE_PANEL;CHECK_BOX;TABBED_PANE;PlaybackApp
-Uncheck Check box;true;false;CHOOSE_PANEL;CHECK_BOX;TABBED_PANE;PlaybackApp
-check Radio;true;false;CHOOSE_PANEL;RADIO_BUTTON;TABBED_PANE;PlaybackApp
-check Toggle;true;false;CHOOSE_PANEL;TOGGLE_BUTTON;TABBED_PANE;PlaybackApp
+COMMENT;VALUE;NOT_VALUE;COMPONENT_NAME;JAVAGUI_INSTANCE_NAME
+Check Check box;true;false;CHECK_BOX;PlaybackApp
+Uncheck Check box;true;false;CHECK_BOX;PlaybackApp
+check Radio;true;false;RADIO_BUTTON;PlaybackApp
+check Toggle;true;false;TOGGLE_BUTTON;PlaybackApp

@@ -10,8 +10,6 @@
 
 from qtaste import *
 
-importTestScript("TabbedPaneSelection")
-
 javaGUI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 
 def checkToolTip():
@@ -25,5 +23,5 @@ def checkToolTip():
 		testAPI.stopTest(Status.FAIL, "The returned tooltip (" + current + ") is not the expected one (" + expected + ")...")
 	pass
 
-doSteps(TabbedPaneSelection.changeTabById)
+javaGUI.selectTabId("TABBED_PANE", "DOCUMENT_PANEL")
 doStep(checkToolTip)
