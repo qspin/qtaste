@@ -75,14 +75,6 @@ public interface JavaGUI {
 	boolean isEnabled(String componentName) throws QTasteException;
 
 	/**
-	  * Check if a specified component is selected.</br>
-	  * Can be used on all {@link AbstractButton}. (see {@link AbstractButton#isEnabled()})
-      * @param componentName an identifier of the {@link AbstractButton}.
-	  * @return <code>true</code> if the specified component is selected.
-	  */
-	boolean isSelected(String componentName) throws QTasteException;
-
-	/**
 	  * Check if a specified component (and its parent(s)) is visible.</br>
 	  * Can be used on all {@link Component}. (see {@link Component#isVisible()})
       * @param componentName an identifier of the {@link Component}.
@@ -227,17 +219,17 @@ public interface JavaGUI {
    void selectValue(String componentName, String value) throws QTasteException;
 
   /**
-    * Return the currently selected value for the specified component.</br>
+    * Return the current selected value for the specified component.</br>
     * Can be used on :
     * <ul>
-    * <li>{@link AbstractButton} (see {@link #selectComponent(String, boolean)})</li>
-    * <li>{@link JComboBox} (see {@link JComboBox#setSelectedIndex(int)})</li>
-    * <li>{@link JList} (see {@link JList#setSelectedIndex(int)})</li>
-    * <li>{@link JSpinner} (see {@link JSpinner#setValue(Object)})</li>
-    * <li>{@link JSlider} (see {@link JSlider#setValue(int)})</li>
+    * <li>{@link AbstractButton} (see {@link AbstractButton#isSelected()})</li>
+    * <li>{@link JComboBox} (see {@link JComboBox#getSelectedItem()})</li>
+    * <li>{@link JList} (see {@link JList#getSelectedValue()})</li>
+    * <li>{@link JSpinner} (see {@link JSpinner#getModel()#getValue()})</li>
+    * <li>{@link JSlider} (see {@link JSlider#getModel()#getValue()})</li>
     * </ul>
     * @param componentName an identifier of the component.
-    * @return the currenlty selected value
+    * @return the current selected value
     */
    String getSelectedValue(String componentName) throws QTasteException;
 
