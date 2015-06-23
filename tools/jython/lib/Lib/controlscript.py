@@ -869,7 +869,7 @@ class JavaProcess(NativeProcess):
 
         # Build the Java GUI argument
         if useJavaGUI:
-            self.javaGUIArgument = "-javaagent:" + qtasteRootDirectory + _os.sep + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
+            self.javaGUIArgument = "-javaagent:\"" + qtasteRootDirectory + _os.sep + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar\""
 
         # build the process argument list
         arguments = self._buildProcessArguments()

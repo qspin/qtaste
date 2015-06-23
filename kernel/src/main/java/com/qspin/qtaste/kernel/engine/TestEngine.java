@@ -208,6 +208,8 @@ public class TestEngine {
 		needToRestartSUT = !start;
 		String startOrStop = start ? "start" : "stop";
 		TestBedConfiguration config = TestBedConfiguration.getInstance();
+		Map<String, String> env = new HashMap<String, String>(System.getenv());
+
 		if (hasControlScript()) {
 			if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
 				if (tr != null) {
@@ -222,18 +224,15 @@ public class TestEngine {
 			List<String> scriptEngineCommand = new ArrayList<String>();
 
 			if (scriptFilename.endsWith(".py")) {
-				final String jythonHome = StaticConfiguration.JYTHON_HOME;
-				final String jythonJar = jythonHome + "/jython.jar";
 				final String jythonLib = StaticConfiguration.JYTHON_LIB.trim();
 				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
 				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
 				
+				env.put("JYTHONPATH", jythonLib + File.pathSeparator + additionnalJythonLib);
+				
 				scriptEngineCommand.add("java");
-				scriptEngineCommand.add("-Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + "\"" + jythonLib 
-								 + "\"" + File.pathSeparator + "\"" + additionnalJythonLib + "\"");
 				scriptEngineCommand.add("-cp");
-				scriptEngineCommand.add("\"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator
-								 + jythonJar + File.pathSeparator + classPath + "\"");
+				scriptEngineCommand.add("\"" + classPath + "\"");
 				scriptEngineCommand.add("org.python.util.jython");
 
 				logger.trace("script engine command: " + StringUtils.join(scriptEngineCommand, " "));
@@ -260,7 +259,6 @@ public class TestEngine {
 			// report the control script
 			try {
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				Map<String, String> env = new HashMap<String, String>(System.getenv());
 				env.put("TESTBED", config.getFileName());
 
 				// build the full command to execute
