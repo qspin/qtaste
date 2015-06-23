@@ -46,7 +46,7 @@ public class TreeNodeGetter extends ComponentCommander {
 					try
 					{
 						Component component = getComponentByName(componentName);
-						LOGGER.trace("Component : " + component);
+						//LOGGER.trace("Component : " + component);
 						String separator = data[0].toString();
 		
 						if (component instanceof JTree)
@@ -58,7 +58,7 @@ public class TreeNodeGetter extends ComponentCommander {
 				            
 				            // check if a node has been selected
 				            if (selectedPath == null) {
-				            	LOGGER.debug("No node selected");
+				            	//LOGGER.debug("No node selected");
 				            	m_commandResult = null;
 				            	return;
 				            }
@@ -70,7 +70,7 @@ public class TreeNodeGetter extends ComponentCommander {
 				            
 				            // loop on the tree path to build the node path string
 				            Object[] treePath = selectedPath.getPath();
-				            LOGGER.debug("array : " + Arrays.toString(treePath));
+				            //LOGGER.debug("array : " + Arrays.toString(treePath));
 				            for(; currentTreePathIndex < treePath.length - 1; currentTreePathIndex++)
 				            {
 				            	nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
