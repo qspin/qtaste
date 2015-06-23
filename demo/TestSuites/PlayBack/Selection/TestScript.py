@@ -22,7 +22,7 @@ def step1():
     @expected  Description of the expected result
     """
 
-    javaguiMI.selectTabId("TABBED_PANE", "SELECTION_PANEL")
+    javaguiMI.selectTabId("TABBED_PANE", testData.getValue("TAB_ID"))
     subtitler.setSubtitle(testData.getValue("COMMENT"))
     component = testData.getValue("COMPONENT_NAME")
     value = testData.getIntValue("INDEX")
