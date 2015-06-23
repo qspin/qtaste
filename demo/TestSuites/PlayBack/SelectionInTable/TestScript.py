@@ -28,6 +28,21 @@ def step1():
     occurence = testData.getIntValue("OCCURENCE")
     columnName = testData.getValue("COLUMN_NAME")
     columnValue = testData.getValue("COLUMN_VALUE")
+    try:
+        javaguiMI.countTableRows("INVALID_PURPOSE", columnName, columnValue)
+        testAPI.stopTest(Status.FAIL, "countTableRows should fails if name of the component is invalid")
+    except:
+        pass
+    try:
+        javaguiMI.countTableRows(component, "INVALID_COLUMN", columnValue)
+        testAPI.stopTest(Status.FAIL, "countTableRows should fails if column name of the component is invalid")
+    except:
+        pass
+    try:
+        javaguiMI.countTableRows(component, columnName, -10)
+        testAPI.stopTest(Status.FAIL, "countTableRows should fails if value is invalid")
+    except:
+        pass
 
     if javaguiMI.countTableRows(component, columnName, columnValue) < occurence:
         testAPI.stopTest(Status.FAIL, "Not enough occurences in the table")
