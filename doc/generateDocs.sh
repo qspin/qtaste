@@ -5,7 +5,7 @@
 #                [-p] Password
 
 if [ "$1" == "-help" ]; then
-    echo "usage: generateDocs.sh [-u <username>] [-p <password>]"
+    echo "usage: generateDocs.sh [-u <username>] [-p <password>] [-r <release_name>]"
     exit
 fi
 
