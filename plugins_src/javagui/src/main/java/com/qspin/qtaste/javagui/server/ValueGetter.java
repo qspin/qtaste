@@ -43,7 +43,7 @@ public class ValueGetter extends ComponentCommander {
 		} 
 		else if (component instanceof JSpinner) {
             return ((JSpinner) component).getModel().getValue().toString();
-        } 
+        }
 		else if (component instanceof JSlider) {
             return Integer.toString(((JSlider) component).getModel().getValue());
         }
@@ -51,7 +51,7 @@ public class ValueGetter extends ComponentCommander {
 			return Boolean.toString(((AbstractButton)component).isSelected());
 		}
 		
-		throw new QTasteTestFailException("The component \"" + componentName + "\" is not a supported");
+		throw new QTasteTestFailException("The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
 	}
 
     protected String getItemText(Object item, ListCellRenderer renderer)
