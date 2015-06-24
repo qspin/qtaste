@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.qspin.qtaste</groupId>
         <artifactId>qtaste-testapi-parent</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
+        <version>2.3.0-SNAPSHOT</version>
         <relativePath>../../testapi-parent</relativePath>
     </parent>
 
@@ -17,7 +17,7 @@
     <artifactId>qtaste-neptis-testapi</artifactId>
     <packaging>jar</packaging>
     <name>QTaste Test API for Prosys OPC-UA</name>
-    <version>2.2.3-SNAPSHOT</version>
+    <version>2.3.0-SNAPSHOT</version>
 
     <build>
         <finalName>qtaste-testapi</finalName>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-toolbox-testapi</artifactId>
-            <version>2.2.3-SNAPSHOT</version>
+            <version>2.3.0-SNAPSHOT</version>
         </dependency>
         <!-- EXTERNAL LIBRARIES -->
         <!-- Libraries are ordered by group/artifact. -->
