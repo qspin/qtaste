@@ -54,6 +54,8 @@ public class StaticConfiguration {
 	public static final String FORMATTER_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
 	public static final String ADDITIONNAL_JYTHON_LIB;
 	public static final String PLUGINS_HOME = QTASTE_ROOT + "/plugins";
+	public static final String PYTHON_INDENT_STRING = "    ";  //< string used to indent python code (here, 4 spaces)
+	
 	static {
 		//JYTHON_LIB initialization
 		String path = "";

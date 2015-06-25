@@ -53,6 +53,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.AttributeSet;
 
 import jsyntaxpane.DefaultSyntaxKit;
 import jsyntaxpane.SyntaxDocument;
@@ -287,6 +290,14 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         newAction.putValue(Action.ACCELERATOR_KEY, ks);
         this.getInputMap().put(ks, "PYTHON_INDENT");
         actions.put("PYTHON_INDENT", newAction);
+
+        // add a document filter to replace tabs by 4 spaces when some text is added or replaced
+        // in the document
+        Document document = getDocument();
+        
+        if (document instanceof AbstractDocument) {
+        	((AbstractDocument)document).setDocumentFilter(new IndentationDocumentFilter());
+        }
     }
 
     public void init() {
@@ -483,13 +494,40 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             super("Save");
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
-            NonWrappingTextPane.this.save();
+        	if (NonWrappingTextPane.this.isModified()) {
+        		NonWrappingTextPane.this.save();
+        	}
         }
-
+        
         @Override
         public boolean isEnabled() {
             return true;
         }
+    }
+    
+    /**
+     * Document filter to replace tabs with spaces when the document is edited.
+     */
+    class IndentationDocumentFilter extends DocumentFilter {
+
+        @Override
+    	public void	insertString(DocumentFilter.FilterBypass fb, int offset, String text, 
+    			AttributeSet attrs) throws BadLocationException {
+    		super.insertString(fb, offset, text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING), attrs);
+    	}
+    	
+        @Override
+    	public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, 
+    			AttributeSet attrs) throws BadLocationException {
+    		String newText = text;
+
+    		if (text != null) {
+    			newText = text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
+    		}
+
+    		super.replace(fb, offset, length, newText, attrs);
+    	}
     }
 }
