@@ -293,10 +293,12 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
 
         // add a document filter to replace tabs by 4 spaces when some text is added or replaced
         // in the document
-        Document document = getDocument();
-        
-        if (document instanceof AbstractDocument) {
-        	((AbstractDocument)document).setDocumentFilter(new IndentationDocumentFilter());
+        if (isTestScript) {
+	        Document document = getDocument();
+	        
+	        if (document instanceof AbstractDocument) {
+	        	((AbstractDocument)document).setDocumentFilter(new IndentationDocumentFilter());
+	        }
         }
     }
 

@@ -641,15 +641,17 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 // if needed, replace tabulations by spaces in the file content
                 String  fileContent    = contents.toString();
                 boolean isAutoModified = false;
-                
-                if (fileContent.contains("\t")) {
-                	fileContent = fileContent.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
-                	isAutoModified = true;
-                	
-                	JOptionPane.showMessageDialog(null, 
-                								  "Tabulations have been automatically replaced by spaces",
-                								  "Python indentation",
-                								  JOptionPane.INFORMATION_MESSAGE);
+
+                if (isTestScript) {
+	                if (fileContent.contains("\t")) {
+	                	fileContent = fileContent.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
+	                	isAutoModified = true;
+	                	
+	                	JOptionPane.showMessageDialog(null, 
+	                								  "Tabulations have been automatically replaced by spaces",
+	                								  "Python indentation",
+	                								  JOptionPane.INFORMATION_MESSAGE);
+	                }
                 }
                 
                 setTestCaseSource(textPane, absolutePath, fileContent, isTestScript);
