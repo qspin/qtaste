@@ -195,6 +195,7 @@ public class TestCaseReportTable {
             }
         };
         tcTable.setColumnSelectionAllowed(false);
+        tcTable.getTableHeader().setReorderingAllowed(false);
 
         int tcWidth = interactive ? 360 : 480;
         int tcStatusWidth = 40;
