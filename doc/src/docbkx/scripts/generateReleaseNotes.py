@@ -246,7 +246,7 @@ def main():
         if(len(sys.argv) > 1 and
             not args.userGithub == None and
             not args.passwordGithub == None):
-            g = Github(args.userGithub, args.passwordGithub)
+            g = Github(args.userGithub, args.passwordGithub, timeout=50)
         else:
             print "******************************** WARNING *******************************************"
             print "No Github authentication provided!"
@@ -266,7 +266,7 @@ def main():
     # Read XML file that will be formatted
     strFile = ""
     try:
-        f = open(config.ReleaseNotesTemplate, 'rw')
+        f = open(config.ReleaseNotesTemplate, 'r')
     except IOError as e:
         print 'Cannot open', config.ReleaseNotesTemplate
         sys.exit(e)
