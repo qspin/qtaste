@@ -204,10 +204,17 @@ public class TestDataEditor extends JPanel {
             }
         }
 
-        // reload
-        loadCSVFile(currentCSVFile);
+        reload();
     }
 
+    /**
+     * Reload the current CSV file.
+     */
+    public void reload() {
+        loadCSVFile(currentCSVFile);
+        setModified(false);
+    }
+    
     public void loadCSVFile(String fileName) {
         try {
             m_TestDataModel.removeTableModelListener(tableListener);
@@ -619,6 +626,7 @@ public class TestDataEditor extends JPanel {
                         menu.add(new RemoveRowAction());
                     }
                     menu.add(new SaveAction());
+    				menu.add(new ReloadAction());
                 }
                 Point point = e.getPoint();
                 menu.show(e.getComponent(), point.x, point.y);
@@ -748,6 +756,33 @@ public class TestDataEditor extends JPanel {
         }
     }
 
+	/**
+	 * Reload the current data file (i.e revert unsaved modifications)
+	 */
+	class ReloadAction extends AbstractAction {
+		
+		public ReloadAction() {
+			super("Revert unsaved modifications");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if (JOptionPane.showConfirmDialog(null, 
+										  "Do you want to revert unsaved modifications ?",
+										  "Revert unsaved modifications",
+										  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				reload();
+			}
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return isModified();
+		}
+	}
+
+    
     class SaveAction extends AbstractAction {
 
         public SaveAction() {

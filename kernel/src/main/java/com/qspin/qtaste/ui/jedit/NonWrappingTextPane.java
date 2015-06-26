@@ -85,6 +85,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
     private boolean isModified = false;
     private BreakPointScript mBreakpointScript;
     private long loadDateAndTime;
+    private ReloadAction reloadAction = new ReloadAction();
 
     public boolean isModified() {
         return isModified;
@@ -96,12 +97,15 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         if (wasAlreadyModified != isModified) {
             firePropertyChange("isModified", wasAlreadyModified, isModified);
         }
+
+        reloadAction.setEnabled(isModified);
     }
 
     public void installAdditionalPopup() {
         JPopupMenu popup = this.getComponentPopupMenu();
         if (popup != null) {
             popup.add(new AddNewStep());
+            popup.add(reloadAction);
         }
 
     }
@@ -420,6 +424,10 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         });
     }
 
+    public void reload() {
+        mTcPane.loadTestCaseSource(new File(getFileName()), true, isTestScript, true);
+    }
+    
     public void save() {
         BufferedWriter output = null;
         try {
@@ -451,6 +459,25 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         }
     }
 
+	/**
+	 * Reload the current file (i.e revert unsaved modifications)
+	 */
+	class ReloadAction extends AbstractAction {
+		
+		public ReloadAction() {
+			super("Revert unsaved modifications");
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			if (JOptionPane.showConfirmDialog(null, 
+					  "Do you want to revert unsaved modifications ?",
+					  "Revert unsaved modifications",
+					  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				reload();
+			}
+		}
+	}
+    
     public class AddNewStep extends AbstractAction {
 
         public AddNewStep() {

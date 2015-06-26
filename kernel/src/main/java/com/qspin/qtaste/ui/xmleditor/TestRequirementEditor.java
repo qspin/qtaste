@@ -189,6 +189,11 @@ public class TestRequirementEditor extends JPanel {
         }
     }
 
+    public void reload() {
+		loadXMLFile(currentXMLFile);
+		setModified(false);
+    }
+    
     public void save() {
 		File xmlFile = new File(currentXMLFile);
 		String path = xmlFile.getParent();
@@ -243,9 +248,7 @@ public class TestRequirementEditor extends JPanel {
 			}
 		}
 
-		// reload
-		loadXMLFile(currentXMLFile);
-		setModified(false);
+		reload();
 	}
 
     class RemoveColumnAction extends AbstractAction {
@@ -594,6 +597,7 @@ public class TestRequirementEditor extends JPanel {
 					menu.add(new RemoveRowAction());
 				}
 				menu.add(new SaveAction());
+				menu.add(new ReloadAction());
 				Point point = e.getPoint();
 				menu.show(e.getComponent(), point.x, point.y);
 			}
@@ -664,6 +668,31 @@ public class TestRequirementEditor extends JPanel {
 		}
 	}
 
+	/**
+	 * Reload the current requirement file (i.e revert unsaved modifications)
+	 */
+	class ReloadAction extends AbstractAction {
+		
+		public ReloadAction() {
+			super("Revert unsaved modifications");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (JOptionPane.showConfirmDialog(null, 
+					  "Do you want to revert unsaved modifications ?",
+					  "Revert unsaved modifications",
+					  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				reload();
+			}
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return isModified();
+		}
+	}
+	
 	class SaveAction extends AbstractAction {
 
 		public SaveAction() {
