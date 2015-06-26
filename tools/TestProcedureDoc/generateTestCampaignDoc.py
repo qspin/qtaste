@@ -81,7 +81,7 @@ def generateTestCasesTree(campaignFileName):
     campaign = CampaignManager.getInstance().readFile(campaignFileName)
     for run in campaign.getRuns():
         testbed = os.path.splitext(run.getTestbed())[0]
-        for testScript in MetaTestSuite(testbed, run.getTestsuites()).getTestScripts():
+        for testScript in MetaTestSuite.createMetaTestSuite(testbed, run.getTestsuites()).getTestScripts():
             dataSet = testScript.getTestDataSet()
             selectedRows = dataSet.getSelectedRows();
             addTestCase(testScript.getTestCaseDirectory(), dataSet.size(), selectedRows, testbed, testCasesElem)
