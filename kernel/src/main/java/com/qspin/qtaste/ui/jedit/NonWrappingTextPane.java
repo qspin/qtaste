@@ -297,7 +297,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
 
         // add a document filter to replace tabs by 4 spaces when some text is added or replaced
         // in the document
-        if (isTestScript) {
+        if (contentType.contains("python")) {
 	        Document document = getDocument();
 	        
 	        if (document instanceof AbstractDocument) {

@@ -642,7 +642,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 String  fileContent    = contents.toString();
                 boolean isAutoModified = false;
 
-                if (isTestScript) {
+                if (absolutePath.endsWith(".py")) {
 	                if (fileContent.contains("\t")) {
 	                	fileContent = fileContent.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
 	                	isAutoModified = true;
