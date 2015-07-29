@@ -140,7 +140,7 @@ abstract class ComponentCommander {
 			{
 				//it's maybe a popup... a popup is modal and not resizable and containt a JOptionPane component.
 				JDialog dialog = (JDialog) window;
-				LOGGER.info("Find a popup with the title '" + dialog.getTitle() +"'.");
+				LOGGER.trace("Find a popup with the title '" + dialog.getTitle() +"'.");
 				popupFound.add(dialog);
 			}
 		}
@@ -163,22 +163,22 @@ abstract class ComponentCommander {
 
 		if ( !dialog.isShowing() ) 
 		{
-			LOGGER.info("The given component is not displayed!");
+			LOGGER.trace("The given component is not displayed!");
 			return false;
 		}
 		if ( !dialog.isModal() ) 
 		{
-			LOGGER.info("The given component is not modal!");
+			LOGGER.trace("The given component is not modal!");
 			return false;
 		}
 		if ( dialog.isResizable() ) 
 		{
-			LOGGER.info("The given component is rezisable!");
+			LOGGER.trace("The given component is rezisable!");
 			return false;
 		}
 		if ( getJOptionPane(dialog) == null ) 
 		{
-			LOGGER.info("The given component does not contain any JOptionPane!");
+			LOGGER.trace("The given component does not contain any JOptionPane!");
 			return false;
 		}
 		return true;
