@@ -1,0 +1,378 @@
+/*
+    Copyright 2007-2012 QSpin - www.qspin.be
+
+    This file is part of QTaste framework.
+
+    QTaste is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTaste is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with QTaste. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+package com.qspin.qtaste.javaguifx.server;
+
+import java.lang.instrument.Instrumentation;
+
+import org.apache.log4j.Logger;
+
+import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
+import com.qspin.qtaste.testsuite.QTasteException;
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
+
+/**
+ *  JavaGUI is a java agent started with the same VM as the java GUI application.
+ *  It implements all the JavaGUIMBean services using JMX.
+ * @author lvboque
+ */
+public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
+
+	public static void premain(String agentArgs, Instrumentation inst) {
+		new JavaGUIFX();
+	}
+
+
+	public JavaGUIFX() {
+		init();
+		//new Thread(ComponentNamer.getInstance()).start();
+	}
+
+	public String[] listComponents() throws QTasteException {
+		LOGGER.trace("listComponents()");
+		return new ComponentLister().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
+	}
+
+	public void clickOnButton(String componentName) throws QTasteException {
+		LOGGER.trace("clickOnButton(\"" + componentName + "\")");
+		new ButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public void clickOnButton(final String componentName, final int pressTime) throws QTasteException {
+		LOGGER.trace("clickOnButton(\"" + componentName + "\", " + pressTime + ")");
+		LOGGER.warn("The pressTime parameter is useless, it will be ignores.");
+		clickOnButton(componentName);
+	}
+
+	public boolean isEnabled(String componentName) throws QTasteException {
+//		LOGGER.trace("isEnabled(\"" + componentName + "\")");
+//		return new EnabledStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return false;
+	}
+
+	public boolean isEditable(String componentName) throws QTasteException {
+//		LOGGER.trace("isEditable(\"" + componentName + "\")");
+//		return new EditableStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return false;
+	}
+
+	public boolean isVisible(String componentName) throws QTasteException {
+//		LOGGER.trace("isVisible(\"" + componentName + "\")");
+//		return new ComponentVisibilityChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return false;
+	}
+
+	public void takeSnapShot(final String componentName, final String fileName) throws QTasteException {
+//		LOGGER.trace("takeSnapShot(\"" + componentName + "\", \"" + fileName + "\")");
+//		new Snapshotter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, fileName);
+	}
+
+	public String getText(String componentName) throws QTasteException {
+		LOGGER.trace("getText(\"" + componentName + "\")");
+		return new TextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public String getToolTip(String componentName) throws QTasteException {
+//		LOGGER.trace("getToolTip(\"" + componentName + "\")");
+//		return new ToolTipGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return "";
+	}
+
+	public void setText(final String componentName, final String value) throws QTasteException {
+		LOGGER.trace("setText(\"" + componentName + "\", \"" + value + "\")");
+		new TextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
+	}
+
+	public void requestFocus(final String componentName) throws QTasteException {
+		LOGGER.trace("requestFocus(\"" + componentName + "\")");
+		new FocusRequester().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public void selectComponent(final String componentName, final boolean value) throws QTasteException {
+		LOGGER.trace("selectComponent(\"" + componentName + "\", " + value + ")");
+		new ComponentSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
+	}
+
+	public void selectValue(final String componentName, final String value) throws QTasteException {
+		LOGGER.trace("selectValue(\"" + componentName + "\", \"" + value + "\")");
+		new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
+	}
+
+	public String getSelectedValue(String componentName) throws QTasteException {
+		LOGGER.trace("getSelectValue(\"" + componentName + "\")");
+		return new ValueGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public void selectIndex(final String componentName, final int index) throws QTasteException {
+		LOGGER.trace("selectIndex(\"" + componentName + "\", " + index + ")");
+		new IndexSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, index);
+	}
+
+	@Override
+	public void selectNode(String componentName, String nodePath, String nodePathSeparator) throws QTasteException {
+//		LOGGER.trace("selectNode(\"" + componentName + "\", \"" + nodePath + "\", \"" + nodePathSeparator + "\")");
+//		new TreeNodeSelector(TreeNodeSelector.SelectorIdentifier.SELECT_BY_STRING).executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodePath, nodePathSeparator);
+	}
+
+	@Override
+	public void selectNodeRe(String componentName, String nodePath, String nodePathSeparator) throws QTasteException {
+//		LOGGER.trace("selectNodeRe(\"" + componentName + "\", \"" + nodePath + "\", \"" + nodePathSeparator + "\")");
+//		new TreeNodeSelector(TreeNodeSelector.SelectorIdentifier.SELECT_BY_REGEX).executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodePath, nodePathSeparator);
+	}
+
+	@Override
+	public void clearNodeSelection(String componentName) throws QTasteException {
+//		LOGGER.trace("clearNodeSelection(\"" + componentName + "\")");
+//		new TreeNodeSelector(TreeNodeSelector.SelectorIdentifier.CLEAR_SELECTION).executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public String getSelectedNode(String componentName, String nodeSeparator) throws QTasteException {
+//		LOGGER.trace("getSelectedNode(\"" + componentName + "\", \"" + nodeSeparator + "\")");
+//		return new TreeNodeGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, nodeSeparator);
+		return "";
+	}
+
+	// Todo: getColor, awt?
+
+	@Override
+	public void selectTab(String tabbedPaneComponentName, int tabIndex) throws QTasteException {
+		LOGGER.trace("selectTab(\"" + tabbedPaneComponentName + "\", " + tabIndex + ")");
+		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_INDEX).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabIndex);
+	}
+
+	@Override
+	public void selectTabTitled(String tabbedPaneComponentName, String tabTitle) throws QTasteException {
+		LOGGER.trace("selectTabNamed(\"" + tabbedPaneComponentName + "\", \"" + tabTitle + "\")");
+		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_TITLE).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabTitle);
+	}
+
+	@Override
+	public void selectTabId(String tabbedPaneComponentName, String tabComponentId) throws QTasteException {
+		LOGGER.trace("selectTabId(\"" + tabbedPaneComponentName + "\", \"" + tabComponentId + "\")");
+		new TabSelector(TabSelector.SelectorIdentifier.SELECT_BY_COMPONENT_ID).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName, tabComponentId);
+	}
+
+	@Override
+	public int getSelectedTabIndex(String tabbedPaneComponentName) throws QTasteException {
+		LOGGER.trace("getSelectedTabIndex(\"" + tabbedPaneComponentName + "\")");
+		return Integer.parseInt(new TabGetter(TabGetter.InfoSelector.GET_INDEX).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName));
+	}
+
+	@Override
+	public String getSelectedTabTitle(String tabbedPaneComponentName) throws QTasteException {
+		LOGGER.trace("getSelectedTabTitle(\"" + tabbedPaneComponentName + "\")");
+		return new TabGetter(TabGetter.InfoSelector.GET_TITLE).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName);
+	}
+
+	@Override
+	public String getSelectedTabId(String tabbedPaneComponentName) throws QTasteException {
+		LOGGER.trace("getSelectedTabId(\"" + tabbedPaneComponentName + "\")");
+		return new TabGetter(TabGetter.InfoSelector.GET_COMPONENT_ID).executeCommand(COMPONENT_ENABLED_TIMEOUT, tabbedPaneComponentName);
+	}
+
+	public String whoAmI() throws QTasteTestFailException {
+//		LOGGER.trace("whoAmI()");
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().getName();
+		return "";
+	}
+
+
+	public String getRawName(String name) throws QTasteException
+	{
+//		LOGGER.trace("getRawName(\"" + name + "\")");
+//		return new ComponentRawNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, name);
+		return "";
+	}
+
+	public void setComponentName(String name) throws QTasteTestFailException {
+//		LOGGER.trace("setComponentName(\"" + name + "\")");
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().setName(name);
+	}
+
+	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
+//		LOGGER.trace("pressKey(" + keycode + ", " + delay + ")");
+//		new KeyPresser().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, bot, keycode, delay);
+	}
+
+	public void pressKey(int keycode) throws QTasteTestFailException {
+		LOGGER.trace("pressKey(" + keycode + ")");
+		// 68 is the default delay for a keypress
+		pressKey(keycode, 68);
+	}
+
+	@Override
+	public boolean exist(String pComponentName) {
+//		LOGGER.trace("exist(\"" + pComponentName + "\")");
+//		return new ExistenceChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName);
+		return false;
+	}
+
+	@Override
+	public int getEnabledComponentCount(boolean isEnabled) {
+//		LOGGER.trace("getEnabledComponentCount(" + isEnabled + ")");
+//		return new EnabledComponentCounter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, isEnabled);
+		return 0;
+	}
+
+	@Override
+	public int countTableRows(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
+//		LOGGER.trace("countTableRows(\"" + pComponentName + "\", \"" + pColumnName + "\", \"" + pColumnValue + "\")");
+//		return new TableRowCounter().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue);
+		return 0;
+	}
+
+	@Override
+	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue) throws QTasteException {
+//		LOGGER.trace("selectInTable(\"" + pComponentName + "\", \"" + pColumnName + "\", \"" + pColumnValue + "\")");
+//		selectInTable(pComponentName, pColumnName, pColumnValue, 0);
+	}
+
+	@Override
+	public void selectInTable(String pComponentName, String pColumnName, String pColumnValue, int pOccurenceIndex) throws QTasteException {
+//		LOGGER.trace("selectInTable(\"" + pComponentName + "\", \"" + pColumnName + "\", \"" + pColumnValue + "\", " + pOccurenceIndex + ")");
+//		new TableRowSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName, pColumnName, pColumnValue, pOccurenceIndex);
+	}
+
+	public boolean isPopupDisplayed() throws QTasteException
+	{
+//		LOGGER.trace("isPopupDisplayed()");
+//		return new PopupChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
+		return false;
+	}
+
+	public String getPopupText() throws QTasteException
+	{
+//		LOGGER.trace("getPopupText()");
+//		List<String> texts = new PopupTextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
+//		if (texts.isEmpty())
+//		{
+//			throw new QTasteTestFailException("No active popup found!");
+//		}
+//		return texts.get(0);
+		return "";
+	}
+
+	public String[] getAllPopupText() throws QTasteException
+	{
+//		LOGGER.trace("getAllPopupText()");
+//		return new PopupTextGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
+		return new String[0];
+	}
+
+	public void setPopupValue(String value) throws QTasteException
+	{
+//		LOGGER.trace("setPopupValue(\"" + value + "\")");
+//		new PopupTextSetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, value);
+	}
+
+	public void clickOnPopupButton(String buttonText) throws QTasteException
+	{
+//		LOGGER.trace("clickOnPopupButton(\"" + buttonText + "\")");
+//		new PopupButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, buttonText);
+	}
+
+	@Override
+	public void setComponentEnabledTimeout(int pTimeOut) throws IllegalArgumentException{
+		LOGGER.trace("setComponentEnabledTimeout(" + pTimeOut + ")");
+		if (pTimeOut < 0)
+			throw new IllegalArgumentException("Cannot set a negative timeout value. Try to set " + pTimeOut);
+
+		COMPONENT_ENABLED_TIMEOUT = pTimeOut;
+	}
+
+	@Override
+	public double[] getComponentLocation(String componentName) throws QTasteException {
+//		LOGGER.trace("getComponentLocation(\"" + componentName + "\")");
+//		Point p = new ComponentLocationGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+//		return new double[]{p.getX(), p.getY()};
+		return new double[2];
+	}
+
+	@Override
+	public String getComponentBackgroundColor(String componentName) throws QTasteException {
+//		LOGGER.trace("getComponentBackgroundColor(\"" + componentName + "\")");
+//		return new ComponentBackgroundColorGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return "";
+	}
+
+	@Override
+	public String getComponentForegroundColor(String componentName) throws QTasteException {
+//		LOGGER.trace("getComponentForegroundColor(\"" + componentName + "\")");
+//		return new ComponentForegroundColorGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return "";
+	}
+
+	@Override
+	public String dumpTreeContent(String treeComponentName, String separator) throws QTasteException
+	{
+//		LOGGER.trace("dumpTreeContent(\"" + treeComponentName + "\", \"" + separator + "\")");
+//		return new TreeDumper().executeCommand(COMPONENT_ENABLED_TIMEOUT, treeComponentName, separator);
+		return "";
+	}
+
+	@Override
+	public String[] getPopupRawNames() throws QTasteException {
+//		LOGGER.trace("getPopupRawNames()");
+//		return new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
+		return new String[0];
+	}
+
+	public String getPopupRawName() throws QTasteException {
+//	      LOGGER.trace("getPopupRawName()");
+//           List<String> names = new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
+//           if (names.isEmpty())
+//           {
+//                   throw new QTasteTestFailException("No active popup found!");
+//           }
+//           return names.get(0);
+		return "";
+    }
+
+	@Override
+	public String[] getListContent(String componentName) throws QTasteException {
+//		LOGGER.trace("getListContent(" + componentName + ")");
+//		return new ListDumper().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+		return new String[0];
+	}
+
+	@Override
+	public void selectFileThroughFileChooser(String fileChooserComponentName, String filepath) throws QTasteException {
+//		LOGGER.trace("selectFileThroughFileChooser('" + fileChooserComponentName + "', '" + filepath + "')");
+//		new FileChooserFileSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, fileChooserComponentName, filepath);
+	}
+
+	@Override
+	public void analyzeStructure(final String fileName) throws QTasteException {
+//		LOGGER.trace("analyzeStructure(\"" + fileName + "\")");
+//		new StructureAnalyzer().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, fileName);
+	}
+
+	private static int COMPONENT_ENABLED_TIMEOUT = 10;
+	private static Logger LOGGER = Logger.getLogger(JavaGUIFX.class);
+}
