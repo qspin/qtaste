@@ -21,7 +21,6 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Label;
-import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -40,7 +39,7 @@ public class TreeNodeGetter extends ComponentCommander {
 	String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
 		try
 		{
-			SwingUtilities.invokeAndWait(new Runnable() {
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					try
@@ -93,6 +92,13 @@ public class TreeNodeGetter extends ComponentCommander {
 					{
 						m_commandError = ex;
 					}
+				}
+			});
+			
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					//to synchronize threads
 				}
 			});
 		}

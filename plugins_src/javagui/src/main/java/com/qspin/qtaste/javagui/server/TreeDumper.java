@@ -42,7 +42,7 @@ public class TreeDumper extends ComponentCommander {
 		final Component c = getComponentByName(componentName);
 		try
 		{
-			SwingUtilities.invokeAndWait(new Runnable() {
+			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -61,6 +61,13 @@ public class TreeDumper extends ComponentCommander {
 					} else {
 						m_commandError = new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
 					}
+				}
+			});
+			
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					//to synchronize threads
 				}
 			});
 		}
