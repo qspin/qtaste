@@ -383,7 +383,9 @@ class ShellCommand(Command):
 
 class JavaProcess(ControlAction):
 	""" Control script action for starting/stopping a Java process """
-	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs="", jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False, active=True):
+	def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs="",
+				 jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False, active=True,
+				 jacocoIncludes=None, jacocoExcludes=None):
 		"""
 		Initialize JavaProcess object
 		@param description control script action description, also used as window title
@@ -396,6 +398,8 @@ class JavaProcess(ControlAction):
 		@param checkAfter number of seconds after which to check if process still exist or None to not check
 		@param priority specifies to run the process with the given priority: "low", "belownormal", "normal", "abovenormal", "high" or "realtime" or none for default priority
 		@param useJacoco enable the coverage analysis using jacoco tool
+        @param jacocoIncludes the Jacoco 'includes' parameter (without the 'includes=' part)
+        @param jacocoExcludes the Jacoco 'excludes' parameter (without the 'excludes=' part)
 		@param useJavaGUI enable the javagui service to enable remote javagui accessibility 
 		"""
 		ControlAction.__init__(self, description, active)
@@ -426,6 +430,8 @@ class JavaProcess(ControlAction):
 # 			else:
 # 				self.vmArgs += " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + description + ".jacoco"
 		self.useJacoco = useJacoco
+		self.jacocoExcludes = jacocoExcludes
+		self.jacocoIncludes = jacocoIncludes
 # 		if useJavaGUI:
 # 			self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
 		self.useJavaGUI = useJavaGUI
@@ -488,7 +494,13 @@ class JavaProcess(ControlAction):
 				print "WARNING: JACOCO_HOME variable not defined - Jacoco coverage disabled!\n"
 				return ""
 			else:
-				return " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + self.description + ".jacoco"
+				self.jacocoArgument = " -javaagent:" + jacocoHome + _os.sep + "lib" + _os.sep + "jacocoagent.jar=append=true,destfile=" + "reports" + _os.sep + self.description + ".jacoco"
+				if self.jacocoIncludes:
+					self.jacocoArgument += ",includes=" + self.jacocoIncludes
+
+				if self.jacocoExcludes:
+					self.jacocoArgument += ",excludes=" + self.jacocoExcludes
+				return self.jacocoArgument
 
 	def getJavaGUIVar(self):
 		if self.useJavaGUI:
