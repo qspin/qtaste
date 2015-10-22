@@ -19,8 +19,8 @@ subtitler.setSubtitle(testData.getValue("COMMENT"))
 javaguiMI.selectTabTitled("TABBED_PANE", "TREE_LIST_PANEL")
 
 # get test data
-component 	  = testData.getValue("COMPONENT_NAME")
-value 		  = testData.getValue("VALUE")
+component       = testData.getValue("COMPONENT_NAME")
+value           = testData.getValue("VALUE")
 expectedValue = testData.getValue("EXPECTED_VALUE")
 
 def reset():
