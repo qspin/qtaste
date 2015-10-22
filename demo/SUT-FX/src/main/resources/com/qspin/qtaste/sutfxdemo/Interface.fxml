@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane id="MAIN_FRAME" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qspin.qtaste.sutfxdemo.Interface">
+   <center>
+      <TabPane id="TABBED_PANE" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab id="DOCUMENT_PANEL" text="DOCUMENT_PANEL">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="TextField : " />
+                        <Label text="Text Area : " GridPane.rowIndex="3" />
+                        <Label text="Password Field : " GridPane.rowIndex="2" />
+                        <Label text="Formatted TextField : " GridPane.rowIndex="1" />
+                        <TextArea id="TEXT_AREA" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField id="FORMATTED_TEXT_FIELD" accessibleRole="PASSWORD_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField id="TEXT_FIELD" GridPane.columnIndex="1" />
+                        <PasswordField id="PASSWORD_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+          <Tab id="CHOOSE_PANEL" text="CHOOSE_PANEL">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Checkbox" />
+                        <Label text="Radio :" GridPane.rowIndex="1" />
+                        <Label text="Toggle Button" GridPane.rowIndex="2" />
+                        <CheckBox id="CHECK_BOX" mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" />
+                        <RadioButton id="RADIO_BUTTON" mnemonicParsing="false" text="RadioButton" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ToggleButton id="TOGGLE_BUTTON" mnemonicParsing="false" text="ToggleButton" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </content></Tab>
+            <Tab id="SELECTION_PANEL" text="SELECTION_PANEL">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="ListView" />
+                        <Label text="Slider" GridPane.rowIndex="1" />
+                        <Label text="Spinner" GridPane.rowIndex="2" />
+                        <Label text="ComboBox" GridPane.rowIndex="3" />
+                        <ListView id="LIST" fx:id="m_list" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                        <Slider id="SLIDER" fx:id="m_slider" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Spinner id="SPINNER" fx:id="m_spinner" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox id="COMBO_BOX" fx:id="m_combo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
