@@ -21,18 +21,15 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Label;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import java.util.regex.Pattern;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.qspin.qtaste.javagui.server.TabSelector.SelectorIdentifier;
-import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class TreeNodeSelector extends UpdateComponentCommander {
