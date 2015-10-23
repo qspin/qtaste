@@ -262,8 +262,13 @@ public class JavaGUIImpl implements JavaGUI {
 	}
 
     @Override
-    public String getSelectedValue(String componentName) throws QTasteException {
+    public Object getSelectedValue(String componentName) throws QTasteException {
         return mProxy.getSelectedValue(componentName);
+    }
+
+    @Override
+    public int getSelectedIndex(String componentName) throws QTasteException {
+        return mProxy.getSelectedIndex(componentName);
     }
 
     @Override

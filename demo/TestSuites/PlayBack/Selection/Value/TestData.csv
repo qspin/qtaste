@@ -1,0 +1,11 @@
+COMMENT;JAVAGUI_INSTANCE_NAME;TAB_ID;TAB_COMPONENT_NAME;COMPONENT_NAME;INT_VALUE;VALUE;BOOLEAN_VALUE
+Select the value 3 in a spinner;PlaybackApp;SELECTION_PANEL;TABBED_PANE;SPINNER;;3.0;
+Select the value 10 in a slider;PlaybackApp;SELECTION_PANEL;TABBED_PANE;SLIDER;;10;
+Select element "Elisabeth II (80)" in a combo box;PlaybackApp;SELECTION_PANEL;TABBED_PANE;COMBO_BOX;;Elisabeth II (80);
+Select element "Tintin Milou (40)" in a List;PlaybackApp;SELECTION_PANEL;TABBED_PANE;LIST;;Tintin Milou (40);
+Select a check box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;CHECK_BOX;;;true
+Select a radio box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;RADIO_BUTTON;;;true
+Select a toggle button;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;TOGGLE_BUTTON;;;true
+Unselect a check box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;CHECK_BOX;;;false
+Unselect a radio box;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;RADIO_BUTTON;;;false
+Unselect a toggle button;PlaybackApp;CHOOSE_PANEL;TABBED_PANE;TOGGLE_BUTTON;;;false

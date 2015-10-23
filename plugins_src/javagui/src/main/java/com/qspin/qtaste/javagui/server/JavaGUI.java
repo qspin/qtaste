@@ -124,9 +124,14 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 		new ValueSelector().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName, value);
 	}
 
-	public String getSelectedValue(String componentName) throws QTasteException {
+	public Object getSelectedValue(String componentName) throws QTasteException {
 		LOGGER.trace("getSelectValue(\"" + componentName + "\")");
 		return new ValueGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
+	}
+
+	public int getSelectedIndex(String componentName) throws QTasteException {
+		LOGGER.trace("getSelectIndex(\"" + componentName + "\")");
+		return new IndexGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
 	}
 
 	public void selectIndex(final String componentName, final int index) throws QTasteException {

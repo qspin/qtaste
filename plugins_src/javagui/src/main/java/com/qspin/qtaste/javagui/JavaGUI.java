@@ -218,20 +218,32 @@ public interface JavaGUI {
     */
    void selectValue(String componentName, String value) throws QTasteException;
 
-  /**
-    * Return the current selected value for the specified component.</br>
-    * Can be used on :
-    * <ul>
-    * <li>{@link AbstractButton} (see {@link AbstractButton#isSelected()})</li>
-    * <li>{@link JComboBox} (see {@link JComboBox#getSelectedItem()})</li>
-    * <li>{@link JList} (see {@link JList#getSelectedValue()})</li>
-    * <li>{@link JSpinner} (see {@link JSpinner#getModel()#getValue()})</li>
-    * <li>{@link JSlider} (see {@link JSlider#getModel()#getValue()})</li>
-    * </ul>
-    * @param componentName an identifier of the component.
-    * @return the current selected value
-    */
-   String getSelectedValue(String componentName) throws QTasteException;
+   /**
+     * Return the current selected value for the specified component.</br>
+     * Can be used on :
+     * <ul>
+     * <li>{@link AbstractButton} (see {@link AbstractButton#isSelected()})</li>
+     * <li>{@link JComboBox} (see {@link JComboBox#getSelectedItem()})</li>
+     * <li>{@link JList} (see {@link JList#getSelectedValue()})</li>
+     * <li>{@link JSpinner} (see {@link JSpinner#getModel()#getValue()})</li>
+     * <li>{@link JSlider} (see {@link JSlider#getModel()#getValue()})</li>
+     * </ul>
+     * @param componentName an identifier of the component.
+     * @return the current selected value
+     */
+    Object getSelectedValue(String componentName) throws QTasteException;
+
+    /**
+      * Return the current selected index for the specified component.</br>
+      * Can be used on :
+      * <ul>
+      * <li>{@link JComboBox} (see {@link JComboBox#getSelectedIndex()})</li>
+      * <li>{@link JList} (see {@link JList#getSelectedIndex()})</li>
+      * </ul>
+      * @param componentName an identifier of the component.
+      * @return the current selected index
+      */
+     int getSelectedIndex(String componentName) throws QTasteException;
 
 
    /**

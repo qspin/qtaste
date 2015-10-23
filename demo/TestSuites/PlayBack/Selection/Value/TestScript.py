@@ -25,23 +25,38 @@ def step1():
     javaguiMI.selectTabId("TABBED_PANE", testData.getValue("TAB_ID"))
     subtitler.setSubtitle(testData.getValue("COMMENT"))
     component = testData.getValue("COMPONENT_NAME")
-    value = testData.getIntValue("INDEX")
-    if value != -1:
-        try:
-            javaguiMI.selectIndex(component, value)
-        except:
-            testAPI.stopTest(Status.FAIL, "Fail to select index " + testData.getValue("INDEX") + " in " + component + "'")
+    
+    if len(testData.getValue("VALUE")) > 0:
+        test_with_string_value(component)
+    elif len(testData.getValue("INT_VALUE")) > 0:
+        test_with_int_value(component)
+    elif len(testData.getValue("BOOLEAN_VALUE")) > 0:
+        test_with_boolean_value(component)
     else:
-        value = testData.getValue("VALUE")
-        try:
-            javaguiMI.selectValue(component, value)
-        except:
-            testAPI.stopTest(Status.FAIL, "Fail to select value '" + value + "' in " + component + "'")
-        actualSelection = javaguiMI.getSelectedValue(component)
-        if value != actualSelection:
-            testAPI.stopTest(Status.FAIL, "Expected to see '" + value + "' selected in '" + component + "' but got '" + actualSelection + "'")
+        testAPI.stopTest(Status.FAIL, "No value to select....")
 
-    time.sleep(1)
+def test_with_int_value(componentName):
+    value = testData.getIntValue("INT_VALUE")
+    javaguiMI.selectValue(componentName, value)
+    if javaguiMI.getSelectedValue(componentName) != value:
+        testAPI.stopTest(Status.FAIL, "Fail to select the value '" + str(value) + "' in " + componentName + "'")
+
+def test_with_boolean_value(componentName):
+    value = testData.getBooleanValue("BOOLEAN_VALUE")
+    javaguiMI.selectComponent(componentName, value)
+    if (javaguiMI.getSelectedValue(componentName) == "true" and value) or \
+       (javaguiMI.getSelectedValue(componentName) == "false" and not value):
+        pass
+    else:
+        testAPI.stopTest(Status.FAIL, "Fail to change the selection state of '" + componentName + "' to " + str(value))
+
+def test_with_string_value(componentName):
+    value = testData.getValue("VALUE")
+
+    javaguiMI.selectValue(componentName, value)
+    if javaguiMI.getSelectedValue(componentName) != value:
+        testAPI.stopTest(Status.FAIL, "Fail to change the selection of '" + componentName + "' to " + str(value))
+    
 
 def checkList():
     """
@@ -57,7 +72,6 @@ def checkList():
         if actualList[i] != expectedList[i]:
             testAPI.stopTest(Status.FAIL, "Expected to get %s at indice %d in the list but got %s" %(expectedList[i], i, actualList[i]))
         i = i + 1
-
 
 def reset():
     """
