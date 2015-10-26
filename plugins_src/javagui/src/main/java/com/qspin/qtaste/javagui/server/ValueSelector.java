@@ -48,7 +48,7 @@ public class ValueSelector extends UpdateComponentCommander {
 			ListCellRenderer renderer = combo.getRenderer();
 			for (int i = 0; i < combo.getItemCount(); i++) { 
 				String itemValue = getItemText(combo.getModel().getElementAt(i), renderer);
-				System.out.println("compare combo elmt (" + itemValue + ") with '" + value + "'");
+				LOGGER.trace("compare combo elmt (" + itemValue + ") with '" + value + "'");
 				// Use a startsWith instead of equals() as toString() can return more than the value
 				if (itemValue.equals(value)) {
 					mValueToSelect = i;
@@ -59,7 +59,7 @@ public class ValueSelector extends UpdateComponentCommander {
 			ListCellRenderer renderer = list.getCellRenderer();
 			for (int i = 0; i < list.getModel().getSize(); i++) {
 				String itemValue = getItemText(list.getModel().getElementAt(i), renderer);
-				System.out.println("compare list elmt (" + itemValue + ") with '" + value + "'");
+				LOGGER.trace("compare list elmt (" + itemValue + ") with '" + value + "'");
 				if (itemValue.equals(value)) {
 					mValueToSelect = i;
 				}

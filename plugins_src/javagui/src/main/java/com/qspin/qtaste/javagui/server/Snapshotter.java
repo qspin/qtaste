@@ -41,7 +41,6 @@ class Snapshotter extends UpdateComponentCommander {
 	
 			File file = new File(mData[0].toString());
 			file.createNewFile();
-			System.out.println("creating empty file");
 			ImageIO.write(myImage, "jpg", file);				 			
 		}
 		catch (Exception e) {

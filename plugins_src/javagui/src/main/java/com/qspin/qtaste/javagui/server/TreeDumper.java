@@ -100,13 +100,13 @@ public class TreeDumper extends ComponentCommander {
 	{
 		Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
 		if (nodeComponent instanceof JLabel) {
-			System.out.println("component extend JLabel");
+			LOGGER.trace("component extend JLabel");
 			return ((JLabel) nodeComponent).getText();
 		} else if (nodeComponent instanceof Label) {
-			System.out.println("component extend TextComponent");
+			LOGGER.trace("component extend TextComponent");
 			return ((Label) nodeComponent).getText();
 		} else {
-			System.out.println("component extend something else");
+			LOGGER.trace("component extend something else");
 			return node.toString();
 		}
 	}

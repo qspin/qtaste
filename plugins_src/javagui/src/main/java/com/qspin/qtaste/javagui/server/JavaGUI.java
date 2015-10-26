@@ -51,7 +51,7 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 			bot = new Robot();
 		}
 		catch (AWTException e) {
-			System.out.println("JavaGUI cannot instantiate java.awt.Robot!");
+			LOGGER.error("JavaGUI cannot instantiate java.awt.Robot!", e);
 		}
 		//new Thread(ComponentNamer.getInstance()).start();
 	}
