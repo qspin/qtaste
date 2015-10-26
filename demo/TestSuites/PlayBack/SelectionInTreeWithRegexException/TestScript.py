@@ -9,8 +9,6 @@
 
 from qtaste import *
 
-import time
-
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 
@@ -55,4 +53,3 @@ def step1():
 
 doStep(reset)
 doStep(step1)
-time.sleep(1)

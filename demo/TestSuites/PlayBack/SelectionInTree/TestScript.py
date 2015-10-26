@@ -8,8 +8,6 @@
 
 from qtaste import *
 
-import time
-
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 
@@ -43,7 +41,5 @@ def step1():
     elif actualSelection != value:
         testAPI.stopTest(Status.FAIL, "Expected to see value '" + value + "' selected in " + component + "' but got '" + actualSelection + "'")
     
-    time.sleep(1)
-
 doStep(reset)
 doStep(step1)
