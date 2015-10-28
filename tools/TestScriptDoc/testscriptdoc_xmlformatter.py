@@ -249,7 +249,8 @@ class PythonDocGenerator:
         testScriptFilePath = directory + "/TestScript.py"
         generatorScript = "generate-TestStepsModules-doc"
         osName = java.lang.System.getProperty('os.name')
-        if "win" in osName:
+        print "OS name : " + str(osName)
+        if "win" in str(osName).lower():
 			generatorScript = generatorScript + ".bat"
         else:
 			generatorScript = generatorScript + ".sh"
