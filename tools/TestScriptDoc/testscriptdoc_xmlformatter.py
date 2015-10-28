@@ -5,7 +5,7 @@
 ##
 
 import string, os, re, codecs
-
+import java.lang.System
 try:
     import xml.etree.ElementTree as et
     from xml.etree.ElementTree import XMLTreeBuilder as TreeBuilder
@@ -53,6 +53,7 @@ class PythonDocGenerator:
             self.rootTestSuitesDir = options.get('rootTestSuiteDir')
         self.allImportedModulesStepsDoc = {}
         self.allImportedModulesStepsTables = {}
+        self.importTestScriptPattern = re.compile('importTestScript\(("|\')([\w.]+(?:\s*[\w.]+|\.|\/)*("|\'))\)')
         self.importModulePattern = re.compile('import\s+([\w.]+(?:\s*,\s*[\w.]+)*)')
         self.importSymbolsPattern = re.compile('from\s+([\w.]+)\s+import\s+(\*|\w+(?:\s*,\s*\w+)*)')
         self.doStepPattern = re.compile('doStep\(\s*[\'"]?([\w.]+)[\'"]?(?:\s*,\s*([\w.]+))?\s*\)')
@@ -182,6 +183,13 @@ class PythonDocGenerator:
                             for module in modules:
                                 modulePath = module.replace(".", os.sep)
                                 self._addImportedModuleStepsDocAndTables(modulePath, pythonLibDirectories)
+                                
+                    if self.importTestScriptPattern.match(line):
+						modulePath = line.split('(')[1].split(')')[0].replace('"', '')
+						target = filename.replace("TestScript.py", "") + "../" + modulePath
+						target = target.replace("/",os.sep)
+						self._addImportedTestScriptModuleStepsDocAndTables(target.split(os.sep)[-1], target)
+						
                     for match in self.doStepPattern.finditer(line):
                         if match.group(2):
                             stepName = match.group(2)
@@ -229,6 +237,26 @@ class PythonDocGenerator:
 
     def _addImportedModuleStepsDocAndTables(self, moduleName, pythonLibDirectories):
         stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables(moduleName, pythonLibDirectories)
+        if stepsDocDict:
+            for stepName in stepsDocDict:
+                self.declaredSteps[moduleName + '.' + stepName] = stepsDocDict[stepName]
+        if stepsTablesDict:
+            for stepsTableName in stepsTablesDict:
+                self.declaredStepsTables[moduleName + '.' + stepsTableName] = [(stepId, moduleName + '.' + stepName) for stepId, stepName in stepsTablesDict[stepsTableName]]
+                
+    def _addImportedTestScriptModuleStepsDocAndTables(self, moduleName, directory):
+        #create the step-doc.xml file for the imported test script
+        testScriptFilePath = directory + "/TestScript.py"
+        generatorScript = "generate-TestStepsModules-doc"
+        osName = java.lang.System.getProperty('os.name')
+        if "win" in osName:
+			generatorScript = generatorScript + ".bat"
+        else:
+			generatorScript = generatorScript + ".sh"
+        command = generatorScript + ' "' + testScriptFilePath.replace("/", os.sep) + '"'
+        os.system(command)
+        
+        stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables("TestScript", [directory])
         if stepsDocDict:
             for stepName in stepsDocDict:
                 self.declaredSteps[moduleName + '.' + stepName] = stepsDocDict[stepName]
