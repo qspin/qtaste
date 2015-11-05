@@ -72,6 +72,8 @@ import com.qspin.qtaste.ui.util.QSpinTheme;
 import com.qspin.qtaste.ui.widget.FillLabelUI;
 import com.qspin.qtaste.util.Environment;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.service.PythonLibDocGeneratorService;
+import com.qspin.qtaste.util.service.ServiceManager;
 
 /**
  *
@@ -99,9 +101,23 @@ public class MainPanel extends JFrame {
         super();
         setTitle(title);
         setUpFrame();
+        startServices();
         mTestSuiteDir = testSuiteDir;
         mNumberLoops = numberLoops;
         mLoopsInHour = loopsInHour;
+    }
+    
+    private void startServices()
+    {
+    	try
+    	{
+    		ServiceManager manager = ServiceManager.getInstance();
+    		manager.registerAndStartService(PythonLibDocGeneratorService.INSTANCE);
+    	}
+    	catch(Exception ex)
+    	{
+    		logger.error("Error while starting services : " + ex.getMessage(), ex);
+    	}
     }
 
     private void setUpFrame() {
@@ -110,6 +126,7 @@ public class MainPanel extends JFrame {
             public void windowClosing(WindowEvent winEvt) {
                 // Perhaps ask user if they want to save any unsaved files first.
                 mTestCasePanel.closeAllTabs();
+                ServiceManager.getInstance().stopAllRegisteredServices();
                 System.exit(0);
             }
         });
