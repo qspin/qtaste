@@ -27,13 +27,13 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step Define a test script using the verb throwRuntimeException()
-	@expected Test is set to "Not available" with following reason:<p>
-			  <i>java.lang.RuntimeException: Runtime exception.</i><p>
-			  Script call stack is reported.
-	"""
-	testAPI.getEngineTest().throwRuntimeException()
+    """
+    @step Define a test script using the verb throwRuntimeException()
+    @expected Test is set to "Not available" with following reason:<p>
+              <i>java.lang.RuntimeException: Runtime exception.</i><p>
+              Script call stack is reported.
+    """
+    testAPI.getEngineTest().throwRuntimeException()
 
 doStep(Step1)
 testAPI.stopTest(Status.FAIL, "This should not be executed.")

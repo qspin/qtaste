@@ -25,7 +25,7 @@ def step1():
     javaguiMI.selectTabId("TABBED_PANE", testData.getValue("TAB_ID"))
     subtitler.setSubtitle(testData.getValue("COMMENT"))
     component = testData.getValue("COMPONENT_NAME")
-    
+
     if len(testData.getValue("VALUE")) > 0:
         test_with_string_value(component)
     elif len(testData.getValue("INT_VALUE")) > 0:
@@ -56,7 +56,7 @@ def test_with_string_value(componentName):
     javaguiMI.selectValue(componentName, value)
     if javaguiMI.getSelectedValue(componentName) != value:
         testAPI.stopTest(Status.FAIL, "Fail to change the selection of '" + componentName + "' to " + str(value))
-    
+
 
 def checkList():
     """

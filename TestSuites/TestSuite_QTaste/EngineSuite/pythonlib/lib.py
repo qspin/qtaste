@@ -20,9 +20,9 @@
 from qtaste import *
 
 def Step1FromLIB():
-	"""
-	@step This documentation step is imported from LIB 
-	@expected This documentation of expected is imported from LIB
-	"""
-	pass
+    """
+    @step This documentation step is imported from LIB
+    @expected This documentation of expected is imported from LIB
+    """
+    pass
 

@@ -29,18 +29,18 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step Define a Python script containing the following a syntax error: <p>
-		  if myValue eq True:
-	@expected Test result is "Not available" with the following reason:<p>
-			  <i>Python syntax errorin file Testcase.py at line 18, column 20:
-			  if myValue eq True:</i><p>
-			  Script call stack is reported.
-	"""
-	if myValue eq True:
-		print "myValue is true"
-	else:	
-		print "myValue is false"
+    """
+    @step Define a Python script containing the following a syntax error: <p>
+          if myValue eq True:
+    @expected Test result is "Not available" with the following reason:<p>
+              <i>Python syntax errorin file Testcase.py at line 18, column 20:
+              if myValue eq True:</i><p>
+              Script call stack is reported.
+    """
+    if myValue eq True:
+        print "myValue is true"
+    else:
+        print "myValue is false"
 
 doStep(Step1)
 myValue = testAPI.getEngineTest().throwNoException()

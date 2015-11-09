@@ -29,12 +29,12 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step Define a script calling the verb nonExistentVerb()
-	@expected Test result set to "Not available" with the following reason:<p>
-			  <i>AttributeError: nonExistentVerb.</i><p>
-			  Script call stack is reported.
-	"""
-	testAPI.getEngineTest().nonExistentVerb()
-	
-doStep(Step1)	
+    """
+    @step Define a script calling the verb nonExistentVerb()
+    @expected Test result set to "Not available" with the following reason:<p>
+              <i>AttributeError: nonExistentVerb.</i><p>
+              Script call stack is reported.
+    """
+    testAPI.getEngineTest().nonExistentVerb()
+
+doStep(Step1)

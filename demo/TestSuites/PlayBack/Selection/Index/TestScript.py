@@ -40,6 +40,6 @@ def reset():
     """
     component = testData.getValue("COMPONENT_NAME")
     javaguiMI.selectIndex(component, -1)
-    
+
 doStep(step1)
 doStep(reset)

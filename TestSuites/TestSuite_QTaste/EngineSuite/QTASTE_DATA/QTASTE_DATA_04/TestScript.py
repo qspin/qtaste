@@ -32,24 +32,24 @@ from qtaste import *
 
 expectedFileContent = testData.getValue('FILECONTENT')
 
-def Step1(): 
-	"""
-	@step      extract the content of the files
-	@expected  - no exception thrown (FileNotFound for example) <p>
-			   - File content must be the same as in the variable FILECONTENT
-	"""
-	try:
-		fileContent = testData.getFileContentAsString("FILE_DATA_UTF_8")
-		fileContentUtf8 = testData.getFileContentAsString("FILE_DATA_UTF_8", "UTF-8")
-		fileContentLatin1 = testData.getFileContentAsString("FILE_DATA_ISO_8859_1", "ISO-8859-1")
-	except QTasteDataException, e:
-		testAPI.stopTest(Status.FAIL, "Exception thrown: " + e.getMessage())
+def Step1():
+    """
+    @step      extract the content of the files
+    @expected  - no exception thrown (FileNotFound for example) <p>
+               - File content must be the same as in the variable FILECONTENT
+    """
+    try:
+        fileContent = testData.getFileContentAsString("FILE_DATA_UTF_8")
+        fileContentUtf8 = testData.getFileContentAsString("FILE_DATA_UTF_8", "UTF-8")
+        fileContentLatin1 = testData.getFileContentAsString("FILE_DATA_ISO_8859_1", "ISO-8859-1")
+    except QTasteDataException, e:
+        testAPI.stopTest(Status.FAIL, "Exception thrown: " + e.getMessage())
 
-	if fileContent != expectedFileContent:
-		testAPI.stopTest(Status.FAIL, 'File content is different from expected.\n File content is %s and expected content is %s' % (fileContent, expectedFileContent))
-	if fileContentUtf8 != expectedFileContent:
-		testAPI.stopTest(Status.FAIL, 'File content (UTF-8) is different from expected.\n File content is %s and expected content is %s' % (fileContentUtf8, expectedFileContent))
-	if fileContentLatin1 != expectedFileContent:
-		testAPI.stopTest(Status.FAIL, 'File content (ISO-8859-1) is different from expected.\n File content is %s and expected content is %s' % (fileContentLatin1, expectedFileContent))
+    if fileContent != expectedFileContent:
+        testAPI.stopTest(Status.FAIL, 'File content is different from expected.\n File content is %s and expected content is %s' % (fileContent, expectedFileContent))
+    if fileContentUtf8 != expectedFileContent:
+        testAPI.stopTest(Status.FAIL, 'File content (UTF-8) is different from expected.\n File content is %s and expected content is %s' % (fileContentUtf8, expectedFileContent))
+    if fileContentLatin1 != expectedFileContent:
+        testAPI.stopTest(Status.FAIL, 'File content (ISO-8859-1) is different from expected.\n File content is %s and expected content is %s' % (fileContentLatin1, expectedFileContent))
 
 doStep(Step1)

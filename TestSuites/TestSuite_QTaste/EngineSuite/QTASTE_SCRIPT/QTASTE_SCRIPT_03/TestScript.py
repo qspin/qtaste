@@ -31,40 +31,40 @@ from qtaste import *
 engineTest = testAPI.getEngineTest()
 
 def Step1():
-	"""
-	@step Check that value returned by the verb returnDataAsString('text') is 'text'
-	@expected The check is successful
-	"""
-	if engineTest.returnDataAsString('text') != 'text':
-		testAPI.stopTest(Status.FAIL, "String return value does'nt match.")
+    """
+    @step Check that value returned by the verb returnDataAsString('text') is 'text'
+    @expected The check is successful
+    """
+    if engineTest.returnDataAsString('text') != 'text':
+        testAPI.stopTest(Status.FAIL, "String return value does'nt match.")
 
 def Step2():
-	"""
-	@step Check that value returned by the verb returnDataAsInteger(4) is 4
-	@expected The check is successful
-	"""
-	if engineTest.returnDataAsInteger(4) != 4:
-		testAPI.stopTest(Status.FAIL, "Integer return value does'nt match.")
+    """
+    @step Check that value returned by the verb returnDataAsInteger(4) is 4
+    @expected The check is successful
+    """
+    if engineTest.returnDataAsInteger(4) != 4:
+        testAPI.stopTest(Status.FAIL, "Integer return value does'nt match.")
 
 def Step3():
-	"""
-	@step Check that value returned by the verb returnDataAsDouble(3.14) is 3.14
-	@expected The check is successful
-	"""
-	if engineTest.returnDataAsDouble(3.14) != 3.14:
-		testAPI.stopTest(Status.FAIL, "Double return value does'nt match.")
+    """
+    @step Check that value returned by the verb returnDataAsDouble(3.14) is 3.14
+    @expected The check is successful
+    """
+    if engineTest.returnDataAsDouble(3.14) != 3.14:
+        testAPI.stopTest(Status.FAIL, "Double return value does'nt match.")
 
 def Step4():
-	"""
-	@step Check that value returned by the verb returnDataAsBoolean(True) is True
-	@expected The check is successful<p>
-			  Test result is "Passed"
-	"""
-	if engineTest.returnDataAsBoolean(True) != True:
-		testAPI.stopTest(Status.FAIL, "Boolean return value does'nt match.")
+    """
+    @step Check that value returned by the verb returnDataAsBoolean(True) is True
+    @expected The check is successful<p>
+              Test result is "Passed"
+    """
+    if engineTest.returnDataAsBoolean(True) != True:
+        testAPI.stopTest(Status.FAIL, "Boolean return value does'nt match.")
 
 doStep(Step1)
 doStep(Step2)
 doStep(Step3)
 doStep(Step4)
-	
+

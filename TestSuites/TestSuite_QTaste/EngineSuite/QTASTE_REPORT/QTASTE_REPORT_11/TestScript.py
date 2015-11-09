@@ -29,29 +29,29 @@ from qtaste import *
 engineTest = testAPI.getEngineTest()
 
 def Step1():
-	"""
-	@step      TestData Row 1: call engineTest.checkDataIsInteger(1.0)
-	@expected  test is set to "Not available" with following reason:<p>
-	           <i>Invalid argument(s): checkDataIsInteger(): 1st arg can't be coerced to int</i><p>
-	           Script call stack is reported.
-	"""
-	engineTest.checkDataIsInteger(1.0)
+    """
+    @step      TestData Row 1: call engineTest.checkDataIsInteger(1.0)
+    @expected  test is set to "Not available" with following reason:<p>
+               <i>Invalid argument(s): checkDataIsInteger(): 1st arg can't be coerced to int</i><p>
+               Script call stack is reported.
+    """
+    engineTest.checkDataIsInteger(1.0)
 
 def Step2():
-	"""
-	@step      TestData Row 2: call engineTest.checkData1To5(1,2,3,4)
-	@expected  test is set to "Not available" with following reason:<p>
-	           <i>Invalid argument(s): checkData1To5(): expected 5 args; got 4</i>, if backward compatibility is disabled<p>
-	           <i>TestData doesn't contain value for data DATA5</i>, if backward compatibility is enabled<p>
-	           Script call stack is reported.
-	"""
-	engineTest.checkData1To5(1,2,3,4)
+    """
+    @step      TestData Row 2: call engineTest.checkData1To5(1,2,3,4)
+    @expected  test is set to "Not available" with following reason:<p>
+               <i>Invalid argument(s): checkData1To5(): expected 5 args; got 4</i>, if backward compatibility is disabled<p>
+               <i>TestData doesn't contain value for data DATA5</i>, if backward compatibility is enabled<p>
+               Script call stack is reported.
+    """
+    engineTest.checkData1To5(1,2,3,4)
 
 
 
 row = testData.getIntValue("ROW")
 if row == 1:
-	doStep(Step1)
+    doStep(Step1)
 elif row == 2:
-	doStep(Step2)
-		
+    doStep(Step2)
+

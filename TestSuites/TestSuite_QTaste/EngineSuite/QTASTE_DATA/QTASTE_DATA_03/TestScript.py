@@ -27,14 +27,14 @@
 
 from qtaste import *
 
-def Step1(): 
-	"""
-	@step      Call the verb neverReturn()
-	@expected  Test is "Failed", reason: <i>Test execution timeout.</i><p>
-			   Script call stack is reported.<p>
-			   Elapsed time is more or less 60 seconds.
-	"""
-	testAPI.getEngineTest().neverReturn()
+def Step1():
+    """
+    @step      Call the verb neverReturn()
+    @expected  Test is "Failed", reason: <i>Test execution timeout.</i><p>
+               Script call stack is reported.<p>
+               Elapsed time is more or less 60 seconds.
+    """
+    testAPI.getEngineTest().neverReturn()
 
 doStep(Step1)
 

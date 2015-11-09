@@ -27,12 +27,12 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step      Call testData.getValue("INEXISTENT")
-	@expected  test is set to "Not available" with following reason:<p>
-	           <i>TestData doesn't contain value for data INEXISTENT.</i><p>
-	           Script call stack is reported.
-	"""
-	x = testData.getValue("INEXISTENT")
+    """
+    @step      Call testData.getValue("INEXISTENT")
+    @expected  test is set to "Not available" with following reason:<p>
+               <i>TestData doesn't contain value for data INEXISTENT.</i><p>
+               Script call stack is reported.
+    """
+    x = testData.getValue("INEXISTENT")
 
 doStep(Step1)

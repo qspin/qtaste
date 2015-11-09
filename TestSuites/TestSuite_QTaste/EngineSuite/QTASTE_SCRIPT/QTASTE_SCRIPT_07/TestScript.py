@@ -29,30 +29,30 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step Check that variable myVariable is not defined
-	@expected The check is successful
-	"""
-	try:
-		myVariable
-	except NameError:
-		pass
-	else:
-		testAPI.stopTest(Status.FAIL, "Variable is persistent.")
+    """
+    @step Check that variable myVariable is not defined
+    @expected The check is successful
+    """
+    try:
+        myVariable
+    except NameError:
+        pass
+    else:
+        testAPI.stopTest(Status.FAIL, "Variable is persistent.")
 
 def Step2():
-	"""
-	@step Define variable myVariable with value 5
-	@expected None
-	"""
-	pass
+    """
+    @step Define variable myVariable with value 5
+    @expected None
+    """
+    pass
 
 def Step3():
-	"""
-	@step Repeat step1 and step 2 for a second row of test data
-	@expected Test result is "Passed"
-	"""
-	pass
+    """
+    @step Repeat step1 and step 2 for a second row of test data
+    @expected Test result is "Passed"
+    """
+    pass
 
 doStep(Step1)
 myVariable = 5

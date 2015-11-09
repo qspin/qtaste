@@ -27,21 +27,21 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step      Define a test script using the verb throwQTasteTestFailException()
-	@expected  QTaste reports test as "Failed", reason:<p>
-			   This verb always fails!<p>
-			   Script call stack is reported.
-	"""
-	testAPI.getEngineTest().throwQTasteTestFailException()
+    """
+    @step      Define a test script using the verb throwQTasteTestFailException()
+    @expected  QTaste reports test as "Failed", reason:<p>
+               This verb always fails!<p>
+               Script call stack is reported.
+    """
+    testAPI.getEngineTest().throwQTasteTestFailException()
 
 def Step2():
-	"""
-	@step      Define a test script using the verb throwQTasteDataException()
-	@expected  This verb is never called
-	"""
-	logger.fatal('This step cannot be executed -> TEST FAILED')
-	testAPI.getEngineTest().throwQTasteDataException()
+    """
+    @step      Define a test script using the verb throwQTasteDataException()
+    @expected  This verb is never called
+    """
+    logger.fatal('This step cannot be executed -> TEST FAILED')
+    testAPI.getEngineTest().throwQTasteDataException()
 
 doStep(Step1)
-doStep(Step2)	
+doStep(Step2)

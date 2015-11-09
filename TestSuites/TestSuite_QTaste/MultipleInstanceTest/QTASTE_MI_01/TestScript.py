@@ -24,22 +24,22 @@
 
 from qtaste import *
 
-def Step1():	
-	"""
-	@step Create 2 instances of MultipleInstancesTest with id 1 and 2
-	@expected 2 instances of MultipleInstancesTest are created without any errors.
-	"""
-	global instance1, instance2
-	instance1 = testAPI.getMultipleInstancesTest(INSTANCE_ID="1")
-	instance2 = testAPI.getMultipleInstancesTest(INSTANCE_ID="2")
+def Step1():
+    """
+    @step Create 2 instances of MultipleInstancesTest with id 1 and 2
+    @expected 2 instances of MultipleInstancesTest are created without any errors.
+    """
+    global instance1, instance2
+    instance1 = testAPI.getMultipleInstancesTest(INSTANCE_ID="1")
+    instance2 = testAPI.getMultipleInstancesTest(INSTANCE_ID="2")
 
-def Step2():	
-	"""
-	@step Check that the id of the instances correspond to 1 for instance1 and 2 for instance2 using the verb checkTreatmentRoomId
-	@expected The check returns without error
-	"""
-	instance1.checkInstanceId("1")
-	instance2.checkInstanceId("2")
-	
+def Step2():
+    """
+    @step Check that the id of the instances correspond to 1 for instance1 and 2 for instance2 using the verb checkTreatmentRoomId
+    @expected The check returns without error
+    """
+    instance1.checkInstanceId("1")
+    instance2.checkInstanceId("2")
+
 doStep(Step1)
 doStep(Step2)

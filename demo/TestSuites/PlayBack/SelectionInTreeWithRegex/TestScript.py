@@ -35,7 +35,7 @@ def step1():
     """
     javaguiMI.selectNodeRe(component, value, "!")
     actualSelection = javaguiMI.getSelectedNode(component, "!")
-    
+
     if actualSelection is None :
         testAPI.stopTest(Status.FAIL, "Unable to get the selected node. No node is selected.")
     elif actualSelection != expectedValue:
