@@ -22,36 +22,36 @@
 # <p>
 # The goal of this test is to check the equals method of DoubleWithPrecision.
 # @preparation None
-# @data DOUBLE_WITH_PRECISION_DATA [DoubleWithPrecision] double with precision data 
+# @data DOUBLE_WITH_PRECISION_DATA [DoubleWithPrecision] double with precision data
 ##
 
 from qtaste import *
 
-def Step1(): 
-	"""
-	@step      In the CSV, define DOUBLE_WITH_PRECISION_DATA to 10(0.5)
-	@expected  None
-	"""
-	pass
+def Step1():
+    """
+    @step      In the CSV, define DOUBLE_WITH_PRECISION_DATA to 10(0.5)
+    @expected  None
+    """
+    pass
 
 def Step2():
-	"""
-	@step      Check the equals() method of DoubleWithPrecision with differents values
-	@expected  Check is successful
-	"""
-	doubleWithPrecisionValue = testData.getDoubleWithPrecisionValue('DOUBLE_WITH_PRECISION_DATA')
-	if not doubleWithPrecisionValue.equals(10):
-		testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 10")
-	if not doubleWithPrecisionValue.equals(10.2):
-		testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 10.2")
-	if not doubleWithPrecisionValue.equals(10.5):
-		testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 10.5")
-	if not doubleWithPrecisionValue.equals(9.5):
-		testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 9.5")
-	if doubleWithPrecisionValue.equals(9.49):
-		testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should not be equal to 9.49")
-	if doubleWithPrecisionValue.equals(10.51):
-		testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should not be equal to 10.51")
+    """
+    @step      Check the equals() method of DoubleWithPrecision with differents values
+    @expected  Check is successful
+    """
+    doubleWithPrecisionValue = testData.getDoubleWithPrecisionValue('DOUBLE_WITH_PRECISION_DATA')
+    if not doubleWithPrecisionValue.equals(10):
+        testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 10")
+    if not doubleWithPrecisionValue.equals(10.2):
+        testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 10.2")
+    if not doubleWithPrecisionValue.equals(10.5):
+        testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 10.5")
+    if not doubleWithPrecisionValue.equals(9.5):
+        testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should be equal to 9.5")
+    if doubleWithPrecisionValue.equals(9.49):
+        testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should not be equal to 9.49")
+    if doubleWithPrecisionValue.equals(10.51):
+        testAPI.stopTest(Status.FAIL, "Double with precision value 10(0.5) should not be equal to 10.51")
 
 doStep(Step1)
 doStep(Step2)

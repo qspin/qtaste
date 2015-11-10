@@ -54,7 +54,7 @@ def testChangeTabByTitle():
             testAPI.stopTest(Status.FAIL, "Expected selected tab title : '" + title + "' but got : '" + selectedTitle + "'")
 
     time.sleep(1)
-    
+
 def testChangeTabById():
     """
     @step      select a new tab by ID

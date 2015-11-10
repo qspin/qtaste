@@ -23,9 +23,9 @@ from qtaste import *
 from lib import *
 
 ##
-#  QTaste documentation management: 
+#  QTaste documentation management:
 # <p>
-# This test case has the goal to verify that  when a test step is imported, tis documentation is well imported too.
+# This test case has the goal to verify that  when a test step is imported, this documentation is well imported too.
 ##
 
 
@@ -40,7 +40,7 @@ def Step2():
     """
     if myValue eq True:
         print "myValue is true"
-    else:    
+    else:
         print "myValue is false"
 
 doStep(Step1FromLIB)

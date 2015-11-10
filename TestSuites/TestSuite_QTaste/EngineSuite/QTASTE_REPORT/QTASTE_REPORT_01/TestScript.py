@@ -27,61 +27,61 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step      Invoke the verb throwNoException()
-	@expected  Step result is "Passed" and QTaste proceeds to next step.
-	"""
-	testAPI.getEngineTest().throwNoException()
+    """
+    @step      Invoke the verb throwNoException()
+    @expected  Step result is "Passed" and QTaste proceeds to next step.
+    """
+    testAPI.getEngineTest().throwNoException()
 
 def Step2():
-	"""
-	@step      Invoke the verb throwQTasteTestFailException() and catch the QTasteTestFailException
-	@expected  Step result is "Passed" and QTaste proceeds to next step.
-	"""
-	try:
-		testAPI.getEngineTest().throwQTasteTestFailException()
-	except QTasteTestFailException:
-		pass
+    """
+    @step      Invoke the verb throwQTasteTestFailException() and catch the QTasteTestFailException
+    @expected  Step result is "Passed" and QTaste proceeds to next step.
+    """
+    try:
+        testAPI.getEngineTest().throwQTasteTestFailException()
+    except QTasteTestFailException:
+        pass
 
 def Step3():
-	"""
-	@step      Invoke the verb throwQTasteDataException() and catch the QTasteDataException
-	@expected  Step result is "Passed" and QTaste proceeds to next step.
-	"""
-	try:
-		testAPI.getEngineTest().throwQTasteDataException()
-	except QTasteDataException:
-		pass
+    """
+    @step      Invoke the verb throwQTasteDataException() and catch the QTasteDataException
+    @expected  Step result is "Passed" and QTaste proceeds to next step.
+    """
+    try:
+        testAPI.getEngineTest().throwQTasteDataException()
+    except QTasteDataException:
+        pass
 
 def Step4():
-	"""
-	@step      Invoke the verb throwQTasteException() and catch the QTasteException
-	@expected  Step result is "Passed" and QTaste proceeds to next step.
-	"""
-	try:
-		testAPI.getEngineTest().throwQTasteException()
-	except QTasteException:
-		pass
+    """
+    @step      Invoke the verb throwQTasteException() and catch the QTasteException
+    @expected  Step result is "Passed" and QTaste proceeds to next step.
+    """
+    try:
+        testAPI.getEngineTest().throwQTasteException()
+    except QTasteException:
+        pass
 
 def Step5():
-	"""
-	@step      Invoke the verb throwQTasteTestFailException() and catch the base QTasteException
-	@expected  Step result is "Passed" and QTaste proceeds to next step.
-	"""
-	try:
-		testAPI.getEngineTest().throwQTasteTestFailException()
-	except QTasteException:
-		pass
+    """
+    @step      Invoke the verb throwQTasteTestFailException() and catch the base QTasteException
+    @expected  Step result is "Passed" and QTaste proceeds to next step.
+    """
+    try:
+        testAPI.getEngineTest().throwQTasteTestFailException()
+    except QTasteException:
+        pass
 
 def Step6():
-	"""
-	@step      Invoke the verb throwQTasteDataException() and catch the base QTasteException
-	@expected  Step result is "Passed" and at the end, QTaste reports test as "Passed".
-	"""
-	try:
-		testAPI.getEngineTest().throwQTasteDataException()
-	except QTasteException:
-		pass
+    """
+    @step      Invoke the verb throwQTasteDataException() and catch the base QTasteException
+    @expected  Step result is "Passed" and at the end, QTaste reports test as "Passed".
+    """
+    try:
+        testAPI.getEngineTest().throwQTasteDataException()
+    except QTasteException:
+        pass
 
 doStep(Step1)
 doStep(Step2)

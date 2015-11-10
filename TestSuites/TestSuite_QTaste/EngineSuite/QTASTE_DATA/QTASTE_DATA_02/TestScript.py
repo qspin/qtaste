@@ -23,26 +23,26 @@
 # This test case has the goal to verify that the TIMEOUT data value is used if it is defined in the CSV file.<p>
 # This test will execute a test case that takes more time than the defined TIMEOUT data
 # @preparation None
-# @data TIMEOUT [Integer] specify the TIMEOUT value to 5 
+# @data TIMEOUT [Integer] specify the TIMEOUT value to 5
 ##
 
 from qtaste import *
 
-def Step1(): 
-	"""
-	@step      In CSV file, define TIMEOUT to 5
-	@expected  None
-	"""
-	pass
+def Step1():
+    """
+    @step      In CSV file, define TIMEOUT to 5
+    @expected  None
+    """
+    pass
 
-def Step2(): 
-	"""
-	@step      Call the verb neverReturn()
-	@expected  Test is "Failed", reason: <i>Test execution timeout.</i><p>
-			   Script call stack is reported.<p>
-			   Elapsed time is more or less 5 seconds.
-	"""
-	testAPI.getEngineTest().neverReturn()
+def Step2():
+    """
+    @step      Call the verb neverReturn()
+    @expected  Test is "Failed", reason: <i>Test execution timeout.</i><p>
+               Script call stack is reported.<p>
+               Elapsed time is more or less 5 seconds.
+    """
+    testAPI.getEngineTest().neverReturn()
 
 doStep(Step1)
 doStep(Step2)

@@ -46,24 +46,24 @@ import time
 from qtaste import *
 
 def step1():
-	"""
-	@step Call step1 function as a step
-	@expected step1 function is called as step 1.<p>
-			  Log contains following informations:<p>
-			  <table cols="2" border="1" cellspacing="0"><tr><td>INFO</td><td>Begin of step 1 (step1)</td></tr>
-			  <tr><td>TRACE</td><td>-- step 1 --</td></tr>
-			  <tr><td>INFO</td><td>End of step 1 (step1) - status: SUCCESS - elapsed time: 0.000 seconds</td></tr></table><p>
-			  where 0.000 can vary but is more or less 0 second.
-	"""
-	logger.trace('-- step 1 --')
+    """
+    @step Call step1 function as a step
+    @expected step1 function is called as step 1.<p>
+              Log contains following informations:<p>
+              <table cols="2" border="1" cellspacing="0"><tr><td>INFO</td><td>Begin of step 1 (step1)</td></tr>
+              <tr><td>TRACE</td><td>-- step 1 --</td></tr>
+              <tr><td>INFO</td><td>End of step 1 (step1) - status: SUCCESS - elapsed time: 0.000 seconds</td></tr></table><p>
+              where 0.000 can vary but is more or less 0 second.
+    """
+    logger.trace('-- step 1 --')
 
 if testData.getBooleanValue('USE_DO_STEPS'):
-	if testData.getBooleanValue('UNDEFINED_STEPS_TABLE'):
-		doSteps(undefinedSteps)
-	else:
-		stepsWithUndefinedStep = [ (1, step1),
-								   (2, undefinedStep)
-								 ]
-		doSteps(stepsWithUndefinedStep)
+    if testData.getBooleanValue('UNDEFINED_STEPS_TABLE'):
+        doSteps(undefinedSteps)
+    else:
+        stepsWithUndefinedStep = [ (1, step1),
+                                   (2, undefinedStep)
+                                 ]
+        doSteps(stepsWithUndefinedStep)
 else:
-	doStep(undefinedStep)
+    doStep(undefinedStep)

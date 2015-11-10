@@ -27,21 +27,21 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step Define a test script calling testAPI.stopTest(Status.FAIL, 'This test must fail.')
-	@expected Test is set to "Failed" with following reason:<p>
-			  <i>This test must fail.</i><p>
-			  Script call stack is reported.
-	"""
-	testAPI.stopTest(Status.FAIL, 'This test must fail.')
+    """
+    @step Define a test script calling testAPI.stopTest(Status.FAIL, 'This test must fail.')
+    @expected Test is set to "Failed" with following reason:<p>
+              <i>This test must fail.</i><p>
+              Script call stack is reported.
+    """
+    testAPI.stopTest(Status.FAIL, 'This test must fail.')
 
 def Step2():
-	"""
-	@step Call the verb throwQTasteDataException()
-	@expected This should not be executed.
-	"""
-	# this should not be executed
-	testAPI.getEngineTest().throwQTasteDataException()
+    """
+    @step Call the verb throwQTasteDataException()
+    @expected This should not be executed.
+    """
+    # this should not be executed
+    testAPI.getEngineTest().throwQTasteDataException()
 
 doStep(Step1)
 doStep(Step2)

@@ -41,5 +41,5 @@ def step1():
         testAPI.stopTest(Status.FAIL, "Test Failed: Test output is not as expected!")
 
     value = utility.getUserStringValue("Please insert the output value (e.g Hardware component measure) resulting in this test?", "<Default Value>")
- 
+
 doStep(step1)

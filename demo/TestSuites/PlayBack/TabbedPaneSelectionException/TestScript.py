@@ -36,7 +36,7 @@ def unselectTab():
         testAPI.stopTest(Status.FAIL, "Expected selected tab index : '-1' but got : '" + selectedIndex + "'")
 
     time.sleep(1)
-    
+
 def step1():
     """
     @step      Select a tab using the selection method and selection value defined in test data
@@ -55,7 +55,7 @@ def step1():
             javaguiMI.selectTab(component, testData.getIntValue("SELECTION_VALUE"))
         elif selectionMethod == "title":
             javaguiMI.selectTabTitled(component, selectionValue)
-        elif selectionMethod == "id":    
+        elif selectionMethod == "id":
             javaguiMI.selectTabId(component, selectionValue)
         else:
             testAPI.stopTest(Status.FAIL, "Invalid selection method (check your test data) !")

@@ -47,7 +47,7 @@ def step1():
     except:
         exception = True
         testAPI.stopTest(Status.FAIL, "Unexpected exception")
-    
+
     if not exception:
         testAPI.stopTest(Status.FAIL, "No exception")
 

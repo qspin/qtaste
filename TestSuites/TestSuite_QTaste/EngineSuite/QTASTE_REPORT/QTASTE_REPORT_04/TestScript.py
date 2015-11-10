@@ -27,13 +27,13 @@
 from qtaste import *
 
 def Step1():
-	"""
-	@step      Define a test script using the verb throwQTasteDataException()
-	@expected  Test is set to "Not available" with following reason:<p>
-			   <i>Invalid data.</i><p>
-			   Script call stack is reported.
-	"""
-	testAPI.getEngineTest().throwQTasteDataException()
+    """
+    @step      Define a test script using the verb throwQTasteDataException()
+    @expected  Test is set to "Not available" with following reason:<p>
+               <i>Invalid data.</i><p>
+               Script call stack is reported.
+    """
+    testAPI.getEngineTest().throwQTasteDataException()
 
 doStep(Step1)
 testAPI.stopTest(Status.FAIL, "This should not be executed.")
