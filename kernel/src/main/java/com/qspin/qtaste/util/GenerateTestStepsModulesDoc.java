@@ -60,7 +60,7 @@ public class GenerateTestStepsModulesDoc {
             interp = null;
         }
         catch (Exception e) {
-            System.err.println("Exception occurs executing PythonInterpreter:" + e.getMessage());
+            System.err.println("Exception occurs executing PythonInterpreter:" + e);
         }
     }
 

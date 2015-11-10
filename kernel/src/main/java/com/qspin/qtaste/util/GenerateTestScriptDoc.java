@@ -69,7 +69,7 @@ public class GenerateTestScriptDoc {
             interp.cleanup();
             interp = null;
         } catch (Exception e) {
-            System.err.println("Error executing PythonInterpreter " + e.getMessage());
+            System.err.println("Error executing PythonInterpreter: " + e);
         }
 
         File testScriptDocXML = new File(testDir + "/TestScript-doc.xml");
