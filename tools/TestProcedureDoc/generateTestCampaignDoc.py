@@ -202,8 +202,6 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
                     elif tag == "td":
                         et.SubElement(trElem, tag).text = ' ' # non-breakable space
             testStepsTable = et.tostring(testStepsTableHtmlTree, 'utf-8')
-            #convert the non breakable space in HTML format
-            testStepsTable = testStepsTable.replace(' ', '&nbsp;')
         if DUPLICATE_STEPS_PER_TEST_DATA_ROW:
             contentBeforeSteps = content[:testStepsTableMatch.start(0)]
             testDataContent = content[testStepsTableMatch.end(1):]
@@ -248,6 +246,8 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
             testDataSection = getTransformedTestDataSection(testDataTable, selectedRows)
             content = content[:testDataTableMatch.start(1)] + testDataSection + content[testDataTableMatch.end(1):]
         content = content.replace('</h2>', '</h2><h3>Testbeds</h3><p>' + testbedsText + '</p>', 1)
+        #convert the non breakable space in HTML format
+        content = content.replace(' ', '&nbsp;')
         content = HTML_HEADING_TAG_PATTERN.sub(lambda m: m.group(1) + str(level+int(m.group(2))-1) + '>', content)
         aggregatedDocFile.write(content)
         aggregatedDocFile.write('\n\n')
