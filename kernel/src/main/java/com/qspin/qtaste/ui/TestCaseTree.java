@@ -76,7 +76,6 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
@@ -93,6 +92,7 @@ import com.qspin.qtaste.ui.tools.TestSuiteRunDialog;
 import com.qspin.qtaste.util.DirectoryUtilities;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.service.PythonLibDocGeneratorService;
 
 @SuppressWarnings("serial")
 public class TestCaseTree extends JTree implements DragSourceListener,
@@ -364,7 +364,9 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 }
                 //  regenerate the doc if file date of script > file date of doc
                 PythonTestScript script = fn.getPythonTestScript();
-                boolean generateDoc =  testCasePane.isDocTabSelected() && !script.isDocSynchronized();
+
+                boolean isPythonLibDocumentationGenerated = PythonLibDocGeneratorService.INSTANCE.isFirstIterationCompleted();
+                boolean generateDoc =  testCasePane.isDocTabSelected() && !script.isDocSynchronized() && isPythonLibDocumentationGenerated;
 
                 if (generateDoc) {
                     testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -834,7 +836,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         @Override
         public boolean isEnabled() {
             FileNode fn = getSelectedFileNode();
-            return fn != null && fn.isTestcaseDir();
+            boolean isPythonLibDocumentationGenerated = PythonLibDocGeneratorService.INSTANCE.isFirstIterationCompleted();
+            return fn != null && fn.isTestcaseDir() && isPythonLibDocumentationGenerated;
         }
     }
 

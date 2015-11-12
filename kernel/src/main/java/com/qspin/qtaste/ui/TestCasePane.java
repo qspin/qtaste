@@ -35,7 +35,6 @@ import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -97,6 +96,7 @@ import com.qspin.qtaste.ui.xmleditor.TestRequirementEditor;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.ScriptCheckSyntaxValidator;
 import com.qspin.qtaste.util.ThreadManager;
+import com.qspin.qtaste.util.service.PythonLibDocGeneratorService;
 
 @SuppressWarnings("serial")
 public class TestCasePane extends JPanel implements TestScriptBreakpointListener, DumpPythonResultListener {
@@ -405,7 +405,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 if (tsPane != null) {
                     File tsFile = new File(tsPane.getFileName());
                     PythonTestScript pScript = new PythonTestScript(tsFile, getTestSuiteDirectory());
-                    if (pScript.isDocSynchronized()) {
+                    if (pScript.isDocSynchronized() || !PythonLibDocGeneratorService.INSTANCE.isFirstIterationCompleted()) {
                         return;
                     }
                     // re-generate the doc

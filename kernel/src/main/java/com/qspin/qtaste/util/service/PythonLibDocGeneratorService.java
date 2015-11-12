@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.util.GenerateTestScriptDoc;
+import com.qspin.qtaste.util.GenerateTestStepsModulesDoc;
 
 /**
  * Service class used to generate the python script documentation for pythonlib directories content.
@@ -22,6 +22,7 @@ public final class PythonLibDocGeneratorService extends Service {
 	public final static PythonLibDocGeneratorService INSTANCE = new PythonLibDocGeneratorService();
 	
 	private final static File ROOT_SCRIPT_DIRECTORY = new File(StaticConfiguration.DEFAULT_TESTSUITES_DIR);
+	private final static int ITERATION_TIME_DELAY_IN_SECONDS = 10;
 	
 	private PythonLibDocGeneratorService()
 	{
@@ -42,9 +43,16 @@ public final class PythonLibDocGeneratorService extends Service {
 	};
 	private final static Logger logger = Logger.getLogger(PythonLibDocGeneratorService.class);
 	
+	private boolean m_firstIterationCompleted = false;
+	
 	@Override
 	public String getName() {
 		return "Python Lib Documentation Service Generation";
+	}
+	
+	public boolean isFirstIterationCompleted()
+	{
+		return m_firstIterationCompleted;
 	}
 	
 	@Override
@@ -61,11 +69,11 @@ public final class PythonLibDocGeneratorService extends Service {
 			{
 				if (hasToGenerateDocumentation(script))
 				{
-					logger.trace(script.getName() + " documentation has to be updated!");
-					GenerateTestScriptDoc.generate(script.getAbsolutePath());
+					GenerateTestStepsModulesDoc.generate(script.getAbsolutePath());
 				}
 			}
-			Thread.sleep(10*1000);
+			m_firstIterationCompleted = true;
+			Thread.sleep(ITERATION_TIME_DELAY_IN_SECONDS * 1000);
 		}
 		catch(Exception ex)
 		{
