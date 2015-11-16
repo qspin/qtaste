@@ -23,8 +23,8 @@ package com.qspin.qtaste.ui;
 
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.Point;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -41,8 +41,8 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -50,31 +50,31 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JOptionPane;
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
-import javax.swing.JTree;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.BoxLayout;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeWillExpandListener;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
@@ -91,8 +91,8 @@ import com.qspin.qtaste.ui.tools.TestScriptCreation;
 import com.qspin.qtaste.ui.tools.TestSuiteRunDialog;
 import com.qspin.qtaste.util.DirectoryUtilities;
 import com.qspin.qtaste.util.FileUtilities;
+import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.service.PythonLibDocGeneratorService;
 
 @SuppressWarnings("serial")
 public class TestCaseTree extends JTree implements DragSourceListener,
@@ -365,19 +365,26 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 //  regenerate the doc if file date of script > file date of doc
                 PythonTestScript script = fn.getPythonTestScript();
 
-                boolean isPythonLibDocumentationGenerated = PythonLibDocGeneratorService.INSTANCE.isFirstIterationCompleted();
-                boolean generateDoc =  testCasePane.isDocTabSelected() && !script.isDocSynchronized() && isPythonLibDocumentationGenerated;
+                if( GeneratePythonlibDoc.hasAlreadyRunOneTime() )
+                {
+                	boolean generateDoc =  testCasePane.isDocTabSelected() && !script.isDocSynchronized();
 
-                if (generateDoc) {
-                    testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    script.generateDoc();
-                    // Generate the documentation
-                	setTestCaseDoc(script.getTestcaseDoc(), false);
-                    testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    if (generateDoc) {
+                        testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        script.generateDoc();
+                        // Generate the documentation
+                    	setTestCaseDoc(script.getTestcaseDoc(), false);
+                        testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    }
+                    else
+                    	// update the screen with the doc of the selected test script
+                    	setTestCaseDoc(script.getTestcaseDoc(), false);
                 }
                 else
-                	// update the screen with the doc of the selected test script
-                	setTestCaseDoc(script.getTestcaseDoc(), false);
+                {
+                	setTestCaseDoc(null, false);
+                }
+                
                 // Get the user preferences to display the testcase tab
                 GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
                 String testCaseTabOnSelect = "none"; // default
@@ -826,6 +833,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
             FileNode fn = getSelectedFileNode();
             if (fn==null) return;
             if (fn.getPythonTestScript()==null) return;
+            GeneratePythonlibDoc.generate();
             testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             File testcaseDoc = fn.getPythonTestScript().generateDoc();
             testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -836,8 +844,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         @Override
         public boolean isEnabled() {
             FileNode fn = getSelectedFileNode();
-            boolean isPythonLibDocumentationGenerated = PythonLibDocGeneratorService.INSTANCE.isFirstIterationCompleted();
-            return fn != null && fn.isTestcaseDir() && isPythonLibDocumentationGenerated;
+            return fn != null && fn.isTestcaseDir() && GeneratePythonlibDoc.hasAlreadyRunOneTime();
         }
     }
 

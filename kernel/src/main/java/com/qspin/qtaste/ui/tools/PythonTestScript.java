@@ -31,6 +31,7 @@ import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.util.FileUtilities;
+import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 public class PythonTestScript {
@@ -78,6 +79,7 @@ public class PythonTestScript {
 		return false;
 	}
 	public File generateDoc() {
+		GeneratePythonlibDoc.generate();
         File testcaseDoc = null;
         String xmlDocFilename = m_ScriptFileDir + "/" + StaticConfiguration.TEST_SCRIPT_DOC_XML_FILENAME;
         File xmlDocFile = new File(xmlDocFilename);

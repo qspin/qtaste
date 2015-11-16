@@ -62,7 +62,6 @@ import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
-import com.qspin.qtaste.ui.TestCasePane.UpdateButtons;
 import com.qspin.qtaste.ui.config.MainConfigFrame;
 import com.qspin.qtaste.ui.testcampaign.TestCampaignMainPanel;
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
@@ -71,9 +70,8 @@ import com.qspin.qtaste.ui.tools.WrappedToolTipUI;
 import com.qspin.qtaste.ui.util.QSpinTheme;
 import com.qspin.qtaste.ui.widget.FillLabelUI;
 import com.qspin.qtaste.util.Environment;
+import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.service.PythonLibDocGeneratorService;
-import com.qspin.qtaste.util.service.ServiceManager;
 
 /**
  *
@@ -101,32 +99,19 @@ public class MainPanel extends JFrame {
         super();
         setTitle(title);
         setUpFrame();
-        startServices();
+        //Start a first documentation generation of scripts contained in pythonlib directories. 
+        GeneratePythonlibDoc.generateAsynchronously();
         mTestSuiteDir = testSuiteDir;
         mNumberLoops = numberLoops;
         mLoopsInHour = loopsInHour;
     }
     
-    private void startServices()
-    {
-    	try
-    	{
-    		ServiceManager manager = ServiceManager.getInstance();
-    		manager.registerAndStartService(PythonLibDocGeneratorService.INSTANCE);
-    	}
-    	catch(Exception ex)
-    	{
-    		logger.error("Error while starting services : " + ex.getMessage(), ex);
-    	}
-    }
-
     private void setUpFrame() {
         setName(title);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(WindowEvent winEvt) {
                 // Perhaps ask user if they want to save any unsaved files first.
                 mTestCasePanel.closeAllTabs();
-                ServiceManager.getInstance().stopAllRegisteredServices();
                 System.exit(0);
             }
         });

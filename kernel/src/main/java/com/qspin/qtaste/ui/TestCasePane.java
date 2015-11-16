@@ -93,10 +93,10 @@ import com.qspin.qtaste.ui.tools.HTMLDocumentLoader;
 import com.qspin.qtaste.ui.tools.PythonTestScript;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.xmleditor.TestRequirementEditor;
+import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.ScriptCheckSyntaxValidator;
 import com.qspin.qtaste.util.ThreadManager;
-import com.qspin.qtaste.util.service.PythonLibDocGeneratorService;
 
 @SuppressWarnings("serial")
 public class TestCasePane extends JPanel implements TestScriptBreakpointListener, DumpPythonResultListener {
@@ -405,7 +405,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 if (tsPane != null) {
                     File tsFile = new File(tsPane.getFileName());
                     PythonTestScript pScript = new PythonTestScript(tsFile, getTestSuiteDirectory());
-                    if (pScript.isDocSynchronized() || !PythonLibDocGeneratorService.INSTANCE.isFirstIterationCompleted()) {
+                    if (pScript.isDocSynchronized() || !GeneratePythonlibDoc.hasAlreadyRunOneTime()) {
                         return;
                     }
                     // re-generate the doc
