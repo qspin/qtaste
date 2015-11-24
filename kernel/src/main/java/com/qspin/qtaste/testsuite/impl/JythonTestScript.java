@@ -1314,6 +1314,10 @@ public class JythonTestScript extends TestScript implements Executable {
         public boolean contains(String name) {
             return testData.contains(name);
         }
+
+        public int getRowId() {
+            return testData.getRowId();
+        }
     }
 
     /**
