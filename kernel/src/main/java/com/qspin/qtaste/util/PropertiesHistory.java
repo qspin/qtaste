@@ -96,7 +96,7 @@ public class PropertiesHistory {
                 list.add(new TimestampedValue(oldValue, 0));
             }
             if (list.getLast().value.equals(newValue)) {
-                logger.warn("Ignoring not-changed new value of " + component + " " + property + " property (" + newValue + ")");
+                logger.debug("Ignoring not-changed new value of " + component + " " + property + " property (" + newValue + ")");
                 return;
             }
         }
