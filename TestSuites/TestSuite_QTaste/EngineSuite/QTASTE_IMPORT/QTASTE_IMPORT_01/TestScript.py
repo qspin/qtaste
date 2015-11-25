@@ -1,6 +1,5 @@
 # encoding= utf-8
 
-#
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
 #    This file is part of QTaste framework.
@@ -31,7 +30,7 @@ from lib import *
 
 def Step2():
     """
-    @step Define a Python script containing the following a syntax error: <p>
+    @step Define a Python script&nbsp;containing the following a syntax error:
           if myValue eq True:
     @expected Test result is "Not available" with the following reason:<p>
               <i>Python syntax errorin file Testcase.py at line 18, column 20:

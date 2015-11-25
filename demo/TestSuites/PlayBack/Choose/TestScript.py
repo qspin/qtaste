@@ -16,7 +16,7 @@ subtitler = testAPI.getSubtitler()
 
 def step1():
     """
-    @step      Description of the actions done for this step
+    @step      Description of the actions&nbsp;done for this step
     @expected  Description of the expected result
     """
 
