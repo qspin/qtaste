@@ -143,7 +143,7 @@ WHITESPACE_TOKEN = (
 # Default encoding.  To override this for a module, put a "coding"
 # directive in your Python module (see PEP 263 for details).
 
-ENCODING = "iso-8859-1"
+ENCODING = "utf-8"
 
 ##
 # Known tags.  The parser generates warnings for tags that are not in
@@ -359,7 +359,7 @@ class HTMLTreeBuilder(HTMLParser):
     def __init__(self, encoding=None):
         self.__stack = []
         self.__builder = ET.TreeBuilder()
-        self.encoding = encoding or "iso-8859-1"
+        self.encoding = encoding or "utf-8"
         HTMLParser.__init__(self)
 
     ##
@@ -442,7 +442,8 @@ class HTMLTreeBuilder(HTMLParser):
             if 0 <= entity < 128:
                 self.__builder.data(chr(entity))
             else:
-                self.__builder.data(unichr(entity))
+                #self.__builder.data(unichr(entity))
+                self.__builder.data("&"+name+";")
         else:
             self.unknown_entityref(name)
 
@@ -1015,7 +1016,7 @@ def html_encode(text, pattern=_escape):
         return text
     text = pattern.sub(escape_entities, text)
     try:
-        return text.encode("ascii")
+        return text.encode("utf-8")
     except AttributeError:
         return text # 1.5.2
 

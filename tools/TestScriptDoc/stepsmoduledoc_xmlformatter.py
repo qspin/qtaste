@@ -20,6 +20,8 @@ class PythonDocGenerator:
 
     def __init__(self, options):
         self.encoding = options.get('encoding')
+        if not self.encoding:
+            self.encoding = 'utf_8'
         self.stepsTableDefPattern = re.compile('(\w+)\s*=\s*[\(\[]\s*(\(\s*[\'"]?\w+[\'"]?\s*,\s*\w+\s*\)(?:\s*,\s*\(\s*[\'"]?\w+[\'"]?\s*,\s*\w+\s*\))*)\s*[\)\]]')
 
     def save(self, module, filename):
