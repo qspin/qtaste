@@ -246,8 +246,6 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
             testDataSection = getTransformedTestDataSection(testDataTable, selectedRows)
             content = content[:testDataTableMatch.start(1)] + testDataSection + content[testDataTableMatch.end(1):]
         content = content.replace('</h2>', '</h2><h3>Testbeds</h3><p>' + testbedsText + '</p>', 1)
-        #convert the non breakable space in HTML format
-        content = content.replace(' ', '&#160;').replace('&#160;','&nbsp;')
         content = HTML_HEADING_TAG_PATTERN.sub(lambda m: m.group(1) + str(level+int(m.group(2))-1) + '>', content)
         aggregatedDocFile.write(content)
         aggregatedDocFile.write('\n\n')

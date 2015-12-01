@@ -347,8 +347,11 @@ class PythonDocGenerator:
 		if stepElement.text is not None and len(stepElement.text) > 0:
 			for key in htmlentitydefs.entitydefs:
 				if "&" + key + ";" in stepElement.text:
-					stepElement.text = stepElement.text.encode("utf-8")
+					stepElement.text = stepElement.text.encode(self.encoding)
 					stepElement.text = stepElement.text.replace("&" + key + ";", htmlentitydefs.entitydefs[key])
+			for c in stepElement.text:
+				if ord(c) > 160 and c != '&' and c != ';':
+					stepElement.text = stepElement.text.replace(c, "&#"+str(ord(c)) + ";")
 		for element in stepElement:
 			self._manageSpecialCharacters(element)
 

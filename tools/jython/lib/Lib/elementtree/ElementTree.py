@@ -800,11 +800,16 @@ def _escape_cdata(text, encoding=None, replace=string.replace):
     # escape character data
     try:
         if encoding:
-            try:
-                text = _encode(text, encoding)
-            except UnicodeError:
-                return _encode_entity(text)
+			for c in text:
+				if ord(c) > 127 and c not in ['&', '#', '<', '>']:
+					text = text.replace(c, "&#"+str(ord(c)) + ";")
+			try:
+				text = _encode(text, encoding)
+			except UnicodeError:
+				return _encode_entity(text)
+        text = replace(text, "&#", "!##!")
         text = replace(text, "&", "&amp;")
+        text = replace(text, "!##!", "&#")
         text = replace(text, "<", "&lt;")
         text = replace(text, ">", "&gt;")
         return text
