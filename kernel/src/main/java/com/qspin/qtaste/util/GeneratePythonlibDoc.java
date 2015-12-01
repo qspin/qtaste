@@ -94,10 +94,8 @@ public class GeneratePythonlibDoc {
 		{
         	IS_RUNNING = true;
 			List<File> pythonLibDirectories = findPythonLibDirectories(ROOT_SCRIPT_DIRECTORY);
-			System.out.println(pythonLibDirectories.size() + " directory(ies) found");
 
 			List<File> pythonScriptFiles = findPythonScripts(pythonLibDirectories);
-			System.out.println(pythonScriptFiles.size() + " script(s) found");
 			for (File script : pythonScriptFiles)
 			{
 				if (hasToGenerateDocumentation(script))
