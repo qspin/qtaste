@@ -137,7 +137,6 @@ class PythonDocGenerator:
         self._addTestRequirement(testScriptFileName, testScript)
         tree = et.ElementTree(testScript)
         self._manageSpecialCharacters(tree._root)
-        #dump(tree._root)
         file = open(filename, 'wb')
         tree.write(file, self.encoding)
         file.close()
@@ -431,16 +430,3 @@ class PythonDocGenerator:
         version = VersionControl.getInstance().getTestApiVersion(os.path.dirname(testScriptFileName))
         rootLogger.setLevel(rootLevel)
         return version
-
-def dump(module, lvl = 0):
-	indent = ""
-	i = 0
-	while i < lvl:
-		indent = indent + "    "
-		i = i + 1
-	print indent + "<"+module.tag+">"
-	if module.text is not None:
-		print indent + "    " + str(module.text.encode("utf-8"))
-	for element in module:
-		dump(element, lvl+1)
-	print indent + "</"+module.tag+">"
