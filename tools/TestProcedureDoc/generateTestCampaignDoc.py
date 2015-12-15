@@ -202,7 +202,6 @@ def aggregateTestCaseDoc(testCaseName, testCaseDir, selectedRows, selectedRowsFo
                     elif tag == "td":
                         et.SubElement(trElem, tag).text = ' ' # non-breakable space
             testStepsTable = et.tostring(testStepsTableHtmlTree, 'utf-8')
-            print "==> " + testStepsTable
         if DUPLICATE_STEPS_PER_TEST_DATA_ROW:
             contentBeforeSteps = content[:testStepsTableMatch.start(0)]
             testDataContent = content[testStepsTableMatch.end(1):]
