@@ -654,18 +654,18 @@ class ElementTree:
         if not hasattr(file, "write"):
             file = open(file, "wb")
         if not encoding:
-            encoding = "utf-8"
+            encoding = "us-ascii"
         elif encoding != "utf-8" and encoding != "us-ascii":
-            file.write("<?xml version='1.0' encoding='%s'?>\n" % encoding.encode(encoding))
+            file.write("<?xml version='1.0' encoding='%s'?>\n" % encoding)
         self._write(file, self._root, encoding, {})
 
     def _write(self, file, node, encoding, namespaces):
         # write XML to file
         tag = node.tag
         if tag is Comment:
-            file.write(("<!-- %s -->" % _escape_cdata(node.text, encoding)).encode(encoding))
+            file.write("<!-- %s -->" % _escape_cdata(node.text, encoding))
         elif tag is ProcessingInstruction:
-            file.write(("<?%s?>" % _escape_cdata(node.text, encoding)).encode(encoding))
+            file.write("<?%s?>" % _escape_cdata(node.text, encoding))
         else:
             items = node.items()
             xmlns_items = [] # new namespaces in this scope
@@ -675,7 +675,7 @@ class ElementTree:
                     if xmlns: xmlns_items.append(xmlns)
             except TypeError:
                 _raise_serialization_error(tag)
-            file.write(("<" + _encode(tag, encoding)).encode(encoding))
+            file.write("<" + _encode(tag, encoding))
             if items or xmlns_items:
                 items.sort() # lexical order
                 for k, v in items:
@@ -691,24 +691,24 @@ class ElementTree:
                             if xmlns: xmlns_items.append(xmlns)
                     except TypeError:
                         _raise_serialization_error(v)
-                    file.write((" %s=\"%s\"" % (_encode(k, encoding),
-                                               _escape_attrib(v, encoding))).encode(encoding))
+                    file.write(" %s=\"%s\"" % (_encode(k, encoding),
+                                               _escape_attrib(v, encoding)))
                 for k, v in xmlns_items:
-                    file.write((" %s=\"%s\"" % (_encode(k, encoding),
-                                               _escape_attrib(v, encoding))).encode(encoding))
+                    file.write(" %s=\"%s\"" % (_encode(k, encoding),
+                                               _escape_attrib(v, encoding)))
             if node.text or len(node):
-                file.write(">".encode(encoding))
+                file.write(">")
                 if node.text:
-                    file.write(_escape_cdata(node.text, encoding).encode(encoding))
+                    file.write(_escape_cdata(node.text, encoding))
                 for n in node:
                     self._write(file, n, encoding, namespaces)
-                file.write(("</" + _encode(tag, encoding) + ">").encode(encoding))
+                file.write("</" + _encode(tag, encoding) + ">")
             else:
-                file.write(" />".encode(encoding))
+                file.write(" />")
             for k, v in xmlns_items:
                 del namespaces[v]
         if node.tail:
-            file.write(_escape_cdata(node.tail, encoding).encode(encoding))
+            file.write(_escape_cdata(node.tail, encoding))
 
 # --------------------------------------------------------------------
 # helpers
@@ -745,8 +745,6 @@ def dump(elem):
 
 def _encode(s, encoding):
     try:
-	if type(s).__name__ == 'str':
-	  return s
         return s.encode(encoding)
     except AttributeError:
         return s # 1.5.2: assume the string uses the right encoding
@@ -800,16 +798,11 @@ def _escape_cdata(text, encoding=None, replace=string.replace):
     # escape character data
     try:
         if encoding:
-			for c in text:
-				if ord(c) > 127 and c not in ['&', '#', '<', '>']:
-					text = text.replace(c, "&#"+str(ord(c)) + ";")
-			try:
-				text = _encode(text, encoding)
-			except UnicodeError:
-				return _encode_entity(text)
-        text = replace(text, "&#", "!##!")
+            try:
+                text = _encode(text, encoding)
+            except UnicodeError:
+                return _encode_entity(text)
         text = replace(text, "&", "&amp;")
-        text = replace(text, "!##!", "&#")
         text = replace(text, "<", "&lt;")
         text = replace(text, ">", "&gt;")
         return text

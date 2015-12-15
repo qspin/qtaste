@@ -4,9 +4,8 @@
 # If testsuite_dir is defined, a TestSuite-doc.xml file will be generated in this directory
 ##
 
-import string, os, re, codecs
-import java.lang.System
-import htmlentitydefs
+import string, os, re, codecs, java
+
 try:
     import xml.etree.ElementTree as et
     from xml.etree.ElementTree import XMLTreeBuilder as TreeBuilder
@@ -136,7 +135,6 @@ class PythonDocGenerator:
         self._addTestData(testScriptFileName, testScript)
         self._addTestRequirement(testScriptFileName, testScript)
         tree = et.ElementTree(testScript)
-        self._manageSpecialCharacters(tree._root)
         file = open(filename, 'wb')
         tree.write(file, self.encoding)
         file.close()
@@ -341,18 +339,6 @@ class PythonDocGenerator:
         stepElement.append(description)
         if not expected is None:
             stepElement.append(expected)
-        
-    def _manageSpecialCharacters(self, stepElement):			
-		if stepElement.text is not None and len(stepElement.text) > 0:
-			for key in htmlentitydefs.entitydefs:
-				if "&" + key + ";" in stepElement.text:
-					stepElement.text = stepElement.text.encode(self.encoding)
-					stepElement.text = stepElement.text.replace("&" + key + ";", htmlentitydefs.entitydefs[key])
-			for c in stepElement.text:
-				if ord(c) > 160 and c != '&' and c != ';':
-					stepElement.text = stepElement.text.replace(c, "&#"+str(ord(c)) + ";")
-		for element in stepElement:
-			self._manageSpecialCharacters(element)
 
     # add a undefined step to steps with given id, and name
     def _addUndefinedStep(self, steps, stepId, stepName):
