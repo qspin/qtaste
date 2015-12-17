@@ -5,7 +5,7 @@ Provides access to the test data.
 <P>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY=""> 
 <TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Summary</B></FONT></TH></TR> 
-<TR><TD WIDTH="1%"><CODE><B><A HREF="#getRowId()">getRowId()</A></B></CODE></TD><TD>Gets the test data row index.</TD> 
+<TR><TD WIDTH="1%"><CODE><B><A HREF="#getRowId()">getRowId()</A></B></CODE></TD><TD>Gets the test data row id.</TD> 
 <TR><TD WIDTH="1%"><CODE><B><A HREF="#getValue(String)">getValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as a string.</TD> 
 <TR><TD WIDTH="1%"><CODE><B><A HREF="#getIntValue(String)">getIntValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as an integer.</TD> 
 <TR><TD WIDTH="1%"><CODE><B><A HREF="#getDoubleValue(String)">getDoubleValue(String)</A></B></CODE></TD><TD>Gets the value of the test data with given name, as a double.</TD> 
@@ -26,11 +26,11 @@ Provides access to the test data.
 <TR BGCOLOR="#CCCCFF"><TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2"><B>Methods Detail</B></FONT></TH></TR> 
 </TABLE> 
 <A NAME="getRowId()"> <H3>getRowId</H3></A> 
-<PRE>int <B>getValue</B>(&nbsp;)</PRE> 
-<DL><DD>Gets the test data row index.
-<P>If test data doesn't exist, terminates the script execution and sets test result to "Not available".<P><DD><DL> 
+<PRE>int <B>getRowId</B>()</PRE>
+<DL><DD>Gets the test data row id.
+<P><DD><DL>
 <DT><B>Returns:</B></DT> 
-<DD>the index of the current test data row</DD> 
+<DD>the id of the current test data row, starting at 1 for first row</DD>
 </DL></DD></DL> 
 <HR> 
 <A NAME="getValue(String)"> <H3>getValue</H3></A> 
