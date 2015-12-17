@@ -400,9 +400,9 @@ class PythonDocGenerator:
             root = requirementFile.getroot()
             for requirement in root.getiterator('REQ'):
                 xmlReq = et.SubElement(testRequirement, 'REQ')
-                et.SubElement(xmlReq, 'ID').text = requirement.get('id').encode('utf-8')
+                et.SubElement(xmlReq, 'ID').text = requirement.get('id')
                 for desc in requirement.getiterator('REQ_DESCRIPTION'):
-                    et.SubElement(xmlReq, 'DESCRIPTION').text = desc.text.encode('utf-8')
+                    et.SubElement(xmlReq, 'DESCRIPTION').text = desc.text
         except IOError:
             pass
 
