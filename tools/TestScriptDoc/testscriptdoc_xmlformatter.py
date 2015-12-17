@@ -368,12 +368,12 @@ class PythonDocGenerator:
         testData = et.SubElement(testScript, 'testdata')
         dataFileName = os.path.dirname(testScriptFileName) + os.sep + 'TestData.csv'
         try:
-            dataFile = open(dataFileName)
+            dataFile = open(dataFileName, 'rb')
             dataNames = dataFile.readline().rstrip('\r\n').split(';')
             testDataNames = et.SubElement(testData, 'names')
             for dataName in dataNames:
                 if dataName:
-                    et.SubElement(testDataNames, 'name').text = dataName
+                    et.SubElement(testDataNames, 'name').text = unicode(dataName, 'utf-8')
             row = 1
             for dataLine in dataFile:
                 if not dataLine.startswith('#'):
@@ -385,7 +385,7 @@ class PythonDocGenerator:
                         testDataValues = et.SubElement(testData, 'row', {'id':str(row)})
                         for dataName, dataValue in zip(dataNames, dataValues):
                             if dataName:
-                                et.SubElement(testDataValues, 'value').text = dataValue
+                                et.SubElement(testDataValues, 'value').text = unicode(dataValue, 'utf-8')
                 row = row + 1
             dataFile.close()
         except IOError:
