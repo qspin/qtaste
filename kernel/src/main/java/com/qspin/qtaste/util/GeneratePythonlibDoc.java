@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
@@ -32,8 +34,11 @@ import com.qspin.qtaste.config.StaticConfiguration;
  * @author simjan
  */
 public class GeneratePythonlibDoc {
+
+        private static final Logger LOGGER = Logger.getLogger(GeneratePythonlibDoc.class);
 	
 	private final static File ROOT_SCRIPT_DIRECTORY = new File(StaticConfiguration.DEFAULT_TESTSUITES_DIR);
+
 	/**
 	 * File filter which accept only directories.
 	 */
@@ -89,7 +94,7 @@ public class GeneratePythonlibDoc {
 	 * Generates the documentation of scripts located in a pythonlib directory.
 	 */
     public static synchronized void generate() {
-        System.out.println("Generating documentation of test documentation included in pythonlib directories.");
+        LOGGER.debug("Generating documentation of test documentation included in pythonlib directories.");
         try
 		{
         	IS_RUNNING = true;
