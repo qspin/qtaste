@@ -328,7 +328,7 @@ public interface JavaGUI {
 
    /**
     * Return the full name of the {@link Component} identified by the ID.</br>
-	* Can be used on all {@link Component}. (see {@link Component#getName()()})
+	* Can be used on all {@link Component}. (see {@link Component#getName()})
     * @param name the {@link Component} ID.
     * @return the name of the component
     * @throws QTasteTestFailException
