@@ -502,8 +502,8 @@ class JavaProcess(ControlAction):
             return " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
         return ""
 
-    def getJavaGUIVar(self):
-        if self.useJavaGUI:
+    def getJavaGUIFXVar(self):
+        if self.useJavaGUIFX:
             return " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-fx-deploy.jar"
         return ""
 
@@ -516,6 +516,8 @@ class JavaProcess(ControlAction):
             vmArgs += " " + self.getJacocoVar()
         if self.useJavaGUI:
             vmArgs += " " + self.getJavaGUIVar()
+        if self.useJavaGUIFX:
+            vmArgs += " " + self.getJavaGUIFXVar()
             
         if _OS.getType() != _OS.Type.WINDOWS:
             shellScriptArguments = []
