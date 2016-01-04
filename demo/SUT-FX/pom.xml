@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- Note: to build SUT jar, execute "mvn validate assembly:assembly" or
+	<!-- Note: to build SUT jar, execute "mvn validate assembly:assembly" or 
 		"mvn install assembly:single" -->
 
-    <version>0.0.1</version>
-    <groupId>com.qspin.qtaste</groupId>
+	<version>0.0.1</version>
+	<groupId>com.qspin.qtaste</groupId>
 	<artifactId>qtaste-demo-sut</artifactId>
 	<packaging>jar</packaging>
 	<name>QTaste Test SUT for QTaste Demo</name>
@@ -15,32 +15,32 @@
 	<build>
 		<finalName>qtaste-demo-sut-fx</finalName>
 		<plugins>
-		  <plugin>
-		    <artifactId>maven-assembly-plugin</artifactId>
-		    <version>2.5</version>
-		    <configuration>
-		      <archive>
-		        <manifest>
-		          <mainClass>com.qspin.qtaste.sutfxdemo.Main</mainClass>
-		        </manifest>
-		      </archive>
-		      <descriptorRefs>
-		        <descriptorRef>jar-with-dependencies</descriptorRef>
-		      </descriptorRefs>
-		    </configuration>
-		  </plugin>
-		    <plugin>
-		      <groupId>org.apache.maven.plugins</groupId>
-		      <artifactId>maven-compiler-plugin</artifactId>
-		      <version>2.3.2</version>
-		      <configuration>
-			<source>1.8</source>
-			  <target>1.8</target>
-			  <excludes>
-			   <exclude>**/package-info.java</exclude>
-			  </excludes>
-		      </configuration>
-		</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.qspin.qtaste.sutfxdemo.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<excludes>
+						<exclude>**/package-info.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
