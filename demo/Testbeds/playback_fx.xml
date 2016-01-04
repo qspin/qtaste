@@ -4,7 +4,7 @@
 	
 	<testapi_implementation>		
 		<import>com.qspin.qtaste.testapi.impl.generic</import>
-		<import>com.qspin.qtaste.javaguifx.testapi.api</import>
+		<import>com.qspin.qtaste.javaguifx.testapi.impl</import>
 		<import>com.qspin.qtaste.testapi.impl.demo</import>
 	</testapi_implementation>
 
