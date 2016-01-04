@@ -11,7 +11,7 @@ from qtaste import *
 import time
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
-javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
+javaguiMI = testAPI.getJavaGUIFX(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
 subtitler = testAPI.getSubtitler()
 
 def step1():
