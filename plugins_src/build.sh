@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PLUGINS="javagui"
+PLUGINS="javagui sikuli"
 
 targetDir=../plugins/SUT
 if [ ! -d "$targetDir" ]

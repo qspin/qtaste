@@ -1,0 +1,43 @@
+<assembly>
+	<id>deploy</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<outputDirectory/>
+			<directory>target/classes</directory>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory/>
+			<unpack>true</unpack>
+			<includes>
+				<include>com.qspin.qtaste:qtaste-kernel</include>
+			</includes>
+			<unpackOptions>
+				<includes>
+					<include>com/qspin/qtaste/testsuite/QTasteException*</include>
+					<include>com/qspin/qtaste/testsuite/QTasteTestFailException*</include>
+					<include>com/qspin/qtaste/tcom/jmx/impl/JMXAgent*</include>
+					<include>com/qspin/qtaste/util/Log4jLoggerFactory*</include>
+				</includes>
+			</unpackOptions>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory/>
+			<unpack>true</unpack>
+			<includes>
+				<include>log4j:log4j</include>
+				<include>commons-cli:commons-cli</include>
+				<include>org.apache.commons:commons-exec</include>
+				<include>com.sikulix:sikulixapi</include>
+				<include>com.sikulix:sikulixlibslux</include>
+				<include>com.sikulix:sikulixlibswin</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+</assembly>

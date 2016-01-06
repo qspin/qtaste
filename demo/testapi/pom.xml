@@ -143,6 +143,11 @@
             <artifactId>javagui</artifactId>
             <version>2.3.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.qspin.qtaste.plugin</groupId>
+            <artifactId>sikuli</artifactId>
+            <version>2.3.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
