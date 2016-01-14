@@ -8,7 +8,7 @@
     - call "<PATH_TO_IZPACK>/compile install.xml"
 -->
 
-<installation version="1.0">
+<installation version="5.0">
 
     <!--
         The info section.

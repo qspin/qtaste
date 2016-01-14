@@ -39,7 +39,7 @@
        <plugin>
          <groupId>org.codehaus.izpack</groupId>
          <artifactId>izpack-maven-plugin</artifactId>
-         <version>5.0.0-beta10</version>
+         <version>5.0.0-rc2</version>
          <extensions>true</extensions>
          <executions>
             <execution>
