@@ -1,3 +1,3 @@
 COMMENT
-Set local variable. Expected test result: Passed
-Check that local variable is not set. Expected test result: Passed
+First run, will set variable. Expected test result: Passed
+Second run, will check that variable didn't persist. Expected test result: Passed

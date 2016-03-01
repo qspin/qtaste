@@ -20,7 +20,7 @@
 ##
 # QTaste scripting language test: Check unpersistence of variables.
 # <p>
-# The goal of this test case is to verify that variables defined in the execution of a test script are not kept upon execution of further scripts.
+# The goal of this test case is to verify that variables defined in the execution of a test script are not kept upon execution of further tests.
 # <p>
 # In a first run (row 1 of CSV file), the test will set a variable to some value, in a second run (row 2 of CSV file), the test will check that the variable is not defined.
 # @preparation None
@@ -28,33 +28,32 @@
 
 from qtaste import *
 
-def Step1():
+def step1():
     """
     @step Check that variable myVariable is not defined
-    @expected The check is successful
+    @expected Variable myVariable is not defined
     """
     try:
         myVariable
     except NameError:
         pass
     else:
-        testAPI.stopTest(Status.FAIL, "Variable is persistent.")
+        testAPI.stopTest(Status.FAIL, "Variable myVariable is already defined.")
 
-def Step2():
+def step2():
     """
-    @step Define variable myVariable with value 5
-    @expected None
+    @step Define variable myVariable with value "some value"
+    @expected Variable myVariable is defined
     """
-    pass
+    global myVariable
+    myVariable = "some value"
 
-def Step3():
-    """
-    @step Repeat step1 and step 2 for a second row of test data
-    @expected Test result is "Passed"
-    """
-    pass
+    # check that myVariable is defined
+    try:
+        myVariable
+    except NameError:
+        testAPI.stopTest(Status.FAIL, "Variable myVariable is not defined")
 
-doStep(Step1)
-myVariable = 5
-doStep(Step2)
-doStep(Step3)
+
+doStep(step1)
+doStep(step2)
