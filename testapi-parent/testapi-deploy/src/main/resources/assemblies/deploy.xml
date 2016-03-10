@@ -21,10 +21,10 @@
         <exclude>commons-logging:commons-logging</exclude>
         <exclude>commons-net:commons-net</exclude>
         <exclude>javax.scripting:jython-engine</exclude>
-        <exclude>jfree:jcommon</exclude>
-        <exclude>jfree:jfreechart</exclude>
-        <exclude>com.jgoodies:forms</exclude>
-        <exclude>de.sciss:jsyntaxpane</exclude>
+        <exclude>org.jfree:jcommon</exclude>
+        <exclude>org.jfree:jfreechart</exclude>
+        <exclude>com.jgoodies:jgoodies-forms</exclude>
+        <exclude>de.sciss:syntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
         <exclude>org.python:jython</exclude>
         <exclude>xalan:xalan</exclude>

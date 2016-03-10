@@ -53,10 +53,10 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
-import jsyntaxpane.SyntaxDocument;
-import jsyntaxpane.actions.ActionUtils;
-import jsyntaxpane.components.SyntaxComponent;
-import jsyntaxpane.util.Configuration;
+import de.sciss.syntaxpane.SyntaxDocument;
+import de.sciss.syntaxpane.actions.ActionUtils;
+import de.sciss.syntaxpane.components.SyntaxComponent;
+import de.sciss.syntaxpane.util.Configuration;
 
 import com.qspin.qtaste.debug.BreakPointScript;
 import com.qspin.qtaste.debug.Breakpoint;

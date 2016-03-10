@@ -26,11 +26,11 @@ import java.util.regex.Pattern;
 
 import javax.swing.text.JTextComponent;
 
-import jsyntaxpane.SyntaxDocument;
-import jsyntaxpane.Token;
-import jsyntaxpane.actions.ActionUtils;
-import jsyntaxpane.actions.DefaultSyntaxAction;
-import jsyntaxpane.util.JarServiceProvider;
+import de.sciss.syntaxpane.SyntaxDocument;
+import de.sciss.syntaxpane.Token;
+import de.sciss.syntaxpane.actions.ActionUtils;
+import de.sciss.syntaxpane.actions.DefaultSyntaxAction;
+import de.sciss.syntaxpane.util.JarServiceProvider;
 
 /**
 * IndentAction is used to replace Tabs with spaces. If there is selected

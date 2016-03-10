@@ -18,6 +18,16 @@ along with QTaste. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.qspin.qtaste.ui.jedit;
 
+import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.debug.BreakPointScript;
+import com.qspin.qtaste.testsuite.impl.JythonTestScript;
+import com.qspin.qtaste.ui.TestCasePane;
+import com.qspin.qtaste.ui.tools.FileNode;
+import com.qspin.qtaste.ui.tools.FileSearch;
+import com.qspin.qtaste.util.Log4jLoggerFactory;
+import de.sciss.syntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.SyntaxDocument;
+import de.sciss.syntaxpane.syntaxkits.PythonSyntaxKit;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -29,11 +39,9 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -45,31 +53,18 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
 import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.AttributeSet;
-
-import jsyntaxpane.DefaultSyntaxKit;
-import jsyntaxpane.SyntaxDocument;
-import jsyntaxpane.syntaxkits.PythonSyntaxKit;
-
 import org.apache.log4j.Logger;
-
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.debug.BreakPointScript;
-import com.qspin.qtaste.testsuite.impl.JythonTestScript;
-import com.qspin.qtaste.ui.TestCasePane;
-import com.qspin.qtaste.ui.tools.FileNode;
-import com.qspin.qtaste.ui.tools.FileSearch;
-import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  *
@@ -277,7 +272,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
     public void init(String contentType) {
         setContentType(contentType);
         DefaultSyntaxKit kit = (DefaultSyntaxKit) getEditorKit();
-        kit.deinstallComponent(this, "jsyntaxpane.components.LineNumbersRuler");
+        kit.deinstallComponent(this, "de.sciss.syntaxpane.components.LineNumbersRuler");
         kit.installComponent(this, "com.qspin.qtaste.ui.jedit.LineNumberPanel");
         installAdditionalPopup();
         setFont(new Font("monospaced", Font.PLAIN, 12));

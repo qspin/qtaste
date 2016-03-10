@@ -22,11 +22,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.text.JTextComponent;
 
-import jsyntaxpane.SyntaxDocument;
-import jsyntaxpane.Token;
-import jsyntaxpane.TokenType;
-import jsyntaxpane.actions.ActionUtils;
-import jsyntaxpane.actions.DefaultSyntaxAction;
+import de.sciss.syntaxpane.SyntaxDocument;
+import de.sciss.syntaxpane.Token;
+import de.sciss.syntaxpane.TokenType;
+import de.sciss.syntaxpane.actions.ActionUtils;
+import de.sciss.syntaxpane.actions.DefaultSyntaxAction;
 
 import org.apache.log4j.Logger;
 
