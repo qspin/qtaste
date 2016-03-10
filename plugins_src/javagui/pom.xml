@@ -105,10 +105,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
         </dependency>

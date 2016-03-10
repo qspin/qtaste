@@ -99,15 +99,12 @@
                         <exclude>com.qspin.qtaste:qtaste-kernel</exclude>
                         <exclude>commons-collections:commons-collections</exclude>
                         <exclude>commons-configuration:commons-configuration</exclude>
-                        <exclude>commons-digester:commons-digester</exclude>
-                        <exclude>commons-beanutils:commons-beanutils</exclude>
                         <exclude>commons-lang:commons-lang</exclude>
                         <exclude>commons-logging:commons-logging</exclude>
                         <exclude>commons-net:commons-net</exclude>
                         <exclude>javax.scripting:jython-engine</exclude>
                         <exclude>jfree:jfreechart</exclude>
                         <exclude>jfree:jcommon</exclude>
-                        <exclude>com.jgoodies:bindings</exclude>
                         <exclude>com.jgoodies:forms</exclude>
                         <exclude>de.sciss:jsyntaxpane</exclude>
                         <exclude>log4j:log4j</exclude>
