@@ -24,6 +24,7 @@
         <exclude>org.jfree:jcommon</exclude>
         <exclude>org.jfree:jfreechart</exclude>
         <exclude>com.jgoodies:jgoodies-forms</exclude>
+        <exclude>com.jgoodies:jgoodies-common</exclude>
         <exclude>de.sciss:syntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
         <exclude>org.python:jython</exclude>
