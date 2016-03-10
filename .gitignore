@@ -10,6 +10,7 @@
 /tools/jython/lib/Lib/**/*.class
 /tools/TestProcedureDoc/*.class
 /tools/TestScriptDoc/*.class
+/release.properties
 .idea
 target
 Version.txt
