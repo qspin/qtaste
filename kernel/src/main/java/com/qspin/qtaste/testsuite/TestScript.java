@@ -24,15 +24,6 @@
  */
 package com.qspin.qtaste.testsuite;
 
-import java.io.File;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.JOptionPane;
-
-import org.apache.log4j.Logger;
-
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.datacollection.collection.CacheImpl;
 import com.qspin.qtaste.kernel.engine.TestEngine;
@@ -41,7 +32,14 @@ import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResultImpl;
 import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
+import com.qspin.qtaste.util.Environment;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import java.io.File;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -172,7 +170,12 @@ public abstract class TestScript implements Executable {
 
                     // exit QTaste if test thread couldn't be stopped, because we are in an unstable state
                     if (!taskThreadTerminated) {
-                        JOptionPane.showMessageDialog(null, "Couldn't stop test thread!\nQTaste will now exit because system state is unstable.", "Fatal error", JOptionPane.ERROR_MESSAGE);
+                        // show error pop-up if GUI is started
+                        if (Environment.getEnvironment().getMainFrame() != null) {
+                            JOptionPane.showMessageDialog(null,
+                                  "Couldn't stop test thread!\nQTaste will now exit because system state is unstable.",
+                                  "Fatal error", JOptionPane.ERROR_MESSAGE);
+                        }
                         TestEngine.shutdown();
                         System.exit(1);
                     }
