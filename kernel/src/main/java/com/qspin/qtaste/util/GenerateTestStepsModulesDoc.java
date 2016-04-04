@@ -22,6 +22,7 @@ package com.qspin.qtaste.util;
 import com.qspin.qtaste.config.StaticConfiguration;
 import java.io.StringWriter;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.python.util.PythonInterpreter;
 
 /**
@@ -29,9 +30,11 @@ import org.python.util.PythonInterpreter;
  * @author lvboque
  */
 public class GenerateTestStepsModulesDoc {
-   
+
+    private static Logger logger = Log4jLoggerFactory.getLogger(GenerateTestStepsModulesDoc.class);
+
     public static void generate(String directory) {
-        System.out.println("Generating Test steps module XML doc...");
+        logger.debug("Generating Test steps module XML doc...");
       
         try {
             
@@ -81,6 +84,5 @@ public class GenerateTestStepsModulesDoc {
             default:
                 displayUsage();
         }
-
     }
 }
