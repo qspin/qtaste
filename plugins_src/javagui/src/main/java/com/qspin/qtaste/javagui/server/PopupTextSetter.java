@@ -39,7 +39,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
 
 	/**
 	 * Commander which sets a value in the input field of a popup.
-	 * @param INTEGER - the timeout value; OBJECT - with the value to insert. The toString method will be used on the object.
+	 * @param timeout the timeout value; OBJECT - with the value to insert. The toString method will be used on the object.
 	 * @return true if the command is successfully performed.
 	 * @throws QTasteException
 	 */
