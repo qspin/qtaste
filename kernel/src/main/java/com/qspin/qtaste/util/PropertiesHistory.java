@@ -208,7 +208,7 @@ public class PropertiesHistory {
      * @param propertyValueOrTransition the property value or transition to check (case insensitive)
      *           <dl>
      *           <dd>Format: "<code><i>property</i>:</code>[<code>[</code>]<code><i>expected_value</i></code>[<code>]</code>]" or
-     *                       "<code><i>property</i>:</code>[<code>[</code>]<code><i>initial_value</i>-><i>final_value</i></code>[<code>]</code>]"
+     *                       "<code><i>property</i>:</code>[<code>[</code>]<code><i>initial_value</i>-&gt;<i>final_value</i></code>[<code>]</code>]"
      *           <dd>beginning <code>[</code> means that the expected or initial value must be the first one in the current values history
      *           <dd>ending <code>]</code> means that the expected or final value must be the last one in the current values history
      *           </dl>

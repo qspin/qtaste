@@ -33,14 +33,14 @@ public interface Process extends MultipleInstancesComponent {
 
 	/**
 	 * Defined the maximal number of line saved for the standard output.
-	 * Negative value -> no limit; 0 -> save nothing; positive value -> the new limit. 
+	 * Negative value: no limit; 0: save nothing; positive value: the new limit. 
 	 * @param pLimit The number of line to save.
 	 */
 	void setStdOutLimit(int pLimit);
 
 	/**
 	 * Defined the maximal number of line saved for the standard error output.
-	 * Negative value -> no limit; 0 -> save nothing; positive value -> the new limit. 
+	 * Negative value: no limit; 0: save nothing; positive value: the new limit. 
 	 * @param pLimit The number of line to save.
 	 */
 	void setStdErrLimit(int pLimit);

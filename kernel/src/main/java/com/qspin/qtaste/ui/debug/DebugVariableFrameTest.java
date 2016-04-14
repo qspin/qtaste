@@ -40,13 +40,7 @@ import com.qspin.qtaste.ui.util.QSpinTheme;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 @SuppressWarnings("serial")
-public class DebugVariableFrameTest extends JFrame{
-
-
-	/**
-	 *
-	 * @author vdubois
-	 */
+public class DebugVariableFrameTest extends JFrame {
 
 	    protected static Logger logger = Log4jLoggerFactory.getLogger(DebugVariableFrameTest.class);
 	    protected String title = "QSpin Tailored Automated System Test Environment - DebugVariableFrameTest ";

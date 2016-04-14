@@ -79,8 +79,8 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
 	}
 	
 	/**
-	 * Searches the process'identifier of the current process. If none found, return -1.
-	 * <br/> Only available for Unix process.
+	 * Searches the process'identifier of the current process. If none found, return -1.<br>
+	 * Only available for Unix process.
 	 * @return the process'identifier or -1 if none found.
 	 */
 	protected synchronized int searchPid()

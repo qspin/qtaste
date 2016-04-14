@@ -86,10 +86,8 @@ public class XMLFile {
     }
 
     /**
-     * Return a list of the column names of a XML file
+     * Return a list of the column names read from the XML file
      * @return a list of the column names read from the XML file
-     * @throws java.io.FileNotFoundException If the XML file is not found
-     * @throws java.io.IOException If an error occurs while reading the XML File
      */
     public List<String> getColumnNames() {
         return COLUMN_NAMES;
@@ -97,11 +95,11 @@ public class XMLFile {
 
     private void parseXMLFile() throws IOException, SAXException, ParserConfigurationException {
         if (!alreadyParsed) {
-        	XMLHandler xmlParser = new XMLHandler();
-			SAXParserFactory fabrique = SAXParserFactory.newInstance();
-			SAXParser parseur = fabrique.newSAXParser();
-			parseur.parse(xmlFile, xmlParser);
-			dataSet = xmlParser.getDecodedRequirement();
+        	XMLHandler xmlHandler = new XMLHandler();
+			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+			SAXParser parser = parserFactory.newSAXParser();
+			parser.parse(xmlFile, xmlHandler);
+			dataSet = xmlHandler.getDecodedRequirement();
         }
         alreadyParsed = true;
     }

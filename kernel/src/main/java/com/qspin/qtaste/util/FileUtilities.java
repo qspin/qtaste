@@ -95,7 +95,7 @@ public class FileUtilities {
 	    }
 	}
 
-	/** Fast & simple file copy.
+	/** Fast and simple file copy.
 	 * @param source source file
 	 * @param dest destination file or directory
 	 */

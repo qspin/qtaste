@@ -277,7 +277,7 @@ public class RLogin {
     /**
      * Main program.
      * <p>
-     * Usage: <command> <remote_host> [-user <user>] [-reboot | -command <command>] [-interactive] [-logOutput] [-wait [seconds]] [-log4jconf <properties_file>]
+     * {@code Usage: <command> <remote_host> [-user <user>] [-reboot | -command <command>] [-interactive] [-logOutput] [-wait [seconds]] [-log4jconf <properties_file>]
      *   remote_host: remote host
      *   -user <user>: remote user
      *   -reboot: reboot remote host
@@ -286,6 +286,7 @@ public class RLogin {
      *   -logOutput: enable logging of remote host output
      *   -wait [seconds]: wait until connection is closed or given seconds
      *   -log4jconf <properties_file>: use given file as log4j properties file
+     * }
      */
     public static final void main(String[] args) {
         // parameters

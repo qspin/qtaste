@@ -547,9 +547,9 @@ public class Log4jPanel extends JPanel {
         /**
          * Returns false if message must not be filtered out because it starts with the name of a checkbox,
          *         true otherwise.
-         * @param level
-         * @param source
-         * @param message
+         * @param level the log level
+         * @param source the log source
+         * @param message the log message
          * @return false if message must not be filtered out because it starts with the name of a checkbox,
          *         true otherwise
          */
@@ -565,9 +565,9 @@ public class Log4jPanel extends JPanel {
         /**
          * Returns true if message must be filtered out because the checkbox corresponding to its source is unselected,
          *         false otherwise.
-         * @param level
-         * @param source
-         * @param message
+         * @param level the log level
+         * @param source the log source
+         * @param message the log message
          * @return true if message must be filtered out because the checkbox corresponding to its source is unselected,
          *         false otherwise
          */
@@ -583,9 +583,9 @@ public class Log4jPanel extends JPanel {
         /**
          * Returns true if message must be filtered out because the checkbox corresponding to its level is unselected,
          *         false otherwise.
-         * @param level
-         * @param source
-         * @param message
+         * @param level the log level
+         * @param source the log source
+         * @param message the log message
          * @return true if message must be filtered out because the checkbox corresponding to its level is unselected,
          *         false otherwise
          */
@@ -600,9 +600,9 @@ public class Log4jPanel extends JPanel {
 
         /**
          * Returns false if message must not be filtered out because it is the start of of a test case or a verb invoke.
-         * @param level
-         * @param source
-         * @param message
+         * @param level the log level
+         * @param source the log source
+         * @param message the log message
          * @return false if message must not be filtered out because it is the start of of a test case or a verb invoke
          */
         public boolean filterMessageTestCaseOrVerb(String level, String source, String message) {

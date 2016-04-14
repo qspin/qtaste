@@ -44,7 +44,8 @@ import com.sun.javadoc.Tag;
  * TestAPIDoclet is the Javadoc doclet used to generate HTML documentation
  * for the QTaste Test API Component interfaces.
  * <p>
- * Command-line option: 
+ * Command-line option:
+ * <dl>
  * <dt><b>-d</b> <var>directory</var>
  * <dd> Specifies the destination directory where javadoc saves the 
  * generated HTML files (the "d" means "destination"). Omitting this
@@ -53,7 +54,8 @@ import com.sun.javadoc.Tag;
  * absolute, or relative to the current working directory.  
  * If the destination directory doesn't exist, it is automatically 
  * created when javadoc is run.
- * 
+ * </dl>
+ *
  * @author David Ergo
  */
 public class TestAPIDoclet {

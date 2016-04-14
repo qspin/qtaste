@@ -170,10 +170,9 @@ public class LineNumberPanel extends JComponent
    }
 
    /**
-    * Get the JscrollPane that contains this EditorPane, or null if no
-    * JScrollPane is the parent of this editor
-    * @param editorPane
-    * @return
+    * Get the JscrollPane that contains an editor pane, or null if none.
+    * @param editorPane an editor pane
+    * @return the JscrollPane that contains the editor pane, or null if none
     */
    public JScrollPane getScrollPane(JTextComponent editorPane) {
        Container p = editorPane.getParent();

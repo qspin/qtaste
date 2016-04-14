@@ -17,9 +17,9 @@ public final class InputStreamWriter extends Thread
 {
    /**
     * Constructor.
-    * 
-    * @param pInput
-    * @param pOutput if it's null, writes all in the class Logger at INFO level.
+    *
+    * @param pLogPrefix a log prefix
+    * @param pInput an input stream
     */
    public InputStreamWriter(String pLogPrefix, InputStream pInput)
    {

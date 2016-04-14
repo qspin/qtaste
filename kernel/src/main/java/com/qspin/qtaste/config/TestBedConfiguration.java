@@ -85,7 +85,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Register an handler with callback method which will be called when configuration has changed.
-     * @param handler
+     * @param handler the configuration change handler to register
      */
     public static void registerConfigurationChangeHandler(ConfigurationChangeHandler handler) {
         if (!configurationChangeHandlers.contains(handler)) {
@@ -95,7 +95,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Unregister an handler with callback method which will be called when configuration has changed.
-     * @param handler
+     * @param handler the configuration change handler to unregister
      */
     public static void unregisterConfigurationChangeHandler(ConfigurationChangeHandler handler) {
         configurationChangeHandlers.remove(handler);

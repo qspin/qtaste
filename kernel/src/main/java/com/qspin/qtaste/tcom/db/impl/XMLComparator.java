@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * XMLComparator class enables to compare XML Documents structured as described bellow
- * <p><pre>
+ * <pre>
  *  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
  * 
  *     &lt;Results&gt;    	
@@ -272,7 +272,7 @@ public class XMLComparator {
 
     /**
      * Return an Iterator of String containing all the differences detected while comparing the documents
-     * @return Iterator<String> an iterator of String describing all the differences
+     * @return an iterator of String describing all the differences
      */
     public Iterator<String> getErrorsList() {
         return errorsList.iterator();

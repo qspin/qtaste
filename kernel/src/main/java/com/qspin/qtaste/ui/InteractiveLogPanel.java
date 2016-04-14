@@ -53,11 +53,7 @@ public class InteractiveLogPanel extends JPanel {
         super(new BorderLayout());
         this.tcInteractivePanel = tcInteractivePanel;
     }
-    /**
-     * @param path The path to the image
-     * @param description The description of the image
-     * @return ImageIcon, or null if the path was invalid.
-     */
+
     private void initIcons() {
         passedImg= ResourceManager.getInstance().getImageIcon("icons/passed");
         failedImg= ResourceManager.getInstance().getImageIcon("icons/failed");

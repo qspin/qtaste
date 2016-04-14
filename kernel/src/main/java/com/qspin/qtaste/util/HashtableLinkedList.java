@@ -62,7 +62,7 @@ public class HashtableLinkedList<N,V> implements Serializable {
     /**
      * Warning: you may get a ConcurrentModificationException when using the 
      *          ListIterator if this object is modified concurrently
-     * @param name
+     * @param name a name
      * @return a list iterator to the list mapped to name
      */
     public synchronized ListIterator<V> get(N name) {

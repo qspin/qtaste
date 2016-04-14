@@ -32,17 +32,20 @@ import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
+/**
+ * This class should be mapped to VK_ENTER. It performs proper indentation
+ * for Java Type languages and automatically inserts "*" in multi-line comments
+ * Initial Code contributed by ser... AT mail.ru
+ *
+ * @author Ayman Al-Sairafi
+ */
 @SuppressWarnings("serial")
 public class PythonIndentAction extends DefaultSyntaxAction {
 	protected static Logger logger = Log4jLoggerFactory.getLogger(PythonIndentAction.class);
 	
 
 	/**
-	* This class should be mapped to VK_ENTER. It performs proper indentation
-	* for Java Type languages and automatically inserts "*" in multi-line comments
-	* Initial Code contributed by ser... AT mail.ru
-	*
-	* @author Ayman Al-Sairafi
+	* Constructor.
 	*/
 	public PythonIndentAction() {
 		super("PYTHON_INDENT");
@@ -50,8 +53,8 @@ public class PythonIndentAction extends DefaultSyntaxAction {
 
 	/**
 	* Return a string with number of spaces equal to the tab-stop of the TextComponent
-	* @param target
-	* @return
+	* @param target the target component
+	* @return a string with number of spaces equal to the tab-stop of the TextComponent
 	*/
 	public static String getTab(JTextComponent target) {
 		return "\t";

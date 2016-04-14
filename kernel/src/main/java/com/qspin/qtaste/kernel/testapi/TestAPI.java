@@ -56,14 +56,14 @@ public interface TestAPI {
     
     /**
      * Get an Iterator containing all the names of the registered components
-     * @return a Collection<String>
+     * @return a Collection of String
      */
     public Collection<String> getRegisteredComponents();
     
     /**
      * Get the list of verbs available within the specified component
      * @param componentName the specified component
-     * @return the Collection<String> or null if the component doesn't exist
+     * @return the Collection of String or null if the component doesn't exist
      */
 
     public Collection<String> getRegisteredVerbs(String componentName);

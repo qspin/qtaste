@@ -94,7 +94,7 @@ public abstract class JMXAgent extends NotificationBroadcasterSupport {
     /**
      * Send a JMX notification of a property change event
      * 
-     * @param pEvt
+     * @param pEvt a property change event
      */
     public synchronized void sendNotification(PropertyChangeEvent pEvt) {
         String oldValue = pEvt.getOldValue() == null ? "null" : pEvt.getOldValue().toString();

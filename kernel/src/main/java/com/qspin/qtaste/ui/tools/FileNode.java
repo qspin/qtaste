@@ -52,11 +52,8 @@ public class FileNode extends TreeNodeImpl{
         }
         return false;
     }
-    /**
-     * method to be improved
-     * @return
-     */
 
+    // method to be improved
     public String getTestcaseHeader()  {
         BufferedReader br = null;
         try {

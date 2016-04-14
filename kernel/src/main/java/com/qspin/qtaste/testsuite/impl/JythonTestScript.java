@@ -1063,7 +1063,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
         /**
          * doAction This function is used to perform actions while the script has been stopped
-         * @param event
+         * @param event a test script breapoint event
          */
         @Override
 		public void doAction(TestScriptBreakpointEvent event) {

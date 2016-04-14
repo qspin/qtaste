@@ -36,9 +36,8 @@ public class GUIConfiguration extends XMLConfiguration {
     private static final String CONF_FILE = StaticConfiguration.CONFIG_DIRECTORY + "/gui.xml";
 
     /**
-     * Get an instance of the GUIConfiguration.      
-     * @return The GUIConfiguration.
-     * @throws ConfigurationException 
+     * Constructs an instance of GUIConfiguration.
+     * @throws ConfigurationException
      */
     private GUIConfiguration() throws ConfigurationException {
         setFileName(CONF_FILE);
