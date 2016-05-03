@@ -15,7 +15,7 @@ pushd src/docbkx/scripts/
 popd
 
 # generate documentation using maven
-mvn pre-site
+mvn clean pre-site || exit 1
 
 if [ -d "target/docbkx/" ]; then
 
