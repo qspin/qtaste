@@ -73,7 +73,7 @@ to be rechecked in version 5.0.0-beta11 or later
     <packs>
         <pack name="Kernel" required="yes">
             <description>The kernel files - required to use qtaste</description>
-            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="bin/*"/>
 				<include name="kernel/target/qtaste-kernel-deploy.jar"/>
 				<include name="lib/**"/>
@@ -249,9 +249,9 @@ to be rechecked in version 5.0.0-beta11 or later
 			<description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
         </pack>
 	-->
-        <pack name="The Java GUI binaries" required="yes" preselected="yes" installGroups="Java GUI">
+        <pack name="The Java GUI binaries" required="true" preselected="true" installGroups="Java GUI">
 			<description>The Java GUI binaries</description>
-            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="plugins/SUT/qtaste-javagui-deploy.jar"/>
 			</fileset>
         </pack>
@@ -279,7 +279,7 @@ to be rechecked in version 5.0.0-beta11 or later
 	
         <pack name="The demo binaries" required="yes" preselected="yes" installGroups="Demo">
 			<description>The demo files - examples</description>
-			<fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+			<fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="demo/testapi/target/qtaste-testapi-deploy.jar"/>
 				<include name="demo/testapi/target/TestAPI-doc/**"/>
 				<include name="demo/pywinauto-0.3.8/**"/>
@@ -335,9 +335,9 @@ to be rechecked in version 5.0.0-beta11 or later
         </pack>
         -->
         
-        <pack name="Docs" required="yes" preselected="yes">
+        <pack name="Docs" required="true" preselected="true">
             <description>The documentation files in pdf format.</description>
-            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="yes" defaultexcludes="yes">
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="doc/pdf/*.pdf"/>
 				<include name="doc/html/*"/>
 				<include name="doc/third_products/*"/>
