@@ -341,12 +341,12 @@ public class JavaGUI extends JMXAgent implements JavaGUIMBean {
 	@Override
 	public String[] getPopupRawNames() throws QTasteException {
 		LOGGER.trace("getPopupRawNames()");
-		return new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
+		return new PopupRawNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, false).toArray(new String[0]);
 	}
 
 	public String getPopupRawName() throws QTasteException {
 	      LOGGER.trace("getPopupRawName()");
-           List<String> names = new PopupRowNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
+           List<String> names = new PopupRawNameGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, true);
            if (names.isEmpty())
            {
                    throw new QTasteTestFailException("No active popup found!");

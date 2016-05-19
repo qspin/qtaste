@@ -31,7 +31,7 @@ import com.qspin.qtaste.testsuite.QTasteException;
  * @author simjan
  *
  */
-public class PopupRowNameGetter extends ComponentCommander {
+public class PopupRawNameGetter extends ComponentCommander {
 
 	/**
 	 * Commander wich parses all Popups in order to find the contained message. 
