@@ -181,7 +181,7 @@ public class OPCImpl implements OPC {
 					 null,
 					 "OPC");
 			//register to get temperature update
-	        String realProperty = "[AB1]Global." + varName;
+	        String realProperty = opcPrefix + varName;
 			NodeId node = new NodeId(1, realProperty);
 			Subscription mySub = getSubscription(varName);
 			MonitoredDataItem item = new MonitoredDataItem(node, Attributes.Value, MonitoringMode.Reporting);
