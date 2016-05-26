@@ -381,6 +381,13 @@ public class JTreeTable extends JTable {
             }
 
             visibleRow = row;
+
+            // Add tooltip for the first column if not fully visible.
+            if (column == 0 && !getCellRect(row, column, false).contains(getRowBounds(row))) {
+                setToolTipText(String.valueOf(value));
+            } else {
+                setToolTipText(null);
+            }
             return this;
         }
     }
