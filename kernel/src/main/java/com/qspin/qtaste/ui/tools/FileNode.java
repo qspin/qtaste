@@ -34,6 +34,7 @@ import java.util.List;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.io.CSVFile;
 import com.qspin.qtaste.util.FileUtilities;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class FileNode extends TreeNodeImpl{
 	
@@ -59,26 +60,28 @@ public class FileNode extends TreeNodeImpl{
         try {
             File testscriptFile = new File(f + File.separator + StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME);
             br = new BufferedReader(new FileReader(testscriptFile));
-            String descriptionLine="";
+            String description="";
             String line;
             while ((line = br.readLine()) != null) {
-                descriptionLine += line;
+                description += line;
             }
-            descriptionLine = descriptionLine.replaceAll("<(br/?|/?p)>", "\n");
-            descriptionLine = descriptionLine.replaceAll("</?(i|b)>", "");
             final String startDescription = "<h3>Description</h3>";
             final String startVersion = "<h3>Version</h3>";
             final String startPreparation = "<h3>Preparation</h3>";
             final String startRequiredData = "<h3>Required data</h3>";
-            int startIndex = descriptionLine.indexOf(startDescription);
-            int endIndex = descriptionLine.indexOf(startVersion);
+            int startIndex = description.indexOf(startDescription);
+            int endIndex = description.indexOf(startVersion, startIndex + startDescription.length());
             if (endIndex == -1) {
-                endIndex = descriptionLine.indexOf(startPreparation);
+                endIndex = description.indexOf(startPreparation, startIndex + startDescription.length());
             }
             if (endIndex == -1) {
-                endIndex = descriptionLine.indexOf(startRequiredData);
+                endIndex = description.indexOf(startRequiredData, startIndex + startDescription.length());
             }
-            return descriptionLine.substring(startIndex + startDescription.length(), endIndex);
+            description = description.substring(startIndex + startDescription.length(), endIndex);
+            description = StringEscapeUtils.unescapeHtml(description);
+            description = description.replaceAll("<(br/?|/?p)>", "\n");
+            description = description.replaceAll("</?(i|b)>", "");
+            return description;
         } catch (FileNotFoundException ex) {
             //
         } catch (IOException ex) {
