@@ -26,7 +26,7 @@ set CLASSPATH=
 set PROCESS_START_TIME=0
 set TITLE=
 set PRIORITY=
-set RESTART="false"
+set RESTART=false
 For /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%b_%%a_%%c)
 For /f "tokens=1-2 delims=/:" %%a in ('time /t') do (set mytime=%%a_%%b)
 set NOW=%mydate%-%mytime%
@@ -65,7 +65,7 @@ if [%JAR%] == [] (
     set JAVA_CMD=java %VM_ARGS% %JMX_ARGS% %JAR% %JAVA_MAIN_AND_ARGS%
 )
 
-if [%RESTART%] == "true" (
+if [%RESTART%] == [true] (
    copy %TITLE%.out %TITLE%.%NOW%.out
 )
 

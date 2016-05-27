@@ -104,7 +104,7 @@ else
    cd $WORKINGDIR
 
    # if starting again (restart) then backup log file
-   if [ $RESTART -a -f "$OUTPUT" ]; then
+   if [ $RESTART = true -a -f "$OUTPUT" ]; then
       cp "$OUTPUT" "$TITLE.$NOW.out"
    fi
 
