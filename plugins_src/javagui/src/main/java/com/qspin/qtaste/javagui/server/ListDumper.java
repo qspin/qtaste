@@ -40,7 +40,7 @@ final class ListDumper extends ComponentCommander {
 	@Override
 	String [] executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		Component c = getComponentByName(componentName);
-		List<String> foundItems = new ArrayList<String>();		
+		List<String> foundItems = new ArrayList<>();
 		if ( c instanceof JList )
 		{
 			JList list = (JList) c;

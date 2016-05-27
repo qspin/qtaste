@@ -39,7 +39,7 @@ class EnabledStateGetter extends ComponentCommander {
 	@Override
 	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		Component c = getComponentByName(componentName);
-		return c==null?false:c.isEnabled();
+		return c != null && c.isEnabled();
 	}
 
 }

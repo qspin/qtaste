@@ -21,7 +21,6 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JDialog;
@@ -84,8 +83,7 @@ public class PopupButtonClicker extends UpdateComponentCommander {
 			}
 		}
 		
-		if (component == null )
-		{
+		if (component == null ) {
 			throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not found.");
 		}
 		if (!component.isEnabled()) {

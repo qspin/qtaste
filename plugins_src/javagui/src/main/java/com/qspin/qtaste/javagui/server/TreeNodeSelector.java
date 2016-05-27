@@ -61,19 +61,10 @@ class TreeNodeSelector extends UpdateComponentCommander {
 	 * @return true if both match, false otherwise.
 	 */
 	protected boolean compareNodeNames(String nodePathElement, String nodeName) {
-		boolean comparisonResult = false;
-		
-		switch (mSelectorIdentifier) {
-			case SELECT_BY_REGEX:
-				comparisonResult = Pattern.matches(nodePathElement, nodeName);	
-				break;
-			
-			case SELECT_BY_STRING:
-			default:
-				comparisonResult = nodePathElement.equals(nodeName);
-				break;
-		}
-		
+		boolean comparisonResult =
+			mSelectorIdentifier == SelectorIdentifier.SELECT_BY_REGEX ? Pattern.matches(nodePathElement, nodeName) :
+				nodePathElement.equals(nodeName);
+
 		return comparisonResult;
 	}
 
@@ -105,7 +96,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
 		if (component instanceof JTree) {
 			JTree 		 tree  = (JTree) component;
 			TreeModel	 treeModel = tree.getModel();
-			List<Object> treePath = new ArrayList<Object>();
+			List<Object> treePath = new ArrayList<>();
 			int	      	 currentNodePathItemIndex = 0;
 			
 			// if the root is visible, check it regarding the first node path item

@@ -33,7 +33,7 @@ public class ComponentForegroundColorGetter extends ComponentBackgroundColorGett
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof JTextComponent) {
-				return getHexadecimalColor(((JTextComponent) c).getForeground());
+				return getHexadecimalColor(c.getForeground());
 			} else {
 				throw new QTasteTestFailException("It is not possible to retrieve the foreground color of this kind of component " + c.getClass() );
 			}

@@ -445,7 +445,7 @@ public class TableSorter extends AbstractTableModel {
 
         public void paintIcon(Component c, Graphics g, int x, int y) {
             Color color = c == null ? Color.GRAY : c.getBackground();             
-            // In a compound sort, make each succesive triangle 20% 
+            // In a compound sort, make each successive triangle 20%
             // smaller than the previous one. 
             int dx = (int)(size/2*Math.pow(0.8, priority));
             int dy = descending ? dx : -dx;

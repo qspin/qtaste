@@ -32,14 +32,12 @@ class TextGetter extends ComponentCommander {
 	@Override
 	public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (c instanceof JLabel) {
-				return ((JLabel) c).getText();
-			} else if (c instanceof JTextComponent) {
-				return ((JTextComponent) c).getText();
-			} else if (c instanceof AbstractButton) {
-				return ((AbstractButton) c).getText();
-			}
+		if (c instanceof JLabel) {
+			return ((JLabel) c).getText();
+		} else if (c instanceof JTextComponent) {
+			return ((JTextComponent) c).getText();
+		} else if (c instanceof AbstractButton) {
+			return ((AbstractButton) c).getText();
 		}
 		return null;
 	}

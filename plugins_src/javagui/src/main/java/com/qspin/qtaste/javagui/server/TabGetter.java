@@ -22,7 +22,6 @@ package com.qspin.qtaste.javagui.server;
 import java.awt.Component;
 
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;

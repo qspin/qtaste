@@ -93,7 +93,7 @@ class TabSelector extends UpdateComponentCommander {
 
     @Override
     protected void doActionsInSwingThread() throws QTasteTestFailException {    	
-        if (component != null && component instanceof JTabbedPane) {
+        if (component instanceof JTabbedPane) {
             ((JTabbedPane)component).setSelectedIndex(mTabIndex);
         }
     }

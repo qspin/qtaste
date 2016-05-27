@@ -6,11 +6,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -133,7 +130,7 @@ abstract class ComponentCommander {
 	protected static List<JDialog> findPopups()
 	{
 		//find all popups
-		List<JDialog> popupFound = new ArrayList<JDialog>();
+		List<JDialog> popupFound = new ArrayList<>();
 		for (Window window: Window.getWindows()) {
 //			LOGGER.debug("parse window - type : " + window.getClass());
 			if ( isAPopup(window) )

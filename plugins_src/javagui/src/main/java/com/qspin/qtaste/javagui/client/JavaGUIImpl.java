@@ -15,9 +15,6 @@ public class JavaGUIImpl implements JavaGUI {
 
 	public JavaGUIImpl(String url) throws Exception {
 		mClient = new JMXClient(url);
-		if ( mClient == null ) {
-			throw new QTasteException("Unable to connect to the JMX client");
-		}
 		initialize();
 	}
 

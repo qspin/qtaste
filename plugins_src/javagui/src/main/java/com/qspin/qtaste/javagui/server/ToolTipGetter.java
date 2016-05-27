@@ -30,10 +30,8 @@ class ToolTipGetter extends ComponentCommander {
 	@Override
 	public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (c instanceof JComponent) {
-				return ((JComponent) c).getToolTipText();
-			}
+		if (c instanceof JComponent) {
+			return ((JComponent) c).getToolTipText();
 		}
 		return null;
 	}

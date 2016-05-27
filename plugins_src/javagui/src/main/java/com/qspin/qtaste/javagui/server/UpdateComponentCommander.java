@@ -21,8 +21,8 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Window;
 import java.awt.Dialog;
+import java.awt.Window;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,9 +85,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 		if (windows != null ) {
 			for ( Window w : windows ) {
 				if ( w.isShowing() && w instanceof Dialog && ((Dialog)w).isModal() && !w.isAncestorOf(c)) {
-					if ( w.isShowing() &&  w instanceof Dialog && ((Dialog)w).isModal() && !w.isAncestorOf(c)) {
-						return false;
-					}
+					return false;
 				}
 			}
 		}
@@ -105,7 +103,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	}
 
 	protected Component getComponentByName(String name) throws QTasteTestFailException {
-		mFoundComponents = new ArrayList<Component>();
+		mFoundComponents = new ArrayList<>();
 		mFoundComponent = null;
 		mFindWithEqual = false;
 		LOGGER.debug("try to find a component with the name : " + name);
@@ -167,16 +165,14 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 	}
 
 	protected Component lookForComponent(String name, Component[] components) {
-		for (int i = 0; i < components.length; i++) {
-			//String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
-			Component c = components[i];
-			if ( checkName(name, c) )
-			{
+		for (Component c : components) {
+			//String componentName = ComponentNamer.getInstance().getNameForComponent(c);
+			if (checkName(name, c)) {
 				LOGGER.debug("Component " + c.getName() + " added to the list of found components");
 				mFoundComponents.add(c);
 			}
 			if (c instanceof Container) {
-//				LOGGER.trace("Will parse the container " + c.getName() );
+				// LOGGER.trace("Will parse the container " + c.getName() );
 				lookForComponent(name, ((Container) c).getComponents());
 			}
 		}
@@ -230,10 +226,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 					//Just there in order to "synchronize" the jmx thread with the swing event thread.
 				}
 			});
-		} catch (InterruptedException e) {
-			//Should not occurred, the Runnable do nothing.
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (InterruptedException | InvocationTargetException e) {
 			//Should not occurred, the Runnable do nothing.
 			e.printStackTrace();
 		}

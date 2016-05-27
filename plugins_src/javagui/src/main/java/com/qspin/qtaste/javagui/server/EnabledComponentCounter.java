@@ -40,7 +40,7 @@ class EnabledComponentCounter extends ComponentCommander {
 	@Override
 	Integer executeCommand(int timeout, String componentName, Object... data) {
 		int counter = 0;
-		List<Container> superContainers = new ArrayList<Container>();
+		List<Container> superContainers = new ArrayList<>();
 		for( Window w : Window.getWindows() )
 		{
 			if (!superContainers.contains(w))
@@ -60,21 +60,14 @@ class EnabledComponentCounter extends ComponentCommander {
 	protected int getEnabledComponentCount(boolean isEnabled, Container c)
 	{
 		int counter = 0;
-		if ( c.isEnabled() == isEnabled )
+		if (c.isEnabled() == isEnabled)
 		{
-			counter ++;
+			counter++;
 		}
-		for (int i=0; i<c.getComponentCount(); i++)
+		for (int i = 0; i < c.getComponentCount(); i++)
 		{
 			Component child = c.getComponent(i);
-			if ( c instanceof Container )
-			{
-				counter += getEnabledComponentCount(isEnabled, (Container)child);
-			}
-			else
-			{
-				counter += child.isEnabled() == isEnabled? 1 : 0;
-			}
+			counter += getEnabledComponentCount(isEnabled, (Container)child);
 		}
 		return counter;
 	}

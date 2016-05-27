@@ -21,7 +21,6 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +45,7 @@ final class ComponentLister extends ComponentCommander {
 	@Override
 	String[] executeCommand(int timeout, String componentName, Object... data)
 	{
-		mComponentsMap = new HashMap<String, List<Component>>();
+		mComponentsMap = new HashMap<>();
 		
 		for (Window window: Window.getWindows()) {
 			if (window.getName() != null) {
@@ -55,7 +54,7 @@ final class ComponentLister extends ComponentCommander {
 			browseComponent(window.getComponents());
 		}
 		
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		for ( String key : mComponentsMap.keySet() )
 		{
 			list.add(key + "   (number of instance with this name :" + mComponentsMap.get(key).size() + ")");
@@ -63,8 +62,7 @@ final class ComponentLister extends ComponentCommander {
 		Collections.sort(list);
 		list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
 		list.add("Number of windows : " + Window.getWindows().length);
-		String[] result = (String[]) list.toArray(new String[0]);
-		return result;
+		return list.toArray(new String[list.size()]);
 	}
 	
 	private void addToMap(Component c)
@@ -81,21 +79,20 @@ final class ComponentLister extends ComponentCommander {
 	}
 
 	private void browseComponent(Component[] components) {
-		for (int c = 0; c < components.length; c++) {			
-			String componentName = components[c].getName();
+		for (Component component : components) {
+			String componentName = component.getName();
 			// LOGGER.debug("browsing " + components[c].toString());
 			// LOGGER.debug("name=" + componentName);
 			if (componentName != null) {
 				//LOGGER.debug("Component:" + componentName + " is found!");
 				//if (!componentName.startsWith("null."))
-				addToMap(components[c]);
+				addToMap(component);
 			}
-			if (components[c] instanceof Container) {
-				if (components[c] instanceof JPopupMenu)
-				{
+			if (component instanceof Container) {
+				if (component instanceof JPopupMenu) {
 					LOGGER.debug("detected JPopupMenu !!!!");
 				}
-				browseComponent(((Container) components[c]).getComponents());
+				browseComponent(((Container) component).getComponents());
 			}
 		}
 	}

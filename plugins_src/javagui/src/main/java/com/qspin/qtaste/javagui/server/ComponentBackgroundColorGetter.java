@@ -33,7 +33,7 @@ public class ComponentBackgroundColorGetter extends ComponentCommander {
 		Component c = getComponentByName(componentName);
 		if (c != null) {
 			if (c instanceof Container) {
-				return getHexadecimalColor(((Container) c).getBackground());
+				return getHexadecimalColor(c.getBackground());
 			} else {
 				throw new QTasteTestFailException("It is not possible to retrieve the background color of this kind of component " + c.getClass() );
 			}

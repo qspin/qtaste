@@ -21,7 +21,6 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -84,8 +83,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
 			}
 		}	
 			
-		if (component == null )
-		{
+		if (component == null) {
 			throw new QTasteTestFailException("The text field component is not found.");
 		}
 		if (!component.isEnabled()) {

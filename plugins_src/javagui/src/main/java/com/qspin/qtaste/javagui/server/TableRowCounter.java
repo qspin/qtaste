@@ -38,7 +38,7 @@ final class TableRowCounter extends ComponentCommander {
 	@Override
 	Integer executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 		Component c = getComponentByName(componentName);
-		if ( c == null || !(c instanceof JTable) )
+		if (!(c instanceof JTable))
 		{
 			throw new QTasteTestFailException("The component " + componentName + " is not a JTable.");
 		}

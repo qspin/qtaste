@@ -5,7 +5,7 @@ import javax.swing.AbstractButton;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
- * Component controller that simulates a click on an {@link AbtractButton} through the doClick method.
+ * Component controller that simulates a click on an {@link AbstractButton} through the doClick method.
  * The doClick(int) method call will be executed in the Swing Thread.
  * @author simjan
  *

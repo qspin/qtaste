@@ -50,12 +50,12 @@ public class TreeDumper extends ComponentCommander {
 					if ( c instanceof JTree )
 					{
 						JTree tree = (JTree) c;
-						List<String> dump = new ArrayList<String>();
+						List<String> dump = new ArrayList<>();
 						dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
 						StringBuilder builder = new StringBuilder();
 						for (String s : dump)
 						{
-							builder.append(s + "\n");
+							builder.append(s).append('\n');
 						}
 						m_commandResult =  builder.toString();
 					} else {
