@@ -24,6 +24,7 @@ import java.util.HashMap;
 import javax.management.AttributeChangeNotification;
 import javax.management.Notification;
 import javax.management.NotificationListener;
+import javax.management.ObjectName;
 import javax.management.remote.JMXConnectionNotification;
 
 import org.apache.log4j.Logger;
@@ -82,6 +83,19 @@ public class JMXNotificationHandler implements NotificationListener {
             return;
         }
 
+        AttributeChangeNotification attributeChangeNotification = (AttributeChangeNotification) notification;
+        Object source = attributeChangeNotification.getSource();
+        if (!(source instanceof String)) {
+            // ignore AttributeChangeDetected sent by RequiredModelMBean#sendAttributeChangeNotification because sequence number is always set to 1
+            if (source instanceof ObjectName && "AttributeChangeDetected".equals(attributeChangeNotification.getMessage()))
+            {
+                logger.warn("Ignoring JMX AttributeChangeDetected notification from " + componentName + " for attribute " + attributeChangeNotification.getAttributeName() );
+            } else {
+                logger.error("JMX notification source from " + componentName + " is not of type String (" + source.getClass().getName() + ")");
+            }
+            return;
+        }
+
         // check that we didn't miss a notification
         long notificationSequenceNumber = notification.getSequenceNumber();
         if (lastNotificationSequenceNumber != -1) {
@@ -91,12 +105,6 @@ public class JMXNotificationHandler implements NotificationListener {
             }
         }
         lastNotificationSequenceNumber = notificationSequenceNumber;
-
-        AttributeChangeNotification attributeChangeNotification = (AttributeChangeNotification) notification;
-        if (!(attributeChangeNotification.getSource() instanceof String)) {
-            logger.error("JMX notification source from " + componentName + " is not of type String (" + attributeChangeNotification.getSource().getClass().getName() + ")");
-            return;
-        }
 
         String message = (String) attributeChangeNotification.getMessage();
         int separatorIndex = message.indexOf(':');
