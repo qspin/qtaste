@@ -27,6 +27,7 @@
         <exclude>com.jgoodies:jgoodies-common</exclude>
         <exclude>de.sciss:syntaxpane</exclude>
         <exclude>log4j:log4j</exclude>
+        <exclude>org.python:jython</exclude>
         <exclude>org.python:jython-standalone</exclude>
         <exclude>xalan:xalan</exclude>
         <exclude>xalan:serializer</exclude>
