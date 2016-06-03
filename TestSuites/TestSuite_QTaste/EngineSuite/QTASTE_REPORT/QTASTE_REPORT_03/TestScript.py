@@ -1,4 +1,4 @@
-# encoding= utf-8
+# coding=utf-8
 
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
