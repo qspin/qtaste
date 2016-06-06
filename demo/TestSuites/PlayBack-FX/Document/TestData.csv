@@ -10,4 +10,3 @@ insert in password field;PlaybackAppBis;PASSWORD_FIELD;true;passWord;passWord
 insert in text area;PlaybackAppBis;TEXT_AREA;true;This is a \n test;This is a \n test
 insert wrong value in formatted text field;PlaybackAppBis;FORMATTED_TEXT_FIELD;false;test;
 insert in formatted text field;PlaybackAppBis;FORMATTED_TEXT_FIELD;true;5%;5%
-insert in formatted text field (format change value);PlaybackAppBis;FORMATTED_TEXT_FIELD;true;11.5%;12%
