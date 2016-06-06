@@ -10,7 +10,7 @@
 ##
 
 from qtaste import *
-import os
+import os, time
 
 IMAGE_DIRECTORY = os.getcwd() + "/TestSuites/Sikuli/images"
 logger.info("directory : " + IMAGE_DIRECTORY)
@@ -48,6 +48,8 @@ def goToQtasteSite():
     @expected  The QTaste page is displayed.
     """
     sikuli.click(IMAGE_DIRECTORY + "/qtaste_link.png")
+    time.sleep(10)
+    sikuli.waitVanish(IMAGE_DIRECTORY + "/qtaste_link.png")
     sikuli.wait(IMAGE_DIRECTORY + "/qtaste_logo.png")
 
 def closeTab():
