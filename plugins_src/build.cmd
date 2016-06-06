@@ -8,3 +8,13 @@ pushd javagui
 call mvn clean install assembly:single
 copy target\*-deploy.jar ..\..\plugins\SUT\
 popd
+
+pushd javagui-fx
+call mvn clean install assembly:single
+copy target\*-deploy.jar ..\..\plugins\SUT\
+popd
+
+pushd sikuli
+call mvn clean install assembly:single
+copy target\*-deploy.jar ..\..\plugins\SUT\
+popd
