@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<testbed_configuration>
+	<sut_host>localhost</sut_host>
+	
+	<testapi_implementation>		
+		<import>com.qspin.qtaste.testapi.impl.generic</import>
+		<import>com.qspin.qtaste.javaguifx.testapi.impl</import>
+		<import>com.qspin.qtaste.testapi.impl.demo</import>
+	</testapi_implementation>
+
+	<control_script>playback_fx.py</control_script>
+
+	<multiple_instances_components default="PlaybackApp">
+		<JavaGUIFX id="PlaybackApp">
+			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>
+		</JavaGUIFX>
+		<JavaGUIFX id="PlaybackAppBis">
+			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10102/jmxrmi</jmx_url>
+		</JavaGUIFX>
+	</multiple_instances_components>
+	
+	<singleton_components>
+		<Utility/>
+		<Subtitler/>
+	</singleton_components>
+	
+</testbed_configuration>

@@ -53,7 +53,7 @@ class VirtualBox(ControlAction):
         self.executeCommand(commandArguments);
         time.sleep(30)
         print
-
+        
     def stop(self):
         commandArguments = ['VBoxManage', 'controlvm', self.nameOfVBoxImage, 'poweroff']
         print "Stopping " + self.description + "..."

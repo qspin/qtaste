@@ -12,3 +12,6 @@ pushd SUT
 mvn clean install assembly:single || exit 1
 
 popd
+pushd SUT-FX
+mvn clean install assembly:single || exit 1
+popd

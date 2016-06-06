@@ -385,7 +385,7 @@ class JavaProcess(ControlAction):
     """ Control script action for starting/stopping a Java process """
     def __init__(self, description, mainClassOrJar, args=None, workingDir=qtasteRootDirectory, classPath=None, vmArgs="",
                  jmxPort=None, checkAfter=None, priority=None, useJacoco=False, useJavaGUI=False, active=True,
-                 jacocoIncludes=None, jacocoExcludes=None):
+                 jacocoIncludes=None, jacocoExcludes=None, useJavaGUIFX=False):
         """
         Initialize JavaProcess object
         @param description control script action description, also used as window title
@@ -401,6 +401,7 @@ class JavaProcess(ControlAction):
         @param jacocoIncludes the Jacoco 'includes' parameter (without the 'includes=' part)
         @param jacocoExcludes the Jacoco 'excludes' parameter (without the 'excludes=' part)
         @param useJavaGUI enable the javagui service to enable remote javagui accessibility 
+        @param useJavaGUIFX enable the javagui service to enable remote javagui accessibility (JavaFX)
         """
         ControlAction.__init__(self, description, active)
         self.callerScript = traceback.format_stack()[0].split('"')[1]
@@ -434,7 +435,10 @@ class JavaProcess(ControlAction):
         self.jacocoIncludes = jacocoIncludes
 #         if useJavaGUI:
 #             self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
+#         if useJavaGUI:
+#             self.vmArgs += " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
         self.useJavaGUI = useJavaGUI
+        self.useJavaGUIFX = useJavaGUIFX
         if jmxPort:
             self.jmxPort = "%d" % jmxPort
         else:
@@ -466,6 +470,11 @@ class JavaProcess(ControlAction):
             writer.write(str(self.caID) + ".useJavaGUI=True\n")
         else:
             writer.write(str(self.caID) + ".useJavaGUI=False\n")
+        if self.useJavaGUIFX:
+            writer.write(str(self.caID) + ".useJavaGUIFX=True\n")
+        else:
+            writer.write(str(self.caID) + ".useJavaGUIFX=False\n")
+
         if self.jmxPort is not None:
             writer.write(str(self.caID) + ".jmxPort=" + str(self.jmxPort) + "\n")
         if self.checkAfter is not None:
@@ -483,6 +492,7 @@ class JavaProcess(ControlAction):
         writer.write(prefix + ".vmArgs=string\n")
         writer.write(prefix + ".useJacoco=boolean\n")
         writer.write(prefix + ".useJavaGUI=boolean\n")
+        writer.write(prefix + ".useJavaGUIFX=boolean\n")
         writer.write(prefix + ".jmxPort=integer\n")
         writer.write(prefix + ".checkAfter=integer\n")
         writer.write(prefix + ".priority=string\n")
@@ -507,6 +517,11 @@ class JavaProcess(ControlAction):
             return " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-deploy.jar"
         return ""
 
+    def getJavaGUIFXVar(self):
+        if self.useJavaGUIFX:
+            return " -javaagent:" + qtasteRootDirectory + "plugins" + _os.sep + "SUT" + _os.sep + "qtaste-javagui-fx-deploy.jar"
+        return ""
+
     def start(self):
         print "Starting " + self.description + "..."
         isJar = self.mainClassOrJar.endswith(".jar")
@@ -516,6 +531,8 @@ class JavaProcess(ControlAction):
             vmArgs += " " + self.getJacocoVar()
         if self.useJavaGUI:
             vmArgs += " " + self.getJavaGUIVar()
+        if self.useJavaGUIFX:
+            vmArgs += " " + self.getJavaGUIFXVar()
             
         if _OS.getType() != _OS.Type.WINDOWS:
             shellScriptArguments = []

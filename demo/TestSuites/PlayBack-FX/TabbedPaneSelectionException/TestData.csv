@@ -1,0 +1,7 @@
+COMMENT;SELECTION_METHOD;SELECTION_VALUE;EXPECTED_MSG;TAB_COMPONENT_NAME;JAVAGUI_INSTANCE_NAME
+select out of lower bound tab;index;-2;Tab index -2 out of bounds.;TABBED_PANE;PlaybackApp
+select out of higher bound tab;index;1234;Tab index 1234 out of bounds.;TABBED_PANE;PlaybackApp
+select wrong title tab;title;tototutu;Unable to find tab titled 'tototutu';TABBED_PANE;PlaybackApp
+select wrong id tab;id;a12;Unable to find the component named 'a12';TABBED_PANE;PlaybackApp
+empty title;title;;Unable to find tab titled '';TABBED_PANE;PlaybackApp
+empty id;id;;Unable to find the component named '';TABBED_PANE;PlaybackApp

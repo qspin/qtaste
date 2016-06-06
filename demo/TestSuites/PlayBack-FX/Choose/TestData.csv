@@ -1,0 +1,5 @@
+COMMENT;VALUE;NOT_VALUE;COMPONENT_NAME;JAVAGUI_INSTANCE_NAME
+Check Check box;true;false;CHECK_BOX;PlaybackApp
+Uncheck Check box;true;false;CHECK_BOX;PlaybackApp
+check Radio;true;false;RADIO_BUTTON;PlaybackApp
+check Toggle;true;false;TOGGLE_BUTTON;PlaybackApp
