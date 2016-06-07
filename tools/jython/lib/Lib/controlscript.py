@@ -198,8 +198,7 @@ class ControlScript(object):
     def start(self):
         """ Method called on start, starts control actions in defined order"""
         try:
-            writer = open(self.callerDirectory + _os.sep + self.callerScript.replace(".py", ".param"), "w")
-            try:
+            with open(self.callerDirectory + _os.sep + self.callerScript.replace(".py", ".param"), "w") as writer:
                 processId = ""
                 for controlAction in self.controlActions:
                     controlAction.dump(writer)
@@ -208,8 +207,6 @@ class ControlScript(object):
                     processId += str(controlAction.caID)
                     controlAction.dumpDataType(controlAction.__class__.__name__, writer)
                 writer.write("processes=" + processId + "\n")
-            finally:
-                writer.close
         except:
             print "error during the param file generation"
             raise
