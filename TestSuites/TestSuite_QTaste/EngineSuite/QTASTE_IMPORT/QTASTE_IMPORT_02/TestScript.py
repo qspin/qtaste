@@ -19,30 +19,34 @@
 #
 
 from qtaste import *
-from lib import *
+importTestScript("../QTASTE_DATA/QTASTE_DATA_01")
 
 ##
-#  QTaste documentation management:
+#  QTaste import test script feature:
 # <p>
-# This test case has the goal to verify that when a test step is imported, this documentation is well imported too.
+# This test case has the goal to verify that steps of an imported test script are accessible.
 ##
+
+
+def Step1():
+    """
+    @step Check that NEW_DATA test data doesn't exist
+    @expected NEW_DATA test data doesn't exist
+    """
+    if testData.contains('NEW_DATA'):
+        testAPI.stopTest(Status.FAIL, "the test data 'NEW_DATA' already exists")
 
 
 def Step2():
     """
-    @step Define a Python script&nbsp;containing the following a syntax error:
-          if myValue eq True:
-    @expected Test result is "Not available" with the following reason:<p>
-              <i>Python syntax error in file .../TestScript.py at line 40, column 15:</i>
-              <pre><i>    if myValue eq True:</i></pre><p>
-              Script call stack is reported.
+    @step Execute Step3 of QTASTE_DATA_01
+    @expected NEW_DATA test data exists and has value 'new'
     """
-    if myValue eq True:
-        print "myValue is true"
-    else:
-        print "myValue is false"
+    doSubStep(QTASTE_DATA_01.Step3)
 
-doStep(Step1FromLIB)
+    if testData.getValue('NEW_DATA') != 'new':
+        testAPI.stopTest(Status.FAIL, "the test data 'NEW_DATA' doesn't have 'new' value")
+
+
+doStep(Step1)
 doStep(Step2)
-
-myValue = testAPI.getEngineTest().throwNoException()
