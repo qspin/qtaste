@@ -19,17 +19,18 @@
 
 package com.qspin.qtaste.ui;
 
-import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -43,6 +44,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -51,6 +54,7 @@ import javax.swing.tree.TreePath;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.datacollection.collection.ProbeManager;
@@ -59,6 +63,7 @@ import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 import com.qspin.qtaste.kernel.testapi.TestAPI;
 import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.reporter.testresults.TestResult;
+import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.QTasteDataException;
 import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.testsuite.TestRequirement;
@@ -134,6 +139,28 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             mInteractiveText.addActionListener(executeButtonListener);
 
             mInteractiveText.setEnabled(false);
+            // enable the execute button only when text is not empty
+            mInteractiveText.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    onChange();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    onChange();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    onChange();
+                }
+
+                private void onChange()
+                {
+                    mExecuteButton.setEnabled(!mInteractiveText.getText().isEmpty());
+                }
+            });
 
             topPanel.add(mInteractiveText, BorderLayout.CENTER);
             topPanel.add(mExecuteButton, BorderLayout.EAST);
@@ -202,7 +229,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             // listen to events 
             TextAreaAppender.addTextArea(log4jPane);
             mLogPanel.startTestCaseListener();
-            mExecuteButton.setEnabled(true);
+            mExecuteButton.setEnabled(!mInteractiveText.getText().isEmpty());
             mInteractiveText.setEnabled(true);
             mStopInteractiveTestButton.setEnabled(true);
             mStartInteractiveTestButton.setEnabled(false);
@@ -256,7 +283,9 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             try {
                 File iQTasteDirectory = new File(tempDir + "/QTaste_interactive");
                 File iQTasteFile = new File(iQTasteDirectory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
-                interactiveQTasteFile = new PrintWriter(new BufferedWriter(new FileWriter(iQTasteFile)));
+                interactiveQTasteFile = new PrintWriter(
+                      new BufferedWriter(new OutputStreamWriter(new FileOutputStream(iQTasteFile), StandardCharsets.UTF_8)));
+                interactiveQTasteFile.println("# coding=utf-8");
                 interactiveQTasteFile.println("from qtaste import *");
                 interactiveQTasteFile.println("def interactiveCommand():");
                 interactiveQTasteFile.println("\t" + command);
@@ -318,12 +347,15 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
          */
         public void actionPerformed(ActionEvent e) {
         	final String command = mInteractiveText.getText();
-            new Thread(new Runnable() {
+            if (!command.isEmpty())
+            {
+                new Thread(new Runnable() {
             	@Override
             		public void run() {
             			executeCommand(command);
             		}
             }).start();
+            }
         }
     }
 
