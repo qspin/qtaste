@@ -53,9 +53,9 @@ import org.python.core.PyException;
 import org.python.core.PyFunction;
 import org.python.core.PyInstance;
 import org.python.core.PyInteger;
-import org.python.core.PyInstance;
 import org.python.core.PyList;
 import org.python.core.PyObject;
+import org.python.core.PyObjectDerived;
 import org.python.core.PyString;
 import org.python.core.PyStringMap;
 import org.python.core.PySyntaxError;
@@ -142,6 +142,15 @@ public class JythonTestScript extends TestScript implements Executable {
 
     public static Logger getLogger() {
         return logger;
+    }
+
+    /**
+     * Raises the current exception in Python code.
+     * (workaround, replacement for raise which loses the stacktrace, in jython 2.7.0)
+     * @throws Throwable
+     */
+    public static void raise() throws Throwable {
+        throw Py.getThreadState().exception;
     }
 
     private static void initializeEmbeddedJython() {
@@ -315,15 +324,18 @@ public class JythonTestScript extends TestScript implements Executable {
                     "    status = __TestResultStatus.SUCCESS\n" +
                     "    begin_time = __time.clock()\n" +
                     "    try:\n" +
-                    "        try:\n" +
-                    "            testScript.addStepResult(stepId, __TestResultStatus.RUNNING, stepName, stepDoc, 0)\n" +
-                    "            func()\n" +
-                    "        except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
-                    "            status = __TestResultStatus.FAIL\n" +
-                    "            raise\n" +
-                    "        except:\n" +
-                    "            status = __TestResultStatus.NOT_AVAILABLE\n" +
-                    "            raise\n" +
+                    "        testScript.addStepResult(stepId, __TestResultStatus.RUNNING, stepName, stepDoc, 0)\n" +
+                    "        func()\n" +
+                    "    except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
+                    "        status = __TestResultStatus.FAIL\n" +
+//                    "        raise\n" +
+                          // following code replaces raise, without losing the stacktrace (jython 2.7.0)
+                          "        __JythonTestScript.raise()\n" +
+                    "    except:\n" +
+                    "        status = __TestResultStatus.NOT_AVAILABLE\n" +
+//                    "        raise\n" +
+                    // following code replaces raise, without losing the stacktrace (jython 2.7.0)
+                    "        __JythonTestScript.raise()\n" +
                     "    finally:\n" +
                     "        end_time = __time.clock()\n" +
                     "        elapsed_time = end_time - begin_time\n" +
@@ -838,7 +850,7 @@ public class JythonTestScript extends TestScript implements Executable {
         // handle ThreadDeath exception
         if (cause instanceof PyException) {
             PyException pe = (PyException) cause;
-            if (pe.value instanceof PyInstance) {
+            if (pe.value instanceof PyObjectDerived) {
                 Object javaError = pe.value.__tojava__(Throwable.class);
                 if (javaError != null && javaError != Py.NoConversion) {
                     if (javaError instanceof ThreadDeath) {
@@ -871,8 +883,6 @@ public class JythonTestScript extends TestScript implements Executable {
                     lineNumber = (PyInteger) syntaxError.value.__getattr__(new PyString("lineno"));
                     columnNumber = (PyInteger) syntaxError.value.__getattr__(new PyString("offset"));
                     text = (PyString) syntaxError.value.__getattr__(new PyString("text"));
-                    message = "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n" + text;
-
                 }
                 message = "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n" + text;
                 result.addStackTraceElement(new StackTraceElement("", "", fileName.toString(), Integer.parseInt(lineNumber.toString())));
@@ -882,7 +892,7 @@ public class JythonTestScript extends TestScript implements Executable {
             }
         } else if (cause instanceof PyException) {
             PyException pe = (PyException) cause;
-            if (pe.value instanceof PyInstance) {
+            if (pe.value instanceof PyObjectDerived) {
                 // check  if exception is UndeclaredThrowableException
                 // in this case status is "failed" and message is taken from cause exception
                 Object javaError = pe.value.__tojava__(Throwable.class);
@@ -1228,8 +1238,8 @@ public class JythonTestScript extends TestScript implements Executable {
                 debugVar = dumpJavaObject(o, debugVar);
             }
             return debugVar;
-        } else if (value instanceof PyInstance) {
-            PyInstance pythonValue = (PyInstance) value;
+        } else if (value instanceof PyObjectDerived) {
+            PyObjectDerived pythonValue = (PyObjectDerived) value;
             Object javaObject = pythonValue.__tojava__(Object.class);
             if (javaObject instanceof ArrayList) {
                 ArrayList<?> javaObjectArray = (ArrayList<?>) javaObject;
