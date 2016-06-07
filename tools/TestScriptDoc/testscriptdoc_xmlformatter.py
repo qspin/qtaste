@@ -76,10 +76,9 @@ class PythonDocGenerator:
             self._handleDirectories(directory)
             # add name, relative filename and summary to testsuite
             testSuiteScript = et.SubElement(self.currentNodePath[-1], 'testscript', {'name':testScriptName, 'docfilename':relativeFilename})
-            try:
-                testSuiteScript.append(module.find('info/summary'))
-            except:
-                pass
+            infoSummary = module.find('info/summary')
+            if infoSummary is not None:
+                testSuiteScript.append(infoSummary)
         # split data names, types and descriptions
         for elem in module.getiterator('data'):
             try:
@@ -114,7 +113,7 @@ class PythonDocGenerator:
         et.SubElement(info, 'version').text = self._getVersion(testScriptFileName)
         # create steps functions dictionary
         for elem in module.getiterator('function'):
-            if not elem.find('info/step') is None:
+            if elem.find('info/step') is not None:
                 name = elem.findtext('info/name')
                 step = elem.find('info')
                 step.tag = 'step'
@@ -141,7 +140,7 @@ class PythonDocGenerator:
 
     def done(self):
         if self.createTestSuiteDoc:
-            filename = self.testSuiteDir + r'%sTestSuite-doc.xml' %(os.sep)
+            filename = self.testSuiteDir + r'%sTestSuite-doc.xml' % os.sep
             print 'Saving', filename
             tree = et.ElementTree(self.testSuite)
             with open(filename, 'wb') as file:
@@ -302,7 +301,7 @@ class PythonDocGenerator:
                             stepsDocDict[stepName] = stepElem
                     stepsTablesDict = {}
                     stepsTablesTree = stepsModuleDocTree.find('stepsTables')
-                    if stepsTablesTree:
+                    if stepsTablesTree is not None:
                         for stepsTableElem in stepsTablesTree.getiterator('stepsTable'):
                             stepsTableName = stepsTableElem.get('name')
                             stepsTable = []
@@ -334,7 +333,7 @@ class PythonDocGenerator:
         description = declaredStep.find('description')
         expected = declaredStep.find('expected')
         stepElement.append(description)
-        if not expected is None:
+        if expected is not None:
             stepElement.append(expected)
 
     # add a undefined step to steps with given id, and name
