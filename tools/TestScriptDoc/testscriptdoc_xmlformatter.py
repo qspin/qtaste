@@ -299,7 +299,7 @@ class PythonDocGenerator:
                     stepsModuleDocTree = et.parse(stepsDocFileName, TreeBuilder())
                     stepsDocDict = {}
                     stepsDocTree = stepsModuleDocTree.find('steps')
-                    if stepsDocTree:
+                    if stepsDocTree is not None:
                         for stepElem in stepsDocTree.getiterator('step'):
                             stepName = stepElem.get('name')
                             stepsDocDict[stepName] = stepElem
