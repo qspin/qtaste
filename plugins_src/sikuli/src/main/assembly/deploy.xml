@@ -37,6 +37,7 @@
 				<include>com.sikulix:sikulixapi</include>
 				<include>com.sikulix:sikulixlibslux</include>
 				<include>com.sikulix:sikulixlibswin</include>
+				<include>com.nativelibs4java:bridj</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>
