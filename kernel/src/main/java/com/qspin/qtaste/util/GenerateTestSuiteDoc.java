@@ -26,6 +26,8 @@ import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -178,6 +180,7 @@ public class GenerateTestSuiteDoc {
             }
         };
         File [] testScripts = aTestScriptDirectory.listFiles(fileFilter);
+        Arrays.sort(testScripts);
         if ( testScripts.length != 0 ) {
         	return testScripts;
         } else {
@@ -186,10 +189,10 @@ public class GenerateTestSuiteDoc {
                     return !file.isFile();
                 }
             };
-        	for (File dir : aTestScriptDirectory.listFiles(directoryFilter) ) {
-        		for ( File f : searchTestScripts(dir) ) {
-        			files.add(f);
-        		}
+            File[] directories = aTestScriptDirectory.listFiles(directoryFilter);
+            Arrays.sort(directories);
+            for (File dir : directories) {
+                Collections.addAll(files, searchTestScripts(dir));
         	}
         	return files.toArray(new File[0]);
         }
