@@ -8,14 +8,13 @@
 # Precondition: must be run from QTaste root directory and qtaste-kernel-deploy.jar must be in CLASSPATH
 ##
 
-import sys, re, os.path, os.sep
+import sys, re, os
 from sets import Set
 try:
     import xml.etree.ElementTree as et
-    from xml.etree.HTMLTreeBuilder import HTMLTreeBuilder
 except ImportError:
     import elementtree.ElementTree as et
-    from elementtree.HTMLTreeBuilder import HTMLTreeBuilder
+from pythondoc import HTMLTreeBuilder
 
 from com.qspin.qtaste.config import StaticConfiguration
 from com.qspin.qtaste.config import TestEngineConfiguration
@@ -44,7 +43,7 @@ DUPLICATE_STEPS_PER_TEST_DATA_ROW = TestEngineConfiguration.getInstance().getBoo
 
 
 ##
-# Read an QTaste test campaign file and generate the aggregated test cases doc file.
+# Read a QTaste test campaign file and generate the aggregated test cases doc file.
 # @param campaignFileName the test campaign file name
 # @return the aggregated test cases doc file name
 def generateTestCasesDoc(campaignFileName):
@@ -68,7 +67,7 @@ def generateTestCasesDoc(campaignFileName):
     return aggregatedDocFileName
 
 ##
-# Read an QTaste test campaign file and return an Element tree of test cases directory hierarchy.
+# Read a QTaste test campaign file and return an Element tree of test cases directory hierarchy.
 # The root node is named 'testcases', other nodes are named with the directory basename,
 # leaf nodes represent testcases and have a 'testCaseDir' attribute which is the full test case directory path,
 # a 'selectedRows' attribute containing the comma-separated list of selected data rows,
@@ -151,7 +150,7 @@ def visit(nodeElem, aggregatedDocFile, level=1, prefix=''):
         else:
             testCaseDir = elem.get('testCaseDir')
             selectedRows = Set([int(x) for x in elem.get('selectedRows').split(',')])
-            testbeds = elem.get('testbeds').split(',')
+            testbeds = map(str, elem.get('testbeds').split(','))
             selectedRowsForTestbeds = {}
             for testbed in testbeds:
                 selectedRowsForTestbeds[testbed] = Set([int(x) for x in elem.get('selectedRowsForTestbed' + testbed).split(',')])
