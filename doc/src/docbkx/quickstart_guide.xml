@@ -75,7 +75,7 @@
         <listitem override="bullet">
            On Linux system, Java VM requires some graphical gnome libraries. These libraries have to be installed.
 
-          <ulink url="https://sourceforge.net/apps/mantisbt/qtaste/view.php?id=3"/>
+          <ulink url="https://github.com/qspin/qtaste/issues/4"/>
 
 
         </listitem>
