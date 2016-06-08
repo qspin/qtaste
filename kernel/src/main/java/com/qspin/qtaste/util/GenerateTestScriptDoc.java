@@ -19,11 +19,14 @@
 
 package com.qspin.qtaste.util;
 
-import com.qspin.qtaste.config.StaticConfiguration;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.Properties;
+
+import org.apache.log4j.PropertyConfigurator;
 import org.python.util.PythonInterpreter;
+
+import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
  * This class is responsible for generating the documentation of a TestScript
@@ -87,6 +90,9 @@ public class GenerateTestScriptDoc {
     }
 
     public static void main(String[] args) {
+        // Log4j Configuration
+        PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+
         if (args.length != 1) {
             displayUsage();
         } else {

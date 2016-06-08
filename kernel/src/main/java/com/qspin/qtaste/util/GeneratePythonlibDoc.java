@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 
@@ -121,7 +122,10 @@ public class GeneratePythonlibDoc {
     }
 
     public static void main(String[] args) {
-        if (args.length == 0) {
+		// Log4j Configuration
+		PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+
+		if (args.length == 0) {
             generate();
         }
     }

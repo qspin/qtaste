@@ -25,6 +25,7 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
 import org.w3c.dom.Document;
@@ -83,6 +84,9 @@ public class GenerateTestCampaignDoc {
     }
 
     public static void main(String[] args) {
+        // Log4j Configuration
+        PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+
         if (args.length != 1) {
             displayUsage();
         } else {

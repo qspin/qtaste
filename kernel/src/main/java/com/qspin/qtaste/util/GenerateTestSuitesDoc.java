@@ -22,6 +22,10 @@ package com.qspin.qtaste.util;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.apache.log4j.PropertyConfigurator;
+
+import com.qspin.qtaste.config.StaticConfiguration;
+
 /**
  * This class is responsible for generating the documentation of all the testsuites
  * @author lvboque
@@ -53,6 +57,9 @@ public class GenerateTestSuitesDoc {
     }
 
     public static void main(String[] args) {
+        // Log4j Configuration
+        PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+
         if (args.length != 0) {
             displayUsage();
         } else {

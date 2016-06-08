@@ -19,11 +19,14 @@
 
 package com.qspin.qtaste.util;
 
-import com.qspin.qtaste.config.StaticConfiguration;
 import java.io.StringWriter;
 import java.util.Properties;
+
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.python.util.PythonInterpreter;
+
+import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
  *
@@ -74,6 +77,9 @@ public class GenerateTestStepsModulesDoc {
     }
 
     public static void main(String [] args) {
+        // Log4j Configuration
+        PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+
         switch (args.length) {
             case 0:
                 generate("TestSuites");
