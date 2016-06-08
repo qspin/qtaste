@@ -222,18 +222,17 @@ public class TestEngine {
 			List<String> scriptEngineCommand = new ArrayList<String>();
 
 			if (scriptFilename.endsWith(".py")) {
+				final String qtasteJar = StaticConfiguration.QTASTE_ROOT + "/kernel/target/qtaste-kernel-deploy.jar";
 				final String jythonHome = StaticConfiguration.JYTHON_HOME;
-				final String jythonJar = jythonHome + "/jython.jar";
 				final String jythonLib = StaticConfiguration.JYTHON_LIB.trim();
 				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
 				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
 				
 				scriptEngineCommand.add("java");
-				scriptEngineCommand.add("-Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + "\"" + jythonLib 
-								 + "\"" + File.pathSeparator + "\"" + additionnalJythonLib + "\"");
+				scriptEngineCommand.add("-Dpython.path=\"" + qtasteJar + '"' + File.pathSeparator + '"' + jythonLib
+								 + '"' + File.pathSeparator + '"' + additionnalJythonLib + '"');
 				scriptEngineCommand.add("-cp");
-				scriptEngineCommand.add("\"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator
-								 + jythonJar + File.pathSeparator + classPath + "\"");
+				scriptEngineCommand.add('"' + qtasteJar + File.pathSeparator + classPath + '"');
 				scriptEngineCommand.add("org.python.util.jython");
 
 				logger.trace("script engine command: " + StringUtils.join(scriptEngineCommand, " "));

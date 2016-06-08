@@ -1,7 +1,7 @@
 @echo off
 setlocal
 set QTASTE_ROOT=%~dp0\..
-java -Xms64m -Xmx512m -cp "%QTASTE_CLASSPATH%";%QTASTE_ROOT%/plugins/*;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar;testapi/target/qtaste-testapi-deploy.jar com.qspin.qtaste.kernel.engine.TestEngine %* | set result=1
+java -Xms64m -Xmx512m -cp "%QTASTE_CLASSPATH%";%QTASTE_ROOT%\plugins\*;%QTASTE_ROOT%\kernel\target\qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar com.qspin.qtaste.kernel.engine.TestEngine %* | set result=1
 if %result% == 1
 then
     echo test failed

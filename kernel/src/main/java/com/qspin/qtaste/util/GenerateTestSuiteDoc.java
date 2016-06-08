@@ -85,14 +85,11 @@ public class GenerateTestSuiteDoc {
             interp.setOut(outputs);
             interp.setErr(outputs);
             interp.cleanup();
-            //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
             String args = "import sys;sys.argv[1:]= ['-f', '-s', '-Otestscriptdoc_xmlformatter', '-Dtestsuite_dir=" + testSuiteDir.replace(File.separator, "/") + "'," + testScriptsList.toString().replace(File.separator, "/") + "]";
-            //System.out.println(args);
             interp.exec(args);
             interp.exec("__name__ = '__main__'");
             interp.exec("execfile(r'" + StaticConfiguration.JYTHON_HOME + "/Lib/pythondoc.py')");
             interp.cleanup();
-            interp = null;
         }
         catch (Exception e) {
             System.err.println("GenerateTestSuiteDoc - Exception occurs executing PythonInterpreter:" + e.getMessage());

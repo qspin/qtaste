@@ -66,14 +66,11 @@ public class GenerateTestCampaignDoc {
                 interp.setOut(output);
                 interp.setErr(output);
                 interp.cleanup();
-                //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
                 String args = "import sys;sys.argv[1:]= ['" + campaignFile +  "']";
                 interp.exec(args);
                 interp.exec("__name__ = '__main__'");
                 interp.exec("execfile(r'" + StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py')");
                 interp.cleanup();
-                interp = null;
-
             } catch (PyException e) {
                 System.err.println("Exception occurs executing PythonInterpreter:" + e.value);
             }
