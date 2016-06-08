@@ -36,7 +36,6 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 public class PythonTestScript {
     private static Logger logger = Log4jLoggerFactory.getLogger(PythonTestScript.class);
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 	private File m_ScriptFile;
 	private File m_ScriptFileDir;
@@ -110,13 +109,13 @@ public class PythonTestScript {
                 final String[] args2 = new String[]{"-XSLTC", "-XT", "-IN", xmlDocFilename, "-XSL", StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR + "/testscriptdoc_xml2html.xsl", "-OUT", htmlDocFilename};
                 org.apache.xalan.xslt.Process.main(args2);
                 xmlDocFile.delete();
-                String outputString = output.toString();
-                if (outputString.endsWith(StaticConfiguration.TEST_SCRIPT_DOC_XML_FILENAME + " ok" + LINE_SEPARATOR)) {
-                    int endOfBeforeLastLine = outputString.lastIndexOf(LINE_SEPARATOR, outputString.length() - (LINE_SEPARATOR.length() + 4));
+                String outputString = output.toString().trim();
+                if (outputString.endsWith(StaticConfiguration.TEST_SCRIPT_DOC_XML_FILENAME + " ok")) {
+                    int endOfBeforeLastLine = outputString.lastIndexOf('\n');
                     if (endOfBeforeLastLine == -1) {
                         outputString = null;
                     } else {
-                        outputString = outputString.substring(0, endOfBeforeLastLine);
+                        outputString = outputString.substring(0, endOfBeforeLastLine).trim();
                     }
                 }
                 if (outputString != null) {
@@ -133,7 +132,7 @@ public class PythonTestScript {
         }
         return testcaseDoc;		
 	}
-	
+
     public File getTestcaseData() {
     	if (m_ScriptData==null) {
         	m_ScriptData = findFileIn(StaticConfiguration.TEST_DATA_FILENAME, m_ScriptFileDir);
