@@ -190,8 +190,6 @@ public class JythonTestScript extends TestScript implements Executable {
                     "    pass\n" +
                     "class StepsException(Exception):\n" +
                     "    pass\n" +
-                    "class ImportTestScriptException(Exception):\n" +
-                    "    pass\n" +
                     "class __TestAPIWrapper:\n" +
                     "    def __init__(self, testScript):\n" +
                     "        self.testScript = testScript\n";
@@ -271,8 +269,6 @@ public class JythonTestScript extends TestScript implements Executable {
                     "                import TestScript\n" +
                     "            except ImportError:\n" +
                     "                raise ImportError('No test script found in ' + testCasePath)\n" +
-                    "            except:\n" +
-                    "                raise ImportTestScriptException('Error while importing test script ' + testCasePath)\n" +
                     "            if wasInTestScriptImport:\n" +
                     "                # test script is imported\n" +
                     "                __sys._getframe(1).f_globals[testCaseName] = TestScript\n" +
