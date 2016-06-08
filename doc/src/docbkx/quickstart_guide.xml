@@ -117,18 +117,18 @@
         </itemizedlist></para>
 
       <para>The installer available on source forge (<ulink
-      url="https://sourceforge.net/projects/qtaste/files"/>) contains the
+      url="https://github.com/qspin/qtaste/releases"/>) contains the
       QTaste Kernel (sources and binaries), the demonstration (sources and
       binaries) and the documentation.</para>
 
       <para>To start the installer, just click on the <ulink
-      url="http://www.sourceforge.net/projects/qtaste/files/QTaste_V1.1/QTaste_1.1-installer.jar/download">QTaste_1.2-installer.jar</ulink></para>
+      url="https://github.com/qspin/qtaste/releases/tag/v2.3.0">qtaste-izpack-2.3.0-installer.jar</ulink></para>
 
       <warning>
         <para>It is not recommended to install QTASTE in a directory
         containing spaces (like Program Files/QTaste) due to limitations in
         some shell scripts.(<ulink
-        url="http://sourceforge.net/apps/mantisbt/qtaste/view.php?id=6"/>)</para>
+        url="https://github.com/qspin/qtaste/issues/7"/>)</para>
       </warning>
     </section>
   </chapter>
@@ -153,7 +153,7 @@
 
     <para>Unfortunately, this demo is only working on XP 32 bits platform.
     <ulink
-    url="https://sourceforge.net/apps/mantisbt/qtaste/view.php?id=4"/></para>
+    url="https://github.com/qspin/qtaste/issues/5"/></para>
 
     <para>Keep in mind that this demo is only working on Windows XP 32 bits
     platform as this example demonstrates how QTaste can communicate with
