@@ -47,7 +47,6 @@ import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 import org.python.core.Py;
 import org.python.core.PyArray;
-import org.python.core.PyClass;
 import org.python.core.PyDictionary;
 import org.python.core.PyException;
 import org.python.core.PyFunction;
@@ -61,6 +60,7 @@ import org.python.core.PyStringMap;
 import org.python.core.PySyntaxError;
 import org.python.core.PySystemState;
 import org.python.core.PyTuple;
+import org.python.core.PyType;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
@@ -914,7 +914,7 @@ public class JythonTestScript extends TestScript implements Executable {
                 }
             }
             if (message == null) {
-                if (pe.type instanceof PyClass) {
+                if (pe.type instanceof PyType) {
                     String errorName = null, errorValue;
                     try {
                         PyObject doc = pe.value.__getattr__(new PyString("__doc__"));
@@ -927,11 +927,7 @@ public class JythonTestScript extends TestScript implements Executable {
                     } catch (PyException pye) {
                     }
                     if (errorName == null) {
-                        if (pe.type instanceof PyClass) {
-                            errorName = ((PyClass) pe.type).__name__;
-                        } else {
-                            errorName = pe.type.toString();
-                        }
+                        errorName = ((PyType) pe.type).getName();
                     }
 
                     try {
