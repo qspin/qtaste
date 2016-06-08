@@ -4,16 +4,20 @@
 # If testsuite_dir is defined, a TestSuite-doc.xml file will be generated in this directory
 ##
 
-import string, os, re, codecs, java
+import string, os, re, codecs, java.lang
+from com.qspin.qtaste.config import StaticConfiguration
+from com.qspin.qtaste.util import OS
 
 try:
     import xml.etree.ElementTree as et
     from xml.etree.ElementTree import XMLTreeBuilder as TreeBuilder
-
 except ImportError:
     import elementtree.ElementTree as et
     from elementtree.SimpleXMLTreeBuilder import TreeBuilder
 
+
+# conditional expression
+IF = lambda a,b,c:(a and [b] or [c])[0]
 
 
 def relpath(path, reldir):
@@ -242,14 +246,10 @@ class PythonDocGenerator:
 
     def _addImportedTestScriptModuleStepsDocAndTables(self, moduleName, directory):
         #create the step-doc.xml file for the imported test script
-        testScriptFilePath = directory + "/TestScript.py"
-        generatorScript = "generate-TestStepsModules-doc"
-        osName = java.lang.System.getProperty('os.name')
-        if "win" in str(osName).lower():
-            generatorScript = generatorScript + ".bat"
-        else:
-            generatorScript = generatorScript + ".sh"
-        command = generatorScript + ' "' + testScriptFilePath.replace("/", os.sep) + '"'
+        testScriptFilePath = directory.replace("/", os.sep) + os.sep + StaticConfiguration.TEST_SCRIPT_FILENAME
+        shellScriptExtension = IF(OS.getType() == OS.Type.WINDOWS, ".bat", ".sh")
+        generatorScript = "generate-TestStepsModules-doc" + shellScriptExtension
+        command = StaticConfiguration.QTASTE_ROOT + os.sep + "bin" + os.sep + generatorScript + ' "' + testScriptFilePath + '"'
         os.system(command)
 
         stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables("TestScript", [directory])
