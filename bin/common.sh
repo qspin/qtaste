@@ -5,4 +5,3 @@
 #
 
 export QTASTE_ROOT="$(dirname "$0")/.."
-export PATH=$PATH:"$QTASTE_ROOT/lib"
