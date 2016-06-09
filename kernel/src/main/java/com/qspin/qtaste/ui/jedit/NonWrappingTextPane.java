@@ -18,16 +18,6 @@ along with QTaste. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.qspin.qtaste.ui.jedit;
 
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.debug.BreakPointScript;
-import com.qspin.qtaste.testsuite.impl.JythonTestScript;
-import com.qspin.qtaste.ui.TestCasePane;
-import com.qspin.qtaste.ui.tools.FileNode;
-import com.qspin.qtaste.ui.tools.FileSearch;
-import com.qspin.qtaste.util.Log4jLoggerFactory;
-import de.sciss.syntaxpane.DefaultSyntaxKit;
-import de.sciss.syntaxpane.SyntaxDocument;
-import de.sciss.syntaxpane.syntaxkits.PythonSyntaxKit;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -42,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -56,18 +47,32 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.DefaultEditorKit.CopyAction;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.Element;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
+
+import de.sciss.syntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.SyntaxDocument;
+import de.sciss.syntaxpane.syntaxkits.PythonSyntaxKit;
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.debug.BreakPointScript;
+import com.qspin.qtaste.testsuite.impl.JythonTestScript;
+import com.qspin.qtaste.ui.TestCasePane;
+import com.qspin.qtaste.ui.tools.FileNode;
+import com.qspin.qtaste.ui.tools.FileSearch;
+import com.qspin.qtaste.util.Log4jLoggerFactory;
+
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -112,7 +117,6 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         loadDateAndTime = System.currentTimeMillis();
         isTestScript = testscript;
 
-
         //setEditorKit(new HighlightKit());
 
         this.addFocusListener(new FocusListener() {
@@ -124,8 +128,9 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
                 long lastFileModifiedDate = file.lastModified();
                 if (loadDateAndTime < lastFileModifiedDate) {
                     loadDateAndTime = lastFileModifiedDate;
-                    if (JOptionPane.showConfirmDialog(null, "File has been modified outside this editor.\n Do you want to reload it?'",
-                            "Update confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if (JOptionPane.showConfirmDialog(null,
+                          "File has been modified outside this editor.\n Do you want to reload it?'", "Update confirmation",
+                          JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         if (mTcPane == null) {
                             return;
                         }
@@ -137,7 +142,6 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             public void focusLost(FocusEvent e) {
             }
         });
-
 
         this.addMouseListener(new MouseAdapter() {
 
@@ -166,13 +170,15 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
                                     int startQuotePos = text.indexOf(quoteStr);
                                     int endQuotePos = text.lastIndexOf(quoteStr);
                                     if (startQuotePos > 0 && endQuotePos > 0 && startQuotePos != endQuotePos) {
-                                        String testScriptName =
-                                                text.substring(startQuotePos + 1, endQuotePos);
+                                        String testScriptName = text.substring(startQuotePos + 1, endQuotePos);
                                         // search the script from testscript file
                                         File testScriptFile = new File(getFileName());
                                         try {
-                                            String testScriptFileDir = testScriptFile.getParentFile().getParentFile().getCanonicalPath();
-                                            String importedTestScript = testScriptFileDir + File.separator + testScriptName + File.separator + "TestScript.py";
+                                            String testScriptFileDir = testScriptFile.getParentFile().getParentFile()
+                                                  .getCanonicalPath();
+                                            String importedTestScript =
+                                                  testScriptFileDir + File.separator + testScriptName + File.separator
+                                                        + "TestScript.py";
                                             mTcPane.loadTestCaseSource(new File(importedTestScript), true, false);
                                         } catch (IOException e1) {
                                             // TODO Auto-generated catch block
@@ -203,8 +209,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
                                     }
                                     fileSearch.addSearchPath(StaticConfiguration.JYTHON_LIB);
                                     fileSearch.addSearchPath(StaticConfiguration.ADDITIONNAL_JYTHON_LIB);
-                                    String importFileName =
-                                            fileSearch.getFirstFileFound(selectedText + ".py");
+                                    String importFileName = fileSearch.getFirstFileFound(selectedText + ".py");
                                     if (importFileName != null) // now open the docfile
                                     {
                                         // load the file
@@ -219,8 +224,6 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             }
         });
 
-
-
         TextAction selectWordAction = new TextAction("Select Word") {
 
             public void actionPerformed(ActionEvent evt) {
@@ -231,13 +234,12 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
                     int start = TextUtilities.findWordStart(getDocument().getText(0, getDocument().getLength()), pos, "_");
 
                     // Check if start precedes whitespace
-                    if (start < getDocument().getLength()
-                            && Character.isWhitespace(getDocument().getText(start, 1).charAt(0))) {
+                    if (start < getDocument().getLength() && Character.isWhitespace(getDocument().getText(start, 1).charAt(0))) {
                         // Check if caret is at end of word
-                        if (pos > 0
-                                && !Character.isWhitespace(getDocument().getText(pos - 1, 1).charAt(0))) {
+                        if (pos > 0 && !Character.isWhitespace(getDocument().getText(pos - 1, 1).charAt(0))) {
                             // Start searching before the caret
-                            start = TextUtilities.findWordStart(getDocument().getText(0, getDocument().getLength()), pos - 1, "_");
+                            start = TextUtilities.findWordStart(getDocument().getText(0, getDocument().getLength()), pos - 1,
+                                  "_");
                         } else {
                             // Caret is not adjacent to a word
                             start = -1;
@@ -255,7 +257,6 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             }
         };
         getActionMap().put("select-word", selectWordAction);
-
 
     }
     // Override getScrollableTracksViewportWidth
@@ -277,27 +278,45 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         installAdditionalPopup();
         setFont(new Font("monospaced", Font.PLAIN, 12));
         setTabs(4);
-        ActionMap actions = this.getActionMap();
-        // remove the default behaviour
-        actions.remove("indent");
-        // install the new one (with same name to keep the inputpmap
+        ActionMap actions = getActionMap();
+        // install new behaviour (with same name to keep the inputmap)
         actions.put("indent", new com.qspin.qtaste.ui.jedit.IndentAction());
 
         // install Specific indentation for Python on ENTER key
-        PythonIndentAction newAction = new PythonIndentAction();
+        PythonIndentAction pythonIndentAction = new PythonIndentAction();
         KeyStroke ks = KeyStroke.getKeyStroke("ENTER");
-        newAction.putValue(Action.ACCELERATOR_KEY, ks);
-        this.getInputMap().put(ks, "PYTHON_INDENT");
-        actions.put("PYTHON_INDENT", newAction);
+        pythonIndentAction.putValue(Action.ACCELERATOR_KEY, ks);
+        getInputMap().put(ks, "PYTHON_INDENT");
+        actions.put("PYTHON_INDENT", pythonIndentAction);
+
+        // install smart copy: select line and copy on CTRL-C key if nothing selected
+        final Action selectLineAction = actions.get(DefaultEditorKit.selectLineAction);
+        Action smartCopyAction = new CopyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextComponent target = getTextComponent(e);
+                if (target != null) {
+                    if (target.getSelectedText() == null) {
+                        selectLineAction.actionPerformed(e);
+                        // include new-line
+                        target.setSelectionEnd(target.getSelectionEnd() + 1);
+                    }
+                    super.actionPerformed(e);
+                }
+            }
+        };
+        smartCopyAction.putValue(Action.ACCELERATOR_KEY,
+              actions.get(DefaultEditorKit.copyAction).getValue(Action.ACCELERATOR_KEY));
+        actions.put(DefaultEditorKit.copyAction, smartCopyAction);
 
         // add a document filter to replace tabs by 4 spaces when some text is added or replaced
         // in the document
         if (contentType.contains("python")) {
-	        Document document = getDocument();
-	        
-	        if (document instanceof AbstractDocument) {
-	        	((AbstractDocument)document).setDocumentFilter(new IndentationDocumentFilter());
-	        }
+            Document document = getDocument();
+
+            if (document instanceof AbstractDocument) {
+                ((AbstractDocument) document).setDocumentFilter(new IndentationDocumentFilter());
+            }
         }
     }
 
@@ -317,7 +336,9 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
 
         TabStop[] tabs = new TabStop[10];
 
-        for (int j = 0; j < tabs.length; j++) {
+        for (int j = 0;
+              j < tabs.length;
+              j++) {
             int tab = j + 1;
             tabs[j] = new TabStop(tab * tabWidth);
         }
@@ -329,6 +350,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
 
     /**
      * Converts a y co-ordinate to a line index.
+     *
      * @param y The y co-ordinate
      */
     public int yToLine(int y) {
@@ -340,8 +362,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         int startLine = map.getElementIndex(0);
         int endline = map.getElementIndex(length);
 
-        return Math.max(0, Math.min(endline - 1,
-                y / height + startLine)) - 1;
+        return Math.max(0, Math.min(endline - 1, y / height + startLine)) - 1;
     }
 
     public LineNumberPanel getLineNumberPanel() {
@@ -422,57 +443,51 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
     public void reload() {
         mTcPane.loadTestCaseSource(new File(getFileName()), true, isTestScript, true);
     }
-    
+
     public void save() {
         BufferedWriter output = null;
         try {
             File file = new File(getFileName());
             //output = new BufferedWriter(new FileWriter(file)); //TODO Remove loc
-            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
             output.append(getText());
             output.close();
             loadDateAndTime = file.lastModified();
         } catch (IOException ex) {
             logger.fatal("Cannot save file", ex);
-            JOptionPane.showMessageDialog(
-            		null,
-            		"Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
-            		"Cannot save the file",
-            		JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                  "Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
+                  "Cannot save the file", JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
                 output.close();
                 setModified(false);
             } catch (IOException ex) {
                 logger.fatal("Cannot save file", ex);
-                JOptionPane.showMessageDialog(
-                		null,
-                		"Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
-                		"Cannot save the file",
-                		JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,
+                      "Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
+                      "Cannot save the file", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-	/**
-	 * Reload the current file (i.e revert unsaved modifications)
-	 */
-	class ReloadAction extends AbstractAction {
-		
-		public ReloadAction() {
-			super("Revert unsaved modifications");
-		}
-		
-		public void actionPerformed(ActionEvent e) {
-			if (JOptionPane.showConfirmDialog(null, 
-					  "Do you want to revert unsaved modifications ?",
-					  "Revert unsaved modifications",
-					  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				reload();
-			}
-		}
-	}
-    
+    /**
+     * Reload the current file (i.e revert unsaved modifications)
+     */
+    class ReloadAction extends AbstractAction {
+
+        public ReloadAction() {
+            super("Revert unsaved modifications");
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (JOptionPane.showConfirmDialog(null, "Do you want to revert unsaved modifications ?",
+                  "Revert unsaved modifications", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                reload();
+            }
+        }
+    }
+
     public class AddNewStep extends AbstractAction {
 
         public AddNewStep() {
@@ -483,20 +498,18 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
             try {
                 // ask for the stepName
                 String input = null;
-                input = JOptionPane.showInputDialog(null,
-                        "Give the name of the step",
-                        "Name of the step",
-                        JOptionPane.QUESTION_MESSAGE);
+                input = JOptionPane.showInputDialog(null, "Give the name of the step", "Name of the step",
+                      JOptionPane.QUESTION_MESSAGE);
                 if (input != null) {
                     // get the selected table lines
                     Document doc = getDocument();
-                    String NewStepTemplate =
-                            "def " + input + "():\n"
-                            + "	\"\"\"\n"
-                            + "	@step	   Description of the actions done for this step\n"
-                            + "	@expected  Description of the expected result\n"
-                            + "	\"\"\"\n"
-                            + "	pass\n";
+                    String NewStepTemplate = //
+                          "def " + input + "():\n" //
+                                + "	\"\"\"\n" //
+                                + "	@step	   Description of the actions done for this  step\n" //
+                                + "	@expected  Description of the expected result\n" //
+                                + "	\"\"\"\n" //
+                                + "	pass\n";
                     doc.insertString(NonWrappingTextPane.this.getCaretPosition(), NewStepTemplate, null);
 
                     String CallStepTemplate = "doStep(" + input + ")\n";
@@ -520,38 +533,38 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-        	if (NonWrappingTextPane.this.isModified()) {
-        		NonWrappingTextPane.this.save();
-        	}
+            if (NonWrappingTextPane.this.isModified()) {
+                NonWrappingTextPane.this.save();
+            }
         }
-        
+
         @Override
         public boolean isEnabled() {
             return true;
         }
     }
-    
+
     /**
      * Document filter to replace tabs with spaces when the document is edited.
      */
     class IndentationDocumentFilter extends DocumentFilter {
 
         @Override
-    	public void	insertString(DocumentFilter.FilterBypass fb, int offset, String text, 
-    			AttributeSet attrs) throws BadLocationException {
-    		super.insertString(fb, offset, text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING), attrs);
-    	}
-    	
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attrs) throws
+              BadLocationException {
+            super.insertString(fb, offset, text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING), attrs);
+        }
+
         @Override
-    	public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, 
-    			AttributeSet attrs) throws BadLocationException {
-    		String newText = text;
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws
+              BadLocationException {
+            String newText = text;
 
-    		if (text != null) {
-    			newText = text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
-    		}
+            if (text != null) {
+                newText = text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
+            }
 
-    		super.replace(fb, offset, length, newText, attrs);
-    	}
+            super.replace(fb, offset, length, newText, attrs);
+        }
     }
 }
