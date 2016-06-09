@@ -27,7 +27,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,23 +42,23 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.log4j.Logger;
-import org.python.core.PyException;
-import org.python.util.PythonInterpreter;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.log4j.Logger;
+import org.python.core.PyException;
+
 import com.qspin.qtaste.config.GUIConfiguration;
+import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.kernel.campaign.Campaign;
 import com.qspin.qtaste.kernel.campaign.CampaignManager;
-import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.ui.MainPanel;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.treetable.JTreeTable;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.PythonHelper;
 import com.qspin.qtaste.util.ThreadManager;
 
 /**
@@ -250,7 +249,6 @@ public class TestCampaignMainPanel extends JPanel {
             metaCampaignComboBox.addItem(campaigns[i]);
         }
         return campaigns;
-
 	}
 
 	public JTreeTable getTreeTable() {
@@ -312,18 +310,9 @@ public class TestCampaignMainPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             MetaCampaignFile selectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
             try {
-                StringWriter output = new StringWriter();
-                PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-                interp.setOut(output);
-                interp.setErr(output);
-                interp.cleanup();
-                String args = "import sys;sys.argv[1:]= [r'" + selectedCampaign.getFileName() + "']";
-                interp.exec(args);
-                interp.exec("__name__ = '__main__'");
-                String s =   "execfile(r'tools/TestProcedureDoc/generateTestCampaignDoc.py')";
-                interp.exec(s);
-                interp.cleanup();
-                interp = null;
+                PythonHelper.execute(StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py",
+                      selectedCampaign.getFileName());
+
                 File campaingFile = new File(selectedCampaign.getFileName());
                 if (campaingFile.exists()) {
                 	File resultsFile = new File(campaingFile.getParentFile().getCanonicalPath() + "/" + selectedCampaign.getCampaignName() + "-doc.html");
@@ -338,10 +327,8 @@ public class TestCampaignMainPanel extends JPanel {
                 		JOptionPane.showMessageDialog(null,
                 				"Error during generation of TPO file",
                 				"Error", JOptionPane.ERROR_MESSAGE);
-
                 	}
                 }
-
             } catch (PyException ex) {
                 logger.error(ex.getMessage(), ex);
         		JOptionPane.showMessageDialog(null,
@@ -354,7 +341,6 @@ public class TestCampaignMainPanel extends JPanel {
         				"Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }
 
     public class CampaignExecutionThread implements Runnable {

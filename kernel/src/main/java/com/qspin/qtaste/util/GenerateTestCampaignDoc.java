@@ -19,15 +19,11 @@
 
 package com.qspin.qtaste.util;
 
-import java.io.StringWriter;
-import java.util.Properties;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.python.core.PyException;
-import org.python.util.PythonInterpreter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -58,19 +54,8 @@ public class GenerateTestCampaignDoc {
             }
 
             try {
-                StringWriter output = new StringWriter();
-                Properties properties = new Properties();
-                properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
-                PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
-                PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-                interp.setOut(output);
-                interp.setErr(output);
-                interp.cleanup();
-                String args = "import sys;sys.argv[1:]= ['" + campaignFile +  "']";
-                interp.exec(args);
-                interp.exec("__name__ = '__main__'");
-                interp.exec("execfile(r'" + StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py')");
-                interp.cleanup();
+                PythonHelper.execute(StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py",
+                      campaignFile);
             } catch (PyException e) {
                 System.err.println("Exception occurs executing PythonInterpreter:" + e.value);
             }
