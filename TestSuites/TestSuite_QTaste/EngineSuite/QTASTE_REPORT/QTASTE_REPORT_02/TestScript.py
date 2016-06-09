@@ -20,8 +20,9 @@
 ##
 # QTaste Test result management: check QTasteTestFailException handling.
 # <p>
-# This test case has the goal to verify that when a verb reports a failure by throwing an QTasteTestFailException, it is reported as "Failed" in the test report.
+# This test case has the goal to verify that when a verb reports a failure by throwing a QTasteTestFailException, it is reported as "Failed" in the test report.
 # @preparation None
+# @data WITH_CAUSE [Boolean] True if QTasteTestFailException contains a cause exception, False otherwise
 ##
 
 from qtaste import *
@@ -30,10 +31,13 @@ def Step1():
     """
     @step      Define a test script using the verb throwQTasteTestFailException()
     @expected  QTaste reports test as "Failed", reason:<p>
-               This verb always fails!<p>
+               This verb always fails!<br>
+               <i>followed by, if WITH_CAUSE test data is True:</i><br>
+               caused by java.lang.RuntimeException: Root cause of the failure<br>
+               at com.qspin.qtaste.testapi.impl.enginetest.EngineTestImpl.throwQTasteTestFailException(EngineTestImpl.java:56)<p>
                Script call stack is reported.
     """
-    testAPI.getEngineTest().throwQTasteTestFailException()
+    testAPI.getEngineTest().throwQTasteTestFailException(testData.getBooleanValue('WITH_CAUSE'))
 
 def Step2():
     """

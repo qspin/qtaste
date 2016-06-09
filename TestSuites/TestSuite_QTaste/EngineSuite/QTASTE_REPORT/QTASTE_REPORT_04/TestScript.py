@@ -20,7 +20,7 @@
 ##
 # QTaste Test result management: Check QTasteDataException handling.
 # <p>
-# This test case has the goal to verify that when a verb reports that a test data is invalid by throwing an QTasteDataException, it is reported as "Not available" in the test report.
+# This test case has the goal to verify that when a verb reports that a test data is invalid by throwing a QTasteDataException, it is reported as "Not available" in the test report.
 # @preparation None
 ##
 

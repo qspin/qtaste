@@ -35,11 +35,11 @@ def Step1():
 
 def Step2():
     """
-    @step      Invoke the verb throwQTasteTestFailException() and catch the QTasteTestFailException
+    @step      Invoke the verb throwQTasteTestFailException(False) and catch the QTasteTestFailException
     @expected  Step result is "Passed" and QTaste proceeds to next step.
     """
     try:
-        testAPI.getEngineTest().throwQTasteTestFailException()
+        testAPI.getEngineTest().throwQTasteTestFailException(False)
     except QTasteTestFailException:
         pass
 
@@ -65,11 +65,11 @@ def Step4():
 
 def Step5():
     """
-    @step      Invoke the verb throwQTasteTestFailException() and catch the base QTasteException
+    @step      Invoke the verb throwQTasteTestFailException(False) and catch the base QTasteException
     @expected  Step result is "Passed" and QTaste proceeds to next step.
     """
     try:
-        testAPI.getEngineTest().throwQTasteTestFailException()
+        testAPI.getEngineTest().throwQTasteTestFailException(False)
     except QTasteException:
         pass
 

@@ -41,16 +41,17 @@ public interface EngineTest extends SingletonComponent {
     void throwNoException();
 
     /**
-     * Throws an QTasteTestFailException, to interrupt test execution and
+     * Throws a QTasteTestFailException, to interrupt test execution and
      * set test status to fail.
-     * 
+     *
+     * @param withCause true to set a cause exception to the QTasteTestFailException, false otherwise
      * @throws QTasteTestFailException always
      */
 
-    void throwQTasteTestFailException() throws QTasteTestFailException;
+    void throwQTasteTestFailException(boolean withCause) throws QTasteTestFailException;
 
     /**
-     * Throws an QTasteDataException, to interrupt test execution and
+     * Throws a QTasteDataException, to interrupt test execution and
      * set test status to not available.
      * 
      * @throws QTasteDataException always
@@ -59,7 +60,7 @@ public interface EngineTest extends SingletonComponent {
     void throwQTasteDataException() throws QTasteDataException;
 
     /**
-     * Throws an QTasteException, to interrupt test execution and
+     * Throws a QTasteException, to interrupt test execution and
      * set test status to not available.
      * 
      * @throws QTasteException always

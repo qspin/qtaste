@@ -35,34 +35,46 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 public class EngineTestImpl implements EngineTest {
 
     private static Logger logger = Log4jLoggerFactory.getLogger(TestAPIImpl.class);
-      
+
+    @Override
     public void initialize() throws QTasteException {
         // nothing to do
     }
-    
+
+    @Override
     public void terminate() throws QTasteException {
         // nothing to do
     }
-    
+
+    @Override
     public void throwNoException() {
     }
 
-    public void throwQTasteTestFailException() throws QTasteTestFailException {
-        throw new QTasteTestFailException("This verb always fails!");
+    @Override
+    public void throwQTasteTestFailException(boolean withCause) throws QTasteTestFailException {
+        if (withCause) {
+            throw new QTasteTestFailException("This verb always fails!", new RuntimeException("Root cause of the failure"));
+        } else {
+            throw new QTasteTestFailException("This verb always fails!");
+        }
     }
 
+    @Override
     public void throwQTasteDataException() throws QTasteDataException {
         throw new QTasteDataException("Invalid data");
     }
 
+    @Override
     public void throwQTasteException() throws QTasteException {
         throw new QTasteException("Generic QTasteException");
     }
 
+    @Override
     public void throwRuntimeException() throws RuntimeException {
         throw new RuntimeException("Runtime exception");
     }
 
+    @Override
     public void sleep(double duration) {
         try {
             Thread.sleep(Math.round(duration * 1000));
@@ -71,6 +83,7 @@ public class EngineTestImpl implements EngineTest {
         }
     }
 
+    @Override
     public void neverReturn() {
         while (true) {
             try {
@@ -81,33 +94,41 @@ public class EngineTestImpl implements EngineTest {
         }
     }
 
+    @Override
     public void checkDataIsInteger(int data) {
     }
 
+    @Override
     public void checkDataIsDouble(double data) {
     }
 
+    @Override
     public void checkDataIsBoolean(boolean data) {
     }
 
+    @Override
     public void checkData1To5(int data1, int data2, int data3, int data4, int data5) throws QTasteTestFailException {
         if (data1 != 1 || data2 != 2 || data3 != 3 || data4 != 4 || data5 != 5) {
             throw new QTasteTestFailException("DATA1 to DATA5 are not equals to 1 to 5 respectively!");
         }
     }
 
+    @Override
     public String returnDataAsString(String data) {
         return data;
     }
 
+    @Override
     public int returnDataAsInteger(int data) {
         return data;
     }
 
+    @Override
     public double returnDataAsDouble(double data) {
         return data;
     }
 
+    @Override
     public boolean returnDataAsBoolean(boolean data) {
         return data;
     }

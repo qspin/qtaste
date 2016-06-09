@@ -18,4 +18,4 @@
 
 from qtaste import *
 
-testAPI.getEngineTest().throwQTasteTestFailException()
+testAPI.getEngineTest().throwQTasteTestFailException(False)

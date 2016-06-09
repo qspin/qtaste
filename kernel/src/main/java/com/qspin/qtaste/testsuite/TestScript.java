@@ -24,6 +24,15 @@
  */
 package com.qspin.qtaste.testsuite;
 
+import java.io.File;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.datacollection.collection.CacheImpl;
 import com.qspin.qtaste.kernel.engine.TestEngine;
@@ -34,12 +43,6 @@ import com.qspin.qtaste.reporter.testresults.TestResultImpl;
 import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.util.Environment;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import java.io.File;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -248,28 +251,41 @@ public abstract class TestScript implements Executable {
     }
 
     public void handleQTasteException(QTasteException e, TestResult result) {
-    	String message = null;
+        String message = e.getMessage();
+        Throwable cause = e.getCause();
 
-    	if (e instanceof QTasteTestFailException) {
+        if (e instanceof QTasteTestFailException) {
             result.setStatus(TestResult.Status.FAIL);
-            message = e.getMessage();
+            if (cause != null) {
+                message += "\ncaused by " + cause;
+                message += getStackTrace(cause.getStackTrace());
+            }
     	} else if (e instanceof QTasteDataException) {
             result.setStatus(TestResult.Status.NOT_AVAILABLE);
-            message = e.getMessage();
     	} else {
             result.setStatus(TestResult.Status.NOT_AVAILABLE);
-            message = e.getMessage();
-            StackTraceElement elements[] = (e.getCause() != null ? e.getCause().getStackTrace() : e.getStackTrace());
-            for (int i = 0,  n = elements.length; i < n; i++) {
-                if (elements[i].getMethodName().startsWith("invoke")) {
-                    break;
-                }
-                message += "\nat " + elements[i].getClassName() + "." + elements[i].getMethodName() + "(" + elements[i].getFileName() + ":" + elements[i].getLineNumber() + ")";
+            if (cause != null) {
+                message += "\ncaused by " + cause;
+                message += getStackTrace(cause.getStackTrace());
+            } else {
+                message += getStackTrace(e.getStackTrace());
             }
     	}
 
     	result.stop();
         result.setExtraResultDetails(message);
+    }
+
+    private String getStackTrace(StackTraceElement[] pElements)
+    {
+        String stackTrace = "";
+        for (int i = 0,  n = pElements.length; i < n; i++) {
+            if (pElements[i].getMethodName().startsWith("invoke")) {
+                break;
+            }
+            stackTrace += "\nat " + pElements[i].getClassName() + "." + pElements[i].getMethodName() + "(" + pElements[i].getFileName() + ":" + pElements[i].getLineNumber() + ")";
+        }
+        return stackTrace;
     }
 
     public void setName(String value) {

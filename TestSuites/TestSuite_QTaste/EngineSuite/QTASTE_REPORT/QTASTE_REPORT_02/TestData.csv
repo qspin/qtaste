@@ -1,2 +1,3 @@
-COMMENT
-Expected test result: Failed
+COMMENT;WITH_CAUSE
+QTasteTestFailException without cause. Expected test result: Failed;False
+QTasteTestFailException with cause. Expected test result: Failed;True

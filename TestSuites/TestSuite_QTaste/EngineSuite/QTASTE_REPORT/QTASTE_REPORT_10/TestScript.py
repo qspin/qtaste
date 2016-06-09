@@ -37,11 +37,11 @@ def Step1():
 
 def Step2():
     """
-    @step Call the verb throwQTasteDataException()
+    @step Call the verb throwQTasteDataException(False)
     @expected This should not be executed.
     """
     # this should not be executed
-    testAPI.getEngineTest().throwQTasteTestFailException()
+    testAPI.getEngineTest().throwQTasteTestFailException(False)
 
 doStep(Step1)
 doStep(Step2)
