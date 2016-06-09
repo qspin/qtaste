@@ -48,6 +48,7 @@ import com.qspin.qtaste.reporter.testresults.TestResultImpl;
 import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
+import com.qspin.qtaste.testsuite.impl.JythonTestScript;
 import com.qspin.qtaste.util.Exec;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
@@ -71,6 +72,20 @@ public class TestEngine {
 	private static volatile boolean isSUTStartingManually = false;
 	private static volatile boolean isSUTStartedManually = false;
     private static volatile boolean isSUTRunning = false;
+
+	static {
+		// pre-load JythonTestScript class and dependencies in the background which takes several seconds
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					Class.forName(JythonTestScript.class.getName());
+				} catch (Throwable pE) {
+					// ignore
+				}
+			}
+		}.start();
+	}
 
 	/**
 	 * Check if Test was aborted by user.
