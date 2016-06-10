@@ -22,6 +22,7 @@ package com.qspin.qtaste.testsuite.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -44,6 +45,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.python.core.Py;
 import org.python.core.PyArray;
@@ -168,11 +170,13 @@ public class JythonTestScript extends TestScript implements Executable {
         TestAPI testAPI = TestAPIImpl.getInstance();
         Collection<String> registeredComponents = testAPI.getRegisteredComponents();
 
-        if (engine != null) {
-            Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-            if (bindings != null) {
-                bindings.clear();
-            }
+        // install line buffered auto-flush writers for stdout/sterr
+        engine.getContext().setWriter(new LineBufferedPrintWriter(System.out));
+        engine.getContext().setErrorWriter(new LineBufferedPrintWriter(System.err));
+
+        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+        if (bindings != null) {
+            bindings.clear();
         }
 
         globalBindings = engine.createBindings();
@@ -965,6 +969,57 @@ public class JythonTestScript extends TestScript implements Executable {
             descriptionWriter.getBuffer().setLength(sunReflectPos);
         }
         return descriptionWriter.toString();
+    }
+
+    /**
+     * Line buffered auto-flush print writer.
+     * <p>
+     * Output is flushed each time a newline character is written.
+     */
+    private static class LineBufferedPrintWriter extends PrintWriter {
+        private LineBufferedPrintWriter(OutputStream pOut) {
+            super(pOut, true);
+        }
+
+        @Override
+        public void write(int c) {
+            super.write(c);
+            if (c == (int) '\n') {
+                flush();
+            }
+        }
+
+        @Override
+        public void write(char[] buf, int off, int len) {
+            int lastNewline = ArrayUtils.lastIndexOf(buf, '\n', off + len - 1);
+            if (lastNewline != -1) {
+                // write part before last newline character (including it)
+                super.write(buf, off, lastNewline - off + 1);
+                flush();
+                // write remaining part if any
+                if (lastNewline != off + len - 1) {
+                    super.write(buf, lastNewline + 1, len - (lastNewline - off + 1));
+                }
+            } else {
+                super.write(buf, off, len);
+            }
+        }
+
+        @Override
+        public void write(String s, int off, int len) {
+            int lastNewline = s.lastIndexOf('\n', off + len - 1);
+            if (lastNewline != -1) {
+                // write part before last newline character (including it)
+                super.write(s, off, lastNewline - off + 1);
+                flush();
+                // write remaining part if any
+                if (lastNewline != off + len - 1) {
+                    super.write(s, lastNewline + 1, len - (lastNewline - off + 1));
+                }
+            } else {
+                super.write(s, off, len);
+            }
+        }
     }
 
     /**
