@@ -106,7 +106,7 @@ public class TestEngine {
 
     /**
      * Set Running Mode and define if was started manually
-     * @param define if testbed started with ignore control script or manually
+     * @param startedManually define if testbed started with ignore control script or manually
      */
     private static void setSUTAsRunning(boolean startedManually) {
     	isSUTStartedManually = startedManually;
@@ -238,19 +238,16 @@ public class TestEngine {
 
 			if (scriptFilename.endsWith(".py")) {
 				final String qtasteJar = StaticConfiguration.QTASTE_ROOT + "/kernel/target/qtaste-kernel-deploy.jar";
-				final String jythonHome = StaticConfiguration.JYTHON_HOME;
-				final String jythonLib = StaticConfiguration.JYTHON_LIB.trim();
-				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
+				final String jythonLib = StaticConfiguration.JYTHON_LIB;
+				final String additionalJythonLib = StaticConfiguration.ADDITIONAL_JYTHON_LIB.trim();
 				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
 				
 				scriptEngineCommand.add("java");
-				scriptEngineCommand.add("-Dpython.path=\"" + qtasteJar + '"' + File.pathSeparator + '"' + jythonLib
-								 + '"' + File.pathSeparator + '"' + additionnalJythonLib + '"');
+				scriptEngineCommand.add("-Dpython.path=" + qtasteJar + File.pathSeparator  + jythonLib
+								 + (additionalJythonLib.isEmpty() ? "" : File.pathSeparator + additionalJythonLib));
 				scriptEngineCommand.add("-cp");
-				scriptEngineCommand.add('"' + qtasteJar + File.pathSeparator + classPath + '"');
+				scriptEngineCommand.add(qtasteJar + File.pathSeparator + classPath);
 				scriptEngineCommand.add("org.python.util.jython");
-
-				logger.trace("script engine command: " + StringUtils.join(scriptEngineCommand, " "));
 			}
 			
 			// then, build the 'start or stop' command as a list
@@ -267,8 +264,8 @@ public class TestEngine {
 			if (isRestartingSUT) {
 				startOrStopCommand.add("-restart true");
 			}
-			
-			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" + 
+
+			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" +
 						StringUtils.join(startOrStopCommand, " ") + "'");
 
 			// report the control script

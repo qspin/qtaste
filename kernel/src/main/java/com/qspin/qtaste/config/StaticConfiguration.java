@@ -53,7 +53,7 @@ public class StaticConfiguration {
 	public static final String CAMPAIGN_FILE_EXTENSION = "xml";
 	public static final String FORMATTER_DIR = QTASTE_ROOT + "/tools/TestScriptDoc";
 	public static final String PYTHON_DOC = JYTHON_LIB + "/pythondoc.py";
-	public static final String ADDITIONNAL_JYTHON_LIB;
+	public static final String ADDITIONAL_JYTHON_LIB;
 	public static final String PLUGINS_HOME = QTASTE_ROOT + "/plugins";
 	public static final String PYTHON_INDENT_STRING = "    ";  //< string used to indent python code (here, 4 spaces)
 	
@@ -63,7 +63,7 @@ public class StaticConfiguration {
 		if (System.getenv("QTASTE_JYTHON_LIB") != null) {
 			path = System.getenv("QTASTE_JYTHON_LIB");
 		}
-		ADDITIONNAL_JYTHON_LIB = path;
+		ADDITIONAL_JYTHON_LIB = path;
 	}
 
 	/**
