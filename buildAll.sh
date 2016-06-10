@@ -12,9 +12,7 @@ fi
 find . -name "*.sh" | xargs chmod +x
 
 # remove previous python compilation classes
-pushd tools/jython/lib/Lib/
-rm -f *.class
-popd
+rm -f tools/jython/lib/Lib/*.class
 
 # install kernel 3rd party artifacts
 pushd kernel
