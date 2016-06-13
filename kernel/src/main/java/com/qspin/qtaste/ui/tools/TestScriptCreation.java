@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -141,16 +139,17 @@ public class TestScriptCreation {
 
     private String getTemplateContent(String templateName) throws FileNotFoundException, IOException
     {
-            BufferedReader input = null;
-            StringBuilder contents = new StringBuilder();
-            input = new BufferedReader(new InputStreamReader(new FileInputStream(templateName), "UTF-8"));
-            String line = null; //not declared within while loop
-            while ((line = input.readLine()) != null) {
-                contents.append(line);
-                contents.append(System.getProperty("line.separator"));
-            }
-            input.close();
-            // replace the template by the specific items
-            return contents.toString();
+        BufferedReader input = null;
+        StringBuilder contents = new StringBuilder();
+        input = new BufferedReader(new InputStreamReader(new FileInputStream(templateName), "UTF-8"));
+        final String eol = System.getProperty("line.separator");
+        String line = null; //not declared within while loop
+        while ((line = input.readLine()) != null) {
+            contents.append(line);
+            contents.append(eol);
+        }
+        input.close();
+        // replace the template by the specific items
+        return contents.toString();
     }
 }
