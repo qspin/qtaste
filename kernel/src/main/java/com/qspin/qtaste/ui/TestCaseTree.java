@@ -47,6 +47,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -62,7 +64,6 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.TransferHandler;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeExpansionEvent;
@@ -77,6 +78,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.config.GUIConfiguration;
@@ -143,7 +145,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         ds = new DragSource();
         dt = new DropTarget();
 
-        ds.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY, this);
+        ds.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         try
         {
             dt.setComponent(this);
@@ -153,7 +155,6 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         {
             logger.error(e.getMessage());
         }
-
     }
 
     @Override
@@ -448,17 +449,6 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
     public void dragOver(DragSourceDragEvent dsde) {
         //
-        Point dropPoint = dsde.getLocation();
-        TreePath path = getPathForLocation (dropPoint.x, dropPoint.y);
-        if (path==null) return;
-        Object targetNode = path.getLastPathComponent();
-        if (targetNode instanceof TCTreeNode)
-        {
-           TCTreeNode tcTreeNode = (TCTreeNode)targetNode;
-           if (tcTreeNode.getUserObject() instanceof FileNode) {
-               FileNode fn = (FileNode)tcTreeNode.getUserObject();
-           }
-        }
     }
 
     public void dropActionChanged(DragSourceDragEvent dsde) {
@@ -474,16 +464,16 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     }
 
     public void dragEnter(DropTargetDragEvent dtde) {
-        dtde.acceptDrag (DnDConstants.ACTION_COPY_OR_MOVE);
+        //
     }
 
     public void dragOver(DropTargetDragEvent dtde) {
-        //
         Point dropPoint = dtde.getLocation();
         // int index = locationToIndex (dropPoint);
         TreePath path = getPathForLocation (dropPoint.x, dropPoint.y);
-        if (path ==null)
+        if (path == null)
         {
+            dtde.rejectDrag();
             return;
         }
         Object targetNode = path.getLastPathComponent();
@@ -491,9 +481,24 @@ public class TestCaseTree extends JTree implements DragSourceListener,
            TCTreeNode tcTreeNode = (TCTreeNode)targetNode;
            if (tcTreeNode.getUserObject() instanceof FileNode) {
                FileNode fn = (FileNode)tcTreeNode.getUserObject();
-               if (fn.isTestcaseDir())
+               if (fn.isTestcaseDir()) {
+                   dtde.rejectDrag();
+               }
+               else {
+                   try
                {
-                   return;
+                   TCTreeNode sourceNode = (TCTreeNode) dtde.getTransferable().getTransferData(localObjectFlavor);
+                   if (tcTreeNode.equals(sourceNode.getParent()) || sourceNode.isNodeDescendant(tcTreeNode)) {
+                       // reject copy or move in same directory or in a descendant directory
+                       dtde.rejectDrag();
+                   }
+                   else {
+                       dtde.acceptDrag(dtde.getDropAction());
+                   }
+               }
+                   catch (Exception pE) {
+                       dtde.rejectDrag();
+                   }
                }
            }
         }
@@ -508,78 +513,79 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     }
 
     public void drop(DropTargetDropEvent dtde) {
-    //try
-        {
-            try {
-                TCTreeNode tcTreeNode = (TCTreeNode) dtde.getTransferable().getTransferData(localObjectFlavor);
-                Point dropPoint = dtde.getLocation();
-                // int index = locationToIndex (dropPoint);
-                TreePath path = getPathForLocation (dropPoint.x, dropPoint.y);
-                Object targetNode = path.getLastPathComponent();
-                if (targetNode instanceof TCTreeNode) {
-                    // rename the dragged dir into the new target one
-                    TCTreeNode tcTargetNode = (TCTreeNode)targetNode;
-                    FileNode fn = (FileNode)tcTargetNode.getUserObject();
-                    if (fn.isTestcaseDir())
-                    {
-                        dtde.rejectDrop();
-                        return;
-                    }
-
-                    FileNode draggedFileNode = (FileNode)tcTreeNode.getUserObject();
-                    draggedFileNode.getFile().renameTo(new File(fn.getFile() + "/" + draggedFileNode.getFile().getName()));
-                    // update target tree
-
-                    testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-                    TCTreeNode parentTreeNode = (TCTreeNode)tcTargetNode.getParent();
-                    if (parentTreeNode!=null) {
-                        parentTreeNode.removeAllChildren();
-                        FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
-                        addTreeToDir(parentFileNode.getFile(), parentTreeNode);
-                        ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-                    }
-                    else
-                    {
-                        tcTargetNode.removeAllChildren();
-                        FileNode targetFileNode = (FileNode)tcTargetNode.getUserObject();
-                        addTreeToDir(targetFileNode.getFile(), tcTargetNode);
-                        ((DefaultTreeModel) getModel()).reload(tcTargetNode);
-                    }
-                    // update source tree
-                    parentTreeNode = (TCTreeNode)tcTreeNode.getParent();
-                    if (parentTreeNode!=null) {
-                        parentTreeNode.removeAllChildren();
-                        FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
-                        addTreeToDir(parentFileNode.getFile(), parentTreeNode);
-                        ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-                    }
-                    else
-                    {
-                        tcTreeNode.removeAllChildren();
-                        FileNode targetFileNode = (FileNode)tcTreeNode.getUserObject();
-                        addTreeToDir(targetFileNode.getFile(), tcTreeNode);
-                        ((DefaultTreeModel) getModel()).reload(tcTreeNode);
-                    }
-                    testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    dtde.getDropTargetContext().dropComplete(true);
-                }
-                else
-                {
+        try {
+            TCTreeNode tcTreeNode = (TCTreeNode) dtde.getTransferable().getTransferData(localObjectFlavor);
+            Point dropPoint = dtde.getLocation();
+            // int index = locationToIndex (dropPoint);
+            TreePath path = getPathForLocation(dropPoint.x, dropPoint.y);
+            Object targetNode = path.getLastPathComponent();
+            if (targetNode instanceof TCTreeNode) {
+                // rename the dragged dir into the new target one
+                TCTreeNode tcTargetNode = (TCTreeNode) targetNode;
+                FileNode fn = (FileNode) tcTargetNode.getUserObject();
+                if (fn.isTestcaseDir()) {
                     dtde.rejectDrop();
+                    return;
                 }
-            } catch (UnsupportedFlavorException ex) {
-                logger.error(ex.getMessage());
-            } catch (IOException ex) {
-                logger.error(ex.getMessage());
-            }
 
+                FileNode draggedFileNode = (FileNode) tcTreeNode.getUserObject();
+                Path source = draggedFileNode.getFile().toPath();
+                Path dest = fn.getFile().toPath().resolve(source.getFileName());
+                if (dtde.getDropAction() == DnDConstants.ACTION_COPY) {
+                    FileUtils.copyDirectory(source.toFile(), dest.toFile());
+                }
+                else {
+                    Files.move(source, dest);
+                }
+                // update target tree
+
+                testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+                TCTreeNode parentTreeNode = (TCTreeNode) tcTargetNode.getParent();
+                if (parentTreeNode != null) {
+                    parentTreeNode.removeAllChildren();
+                    FileNode parentFileNode = (FileNode) parentTreeNode.getUserObject();
+                    addTreeToDir(parentFileNode.getFile(), parentTreeNode);
+                    ((DefaultTreeModel) getModel()).reload(parentTreeNode);
+                }
+                else {
+                    tcTargetNode.removeAllChildren();
+                    FileNode targetFileNode = (FileNode) tcTargetNode.getUserObject();
+                    addTreeToDir(targetFileNode.getFile(), tcTargetNode);
+                    ((DefaultTreeModel) getModel()).reload(tcTargetNode);
+                }
+                // update source tree
+                parentTreeNode = (TCTreeNode) tcTreeNode.getParent();
+                if (parentTreeNode != null) {
+                    parentTreeNode.removeAllChildren();
+                    FileNode parentFileNode = (FileNode) parentTreeNode.getUserObject();
+                    addTreeToDir(parentFileNode.getFile(), parentTreeNode);
+                    ((DefaultTreeModel) getModel()).reload(parentTreeNode);
+                }
+                else {
+                    tcTreeNode.removeAllChildren();
+                    FileNode targetFileNode = (FileNode) tcTreeNode.getUserObject();
+                    addTreeToDir(targetFileNode.getFile(), tcTreeNode);
+                    ((DefaultTreeModel) getModel()).reload(tcTreeNode);
+                }
+                testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                dtde.getDropTargetContext().dropComplete(true);
+            }
+            else {
+                dtde.rejectDrop();
+            }
+        }
+        catch (UnsupportedFlavorException ex) {
+            logger.error(ex.getMessage());
+        }
+        catch (IOException ex) {
+            logger.error(ex.getMessage());
         }
     }
 
     public void dragGestureRecognized(DragGestureEvent dge) {
         Transferable trans = new TCTreeNodeTransferable (this.getSelectionPath().getLastPathComponent());
-        ds.startDrag(dge, DragSource.DefaultCopyDrop, trans, this);
+        ds.startDrag(dge, null, trans, this);
     }
 
     /**
@@ -1096,22 +1102,4 @@ public class TestCaseTree extends JTree implements DragSourceListener,
             return supportedFlavors;
         }
     }
-    public class TestCaseTreeHandler extends TransferHandler {
-        @Override
-        public boolean canImport(TransferHandler.TransferSupport info) {
-            if (!info.isDrop()) {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public boolean importData(TransferHandler.TransferSupport info) {
-            if (!canImport(info)) {
-                return false;
-            }
-            return true;
-        }
-    }
-
 }
