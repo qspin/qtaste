@@ -61,7 +61,7 @@ public class DirectoryTestSuite extends TestSuite {
 
     public static DirectoryTestSuite createDirectoryTestSuite(String strDirectory) {
     	DirectoryTestSuite ts = new DirectoryTestSuite(strDirectory);
-    	if (!ts.init(strDirectory) || TestEngine.isAbortedByUser()) {
+        if (!ts.init() || TestEngine.isAbortedByUser()) {
     		return null;
     	}
     	return ts;
@@ -76,7 +76,7 @@ public class DirectoryTestSuite extends TestSuite {
         directory = new File(strDirectory);
     }
 
-    private boolean init(String strDirectory) {
+    private boolean init() {
     	if (directory == null) {
     		return false;
     	}
@@ -145,19 +145,15 @@ public class DirectoryTestSuite extends TestSuite {
                 	xmlRequirements = new ArrayList<TestRequirement>();
                 }
                 if (csvDataSet.isEmpty()) {
-                    logger.warn("Ignoring test case " + scriptFile + " " + csvFile.getName() + " because it contains no data row");
+                    logger.warn("Ignoring test case " + directory + " because it contains no data row");
                 } else {
-                    logger.info("Adding test case " + scriptFile + " " + csvFile.getName() + " " + xmlFile);
+                    logger.info("Adding test case " + directory);
                     TestScript ts = new JythonTestScript(csvDataSet, xmlRequirements, scriptFile, directory, DirectoryTestSuite.this);
                     testScripts.add(ts);
                 }
-            } catch (IOException e) {
+            } catch (IOException | SAXException | ParserConfigurationException e) {
                 e.printStackTrace();
-            } catch (SAXException e) {
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			}
+            }
         } else {
             // intermediate directory: add test scripts from sub-directories
             File[] subdirectories = FileUtilities.listSortedFiles(directory, new FileFilter() {
