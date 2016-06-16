@@ -8,8 +8,7 @@
 ##
 
 from qtaste import *
-import os.path
-import os.remove
+import os
 
 # update in order to cope with the javaGUI extension declared in your testbed configuration.
 javaguiMI = testAPI.getJavaGUI(INSTANCE_ID=testData.getValue("JAVAGUI_INSTANCE_NAME"))
