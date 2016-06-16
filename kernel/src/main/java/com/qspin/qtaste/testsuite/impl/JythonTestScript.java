@@ -35,9 +35,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -51,7 +50,7 @@ import org.python.core.Py;
 import org.python.core.PyArray;
 import org.python.core.PyDictionary;
 import org.python.core.PyException;
-import org.python.core.PyFunction;
+import org.python.core.PyFrame;
 import org.python.core.PyInstance;
 import org.python.core.PyInteger;
 import org.python.core.PyList;
@@ -61,6 +60,7 @@ import org.python.core.PyString;
 import org.python.core.PyStringMap;
 import org.python.core.PySyntaxError;
 import org.python.core.PySystemState;
+import org.python.core.PyTraceback;
 import org.python.core.PyTuple;
 import org.python.core.PyType;
 
@@ -761,87 +761,62 @@ public class JythonTestScript extends TestScript implements Executable {
     }
 
     private void dumpScriptPythonStackDetails(TestResult result, Throwable error) {
-        StackTraceElement stack[] = (error != null ? error.getStackTrace() : Thread.currentThread().getStackTrace());
+        StringBuilder stackTrace = new StringBuilder();
 
-        // get the stack trace and extract all necessary details
-        boolean stackLastDataExtracted = false;
-        String stackTrace = new String();
-        for (int i = 0; i < stack.length; i++) {
-            StackTraceElement stackElement = stack[i];
-            if (stackElement.getLineNumber() != -1) {
-                String className = stackElement.getClassName();
-                if (className.startsWith("org.python.pycode.") || className.endsWith("$py") ||
-                        className.equals(getClass().getCanonicalName() + "$ScriptTestData")) {
-                    String methodName = stackElement.getMethodName();
-                    String fileName = stackElement.getFileName();
-                    int lineNumber = stackElement.getLineNumber();
+        // get stacktrace from PyException traceback, because easier and line number is not always correct in Java stack trace
+        if (error instanceof PyException) {
+            List<PyFrame> stacktrace = new ArrayList<>();
+            PyTraceback previousTraceback = null;
+            PyTraceback traceback = ((PyException) error).traceback;
+            while (traceback != null && traceback != previousTraceback) {
+                PyFrame frame = traceback.tb_frame;
+                String fileName;
+                String function;
 
-                    if ((fileName.equals("embedded_jython") &&
-                            (methodName.equals("f$0") || methodName.startsWith("doStep$") || methodName.startsWith("doSteps$") || methodName.startsWith("_TestAPIWrapper__invoke$") || methodName.startsWith("user_line$")))
-							|| fileName.endsWith(File.separator + "bdb.py")) {
-                        // this is the execfile() call in the embedded jython
-                        // or the doStep() or doSteps function
-                        // or a private __invokexxx() method of the __TestAPIWrapper class
-                        // or the user_line() method of the __ScriptDebugger class
-                        // or a function of the debugger
-                        // so just skip
-                        continue;
+                if (frame != null && frame.f_code != null && (fileName = frame.f_code.co_filename) != null
+                      && (function = frame.f_code.co_name) != null) {
+                    // skip execfile() call in the embedded jython, doStep() and doSteps() functions,
+                    // private __invokexxx() methods of the __TestAPIWrapper class,
+                    // user_line() method of the __ScriptDebugger class and a function of the debugger
+                    if ((!fileName.equals("embedded_jython") || (!function.equals("<module>") && !function.equals("doStep")
+                          && !function.equals("doSteps") && !function.startsWith("_TestAPIWrapper__invoke") &&
+                          !function.equals("user_line"))) && !fileName.endsWith(File.separator + "bdb.py")) {
+                        stacktrace.add(frame);
                     }
-
-                    if (methodName.equals("f$0")) {
-                        stackTrace += "\nat file " + fileName + " line " + lineNumber;
-                    } else {
-                        // remove $i suffix from method name
-                        int dollarIndex = methodName.indexOf("$");
-                        if (dollarIndex > 0) {
-                            methodName = methodName.substring(0, dollarIndex);
-                        }
-
-                        stackTrace += "\n";
-
-                        // check if function is a step, i.e. executed by doStep
-                        if ((i + 6 < stack.length) && stack[i + 6].getMethodName().startsWith("doStep$")) {
-                            String stepId;
-                            Object doStep = engine.getBindings(ScriptContext.ENGINE_SCOPE).get("doStep");
-                            if (doStep instanceof PyFunction) {
-                                stepId = ((PyFunction) doStep).__getattr__("stepId").toString();
-                                stackTrace += "step " + stepId + " ";
-                            }
-                        }
-
-                        stackTrace += "function " + methodName;
-                        if (!fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
-                            stackTrace += " at file " + fileName + " line " + lineNumber;
-                        }
-                    }
-                    if (!stackLastDataExtracted && !fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
-                        stackLastDataExtracted = true;
-                        result.setFailedLineNumber(lineNumber);
-                        result.setFailedFunctionId(methodName);
-                    }
-                    result.addStackTraceElement(stackElement);
                 }
+
+                previousTraceback = traceback;
+                traceback = (PyTraceback) traceback.tb_next;
+            }
+
+            // extract all necessary details from stacktrace from last frame to first one
+            boolean stackLastDataExtracted = false;
+            ListIterator<PyFrame> frameIterator = stacktrace.listIterator(stacktrace.size());
+            while (frameIterator.hasPrevious()) {
+                PyFrame frame = frameIterator.previous();
+                String fileName = frame.f_code.co_filename;
+                String function = frame.f_code.co_name;
+                int lineNumber = frame.f_lineno;
+
+                if (function.equals("<module>")) {
+                    stackTrace.append("at file ").append(fileName).append(" line ").append(lineNumber);
+                } else {
+                    stackTrace.append("function ").append(function);
+                    if (!fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
+                        stackTrace.append(" at file ").append(fileName).append(" line ").append(lineNumber);
+                    }
+                }
+                stackTrace.append('\n');
+                if (!stackLastDataExtracted && !fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
+                    stackLastDataExtracted = true;
+                    result.setFailedLineNumber(lineNumber);
+                    result.setFailedFunctionId(function);
+                }
+                result.addStackTraceElement(new StackTraceElement("", function, fileName, lineNumber));
             }
         }
-        if (stackTrace.isEmpty() && (error != null)) {
-            // in some case stack seems corrupted, e.g. timeout while script never returns
-            // in this case, try to parse the printed stack trace to get filename and line number
-            StringWriter stackTraceWriter = new StringWriter();
-            error.printStackTrace(new PrintWriter(stackTraceWriter));
-            String printedStackTrace = stackTraceWriter.toString();
-            Pattern printedStackTracePattern = Pattern.compile(".*^  File \"(.*?)\", line (\\d+), .*", Pattern.MULTILINE | Pattern.DOTALL);
-            Matcher printedStackTraceMatcher = printedStackTracePattern.matcher(printedStackTrace);
-            if (printedStackTraceMatcher.matches()) {
-                stackTrace = "at file " + printedStackTraceMatcher.group(1) +
-                        " line " + printedStackTraceMatcher.group(2);
-            } else {
-                stackTrace = "?";
-            }
-        }
-        if (stackTrace.startsWith("\n")) {
-            stackTrace = stackTrace.substring(1);
-        }
-        result.setStackTrace(stackTrace);
+
+        result.setStackTrace(stackTrace.toString().trim());
     }
 
     private void handleScriptException(ScriptException e, TestResult result) {
@@ -885,7 +860,7 @@ public class JythonTestScript extends TestScript implements Executable {
                     text = (PyString) syntaxError.value.__getattr__(new PyString("text"));
                 }
                 message = "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n" + text;
-                result.addStackTraceElement(new StackTraceElement("", "", fileName.toString(), Integer.parseInt(lineNumber.toString())));
+                result.addStackTraceElement(new StackTraceElement("", "", fileName.toString(), lineNumber.getValue()));
                 dumpStack = false;
             } catch (PyException pye) {
                 message = "Python syntax error (Couldn't decode localization of error)";
