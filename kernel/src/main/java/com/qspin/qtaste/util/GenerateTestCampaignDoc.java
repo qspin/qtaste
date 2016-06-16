@@ -19,6 +19,11 @@
 
 package com.qspin.qtaste.util;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -46,11 +51,16 @@ public class GenerateTestCampaignDoc {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.parse(campaignFile);
             NodeList nodelist = doc.getElementsByTagName("testsuite");
+            Set<String> testSuites = new HashSet<>();
+            Pattern testSuitePattern = Pattern.compile("^(TestSuites/.*?)/.*$");
             for (int i = 0; i < nodelist.getLength(); i++) {
                 String directory = nodelist.item(i).getAttributes().getNamedItem("directory").getNodeValue();
-                // TODO: Keep only the first level
-                System.out.println("Directory is " + directory);
-                GenerateTestSuiteDoc.generate(directory);
+                Matcher matcher = testSuitePattern.matcher(directory);
+                String testSuite = matcher.matches() ? matcher.group(1) : directory;
+                testSuites.add(testSuite);
+            }
+            for (String testSuite: testSuites) {
+                GenerateTestSuiteDoc.generate(testSuite);
             }
 
             try {
