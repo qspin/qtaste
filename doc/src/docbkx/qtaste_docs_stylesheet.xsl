@@ -5,6 +5,7 @@
                 version="1.0">
 <xsl:import href="urn:docbkx:stylesheet"/>
 
+<xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="section.label.includes.component.label" select="1"/>
 
