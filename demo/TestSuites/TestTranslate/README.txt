@@ -15,8 +15,7 @@ Pre-Requisites
 - firefox (tested with version 3.x)
 - Optional: Internet Explorer (tested with version 6 and 7) but to use Internet Explorer you have to change the testdata with "*iexplore" as BROWSER string, 
             by default, the demo will use firefox. The current version of selenium doesn't seem to run well on Internet Explorer 8.
-- JDK 1.7
-
+- JDK 1.8
 
 Running The Client
 ==================
