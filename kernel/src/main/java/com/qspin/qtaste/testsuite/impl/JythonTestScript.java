@@ -219,6 +219,8 @@ public class JythonTestScript extends TestScript implements Executable {
                        "        self.component = component\n" +
                        "    def __nonzero__(self):\n" +
                        "        return self.component\n"+
+                       "    def __getattr__(self, attr):\n" + // only called when self.attr doesn't exist
+                       "        raise AttributeError('Component " + component + " has no \\'' + attr + '\\' verb')\n"+
                        "    def __checkPresent(self):\n" +
                        "        if not self.component:\n" +
                        "            raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
