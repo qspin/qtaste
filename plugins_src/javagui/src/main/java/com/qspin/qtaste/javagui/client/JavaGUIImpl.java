@@ -149,11 +149,6 @@ public class JavaGUIImpl implements JavaGUI {
 		return mProxy.whoAmI();
     }
 
-	public void setComponentName(String name) throws QTasteException {
-		mProxy.setComponentName(name);
-	}
-
-
 	private JavaGUI getProxy() throws Exception {
 		return (com.qspin.qtaste.javagui.JavaGUI) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}

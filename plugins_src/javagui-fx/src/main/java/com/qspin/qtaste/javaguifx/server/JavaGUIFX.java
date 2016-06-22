@@ -205,16 +205,6 @@ public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
 		return "";
 	}
 
-	public void setComponentName(String name) throws QTasteTestFailException {
-//		LOGGER.trace("setComponentName(\"" + name + "\")");
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner().setName(name);
-	}
-
 	public void pressKey(int keycode, long delay) throws QTasteTestFailException {
 //		LOGGER.trace("pressKey(" + keycode + ", " + delay + ")");
 //		new KeyPresser().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, bot, keycode, delay);

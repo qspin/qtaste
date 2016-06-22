@@ -350,13 +350,6 @@ public interface JavaGUI {
    String getPopupRawName() throws QTasteException;
 
    /**
-    * Set the name of the GUI component that have the focus with the specified name.
-    * @throws QTasteTestFailException
-    */
-   @Deprecated
-   void setComponentName(String name) throws QTasteException;
-
-   /**
     * Send the specified key code to the application.
     * @param keycode key code of the key sent to the application.
     * @throws QTasteTestFailException If some internal errors occurs.

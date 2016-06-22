@@ -164,11 +164,6 @@ public class JavaGUIFXImpl implements JavaGUIFX {
 		return mProxy.whoAmI();
     }
 
-	public void setComponentName(String name) throws QTasteException {
-		mProxy.setComponentName(name);
-	}
-
-
 	private JavaGUIFX getProxy() throws Exception {
 		return (com.qspin.qtaste.javaguifx.JavaGUIFX) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
 	}
