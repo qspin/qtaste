@@ -124,9 +124,6 @@ to be rechecked in version 5.0.0-beta11 or later
 			<executable targetfile="$INSTALL_PATH/TestSuites/TestSuite_QTaste/Run_TestSuite.sh" stage="never">
 			  <os family="unix"/>
 			</executable>
-			<executable targetfile="$INSTALL_PATH/tools/jython/bin/jython_for_komodo.sh" stage="never">
-			  <os family="unix"/>
-			</executable>
 			<executable targetfile="$INSTALL_PATH/tools/jython/bin/jython.sh" stage="never">
 			  <os family="unix"/>
 			</executable>
