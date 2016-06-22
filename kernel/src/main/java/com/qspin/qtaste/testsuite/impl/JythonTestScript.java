@@ -196,14 +196,11 @@ public class JythonTestScript extends TestScript implements Executable {
                     "    pass\n" +
                     "class __TestAPIWrapper:\n" +
                     "    def __init__(self, testScript):\n" +
-                    "        self.testScript = testScript\n";
-
-            code +=
-                    //   new-style test api - direct method call
-                    "    def __invoke(self, method, arguments):\n" +
-                    "        self.testScript.logInvoke(method.im_self, method.__name__, str(arguments)[1:-1-(len(arguments)==1)])\n" +
+                    "        self.testScript = testScript\n" +
+                    "    def __invoke(self, method, args):\n" +
+                    "        self.testScript.logInvoke(method.im_self, method.__name__, str(args)[1:-1-(len(args)==1)])\n" +
                     "        try:\n" +
-                    "            return method(*arguments)\n" +
+                    "            return method(*args)\n" +
                     "        except TypeError, e:\n" +
                     "            raise QTasteDataException('Invalid argument(s): ' + str(e))\n" +
                     "    def stopTest(self, status, message):\n" +
@@ -216,33 +213,36 @@ public class JythonTestScript extends TestScript implements Executable {
 
             // add get<Component>() methods to the __TestAPIWrapper class
             for (String component : registeredComponents) {
-                code += "    def get" + component + "(self, **keywords):\n" +
-                        "        component = self.testScript.getComponent('" + component + "', keywords)\n" +
-                        "        return __TestAPIWrapper." + component + "Wrapper(self, component)\n";
+                code += "    def get" + component + "(self, **kw):\n" +
+                      "        component = self.testScript.getComponent('" + component + "', kw)\n" +
+                      "        return __TestAPIWrapper." + component + "Wrapper(self, component)\n";
+            }
+            engine.eval(code, globalBindings);
 
+            for (String component : registeredComponents) {
                 // declare the <Component>Wrapper class, of which the objects returned
                 // by get<Component>() methods will be instances
-                code += "    class " + component + "Wrapper:\n" +
-                        "        def __init__(self, testAPI, component):\n" +
-                        "            self.testAPI = testAPI\n" +
-                        "            self.component = component\n" +
-                        "        def __nonzero__(self):\n" +
-                        "            return self.component\n";
+                code = "class __TestAPIWrapper_" + component + "Wrapper:\n" +
+                       "    def __init__(self, testAPI, component):\n" +
+                       "        self.testAPI = testAPI\n" +
+                       "        self.component = component\n" +
+                       "    def __nonzero__(self):\n" +
+                       "        return self.component\n"+
+                       "    def __checkPresent(self):\n" +
+                       "        if not self.component:\n" +
+                       "            raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
 
                 // add verbs methods to the ComponentWrapper class
                 Collection<String> verbs = testAPI.getRegisteredVerbs(component);
                 for (String verb : verbs) {
-                    code += "        def " + verb + "(self, *arguments, **keywords):\n" +
-                            "            if self.component:\n";
-
-                    code += "                return self.testAPI._TestAPIWrapper__invoke(self.component." + verb + ", arguments)\n";
-
-                    code +=
-                            "            else:\n" +
-                            "                raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
+                    code += "    def " + verb + "(self, *args):\n" +
+                            "        self.__checkPresent()\n" +
+                            "        return self.testAPI._TestAPIWrapper__invoke(self.component." + verb + ", args)\n";
                 }
+                code += "__TestAPIWrapper." + component + "Wrapper = __TestAPIWrapper_" + component + "Wrapper\n";
+                code += "del __TestAPIWrapper_" + component + "Wrapper\n";
+                engine.eval(code, globalBindings);
             }
-            engine.eval(code, globalBindings);
         } catch (ScriptException e) {
             logger.fatal("Couldn't create __TestAPIWrapper Python class", e);
             TestEngine.shutdown();
@@ -777,10 +777,12 @@ public class JythonTestScript extends TestScript implements Executable {
                       && (function = frame.f_code.co_name) != null) {
                     // skip execfile() call in the embedded jython, doStep() and doSteps() functions,
                     // private __invokexxx() methods of the __TestAPIWrapper class,
+                    // private __checkPresent() method of a test API wrapper class,
                     // user_line() method of the __ScriptDebugger class and a function of the debugger
                     if ((!fileName.equals("embedded_jython") || (!function.equals("<module>") && !function.equals("doStep")
-                          && !function.equals("doSteps") && !function.startsWith("_TestAPIWrapper__invoke") &&
-                          !function.equals("user_line"))) && !fileName.endsWith(File.separator + "bdb.py")) {
+                          && !function.equals("doSteps") && !function.startsWith("_TestAPIWrapper__invoke") && !function
+                          .endsWith("__checkPresent") && !function.equals("user_line"))) && !fileName
+                          .endsWith(File.separator + "bdb.py")) {
                         stacktrace.add(frame);
                     }
                 }
@@ -879,7 +881,7 @@ public class JythonTestScript extends TestScript implements Executable {
                         result.setStatus(TestResult.Status.FAIL);
                         Throwable undeclaredThrowable = ((UndeclaredThrowableException) javaError).getCause();
                         if (undeclaredThrowable instanceof InvocationTargetException) {
-                            message = getThrowableDescription(((InvocationTargetException) undeclaredThrowable).getCause());
+                            message = getThrowableDescription(undeclaredThrowable.getCause());
                         } else {
                             message = getThrowableDescription(undeclaredThrowable);
                         }
