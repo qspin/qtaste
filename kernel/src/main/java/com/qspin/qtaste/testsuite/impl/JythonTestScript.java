@@ -146,15 +146,6 @@ public class JythonTestScript extends TestScript implements Executable {
         return logger;
     }
 
-    /**
-     * Raises the current exception in Python code.
-     * (workaround, replacement for raise which loses the stacktrace, in jython 2.7.0)
-     * @throws Throwable
-     */
-    public static void raise() throws Throwable {
-        throw Py.getThreadState().exception;
-    }
-
     private static void initializeEmbeddedJython() {
         TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
         if (testbedConfig != null) {
@@ -328,14 +319,10 @@ public class JythonTestScript extends TestScript implements Executable {
                     "        func()\n" +
                     "    except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
                     "        status = __TestResultStatus.FAIL\n" +
-//                    "        raise\n" +
-                          // following code replaces raise, without losing the stacktrace (jython 2.7.0)
-                          "        __JythonTestScript.raise()\n" +
+                    "        raise\n" +
                     "    except:\n" +
                     "        status = __TestResultStatus.NOT_AVAILABLE\n" +
-//                    "        raise\n" +
-                    // following code replaces raise, without losing the stacktrace (jython 2.7.0)
-                    "        __JythonTestScript.raise()\n" +
+                    "        raise\n" +
                     "    finally:\n" +
                     "        end_time = __time.clock()\n" +
                     "        elapsed_time = end_time - begin_time\n" +
