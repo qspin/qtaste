@@ -49,7 +49,7 @@
 
     <para>The QTaste framework is mainly developed in java programming
     language and python. So by definition, it can be installed on any platform
-    running java VM 1.7. However, it has only been validated on Windows and
+    running java VM 1.8. However, it has only been validated on Windows and
     Linux platforms.</para>
 
     <section>
@@ -57,7 +57,7 @@
 
       <itemizedlist mark="opencircle">
         <listitem override="bullet">
-           Java Virtual Machine (JDK) 1.7 <emphasis>( <ulink url="http://java.sun.com/javase/downloads/index.jsp"/> )</emphasis>
+           Java Virtual Machine (JDK) 1.8 <emphasis>( <ulink url="http://java.sun.com/javase/downloads/index.jsp"/> )</emphasis>
         </listitem>
 
         <listitem override="bullet">
@@ -165,7 +165,7 @@
         available in the PATH environment variable. (<ulink
         url="http://www.python.org/download/releases/2.5/"/>)</listitem>
 
-        <listitem override="bullet">JDK 1.7 has to be installed as well as it
+        <listitem override="bullet">JDK 1.8 has to be installed as well as it
         is part of the QTaste pre-requisite.</listitem>
 
         <listitem override="bullet">Start the Qtaste demo using the
@@ -212,7 +212,7 @@
       browser.</para>
 
       <itemizedlist mark="opencircle">
-        <listitem override="bullet">JDK 1.7 has to be installed as well as it
+        <listitem override="bullet">JDK 1.8 has to be installed as well as it
         is part of the QTaste pre-requisite.</listitem>
 
         <listitem override="bullet">Start the Qtaste demo using the

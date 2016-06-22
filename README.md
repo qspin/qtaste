@@ -17,7 +17,7 @@ Download
 QTaste System Requirements
 ==========================
 
-• Java Virtual Machine (JDK) >= 1.7 ( http://java.sun.com/javase/downloads/index.jsp )
+• Java Virtual Machine (JDK) >= 1.8 ( http://java.sun.com/javase/downloads/index.jsp )
 
 • (optional) git command-line client accessible from PATH (“git”), for test script versioning
 
