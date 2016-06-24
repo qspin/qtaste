@@ -31,7 +31,7 @@ import com.qspin.qtaste.testsuite.TestDataSet;
 public class InteractiveTestDataSetProvider extends TestDataSet {
 
     public InteractiveTestDataSetProvider(boolean GUIMonitored, TestData data) {
-        testDataList = new ArrayList<TestData>();
+        testDataList = new ArrayList<>();
         testDataList.add(data);
     }
 

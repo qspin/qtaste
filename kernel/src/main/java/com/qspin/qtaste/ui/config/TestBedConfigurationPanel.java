@@ -19,8 +19,6 @@
 
 package com.qspin.qtaste.ui.config;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
@@ -43,35 +41,27 @@ public class TestBedConfigurationPanel extends ConfigPanelTemplate {
         testbedConfig = TestBedConfiguration.getInstance();
         //genUI();
         // add listeners
-        jMultipleInstancesComboBox.addActionListener(new ActionListener() {
+        jMultipleInstancesComboBox.addActionListener(e -> refreshData());
 
-            public void actionPerformed(ActionEvent e) {
-                refreshData();
-            }
-        });
-
-        DefaultComboBoxModel model = (DefaultComboBoxModel) jTestbedComboBox.getModel();
+        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jTestbedComboBox.getModel();
         model.removeAllElements();
         File fTestbedDir = new File(StaticConfiguration.TESTBED_CONFIG_DIRECTORY);
         FileMask fileMask = new FileMask();
         fileMask.addExtension("xml");
         File[] fTestbedList = FileUtilities.listSortedFiles(fTestbedDir, fileMask);
-        for (int i = 0; i < fTestbedList.length; i++) {
+        for (File fTestbed : fTestbedList) {
             // remove the extension
-            String testbedName = fTestbedList[i].getName().substring(0, fTestbedList[i].getName().lastIndexOf("."));
+            String testbedName = fTestbed.getName().substring(0, fTestbed.getName().lastIndexOf("."));
             model.addElement(testbedName);
         }
 
         refreshTestBed();
         refreshData();
 
-        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-            public void onConfigurationChange() {
-                testbedConfig = TestBedConfiguration.getInstance();
-                refreshTestBed();
-                refreshData();
-            }
+        TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+            testbedConfig = TestBedConfiguration.getInstance();
+            refreshTestBed();
+            refreshData();
         });
     }
 
@@ -105,5 +95,5 @@ public class TestBedConfigurationPanel extends ConfigPanelTemplate {
     private javax.swing.JComboBox jMultipleInstancesComboBox;
     private javax.swing.JLabel jMultipleInstancesLabel;
     private javax.swing.JPanel jMultipleInstancesPanel;
-    private javax.swing.JComboBox jTestbedComboBox;
+    private javax.swing.JComboBox<String> jTestbedComboBox;
 }

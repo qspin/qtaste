@@ -66,12 +66,7 @@ public class UtilityImpl implements Utility {
 
     public void showMessageDialog(final String title, final String message) throws QTasteException {
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
-                }
-            });
+            SwingUtilities.invokeAndWait(() -> JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE));
         } catch (Exception e) {
             throw new QTasteException("Error while showing message dialog", e);
         }
@@ -81,12 +76,9 @@ public class UtilityImpl implements Utility {
     public String getUserStringValue(final String message, final Object defaultValue) throws QTasteException {
         final StringBuilder valueBuilder = new StringBuilder();
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    String value = JOptionPane.showInputDialog(message, defaultValue);
-                    valueBuilder.append(value);
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                String value = JOptionPane.showInputDialog(message, defaultValue);
+                valueBuilder.append(value);
             });
         } catch (Exception e) {
             throw new QTasteException("Error while showing user input dialog", e);
@@ -98,12 +90,9 @@ public class UtilityImpl implements Utility {
     public boolean getUserConfirmation(final String title, final String message) throws QTasteException {
         final MutableBoolean confirmed = new MutableBoolean();
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    int result = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
-                    confirmed.setValue(result == JOptionPane.YES_OPTION);
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                int result = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+                confirmed.setValue(result == JOptionPane.YES_OPTION);
             });
         } catch (Exception e) {
             throw new QTasteException("Error while showing user confirmation dialog", e);

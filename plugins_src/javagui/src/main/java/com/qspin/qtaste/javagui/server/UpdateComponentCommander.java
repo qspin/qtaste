@@ -202,12 +202,9 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
      */
     protected void synchronizeThreads() {
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    //Do nothing.
-                    //Just there in order to "synchronize" the jmx thread with the swing event thread.
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                //Do nothing.
+                //Just there in order to "synchronize" the jmx thread with the swing event thread.
             });
         } catch (InterruptedException | InvocationTargetException e) {
             //Should not occurred, the Runnable do nothing.

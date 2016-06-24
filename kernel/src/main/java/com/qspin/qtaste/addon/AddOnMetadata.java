@@ -48,7 +48,7 @@ public final class AddOnMetadata {
     }
 
     protected AddOnMetadata() {
-        mListener = new ArrayList<PropertyChangeListener>();
+        mListener = new ArrayList<>();
         setStatus(NONE);
     }
 

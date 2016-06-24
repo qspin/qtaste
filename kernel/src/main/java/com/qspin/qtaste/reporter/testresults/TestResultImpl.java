@@ -89,8 +89,8 @@ public class TestResultImpl extends Result implements TestResult {
         end = 0;
         status = Status.NOT_EXECUTED;
         extraResultDetails = "N/A";
-        stepResults = new LinkedHashMap<String, StepResult>();
-        this.stack = new ArrayList<StackTraceElement>();
+        stepResults = new LinkedHashMap<>();
+        this.stack = new ArrayList<>();
     }
 
     public TestData getTestData() {

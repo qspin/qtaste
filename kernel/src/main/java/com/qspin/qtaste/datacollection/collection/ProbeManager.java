@@ -20,7 +20,6 @@
 package com.qspin.qtaste.datacollection.collection;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -41,7 +40,7 @@ public class ProbeManager {
     private int numberUsers = 0;
 
     private ProbeManager() {
-        probes = new ArrayList<Probe>();
+        probes = new ArrayList<>();
     }
 
     public synchronized static ProbeManager getInstance() {
@@ -58,9 +57,8 @@ public class ProbeManager {
                 TestBedConfiguration config = TestBedConfiguration.getInstance();
                 List<Object> l = config.getList("probe_manager.probe");
                 if (l != null) {
-
-                    for (Iterator<Object> i = l.iterator(); i.hasNext(); ) {
-                        String probeName = (String) i.next();
+                    for (Object o : l) {
+                        String probeName = (String) o;
                         logger.info("Starting probe:" + probeName);
                         try {
                             Class<?> probeClass = Class.forName(probeName);
@@ -83,8 +81,7 @@ public class ProbeManager {
     public synchronized void stop() {
         numberUsers--;
         if (numberUsers == 0) {
-            for (Iterator<Probe> p = probes.iterator(); p.hasNext(); ) {
-                Probe probe = p.next();
+            for (Probe probe : probes) {
                 logger.info("Stopping probe:" + probe);
                 probe.stop();
             }

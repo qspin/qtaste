@@ -53,10 +53,9 @@ final class SelectionPanel extends JPanel {
 
     private JSpinner mSpinner = new JSpinner();
     private JSlider mSlider = new JSlider();
-    private JComboBox mCombo = new JComboBox(ModelBuilder.getComboBoxModel());
-    private JList mList = new JList(ModelBuilder.getListModel());
+    private JComboBox<Person> mCombo = new JComboBox<>(ModelBuilder.getComboBoxModel());
+    private JList<Person> mList = new JList<>(ModelBuilder.getListModel());
 
     private static final int NUMBER_OF_COMPONENT = 4;
     public static final String COMPONENT_NAME = "SELECTION_PANEL";
-
 }

@@ -54,7 +54,7 @@ public class PropertiesHistory {
 
     public PropertiesHistory(String component) {
         this.component = component;
-        hash = new HashMap<String, LinkedList<TimestampedValue>>();
+        hash = new HashMap<>();
     }
 
     public synchronized void reset() {
@@ -85,7 +85,7 @@ public class PropertiesHistory {
 
         LinkedList<TimestampedValue> list = hash.get(property);
         if (list == null) {
-            list = new LinkedList<TimestampedValue>();
+            list = new LinkedList<>();
             hash.put(property, list);
         }
 
@@ -126,7 +126,7 @@ public class PropertiesHistory {
           long maxTime_ms, String expectedValueOrTransition)
           throws QTasteDataException, QTasteTestFailException {
         long beginTime_ms = System.currentTimeMillis(); // begin time
-        long elapsedTime_ms = 0; // total elapsed time
+        long elapsedTime_ms; // total elapsed time
         long checkTimeInterval_ms = 100; // check every 100 milliseconds
         LinkedList<TimestampedValue> list = null;
 
@@ -276,7 +276,7 @@ public class PropertiesHistory {
 
     public synchronized void dump(boolean withTimestamps) {
         System.out.println(component + " properties history:");
-        TreeSet<String> sortedKeys = new TreeSet<String>(hash.keySet());
+        TreeSet<String> sortedKeys = new TreeSet<>(hash.keySet());
         for (String property : sortedKeys) {
             System.out.println(getHistoryString(property, withTimestamps));
         }

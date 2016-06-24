@@ -37,17 +37,11 @@ public abstract class ConfigPanelTemplate extends JPanel {
     void Apply() {
     }
 
-    ;
-
     void Save() {
     }
 
-    ;
-
     void Refresh() {
     }
-
-    ;
 
     public ConfigPanelTemplate() {
         super(new BorderLayout());

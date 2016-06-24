@@ -47,11 +47,11 @@ public class TestDataSet {
      * Creates a new instance of TestDataSet
      */
     public TestDataSet() {
-        testDataList = new ArrayList<TestData>();
+        testDataList = new ArrayList<>();
     }
 
     public TestDataSet(List<LinkedHashMap<String, String>> data) {
-        testDataList = new ArrayList<TestData>();
+        testDataList = new ArrayList<>();
         int i = 1;
         for (LinkedHashMap<String, String> testData : data) {
             TestData td = new TestDataImpl(i++, testData);

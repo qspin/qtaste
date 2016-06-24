@@ -43,7 +43,7 @@ public class FileMask implements FileFilter {
      * @see #addExtension
      */
     public FileMask() {
-        this.filters = new Hashtable<String, FileMask>();
+        this.filters = new Hashtable<>();
     }
 
     /**
@@ -99,8 +99,8 @@ public class FileMask implements FileFilter {
      */
     public FileMask(String[] filters, String description) {
         this();
-        for (int i = 0; i < filters.length; i++) {
-            addExtension(filters[i]);// Ajoute les filtres un a un
+        for (String filter : filters) {
+            addExtension(filter);// Ajoute les filtres un a un
         }
         if (description != null) {
             setDescription(description);
@@ -125,7 +125,6 @@ public class FileMask implements FileFilter {
             if (extension != null && filters.get(getExtension(f)) != null) {
                 return true;
             }
-            ;
         }
         return false;
     }
@@ -143,7 +142,6 @@ public class FileMask implements FileFilter {
             if (i > 0 && i < filename.length() - 1) {
                 return filename.substring(i + 1).toLowerCase();
             }
-            ;
         }
         return null;
     }
@@ -162,7 +160,7 @@ public class FileMask implements FileFilter {
      */
     public void addExtension(String extension) {
         if (filters == null) {
-            filters = new Hashtable<String, FileMask>(5);
+            filters = new Hashtable<>(5);
         }
         filters.put(extension.toLowerCase(), this);
         fullDescription = null;

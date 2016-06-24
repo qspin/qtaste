@@ -61,9 +61,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
             if (getStatus() != ProcessStatus.STOPPED) {
                 throw new QTasteTestFailException("The process " + getInstanceId() + " is still running.");
             }
-        } catch (IOException pException) {
-            LOGGER.error("Unable to kill the process " + getInstanceId() + " : " + pException.getMessage(), pException);
-        } catch (InterruptedException pException) {
+        } catch (IOException | InterruptedException pException) {
             LOGGER.error("Unable to kill the process " + getInstanceId() + " : " + pException.getMessage(), pException);
         }
     }
@@ -95,7 +93,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
             cmd += mParameters[i];
         }
 
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
         //use ps command to list all processes and filter on the process command
         try {
             java.lang.Process myProcess = Runtime.getRuntime().exec("ps -eo pid,command");
@@ -109,9 +107,7 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
                 line = stdout.readLine();
             }
             myProcess.waitFor();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             LOGGER.error(e.getMessage(), e);
         }
 

@@ -202,7 +202,6 @@ public class SimulatorImpl implements SimulatorMBean {
         try {
             PyObject pyValue = (value instanceof PyObject) ? (PyObject) value : Py.java2py(value);
             mPySimulator.__setattr__(new PyString(name), pyValue);
-            return;
         } catch (PyException e) {
             logAndThrowException("Error while setting value of " + name + " variable of Python simulator instance", e);
         }

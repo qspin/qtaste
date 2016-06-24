@@ -46,13 +46,13 @@ final class ComponentLister extends ComponentCommander {
      */
     @Override
     String[] executeCommand(int timeout, String componentName, Object... data) {
-        mComponentsMap = new HashMap<String, List<Node>>();
+        mComponentsMap = new HashMap<>();
 
         for (Stage s : StageHelper.getStages()) {
             browseComponent(s.getScene().getRoot().getChildrenUnmodifiable());
         }
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (String key : mComponentsMap.keySet()) {
             list.add(key + "   (number of instance with this name :" + mComponentsMap.get(key).size() + ")");
         }
@@ -60,14 +60,13 @@ final class ComponentLister extends ComponentCommander {
         list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
         list.add("Number of windows : " + Window.getWindows().length);
         list.add("Number of windows (JavaFX) : " + StageHelper.getStages().size());
-        String[] result = (String[]) list.toArray(new String[0]);
-        return result;
+        return list.toArray(new String[list.size()]);
     }
 
     private void addToMap(Node c) {
         String componentName = c.getId();
         if (!mComponentsMap.containsKey(componentName)) {
-            mComponentsMap.put(componentName, new ArrayList<Node>());
+            mComponentsMap.put(componentName, new ArrayList<>());
         }
         if (!mComponentsMap.get(componentName).contains(c)) {
             mComponentsMap.get(componentName).add(c);
@@ -75,8 +74,7 @@ final class ComponentLister extends ComponentCommander {
     }
 
     private void browseComponent(ObservableList<Node> components) {
-        for (int c = 0; c < components.size(); c++) {
-            Node n = components.get(c);
+        for (Node n : components) {
             String componentName = n.getId();
             // LOGGER.debug("browsing " + components[c].toString());
             // LOGGER.debug("name=" + componentName);

@@ -63,12 +63,9 @@ public class TestAPIDocsTree extends JTree {
         TreeSelectionModel selModel = this.getSelectionModel();
         selModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-            public void onConfigurationChange() {
-                TestAPIDocsTree.this.buildTree(rootNode, TestAPIDocsTree.this);
-                tm.reload();
-            }
+        TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+            TestAPIDocsTree.this.buildTree(rootNode, TestAPIDocsTree.this);
+            tm.reload();
         });
 
     }
@@ -80,7 +77,7 @@ public class TestAPIDocsTree extends JTree {
                 rootNode.removeAllChildren();
                 ComponentsLoader.getInstance(); // don't remove, it is to be sure that components are registered
                 Collection<String> hashComponents = testAPI.getRegisteredComponents();
-                TreeSet<String> sortedComponents = new TreeSet<String>(hashComponents);
+                TreeSet<String> sortedComponents = new TreeSet<>(hashComponents);
                 TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
                 for (String componentName : sortedComponents) {
                     boolean componentPresentInTestbed = true;
@@ -96,7 +93,7 @@ public class TestAPIDocsTree extends JTree {
                         DefaultMutableTreeNode node = new DefaultMutableTreeNode(componentName, true);
                         rootNode.add(node);
                         // get all methods from this component
-                        List<String> methods = new ArrayList<String>(testAPI.getRegisteredVerbs(componentName));
+                        List<String> methods = new ArrayList<>(testAPI.getRegisteredVerbs(componentName));
                         Collections.sort(methods);
                         for (String methodName : methods) {
                             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(methodName, true);

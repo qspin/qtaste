@@ -21,6 +21,8 @@
  */
 package com.qspin.qtaste.ui;
 
+import static com.qspin.qtaste.config.StaticConfiguration.DEFAULT_TESTSUITES_DIR;
+
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -42,7 +44,6 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -112,7 +113,6 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
     static DataFlavor[] supportedFlavors = {localObjectFlavor};
 
     private static Logger logger = Log4jLoggerFactory.getLogger(TestCaseTree.class);
-    private final String TESTUITE_DIR = "TestSuites";
     private TestCaseTree mTestCaseTree;
     protected TestCasePane testCasePane;
     private static final String TEST_CASE_TAB_ON_SELECT_PROPERTY = "test_case_tab_on_select";
@@ -206,22 +206,20 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
     }
 
     protected FileNode createRootFileNode() {
-        String scriptDir = TESTUITE_DIR;
-        FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases", getTestCasePane().getTestSuiteDirectory());
-        return tcFn;
+        String scriptDir = DEFAULT_TESTSUITES_DIR;
+        return new FileNode(new File(scriptDir), "Test Cases", getTestCasePane().getTestSuiteDirectory());
     }
 
     public void generateScriptsTree(String testSuiteDir) {
-        String scriptDir = testSuiteDir;
-        FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases", getTestCasePane().getTestSuiteDirectory());
+        FileNode tcFn = new FileNode(new File(testSuiteDir), "Test Cases", getTestCasePane().getTestSuiteDirectory());
         generateScriptsTree(tcFn);
     }
 
     protected void addTreeToDir(File file, DefaultMutableTreeNode parentNode) {
         if (file.isDirectory()) {
             File[] childFiles = FileUtilities.listSortedFiles(file);
-            for (int i = 0; i < childFiles.length; i++) {
-                addChildToTree(childFiles[i], parentNode);
+            for (File childFile : childFiles) {
+                addChildToTree(childFile, parentNode);
             }
         }
     }
@@ -229,33 +227,30 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
     protected boolean isTestcaseDir(File file) {
         if (file.isDirectory()) {
             File[] childFiles = FileUtilities.listSortedFiles(file);
-            for (int i = 0; i < childFiles.length; i++) {
-                if (childFiles[i].getName().equals(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
+            for (File childFile : childFiles) {
+                if (childFile.getName().equals(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
                     return true;
                 }
             }
         }
         return false;
-
     }
 
     protected boolean checkIfDirectoryContainsTestScriptFile(File file) {
         File[] childFiles = FileUtilities.listSortedFiles(file);
-        for (int i = 0; i < childFiles.length; i++) {
-            if (childFiles[i].isDirectory()) {
-                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(),
-                      getTestCasePane().getTestSuiteDirectory());
+        for (File childFile : childFiles) {
+            if (childFile.isDirectory()) {
+                FileNode childNode = new FileNode(childFile, childFile.getName(), getTestCasePane().getTestSuiteDirectory());
                 if (childNode.isTestcaseDir()) {
                     return true;
                 } else {
                     // go recursively into its directory
-                    boolean result = checkIfDirectoryContainsTestScriptFile(childFiles[i]);
+                    boolean result = checkIfDirectoryContainsTestScriptFile(childFile);
                     if (result) {
                         return true;
                     }
                 }
             }
-
         }
         return false;
     }
@@ -559,9 +554,7 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
             } else {
                 dtde.rejectDrop();
             }
-        } catch (UnsupportedFlavorException ex) {
-            logger.error(ex.getMessage());
-        } catch (IOException ex) {
+        } catch (UnsupportedFlavorException | IOException ex) {
             logger.error(ex.getMessage());
         }
     }
@@ -578,7 +571,7 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
      * @return the option pane.
      */
     protected JOptionPane getOptionPane(JComponent parent) {
-        JOptionPane pane = null;
+        JOptionPane pane;
         if (!(parent instanceof JOptionPane)) {
             pane = getOptionPane((JComponent) parent.getParent());
         } else {
@@ -612,21 +605,15 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
         panel.add(textField);
 
         // configure button action listeners to return the button instance when it is clicked.
-        okayBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent) e.getSource());
-                pane.setValue(okayBtn);
-            }
+        okayBtn.addActionListener(e -> {
+            JOptionPane pane = getOptionPane((JComponent) e.getSource());
+            pane.setValue(okayBtn);
         });
         okayBtn.setEnabled(false);
 
-        cancelBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent) e.getSource());
-                pane.setValue(cancelBtn);
-            }
+        cancelBtn.addActionListener(e -> {
+            JOptionPane pane = getOptionPane((JComponent) e.getSource());
+            pane.setValue(cancelBtn);
         });
 
         // configure the text field document listener to check that the new text entered is 

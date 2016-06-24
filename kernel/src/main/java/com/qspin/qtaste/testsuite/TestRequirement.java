@@ -10,8 +10,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 public final class TestRequirement {
 
     public TestRequirement(String pId) {
-        mDataIdList = new LinkedList<String>();
-        mData = new HashMap<String, String>();
+        mDataIdList = new LinkedList<>();
+        mData = new HashMap<>();
         setData(ID, pId);
         setRequirementDescription("Empty requirement description");
     }

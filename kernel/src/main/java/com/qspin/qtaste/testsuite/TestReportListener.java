@@ -31,22 +31,22 @@ public interface TestReportListener {
     /**
      * Method called after test suite has been started.
      */
-    public void reportTestSuiteStarted();
+    void reportTestSuiteStarted();
 
     /**
      * Method called after test suite has been stopped.
      */
-    public void reportTestSuiteStopped();
+    void reportTestSuiteStopped();
 
     /**
      * Method called when a test result is reported.
      *
      * @param status test result status
      */
-    public void reportTestResult(TestResult.Status status);
+    void reportTestResult(TestResult.Status status);
 
     /**
      * Method called when a test retry occurs.
      */
-    public void reportTestRetry();
+    void reportTestRetry();
 }

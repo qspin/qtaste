@@ -92,7 +92,7 @@ public class TestRequirementEditor extends JPanel {
     private String currentXMLFile = "";
     private boolean isModified;
     private TableModelListener tableListener;
-    private int ROW_HEIGHT = 20;
+    private static final int ROW_HEIGHT = 20;
     private MyTableColumnModelListener m_TableColumnModelListener;
     private Clipboard m_systemClipboard;
 
@@ -215,9 +215,9 @@ public class TestRequirementEditor extends JPanel {
                         continue;
                     }
                     output.newLine();
-                    output.append("\t\t<" + dataId.replace(" ", XMLFile.SPACE_REPLACEMENT) + ">");
+                    output.append("\t\t<").append(dataId.replace(" ", XMLFile.SPACE_REPLACEMENT)).append(">");
                     output.append(req.getDataEscapeXml(dataId));
-                    output.append("</" + dataId.replace(" ", XMLFile.SPACE_REPLACEMENT) + ">");
+                    output.append("</").append(dataId.replace(" ", XMLFile.SPACE_REPLACEMENT)).append(">");
                 }
 
                 output.newLine();
@@ -284,11 +284,7 @@ public class TestRequirementEditor extends JPanel {
             m_TestRequirementModel.addTableModelListener(tableListener);
             m_TestRequirementTable.getColumnModel().addColumnModelListener(m_TableColumnModelListener);
 
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-        } catch (SAXException ex) {
-            logger.error(ex.getMessage());
-        } catch (ParserConfigurationException ex) {
+        } catch (IOException | ParserConfigurationException | SAXException ex) {
             logger.error(ex.getMessage());
         }
     }
@@ -401,14 +397,11 @@ public class TestRequirementEditor extends JPanel {
             }
         });
 
-        tableListener = new TableModelListener() {
-
-            public void tableChanged(TableModelEvent e) {
-                // build the test data
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    if (e.getFirstRow() >= 0) {
-                        setModified(true);
-                    }
+        tableListener = e -> {
+            // build the test data
+            if (e.getType() == TableModelEvent.UPDATE) {
+                if (e.getFirstRow() >= 0) {
+                    setModified(true);
                 }
             }
         };
@@ -437,12 +430,12 @@ public class TestRequirementEditor extends JPanel {
     }
 
     private void copySelectionToClipboard() {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         int[] selectedRows = m_TestRequirementTable.getSelectedRows();
         int[] selectedCols = m_TestRequirementTable.getSelectedColumns();
-        for (int i = 0; i < selectedRows.length; i++) {
+        for (int selectedRow : selectedRows) {
             for (int j = 0; j < selectedCols.length; j++) {
-                stringBuffer.append(m_TestRequirementTable.getValueAt(selectedRows[i], selectedCols[j]));
+                stringBuffer.append(m_TestRequirementTable.getValueAt(selectedRow, selectedCols[j]));
                 if (j < selectedCols.length - 1) {
                     stringBuffer.append("\t");
                 }
@@ -533,7 +526,7 @@ public class TestRequirementEditor extends JPanel {
 
         private void evaluatePopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                int clickedRow = -1;
+                int clickedRow;
                 int clickedColumn = -1;
                 if (table != null) {
                     // force selection of clicked cell

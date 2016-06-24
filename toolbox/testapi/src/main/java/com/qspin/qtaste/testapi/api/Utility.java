@@ -37,7 +37,7 @@ public interface Utility extends SingletonComponent {
      * @param fileName full path to the generated png file
      * @throws QTasteException if the screenshot cannot be performed sucessfully
      */
-    public void createScreenshot(String fileName) throws QTasteException;
+    void createScreenshot(String fileName) throws QTasteException;
 
     /**
      * Shows a modal message dialog window displaying information to the tester.
@@ -46,7 +46,7 @@ public interface Utility extends SingletonComponent {
      * @param title the title of the dialog window
      * @param message the message to be displayed in the dialog
      */
-    public void showMessageDialog(String title, String message) throws QTasteException;
+    void showMessageDialog(String title, String message) throws QTasteException;
 
     /**
      * Shows a input dialog window to user input a String value.
@@ -54,7 +54,7 @@ public interface Utility extends SingletonComponent {
      * @param message the message to be displayed in the dialog
      * @param defaultValue default value for the user input
      */
-    public String getUserStringValue(String message, Object defaultValue) throws QTasteException;
+    String getUserStringValue(String message, Object defaultValue) throws QTasteException;
 
     /**
      * Shows a confirmation dialog window (Yes/No).
@@ -62,5 +62,5 @@ public interface Utility extends SingletonComponent {
      * @param title the title of the dialog window
      * @param message the message to be displayed in the dialog
      */
-    public boolean getUserConfirmation(String title, String message) throws QTasteException;
+    boolean getUserConfirmation(String title, String message) throws QTasteException;
 }

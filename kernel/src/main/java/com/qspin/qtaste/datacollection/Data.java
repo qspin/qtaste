@@ -39,8 +39,6 @@ public class Data implements Serializable {
 
     }
 
-    ;
-
     private long timestamp;
     private String sender;
     private String dest;

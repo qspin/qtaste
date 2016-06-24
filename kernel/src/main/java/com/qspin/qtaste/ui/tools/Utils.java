@@ -45,11 +45,11 @@ public class Utils {
     static boolean deleteDirectoryContent(File path) {
         if (path.exists()) {
             File[] files = path.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isDirectory()) {
-                    deleteDirectoryContent(files[i]);
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectoryContent(file);
                 } else {
-                    files[i].delete();
+                    file.delete();
                 }
             }
         }
@@ -77,9 +77,9 @@ public class Utils {
         if (src.isDirectory()) {
             dest.mkdirs();
             String list[] = src.list();
-            for (int i = 0; i < list.length; i++) {
-                String dest1 = dest.getPath() + "/" + list[i];
-                String src1 = src.getPath() + "/" + list[i];
+            for (String fileName : list) {
+                String dest1 = dest.getPath() + "/" + fileName;
+                String src1 = src.getPath() + "/" + fileName;
                 // i.e: avoid .svn directory
                 File src1_ = new File(src1);
                 File dest1_ = new File(dest1);

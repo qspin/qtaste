@@ -31,7 +31,7 @@ public class Campaign {
     ArrayList<CampaignRun> runs;
 
     public Campaign() {
-        runs = new ArrayList<CampaignRun>();
+        runs = new ArrayList<>();
     }
 
     public String getName() {

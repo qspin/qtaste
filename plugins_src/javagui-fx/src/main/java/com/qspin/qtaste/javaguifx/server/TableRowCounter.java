@@ -53,32 +53,28 @@ final class TableRowCounter extends ComponentCommander {
 
     private int countRows(final String pValue, final int pColumnIndex, final JTable pTable) throws QTasteException {
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    for (int rowIndex = 0; rowIndex < pTable.getModel().getRowCount(); ++rowIndex) {
-                        //format model value
-                        Object cellValue = pTable.getModel().getValueAt(rowIndex, pColumnIndex);
-                        TableCellRenderer renderer = pTable.getCellRenderer(rowIndex, pColumnIndex);
-                        Component c = renderer.getTableCellRendererComponent(pTable, cellValue, false, false, rowIndex,
-                              pColumnIndex);
-                        String valueRepresentation;
-                        if (c instanceof Label) {
-                            LOGGER.debug("cell is represented by a Label");
-                            valueRepresentation = ((Label) c).getText();
-                        } else if (c instanceof JLabel) {
-                            LOGGER.debug("cell is represented by a JLabel");
-                            valueRepresentation = ((JLabel) c).getText();
-                        } else {
-                            LOGGER.debug("cell is represented by a " + c.getClass());
-                            valueRepresentation = c.toString();
-                        }
+            SwingUtilities.invokeAndWait(() -> {
+                for (int rowIndex = 0; rowIndex < pTable.getModel().getRowCount(); ++rowIndex) {
+                    //format model value
+                    Object cellValue = pTable.getModel().getValueAt(rowIndex, pColumnIndex);
+                    TableCellRenderer renderer = pTable.getCellRenderer(rowIndex, pColumnIndex);
+                    Component c = renderer.getTableCellRendererComponent(pTable, cellValue, false, false, rowIndex, pColumnIndex);
+                    String valueRepresentation;
+                    if (c instanceof Label) {
+                        LOGGER.debug("cell is represented by a Label");
+                        valueRepresentation = ((Label) c).getText();
+                    } else if (c instanceof JLabel) {
+                        LOGGER.debug("cell is represented by a JLabel");
+                        valueRepresentation = ((JLabel) c).getText();
+                    } else {
+                        LOGGER.debug("cell is represented by a " + c.getClass());
+                        valueRepresentation = c.toString();
+                    }
 
-                        //check with searched value
-                        LOGGER.debug("compare value (" + pValue + ") with the cell value (" + valueRepresentation + ")");
-                        if (pValue.equals(valueRepresentation)) {
-                            lastCounter++;
-                        }
+                    //check with searched value
+                    LOGGER.debug("compare value (" + pValue + ") with the cell value (" + valueRepresentation + ")");
+                    if (pValue.equals(valueRepresentation)) {
+                        lastCounter++;
                     }
                 }
             });

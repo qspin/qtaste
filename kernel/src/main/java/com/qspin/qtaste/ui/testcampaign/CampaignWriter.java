@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -49,59 +48,50 @@ public class CampaignWriter {
     private HashMap<String, ArrayList<Testcase>> m_campaign;
 
     public CampaignWriter() {
-        m_campaign = new HashMap<String, ArrayList<Testcase>>();
+        m_campaign = new HashMap<>();
     }
 
     public void addCampaign(String testbed, String testcaseDirectory, int rowId) {
         if (m_campaign.containsKey(testbed)) {
             ArrayList<Testcase> testcases = m_campaign.get(testbed);
-            Iterator<Testcase> testcaseIt = testcases.iterator();
-            while (testcaseIt.hasNext()) {
-                Testcase testcase = testcaseIt.next();
+            for (Testcase testcase : testcases) {
                 if (testcaseDirectory.equals(testcase.getDirectory())) {
-                    if (testcase.rowId != null) {
-                        if (testcase.getRowid().contains(rowId)) {
+                    if (testcase.rowIds != null) {
+                        if (testcase.getRowIds().contains(rowId)) {
                             return; // already added
                         }
-                        testcase.getRowid().add(rowId);
+                        testcase.getRowIds().add(rowId);
                         return;
                     } else {
                         // set all rows by settings the array to null
-                        testcase.setRowId(new ArrayList<Integer>());
-                        testcase.getRowid().add(rowId);
+                        testcase.setRowIds(new ArrayList<>());
+                        testcase.getRowIds().add(rowId);
                         return;
                     }
                 }
             }
             // add the testcase
-            Testcase testcase = new Testcase(testcaseDirectory, new ArrayList<Integer>());
-            testcase.getRowid().add(rowId);
+            Testcase testcase = new Testcase(testcaseDirectory, new ArrayList<>());
+            testcase.getRowIds().add(rowId);
             testcases.add(testcase);
-            return;
         } else {
-            ArrayList<Testcase> testcases = new ArrayList<Testcase>();
-            Testcase testcase = new Testcase(testcaseDirectory, new ArrayList<Integer>());
-            testcase.getRowid().add(rowId);
+            ArrayList<Testcase> testcases = new ArrayList<>();
+            Testcase testcase = new Testcase(testcaseDirectory, new ArrayList<>());
+            testcase.getRowIds().add(rowId);
             testcases.add(testcase);
             m_campaign.put(testbed, testcases);
         }
-
     }
 
     public void addCampaign(String testbed, String testcaseDirectory) {
         if (m_campaign.containsKey(testbed)) {
             ArrayList<Testcase> testcases = m_campaign.get(testbed);
-            Iterator<Testcase> testcaseIt = testcases.iterator();
-            while (testcaseIt.hasNext()) {
-                Testcase testcase = testcaseIt.next();
+            for (Testcase testcase : testcases) {
                 if (testcaseDirectory.equals(testcase.getDirectory())) {
-                    if (testcase.rowId == null) // all rows
-                    {
+                    if (testcase.rowIds == null) { // all rows
                         return;
-                    } else
-                    // set all rows by settings the array to null
-                    {
-                        testcase.rowId = null;
+                    } else { // set all rows by settings the array to null
+                        testcase.rowIds = null;
                     }
                     return;
                 }
@@ -111,7 +101,7 @@ public class CampaignWriter {
             testcases.add(testcase);
         } else {
             Testcase testcase = new Testcase(testcaseDirectory, null);
-            ArrayList<Testcase> testcases = new ArrayList<Testcase>();
+            ArrayList<Testcase> testcases = new ArrayList<>();
             testcases.add(testcase);
             m_campaign.put(testbed, testcases);
         }
@@ -130,7 +120,7 @@ public class CampaignWriter {
 
             Iterator<String> testbeds = m_campaign.keySet().iterator();
             // sort the iterator
-            ArrayList<String> testbedList = new ArrayList<String>();
+            ArrayList<String> testbedList = new ArrayList<>();
             while (testbeds.hasNext()) {
                 String testbedName = testbeds.next();
                 testbedList.add(testbedName);
@@ -144,18 +134,14 @@ public class CampaignWriter {
                 Element run = doc.createElement("run");
                 run.setAttribute("testbed", testbedFileName);
                 ArrayList<Testcase> testcases = m_campaign.get(testbedName);
-                Iterator<Testcase> testcaseIt = testcases.iterator();
-                while (testcaseIt.hasNext()) {
-                    Testcase testcase = testcaseIt.next();
+                for (Testcase testcase : testcases) {
                     Element testsuite = doc.createElement("testsuite");
                     testsuite.setAttribute("directory", testcase.getDirectory());
                     // check if rows of testdata must be specified
-                    if (testcase.getRowid() != null) {
+                    if (testcase.getRowIds() != null) {
                         Element testdata = doc.createElement("testdata");
                         String selector = "";
-                        Iterator<Integer> rowIt = testcase.getRowid().iterator();
-                        while (rowIt.hasNext()) {
-                            Integer rowId = rowIt.next();
+                        for (Integer rowId : testcase.getRowIds()) {
                             if (selector.length() >= 1) {
                                 selector += ",";
                             }
@@ -181,16 +167,7 @@ public class CampaignWriter {
             fw = new java.io.FileWriter(fileName);
             StreamResult sr = new StreamResult(fw);
             transformer.transform(domSource, sr);
-        } catch (TransformerConfigurationException ex) {
-            //
-            logger.error(ex);
-        } catch (TransformerException ex) {
-            //
-            logger.error(ex);
-        } catch (IOException ex) {
-            //
-            logger.error(ex);
-        } catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException | IOException | TransformerException ex) {
             //
             logger.error(ex);
         } finally {
@@ -206,24 +183,24 @@ public class CampaignWriter {
     }
 
     public class Testcase {
-        private ArrayList<Integer> rowId;
+        private ArrayList<Integer> rowIds;
         private String directory;
 
-        public Testcase(String directory, ArrayList<Integer> rowId) {
+        public Testcase(String directory, ArrayList<Integer> rowIds) {
             this.directory = directory;
-            this.rowId = rowId;
+            this.rowIds = rowIds;
         }
 
-        public ArrayList<Integer> getRowid() {
-            return rowId;
+        public ArrayList<Integer> getRowIds() {
+            return rowIds;
         }
 
         public String getDirectory() {
             return directory;
         }
 
-        public void setRowId(ArrayList<Integer> rows) {
-            rowId = rows;
+        public void setRowIds(ArrayList<Integer> rows) {
+            rowIds = rows;
         }
     }
 

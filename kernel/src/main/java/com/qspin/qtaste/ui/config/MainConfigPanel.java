@@ -20,8 +20,6 @@
 package com.qspin.qtaste.ui.config;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -73,24 +71,18 @@ public class MainConfigPanel extends JPanel {
         JPanel buttonPanel = new JPanel();
         JButton applyButton = new JButton("Apply");
         buttonPanel.add(applyButton);
-        applyButton.addActionListener(new ActionListener() {
+        applyButton.addActionListener(e -> {
+            engineTestConfigPanel.Apply();
+            testBedConfigPanel.Apply();
 
-            public void actionPerformed(ActionEvent e) {
-                engineTestConfigPanel.Apply();
-                testBedConfigPanel.Apply();
-
-            }
         });
 
         JButton saveButton = new JButton("Save");
         buttonPanel.add(saveButton);
-        saveButton.addActionListener(new ActionListener() {
+        saveButton.addActionListener(e -> {
+            engineTestConfigPanel.Save();
+            testBedConfigPanel.Save();
 
-            public void actionPerformed(ActionEvent e) {
-                engineTestConfigPanel.Save();
-                testBedConfigPanel.Save();
-
-            }
         });
 
         this.add(titlePanel, BorderLayout.NORTH);

@@ -107,7 +107,6 @@ public class JythonTestScript extends TestScript implements Executable {
     private ScriptBreakpoint scriptBreakpoint;
     private TestData testData;
     public TestResult testResult;
-    private Bindings bindings;
     private static ScriptEngineManager engineManager = new ScriptEngineManager();
     private static ScriptEngine engine = engineManager.getEngineByName("python");
     private static List<Object> platform;
@@ -477,10 +476,10 @@ public class JythonTestScript extends TestScript implements Executable {
      * is mapped to an empty tag name
      */
     public static HashMap<String, String> parsePythonDoc(String pythonDoc) {
-        HashMap<String, String> tagsDoc = new HashMap<String, String>();
+        HashMap<String, String> tagsDoc = new HashMap<>();
         String[] lines = pythonDoc.split("\\s*\n\\s*");
         String tag = "";
-        List<String> textLines = new ArrayList<String>();
+        List<String> textLines = new ArrayList<>();
         for (String line : lines) {
             if (line.startsWith("@")) {
                 tagsDoc.put(tag, Strings.join(textLines, "\n"));
@@ -548,7 +547,7 @@ public class JythonTestScript extends TestScript implements Executable {
                 Object argument = arguments[i];
                 Class<?> parameterClass = parametersClasses[i];
                 if (argument instanceof String && !(parameterClass == String.class || parameterClass == File.class)) {
-                    final TestData tempTestData = new TestDataImpl(testData.getRowId(), new LinkedHashMap<String, String>());
+                    final TestData tempTestData = new TestDataImpl(testData.getRowId(), new LinkedHashMap<>());
                     final String tempDataName = "TEMP_DATA";
                     tempTestData.setValue(tempDataName, (String) argument);
                     if (parameterClass == int.class || parameterClass == Integer.class) {
@@ -579,7 +578,7 @@ public class JythonTestScript extends TestScript implements Executable {
     }
 
     public static List<String> getAdditionalPythonPath(File file) {
-        List<String> pythonlibs = new ArrayList<String>();
+        List<String> pythonlibs = new ArrayList<>();
         //add librairies references by the environment variable
         for (String additionnalPath : StaticConfiguration.JYTHON_LIB.split(File.pathSeparator)) {
             File directory = new File(additionnalPath);
@@ -618,7 +617,7 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         try {
-            bindings = engine.createBindings();
+            Bindings bindings = engine.createBindings();
             engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
             // add all global bindinds
@@ -718,9 +717,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
     protected PyList SaveTestDataValues(PyDictionary pythonArguments) throws QTasteDataException {
         PyList oldValues = new PyList();
-        Iterator<?> argIterator = pythonArguments.items().iterator();
-        while (argIterator.hasNext()) {
-            Object oArg = argIterator.next();
+        for (Object oArg : pythonArguments.items()) {
             if (oArg instanceof PyTuple) {
                 PyTuple argType = (PyTuple) oArg;
                 PyObject[] pyObj = argType.getArray();
@@ -743,13 +740,12 @@ public class JythonTestScript extends TestScript implements Executable {
     }
 
     protected void RestoreTestDataValues(PyList oldValues) throws QTasteDataException {
-        Iterator<?> oldValuesIterator = oldValues.iterator();
-        while (oldValuesIterator.hasNext()) {
-            Object[] oldValue = (Object[]) oldValuesIterator.next();
-            if (oldValue[1] == null) {
-                testData.remove((String) oldValue[0]);
+        for (Object oldValue : oldValues) {
+            Object[] oldValueArray = (Object[]) oldValue;
+            if (oldValueArray[1] == null) {
+                testData.remove((String) oldValueArray[0]);
             } else {
-                testData.setValue((String) oldValue[0], (String) oldValue[1]);
+                testData.setValue((String) oldValueArray[0], (String) oldValueArray[1]);
             }
         }
     }
@@ -1121,8 +1117,8 @@ public class JythonTestScript extends TestScript implements Executable {
 
         private ArrayList<DebugVariable> getPythonVariablesDump() {
             Bindings globalContext = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-            ArrayList<DebugVariable> debugVariables = new ArrayList<DebugVariable>();
-            for (String variableName : new TreeSet<String>(globalContext.keySet())) {
+            ArrayList<DebugVariable> debugVariables = new ArrayList<>();
+            for (String variableName : new TreeSet<>(globalContext.keySet())) {
                 Object variableValue = globalContext.get(variableName);
                 if (!variableName.startsWith("__") &&
                       !(variableValue instanceof PySystemState) &&
@@ -1153,14 +1149,11 @@ public class JythonTestScript extends TestScript implements Executable {
             if (mLocals instanceof PyStringMap) {
                 PyStringMap locals = (PyStringMap) mLocals;
                 PyList keys = locals.keys();
-                Iterator<?> localIt = keys.iterator();
-                while (localIt.hasNext()) {
-                    Object oMap = localIt.next();
+                for (Object oMap : keys) {
                     if (oMap instanceof String) {
                         String localKey = (String) oMap;
                         Object oValue = locals.get(new PyString(localKey));
-                        DebugVariable debugVar = new DebugVariable(localKey.toString(), oValue.getClass().toString(),
-                              oValue.toString());
+                        DebugVariable debugVar = new DebugVariable(localKey, oValue.getClass().toString(), oValue.toString());
                         debugVar = dumpPythonObject(oValue, debugVar);
                         debugVariables.add(debugVar);
                     }
@@ -1189,14 +1182,13 @@ public class JythonTestScript extends TestScript implements Executable {
             }
         }
         Field[] fields = javaObject.getClass().getFields();
-        for (int fIndex = 0; fIndex < fields.length; fIndex++) {
-            Field field = fields[fIndex];
+        for (Field field : fields) {
             String fieldName = field.getName();
             try {
                 Object fieldObject = field.get(javaObject);
 
                 String fieldValue = fieldObject.toString();
-                DebugVariable fieldVar = new DebugVariable(fieldName, field.getClass().toString(), fieldValue.toString());
+                DebugVariable fieldVar = new DebugVariable(fieldName, field.getClass().toString(), fieldValue);
                 fieldVar = dumpJavaObject(fieldValue, fieldVar);
                 debugVar.addField(fieldVar);
             } catch (IllegalArgumentException e) {
@@ -1208,13 +1200,12 @@ public class JythonTestScript extends TestScript implements Executable {
             }
         }
         Method[] methods = javaObject.getClass().getMethods();
-        for (int methodIndex = 0; methodIndex < methods.length; methodIndex++) {
-            Method method = methods[methodIndex];
+        for (Method method : methods) {
             if ((method.getName().startsWith("get")) &&
                   (!(method.getName().equals("getClass"))) &&
                   (!(method.getName().equals("getAccessorKeys")))) {
                 try {
-                    Object returnValue = method.invoke(javaObject, new Object[] {});
+                    Object returnValue = method.invoke(javaObject);
                     DebugVariable fieldVar = new DebugVariable(method.getName(), javaObject.getClass().toString(),
                           returnValue.toString());
                     fieldVar = dumpJavaObject(returnValue, fieldVar);
@@ -1238,7 +1229,7 @@ public class JythonTestScript extends TestScript implements Executable {
         }
         if (value instanceof PyList) {
             PyList listValue = (PyList) value;
-            Object[] dataArray = (Object[]) listValue.getArray();
+            Object[] dataArray = listValue.getArray();
             for (int i = 0; i < listValue.__len__(); i++) {
                 Object o = dataArray[i];
                 debugVar.addField(new DebugVariable("[" + i + "]", o.getClass().toString(), o.toString()));
@@ -1260,9 +1251,7 @@ public class JythonTestScript extends TestScript implements Executable {
             Object javaObject = pythonValue.__tojava__(Object.class);
             if (javaObject instanceof ArrayList) {
                 ArrayList<?> javaObjectArray = (ArrayList<?>) javaObject;
-                Iterator<?> arrayIterator = javaObjectArray.iterator();
-                while (arrayIterator.hasNext()) {
-                    Object arrayListObject = arrayIterator.next();
+                for (Object arrayListObject : javaObjectArray) {
                     debugVar = dumpJavaObject(arrayListObject, debugVar);
                 }
             } else {
@@ -1315,11 +1304,11 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         public void setIntValue(String name, int value) throws QTasteDataException {
-            setValue(name, new Integer(value).toString());
+            setValue(name, Integer.toString(value));
         }
 
         public void setDoubleValue(String name, double value) throws QTasteDataException {
-            setValue(name, new Double(value).toString());
+            setValue(name, Double.toString(value));
         }
 
         public void setBooleanValue(String name, boolean value) throws QTasteDataException {

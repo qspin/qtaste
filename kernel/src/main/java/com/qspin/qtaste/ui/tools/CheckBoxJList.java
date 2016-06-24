@@ -40,7 +40,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings("serial")
-public class CheckBoxJList extends JList implements ListSelectionListener {
+public class CheckBoxJList<E> extends JList<E> implements ListSelectionListener {
 
     static Color listForeground, listBackground, listSelectionForeground, listSelectionBackground;
 
@@ -52,15 +52,13 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
         listSelectionBackground = uid.getColor("List.selectionBackground");
     }
 
-    HashSet<Integer> selectionCache = new HashSet<Integer>();
+    HashSet<Integer> selectionCache = new HashSet<>();
     int toggleIndex = -1;
     boolean toggleWasSelected;
 
     public boolean isIndexSelected(int index) {
-        Iterator<Integer> it = selectionCache.iterator();
-        while (it.hasNext()) {
-            Integer nextInt = it.next();
-            if (nextInt.equals(index)) {
+        for (Integer i : selectionCache) {
+            if (i.equals(index)) {
                 return true;
             }
         }
@@ -69,7 +67,7 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
 
     public CheckBoxJList() {
         super();
-        setCellRenderer(new CheckBoxListCellRenderer());
+        setCellRenderer(new CheckBoxListCellRenderer<E>());
         addListSelectionListener(this);
     }
 
@@ -79,18 +77,18 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
             removeListSelectionListener(this);
 
             // remember everything selected as a result of this action
-            HashSet<Integer> newSelections = new HashSet<Integer>();
+            HashSet<Integer> newSelections = new HashSet<>();
             int size = getModel().getSize();
             for (int i = 0; i < size; i++) {
                 if (getSelectionModel().isSelectedIndex(i)) {
-                    newSelections.add(new Integer(i));
+                    newSelections.add(i);
                 }
             }
 
             // turn on everything that was previously selected
             Iterator<Integer> it = selectionCache.iterator();
             while (it.hasNext()) {
-                int index = it.next().intValue();
+                int index = it.next();
                 getSelectionModel().addSelectionInterval(index, index);
             }
 
@@ -98,7 +96,7 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
             it = newSelections.iterator();
             while (it.hasNext()) {
                 Integer nextInt = it.next();
-                int index = nextInt.intValue();
+                int index = nextInt;
                 if (selectionCache.contains(nextInt)) {
                     getSelectionModel().removeSelectionInterval(index, index);
                 } else {
@@ -110,7 +108,7 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
             selectionCache.clear();
             for (int i = 0; i < size; i++) {
                 if (getSelectionModel().isSelectedIndex(i)) {
-                    selectionCache.add(new Integer(i));
+                    selectionCache.add(i);
                 }
             }
 
@@ -119,7 +117,7 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
         }
     }
 
-    class CheckBoxListCellRenderer extends JComponent implements ListCellRenderer {
+    class CheckBoxListCellRenderer<E> extends JComponent implements ListCellRenderer<E> {
         DefaultListCellRenderer defaultComp;
         JCheckBox checkbox;
 
@@ -145,9 +143,9 @@ public class CheckBoxJList extends JList implements ListSelectionListener {
             */
             checkbox.setSelected(isSelected);
             Component[] comps = getComponents();
-            for (int i = 0; i < comps.length; i++) {
-                comps[i].setForeground(listForeground);
-                comps[i].setBackground(listBackground);
+            for (Component comp : comps) {
+                comp.setForeground(listForeground);
+                comp.setBackground(listBackground);
             }
             return this;
         }

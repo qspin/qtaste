@@ -48,7 +48,7 @@ public class CacheValidator extends Validator {
     private String extraDetails;
 
     public static void check(String name, Object expectedValue, long timeout) throws QTasteTestFailException {
-        LinkedHashMap<String, Object> nameExpectedValues = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> nameExpectedValues = new LinkedHashMap<>();
         nameExpectedValues.put(name, expectedValue);
         check(nameExpectedValues, timeout);
     }
@@ -88,12 +88,12 @@ public class CacheValidator extends Validator {
     protected boolean validate() {
         try {
             final long beginTime_ms = System.currentTimeMillis(); // begin time
-            long elapsedTime_ms = 0; // total elapsed time
+            long elapsedTime_ms; // total elapsed time
             final long checkTimeInterval_ms = 100; // check every 100 ms
 
             Cache cache = CacheImpl.getInstance();
 
-            LinkedList<Object> currentValues = new LinkedList<Object>();
+            LinkedList<Object> currentValues = new LinkedList<>();
             String mismatchVariableName = null;
             Object mismatchVariableValue = null;
             Object mismatchVariableExpectedValue = null;

@@ -96,7 +96,6 @@ public class TestScriptCreation {
             copyTestData(TEMPLATE_DIR, testSuiteDirectoryName);
             // create empty requirement xml file
             copyTestRequirement(TEMPLATE_DIR, testSuiteDirectoryName);
-        } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         } finally {
             if (output != null) {
@@ -139,11 +138,11 @@ public class TestScriptCreation {
     }
 
     private String getTemplateContent(String templateName) throws FileNotFoundException, IOException {
-        BufferedReader input = null;
+        BufferedReader input;
         StringBuilder contents = new StringBuilder();
         input = new BufferedReader(new InputStreamReader(new FileInputStream(templateName), "UTF-8"));
         final String eol = System.getProperty("line.separator");
-        String line = null; //not declared within while loop
+        String line; //not declared within while loop
         while ((line = input.readLine()) != null) {
             contents.append(line);
             contents.append(eol);

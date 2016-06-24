@@ -92,5 +92,5 @@ public class TestRequirementTableModel extends DefaultTableModel {
         return mRequirements;
     }
 
-    private List<TestRequirement> mRequirements = new ArrayList<TestRequirement>();
+    private List<TestRequirement> mRequirements = new ArrayList<>();
 }

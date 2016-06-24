@@ -29,11 +29,9 @@ public abstract class DebugNode extends DefaultMutableTreeNode {
      */
     protected Object[] getChildren() {
         return null;
-
     }
 
     public boolean hasChildren() {
         return false;
     }
-
 }

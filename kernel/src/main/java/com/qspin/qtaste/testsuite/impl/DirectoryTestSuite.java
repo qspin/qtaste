@@ -25,11 +25,9 @@
 package com.qspin.qtaste.testsuite.impl;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
@@ -57,7 +55,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 public class DirectoryTestSuite extends TestSuite {
 
     private static Logger logger = Log4jLoggerFactory.getLogger(DirectoryTestSuite.class);
-    private List<TestScript> testScripts = new ArrayList<TestScript>();
+    private List<TestScript> testScripts = new ArrayList<>();
     private File directory;
 
     public static DirectoryTestSuite createDirectoryTestSuite(String strDirectory) {
@@ -79,10 +77,7 @@ public class DirectoryTestSuite extends TestSuite {
     }
 
     private boolean init() {
-        if (directory == null) {
-            return false;
-        }
-        return addTestScripts(directory);
+        return directory != null && addTestScripts(directory);
     }
 
     /**
@@ -145,7 +140,7 @@ public class DirectoryTestSuite extends TestSuite {
                 if (xmlFile.exists()) {
                     xmlRequirements = new XMLFile(xmlFile).getXMLDataSet();
                 } else {
-                    xmlRequirements = new ArrayList<TestRequirement>();
+                    xmlRequirements = new ArrayList<>();
                 }
                 if (csvDataSet.isEmpty()) {
                     logger.warn("Ignoring test case " + directory + " because it contains no data row");
@@ -160,20 +155,10 @@ public class DirectoryTestSuite extends TestSuite {
             }
         } else {
             // intermediate directory: add test scripts from sub-directories
-            File[] subdirectories = FileUtilities.listSortedFiles(directory, new FileFilter() {
-
-                public boolean accept(File pathname) {
-                    return pathname.isDirectory();
-                }
-            });
+            File[] subdirectories = FileUtilities.listSortedFiles(directory, File::isDirectory);
             if (subdirectories != null && subdirectories.length > 0) {
                 // sort subdirectories by alphabetic order
-                Arrays.sort(subdirectories, new Comparator<File>() {
-
-                    public int compare(File file1, File file2) {
-                        return file1.getName().compareToIgnoreCase(file2.getName());
-                    }
-                });
+                Arrays.sort(subdirectories, (file1, file2) -> file1.getName().compareToIgnoreCase(file2.getName()));
                 for (File subdir : subdirectories) {
                     if (!addTestScripts(subdir)) {
                         break;

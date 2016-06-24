@@ -43,24 +43,19 @@ public class ProcessImpl implements Process {
         if (getStatus() != ProcessStatus.READY_TO_START) {
             throw new QTasteException("Invalide state. Cannot start a non initialized process.");
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mStatus = ProcessStatus.RUNNING;
-                    mCurrentProcess = mBuilder.start();
-                    mStdLogs = new InputStreamWriter(getInstanceId(), mCurrentProcess.getInputStream());
-                    new Thread(mStdLogs).start();
-                    mErrLogs = new InputStreamWriter(getInstanceId(), mCurrentProcess.getErrorStream());
-                    new Thread(mErrLogs).start();
-                    mReturnCode = mCurrentProcess.waitFor();
-                } catch (IOException e) {
-                    LOGGER.error(e.getMessage(), e);
-                } catch (InterruptedException e) {
-                    LOGGER.error(e.getMessage(), e);
-                } finally {
-                    mStatus = ProcessStatus.STOPPED;
-                }
+        new Thread(() -> {
+            try {
+                mStatus = ProcessStatus.RUNNING;
+                mCurrentProcess = mBuilder.start();
+                mStdLogs = new InputStreamWriter(getInstanceId(), mCurrentProcess.getInputStream());
+                new Thread(mStdLogs).start();
+                mErrLogs = new InputStreamWriter(getInstanceId(), mCurrentProcess.getErrorStream());
+                new Thread(mErrLogs).start();
+                mReturnCode = mCurrentProcess.waitFor();
+            } catch (IOException | InterruptedException e) {
+                LOGGER.error(e.getMessage(), e);
+            } finally {
+                mStatus = ProcessStatus.STOPPED;
             }
         }).start();
     }

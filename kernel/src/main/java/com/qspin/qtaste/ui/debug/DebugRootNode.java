@@ -20,7 +20,6 @@
 package com.qspin.qtaste.ui.debug;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 @SuppressWarnings("serial")
 public class DebugRootNode extends DebugNode {
@@ -41,11 +40,7 @@ public class DebugRootNode extends DebugNode {
     }
 
     public boolean hasChildren() {
-        if (mDebugVariables != null) {
-            return mDebugVariables.size() > 0;
-        } else {
-            return false;
-        }
+        return mDebugVariables != null && mDebugVariables.size() > 0;
     }
 
     /**
@@ -60,9 +55,7 @@ public class DebugRootNode extends DebugNode {
         }
         Object[] returnc = new Object[mDebugVariables.size()];
         int i = 0;
-        Iterator<DebugVariable> debugVariables = mDebugVariables.iterator();
-        while (debugVariables.hasNext()) {
-            DebugVariable debugVariable = debugVariables.next();
+        for (DebugVariable debugVariable : mDebugVariables) {
             VariableNode variableNode = new VariableNode(debugVariable);
             returnc[i] = variableNode;
             i++;

@@ -39,11 +39,11 @@ public class OS {
     public static Type getType() {
         String osName = System.getProperty("os.name").toLowerCase();
 
-        if (osName.indexOf("windows") > -1) {
+        if (osName.contains("windows")) {
             return Type.WINDOWS;
-        } else if (osName.indexOf("linux") > -1) {
+        } else if (osName.contains("linux")) {
             return Type.LINUX;
-        } else if (osName.indexOf("mac") > -1) {
+        } else if (osName.contains("mac")) {
             return Type.MAC;
         }
 

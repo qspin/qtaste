@@ -335,9 +335,9 @@ public final class ResourceManager {
     private Font mBiggestFontLight;
     private Font mStandardFontBold;
     private Locale mLocale = new Locale("en", "US");
-    private HashMap<String, ImageIcon> mImageIcons = new HashMap<String, ImageIcon>();
-    private HashMap<String, ResourceBundle> mBundles = new HashMap<String, ResourceBundle>();
-    private HashMap<String, Clip> mSounds = new HashMap<String, Clip>();
+    private HashMap<String, ImageIcon> mImageIcons = new HashMap<>();
+    private HashMap<String, ResourceBundle> mBundles = new HashMap<>();
+    private HashMap<String, Clip> mSounds = new HashMap<>();
     private boolean mWarningColorScheme = false;
     private final Color mLightBlue = new Color(0.78f, 0.67f, 0.87f);
     private final Color mBlue = new Color(0.38f, 0.12f, 0.69f);

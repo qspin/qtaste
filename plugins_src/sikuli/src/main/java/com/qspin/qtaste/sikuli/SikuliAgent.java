@@ -5,8 +5,6 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
@@ -25,30 +23,24 @@ public class SikuliAgent {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final com.qspin.qtaste.sikuli.server.Sikuli server = new Sikuli();
-                    TrayIcon sikuliIcon = new TrayIcon(ICON_TRAY);
-                    MenuItem quit = new MenuItem("Stop Sikuli Qtaste Agent");
-                    quit.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            try {
-                                server.unregister();
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                            System.exit(0);
-                        }
-                    });
-                    sikuliIcon.setPopupMenu(new PopupMenu());
-                    sikuliIcon.getPopupMenu().add(quit);
-                    SystemTray.getSystemTray().add(sikuliIcon);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                final Sikuli server = new Sikuli();
+                TrayIcon sikuliIcon = new TrayIcon(ICON_TRAY);
+                MenuItem quit = new MenuItem("Stop Sikuli Qtaste Agent");
+                quit.addActionListener(e -> {
+                    try {
+                        server.unregister();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    System.exit(0);
+                });
+                sikuliIcon.setPopupMenu(new PopupMenu());
+                sikuliIcon.getPopupMenu().add(quit);
+                SystemTray.getSystemTray().add(sikuliIcon);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
     }

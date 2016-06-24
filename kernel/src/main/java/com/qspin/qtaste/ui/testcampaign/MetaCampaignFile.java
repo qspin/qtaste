@@ -40,14 +40,14 @@ public class MetaCampaignFile {
     private String campaignName;
 
     static public MetaCampaignFile[] getExistingCampaigns() {
-        ArrayList<MetaCampaignFile> campaignArray = new ArrayList<MetaCampaignFile>();
+        ArrayList<MetaCampaignFile> campaignArray = new ArrayList<>();
         File campaignDir = new File(StaticConfiguration.CAMPAIGN_DIRECTORY);
         FileMask fileMask = new FileMask();
         fileMask.addExtension(StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
         File[] fCampaignList = FileUtilities.listSortedFiles(campaignDir, fileMask);
-        for (int i = 0; i < fCampaignList.length; i++) {
+        for (File fCampaign : fCampaignList) {
             // remove the extension
-            String campaignName = fCampaignList[i].getName().substring(0, fCampaignList[i].getName().lastIndexOf("."));
+            String campaignName = fCampaign.getName().substring(0, fCampaign.getName().lastIndexOf("."));
             campaignArray.add(new MetaCampaignFile(campaignName));
         }
         return campaignArray.toArray(new MetaCampaignFile[0]);

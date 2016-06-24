@@ -33,6 +33,6 @@ public interface DumpPythonResultListener extends EventListener {
     /**
      *
      */
-    public void pythonResult(DumpPythonResultEvent event);
+    void pythonResult(DumpPythonResultEvent event);
 
 }

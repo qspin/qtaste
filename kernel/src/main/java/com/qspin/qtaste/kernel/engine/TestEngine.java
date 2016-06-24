@@ -228,7 +228,7 @@ public class TestEngine {
 
             // build the engine script command as a list to avoid mistakes with spaces (see ticket #7)
             String scriptFilename = config.getControlScriptFileName();
-            List<String> scriptEngineCommand = new ArrayList<String>();
+            List<String> scriptEngineCommand = new ArrayList<>();
 
             if (scriptFilename.endsWith(".py")) {
                 final String qtasteJar = StaticConfiguration.QTASTE_ROOT + "/kernel/target/qtaste-kernel-deploy.jar";
@@ -246,7 +246,7 @@ public class TestEngine {
             }
 
             // then, build the 'start or stop' command as a list
-            List<String> startOrStopCommand = new ArrayList<String>();
+            List<String> startOrStopCommand = new ArrayList<>();
 
             startOrStopCommand.add(scriptFilename);
             startOrStopCommand.add(startOrStop);
@@ -266,11 +266,11 @@ public class TestEngine {
             // report the control script
             try {
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
-                Map<String, String> env = new HashMap<String, String>(System.getenv());
+                Map<String, String> env = new HashMap<>(System.getenv());
                 env.put("TESTBED", config.getFileName());
 
                 // build the full command to execute
-                List<String> startOrStopFullCommand = new ArrayList<String>();
+                List<String> startOrStopFullCommand = new ArrayList<>();
                 startOrStopFullCommand.addAll(scriptEngineCommand);
                 startOrStopFullCommand.addAll(startOrStopCommand);
 
@@ -356,11 +356,7 @@ public class TestEngine {
      * control_script declared
      */
     public static boolean setNeedToRestartSUT() {
-        if (useControlScript()) {
-            needToRestartSUT = true;
-        } else {
-            needToRestartSUT = false;
-        }
+        needToRestartSUT = useControlScript();
         return needToRestartSUT;
     }
 

@@ -52,7 +52,7 @@ public class XMLFile {
     public static final ArrayList<String> COLUMN_NAMES;
 
     static {
-        COLUMN_NAMES = new ArrayList<String>();
+        COLUMN_NAMES = new ArrayList<>();
         COLUMN_NAMES.add(REQUIREMENT_ID);
         COLUMN_NAMES.add(DESCRIPTION_ELEMENT);
     }
@@ -67,7 +67,7 @@ public class XMLFile {
      */
     public XMLFile(File xmlFile) {
         this.xmlFile = xmlFile;
-        dataSet = new ArrayList<TestRequirement>();
+        dataSet = new ArrayList<>();
     }
 
     public XMLFile(String xmlFileName) {

@@ -47,17 +47,17 @@ public class DoubleWithPrecisionTest extends TestCase {
 
     public void testCompareWithInteger() {
         System.out.println("testCompareWithInteger");
-        assertTrue(instance.equals(new Integer(1)));
-        assertFalse(instance.equals(new Integer(2)));
+        assertTrue(instance.equals(1));
+        assertFalse(instance.equals(2));
     }
 
     public void testCompareWithDouble() {
         System.out.println("testCompareWithDouble");
-        assertTrue(instance.equals(new Double(1.0)));
-        assertTrue(instance.equals(new Double(0.5)));
-        assertTrue(instance.equals(new Double(1.5)));
-        assertFalse(instance.equals(new Double(0.49)));
-        assertFalse(instance.equals(new Double(1.51)));
+        assertTrue(instance.equals(1.0));
+        assertTrue(instance.equals(0.5));
+        assertTrue(instance.equals(1.5));
+        assertFalse(instance.equals(0.49));
+        assertFalse(instance.equals(1.51));
     }
 
     public void testCompareWithDoubleWithPrecision() {

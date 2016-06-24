@@ -62,7 +62,7 @@ public class TestCaseResultsPane extends JSplitPane {
     private static final long serialVersionUID = 1L;
     protected Log4jPanel tcLogsPane = new Log4jPanel();
     protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
-    private List<TestScript> results = new ArrayList<TestScript>();
+    private List<TestScript> results = new ArrayList<>();
     private TestCasePane mTestCasePane;
     private JTabbedPane runTabbedPane = new JTabbedPane(JTabbedPane.TOP);
     private int runIndex = 0;
@@ -344,7 +344,6 @@ public class TestCaseResultsPane extends JSplitPane {
                 TestCaseReportTable reportTable = (TestCaseReportTable) reportObject;
                 TestCaseReporter.removeTestCaseReportTableListener(reportTable);
             }
-            return;
         }
     }
 
@@ -365,11 +364,7 @@ public class TestCaseResultsPane extends JSplitPane {
 
         @Override
         public boolean isEnabled() {
-            if (runTabbedPane.getSelectedIndex() > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return runTabbedPane.getSelectedIndex() > 0;
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -402,7 +397,7 @@ public class TestCaseResultsPane extends JSplitPane {
 
                         // load the file into the tabbedPaned
                         File f = new File(fileName);
-                        NonWrappingTextPane textPane = null;
+                        NonWrappingTextPane textPane;
                         if (f.exists() && f.canRead()) {
                             textPane = mTestCasePane.loadTestCaseSource(f, true, false);
                             //mTestCasepane.setTestCaseSourceURL(fileName);

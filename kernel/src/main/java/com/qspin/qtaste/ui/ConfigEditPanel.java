@@ -28,9 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -57,7 +55,6 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 public class ConfigEditPanel extends JDialog {
 
     static private Logger logger = Log4jLoggerFactory.getLogger(ConfigEditPanel.class);
-    private InfoCbBox mInfoBox;
     private JPanel mDetailsPanel;
     private JScrollPane mDetailsScrollPane;
     private Properties mSelectedProperties;
@@ -72,10 +69,10 @@ public class ConfigEditPanel extends JDialog {
         // add the Site selection panel
         JPanel siteSelectionPanel = new JPanel(new BorderLayout());
 
-        mInfoBox = new InfoCbBox();
-        this.initSiteCb(mInfoBox);
-        mInfoBox.addActionListener(new CbActionListener(this));
-        siteSelectionPanel.add(mInfoBox);
+        InfoCbBox infoBox = new InfoCbBox();
+        initSiteCb(infoBox);
+        infoBox.addActionListener(new CbActionListener(this));
+        siteSelectionPanel.add(infoBox);
 
         adder.addToEnd(mainConfigPanel);
         adder.addToEnd(siteSelectionPanel);
@@ -105,11 +102,10 @@ public class ConfigEditPanel extends JDialog {
             gridLayout.setColumns(4);
             mDetailsPanel.removeAll();
 
-            Iterator it = mSelectedProperties.entrySet().iterator();
             //mDetailsPanel.setLayout(new GridLayout(cfg.getConfig().getKeysSize(), 2));
             // clear the objects
-            while (it.hasNext()) {
-                Entry<String, String> keyhash = (Entry<String, String>) it.next();
+            for (Object entry : mSelectedProperties.entrySet()) {
+                Entry<String, String> keyhash = (Entry<String, String>) entry;
                 String key = keyhash.getKey();
                 // add objects into the panel
                 //String key = it.next();
@@ -124,8 +120,6 @@ public class ConfigEditPanel extends JDialog {
             mDetailsPanel.revalidate();
             mDetailsScrollPane.revalidate();
             //this.pack();
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
         } catch (IOException ex) {
             logger.error(ex);
         }

@@ -210,27 +210,23 @@ abstract class ComponentCommander {
             final KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
             WindowFocusedListener windowFocusedListener = new WindowFocusedListener(window);
             window.addWindowFocusListener(windowFocusedListener);
-            SwingUtilities.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    // try to activate application if not active
-                    if (keyboardFocusManager.getActiveWindow() == null) {
-                        LOGGER.trace("try to activate application");
-                        // create and display a new frame to force application activation
-                        JFrame newFrame = new JFrame();
-                        newFrame.pack();
-                        newFrame.setVisible(true);
-                        newFrame.toFront();
-                        newFrame.setVisible(false);
-                        newFrame.dispose();
-                    }
-
-                    window.toFront();
-
-                    LOGGER.trace("current focused window : " + keyboardFocusManager.getFocusedWindow());
-                    window.requestFocus();
+            SwingUtilities.invokeLater(() -> {
+                // try to activate application if not active
+                if (keyboardFocusManager.getActiveWindow() == null) {
+                    LOGGER.trace("try to activate application");
+                    // create and display a new frame to force application activation
+                    JFrame newFrame = new JFrame();
+                    newFrame.pack();
+                    newFrame.setVisible(true);
+                    newFrame.toFront();
+                    newFrame.setVisible(false);
+                    newFrame.dispose();
                 }
+
+                window.toFront();
+
+                LOGGER.trace("current focused window : " + keyboardFocusManager.getFocusedWindow());
+                window.requestFocus();
             });
 
             boolean windowFocused = windowFocusedListener.waitUntilWindowFocused();

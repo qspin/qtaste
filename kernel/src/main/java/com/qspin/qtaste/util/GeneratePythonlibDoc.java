@@ -45,21 +45,11 @@ public class GeneratePythonlibDoc {
     /**
      * File filter which accept only directories.
      */
-    private final static FileFilter DIRECTORY_FILE_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File f) {
-            return f.isDirectory();
-        }
-    };
+    private final static FileFilter DIRECTORY_FILE_FILTER = File::isDirectory;
     /**
      * File filter which accept only file with the .py extention (case insensitive).
      */
-    private final static FileFilter PYTHON_SCRIPT_FILE_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File f) {
-            return f.isFile() && f.getName().toLowerCase().endsWith(".py");
-        }
-    };
+    private final static FileFilter PYTHON_SCRIPT_FILE_FILTER = f -> f.isFile() && f.getName().toLowerCase().endsWith(".py");
 
     /**
      * Flag to specify if the generation has already be done (at least) one time during this VM execution.
@@ -85,11 +75,7 @@ public class GeneratePythonlibDoc {
             return;
         }
 
-        new Thread(new Runnable() {
-            public void run() {
-                generate();
-            }
-        }).start();
+        new Thread(GeneratePythonlibDoc::generate).start();
     }
 
     /**
@@ -131,7 +117,7 @@ public class GeneratePythonlibDoc {
      * @return A list containing all directories named pythonlib.
      */
     private static List<File> findPythonLibDirectories(File parentDirectory) {
-        List<File> foundDirectories = new ArrayList<File>();
+        List<File> foundDirectories = new ArrayList<>();
         if (parentDirectory != null && parentDirectory.exists()) {
             for (File dir : parentDirectory.listFiles(DIRECTORY_FILE_FILTER)) {
                 if (dir.getName().equals("pythonlib")) {
@@ -151,7 +137,7 @@ public class GeneratePythonlibDoc {
      * @return A list of all found files.
      */
     private static List<File> findPythonScripts(List<File> pythonLibDirectories) {
-        List<File> scripts = new ArrayList<File>();
+        List<File> scripts = new ArrayList<>();
         for (File dir : pythonLibDirectories) {
             if (dir.exists()) {
                 scripts.addAll(Arrays.asList(dir.listFiles(PYTHON_SCRIPT_FILE_FILTER)));
@@ -176,11 +162,7 @@ public class GeneratePythonlibDoc {
             String scriptDocFileName = script.getName().substring(0, script.getName().length() - 3);
             scriptDocFileName += "-steps-doc.xml";
             File scriptDocFile = new File(script.getParentFile(), scriptDocFileName);
-            if (!scriptDocFile.exists()) {
-                return true;
-            }
-
-            return scriptDocFile.lastModified() <= script.lastModified();
+            return !scriptDocFile.exists() || scriptDocFile.lastModified() <= script.lastModified();
         }
         return false;
     }

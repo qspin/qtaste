@@ -187,7 +187,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
                                 }
                             }
 
-                            if ((text.contains("import ")) || (text.indexOf("from " + selectedText) >= 0)) {
+                            if ((text.contains("import ")) || (text.contains("from " + selectedText))) {
                                 // the selected text is then maybe an existing python lib
                                 // path to python lib
                                 FileSearch fileSearch = new FileSearch();
@@ -267,7 +267,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         Component parent = getParent();
         ComponentUI myui = getUI();
 
-        return parent != null ? (myui.getPreferredSize(this).width <= parent.getSize().width) : true;
+        return parent == null || (myui.getPreferredSize(this).width <= parent.getSize().width);
     }
 
     public void init(String contentType) {
@@ -495,7 +495,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         public void actionPerformed(ActionEvent e) {
             try {
                 // ask for the stepName
-                String input = null;
+                String input;
                 input = JOptionPane.showInputDialog(null, "Give the name of the step", "Name of the step",
                       JOptionPane.QUESTION_MESSAGE);
                 if (input != null) {

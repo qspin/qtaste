@@ -38,28 +38,28 @@ public interface Cache extends DataReceivedListener {
     /**
      * Initialize the cache
      */
-    public void init();
+    void init();
 
-    public void dump();
+    void dump();
 
-    public void save(String fout) throws Exception;
+    void save(String fout) throws Exception;
 
-    public void load(String fin) throws Exception;
+    void load(String fin) throws Exception;
 
-    public void clear();
+    void clear();
 
-    public void clearHistory();
+    void clearHistory();
 
-    public long getClearHistoryTimestamp();
+    long getClearHistoryTimestamp();
 
-    public Iterator<NameValue<String, Data>> getContent();
+    Iterator<NameValue<String, Data>> getContent();
 
     /**
      * Invalidate the data present in the cache for the reason specified as parameter
      *
      * @param reason the reason
      */
-    public void invalidate(String reason);
+    void invalidate(String reason);
 
     /**
      * Return the last Data structure for the specified variable
@@ -70,12 +70,12 @@ public interface Cache extends DataReceivedListener {
      * @throws com.qspin.qtaste.testsuite.QTasteTestFailException if there is no data in the cache for the specified variable
      * @throws QTasteException
      */
-    public Data getLast(String name) throws QTasteTestFailException, QTasteException;
+    Data getLast(String name) throws QTasteTestFailException, QTasteException;
 
     /**
      * Comparators for the {@link #waitForValue} method.
      */
-    public enum Comparator {
+    enum Comparator {
 
         COMPARATOR_EQ, // equal ("==")
         COMPARATOR_NEQ, // not equal ("!=")
@@ -92,7 +92,7 @@ public interface Cache extends DataReceivedListener {
      * @return comparator corresponding to comparatorString
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if comparatorString is invalid
      */
-    public Comparator getComparatorFromString(String comparatorString) throws QTasteDataException;
+    Comparator getComparatorFromString(String comparatorString) throws QTasteDataException;
 
     /**
      * Wait that specified variable compares to given value as specified by the given comparator,
@@ -110,8 +110,8 @@ public interface Cache extends DataReceivedListener {
      * @throws com.qspin.qtaste.testsuite.QTasteTestFailException if there is no data in the cache for the specified variable,
      * or its value didn't compares to given value as specified by the given comparator within given time
      */
-    public Data waitForValue(String name, Comparator comparator, Object value, long timeout)
+    Data waitForValue(String name, Comparator comparator, Object value, long timeout)
           throws QTasteTestFailException, QTasteException;
 
-    public HashMap<String, Data> getCopyContent();
+    HashMap<String, Data> getCopyContent();
 }

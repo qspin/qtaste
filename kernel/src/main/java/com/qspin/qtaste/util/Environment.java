@@ -1,7 +1,6 @@
 package com.qspin.qtaste.util;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -124,12 +123,8 @@ public class Environment {
                 if (!new File(testbedConfigFileName).exists()) {
                     // if last selected testbed doesn't exist use the first one found
                     File[] testbedConfigFiles = FileUtilities.listSortedFiles(
-                          new File(StaticConfiguration.TESTBED_CONFIG_DIRECTORY), new FileFilter() {
-
-                              public boolean accept(File pathname) {
-                                  return pathname.getName().toLowerCase().endsWith(".xml");
-                              }
-                          });
+                          new File(StaticConfiguration.TESTBED_CONFIG_DIRECTORY),
+                          pathname -> pathname.getName().toLowerCase().endsWith(".xml"));
                     if (testbedConfigFiles == null) {
                         throw new RuntimeException(
                               "Testbed configuration directory (" + StaticConfiguration.TESTBED_CONFIG_DIRECTORY

@@ -68,7 +68,7 @@ public class TestDataImpl implements TestData, Serializable {
         super();
         this.rowId = rowId;
         this.hash = map;
-        this.hashFiles = new HashMap<String, Object>();
+        this.hashFiles = new HashMap<>();
     }
 
     @Override
@@ -158,8 +158,7 @@ public class TestDataImpl implements TestData, Serializable {
     public byte[] getFileContentAsByteArray(String key) throws QTasteDataException {
         getValue(key); // to check if data exists
         if (hashFiles.containsKey(key)) {
-            byte[] array = (byte[]) hashFiles.get(key);
-            return array;
+            return (byte[]) hashFiles.get(key);
         } else {
             throw new QTasteDataException("Test data " + key + " has no byte array value");
         }
@@ -202,8 +201,8 @@ public class TestDataImpl implements TestData, Serializable {
 
     @Override
     public String dump() {
-        TreeSet<String> sortedKeys = new TreeSet<String>(hash.keySet());
-        String result = new String("{");
+        TreeSet<String> sortedKeys = new TreeSet<>(hash.keySet());
+        String result = "{";
         Iterator<String> iKey = sortedKeys.iterator();
         for (int i = 0; i < sortedKeys.size(); i++) {
             if (i > 0) {
@@ -219,9 +218,7 @@ public class TestDataImpl implements TestData, Serializable {
     @Override
     public void loadFileIfAny() {
         // Load files defined in testdata if any
-        Iterator<String> i = hash.keySet().iterator();
-        while (i.hasNext()) {
-            String key = i.next();
+        for (String key : hash.keySet()) {
             if (key.startsWith("FILE_")) {
                 try {
                     loadFile(key, hash.get(key));

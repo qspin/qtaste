@@ -23,7 +23,7 @@ package com.qspin.qtaste.datacollection.collection;
  * @author lvboque
  */
 public interface Probe {
-    public void start();
+    void start();
 
-    public void stop();
+    void stop();
 }

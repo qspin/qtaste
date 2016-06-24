@@ -46,7 +46,7 @@ public class CachePusherImpl extends AbstractPusher {
 
     public CachePusherImpl(HashtableLinkedList<String, Data> data) throws Exception {
         super(data);
-        this.array = new ArrayList<Data>();
+        this.array = new ArrayList<>();
     }
 
     public void prepare(String name, Data data) {
@@ -56,7 +56,7 @@ public class CachePusherImpl extends AbstractPusher {
     public void publish() {
         //logger.info("publish");  
         Iterator<Data> i = array.iterator();
-        Data data = null;
+        Data data;
         DataReceivedListener listener = CacheImpl.getInstance();
         while (i.hasNext()) {
             data = i.next();

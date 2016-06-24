@@ -31,7 +31,7 @@ public interface VersionControlInterface {
      * @param path The path to the SUT.
      * @return the version of the SUT.
      */
-    public String getSUTVersion(String path);
+    String getSUTVersion(String path);
 
     /**
      * Returns the version of the testapi located at the path.
@@ -39,5 +39,5 @@ public interface VersionControlInterface {
      * @param path The path to the testapi.
      * @return the version of the testapi.
      */
-    public String getTestApiVersion(String path);
+    String getTestApiVersion(String path);
 }

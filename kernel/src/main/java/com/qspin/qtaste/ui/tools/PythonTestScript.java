@@ -28,7 +28,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.python.core.PyException;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.util.FileUtilities;
@@ -124,8 +123,6 @@ public class PythonTestScript {
                 JOptionPane.showMessageDialog(null, output, "Documentation generation error", JOptionPane.ERROR_MESSAGE);
             }
             testcaseDoc = getTestcaseDoc();
-        } catch (PyException ex) {
-            logger.error(ex);
         } catch (Exception ex) {
             logger.error(ex);
         }
@@ -168,9 +165,9 @@ public class PythonTestScript {
 
     protected File findFileIn(String pFileName, File pDirectory) {
         File[] childFiles = FileUtilities.listSortedFiles(pDirectory);
-        for (int i = 0; i < childFiles.length; i++) {
-            if (childFiles[i].getName().equalsIgnoreCase(pFileName)) {
-                return childFiles[i];
+        for (File childFile : childFiles) {
+            if (childFile.getName().equalsIgnoreCase(pFileName)) {
+                return childFile;
             }
         }
         return null;

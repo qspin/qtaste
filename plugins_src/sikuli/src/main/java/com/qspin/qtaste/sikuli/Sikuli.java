@@ -132,7 +132,6 @@ public interface Sikuli {
     /**
      * Types the text within the focused component.
      *
-     * @param fileName the image file name.
      * @param value the new value for the text.
      */
     void type(String value) throws QTasteException;
@@ -148,7 +147,6 @@ public interface Sikuli {
     /**
      * Uses the "paste" command to put the text within the focused component.
      *
-     * @param fileName the image file name.
      * @param value the new value for the text.
      */
     void paste(String value) throws QTasteException;

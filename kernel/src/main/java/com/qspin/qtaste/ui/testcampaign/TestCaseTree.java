@@ -125,15 +125,14 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
 
     protected FileNode createRootFileNode() {
         String scriptDir = TESTUITE_DIR;
-        FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases", TESTUITE_DIR);
-        return tcFn;
+        return new FileNode(new File(scriptDir), "Test Cases", TESTUITE_DIR);
     }
 
     protected void addTreeToDir(File file, DefaultMutableTreeNode parentNode) {
         if (file.isDirectory()) {
             File[] childFiles = FileUtilities.listSortedFiles(file);
-            for (int i = 0; i < childFiles.length; i++) {
-                addChildToTree(childFiles[i], parentNode);
+            for (File childFile : childFiles) {
+                addChildToTree(childFile, parentNode);
             }
         }
     }
@@ -141,32 +140,30 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
     protected boolean isTestcaseDir(File file) {
         if (file.isDirectory()) {
             File[] childFiles = FileUtilities.listSortedFiles(file);
-            for (int i = 0; i < childFiles.length; i++) {
-                if (StaticConfiguration.TEST_SCRIPT_FILENAME.equals(childFiles[i].getName())) {
+            for (File childFile : childFiles) {
+                if (StaticConfiguration.TEST_SCRIPT_FILENAME.equals(childFile.getName())) {
                     return true;
                 }
             }
         }
         return false;
-
     }
 
     protected boolean checkIfDirectoryContainsTestScriptFile(File file) {
         File[] childFiles = FileUtilities.listSortedFiles(file);
-        for (int i = 0; i < childFiles.length; i++) {
-            if (childFiles[i].isDirectory()) {
-                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(), TESTUITE_DIR);
+        for (File childFile : childFiles) {
+            if (childFile.isDirectory()) {
+                FileNode childNode = new FileNode(childFile, childFile.getName(), TESTUITE_DIR);
                 if (childNode.isTestcaseDir()) {
                     return true;
                 } else {
                     // go recursively into its directory
-                    boolean result = checkIfDirectoryContainsTestScriptFile(childFiles[i]);
+                    boolean result = checkIfDirectoryContainsTestScriptFile(childFile);
                     if (result) {
                         return true;
                     }
                 }
             }
-
         }
         return false;
     }
@@ -244,7 +241,7 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
                 if (e.getClickCount() == 2) { // double click
                     // add the testcase into the test campaign
                     String selectedPath = ((FileNode) ((TCTreeNode) getSelectionPath().getLastPathComponent()).getUserObject())
-                          .getFile().getPath().toString();
+                          .getFile().getPath();
                     TestCaseTree.this.addSelectedTestdirectoryToMetaCampaign(selectedPath);
                 }
             }
@@ -325,11 +322,8 @@ public class TestCaseTree extends JTree implements DragSourceListener, DropTarge
                 System.err.println("Rejected");
                 dtde.rejectDrop();
             }
-        } catch (IOException io) {
+        } catch (IOException | UnsupportedFlavorException io) {
             logger.error(io);
-            dtde.rejectDrop();
-        } catch (UnsupportedFlavorException ufe) {
-            logger.error(ufe);
             dtde.rejectDrop();
         }
     }

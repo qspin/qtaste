@@ -46,15 +46,12 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
     private HashMap<String, Component> map;
 
     private MultipleInstancesComponentFactory() {
-        map = new HashMap<String, Component>();
+        map = new HashMap<>();
         testbedConfig = TestBedConfiguration.getInstance();
 
-        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-            public void onConfigurationChange() {
-                testbedConfig = TestBedConfiguration.getInstance();
-                map.clear();
-            }
+        TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+            testbedConfig = TestBedConfiguration.getInstance();
+            map.clear();
         });
     }
 
@@ -108,8 +105,7 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
 
     private Component createComponentInstance(String instanceId, Class<?> component) throws QTasteException {
         try {
-            Component componentImpl = (Component) component.getConstructor(String.class).newInstance(new String(instanceId));
-            return componentImpl;
+            return (Component) component.getConstructor(String.class).newInstance(instanceId);
         } catch (NoSuchMethodException e) {
             logger.error("MultipleInstancesFactory cannot get the constructor of " + component.getName(), e);
         } catch (InstantiationException e) {

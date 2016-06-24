@@ -72,12 +72,7 @@ public class DirectoryDialog extends javax.swing.JDialog {
 
         chooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         chooser.setFont(new java.awt.Font("Dialog", 0, 12));
-        chooser.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chooserActionPerformed(evt);
-            }
-        });
+        chooser.addActionListener(this::chooserActionPerformed);
 
         getContentPane().add(chooser);
 

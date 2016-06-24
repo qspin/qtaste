@@ -25,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -44,10 +43,8 @@ public abstract class HTMLFormatter extends ReportFormatter {
 
     public HTMLFormatter(HashMap<String, String> templates, File reportDirectory, String reportFileName) throws IOException {
         super(reportDirectory, reportFileName);
-        templateContents = new HashMap<String, String>();
-        Iterator<String> templateNames = templates.keySet().iterator();
-        while (templateNames.hasNext()) {
-            String templateName = templateNames.next();
+        templateContents = new HashMap<>();
+        for (String templateName : templates.keySet()) {
             String templateFileName = templates.get(templateName);
             templateContents.put(templateName, FileUtilities.readFileContent(templateFileName));
         }

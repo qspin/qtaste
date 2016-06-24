@@ -29,7 +29,6 @@ import java.util.EventObject;
 public class TestScriptBreakpointEvent extends EventObject {
     public enum Action {BREAK, CONTINUE, STEP, STOP, DUMP_STACK, DUMP_VAR, CALL_METHOD, STEPINTO}
 
-    ;
     private Action mAction;
     private Object mExtraData;
 

@@ -56,7 +56,7 @@ public class FillLabelUI extends MetalLabelUI {
 
     protected void paintElements(JLabel pLabel, Graphics pG, String pStr, int pTextX, int pTextY, Color pTextColor, Color
           pBackColor) {
-        Rectangle r = null;
+        Rectangle r;
         Graphics2D g2D = (Graphics2D) pG;
         if (!mEndRounded) {
             r = pG.getClipBounds();

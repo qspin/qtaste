@@ -32,7 +32,7 @@ import com.qspin.qtaste.ui.TestCaseResultsPane;
 public class TestCampaignReporter {
 
     private static TestCampaignReporter instance = null;
-    static private ArrayList<TestCaseResultsPane> reportListeners = new ArrayList<TestCaseResultsPane>();
+    static private ArrayList<TestCaseResultsPane> reportListeners = new ArrayList<>();
 
     /**
      * Get an instance of the CampaignReportManager.
@@ -57,31 +57,25 @@ public class TestCampaignReporter {
     }
 
     public void refresh() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                for (TestCaseResultsPane panel : reportListeners) {
-                    panel.refreshCampaign();
-                }
+        SwingUtilities.invokeLater(() -> {
+            for (TestCaseResultsPane panel : reportListeners) {
+                panel.refreshCampaign();
             }
         });
     }
 
     public void startReport(Date timeStamp, final String name) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                for (TestCaseResultsPane panel : reportListeners) {
-                    panel.startCampaign(name);
-                }
+        SwingUtilities.invokeLater(() -> {
+            for (TestCaseResultsPane panel : reportListeners) {
+                panel.startCampaign(name);
             }
         });
     }
 
     public void stopReport() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                for (TestCaseResultsPane panel : reportListeners) {
-                    panel.stopCampaign();
-                }
+        SwingUtilities.invokeLater(() -> {
+            for (TestCaseResultsPane panel : reportListeners) {
+                panel.stopCampaign();
             }
         });
     }

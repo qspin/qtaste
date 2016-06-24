@@ -27,7 +27,6 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -55,7 +54,7 @@ public class ComponentsLoader {
     private HashMap<String, Class<?>> componentMap;
 
     private ComponentsLoader() {
-        componentMap = new HashMap<String, Class<?>>();
+        componentMap = new HashMap<>();
         api = TestAPIImpl.getInstance();
 
         TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
@@ -66,36 +65,33 @@ public class ComponentsLoader {
         }
         initialize(testapiImplementation);
 
-        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-            public void onConfigurationChange() {
-                List<Object> newTestAPIimplementation;
-                TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
-                if (testbedConfig != null) {
-                    newTestAPIimplementation = testbedConfig.getList("testapi_implementation.import");
-                } else {
-                    newTestAPIimplementation = null;
-                }
-                if (!newTestAPIimplementation.equals(testapiImplementation)) {
-                    initialize(newTestAPIimplementation);
-                }
+        TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+            List<Object> newTestAPIimplementation;
+            TestBedConfiguration testbedConfig1 = TestBedConfiguration.getInstance();
+            if (testbedConfig1 != null) {
+                newTestAPIimplementation = testbedConfig1.getList("testapi_implementation.import");
+            } else {
+                newTestAPIimplementation = null;
+            }
+            if (!newTestAPIimplementation.equals(testapiImplementation)) {
+                initialize(newTestAPIimplementation);
             }
         });
     }
 
-    private void initialize(List<Object> testAPIimplementation) {
+    private void initialize(List<Object> testAPIimplementations) {
         componentMap.clear();
         api.unregisterAllMethods();
-        testapiImplementation = testAPIimplementation;
+        testapiImplementation = testAPIimplementations;
 
         // create factory instances to avoid creating them later on a testbed change
         // which would generate a ConcurrentModificationException in configurationChangeHandlers of TestBedConfiguration
         SingletonComponentFactory.getInstance();
         MultipleInstancesComponentFactory.getInstance();
 
-        if (testAPIimplementation != null) {
-            for (Iterator<Object> testAPIIter = testAPIimplementation.iterator(); testAPIIter.hasNext(); ) {
-                register((String) testAPIIter.next(), Component.class);
+        if (testAPIimplementations != null) {
+            for (Object testAPIimplementation : testAPIimplementations) {
+                register((String) testAPIimplementation, Component.class);
             }
         }
     }
@@ -165,8 +161,8 @@ public class ComponentsLoader {
             // Register also inherited interfaces
             // API extends A, B, C
             Class<?>[] interfaces = componentInterface.getInterfaces();
-            for (int i = 0; i < interfaces.length; i++) {
-                registerClassMethods(componentName, interfaces[i], c, factoryObject);
+            for (Class<?> anInterface : interfaces) {
+                registerClassMethods(componentName, anInterface, c, factoryObject);
             }
 
         } catch (ClassNotFoundException e) {
@@ -211,18 +207,17 @@ public class ComponentsLoader {
         String platformName = name.replaceFirst("^.*/", "");
         logger.info("Loading components for platform " + platformName + " from " + url);
 
-        File directory = new File(url.getFile().toString().replaceAll("%20", "\\ "));
+        File directory = new File(url.getFile().replaceAll("%20", "\\ "));
 
         if (directory.exists()) {
             // Get the list of the files contained in the package
             String[] files = directory.list();
-            for (int i = 0; i < files.length; i++) {
+            for (String file : files) {
                 // we are only interested in .class files
-                if (files[i].endsWith(".class")) {
+                if (file.endsWith(".class")) {
                     // removes the .class extension
-                    String classname = files[i].substring(0, files[i].length() - 6);
+                    String classname = file.substring(0, file.length() - 6);
                     try {
-
                         Class<?> c = Class.forName(pckgname + "." + classname);
                         registerTestAPIMethods(c);
 
@@ -240,7 +235,7 @@ public class ComponentsLoader {
                 JarFile jfile = conn.getJarFile();
                 Enumeration<JarEntry> e = jfile.entries();
                 while (e.hasMoreElements()) {
-                    ZipEntry entry = (ZipEntry) e.nextElement();
+                    ZipEntry entry = e.nextElement();
                     String entryname = entry.getName();
                     if (entryname.startsWith(starts) && (entryname.lastIndexOf('/') <= starts.length()) && entryname.endsWith(
                           ".class")) {

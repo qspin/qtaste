@@ -40,6 +40,6 @@ public interface Bugzilla extends MultipleInstancesComponent {
      * @throws QTasteTestFailException If the content of the DB doesn't correspond to the specified values
      * @throws Exception Throw an exception in case of database connection errors
      */
-    public void checkDatabase(int defectId, String shortDescription, String longDescription, String assignee)
+    void checkDatabase(int defectId, String shortDescription, String longDescription, String assignee)
           throws QTasteTestFailException, Exception;
 }

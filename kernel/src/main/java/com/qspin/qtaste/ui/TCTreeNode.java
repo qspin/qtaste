@@ -48,10 +48,8 @@ public class TCTreeNode extends DefaultMutableTreeNode {
             FileNode fn = (FileNode) getUserObject();
             return fn.isTestcaseDir() && getParent() != null && (fn.isTestcaseDir() && !fn.isShowTestData()
                   || fn.getChildren() == null || fn.getChildren().length == 0);
-        } else if (getUserObject() instanceof TestDataNode) {
-            return true;
         } else {
-            return false;
+            return getUserObject() instanceof TestDataNode;
         }
     }
 

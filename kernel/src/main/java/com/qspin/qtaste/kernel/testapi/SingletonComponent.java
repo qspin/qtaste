@@ -30,5 +30,5 @@ public interface SingletonComponent extends Component {
      * This component uses a SingletonComponentFactory, i.e. it has only one instance. <br>
      * The constructors of implementing classes must have no argument.
      */
-    public static final ComponentFactory factory = SingletonComponentFactory.getInstance();
+    ComponentFactory factory = SingletonComponentFactory.getInstance();
 }

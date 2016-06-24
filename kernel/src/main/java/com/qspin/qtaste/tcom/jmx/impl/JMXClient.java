@@ -82,7 +82,7 @@ public class JMXClient {
                 throw new InstanceNotFoundException("JMX MBean " + mbeanName + " is not registered at " + jmxServiceURL);
             }
 
-            return (T) JMX.newMBeanProxy(mbsc, objectName, mbeanInterface, true);
+            return JMX.newMBeanProxy(mbsc, objectName, mbeanInterface, true);
         } else {
             return null;
         }

@@ -157,22 +157,14 @@ public class GenerateTestSuiteDoc {
      * @return the found TestScript.py files.
      */
     private static File[] searchTestScripts(File aTestScriptDirectory) {
-        List<File> files = new ArrayList<File>();
-        FileFilter fileFilter = new FileFilter() {
-            public boolean accept(File file) {
-                return file.isFile() && file.getName().equals("TestScript.py");
-            }
-        };
+        List<File> files = new ArrayList<>();
+        FileFilter fileFilter = file -> file.isFile() && file.getName().equals("TestScript.py");
         File[] testScripts = aTestScriptDirectory.listFiles(fileFilter);
         Arrays.sort(testScripts);
         if (testScripts.length != 0) {
             return testScripts;
         } else {
-            FileFilter directoryFilter = new FileFilter() {
-                public boolean accept(File file) {
-                    return !file.isFile();
-                }
-            };
+            FileFilter directoryFilter = file -> !file.isFile();
             File[] directories = aTestScriptDirectory.listFiles(directoryFilter);
             Arrays.sort(directories);
             for (File dir : directories) {

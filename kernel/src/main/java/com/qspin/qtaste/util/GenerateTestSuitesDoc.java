@@ -36,12 +36,9 @@ public class GenerateTestSuitesDoc {
     public static void generate(String directory) {
         GenerateTestStepsModulesDoc.generate(directory);
         File dir = new File(directory);
-        FileFilter fileFilter = new FileFilter() {
-
-            public boolean accept(File file) {
-                // escape hidden directory like .svn, etc.
-                return file.isDirectory() && !file.isHidden();
-            }
+        FileFilter fileFilter = file -> {
+            // escape hidden directory like .svn, etc.
+            return file.isDirectory() && !file.isHidden();
         };
 
         File[] files = dir.listFiles(fileFilter);

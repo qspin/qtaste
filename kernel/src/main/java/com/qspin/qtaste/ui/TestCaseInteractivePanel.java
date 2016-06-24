@@ -87,7 +87,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
     private JButton mStartInteractiveTestButton;
     private JButton mStopInteractiveTestButton;
     private InteractiveLogPanel mLogPanel = new InteractiveLogPanel(this);
-    protected Map<String, Integer> testCases = new HashMap<String, Integer>();
+    protected Map<String, Integer> testCases = new HashMap<>();
     protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
     private boolean isStarted = false;
     private TestDataInteractive m_testData;
@@ -200,22 +200,19 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             m_testData.setValue("INSTANCE_ID", defaultInstance);
             testDataView.setTestData(m_testData);
 
-            TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-                public void onConfigurationChange() {
-                    String defaultInstance = null;
-                    try {
-                        TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
-                        if (testbedConfig != null) {
-                            defaultInstance = testbedConfig.getDefaultInstanceId();
-                        }
-                    } catch (Exception e) {
+            TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+                String defaultInstance1 = null;
+                try {
+                    TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
+                    if (testbedConfig != null) {
+                        defaultInstance1 = testbedConfig.getDefaultInstanceId();
                     }
-                    try {
-                        m_testData.setValue("INSTANCE_ID", defaultInstance);
-                        testDataView.setTestData(m_testData);
-                    } catch (QTasteDataException ex) {
-                    }
+                } catch (Exception e) {
+                }
+                try {
+                    m_testData.setValue("INSTANCE_ID", defaultInstance1);
+                    testDataView.setTestData(m_testData);
+                } catch (QTasteDataException ex) {
                 }
             });
         } catch (QTasteDataException ex) {
@@ -277,19 +274,17 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
         if (tempDir.isDirectory()) {
             File interactiveQTasteDir = new File(tempDir + "/QTaste_interactive");
             interactiveQTasteDir.mkdir();
-            PrintWriter interactiveQTasteFile = null;
-            try {
-                File iQTasteDirectory = new File(tempDir + "/QTaste_interactive");
-                File iQTasteFile = new File(iQTasteDirectory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
-                interactiveQTasteFile = new PrintWriter(
-                      new BufferedWriter(new OutputStreamWriter(new FileOutputStream(iQTasteFile), StandardCharsets.UTF_8)));
+            File iQTasteDirectory = new File(tempDir + "/QTaste_interactive");
+            File iQTasteFile = new File(iQTasteDirectory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
+            try (PrintWriter interactiveQTasteFile = new PrintWriter(
+                  new BufferedWriter(new OutputStreamWriter(new FileOutputStream(iQTasteFile), StandardCharsets.UTF_8)))) {
                 interactiveQTasteFile.println("# coding=utf-8");
                 interactiveQTasteFile.println("from qtaste import *");
                 interactiveQTasteFile.println("def interactiveCommand():");
                 interactiveQTasteFile.println("\t" + command);
                 interactiveQTasteFile.println("result = interactiveCommand()");
                 interactiveQTasteFile.close();
-                ArrayList<LinkedHashMap<String, String>> l = new ArrayList<LinkedHashMap<String, String>>();
+                ArrayList<LinkedHashMap<String, String>> l = new ArrayList<>();
                 l.add(data.getDataHash());
                 // checks must be added to ask specific data
                 JythonTestScript ts = new JythonTestScript(l, requirements, iQTasteFile, iQTasteDirectory, null);
@@ -312,8 +307,6 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
                 }
             } catch (IOException ex) {
                 //
-            } finally {
-                interactiveQTasteFile.close();
             }
         }
     }
@@ -346,11 +339,8 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
         public void actionPerformed(ActionEvent e) {
             final String command = mInteractiveText.getText();
             if (!command.isEmpty()) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        executeCommand(command);
-                    }
+                new Thread(() -> {
+                    executeCommand(command);
                 }).start();
             }
         }

@@ -5,5 +5,5 @@ public enum ProcessStatus {
     READY_TO_START,
     RUNNING,
     STOPPED,
-    UNDEFINED;
+    UNDEFINED
 }

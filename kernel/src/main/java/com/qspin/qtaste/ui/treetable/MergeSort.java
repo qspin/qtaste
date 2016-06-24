@@ -25,7 +25,7 @@ package com.qspin.qtaste.ui.treetable;
  *
  * @author vdubois
  */
-public abstract class MergeSort extends Object {
+public abstract class MergeSort {
     protected Object toSort[];
     protected Object swapSpace[];
 

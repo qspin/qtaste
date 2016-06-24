@@ -36,7 +36,7 @@ public interface JDBCClient {
      * @throws java.sql.SQLException If a SQL error occurs
      * @throws java.lang.ClassNotFoundException If the driver class does not exists
      */
-    public void open() throws SQLException, ClassNotFoundException;
+    void open() throws SQLException, ClassNotFoundException;
 
     /**
      * Execute the specified query
@@ -47,19 +47,18 @@ public interface JDBCClient {
      * @throws java.sql.SQLException If a SQL error occurs
      * @throws java.lang.ClassNotFoundException If the driver class does not exists
      */
-    public ResultSet executeQuery(String query) throws SQLException, ClassNotFoundException;
+    ResultSet executeQuery(String query) throws SQLException, ClassNotFoundException;
 
-    public boolean executeCommand(String query) throws SQLException, ClassNotFoundException;
+    boolean executeCommand(String query) throws SQLException, ClassNotFoundException;
 
-    public void executeSQLScript(String scriptFile)
-          throws SQLException, FileNotFoundException, ClassNotFoundException, IOException;
+    void executeSQLScript(String scriptFile) throws SQLException, FileNotFoundException, ClassNotFoundException, IOException;
 
     /**
      * Close the JDBC conncetion to the database
      *
      * @throws java.sql.SQLException If a SQL error occurs
      */
-    public void close() throws SQLException;
+    void close() throws SQLException;
 
-    public Connection getConnection();
+    Connection getConnection();
 }

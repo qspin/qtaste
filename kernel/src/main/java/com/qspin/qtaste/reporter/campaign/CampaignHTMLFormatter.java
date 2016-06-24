@@ -66,7 +66,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
     }
 
     public void generateHeader() {
-        NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+        NamesValuesList<String, String> namesValues = new NamesValuesList<>();
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
         namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
         namesValues.add("###SUT_VERSION###", TestBedConfiguration.getSUTVersion());
@@ -79,7 +79,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
 
     public void makeBody() {
         for (CampaignResult cr : CampaignReportManager.getInstance().getResults()) {
-            NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+            NamesValuesList<String, String> namesValues = new NamesValuesList<>();
             boolean notRunYet = cr.getStatus() == CampaignResult.Status.NOT_EXECUTED;
             if (notRunYet) {
                 namesValues.add("###TESTBED###", cr.getTestBed());
@@ -153,7 +153,7 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
     }
 
     public void generateFooter() {
-        NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+        NamesValuesList<String, String> namesValues = new NamesValuesList<>();
         substituteAndWriteFile(this.templateContents.get("end"), namesValues);
     }
 }

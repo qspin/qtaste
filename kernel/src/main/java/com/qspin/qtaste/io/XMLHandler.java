@@ -18,12 +18,12 @@ public class XMLHandler extends DefaultHandler {
 
     public XMLHandler() {
         super();
-        mDecodedRequirement = new LinkedList<TestRequirement>();
+        mDecodedRequirement = new LinkedList<>();
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equals(XMLFile.ROOT_ELEMENT)) {
-            mDecodedRequirement = new LinkedList<TestRequirement>();
+            mDecodedRequirement = new LinkedList<>();
         } else if (qName.equals(XMLFile.REQUIREMENT_ELEMENT)) {
             mRequirement = new TestRequirement(attributes.getValue(XMLFile.REQUIREMENT_ID));
         } else if (mCurrentRequirementElement == null) {
@@ -33,9 +33,8 @@ public class XMLHandler extends DefaultHandler {
             mBuffer.append("<");
             mBuffer.append(qName.replace(XMLFile.SPACE_REPLACEMENT, " "));
             for (int i = 0; i < attributes.getLength(); i++) {
-                mBuffer.append(
-                      " " + attributes.getQName(i).replace(XMLFile.SPACE_REPLACEMENT, " ") + "=\"" + attributes.getValue(i)
-                            + "\"");
+                mBuffer.append(" ").append(attributes.getQName(i).replace(XMLFile.SPACE_REPLACEMENT, " ")).append("=\"").append(
+                      attributes.getValue(i)).append("\"");
             }
             mBuffer.append(">");
             System.out.println("buffer : " + mBuffer);
@@ -55,7 +54,7 @@ public class XMLHandler extends DefaultHandler {
             mBuffer = null;
             mCurrentRequirementElement = null;
         } else if (mCurrentRequirementElement != null && mBuffer != null) {
-            mBuffer.append("</" + qName.replace(XMLFile.SPACE_REPLACEMENT, " ") + ">");
+            mBuffer.append("</").append(qName.replace(XMLFile.SPACE_REPLACEMENT, " ")).append(">");
         }
     }
 

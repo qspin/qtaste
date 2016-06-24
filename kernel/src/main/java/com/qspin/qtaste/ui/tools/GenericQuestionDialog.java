@@ -29,8 +29,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -52,7 +50,7 @@ import com.qspin.qtaste.testsuite.impl.TestDataImpl;
 @SuppressWarnings("serial")
 public class GenericQuestionDialog extends JDialog {
     private String[] mNames;
-    private TestData mData = new TestDataImpl(1, new LinkedHashMap<String, String>());
+    private TestData mData = new TestDataImpl(1, new LinkedHashMap<>());
     private ArrayList<JLabel> mLabels;
     private ArrayList<JTextField> mTextFields;
     JCheckBox mAddToCSVCheckBox;
@@ -69,8 +67,8 @@ public class GenericQuestionDialog extends JDialog {
         this.setLayout(new BorderLayout());
         JPanel mainPanel = new JPanel(layout);
 
-        mLabels = new ArrayList<JLabel>();
-        mTextFields = new ArrayList<JTextField>();
+        mLabels = new ArrayList<>();
+        mTextFields = new ArrayList<>();
 
         for (String name : mNames) {
             JLabel label = new JLabel();
@@ -90,26 +88,20 @@ public class GenericQuestionDialog extends JDialog {
         buttonPanel.add(dummylabel);
 
         JButton okBtn = new JButton();
-        okBtn.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                JButton okBtn = (JButton) e.getSource();
-                GenericQuestionDialog dialog = (GenericQuestionDialog) okBtn.getTopLevelAncestor();
-                dialog.ok();
-            }
+        okBtn.addActionListener(e -> {
+            JButton okBtn12 = (JButton) e.getSource();
+            GenericQuestionDialog dialog = (GenericQuestionDialog) okBtn12.getTopLevelAncestor();
+            dialog.ok();
         });
         okBtn.setText("Ok");
 
         JButton cancelBtn = new JButton();
-        cancelBtn.addActionListener(new ActionListener() {
+        cancelBtn.addActionListener(e -> {
+            JButton okBtn1 = (JButton) e.getSource();
+            JPanel buttonPanel1 = (JPanel) okBtn1.getParent();
+            GenericQuestionDialog dialog = (GenericQuestionDialog) buttonPanel1.getParent();
+            dialog.cancel();
 
-            public void actionPerformed(ActionEvent e) {
-                JButton okBtn = (JButton) e.getSource();
-                JPanel buttonPanel = (JPanel) okBtn.getParent();
-                GenericQuestionDialog dialog = (GenericQuestionDialog) buttonPanel.getParent();
-                dialog.cancel();
-
-            }
         });
         cancelBtn.setText("Cancel");
 

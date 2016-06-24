@@ -44,7 +44,7 @@ public class TestResultsReportManager extends ReportManager {
 
     private TestResultsReportManager() {
         super();
-        results = new ArrayList<TestResult>();
+        results = new ArrayList<>();
 
         TestEngineConfiguration config = TestEngineConfiguration.getInstance();
         String output = config.getString("reporting.generated_report_path");

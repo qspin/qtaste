@@ -38,8 +38,6 @@ import com.qspin.qtaste.testsuite.QTasteException;
 public class WindowsImpl implements Windows {
     static Logger logger = Logger.getLogger(TestAPIImpl.class);
     private int sessionID;
-    private String host;
-    private int port;
     private XmlRpcClient client;
 
     public WindowsImpl() throws QTasteException {
@@ -48,8 +46,8 @@ public class WindowsImpl implements Windows {
 
     public void initialize() throws QTasteException {
         TestBedConfiguration tb = TestBedConfiguration.getInstance();
-        this.host = tb.getString("singleton_components.Windows.host");
-        this.port = tb.getInt("singleton_components.Windows.port");
+        String host = tb.getString("singleton_components.Windows.host");
+        int port = tb.getInt("singleton_components.Windows.port");
         this.client = new XmlRpcClient();
         try {
             XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -72,7 +70,6 @@ public class WindowsImpl implements Windows {
         Object[] params = new Object[] {sessionID};
         int result = (Integer) client.execute("stopApplication", params);
         logger.info("sessionID:" + sessionID);
-
     }
 
     public void selectTreeViewItem(String windowName, String treeviewName, String item) throws Exception {
@@ -92,7 +89,7 @@ public class WindowsImpl implements Windows {
 
     public String getText(String windowName, String name) throws Exception {
         Object[] params = new Object[] {sessionID, windowName, name};
-        return (String) client.execute("getText", params).toString();
+        return client.execute("getText", params).toString();
     }
 
     public void setText(String windowName, String name, String value) {
@@ -112,9 +109,7 @@ public class WindowsImpl implements Windows {
     private int send(String function, String[] data) throws Exception {
         Object[] params = new Object[1 + data.length];
         params[0] = sessionID;
-        for (int i = 0; i < data.length; i++) {
-            params[1 + i] = data[i];
-        }
+        System.arraycopy(data, 0, params, 1, data.length);
         return (Integer) client.execute(function, params);
     }
 

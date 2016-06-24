@@ -45,7 +45,7 @@ public class JMXNotificationHandler implements NotificationListener {
 
     // Possible enhancement: Define a Container interface (or Collection)
     public JMXNotificationHandler(String componentName, PropertiesHistory propertiesHistory) {
-        subComponentsMap = new HashMap<String, String>();
+        subComponentsMap = new HashMap<>();
         this.componentName = componentName;
         this.propertiesHistory = propertiesHistory;
     }
@@ -116,7 +116,7 @@ public class JMXNotificationHandler implements NotificationListener {
         }
         lastNotificationSequenceNumber = notificationSequenceNumber;
 
-        String message = (String) attributeChangeNotification.getMessage();
+        String message = attributeChangeNotification.getMessage();
         int separatorIndex = message.indexOf(':');
         String subComponent = ((separatorIndex != -1) ? message.substring(0, separatorIndex) : "");
         String subComponentName = subComponentsMap.get(subComponent);

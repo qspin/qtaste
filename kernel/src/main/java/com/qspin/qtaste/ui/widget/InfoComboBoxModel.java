@@ -22,7 +22,7 @@ package com.qspin.qtaste.ui.widget;
 import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
-public class InfoComboBoxModel extends DefaultComboBoxModel {
+public class InfoComboBoxModel extends DefaultComboBoxModel<InfoComboBox.Info> {
     public void addInfo(InfoComboBox.Info pInfo) {
         addElement(pInfo);
         setSelectedItem(pInfo);

@@ -41,7 +41,7 @@ public class TestBedConfiguration extends XMLConfiguration {
     private static Logger logger = Log4jLoggerFactory.getLogger(TestBedConfiguration.class);
     private static TestBedConfiguration instance;
     private static String configFile;
-    private static List<ConfigurationChangeHandler> configurationChangeHandlers = new ArrayList<ConfigurationChangeHandler>();
+    private static List<ConfigurationChangeHandler> configurationChangeHandlers = new ArrayList<>();
     private static long lastModifiedTime;
     private static String sutVersion;
 

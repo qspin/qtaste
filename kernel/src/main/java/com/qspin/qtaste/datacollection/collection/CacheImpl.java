@@ -59,7 +59,7 @@ public class CacheImpl implements Cache, DataReceivedListener {
      * Creates a new instance of CacheImpl
      */
     private CacheImpl() {
-        hash = new HashtableLinkedList<String, Data>();
+        hash = new HashtableLinkedList<>();
         init();
     }
 
@@ -79,13 +79,13 @@ public class CacheImpl implements Cache, DataReceivedListener {
     }
 
     public HashMap<String, Data> getCopyContent() {
-        HashMap<String, Data> returnHash = new HashMap<String, Data>();
+        HashMap<String, Data> returnHash = new HashMap<>();
         synchronized (hash2) {
             Iterator<NameValue<String, Data>> it = hash.getByInsertionTime();
             NameValue<String, Data> value;
             while (it.hasNext()) {
                 try {
-                    value = (NameValue<String, Data>) it.next();
+                    value = it.next();
                     returnHash.put(value.name, value.value);
                 } catch (Exception e) {
                     logger.error(e.getMessage());
@@ -237,20 +237,21 @@ public class CacheImpl implements Cache, DataReceivedListener {
     }
 
     public Comparator getComparatorFromString(String comparatorString) throws QTasteDataException {
-        if (comparatorString.equals("==")) {
-            return Comparator.COMPARATOR_EQ;
-        } else if (comparatorString.equals("!=")) {
-            return Comparator.COMPARATOR_NEQ;
-        } else if (comparatorString.equals("<")) {
-            return Comparator.COMPARATOR_LT;
-        } else if (comparatorString.equals(">")) {
-            return Comparator.COMPARATOR_GT;
-        } else if (comparatorString.equals("<=")) {
-            return Comparator.COMPARATOR_LEQ;
-        } else if (comparatorString.equals(">=")) {
-            return Comparator.COMPARATOR_GEQ;
-        } else {
-            throw new QTasteDataException("Invalid comparator (" + comparatorString + ")");
+        switch (comparatorString) {
+            case "==":
+                return Comparator.COMPARATOR_EQ;
+            case "!=":
+                return Comparator.COMPARATOR_NEQ;
+            case "<":
+                return Comparator.COMPARATOR_LT;
+            case ">":
+                return Comparator.COMPARATOR_GT;
+            case "<=":
+                return Comparator.COMPARATOR_LEQ;
+            case ">=":
+                return Comparator.COMPARATOR_GEQ;
+            default:
+                throw new QTasteDataException("Invalid comparator (" + comparatorString + ")");
         }
     }
 }

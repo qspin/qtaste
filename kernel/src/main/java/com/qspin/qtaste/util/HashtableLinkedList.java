@@ -42,22 +42,19 @@ public class HashtableLinkedList<N, V> implements Serializable {
      * Creates a new instance of HashtableLinkedList
      */
     public HashtableLinkedList() {
-        hash = new Hashtable<N, LinkedList<V>>();
-        order = new LinkedList<NameValue<N, V>>();
+        hash = new Hashtable<>();
+        order = new LinkedList<>();
         clearHistoryTimestamp = System.currentTimeMillis();
     }
 
     public synchronized void put(N name, V value) {
         putInHash(name, value);
-        order.add(new NameValue<N, V>(name, value));
+        order.add(new NameValue<>(name, value));
     }
 
     public synchronized boolean remove(N name, V value) {
-        if (hash.containsKey(name)) {
-            return hash.get(name).remove(value);
-        } else {
-            return false;
-        }
+        LinkedList<V> list = hash.get(name);
+        return list != null && list.remove(value);
     }
 
     /**
@@ -68,16 +65,18 @@ public class HashtableLinkedList<N, V> implements Serializable {
      * @return a list iterator to the list mapped to name
      */
     public synchronized ListIterator<V> get(N name) {
-        if (hash.containsKey(name)) {
-            return hash.get(name).listIterator(0);
+        LinkedList<V> list = hash.get(name);
+        if (list != null) {
+            return list.listIterator(0);
         } else {
             return null;
         }
     }
 
     public synchronized V getLast(N name) {
-        if (hash.containsKey(name)) {
-            return hash.get(name).getLast();
+        LinkedList<V> list = hash.get(name);
+        if (list != null) {
+            return list.getLast();
         } else {
             return null;
         }
@@ -138,12 +137,13 @@ public class HashtableLinkedList<N, V> implements Serializable {
     }
 
     private void putInHash(N name, V value) {
-        if (hash.containsKey(name)) {
-            hash.get(name).add(value);
+        LinkedList<V> list = hash.get(name);
+        if (list != null) {
+            list.add(value);
         } else {
-            LinkedList<V> l = new LinkedList<V>();
-            l.add(value);
-            hash.put(name, l);
+            list = new LinkedList<>();
+            list.add(value);
+            hash.put(name, list);
         }
     }
 
@@ -159,10 +159,8 @@ public class HashtableLinkedList<N, V> implements Serializable {
         in.defaultReadObject();
 
         // rebuild hash hashtable
-        hash = new Hashtable<N, LinkedList<V>>();
-        Iterator<NameValue<N, V>> i = order.iterator();
-        while (i.hasNext()) {
-            NameValue<N, V> nameValue = i.next();
+        hash = new Hashtable<>();
+        for (NameValue<N, V> nameValue : order) {
             putInHash(nameValue.name, nameValue.value);
         }
     }

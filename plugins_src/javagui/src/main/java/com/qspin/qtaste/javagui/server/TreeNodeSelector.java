@@ -66,10 +66,8 @@ class TreeNodeSelector extends UpdateComponentCommander {
      * @return true if both match, false otherwise.
      */
     protected boolean compareNodeNames(String nodePathElement, String nodeName) {
-        boolean comparisonResult = mSelectorIdentifier == SelectorIdentifier.SELECT_BY_REGEX ? Pattern.matches(nodePathElement,
-              nodeName) : nodePathElement.equals(nodeName);
-
-        return comparisonResult;
+        return mSelectorIdentifier == SelectorIdentifier.SELECT_BY_REGEX ? Pattern.matches(nodePathElement, nodeName) :
+              nodePathElement.equals(nodeName);
     }
 
     /**

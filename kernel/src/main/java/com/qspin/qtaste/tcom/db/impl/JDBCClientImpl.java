@@ -86,10 +86,7 @@ public class JDBCClientImpl implements JDBCClient {
     }
 
     private boolean isComment(String line) {
-        if ((line != null) && (line.length() > 0)) {
-            return (line.charAt(0) == '#');
-        }
-        return false;
+        return (line != null) && (line.length() > 0) && (line.charAt(0) == '#');
     }
 
     private boolean checkStatementEnds(String s) {
@@ -107,8 +104,8 @@ public class JDBCClientImpl implements JDBCClient {
         Statement stmt = con.createStatement();
 
         String line;
-        StringBuffer query = new StringBuffer();
-        boolean queryEnds = false;
+        StringBuilder query = new StringBuilder();
+        boolean queryEnds;
 
         while ((line = reader.readLine()) != null) {
             if (isComment(line)) {
@@ -140,8 +137,7 @@ public class JDBCClientImpl implements JDBCClient {
         }
         Statement stmt = con.createStatement();
 
-        ResultSet rs = stmt.executeQuery(query);
-        return rs;
+        return stmt.executeQuery(query);
     }
 
     /**

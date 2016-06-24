@@ -34,8 +34,8 @@ import javax.swing.event.PopupMenuListener;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
-public class InfoComboBox extends JComboBox implements PopupMenuListener {
-    private class InfoRenderer extends JLabel implements ListCellRenderer {
+public class InfoComboBox extends JComboBox<InfoComboBox.Info> implements PopupMenuListener {
+    private static class InfoRenderer extends JLabel implements ListCellRenderer<Info> {
         public InfoRenderer(InfoComboBox pBox, ResourceBundle pRes) {
             mBox = pBox;
             mRes = pRes;
@@ -80,25 +80,23 @@ public class InfoComboBox extends JComboBox implements PopupMenuListener {
             return mForeground;
         }
 
-        public Component getListCellRendererComponent(JList pList, Object pValue, int pIndex, boolean pIsSelected, boolean
+        public Component getListCellRendererComponent(JList pList, Info pInfo, int pIndex, boolean pIsSelected, boolean
               pCellHasFocus) {
-            if (pValue != null) {
-                Info i = (Info) pValue;
-
-                StringBuffer msg = new StringBuffer();
+            if (pInfo != null) {
+                StringBuilder msg = new StringBuilder();
                 try {
-                    String translated = mRes.getString(i.getMessage());
+                    String translated = mRes.getString(pInfo.getMessage());
                     msg.append(translated);
                 } catch (MissingResourceException e) {
                     msg.append("NOT LOCALIZED!!   ");
-                    msg.append(i.getMessage());
+                    msg.append(pInfo.getMessage());
                 }
 
-                if (i.getParams() != null && i.getParams().length > 0) {
+                if (pInfo.getParams() != null && pInfo.getParams().length > 0) {
                     msg.append(": ");
-                    for (int c = 0; c < i.getParams().length; ++c) {
-                        msg.append(i.getParams()[c]);
-                        if (c < i.getParams().length - 1) {
+                    for (int c = 0; c < pInfo.getParams().length; ++c) {
+                        msg.append(pInfo.getParams()[c]);
+                        if (c < pInfo.getParams().length - 1) {
                             msg.append(", ");
                         }
                     }

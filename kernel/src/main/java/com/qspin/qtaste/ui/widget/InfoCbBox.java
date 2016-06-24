@@ -34,7 +34,7 @@ import javax.swing.event.PopupMenuListener;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
-class InfoCbModel extends DefaultComboBoxModel {
+class InfoCbModel extends DefaultComboBoxModel<InfoCbBox.Info> {
     public void addInfo(InfoCbBox.Info pInfo) {
         addElement(pInfo);
         setSelectedItem(pInfo);
@@ -42,8 +42,8 @@ class InfoCbModel extends DefaultComboBoxModel {
 }
 
 @SuppressWarnings("serial")
-public class InfoCbBox extends JComboBox implements PopupMenuListener {
-    private class InfoRenderer extends JLabel implements ListCellRenderer {
+public class InfoCbBox extends JComboBox<InfoCbBox.Info> implements PopupMenuListener {
+    private class InfoRenderer extends JLabel implements ListCellRenderer<Info> {
         public InfoRenderer(InfoCbBox pBox) {
             mBox = pBox;
         }
@@ -85,16 +85,14 @@ public class InfoCbBox extends JComboBox implements PopupMenuListener {
             return mForeground;
         }
 
-        public Component getListCellRendererComponent(JList pList, Object pValue, int pIndex, boolean pIsSelected, boolean
+        public Component getListCellRendererComponent(JList pList, Info pInfo, int pIndex, boolean pIsSelected, boolean
               pCellHasFocus) {
-            if (pValue != null) {
-                Info info = (Info) pValue;
-
-                setText(info.getMessage());
+            if (pInfo != null) {
+                setText(pInfo.getMessage());
                 Icon icon = ResourceManager.getInstance().getImageIcon("main/badsmall");  // Default value plus Error Level
-                if (info.getLevel() == Info.Level.WARNING) {
+                if (pInfo.getLevel() == Info.Level.WARNING) {
                     icon = ResourceManager.getInstance().getImageIcon("main/beam16");  // TODO: ask for a 'Warning' logo
-                } else if (info.getLevel() == Info.Level.INFO) {
+                } else if (pInfo.getLevel() == Info.Level.INFO) {
                     icon = ResourceManager.getInstance().getImageIcon("main/goodsmall");
                 }
                 setIcon(icon);
@@ -120,7 +118,7 @@ public class InfoCbBox extends JComboBox implements PopupMenuListener {
             /**
              * Error level.
              */
-            ERROR;
+            ERROR
         }
 
         Level getLevel();

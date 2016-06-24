@@ -57,7 +57,6 @@ public class CampaignManager implements TestReportListener {
     private Date campaignStartTimeStamp;
     private String currentTestBed;
     private TestSuite currentTestSuite;
-    private boolean campaignResult;
 
     private CampaignManager() {
     }
@@ -94,8 +93,7 @@ public class CampaignManager implements TestReportListener {
             throw new Exception(fileName + " is not a valid xml campain file");
         }
 
-        String campaignName = el.getAttributeNode("name").getValue();
-        result.name = campaignName;
+        result.name = el.getAttributeNode("name").getValue();
 
         NodeList nodeLst = doc.getElementsByTagName("run");
         for (int s = 0; s < nodeLst.getLength(); s++) {
@@ -119,9 +117,9 @@ public class CampaignManager implements TestReportListener {
                         if (childNode.getNodeName().equals("testdata")) {
                             String selectorStr = childNode.getAttributes().getNamedItem("selector").getNodeValue();
                             String[] selectedRowsStr = selectorStr.split(",");
-                            TreeSet<Integer> selectedRows = new TreeSet<Integer>();
-                            for (int i = 0; i < selectedRowsStr.length; i++) {
-                                selectedRows.add(Integer.parseInt(selectedRowsStr[i]));
+                            TreeSet<Integer> selectedRows = new TreeSet<>();
+                            for (String selectedRowStr : selectedRowsStr) {
+                                selectedRows.add(Integer.parseInt(selectedRowStr));
                             }
                             params.setDataRows(selectedRows);
                         }
@@ -167,7 +165,7 @@ public class CampaignManager implements TestReportListener {
      * @param campaign the campaign to execute.
      */
     public boolean execute(Campaign campaign) {
-        campaignResult = true;
+        boolean campaignResult = true;
         currentCampaign = campaign;
         campaignStartTimeStamp = new Date();
         try {

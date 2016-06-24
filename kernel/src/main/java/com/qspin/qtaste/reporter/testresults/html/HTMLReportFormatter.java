@@ -95,7 +95,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
     private boolean reportStopStartSUT, reportReStartSUT;
 
     private static TestEngineConfiguration config = TestEngineConfiguration.getInstance();
-    private static HashMap<String, String> templates = new HashMap<String, String>();
+    private static HashMap<String, String> templates = new HashMap<>();
 
     static {
         try {
@@ -160,7 +160,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
     }
 
     public void generateHeader() {
-        NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+        NamesValuesList<String, String> namesValues = new NamesValuesList<>();
 
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
         namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
@@ -202,7 +202,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
     }
 
     private String generateSummaryReport() {
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         String templateContent = this.templateContents.get("executiveSummary");
 
         for (TestResult tr : TestResultsReportManager.getInstance().getResults()) {
@@ -225,7 +225,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     continue;
                 }
 
-                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                NamesValuesList<String, String> namesValues = new NamesValuesList<>();
                 namesValues.add("###TEST_SCRIPT###", tr.getName());
                 namesValues.add("###TEST_SCRIPT_SECTION_ID###", "#" + tr.getName() + "-" + (tr.getCurrentRowIndex() + 1));
 
@@ -275,7 +275,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
             Set<Entry<String, String>> entrySet = data.getDataHash().entrySet();
             if (!entrySet.isEmpty()) {
                 for (Entry<String, String> entry : entrySet) {
-                    NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                    NamesValuesList<String, String> namesValues = new NamesValuesList<>();
                     namesValues.add("###DATA_NAME###", entry.getKey());
                     namesValues.add("###DATA_VALUE###", StringEscapeUtils.escapeHtml(entry.getValue()));
                     dataColumnContent += getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
@@ -298,7 +298,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 return "Not specified";
             }
             for (TestRequirement req : tr.getTestRequirements()) {
-                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                NamesValuesList<String, String> namesValues = new NamesValuesList<>();
                 namesValues.add("###REQ_ID###", req.getId());
                 namesValues.add("###REQ_DESC###",
                       req.getDescription() != null ? StringEscapeUtils.escapeHtml(req.getDescription()) : "");
@@ -332,7 +332,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 }
 
                 if (!testcaseName.equals(previousTestSuiteName) && !testcaseName.equals("Restart SUT")) {
-                    NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                    NamesValuesList<String, String> namesValues = new NamesValuesList<>();
                     namesValues.add("###TEST_SCRIPT###", testcaseName);
                     String testScriptVersion = tr.getTestScriptVersion();
                     if (testScriptVersion == null || testScriptVersion.equalsIgnoreCase("undefined")) {
@@ -356,7 +356,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     } else {
                         String requirementColumn = generateRequirementColumn(tr);
                         if (!requirementColumn.equalsIgnoreCase("Not specified")) {
-                            NamesValuesList<String, String> requirementValue = new NamesValuesList<String, String>();
+                            NamesValuesList<String, String> requirementValue = new NamesValuesList<>();
                             requirementValue.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
                             requirementColumn = "<p><h4>Verified requirement(s)</h4>" + getSubstitutedTemplateContent(
                                   templateContents.get("testRequirement"), requirementValue);
@@ -370,7 +370,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 }
                 // TODO: Convert String into HTML String
 
-                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                NamesValuesList<String, String> namesValues = new NamesValuesList<>();
                 String testId = tr.getId();
                 String testComment = tr.getComment().replace("\n", "<BR>");
                 if (testComment.length() > 0) {
@@ -441,7 +441,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 }
 
                 String dataColumn = generateDataColumn(tr);
-                NamesValuesList<String, String> dataValues = new NamesValuesList<String, String>();
+                NamesValuesList<String, String> dataValues = new NamesValuesList<>();
                 dataValues.add("###DATA_TEMPLATE###", dataColumn);
                 dataColumn = getSubstitutedTemplateContent(templateContents.get("testData"), dataValues);
 
@@ -454,7 +454,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 if (generateStepsRows && !steps.isEmpty()) {
                     // Display (sorted) steps.
                     for (StepResult step : steps) {
-                        NamesValuesList<String, String> stepsNamesValues = new NamesValuesList<String, String>();
+                        NamesValuesList<String, String> stepsNamesValues = new NamesValuesList<>();
                         stepsNamesValues.add("###STEP_ID###", step.getStepId());
                         stepsNamesValues.add("###STEP_NAME###", step.getFunctionName());
                         final String stepDescription = step.getStepDescription();
@@ -552,7 +552,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
     }
 
     public void generateFooter() {
-        NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+        NamesValuesList<String, String> namesValues = new NamesValuesList<>();
         namesValues.add("###SUMMARY_PICTURE###", testSummaryFileName);
         namesValues.add("###TESTBED_CONFIGURATION_FILE_NAME###", StringEscapeUtils.escapeHtml(getTestbedConfigurationFileName()));
         namesValues.add("###TESTBED_CONFIGURATION_FILE_CONTENT###",
@@ -593,7 +593,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
         pieDataSet.setValue("Tests in error", new Integer(currentTestSuite.getNbTestsNotAvailable()));
         pieDataSet.setValue("Not executed",
               new Integer(currentTestSuite.getNbTestsToExecute() - currentTestSuite.getNbTestsExecuted()));
-        JFreeChart chart = null;
+        JFreeChart chart;
         final boolean drilldown = true;
 
         // create the chart...
@@ -602,7 +602,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
             Color[] colors = {new Color(100, 230, 40), new Color(210, 35, 35), new Color(230, 210, 40), new Color(100, 90, 40)};
             PieRenderer renderer = new PieRenderer(colors);
-            renderer.setColor(plot, (DefaultPieDataset) pieDataSet);
+            renderer.setColor(plot, pieDataSet);
 
             plot.setURLGenerator(new StandardPieURLGenerator("pie_chart_detail.jsp"));
             plot.setLabelGenerator(new TestSectiontLabelPieGenerator());

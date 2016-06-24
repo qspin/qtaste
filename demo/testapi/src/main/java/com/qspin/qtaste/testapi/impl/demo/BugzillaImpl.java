@@ -39,7 +39,6 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 public class BugzillaImpl implements Bugzilla {
 
     private String instanceId;
-    private JDBCClient jdbcClient;
     private String jdbcDriver;
     private String jdbcURL;
     private String user;
@@ -57,7 +56,7 @@ public class BugzillaImpl implements Bugzilla {
 
     @Override
     public void checkDatabase(int defectId, String shortDescription, String longDescription, String assignee) throws Exception {
-        jdbcClient = new JDBCClientImpl(jdbcDriver, jdbcURL, user, password);
+        JDBCClient jdbcClient = new JDBCClientImpl(jdbcDriver, jdbcURL, user, password);
 
         jdbcClient.open();
         ResultSet result = jdbcClient.executeQuery("select profiles.login_name, bugs.short_desc, longdescs.thetext " +
@@ -82,10 +81,8 @@ public class BugzillaImpl implements Bugzilla {
             if (!loginNameDB.equals(assignee)) {
                 throw new QTasteTestFailException("Expected to get '" + assignee + "' as assignee but got " + loginNameDB);
             }
-
         }
         jdbcClient.close();
-
     }
 
     @Override

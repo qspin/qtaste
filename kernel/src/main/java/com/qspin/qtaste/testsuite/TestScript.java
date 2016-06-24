@@ -94,14 +94,14 @@ public abstract class TestScript implements Executable {
               INTERACTIVE_REPORT_NAME))) {
             reportManager.startReport(new Date(), INTERACTIVE_REPORT_NAME);
         }
-        testResults = new LinkedList<TestResult>();
+        testResults = new LinkedList<>();
 
         for (TestData data : ds.getData()) {
             if (data.isSelected()) {
                 data.setTestCaseDirectory(fileName.toString());
                 data.loadFileIfAny();
 
-                TestResult.Status status = TestResult.Status.NOT_EXECUTED;
+                TestResult.Status status;
                 int trial = 0;
                 boolean needToRetry = false;
                 // Retry the script "RETRY_COUNTER" times in case of failure
@@ -282,15 +282,15 @@ public abstract class TestScript implements Executable {
         result.setExtraResultDetails(message);
     }
 
-    private String getStackTrace(StackTraceElement[] pElements) {
+    private String getStackTrace(StackTraceElement[] elements) {
         String stackTrace = "";
-        for (int i = 0, n = pElements.length; i < n; i++) {
-            if (pElements[i].getMethodName().startsWith("invoke")) {
+        for (StackTraceElement element : elements) {
+            if (element.getMethodName().startsWith("invoke")) {
                 break;
             }
             stackTrace +=
-                  "\nat " + pElements[i].getClassName() + "." + pElements[i].getMethodName() + "(" + pElements[i].getFileName()
-                        + ":" + pElements[i].getLineNumber() + ")";
+                  "\nat " + element.getClassName() + "." + element.getMethodName() + "(" + element.getFileName() + ":" + element
+                        .getLineNumber() + ")";
         }
         return stackTrace;
     }

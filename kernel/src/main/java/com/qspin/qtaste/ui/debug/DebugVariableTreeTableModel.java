@@ -38,7 +38,7 @@ public class DebugVariableTreeTableModel extends DefaultTreeModel //AbstractTree
     public void setDebugVariables(ArrayList<DebugVariable> debugVariables) {
         DebugRootNode rootNode = (DebugRootNode) this.getRoot();
         // remove all children
-        ArrayList<TreeNode> childNodes = new ArrayList<TreeNode>();
+        ArrayList<TreeNode> childNodes = new ArrayList<>();
         if (rootNode.getChildren() != null) {
             int[] indices = new int[rootNode.getChildCount()];
             int index = 0;
@@ -149,8 +149,7 @@ public class DebugVariableTreeTableModel extends DefaultTreeModel //AbstractTree
     }
 
     protected DebugNode getVariable(Object node) {
-        DebugNode debugNode = ((DebugNode) node);
-        return debugNode;
+        return ((DebugNode) node);
     }
 
     // The superclass's implementation would work, but this is more efficient. 

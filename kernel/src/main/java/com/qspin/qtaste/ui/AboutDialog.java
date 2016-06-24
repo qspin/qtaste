@@ -23,8 +23,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -103,12 +101,9 @@ public class AboutDialog extends JDialog {
         p2.add(ok);
         contentPane.add(p2, "South");
 
-        ok.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent evt) {
-                setVisible(false);
-                dispose();
-            }
+        ok.addActionListener(evt -> {
+            setVisible(false);
+            dispose();
         });
 
         setSize(450, 250);

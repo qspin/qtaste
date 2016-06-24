@@ -66,7 +66,7 @@ final class ComponentLister extends ComponentCommander {
     private void addToMap(Component c) {
         String componentName = c.getName();
         if (!mComponentsMap.containsKey(componentName)) {
-            mComponentsMap.put(componentName, new ArrayList<Component>());
+            mComponentsMap.put(componentName, new ArrayList<>());
         }
         if (!mComponentsMap.get(componentName).contains(c)) {
             mComponentsMap.get(componentName).add(c);

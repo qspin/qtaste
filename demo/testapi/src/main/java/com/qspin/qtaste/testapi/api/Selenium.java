@@ -36,11 +36,11 @@ public interface Selenium extends com.thoughtworks.selenium.Selenium, MultipleIn
      *
      * @param browser the browser String
      */
-    public void openBrowser(String browser);
+    void openBrowser(String browser);
 
     /**
      * Close the web browser
      */
-    public void closeBrowser();
+    void closeBrowser();
 
 }

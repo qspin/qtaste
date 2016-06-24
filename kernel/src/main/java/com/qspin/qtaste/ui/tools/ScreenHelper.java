@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * available screen in a multiple screens configuration.
  */
 public class ScreenHelper {
-    private java.util.List<Rectangle> mCoords = new ArrayList<Rectangle>();
+    private java.util.List<Rectangle> mCoords = new ArrayList<>();
     private int mLargerScreen;
     private int mCurrentScreen;
     private Dimension mForcedResolution;

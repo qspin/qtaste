@@ -70,7 +70,6 @@ public class TestSuiteRunDialog extends JDialog {
     private JButton cancelButton = new JButton("Cancel");
     private JPanel mainPanel = new JPanel(new GridBagLayout());
     private JPanel bottomPanel = new JPanel(new BorderLayout());
-    private QSpinTheme mTheme;
 
     public boolean IsCancelled = false;
     //private static Logger logger = Log4jLoggerFactory.getLogger(TestSuiteRunDialog.class);
@@ -142,26 +141,20 @@ public class TestSuiteRunDialog extends JDialog {
         group.add(mNumberofLoopsOption);
         mNumberofLoopsOption.setSelected(true);
         group.add(mNumberofLoopsInTimeOption);
-        mNumberofLoopsOption.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                mNumberOfLoopsTextArea.setEnabled(true);
-                mNumberOfLoopsInHoursTextArea.setEnabled(false);
-                mNumberOfLoopsInHoursLabel.setEnabled(false);
-                mNumberOfLoopsInMinutesTextArea.setEnabled(false);
-                mNumberOfLoopsInMinutesLabel.setEnabled(false);
-            }
+        mNumberofLoopsOption.addActionListener(e -> {
+            mNumberOfLoopsTextArea.setEnabled(true);
+            mNumberOfLoopsInHoursTextArea.setEnabled(false);
+            mNumberOfLoopsInHoursLabel.setEnabled(false);
+            mNumberOfLoopsInMinutesTextArea.setEnabled(false);
+            mNumberOfLoopsInMinutesLabel.setEnabled(false);
         });
 
-        mNumberofLoopsInTimeOption.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                mNumberOfLoopsTextArea.setEnabled(false);
-                mNumberOfLoopsInHoursTextArea.setEnabled(true);
-                mNumberOfLoopsInHoursLabel.setEnabled(true);
-                mNumberOfLoopsInMinutesTextArea.setEnabled(true);
-                mNumberOfLoopsInMinutesLabel.setEnabled(true);
-            }
+        mNumberofLoopsInTimeOption.addActionListener(e -> {
+            mNumberOfLoopsTextArea.setEnabled(false);
+            mNumberOfLoopsInHoursTextArea.setEnabled(true);
+            mNumberOfLoopsInHoursLabel.setEnabled(true);
+            mNumberOfLoopsInMinutesTextArea.setEnabled(true);
+            mNumberOfLoopsInMinutesLabel.setEnabled(true);
         });
 
         GridBagConstraints c = new GridBagConstraints();
@@ -245,8 +238,7 @@ public class TestSuiteRunDialog extends JDialog {
     }
 
     public void setQSpinTheme() {
-        mTheme = new QSpinTheme();
-        MetalLookAndFeel.setCurrentTheme(mTheme);
+        MetalLookAndFeel.setCurrentTheme(new QSpinTheme());
         try {
             UIManager.setLookAndFeel(new MetalLookAndFeel());
         } catch (UnsupportedLookAndFeelException ex) {
@@ -266,8 +258,6 @@ public class TestSuiteRunDialog extends JDialog {
             IsCancelled = false;
         }
     }
-
-    ;
 
     protected class CancelActionListener implements ActionListener {
 

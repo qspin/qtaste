@@ -38,8 +38,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 @SuppressWarnings("serial")
 public class TestCaseTreeCellRenderer extends DefaultTreeCellRenderer {
-    private final Color mLightBlue = new Color(0.78f, 0.67f, 0.87f);
-    private final Color mBlue = new Color(0.38f, 0.12f, 0.69f);
+    private static final Color LIGHT_BLUE = new Color(0.78f, 0.67f, 0.87f);
+    private static final Color BLUE = new Color(0.38f, 0.12f, 0.69f);
     //private final Color mDarkGreen = new Color(0.19f, 0.345f, 0.06f);
     //private final Color mLightRed = new Color(255, 65, 65);
     //private final Color mDarkRed = new Color(157, 0, 0);
@@ -49,8 +49,8 @@ public class TestCaseTreeCellRenderer extends DefaultTreeCellRenderer {
     private static final Font NORMAL_FONT = new Font("Dialog", Font.PLAIN, 12);
 
     public TestCaseTreeCellRenderer() {
-        setBorderSelectionColor(mBlue);
-        setBackgroundSelectionColor(mLightBlue);
+        setBorderSelectionColor(BLUE);
+        setBackgroundSelectionColor(LIGHT_BLUE);
     }
 
     public Component getTreeCellRendererComponent(JTree pTree, Object pValue, boolean pSel, boolean pExpanded, boolean pLeaf,

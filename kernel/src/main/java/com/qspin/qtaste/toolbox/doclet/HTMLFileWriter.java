@@ -320,12 +320,11 @@ public class HTMLFileWriter {
         mOut.println("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
         mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Components "
               + "Summary</B></FONT></TH></TR>");
-        for (int c = 0; c < testAPIComponents.length; c++) {
-            ClassDoc classDoc = testAPIComponents[c];
-            String componentName = classDoc.name();
+        for (ClassDoc testAPIComponent : testAPIComponents) {
+            String componentName = testAPIComponent.name();
             mOut.print("<TR><TD WIDTH=\"1%\"><CODE><B><A HREF=\"components/" + componentName + ".html\">" + componentName
                   + "</A></B></CODE></TD><TD>");
-            printInlineTags(classDoc.firstSentenceTags(), classDoc);
+            printInlineTags(testAPIComponent.firstSentenceTags(), testAPIComponent);
             mOut.println("</TD>");
         }
         mOut.println("</TABLE>");
@@ -357,15 +356,15 @@ public class HTMLFileWriter {
      * @param tags the array of Tag to print
      */
     private void printInlineTags(Tag[] tags, ClassDoc classDoc) {
-        for (int i = 0; i < tags.length; i++) {
-            if ((tags[i] instanceof SeeTag) && tags[i].name().equals("@link")) {
-                SeeTag seeTag = (SeeTag) tags[i];
+        for (Tag tag : tags) {
+            if ((tag instanceof SeeTag) && tag.name().equals("@link")) {
+                SeeTag seeTag = (SeeTag) tag;
                 boolean sameClass = seeTag.referencedClass() == classDoc;
                 String fullClassName = seeTag.referencedClassName();
                 String memberName = seeTag.referencedMemberName();
 
                 String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-                List<String> nameParts = new ArrayList<String>();
+                List<String> nameParts = new ArrayList<>();
                 if (!sameClass) {
                     nameParts.add(className);
                 }
@@ -391,7 +390,7 @@ public class HTMLFileWriter {
                     mOut.print(name);
                 }
             } else {
-                mOut.print(tags[i].text());
+                mOut.print(tag.text());
             }
         }
     }

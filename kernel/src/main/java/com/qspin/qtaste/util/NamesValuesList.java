@@ -31,6 +31,6 @@ public class NamesValuesList<N, V> extends ArrayList<NameValue<N, V>> implements
     private static final long serialVersionUID = -4978002824576924808L;
 
     public void add(N name, V value) {
-        add(new NameValue<N, V>(name, value));
+        add(new NameValue<>(name, value));
     }
 }

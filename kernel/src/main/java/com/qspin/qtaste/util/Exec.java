@@ -228,7 +228,7 @@ public class Exec {
 
         BufferedInputStream in;
         OutputStream out;
-        ByteArrayOutputStream outResult;
+        final ByteArrayOutputStream outResult;
         boolean cancelled;
         byte[] buffer;
 

@@ -31,10 +31,10 @@ import java.util.Date;
  */
 public abstract class ReportManager {
     protected String reportName;
-    protected ArrayList<ReportFormatter> formatters = new ArrayList<ReportFormatter>();
+    protected ArrayList<ReportFormatter> formatters = new ArrayList<>();
 
     public ReportManager() {
-        formatters = new ArrayList<ReportFormatter>();
+        formatters = new ArrayList<>();
     }
 
     public void startReport(Date timeStamp, String name) {

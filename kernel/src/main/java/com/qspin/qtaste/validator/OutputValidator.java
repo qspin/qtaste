@@ -48,7 +48,7 @@ public class OutputValidator extends Validator {
     private OutputValidator(File reference, StringBuffer buf) {
         this.reference = reference;
         this.buf = buf;
-        this.extraDetails = new String("No detail available!");
+        this.extraDetails = "No detail available!";
     }
 
     private String readLine(StringBuffer buf, int pos) {
@@ -65,8 +65,8 @@ public class OutputValidator extends Validator {
             int s = 0;
             //int e=0;
             int lineCounter = 1;
-            String refLine = null;
-            String gotLine = null;
+            String refLine;
+            String gotLine;
             do {
                 refLine = ref.readLine();
                 if (refLine != null) {
@@ -85,8 +85,8 @@ public class OutputValidator extends Validator {
                     String patternedLine = Strings.join(lineParts, IGNORE_VALUE);
                     if (!gotLine.matches(patternedLine)) {
                         //System.out.println("NO MATCH! with " + patternedLine);
-                        this.extraDetails = new String(
-                              "Error at line " + lineCounter + ": expecting " + patternedLine + " but got " + gotLine);
+                        this.extraDetails =
+                              "Error at line " + lineCounter + ": expecting " + patternedLine + " but got " + gotLine;
                         return false;
                     }
                     // Get the next String but skip the file.separator

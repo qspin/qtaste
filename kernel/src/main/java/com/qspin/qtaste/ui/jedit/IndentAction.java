@@ -107,7 +107,7 @@ public class IndentAction extends DefaultSyntaxAction {
 
     public void addAbbreviation(String abbr, String template) {
         if (abbrvs == null) {
-            abbrvs = new HashMap<String, String>();
+            abbrvs = new HashMap<>();
         }
         abbrvs.put(abbr, template);
     }

@@ -94,8 +94,7 @@ public class DebugVariablePanel extends JPanel {
         // parse the string
         tableModel.setRowCount(0);
         String[] lines = s.split("\\n");
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
+        for (String line : lines) {
             String[] data = line.split("' = '");
             if (data.length == 2) {
                 tableModel.addRow(new Object[] {data[0].replace("'", ""), "'" + data[1]});

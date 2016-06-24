@@ -62,7 +62,7 @@ public abstract class AbstractProbe implements Probe, Runnable {
     }
 
     public void register() {
-        listener = (DataReceivedListener) CacheImpl.getInstance();
+        listener = CacheImpl.getInstance();
     }
 
     public void unregister() {

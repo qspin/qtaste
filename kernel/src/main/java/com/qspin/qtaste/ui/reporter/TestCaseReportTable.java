@@ -27,12 +27,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -89,7 +86,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 public class TestCaseReportTable {
 
     protected static Logger logger = Log4jLoggerFactory.getLogger(TestCaseReportTable.class);
-    protected Map<TestResult, Integer> testCases = new HashMap<TestResult, Integer>();
+    protected Map<TestResult, Integer> testCases = new HashMap<>();
     protected TestCasePane tcPane;
     protected DefaultTableModel tcModel;
     protected DefaultTableModel tcReasonModel;
@@ -366,20 +363,15 @@ public class TestCaseReportTable {
 
             cols[TC] = tr;
             //tcModel.addRow(cols);
-            Integer rowNum = new Integer(tcModel.getRowCount());
+            Integer rowNum = tcModel.getRowCount();
             testCases.put(tr, rowNum);
-            long currentScrollBarMax = 0;
+            long currentScrollBarMax;
 
             JScrollPane scrollPane = (JScrollPane) tcTable.getParent().getParent();
             JScrollBar scrollbar = scrollPane.getVerticalScrollBar();
             if (scrollbar != null) {
                 if (scrollbar.getMouseListeners().length == 1) {
-                    scrollPane.addMouseWheelListener(new MouseWheelListener() {
-
-                        public void mouseWheelMoved(MouseWheelEvent e) {
-                            userScrollPosition = true;
-                        }
-                    });
+                    scrollPane.addMouseWheelListener(e -> userScrollPosition = true);
                     scrollbar.addMouseListener(new MouseAdapter() {
 
                         @Override
@@ -397,11 +389,9 @@ public class TestCaseReportTable {
                 tcModel.addRow(cols);
                 if (!userScrollPosition) {
                     tcTable.scrollRectToVisible(tcTable.getCellRect(tcModel.getRowCount() - 1, 0, true));
-                    return;
                 } else if (scrollbar.getValue() >= currentScrollBarMax) {
                     tcTable.scrollRectToVisible(tcTable.getCellRect(tcModel.getRowCount() - 1, 0, true));
                     userScrollPosition = false;
-                    return;
                 } else {
                     System.out.println(
                           "Scrollbar pos=" + scrollbar.getValue() + "; max=" + currentScrollBarMax + "height=" + scrollbar
@@ -428,7 +418,7 @@ public class TestCaseReportTable {
 
     protected void updateTestCaseRow(TestResult tr) {
 
-        int rowNum = ((Integer) testCases.get(tr)).intValue();
+        int rowNum = testCases.get(tr);
         if (rowNum == -1) {
             // means that testcases has not been emptied ..
 
@@ -461,9 +451,7 @@ public class TestCaseReportTable {
                         tcReasonModel.removeRow(0);
                     }
                     ArrayList<StackTraceElement> stack = tr.getStack();
-                    Iterator<StackTraceElement> it = stack.iterator();
-                    while (it.hasNext()) {
-                        StackTraceElement stackElement = it.next();
+                    for (StackTraceElement stackElement : stack) {
                         if (stackElement.getFileName().equals("embedded_jython")) {
                             continue;
                         }
@@ -574,9 +562,7 @@ public class TestCaseReportTable {
                 if (tr.getStatus() == TestResult.Status.NOT_AVAILABLE || tr.getStatus() == TestResult.Status.FAIL) {
                     if (tcReasonModel != null) {
                         ArrayList<StackTraceElement> stack = tr.getStack();
-                        Iterator<StackTraceElement> it = stack.iterator();
-                        while (it.hasNext()) {
-                            StackTraceElement stackElement = it.next();
+                        for (StackTraceElement stackElement : stack) {
                             if (stackElement.getFileName().equals("embedded_jython")) {
                                 continue;
                             }
@@ -767,7 +753,7 @@ public class TestCaseReportTable {
 
         public void actionPerformed(ActionEvent e) {
             int[] selectedRowsId = tcTable.getSelectedRows();
-            final LinkedHashMap<String, SortedSet<Integer>> testScripts = new LinkedHashMap<String, SortedSet<Integer>>();
+            final LinkedHashMap<String, SortedSet<Integer>> testScripts = new LinkedHashMap<>();
             // group test cases by test script
             for (int rowId : selectedRowsId) {
                 TestResult tr = (TestResult) tcModel.getValueAt(rowId, TC);
@@ -776,13 +762,13 @@ public class TestCaseReportTable {
                 if (testScripts.containsKey(testCaseDirectory)) {
                     dataRows = testScripts.get(testCaseDirectory);
                 } else {
-                    dataRows = new TreeSet<Integer>();
+                    dataRows = new TreeSet<>();
                     testScripts.put(testCaseDirectory, dataRows);
                 }
                 dataRows.add(tr.getTestData().getRowId());
             }
             // build meta test suite
-            List<TestSuiteParams> testSuitesParams = new LinkedList<TestSuiteParams>();
+            List<TestSuiteParams> testSuitesParams = new LinkedList<>();
             for (Map.Entry<String, SortedSet<Integer>> testCases : testScripts.entrySet()) {
                 TestSuiteParams testSuiteParams = new TestSuiteParams();
                 testSuiteParams.setDirectory(testCases.getKey());
@@ -844,8 +830,8 @@ public class TestCaseReportTable {
 
         public boolean isEnabled() {
             int[] selectedRows = tcTable.getSelectedRows();
-            for (int i = 0; i < selectedRows.length; i++) {
-                String tc = (String) tcModel.getValueAt(selectedRows[i], TestCaseReportTable.TEST_CASE);
+            for (int selectedRow : selectedRows) {
+                String tc = (String) tcModel.getValueAt(selectedRow, TestCaseReportTable.TEST_CASE);
                 if (tc.endsWith(" SUT")) {
                     // disable if contains "Re(start) SUT" or "Stop SUT"
                     return false;

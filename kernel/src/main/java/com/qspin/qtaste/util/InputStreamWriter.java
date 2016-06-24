@@ -31,7 +31,7 @@ public final class InputStreamWriter extends Thread {
         try {
             LOGGER.debug("Stream redirection start");
             BufferedReader br = new BufferedReader(new InputStreamReader(mInput));
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 if (mLimit != 0) {
                     mOutput.add(line);

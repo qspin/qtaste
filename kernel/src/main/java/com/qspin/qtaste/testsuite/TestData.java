@@ -37,7 +37,7 @@ public interface TestData {
      * @return the value as string to which the specified key is mapped in this container.
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists
      */
-    public String getValue(String key) throws QTasteDataException;
+    String getValue(String key) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
@@ -47,7 +47,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * int.
      */
-    public int getIntValue(String key) throws QTasteDataException;
+    int getIntValue(String key) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
@@ -57,7 +57,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * double.
      */
-    public double getDoubleValue(String key) throws QTasteDataException;
+    double getDoubleValue(String key) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
@@ -67,7 +67,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * boolean.
      */
-    public boolean getBooleanValue(String key) throws QTasteDataException;
+    boolean getBooleanValue(String key) throws QTasteDataException;
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a byte array.
@@ -77,7 +77,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * boolean.
      */
-    public byte[] getFileContentAsByteArray(String key) throws QTasteDataException;
+    byte[] getFileContentAsByteArray(String key) throws QTasteDataException;
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
@@ -88,7 +88,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * boolean.
      */
-    public String getFileContentAsString(String key) throws QTasteDataException;
+    String getFileContentAsString(String key) throws QTasteDataException;
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
@@ -100,7 +100,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * boolean.
      */
-    public String getFileContentAsString(String key, String charset) throws QTasteDataException;
+    String getFileContentAsString(String key, String charset) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
@@ -111,7 +111,7 @@ public interface TestData {
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
      * DoubleWithPrecision object.
      */
-    public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException;
+    DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException;
 
     /**
      * Maps the specified key to the specified value in this container. Neither the key not the value can be null.
@@ -120,7 +120,7 @@ public interface TestData {
      * @param value the value
      * @throws com.qspin.qtaste.testsuite.QTasteDataException
      */
-    public void setValue(String key, String value) throws QTasteDataException;
+    void setValue(String key, String value) throws QTasteDataException;
 
     /**
      * Removes the key and its corresponding value from this container. This method does nothing if the key is not in this
@@ -128,7 +128,7 @@ public interface TestData {
      *
      * @param key the key that need to be removed
      */
-    public void remove(String key);
+    void remove(String key);
 
     /**
      * Checks if this container contains a value for the specified key.
@@ -137,52 +137,52 @@ public interface TestData {
      * @return true if a value is contained for the specified key,
      * false otherwise
      */
-    public boolean contains(String key);
+    boolean contains(String key);
 
     /**
      * Dump all the content of the container to a String
      *
      * @return the String
      */
-    public String dump();
+    String dump();
 
     /**
      * Force the keys starting with "FILE_" to be loaded (or reloaded) into this container.
      * The content of a file can be retrieved using the getByteArrayValue method.
      * Normally, this method should not be called as it is done at the execution of the TestScript.
      */
-    public void loadFileIfAny();
+    void loadFileIfAny();
 
-    public LinkedHashMap<String, String> getDataHash();
+    LinkedHashMap<String, String> getDataHash();
 
     /**
      * @return diretory containing the testcase
      */
-    public String getTestCaseDirectory();
+    String getTestCaseDirectory();
 
     /**
      * Set the testcase directory to the directory value
      */
-    public void setTestCaseDirectory(String directory);
+    void setTestCaseDirectory(String directory);
 
     /**
      * Get the data row id.
      *
      * @return the data row id
      */
-    public int getRowId();
+    int getRowId();
 
     /**
      * Set if the data is selected or not (default is selected).
      *
      * @param selected true if the data is selected, false otherwise
      */
-    public void setSelected(boolean selected);
+    void setSelected(boolean selected);
 
     /**
      * Check if the data is selected or not.
      *
      * @return true if the data is selected, false otherwise
      */
-    public boolean isSelected();
+    boolean isSelected();
 }

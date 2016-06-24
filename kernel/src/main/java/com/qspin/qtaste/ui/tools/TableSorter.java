@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -107,17 +106,10 @@ public class TableSorter extends AbstractTableModel {
     private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
 
     @SuppressWarnings("unchecked")
-    public static final Comparator<Object> COMPARABLE_COMPARATOR = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return ((Comparable<Object>) o1).compareTo(o2);
-        }
-    };
+    public static final Comparator<Object> COMPARABLE_COMPARATOR = (Comparator) (o1, o2) -> ((Comparable<Object>) o1).compareTo(
+          o2);
     @SuppressWarnings("unchecked")
-    public static final Comparator<Object> LEXICAL_COMPARATOR = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return o1.toString().compareTo(o2.toString());
-        }
-    };
+    public static final Comparator<Object> LEXICAL_COMPARATOR = (Comparator) (o1, o2) -> o1.toString().compareTo(o2.toString());
 
     private Row[] viewToModel;
     private int[] modelToView;
@@ -125,8 +117,8 @@ public class TableSorter extends AbstractTableModel {
     private JTableHeader tableHeader;
     private MouseListener mouseListener;
     private TableModelListener tableModelListener;
-    private Map<Class<?>, Comparator<Object>> columnComparators = new HashMap<Class<?>, Comparator<Object>>();
-    private List<Directive> sortingColumns = new ArrayList<Directive>();
+    private Map<Class<?>, Comparator<Object>> columnComparators = new HashMap<>();
+    private List<Directive> sortingColumns = new ArrayList<>();
 
     public TableSorter() {
         this.mouseListener = new MouseHandler();
@@ -191,8 +183,7 @@ public class TableSorter extends AbstractTableModel {
     }
 
     private Directive getDirective(int column) {
-        for (int i = 0; i < sortingColumns.size(); i++) {
-            Directive directive = sortingColumns.get(i);
+        for (Directive directive : sortingColumns) {
             if (directive.column == column) {
                 return directive;
             }
@@ -330,13 +321,12 @@ public class TableSorter extends AbstractTableModel {
             int row1 = modelIndex;
             int row2 = ((Row) o).modelIndex;
 
-            for (Iterator<Directive> it = sortingColumns.iterator(); it.hasNext(); ) {
-                Directive directive = it.next();
+            for (Directive directive : sortingColumns) {
                 int column = directive.column;
                 Object o1 = tableModel.getValueAt(row1, column);
                 Object o2 = tableModel.getValueAt(row2, column);
 
-                int comparison = 0;
+                int comparison;
                 // Define null less than everything, except null.
                 if (o1 == null && o2 == null) {
                     comparison = 0;
@@ -402,7 +392,6 @@ public class TableSorter extends AbstractTableModel {
             // Something has happened to the data that may have invalidated the row order. 
             clearSortingState();
             fireTableDataChanged();
-            return;
         }
     }
 

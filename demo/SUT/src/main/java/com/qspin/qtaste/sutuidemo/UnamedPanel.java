@@ -44,10 +44,11 @@ final class UnamedPanel extends JPanel {
         //do not set name to components
     }
 
-    private JList mList = new JList(new String[] {"listItem_01", "listItem_02", "listItem_03", "listItem_04", "listItem_05"});
+    private JList<String> mList = new JList<>(
+          new String[] {"listItem_01", "listItem_02", "listItem_03", "listItem_04", "listItem_05"});
     private JSpinner mSpinner = new JSpinner();
     private JSlider mSlider = new JSlider();
-    private JComboBox mCombo = new JComboBox(new String[] {"elmt_01", "elmt_02", "elmt_03", "elmt_04"});
+    private JComboBox<String> mCombo = new JComboBox<>(new String[] {"elmt_01", "elmt_02", "elmt_03", "elmt_04"});
 
     private static final int NUMBER_OF_COMPONENT = 4;
 

@@ -36,7 +36,7 @@ public class Strings {
      * @return string containing strings joined using separator
      */
     public static String join(Object[] objects, String separator) {
-        String result = null;
+        String result;
 
         if (objects.length > 0) {
             result = objects[0].toString();

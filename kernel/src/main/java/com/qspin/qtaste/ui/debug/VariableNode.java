@@ -43,10 +43,7 @@ public class VariableNode extends DebugNode {
     }
 
     public boolean hasChildren() {
-        if (mVariable == null) {
-            return true;
-        }
-        return mVariable.getFieldList().size() > 0;
+        return mVariable == null || mVariable.getFieldList().size() > 0;
     }
 
     /**
@@ -68,5 +65,4 @@ public class VariableNode extends DebugNode {
         }
         return null;
     }
-
 }

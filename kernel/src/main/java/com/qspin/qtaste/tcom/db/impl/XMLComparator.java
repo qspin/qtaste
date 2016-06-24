@@ -53,7 +53,7 @@ import org.w3c.dom.NodeList;
  * @author lvboque
  */
 public class XMLComparator {
-    private List<String> errorsList = new ArrayList<String>();
+    private List<String> errorsList = new ArrayList<>();
 
     private static Node setParameterValues(Node node, HashMap<String, String> parameters) {
         String nodeValue = null;
@@ -62,9 +62,7 @@ public class XMLComparator {
             nodeValue = valueNode.getNodeValue();
         }
         if (nodeValue != null) {
-            Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
-            while (it.hasNext()) {
-                Entry<String, String> parameter = it.next();
+            for (Entry<String, String> parameter : parameters.entrySet()) {
                 nodeValue = nodeValue.replace("$" + parameter.getKey(), parameter.getValue());
                 valueNode.setNodeValue(nodeValue);
             }
@@ -82,7 +80,7 @@ public class XMLComparator {
         org.w3c.dom.Element rootElement = doc.getDocumentElement();
         // retrieve row by row
         Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
-        HashMap<String, String[]> parameterMap = new HashMap<String, String[]>();
+        HashMap<String, String[]> parameterMap = new HashMap<>();
 
         while (it.hasNext()) {
             Entry<String, String> parameter = it.next();
@@ -93,10 +91,8 @@ public class XMLComparator {
         NodeList nl = rootElement.getElementsByTagName("Row");
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            HashMap<String, String> rowParameters = new HashMap<String, String>();
-            Iterator<Entry<String, String[]>> rowIt = parameterMap.entrySet().iterator();
-            while (rowIt.hasNext()) {
-                Entry<String, String[]> rowParameter = rowIt.next();
+            HashMap<String, String> rowParameters = new HashMap<>();
+            for (Entry<String, String[]> rowParameter : parameterMap.entrySet()) {
                 rowParameters.put(rowParameter.getKey(), rowParameter.getValue()[i]);
             }
             node = setParameterValues(node, rowParameters);
@@ -118,7 +114,7 @@ public class XMLComparator {
      */
     private List<HashMap<String, String>> createRowsHashMap(Document doc, String tableName) {
 
-        List<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> result = new ArrayList<>();
 
         NodeList nl = doc.getElementsByTagName("Row");
 
@@ -133,7 +129,7 @@ public class XMLComparator {
 
             if (n.hasChildNodes()) {
                 NodeList child = n.getChildNodes();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 result.add(hash);
                 for (int j = 0; j < child.getLength(); j++) {
                     Node childNode = child.item(j);
@@ -192,13 +188,11 @@ public class XMLComparator {
         List<HashMap<String, String>> doc1Hash = createRowsHashMap(doc1, tableName);
         List<HashMap<String, String>> doc2Hash = createRowsHashMap(doc2, tableName);
 
-        for (Iterator<HashMap<String, String>> row1 = doc1Hash.iterator(); row1.hasNext(); ) {
-            HashMap<String, String> hash1 = row1.next();
+        for (HashMap<String, String> hash1 : doc1Hash) {
             //System.out.println(hash1.toString());
 
             boolean found = false;
-            for (Iterator<HashMap<String, String>> row2 = doc2Hash.iterator(); row2.hasNext(); ) {
-                HashMap<String, String> hash2 = row2.next();
+            for (HashMap<String, String> hash2 : doc2Hash) {
                 int i = 0;
 
                 while (i < primaryKeyFields.length) {
@@ -225,9 +219,7 @@ public class XMLComparator {
                 if (found) {
                     //System.out.println("The primary key is found!");
                     // The matching row is found, check the content of all fields                    
-                    Iterator<String> it = hash1.keySet().iterator();
-                    while (it.hasNext()) {
-                        String key = it.next();
+                    for (String key : hash1.keySet()) {
                         String value1 = hash1.get(key);
                         String value2 = hash2.get(key);
                         if (!value1.equals(value2)) {
@@ -249,8 +241,8 @@ public class XMLComparator {
 
     private String getPrimaryKeysExtraDetails(HashMap<String, String> hash, String[] primaryKeyFields) {
         String message = " with primary key";
-        for (int i = 0; i < primaryKeyFields.length; i++) {
-            message += " " + primaryKeyFields[i] + "=" + hash.get(primaryKeyFields[i]);
+        for (String primaryKeyField : primaryKeyFields) {
+            message += " " + primaryKeyField + "=" + hash.get(primaryKeyField);
         }
         return message;
     }

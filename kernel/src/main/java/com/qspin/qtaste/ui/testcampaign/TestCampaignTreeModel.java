@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -46,6 +45,7 @@ import com.qspin.qtaste.ui.tools.FileNode;
 import com.qspin.qtaste.ui.tools.JTreeNode;
 import com.qspin.qtaste.ui.tools.TestDataNode;
 import com.qspin.qtaste.ui.tools.TristateCheckBox;
+import com.qspin.qtaste.ui.tools.TristateCheckBox.State;
 import com.qspin.qtaste.ui.treetable.TreeTableModel;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
@@ -72,21 +72,20 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         super(new TCTreeNode(rootName, true));
 
         // check the available test beds
-        testbedList = new ArrayList<String>();
-        testsuiteDir = new ArrayList<TCTreeNode>();
-        metaCampaignSelectionList = new HashMap<String, HashMap<String, TristateCheckBox.State>>();
+        testbedList = new ArrayList<>();
+        testsuiteDir = new ArrayList<>();
+        metaCampaignSelectionList = new HashMap<>();
 
         String testbedDir = StaticConfiguration.TESTBED_CONFIG_DIRECTORY;
         File fTestbedDir = new File(testbedDir);
         FileMask fileMask = new FileMask();
         fileMask.addExtension(StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION);
         File[] fTestbedList = FileUtilities.listSortedFiles(fTestbedDir, fileMask);
-        for (int i = 0; i < fTestbedList.length; i++) {
+        for (File fTestbed : fTestbedList) {
             // remove the extension
-            String testbedName = fTestbedList[i].getName().substring(0, fTestbedList[i].getName().lastIndexOf("."));
+            String testbedName = fTestbed.getName().substring(0, fTestbed.getName().lastIndexOf("."));
             testbedList.add(testbedName);
         }
-
     }
 
     public int getColumnCount() {
@@ -131,10 +130,9 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         TCTreeNode tcNode = (TCTreeNode) node;
         if (tcNode.getUserObject() instanceof JTreeNode) {
             JTreeNode jTreeNode = (JTreeNode) tcNode.getUserObject();
-            this.setNodeState(jTreeNode, getColumnName(column), (TristateCheckBox.State) aValue);
+            setNodeState(jTreeNode, getColumnName(column), (TristateCheckBox.State) aValue);
         } else {
-            this.setNodeState(tcNode.toString(), getColumnName(column), (TristateCheckBox.State) aValue);
-
+            setNodeState(tcNode.toString(), getColumnName(column), (TristateCheckBox.State) aValue);
         }
     }
 
@@ -145,12 +143,10 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
     public TristateCheckBox.State getNodeState(String nodeId, String testbedName) {
         if (metaCampaignSelectionList.containsKey(nodeId)) {
             HashMap<String, TristateCheckBox.State> currentStatus = metaCampaignSelectionList.get(nodeId);
-            TristateCheckBox.State testbedState = currentStatus.get(testbedName);
-            return testbedState;
+            return currentStatus.get(testbedName);
         } else {
             return TristateCheckBox.NOT_SELECTED;
         }
-
     }
 
     public void setNodeState(JTreeNode node, String testbedName, TristateCheckBox.State state) {
@@ -162,10 +158,10 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             HashMap<String, TristateCheckBox.State> currentStatus = getMetaCampaignSelectionList().get(nodeId);
             currentStatus.put(testbedName, state);
         } else {
-            HashMap<String, TristateCheckBox.State> testbedSelectionList = new HashMap<String, TristateCheckBox.State>();
-            for (int i = 1; i < this.getColumnCount(); i++) {
-                testbedSelectionList.put(this.getColumnName(i),
-                      this.getColumnName(i).equals(testbedName) ? state : TristateCheckBox.NOT_SELECTED);
+            HashMap<String, TristateCheckBox.State> testbedSelectionList = new HashMap<>();
+            for (int i = 1; i < getColumnCount(); i++) {
+                testbedSelectionList.put(getColumnName(i),
+                      getColumnName(i).equals(testbedName) ? state : TristateCheckBox.NOT_SELECTED);
             }
             getMetaCampaignSelectionList().put(nodeId, testbedSelectionList);
         }
@@ -181,10 +177,10 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             // get the stored object maintaining the status of all nodes
             // navigate through the children
             for (int i = 0; i < childCount; i++) {
-                JTreeNode childFileNode = null;
+                JTreeNode childFileNode;
                 childFileNode = (JTreeNode) childNode.getChildren()[i];
                 // retrive the status of its parent (from stored object model)
-                TristateCheckBox.State parentValue = this.getNodeState(childNode, testbedName);
+                TristateCheckBox.State parentValue = getNodeState(childNode, testbedName);
                 if (parentValue != TristateCheckBox.DONT_CARE) {
                     // update the object model for this child
                     setNodeState(childFileNode, testbedName, parentValue);
@@ -193,15 +189,15 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                 }
             }
         }
-        this.nodeChanged((TreeNode) this.getRoot());
+        nodeChanged((TreeNode) getRoot());
 
     }
 
     public void updateRootNode(String testbedName) {
         // Testsuites root node
         int countChecked = 0, countUnchecked = 0;
-        int childCount = ((TCTreeNode) this.getRoot()).getChildCount();
-        Enumeration<?> enumChildren = ((TCTreeNode) this.getRoot()).children();
+        int childCount = ((TCTreeNode) getRoot()).getChildCount();
+        Enumeration<?> enumChildren = ((TCTreeNode) getRoot()).children();
         while (enumChildren.hasMoreElements()) {
             TCTreeNode childParentNode = (TCTreeNode) enumChildren.nextElement();
             JTreeNode childParentFileNode = (JTreeNode) childParentNode.getUserObject();
@@ -212,9 +208,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             if (childState == TristateCheckBox.NOT_SELECTED) {
                 countUnchecked++;
             }
-
         }
-        TristateCheckBox.State parentState = TristateCheckBox.DONT_CARE;
+        TristateCheckBox.State parentState;
         if (countUnchecked == childCount) {
             parentState = TristateCheckBox.NOT_SELECTED;
         } else if (countChecked == childCount) {
@@ -222,9 +217,9 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         } else {
             parentState = TristateCheckBox.DONT_CARE;
         }
-        int colIndex = this.getColumnIndex(testbedName);
-        setValueAt(parentState, this.getRoot(), colIndex);
-        this.nodeChanged((TreeNode) this.getRoot());
+        int colIndex = getColumnIndex(testbedName);
+        setValueAt(parentState, getRoot(), colIndex);
+        nodeChanged((TreeNode) getRoot());
     }
 
     public void updateParent(JTreeNode childNode, String testbedName) {
@@ -238,36 +233,34 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         }
         int countChecked = 0;
         int countUnchecked = 0;
-        int childCount = 0;
-        JTreeNode parentNode = null;
+        int childCount;
+        JTreeNode parentNode;
         if (parentFile.getParentFile() == null) {
-            this.updateRootNode(testbedName);
+            updateRootNode(testbedName);
             return;
         } else {
-            parentNode = this.getTestSuite(parentFile.getPath().replace("\\", "/"));
+            parentNode = getTestSuite(parentFile.getPath().replace("\\", "/"));
             if (parentNode == null) {
                 File parentParentFile = parentFile.getParentFile();
                 while (parentParentFile.getParentFile() != null) {
-                    parentNode = this.getTestSuite(parentParentFile.getPath().replace("\\", "/"));
+                    parentNode = getTestSuite(parentParentFile.getPath().replace("\\", "/"));
                     if (parentNode != null) {
                         updateParent(parentNode, testbedName);
                         break;
                     }
                     parentParentFile = parentParentFile.getParentFile();
-
                 }
-                this.updateRootNode(testbedName);
-
+                updateRootNode(testbedName);
             }
             if (parentNode == null) {
                 return;
             }
             childCount = parentNode.getChildren().length;
 
-            Object[] childParentNodes = (Object[]) parentNode.getChildren();
-            for (int i = 0; i < childParentNodes.length; i++) {
-                JTreeNode childParentNode = (JTreeNode) childParentNodes[i];
-                TristateCheckBox.State testbedState = getNodeState(childParentNode, testbedName);
+            Object[] childParentNodes = parentNode.getChildren();
+            for (Object childParentNode : childParentNodes) {
+                JTreeNode childParentTreeNode = (JTreeNode) childParentNode;
+                State testbedState = getNodeState(childParentTreeNode, testbedName);
                 if (testbedState == TristateCheckBox.SELECTED) {
                     countChecked++;
                 }
@@ -276,7 +269,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                 }
             }
         }
-        TristateCheckBox.State parentState = TristateCheckBox.DONT_CARE;
+        TristateCheckBox.State parentState;
         if (countUnchecked == childCount) {
             parentState = TristateCheckBox.NOT_SELECTED;
         } else if (countChecked == childCount) {
@@ -284,17 +277,16 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         } else {
             parentState = TristateCheckBox.DONT_CARE;
         }
-        int colIndex = this.getColumnIndex(testbedName);
+        int colIndex = getColumnIndex(testbedName);
         if (colIndex != -1) {
             if (parentNode == null) {
-                setValueAt(parentState, this.getRoot(), colIndex);
+                setValueAt(parentState, getRoot(), colIndex);
             } else {
                 setValueAt(parentState, new TCTreeNode(parentNode, true), colIndex);
                 updateParent(parentNode, testbedName);
             }
         }
-        this.nodeChanged((TreeNode) this.getRoot());
-
+        nodeChanged((TreeNode) getRoot());
     }
 
     public Object getValueAt(Object node, int column) {
@@ -312,9 +304,9 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                     TCTreeNode tcNode = (TCTreeNode) node;
                     if (tcNode.getUserObject() instanceof JTreeNode) {
                         JTreeNode jTreeNode = (JTreeNode) tcNode.getUserObject();
-                        return this.getNodeState(jTreeNode, getColumnName(column));
+                        return getNodeState(jTreeNode, getColumnName(column));
                     } else {
-                        return this.getNodeState(tcNode.toString(), getColumnName(column));
+                        return getNodeState(tcNode.toString(), getColumnName(column));
                     }
             }
         } catch (SecurityException se) {
@@ -335,8 +327,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         }
 
         Object[] childNodes = parent.getChildren();
-        for (int i = 0; i < childNodes.length; i++) {
-            JTreeNode child = (JTreeNode) childNodes[i];
+        for (Object childNode : childNodes) {
+            JTreeNode child = (JTreeNode) childNode;
             String childDir = child.getId();
             if (childDir.equals(directory)) {
                 return child;
@@ -349,11 +341,10 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             }
         }
         return null;
-
     }
 
     public JTreeNode getTestSuite(String directory) {
-        TCTreeNode rootNode = (TCTreeNode) this.getRoot();
+        TCTreeNode rootNode = (TCTreeNode) getRoot();
         Enumeration<?> childNodes = rootNode.children();
         while (childNodes.hasMoreElements()) {
             TCTreeNode childNode = (TCTreeNode) childNodes.nextElement();
@@ -370,7 +361,6 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             }
         }
         return null;
-
     }
 
     public boolean isTestSuite(JTreeNode parent, String directory) {
@@ -381,8 +371,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         }
 
         Object[] childNodes = parent.getChildren();
-        for (int i = 0; i < childNodes.length; i++) {
-            JTreeNode child = (JTreeNode) childNodes[i];
+        for (Object childNode : childNodes) {
+            JTreeNode child = (JTreeNode) childNode;
             String childDir = child.getId();
             if (childDir.equals(directory)) {
                 return true;
@@ -403,7 +393,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         if (parentDir == null) {
             return false;
         }
-        JTreeNode parentNode = this.getTestSuite(directory.getPath().replace("\\", "/"));
+        JTreeNode parentNode = getTestSuite(directory.getPath().replace("\\", "/"));
         if (parentNode != null) {
             return true;
         }
@@ -415,30 +405,29 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         // build the childrent of this new parent
         FileNode parentNode = new FileNode(new File(directory), directory, TESTUITE_DIR);
         Object[] childNodes = parentNode.getChildren();
-        for (int i = 0; i < childNodes.length; i++) {
-            JTreeNode childNode = (JTreeNode) childNodes[i];
+        for (Object childNode : childNodes) {
+            JTreeNode childTreeNode = (JTreeNode) childNode;
             // now check in the already added nodes if it is already added
             // 
-            TCTreeNode rootNode = (TCTreeNode) this.getRoot();
+            TCTreeNode rootNode = (TCTreeNode) getRoot();
             Enumeration<?> childRootNodes = rootNode.children();
             while (childRootNodes.hasMoreElements()) {
                 TCTreeNode childRootNode = (TCTreeNode) childRootNodes.nextElement();
                 JTreeNode childFileRootNode = (JTreeNode) childRootNode.getUserObject();
-                if (childFileRootNode.getId().equals(childNode.getId())) {
-                    this.removeNodeFromParent(childRootNode);
+                if (childFileRootNode.getId().equals(childTreeNode.getId())) {
+                    removeNodeFromParent(childRootNode);
                 }
             }
-            if (childNode.getChildren().length > 0) {
-                removeIfChildAdded(childNode.getId());
+            if (childTreeNode.getChildren().length > 0) {
+                removeIfChildAdded(childTreeNode.getId());
             }
         }
-
     }
 
     public JTreeNode addTestSuite(String directory) {
         // check first if the directory is already added or its parent
         //logger.trace("Adding '" + directory + "'" + " directory into the test campaign");
-        TCTreeNode rootNode = (TCTreeNode) this.getRoot();
+        TCTreeNode rootNode = (TCTreeNode) getRoot();
         Enumeration<?> childNodes = rootNode.children();
         while (childNodes.hasMoreElements()) {
             TCTreeNode childNode = (TCTreeNode) childNodes.nextElement();
@@ -468,7 +457,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         int currentIndex = testsuiteDir.size();
         testsuiteDir.add(testsuiteNode);
         rootNode.add(testsuiteNode);
-        this.fireTreeNodesInserted(this, new Object[] {this.getRoot()}, new int[] {currentIndex}, new Object[] {testsuiteNode});
+        fireTreeNodesInserted(this, new Object[] {getRoot()}, new int[] {currentIndex}, new Object[] {testsuiteNode});
 
         fireAddTestSuite(testsuiteNode, childFileNode.getChildren());
 
@@ -478,13 +467,13 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
     public void saveSelectedTestSuites(CampaignWriter writer, JTreeNode parentNode, String testbedName) {
         // navigate through children
         Object[] children = parentNode.getChildren();
-        for (int i = 0; i < children.length; i++) {
-            JTreeNode childFileNode = (JTreeNode) children[i];
-            TristateCheckBox.State state = this.getNodeState(childFileNode, testbedName);
+        for (Object child : children) {
+            JTreeNode childFileNode = (JTreeNode) child;
+            State state = getNodeState(childFileNode, testbedName);
             if (state == TristateCheckBox.SELECTED) {
                 if (childFileNode instanceof TestDataNode) {
-                    for (int childIndex = 0; childIndex < children.length; childIndex++) {
-                        TestDataNode dataNode = (TestDataNode) children[childIndex];
+                    for (Object child1 : children) {
+                        TestDataNode dataNode = (TestDataNode) child1;
                         if (getNodeState(dataNode, testbedName) == TristateCheckBox.SELECTED) {
                             writer.addCampaign(testbedName, parentNode.getFile().getPath().replace("\\", "/"),
                                   dataNode.getRowIndex());
@@ -504,8 +493,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                     // check if it's datarow
                     JTreeNode childDataNode = (JTreeNode) childChildren[0];
                     if (childDataNode instanceof TestDataNode) {
-                        for (int childIndex = 0; childIndex < childChildren.length; childIndex++) {
-                            TestDataNode dataNode = (TestDataNode) childChildren[childIndex];
+                        for (Object childChild : childChildren) {
+                            TestDataNode dataNode = (TestDataNode) childChild;
                             if (getNodeState(dataNode, testbedName) == TristateCheckBox.SELECTED) {
                                 writer.addCampaign(testbedName, childFileNode.getFile().getPath().replace("\\", "/"),
                                       dataNode.getRowIndex());
@@ -514,7 +503,6 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                     } else {
                         saveSelectedTestSuites(writer, childFileNode, testbedName);
                     }
-
                 }
             }
         }
@@ -524,14 +512,14 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         //
         logger.trace("Saving the campaign " + campaignName + " into the file" + fileName);
         CampaignWriter campaignWriter = new CampaignWriter();
-        TCTreeNode rootNode = (TCTreeNode) this.getRoot();
-        for (int i = 1; i < this.getColumnCount(); i++) {
-            String testbedName = this.getColumnName(i);
+        TCTreeNode rootNode = (TCTreeNode) getRoot();
+        for (int i = 1; i < getColumnCount(); i++) {
+            String testbedName = getColumnName(i);
             Enumeration<?> enumRootNodeChildren = rootNode.children();
             while (enumRootNodeChildren.hasMoreElements()) {
                 TCTreeNode childNode = (TCTreeNode) enumRootNodeChildren.nextElement();
                 JTreeNode childFileNode = (JTreeNode) childNode.getUserObject();
-                TristateCheckBox.State state = this.getNodeState(childFileNode, testbedName);
+                TristateCheckBox.State state = getNodeState(childFileNode, testbedName);
                 if (state == TristateCheckBox.SELECTED) {
                     campaignWriter.addCampaign(testbedName, childFileNode.getFile().getPath().replace("\\", "/"));
                 } else {
@@ -544,8 +532,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
     }
 
     public int getColumnIndex(String colName) {
-        for (int i = 0; i < this.getColumnCount(); i++) {
-            if (this.getColumnName(i).equals(colName)) {
+        for (int i = 0; i < getColumnCount(); i++) {
+            if (getColumnName(i).equals(colName)) {
                 return i;
             }
         }
@@ -564,9 +552,9 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                 throw new Exception(xmlFileName + " is not a valid campain xml file");
             }
 
-            String testbed = "";
-            String testsuite = "";
-            String rowSelector = null;
+            String testbed;
+            String testsuite;
+            String rowSelector;
 
             NodeList nodeLst = doc.getElementsByTagName("run");
             for (int s = 0; s < nodeLst.getLength(); s++) {
@@ -586,13 +574,13 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                             dirToAdd = testsuite.split("\\/")[0] + "/" + testsuite.split("\\/")[1];
                         }
                         JTreeNode addedNode = addTestSuite(dirToAdd);
-                        for (int i = 0; i < this.getColumnCount(); i++) {
-                            if (this.getColumnName(i).equals(testbed)) {
+                        for (int i = 0; i < getColumnCount(); i++) {
+                            if (getColumnName(i).equals(testbed)) {
                                 FileNode fileNode = new FileNode(new File(testsuite), testsuite, TESTUITE_DIR);
                                 // check if there is testdata or not
                                 NodeList childList = nodeList.item(testSuiteIndex).getChildNodes();
                                 if (childList.getLength() == 0) {
-                                    this.setNodeState(fileNode, testbed, TristateCheckBox.SELECTED);
+                                    setNodeState(fileNode, testbed, TristateCheckBox.SELECTED);
                                 } else {
                                     boolean testDataTagFound = false;
                                     for (int c = 0; c < childList.getLength(); c++) {
@@ -602,51 +590,41 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                                             testDataTagFound = true;
                                             rowSelector = childNode.getAttributes().getNamedItem("selector").getNodeValue();
                                             String[] rows = rowSelector.split(",");
-                                            for (int rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                                            for (String row : rows) {
                                                 // update the testata nodes
                                                 TestDataNode dataNode = new TestDataNode(new File(testDataFileName),
-                                                      testDataFileName, Integer.parseInt(rows[rowIndex]));
-                                                this.setNodeState(dataNode, testbed, TristateCheckBox.SELECTED);
-                                                updateParent(this.getTestSuite(addedNode, dataNode.getId()), testbed);
-
+                                                      testDataFileName, Integer.parseInt(row));
+                                                setNodeState(dataNode, testbed, TristateCheckBox.SELECTED);
+                                                updateParent(getTestSuite(addedNode, dataNode.getId()), testbed);
                                             }
                                         }
                                     }
                                     if (!testDataTagFound) {
                                         // add test suite
-                                        this.setNodeState(fileNode, testbed, TristateCheckBox.SELECTED);
+                                        setNodeState(fileNode, testbed, TristateCheckBox.SELECTED);
                                     }
                                 }
 
-                                updateChild(this.getTestSuite(addedNode, testsuite), testbed);
-                                updateParent(this.getTestSuite(addedNode, testsuite), testbed);
+                                updateChild(getTestSuite(addedNode, testsuite), testbed);
+                                updateParent(getTestSuite(addedNode, testsuite), testbed);
                             }
                         }
                     }
                 }
             }
-        } catch (SAXException ex) {
-            //
-            logger.error(ex);
-        } catch (IOException ex) {
-            //
-            logger.error(ex);
-        } catch (ParserConfigurationException ex) {
+        } catch (SAXException | ParserConfigurationException | IOException ex) {
             //
             logger.error(ex);
         }
     }
 
     public void removeTestbed(String testbedName) {
-        Iterator<String> campaigns = metaCampaignSelectionList.keySet().iterator();
-        while (campaigns.hasNext()) {
-            String campaign = campaigns.next();
-            HashMap<String, TristateCheckBox.State> selectedTestbeds = metaCampaignSelectionList.get(campaign);
+        for (String campaign : metaCampaignSelectionList.keySet()) {
+            HashMap<String, State> selectedTestbeds = metaCampaignSelectionList.get(campaign);
             if (selectedTestbeds.containsKey(testbedName)) {
                 selectedTestbeds.put(testbedName, TristateCheckBox.NOT_SELECTED);
             }
         }
-
     }
 
     public void removeTestSuiteFromModel(TCTreeNode node) {
@@ -655,7 +633,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             metaCampaignSelectionList.remove(fileNode.getId());
         }
         Enumeration<?> childNodesArray = node.children();
-        ArrayList<TreeNode> childNodes = new ArrayList<TreeNode>();
+        ArrayList<TreeNode> childNodes = new ArrayList<>();
         int[] indices = new int[node.getChildCount()];
         int index = 0;
         while (childNodesArray.hasMoreElements()) {
@@ -677,7 +655,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             metaCampaignSelectionList.remove(fileNode.getId());
         }
         Enumeration<?> childNodesArray = node.children();
-        ArrayList<TreeNode> childNodes = new ArrayList<TreeNode>();
+        ArrayList<TreeNode> childNodes = new ArrayList<>();
         int[] indices = new int[node.getChildCount()];
         int index = 0;
         while (childNodesArray.hasMoreElements()) {
@@ -692,23 +670,23 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
             removeTestSuiteFromModel(childNode);
         }
         node.removeAllChildren();
-        this.fireTreeNodesRemoved(this, this.getPathToRoot(node), indices, childNodes.toArray());
+        fireTreeNodesRemoved(this, getPathToRoot(node), indices, childNodes.toArray());
 
         //prevent to delete root node - 'Test Campaign'
         if (!node.isRoot()) {
             TCTreeNode parentNode = (TCTreeNode) node.getParent();
             int nodeIndex = parentNode.getIndex(node);
             parentNode.remove(node);
-            this.fireTreeNodesRemoved(this, this.getPathToRoot(parentNode), new int[] {nodeIndex}, new TreeNode[] {node});
+            fireTreeNodesRemoved(this, getPathToRoot(parentNode), new int[] {nodeIndex}, new TreeNode[] {node});
         }
     }
 
     public void removeAll() {
         metaCampaignSelectionList.clear();
         // fire property change
-        TCTreeNode rootNode = (TCTreeNode) this.getRoot();
+        TCTreeNode rootNode = (TCTreeNode) getRoot();
         Enumeration<?> childNodesArray = rootNode.children();
-        ArrayList<TreeNode> childNodes = new ArrayList<TreeNode>();
+        ArrayList<TreeNode> childNodes = new ArrayList<>();
         int[] indices = new int[rootNode.getChildCount()];
         int index = 0;
         while (childNodesArray.hasMoreElements()) {
@@ -719,8 +697,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
         }
         rootNode.removeAllChildren();
 
-        this.fireTreeNodesRemoved(this, this.getPathToRoot(rootNode), indices, childNodes.toArray());
-
+        fireTreeNodesRemoved(this, getPathToRoot(rootNode), indices, childNodes.toArray());
     }
 
     public void fireAddTestSuite(TCTreeNode parentNode, Object[] childNodes) {
@@ -730,7 +707,7 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                 childFileNode.setShowTestdata(true);
                 TCTreeNode childNode = new TCTreeNode(childFileNode, true);
                 parentNode.add(childNode);
-                this.fireTreeNodesInserted(this, this.getPathToRoot(parentNode), new int[] {i}, new Object[] {childNode});
+                fireTreeNodesInserted(this, getPathToRoot(parentNode), new int[] {i}, new Object[] {childNode});
                 if (childFileNode.getChildren() != null) {
                     if (childFileNode.getChildren().length > 0) {
                         fireAddTestSuite(childNode, childFileNode.getChildren());
@@ -742,11 +719,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                 TCTreeNode childNode = new TCTreeNode(childDataNode, false);
                 childDataNode.setShowTestdata(true);
                 parentNode.add(childNode);
-                this.fireTreeNodesInserted(this, this.getPathToRoot(parentNode), new int[] {i}, new Object[] {childNode});
-
+                fireTreeNodesInserted(this, getPathToRoot(parentNode), new int[] {i}, new Object[] {childNode});
             }
-
         }
     }
-
 }

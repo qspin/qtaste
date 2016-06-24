@@ -25,8 +25,6 @@
 package com.qspin.qtaste.ui.treetable;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
@@ -38,7 +36,6 @@ import com.qspin.qtaste.ui.tools.TristateCheckBox;
 public class TristateEditor extends AbstractCellEditor implements TableCellEditor {
 
     private static final long serialVersionUID = 1L;
-    private TristateCheckBox.State b;
     private TristateCheckBox check = null;
     private int currentRow, currentColumn;
 
@@ -47,12 +44,7 @@ public class TristateEditor extends AbstractCellEditor implements TableCellEdito
         check = new TristateCheckBox();
         check.setHorizontalAlignment(JLabel.CENTER);
 
-        check.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                stopCellEditing();
-            }
-        });
+        check.addActionListener(e -> stopCellEditing());
 
     }
 
@@ -61,8 +53,7 @@ public class TristateEditor extends AbstractCellEditor implements TableCellEdito
         currentRow = row;
         currentColumn = column;
         if (value instanceof TristateCheckBox.State) {
-            b = (TristateCheckBox.State) value;
-            getCheck().setState(b);
+            getCheck().setState((TristateCheckBox.State) value);
         }
         this.fireEditingStopped();
 

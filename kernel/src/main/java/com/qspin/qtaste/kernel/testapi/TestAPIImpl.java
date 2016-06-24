@@ -44,7 +44,7 @@ public class TestAPIImpl implements TestAPI {
 
     // not public as only TestAPIFactory can create such instance!
     private TestAPIImpl() {
-        map = new HashMap<String, FactoryVerbs>();
+        map = new HashMap<>();
     }
 
     public static TestAPI getInstance() {
@@ -64,7 +64,7 @@ public class TestAPIImpl implements TestAPI {
         if (!map.containsKey(component)) {
             FactoryVerbs fv = new FactoryVerbs();
             fv.factory = factory;
-            fv.verbs = new ArrayList<String>();
+            fv.verbs = new ArrayList<>();
             fv.packageName = packageName;
             map.put(component, fv);
             verbs = fv.verbs;
@@ -187,7 +187,7 @@ public class TestAPIImpl implements TestAPI {
 
     public void initializeComponents() {
         SingletonComponentFactory singletonComponentFactory = SingletonComponentFactory.getInstance();
-        List<Component> componentsToBeRemoved = new ArrayList<Component>();
+        List<Component> componentsToBeRemoved = new ArrayList<>();
         for (Component component : singletonComponentFactory.getComponentsInstances()) {
             try {
                 component.initialize();
@@ -218,7 +218,7 @@ public class TestAPIImpl implements TestAPI {
     }
 
     public void terminateComponents() {
-        ArrayList<Component> components = new ArrayList<Component>();
+        ArrayList<Component> components = new ArrayList<>();
         components.addAll(SingletonComponentFactory.getInstance().getComponentsInstances());
         components.addAll(MultipleInstancesComponentFactory.getInstance().getComponentsInstances());
         for (Component component : components) {

@@ -17,7 +17,7 @@ public abstract class AddOn {
      */
     public AddOn(AddOnMetadata pMetaData) {
         mLoaded = false;
-        mListeners = new ArrayList<PropertyChangeListener>();
+        mListeners = new ArrayList<>();
         mMetaData = pMetaData;
     }
 

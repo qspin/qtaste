@@ -93,7 +93,7 @@ public class ScriptCheckSyntaxValidator {
     }
 
     private List<String> getStepsFunctionsNames() {
-        List<String> stepsFunctionsNames = new ArrayList<String>();
+        List<String> stepsFunctionsNames = new ArrayList<>();
 
         Matcher doStepMatcher = DO_STEP_PATTERN.matcher(mScriptContent);
         while (doStepMatcher.find()) {

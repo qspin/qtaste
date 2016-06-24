@@ -48,7 +48,7 @@ public final class DialogPanel extends JPanel {
             String result = JOptionPane.showInputDialog(null, "How many popup do you want to display", "Number of popup?",
                   JOptionPane.QUESTION_MESSAGE);
             if (result != null) {
-                int numberOfPopup = 0;
+                int numberOfPopup;
                 try {
                     numberOfPopup = Integer.parseInt(result);
                 } catch (NumberFormatException ex) {
@@ -62,11 +62,8 @@ public final class DialogPanel extends JPanel {
                 if (sureAnswer == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < numberOfPopup; i++) {
                         final String msg = "Popup number " + (i + 1);
-                        Thread t = new Thread(new Runnable() {
-
-                            public void run() {
-                                JOptionPane.showMessageDialog(null, msg, "POPUP", JOptionPane.INFORMATION_MESSAGE);
-                            }
+                        Thread t = new Thread(() -> {
+                            JOptionPane.showMessageDialog(null, msg, "POPUP", JOptionPane.INFORMATION_MESSAGE);
                         });
                         t.start();
                     }

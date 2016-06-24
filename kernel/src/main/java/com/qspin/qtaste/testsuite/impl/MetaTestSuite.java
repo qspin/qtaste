@@ -38,7 +38,7 @@ import com.qspin.qtaste.testsuite.TestSuite;
 public class MetaTestSuite extends TestSuite {
 
     //private static Logger logger = Log4jLoggerFactory.getLogger(MetaTestSuite.class);
-    private ArrayList<TestSuite> testSuites = new ArrayList<TestSuite>();
+    private ArrayList<TestSuite> testSuites = new ArrayList<>();
 
     /**
      * Create a Meta TestSuite.
@@ -58,7 +58,6 @@ public class MetaTestSuite extends TestSuite {
      * Create a Meta TestSuite.
      *
      * @param name the test suite name
-     * @param testSuitesParams the list of test suites parameters
      */
     private MetaTestSuite(String name) {
         super(name);
@@ -123,7 +122,7 @@ public class MetaTestSuite extends TestSuite {
     }
 
     public List<TestScript> getTestScripts() {
-        List<TestScript> testScripts = new ArrayList<TestScript>();
+        List<TestScript> testScripts = new ArrayList<>();
         for (TestSuite testSuite : testSuites) {
             testScripts.addAll(testSuite.getTestScripts());
         }

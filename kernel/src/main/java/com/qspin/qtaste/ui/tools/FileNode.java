@@ -46,8 +46,8 @@ public class FileNode extends TreeNodeImpl {
         if (f.isDirectory()) {
 
             File[] childFiles = FileUtilities.listSortedFiles(f);
-            for (int i = 0; i < childFiles.length; i++) {
-                if (childFiles[i].getName().equalsIgnoreCase(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
+            for (File childFile : childFiles) {
+                if (childFile.getName().equalsIgnoreCase(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
                     return true;
                 }
             }
@@ -83,8 +83,6 @@ public class FileNode extends TreeNodeImpl {
             description = description.replaceAll("<(br/?|/?p)>", "\n");
             description = description.replaceAll("</?(i|b)>", "");
             return description;
-        } catch (FileNotFoundException ex) {
-            //
         } catch (IOException ex) {
             //
         } finally {
@@ -134,9 +132,9 @@ public class FileNode extends TreeNodeImpl {
     public File getTestcaseFile() {
         if (isTestcaseDir()) {
             File[] childFiles = FileUtilities.listSortedFiles(f);
-            for (int i = 0; i < childFiles.length; i++) {
-                if (childFiles[i].getName().equalsIgnoreCase(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
-                    return childFiles[i];
+            for (File childFile : childFiles) {
+                if (childFile.getName().equalsIgnoreCase(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
+                    return childFile;
                 }
             }
         }
@@ -165,14 +163,14 @@ public class FileNode extends TreeNodeImpl {
         if (childFiles == null) {
             return false;
         }
-        for (int i = 0; i < childFiles.length; i++) {
-            if (childFiles[i].isDirectory()) {
-                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(), m_TestSuiteDir);
+        for (File childFile : childFiles) {
+            if (childFile.isDirectory()) {
+                FileNode childNode = new FileNode(childFile, childFile.getName(), m_TestSuiteDir);
                 if (childNode.isTestcaseDir()) {
                     return true;
                 } else {
                     // go recursively into its directory
-                    boolean result = checkIfDirectoryContainsTestScriptFile(childFiles[i]);
+                    boolean result = checkIfDirectoryContainsTestScriptFile(childFile);
                     if (result) {
                         return true;
                     }
@@ -192,7 +190,7 @@ public class FileNode extends TreeNodeImpl {
         }
         if (this.isTestcaseDir()) {
             try {
-                ArrayList<TestDataNode> arrayDataNode = new ArrayList<TestDataNode>();
+                ArrayList<TestDataNode> arrayDataNode = new ArrayList<>();
                 // load test case data
                 File tcDataFile = this.getPythonTestScript().getTestcaseData();
                 if (tcDataFile == null) {
@@ -212,25 +210,23 @@ public class FileNode extends TreeNodeImpl {
                 }
                 children = arrayDataNode.toArray();
                 return children;
-            } catch (FileNotFoundException ex) {
-                // no data found
             } catch (IOException ex) {
                 // unable to read data file
 
             }
 
         } else {
-            ArrayList<FileNode> arrayFileNode = new ArrayList<FileNode>();
+            ArrayList<FileNode> arrayFileNode = new ArrayList<>();
             if (f.isDirectory()) {
                 File[] childFiles = FileUtilities.listSortedFiles(f);
-                for (int i = 0; i < childFiles.length; i++) {
-                    FileNode fn = new FileNode(childFiles[i], childFiles[i].getName(), m_TestSuiteDir);
+                for (File childFile : childFiles) {
+                    FileNode fn = new FileNode(childFile, childFile.getName(), m_TestSuiteDir);
                     boolean nodeToAdd = fn.isTestcaseDir();
                     if (!fn.isTestcaseDir()) {
                         // go recursilvely to its child and check if it must be added
-                        nodeToAdd = checkIfDirectoryContainsTestScriptFile(childFiles[i]);
+                        nodeToAdd = checkIfDirectoryContainsTestScriptFile(childFile);
                     }
-                    if (nodeToAdd && !childFiles[i].isHidden()) {
+                    if (nodeToAdd && !childFile.isHidden()) {
 
                         arrayFileNode.add(fn);
                     }

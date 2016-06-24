@@ -194,7 +194,7 @@ public interface JavaGUIFX {
      * @return the current selected tab index. If not found, -1 is returned.
      * @throws QTasteException
      */
-    public int getSelectedTabIndex(String tabbedPaneComponentName) throws QTasteException;
+    int getSelectedTabIndex(String tabbedPaneComponentName) throws QTasteException;
 
     /**
      * Get the title of the current selected tab in the tabbed pane.
@@ -204,7 +204,7 @@ public interface JavaGUIFX {
      * @return the current selected tab title. If not found, null is returned.
      * @throws QTasteException
      */
-    public String getSelectedTabTitle(String tabbedPaneComponentName) throws QTasteException;
+    String getSelectedTabTitle(String tabbedPaneComponentName) throws QTasteException;
 
     /**
      * Get the component ID of the current selected tab in the tabbed pane.
@@ -214,7 +214,7 @@ public interface JavaGUIFX {
      * @return the current selected tab component ID. If not found, null is returned.
      * @throws QTasteException
      */
-    public String getSelectedTabId(String tabbedPaneComponentName) throws QTasteException;
+    String getSelectedTabId(String tabbedPaneComponentName) throws QTasteException;
 
     /**
      * Set the selection state to the specified component.</br>
@@ -273,7 +273,7 @@ public interface JavaGUIFX {
     /**
      * Select the node for the specified JTree.</br>
      * In this method, node names in the node path are simple strings.</br>
-     * If you need more flexibility, see {@link selectNodeRe} which supports regular expressions.</br>
+     * If you need more flexibility, see {@link #selectNodeRe} which supports regular expressions.</br>
      * Can be used on {@link JTree}. (see {@link JTree#setSelectionPaths(javax.swing.tree.TreePath[])})
      *
      * @param componentName an identifier of the JTree component.

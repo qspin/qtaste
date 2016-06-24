@@ -35,7 +35,7 @@ import com.qspin.qtaste.testsuite.TestRequirement;
  */
 public interface TestResult {
 
-    public enum Status {
+    enum Status {
         NOT_EXECUTED,
         RUNNING,
         NOT_AVAILABLE,
@@ -43,57 +43,57 @@ public interface TestResult {
         FAIL
     }
 
-    public TestData getTestData();
+    TestData getTestData();
 
-    public List<TestRequirement> getTestRequirements();
+    List<TestRequirement> getTestRequirements();
 
-    public String getExtraResultDetails();
+    String getExtraResultDetails();
 
-    public void setExtraResultDetails(String extraResultDetails);
+    void setExtraResultDetails(String extraResultDetails);
 
-    public String getReturnValue();
+    String getReturnValue();
 
-    public void setReturnValue(String returnValue);
+    void setReturnValue(String returnValue);
 
-    public String getId();
+    String getId();
 
-    public String getComment();
+    String getComment();
 
-    public void setName(String name);
+    void setName(String name);
 
-    public String getName();
+    String getName();
 
-    public void setTestScriptVersion(String version);
+    void setTestScriptVersion(String version);
 
-    public String getTestScriptVersion();
+    String getTestScriptVersion();
 
-    public void setComment(String comment);
+    void setComment(String comment);
 
-    public Status getStatus();
+    Status getStatus();
 
-    public void start();
+    void start();
 
-    public void stop();
+    void stop();
 
-    public void setStatus(Status status);
+    void setStatus(Status status);
 
-    public Date getStartDate();
+    Date getStartDate();
 
-    public Date getEndDate();
+    Date getEndDate();
 
-    public long getElapsedTimeMs();
+    long getElapsedTimeMs();
 
-    public String getFormattedElapsedTime(boolean showMilliseconds);
+    String getFormattedElapsedTime(boolean showMilliseconds);
 
-    public void setStackTrace(String stackTrace);
+    void setStackTrace(String stackTrace);
 
-    public String getStackTrace();
+    String getStackTrace();
 
-    public void addStackTraceElement(StackTraceElement stackElement);
+    void addStackTraceElement(StackTraceElement stackElement);
 
-    public void setStack(ArrayList<StackTraceElement> stack);
+    void setStack(ArrayList<StackTraceElement> stack);
 
-    public ArrayList<StackTraceElement> getStack();
+    ArrayList<StackTraceElement> getStack();
 
     //public TestResultsReportManager getReportManager();
     //public void setReportManager(TestResultsReportManager reportFormaterManager);
@@ -101,32 +101,32 @@ public interface TestResult {
     /**
      * @return diretory containing the testcase
      */
-    public String getTestCaseDirectory();
+    String getTestCaseDirectory();
 
     /**
      * Set the testcase directory to the directory value
      */
-    public void setTestCaseDirectory(String directory);
+    void setTestCaseDirectory(String directory);
 
-    public int getFailedLineNumber();
+    int getFailedLineNumber();
 
-    public void setFailedLineNumber(int failedLineNumber);
+    void setFailedLineNumber(int failedLineNumber);
 
-    public String getFailedFunctionId();
+    String getFailedFunctionId();
 
-    public void setFailedFunctionId(String failedFunctionId);
+    void setFailedFunctionId(String failedFunctionId);
 
-    public int getRetryCount();
+    int getRetryCount();
 
-    public void setRetryCount(int retryCount);
+    void setRetryCount(int retryCount);
 
-    public void addStepResult(String stepId, String functionName, String stepDescription, String expectedResult, Status
-          stepStatus, double elapsedTime);
+    void addStepResult(String stepId, String functionName, String stepDescription, String expectedResult, Status stepStatus,
+          double elapsedTime);
 
-    public Collection<StepResult> getStepResults();
+    Collection<StepResult> getStepResults();
 
-    public int getCurrentRowIndex();
+    int getCurrentRowIndex();
 
-    public int getNumberRows();
+    int getNumberRows();
 
 }

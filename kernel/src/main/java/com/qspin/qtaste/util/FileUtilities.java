@@ -35,7 +35,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -58,12 +57,7 @@ public class FileUtilities {
             return fList;
         }
         // sort testbed by alphabetic order (ignoring case)
-        Arrays.sort(fList, new Comparator<File>() {
-
-            public int compare(File o1, File o2) {
-                return o1.getName().compareToIgnoreCase(o2.getName());
-            }
-        });
+        Arrays.sort(fList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         return fList;
     }
 
@@ -77,12 +71,7 @@ public class FileUtilities {
             return fList;
         }
         // sort testbed by alphabetic order (ignoring case)
-        Arrays.sort(fList, new Comparator<File>() {
-
-            public int compare(File o1, File o2) {
-                return o1.getName().compareToIgnoreCase(o2.getName());
-            }
-        });
+        Arrays.sort(fList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         return fList;
     }
 
@@ -158,11 +147,7 @@ public class FileUtilities {
     }
 
     public static boolean deleteFile(File path) {
-        if (path.exists()) {
-            return path.delete();
-        }
-
-        return false;
+        return path.exists() && path.delete();
     }
 
     /**
@@ -175,7 +160,7 @@ public class FileUtilities {
      */
     public static String readFileContent(String filename) throws FileNotFoundException, IOException {
         BufferedReader reader = new BufferedReader(new FileReader(filename));
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         String line;
         final String eol = System.getProperty("line.separator");
         while ((line = reader.readLine()) != null) {
@@ -249,12 +234,7 @@ public class FileUtilities {
             throw new IOException("Resource directory " + resourceDirName + " not found");
         }
         if (dirURL.getProtocol().equals("file")) {
-            File[] entries = new File(dirURL.toURI()).listFiles(new FileFilter() {
-
-                public boolean accept(File pathname) {
-                    return pathname.isFile();
-                }
-            });
+            File[] entries = new File(dirURL.toURI()).listFiles(File::isFile);
             String[] fileNames = new String[entries.length];
             for (int i = 0; i < entries.length; i++) {
                 fileNames[i] = entries[i].toString();
@@ -266,7 +246,7 @@ public class FileUtilities {
             String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
             JarFile jar = new JarFile(jarPath);
             Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-            List<String> result = new ArrayList<String>();
+            List<String> result = new ArrayList<>();
             String relativeResourceDirName = resourceDirName.startsWith("/") ? resourceDirName.substring(1) : resourceDirName;
             while (entries.hasMoreElements()) {
                 String name = entries.nextElement().getName();

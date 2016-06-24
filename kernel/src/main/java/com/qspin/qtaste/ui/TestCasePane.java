@@ -50,10 +50,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -226,10 +222,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             TextAreaAppender.addTextArea(tcLogsPane);
         }
         tcDocsPane.setEditorKit(new HTMLEditorKit());
-        tcDocsPane.addHyperlinkListener(new HyperlinkListener() {
-
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-            }
+        tcDocsPane.addHyperlinkListener(e -> {
         });
 
         ExecuteButtonAction buttonListener = new ExecuteButtonAction();
@@ -240,70 +233,37 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         startExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/start"));
         startExecutionButton.setToolTipText("Continue test case execution (F8)");
         startExecutionButton.setVisible(false);
-        startExecutionButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                continueDebug();
-            }
-        });
+        startExecutionButton.addActionListener(e -> continueDebug());
 
         stepOverExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stepover"));
         stepOverExecutionButton.setToolTipText("Step over the script execution (F6)");
         stepOverExecutionButton.setVisible(false);
-        stepOverExecutionButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                continueStep();
-            }
-        });
+        stepOverExecutionButton.addActionListener(e -> continueStep());
 
         stepIntoExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stepinto"));
         stepIntoExecutionButton.setToolTipText("Step into the script execution (F5)");
         stepIntoExecutionButton.setVisible(false);
-        stepIntoExecutionButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                continueStepInto();
-            }
-        });
+        stepIntoExecutionButton.addActionListener(e -> continueStepInto());
 
         stopExecutionButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/stop"));
         stopExecutionButton.setToolTipText("Stop execution");
         stopExecutionButton.setVisible(false);
-        stopExecutionButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                stopExecution();
-            }
-        });
+        stopExecutionButton.addActionListener(e -> stopExecution());
 
         debugButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/debug"));
         debugButton.setToolTipText("Debug Test(s)");
-        debugButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                {
-                    runTestSuite(true, 1, false);
-                }
-            }
-        });
+        debugButton.addActionListener(e -> runTestSuite(true, 1, false));
         saveButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/save_32"));
         saveButton.setToolTipText("Save and check script(s) syntax");
         saveButton.setName("save button");
-        saveButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
+        saveButton.addActionListener(e -> {
                 if (checkScriptsSyntax()) // display dialog when syntax is correct
                 {
                     JOptionPane.showMessageDialog(null, "Syntax checked successfully");
                 }
-            }
         });
 
-        resultsButton.addActionListener(new ActionListener() {
-
-            // Show the browser displayed the last test report
-            public void actionPerformed(ActionEvent e) {
+        resultsButton.addActionListener(e -> {
                 boolean showTestSuiteReport = resultsPane.getCurrentRunName().equals("Run1");
                 String resDir = TestEngineConfiguration.getInstance().getString("reporting.generated_report_path");
                 String baseDir = System.getProperty("user.dir");
@@ -319,7 +279,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 } catch (IOException ex) {
                     logger.error("Could not open " + filename);
                 }
-            }
         });
 
         resultsButton.setToolTipText("View the HTML Test Run Summary Results");
@@ -372,10 +331,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         ////////////////////////
         debugPanel.setVisible(false);
         //sourcePanel.add(debugPanel, BorderLayout.SOUTH);
-        tabbedPane.addChangeListener(new ChangeListener() {
-
-            @Override
-            public void stateChanged(ChangeEvent e) {
+        tabbedPane.addChangeListener(e -> {
                 // transfer focus to editor if necessary
                 if (tabbedPane.getSelectedIndex() == SOURCE_INDEX) {
                     Component tab = editorTabbedPane.getSelectedComponent();
@@ -426,7 +382,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                     }
                     parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 }
-            }
         });
 
         tabbedPane.add(DOC, new JScrollPane(tcDocsPane));
@@ -452,11 +407,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         }
 
         if (!TestEngine.isSUTStartedManually()) {
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    TestEngine.cancelStartStopSUT();
-                }
-            });
+            Thread t = new Thread(TestEngine::cancelStartStopSUT);
             t.start();
         }
     }
@@ -613,9 +564,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                     editorTabbedPane.addTab(f.getName(), null, sp, absolutePath);
                     editorTabbedPane.setSelectedIndex(editorTabbedPane.getTabCount() - 1);
                     textPane.addDocumentListener();
-                    textPane.addPropertyChangeListener("isModified", new PropertyChangeListener() {
-
-                        public void propertyChange(PropertyChangeEvent evt) {
+                    textPane.addPropertyChangeListener("isModified", evt -> {
                             if (evt.getNewValue().equals(true)) {
                                 String currentTitle = editorTabbedPane.getTitleAt(editorTabbedPane.getSelectedIndex());
                                 if (!currentTitle.contains("*")) {
@@ -629,7 +578,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                                     editorTabbedPane.setTitleAt(editorTabbedPane.getSelectedIndex(), currentTitle);
                                 }
                             }
-                        }
                     });
                 }
 
@@ -927,9 +875,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         TestDataEditor dataEditor = new TestDataEditor();
         dataEditor.loadCSVFile(fileName);
         editorTabbedPane.addTab("TestData", null, dataEditor, fileName);
-        dataEditor.addPropertyChangeListener("isModified", new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
+        dataEditor.addPropertyChangeListener("isModified", evt -> {
                 if (evt.getNewValue().equals(true)) {
                     String currentTitle = editorTabbedPane.getTitleAt(editorTabbedPane.getSelectedIndex());
                     if (!currentTitle.contains("*")) {
@@ -943,7 +889,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                         editorTabbedPane.setTitleAt(editorTabbedPane.getSelectedIndex(), currentTitle);
                     }
                 }
-            }
         });
 
     }

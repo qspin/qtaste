@@ -52,7 +52,7 @@ public class DebugVariable {
         m_Value = value;
         m_Type = variableType;
         m_VarName = variableName;
-        mFieldList = new ArrayList<DebugVariable>();
+        mFieldList = new ArrayList<>();
     }
 
     public ArrayList<DebugVariable> getFields() {

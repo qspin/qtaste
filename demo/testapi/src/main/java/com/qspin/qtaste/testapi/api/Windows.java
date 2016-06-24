@@ -34,7 +34,7 @@ public interface Windows extends SingletonComponent {
      * @return -1 if the application cannot be started, a positive value in other cases
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void startApplication(String name) throws Exception;
+    void startApplication(String name) throws Exception;
 
     /**
      * Stop the application
@@ -42,7 +42,7 @@ public interface Windows extends SingletonComponent {
      * @return -1 if the application cannot be stopped, a positive value in other cases
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void stopApplication() throws Exception;
+    void stopApplication() throws Exception;
 
     /**
      * Press the specified button on the specified window
@@ -51,7 +51,7 @@ public interface Windows extends SingletonComponent {
      * @param name the name of the button to be pressed
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void pressButton(String windowName, String name) throws Exception;
+    void pressButton(String windowName, String name) throws Exception;
 
     /**
      * Select the item of the menu specified as parameter
@@ -60,7 +60,7 @@ public interface Windows extends SingletonComponent {
      * @param menu the item to be selected (i.e: Help->AboutCalculator)
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void selectMenu(String windowName, String menu) throws Exception;
+    void selectMenu(String windowName, String menu) throws Exception;
 
     /**
      * Return the text of the specified component present in the specified window
@@ -70,7 +70,7 @@ public interface Windows extends SingletonComponent {
      * @return The text value identified by the specified component name in the specified window name
      * @throws Exception if an error occurs during the communication with the application
      */
-    public String getText(String windowName, String name) throws Exception;
+    String getText(String windowName, String name) throws Exception;
 
     /**
      * Set the text of a component present on the specified window with the specified value
@@ -80,7 +80,7 @@ public interface Windows extends SingletonComponent {
      * @param value the new text value for the component
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void setText(String windowName, String name, String value) throws Exception;
+    void setText(String windowName, String name, String value) throws Exception;
 
     /**
      * Select an item in the specified treeview
@@ -90,13 +90,13 @@ public interface Windows extends SingletonComponent {
      * @param item the item in the treeview to be selected
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void selectTreeViewItem(String windowName, String treeviewName, String item) throws Exception;
+    void selectTreeViewItem(String windowName, String treeviewName, String item) throws Exception;
 
     /**
      * List all the elements controllable in the started application
      *
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void listElements() throws Exception;
+    void listElements() throws Exception;
 
 }

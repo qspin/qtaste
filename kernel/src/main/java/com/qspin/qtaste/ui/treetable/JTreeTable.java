@@ -25,7 +25,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
@@ -309,7 +308,6 @@ public class JTreeTable extends JTable {
             String testbedName = getColumnName(col);
             if (fNode != null) {
                 model.updateChild(fNode, testbedName);
-                return;
             } else {
                 // update child from root
                 for (int i = 0; i < childCount; i++) {
@@ -558,8 +556,8 @@ public class JTreeTable extends JTable {
 
         public void actionPerformed(ActionEvent e) {
             // show testbed list
-            final CheckBoxJList lb = new CheckBoxJList();
-            final DefaultListModel lm = new DefaultListModel();
+            final CheckBoxJList<String> lb = new CheckBoxJList<>();
+            final DefaultListModel<String> lm = new DefaultListModel<>();
 
             if (addColumn) {
                 for (int i = 1; i < JTreeTable.this.getModel().getColumnCount(); i++) {
@@ -583,49 +581,41 @@ public class JTreeTable extends JTable {
             dlg.add(new JScrollPane(lb));
             JPanel buttonPanel = new JPanel(new BorderLayout());
             JButton okButton = new JButton("Ok");
-            okButton.addActionListener(new ActionListener() {
+            okButton.addActionListener(e12 -> {
+                // remove the columns
+                for (int index = 0; index < lm.getSize(); index++) {
+                    String testbedName = lm.getElementAt(index);
 
-                public void actionPerformed(ActionEvent e) {
-                    // remove the columns
-                    for (int index = 0; index < lm.getSize(); index++) {
-                        String testbedName = (String) lm.getElementAt(index);
-
-                        if (lb.isIndexSelected(index)) {
-                            // check the correct
-                            for (int colIndex = 1; colIndex < JTreeTable.this.getModel().getColumnCount(); colIndex++) {
-                                String colName = JTreeTable.this.getModel().getColumnName(colIndex);
-                                if (colName.equals(testbedName)) {
-                                    // remove the column
-                                    if (addColumn) {
-                                        TableColumn col = new TableColumn(colIndex);
-                                        JTreeTable.this.addColumn(col);
-                                    } else {
-                                        TableColumn col = JTreeTable.this.getColumnModel().getColumn(
-                                              JTreeTable.this.convertColumnIndexToView(colIndex));
-                                        JTreeTable.this.getColumnModel().removeColumn(col);
-                                        // remove it from the model
-                                        if (tree.getModel() instanceof TestCampaignTreeModel) {
-                                            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-                                            model.removeTestbed(colName);
-                                        }
+                    if (lb.isIndexSelected(index)) {
+                        // check the correct
+                        for (int colIndex = 1; colIndex < JTreeTable.this.getModel().getColumnCount(); colIndex++) {
+                            String colName = JTreeTable.this.getModel().getColumnName(colIndex);
+                            if (colName.equals(testbedName)) {
+                                // remove the column
+                                if (addColumn) {
+                                    TableColumn col = new TableColumn(colIndex);
+                                    JTreeTable.this.addColumn(col);
+                                } else {
+                                    TableColumn col = JTreeTable.this.getColumnModel().getColumn(
+                                          JTreeTable.this.convertColumnIndexToView(colIndex));
+                                    JTreeTable.this.getColumnModel().removeColumn(col);
+                                    // remove it from the model
+                                    if (tree.getModel() instanceof TestCampaignTreeModel) {
+                                        TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+                                        model.removeTestbed(colName);
                                     }
-                                    break;
                                 }
+                                break;
                             }
                         }
                     }
-                    dlg.setVisible(false);
                 }
+                dlg.setVisible(false);
             });
 
             JButton cancelButton = new JButton("Cancel");
 
-            cancelButton.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    dlg.setVisible(false);
-                }
-            });
+            cancelButton.addActionListener(e1 -> dlg.setVisible(false));
             buttonPanel.add(okButton);
             buttonPanel.add(cancelButton, BorderLayout.EAST);
             dlg.add(buttonPanel, BorderLayout.SOUTH);

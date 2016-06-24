@@ -41,7 +41,7 @@ public abstract class Validator {
           throws QTasteTestFailException {
         try {
             long beginTime_ms = System.currentTimeMillis(); // begin time
-            long elapsedTime_ms = 0; // total elapsed time
+            long elapsedTime_ms; // total elapsed time
             do {
                 if (validate()) {
                     return;

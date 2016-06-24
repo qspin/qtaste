@@ -43,7 +43,6 @@ public class DebugVariableFrameTest extends JFrame {
 
     protected static Logger logger = Log4jLoggerFactory.getLogger(DebugVariableFrameTest.class);
     protected String title = "QSpin Tailored Automated System Test Environment - DebugVariableFrameTest ";
-    private QSpinTheme mTheme;
 
     public DebugVariableFrameTest() {
         super();
@@ -57,18 +56,14 @@ public class DebugVariableFrameTest extends JFrame {
     }
 
     public void launch() throws InterruptedException, InvocationTargetException {
-        SwingUtilities.invokeAndWait(new Runnable() {
-
-            public void run() {
-                setQSpinTheme();
-                genUI();
-            }
+        SwingUtilities.invokeAndWait(() -> {
+            setQSpinTheme();
+            genUI();
         });
     }
 
     public void setQSpinTheme() {
-        mTheme = new QSpinTheme();
-        MetalLookAndFeel.setCurrentTheme(mTheme);
+        MetalLookAndFeel.setCurrentTheme(new QSpinTheme());
         try {
             UIManager.setLookAndFeel(new MetalLookAndFeel());
             //Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -98,7 +93,7 @@ public class DebugVariableFrameTest extends JFrame {
             //    - Test designer: ability to define new testcase
             //    - Interactive: ability to invoke QTaste verbs one by one
 
-            ArrayList<DebugVariable> debugVariables = new ArrayList<DebugVariable>();
+            ArrayList<DebugVariable> debugVariables = new ArrayList<>();
             debugVariables.add(new DebugVariable("test1", "Unknown", "varValue"));
             debugVariables.add(new DebugVariable("test2", "Unknown", "varValue2"));
             DebugVariable var = new DebugVariable("test3", "Unknown", "varValue3");
@@ -128,10 +123,7 @@ public class DebugVariableFrameTest extends JFrame {
         DebugVariableFrameTest test = new DebugVariableFrameTest();
         try {
             test.launch();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

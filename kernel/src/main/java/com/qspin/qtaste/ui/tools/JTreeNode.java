@@ -31,18 +31,18 @@ import java.io.File;
  */
 public interface JTreeNode {
 
-    public File getFile();
+    File getFile();
 
-    public boolean isDir();
+    boolean isDir();
 
-    public String toString();
+    String toString();
 
-    public Object[] getChildren();
+    Object[] getChildren();
 
-    public String getId();
+    String getId();
 
-    public boolean isShowTestData();
+    boolean isShowTestData();
 
-    public void setShowTestdata(boolean value);
+    void setShowTestdata(boolean value);
 
 }

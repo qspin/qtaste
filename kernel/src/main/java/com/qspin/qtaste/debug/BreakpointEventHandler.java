@@ -77,11 +77,9 @@ public class BreakpointEventHandler {
     }
 
     private Breakpoint getBreakPoint(String fileName, int lineIndex) {
-        Iterator<Breakpoint> breakpointIterator = breakpoints.iterator();
-        while (breakpointIterator.hasNext()) {
-            Breakpoint breakPoint = breakpointIterator.next();
-            if (breakPoint.getFileName().equals(fileName) && breakPoint.getLineIndex() == lineIndex) {
-                return breakPoint;
+        for (Breakpoint breakpoint : breakpoints) {
+            if (breakpoint.getFileName().equals(fileName) && breakpoint.getLineIndex() == lineIndex) {
+                return breakpoint;
             }
         }
         return null;

@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -125,16 +126,15 @@ public class TestAPIDoclet {
             summaryOut.printTestAPIComponentsSummary(testAPIComponents);
             summaryOut.close();
 
-            for (int i = 0; i < testAPIComponents.length; i++) {
-                ClassDoc classDoc = testAPIComponents[i];
-                HTMLFileWriter out = new HTMLFileWriter(mDestinationDirectory + "components/" + classDoc.name() + ".html",
-                      classDoc.name(), true);
-                out.printTestAPIComponentHeader(classDoc, root);
-                out.printMethodsSummary(classDoc);
-                out.printMethodsDetails(classDoc);
+            for (ClassDoc testAPIComponent : testAPIComponents) {
+                HTMLFileWriter out = new HTMLFileWriter(mDestinationDirectory + "components/" + testAPIComponent.name() + ".html",
+                      testAPIComponent.name(), true);
+                out.printTestAPIComponentHeader(testAPIComponent, root);
+                out.printMethodsSummary(testAPIComponent);
+                out.printMethodsDetails(testAPIComponent);
                 out.close();
 
-                listOut.printTestAPIComponentLink(classDoc);
+                listOut.printTestAPIComponentLink(testAPIComponent);
 
             }
 
@@ -253,16 +253,12 @@ public class TestAPIDoclet {
      */
     public static MethodDoc[] getTestAPIComponentMethods(ClassDoc classDoc) {
         MethodDoc[] methods = new MethodDoc[0];
-        List<MethodDoc> methodsList = new ArrayList<MethodDoc>();
-        for (MethodDoc methodDoc : classDoc.methods()) {
-            methodsList.add(methodDoc);
-        }
+        List<MethodDoc> methodsList = new ArrayList<>();
+        Collections.addAll(methodsList, classDoc.methods());
         // Also add the methods provided by the kernel
         for (ClassDoc interface_ : classDoc.interfaces()) {
             if (!interface_.qualifiedName().startsWith(TEST_API_KERNEL_PACKAGE)) {
-                for (MethodDoc methodDoc_ : interface_.methods()) {
-                    methodsList.add(methodDoc_);
-                }
+                Collections.addAll(methodsList, interface_.methods());
             }
         }
         return methodsList.toArray(methods);
@@ -275,9 +271,7 @@ public class TestAPIDoclet {
      * @param options the options passed to javadoc
      */
     private static void parseOptions(String[][] options) {
-        for (int i = 0; i < options.length; i++) {
-            String[] opt = options[i];
-
+        for (String[] opt : options) {
             if (opt[0].equals("-d")) {
                 mDestinationDirectory = opt[1];
                 if (!mDestinationDirectory.endsWith(File.separator)) {
@@ -285,7 +279,6 @@ public class TestAPIDoclet {
                 }
             }
         }
-
     }
 
     /**
@@ -335,9 +328,8 @@ public class TestAPIDoclet {
         ClassDoc[] classes = root.classes();
         sortClassesAlphabetically(classes);
 
-        ArrayList<ClassDoc> verbsList = new ArrayList<ClassDoc>(classes.length);
-        for (int i = 0; i < classes.length; i++) {
-            ClassDoc classDoc = classes[i];
+        ArrayList<ClassDoc> verbsList = new ArrayList<>(classes.length);
+        for (ClassDoc classDoc : classes) {
             if (isTestAPI(classDoc, root)) {
                 // Exclude factory classes (MultipleInstancesComponent, SingletonComponent, ...)
                 if (!classDoc.qualifiedTypeName().startsWith(TEST_API_KERNEL_PACKAGE)) {
@@ -397,7 +389,7 @@ public class TestAPIDoclet {
         out.println("class __" + classDoc.name() + ":");
         out.println("	\"\"\"" + getFirstSentenceText(classDoc) + "\"\"\"");
         for (MethodDoc methodDoc : classDoc.methods()) {
-            List<String> arguments = new ArrayList<String>();
+            List<String> arguments = new ArrayList<>();
             arguments.add("self");
 
             for (Parameter parameter : methodDoc.parameters()) {
@@ -407,19 +399,30 @@ public class TestAPIDoclet {
             out.println("	def " + methodDoc.name() + "(" + Strings.join(arguments, ", ") + "):");
             out.println("		\"\"\"" + getFirstSentenceText(methodDoc) + "\"\"\"");
             String returnType = methodDoc.returnType().qualifiedTypeName().replaceFirst("^java\\.lang\\.", "");
-            if (returnType.equals("void")) {
-                out.println("		pass");
-            } else if (returnType.equals("boolean") || returnType.equals("Boolean")) {
-                out.println("		return False");
-            } else if (returnType.equals("int") || returnType.equals("Integer")) {
-                out.println("		return 0");
-            } else if (returnType.equals("double") || returnType.equals("Double") || returnType.equals("float") || returnType
-                  .equals("Float")) {
-                out.println("		return 0.0");
-            } else if (returnType.equals("String")) {
-                out.println("		return \"\"");
-            } else {
-                out.println("		return " + returnType + "()");
+            switch (returnType) {
+                case "void":
+                    out.println("		pass");
+                    break;
+                case "boolean":
+                case "Boolean":
+                    out.println("		return False");
+                    break;
+                case "int":
+                case "Integer":
+                    out.println("		return 0");
+                    break;
+                case "double":
+                case "Double":
+                case "float":
+                case "Float":
+                    out.println("		return 0.0");
+                    break;
+                case "String":
+                    out.println("		return \"\"");
+                    break;
+                default:
+                    out.println("		return " + returnType + "()");
+                    break;
             }
         }
         out.println();
@@ -450,7 +453,7 @@ public class TestAPIDoclet {
      * @return List of NameTypeDescription
      */
     public static List<NameTypeDescription> getNameTypeDescriptionList(Tag[] tags) {
-        List<NameTypeDescription> nameTypeDescriptionList = new ArrayList<NameTypeDescription>();
+        List<NameTypeDescription> nameTypeDescriptionList = new ArrayList<>();
 
         for (Tag tag : tags) {
             String text = tag.text().trim();

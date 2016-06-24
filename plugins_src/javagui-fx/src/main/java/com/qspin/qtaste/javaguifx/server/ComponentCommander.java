@@ -130,7 +130,7 @@ abstract class ComponentCommander {
      */
     protected static List<JDialog> findPopups() {
         //find all popups
-        List<JDialog> popupFound = new ArrayList<JDialog>();
+        List<JDialog> popupFound = new ArrayList<>();
         for (Window window : Window.getWindows()) {
             //			LOGGER.debug("parse window - type : " + window.getClass());
             if (isAPopup(window)) {

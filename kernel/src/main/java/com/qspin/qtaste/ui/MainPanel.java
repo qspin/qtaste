@@ -25,13 +25,9 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -50,8 +46,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -86,7 +80,6 @@ public class MainPanel extends JFrame {
     protected static boolean mLoopsInHour;
     protected static final int TREE_TABS_WIDTH = 285; // To do must be a parameter
     private static final String MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY = "main_horizontal_split_divider_location";
-    private QSpinTheme mTheme;
     private ConfigInfoPanel mHeaderPanel;
     private JTabbedPane mTreeTabsPanel;
     private JPanel mRightPanels;
@@ -116,18 +109,14 @@ public class MainPanel extends JFrame {
     }
 
     public void launch() throws InterruptedException, InvocationTargetException {
-        SwingUtilities.invokeAndWait(new Runnable() {
-
-            public void run() {
-                setQSpinTheme();
-                genUI();
-            }
+        SwingUtilities.invokeAndWait(() -> {
+            setQSpinTheme();
+            genUI();
         });
     }
 
     public void setQSpinTheme() {
-        mTheme = new QSpinTheme();
-        MetalLookAndFeel.setCurrentTheme(mTheme);
+        MetalLookAndFeel.setCurrentTheme(new QSpinTheme());
         try {
             UIManager.setLookAndFeel(new MetalLookAndFeel());
             ((WrappedToolTipUI) WrappedToolTipUI.createUI(null)).setMaxWidth(200);
@@ -233,35 +222,27 @@ public class MainPanel extends JFrame {
             testInterractivePanel.init();
 
             // Define the listener to display the pane depending on the selected tab
-            mTreeTabsPanel.addChangeListener(new ChangeListener() {
-
-                public void stateChanged(ChangeEvent e) {
-                    String componentName = mTreeTabsPanel.getTitleAt(mTreeTabsPanel.getSelectedIndex());
-                    CardLayout rcl = (CardLayout) mRightPanels.getLayout();
-                    rcl.show(mRightPanels, componentName);
-                }
+            mTreeTabsPanel.addChangeListener(e -> {
+                String componentName = mTreeTabsPanel.getTitleAt(mTreeTabsPanel.getSelectedIndex());
+                CardLayout rcl = (CardLayout) mRightPanels.getLayout();
+                rcl.show(mRightPanels, componentName);
             });
-            mTestCampaignPanel.addTestCampaignActionListener(new ActionListener() {
+            mTestCampaignPanel.addTestCampaignActionListener(e -> {
+                if (e.getID() == TestCampaignMainPanel.RUN_ID) {
+                    if (e.getActionCommand().equals(TestCampaignMainPanel.STARTED_CMD)) {
+                        // open the tab test cases
+                        SwingUtilities.invokeLater(() -> {
+                            mTreeTabsPanel.setSelectedIndex(0);
+                            mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
+                        });
 
-                public void actionPerformed(ActionEvent e) {
-                    if (e.getID() == TestCampaignMainPanel.RUN_ID) {
-                        if (e.getActionCommand().equals(TestCampaignMainPanel.STARTED_CMD)) {
-                            // open the tab test cases
-                            SwingUtilities.invokeLater(new Runnable() {
-                                public void run() {
-                                    mTreeTabsPanel.setSelectedIndex(0);
-                                    mTestCasePanel.setSelectedTab(TestCasePane.RESULTS_INDEX);
-                                }
-                            });
-
-                            // update the buttons
-                            mTestCasePanel.setExecutingTestCampaign(true,
-                                  ((TestCampaignMainPanel) e.getSource()).getExecutionThread());
-                            mTestCasePanel.updateButtons(true);
-                        } else if (e.getActionCommand().equals(TestCampaignMainPanel.STOPPED_CMD)) {
-                            mTestCasePanel.setExecutingTestCampaign(false, null);
-                            mTestCasePanel.updateButtons();
-                        }
+                        // update the buttons
+                        mTestCasePanel.setExecutingTestCampaign(true,
+                              ((TestCampaignMainPanel) e.getSource()).getExecutionThread());
+                        mTestCasePanel.updateButtons(true);
+                    } else if (e.getActionCommand().equals(TestCampaignMainPanel.STOPPED_CMD)) {
+                        mTestCasePanel.setExecutingTestCampaign(false, null);
+                        mTestCasePanel.updateButtons();
                     }
                 }
             });
@@ -273,19 +254,17 @@ public class MainPanel extends JFrame {
                   285);
             splitPane.setDividerLocation(mainHorizontalSplitDividerLocation);
 
-            splitPane.addPropertyChangeListener(new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals("dividerLocation")) {
-                        GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-                        if (evt.getSource() instanceof JSplitPane) {
-                            JSplitPane splitPane = (JSplitPane) evt.getSource();
-                            guiConfiguration.setProperty(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY,
-                                  splitPane.getDividerLocation());
-                            try {
-                                guiConfiguration.save();
-                            } catch (ConfigurationException ex) {
-                                logger.error("Error while saving GUI configuration: " + ex.getMessage());
-                            }
+            splitPane.addPropertyChangeListener(evt -> {
+                if (evt.getPropertyName().equals("dividerLocation")) {
+                    GUIConfiguration guiConfiguration1 = GUIConfiguration.getInstance();
+                    if (evt.getSource() instanceof JSplitPane) {
+                        JSplitPane splitPane1 = (JSplitPane) evt.getSource();
+                        guiConfiguration1.setProperty(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY,
+                              splitPane1.getDividerLocation());
+                        try {
+                            guiConfiguration1.save();
+                        } catch (ConfigurationException ex) {
+                            logger.error("Error while saving GUI configuration: " + ex.getMessage());
                         }
                     }
                 }
@@ -327,88 +306,69 @@ public class MainPanel extends JFrame {
 
         // Tools|Config menu item
         JMenuItem config = new JMenuItem("Config", KeyEvent.VK_D);
-        config.addActionListener(new ActionListener() {
+        config.addActionListener(e -> {
+            //ATEConfigEditPanel configPanel = new  ATEConfigEditPanel(null);
+            //configPanel.setVisible(true);
+            MainConfigFrame configFrame = new MainConfigFrame();
+            configFrame.launch();
+            configFrame.addWindowListener(new WindowListener() {
 
-            public void actionPerformed(ActionEvent e) {
-                //ATEConfigEditPanel configPanel = new  ATEConfigEditPanel(null);
-                //configPanel.setVisible(true);
-                MainConfigFrame configFrame = new MainConfigFrame();
-                configFrame.launch();
-                configFrame.addWindowListener(new WindowListener() {
+                public void windowOpened(WindowEvent e) {
+                }
 
-                    public void windowOpened(WindowEvent e) {
-                    }
+                public void windowClosing(WindowEvent e) {
+                }
 
-                    public void windowClosing(WindowEvent e) {
-                    }
+                public void windowClosed(WindowEvent e) {
+                    // refresh the Configuration information display
+                    refreshParams();
+                }
 
-                    public void windowClosed(WindowEvent e) {
-                        // refresh the Configuration information display
-                        refreshParams();
-                    }
+                public void windowIconified(WindowEvent e) {
+                }
 
-                    public void windowIconified(WindowEvent e) {
-                    }
+                public void windowDeiconified(WindowEvent e) {
+                }
 
-                    public void windowDeiconified(WindowEvent e) {
-                    }
+                public void windowActivated(WindowEvent e) {
+                }
 
-                    public void windowActivated(WindowEvent e) {
-                    }
+                public void windowDeactivated(WindowEvent e) {
+                }
+            });
 
-                    public void windowDeactivated(WindowEvent e) {
-                    }
-                });
-
-            }
         });
         tools.add(config);
 
         // Tools|delete results menu item
         JMenuItem deleteResults = new JMenuItem("Delete Results", KeyEvent.VK_D);
         final MainPanel ui = this;
-        deleteResults.addActionListener(new ActionListener() {
+        deleteResults.addActionListener(e -> {
+            String baseDir = TestEngineConfiguration.getInstance().getString("reporting.generated_report_path");
+            new File(baseDir, baseDir);
+            // TO DO : delete really the files
+            JOptionPane.showMessageDialog(ui, "Results have been deleted");
 
-            public void actionPerformed(ActionEvent e) {
-                String baseDir = TestEngineConfiguration.getInstance().getString("reporting.generated_report_path");
-                new File(baseDir, baseDir);
-                // TO DO : delete really the files
-                JOptionPane.showMessageDialog(ui, "Results have been deleted");
-
-            }
         });
         tools.add(deleteResults);
 
         JMenu fileMenu = new JMenu("File");
         JMenuItem importTestSuites = new JMenuItem("Import TestSuites");
-        importTestSuites.addActionListener(new ActionListener() {
+        importTestSuites.addActionListener(e -> {
+            //
+            mTestCasePanel.importTestSuites();
 
-            public void actionPerformed(ActionEvent e) {
-                //
-                mTestCasePanel.importTestSuites();
-
-            }
         });
         fileMenu.add(importTestSuites);
 
         JMenu help = new JMenu("Help");
         help.setMnemonic(KeyEvent.VK_H);
         JMenuItem about = new JMenuItem("About", KeyEvent.VK_A);
-        about.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                new AboutDialog(owner);
-            }
-        });
+        about.addActionListener(e -> new AboutDialog(owner));
         help.add(about);
 
         JMenuItem ateUserManuel = new JMenuItem("User Manual");
-        ateUserManuel.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                viewQTasteUserManuel();
-            }
-        });
+        ateUserManuel.addActionListener(e -> viewQTasteUserManuel());
         help.add(ateUserManuel);
 
         //menuBar.add(tools); // not to be used at this time!!!!!!!!!

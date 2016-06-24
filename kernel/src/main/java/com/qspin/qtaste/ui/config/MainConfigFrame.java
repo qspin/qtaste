@@ -34,7 +34,6 @@ import com.qspin.qtaste.ui.util.QSpinTheme;
 public class MainConfigFrame extends JFrame {
 
     protected String title = "QTaste Configuration settings";
-    private QSpinTheme mTheme;
 
     public MainConfigFrame() {
         super();
@@ -48,8 +47,7 @@ public class MainConfigFrame extends JFrame {
     }
 
     public void setQSpinTheme() {
-        mTheme = new QSpinTheme();
-        MetalLookAndFeel.setCurrentTheme(mTheme);
+        MetalLookAndFeel.setCurrentTheme(new QSpinTheme());
         try {
             UIManager.setLookAndFeel(new MetalLookAndFeel());
         } catch (UnsupportedLookAndFeelException ex) {
@@ -58,11 +56,9 @@ public class MainConfigFrame extends JFrame {
     }
 
     public void launch() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                setQSpinTheme();
-                genUI();
-            }
+        SwingUtilities.invokeLater(() -> {
+            setQSpinTheme();
+            genUI();
         });
     }
 

@@ -20,7 +20,6 @@
 package com.qspin.qtaste.config;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -51,11 +50,11 @@ public abstract class XMLConfiguration extends org.apache.commons.configuration.
         if (nodes.size() == 0) {
             return null;
         } else {
-            List<Object> list = new ArrayList<Object>();
-            for (Iterator<?> it = nodes.iterator(); it.hasNext(); ) {
-                ConfigurationNode node = (ConfigurationNode) it.next();
-                if (node.getValue() != null) {
-                    list.add(node.getValue());
+            List<Object> list = new ArrayList<>();
+            for (Object node : nodes) {
+                ConfigurationNode configurationNode = (ConfigurationNode) node;
+                if (configurationNode.getValue() != null) {
+                    list.add(configurationNode.getValue());
                 }
             }
 

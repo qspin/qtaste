@@ -44,15 +44,12 @@ public class SingletonComponentFactory implements ComponentFactory {
     private TestBedConfiguration testbedConfig;
 
     private SingletonComponentFactory() {
-        map = new HashMap<String, Component>();
+        map = new HashMap<>();
         testbedConfig = TestBedConfiguration.getInstance();
 
-        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-            public void onConfigurationChange() {
-                testbedConfig = TestBedConfiguration.getInstance();
-                map.clear();
-            }
+        TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+            testbedConfig = TestBedConfiguration.getInstance();
+            map.clear();
         });
     }
 
@@ -114,8 +111,7 @@ public class SingletonComponentFactory implements ComponentFactory {
 
     private Component createComponentInstance(Class<?> componentClass) throws QTasteException {
         try {
-            Component componentImpl = (Component) componentClass.newInstance();
-            return componentImpl;
+            return (Component) componentClass.newInstance();
         } catch (InstantiationException e) {
             logger.error("SingletonFactory cannot instantiate the constructor of " + componentClass.getName(), e);
         } catch (IllegalAccessException e) {

@@ -31,7 +31,7 @@ public class CampaignRun {
     ArrayList<TestSuiteParams> testsuites;
 
     public CampaignRun() {
-        testsuites = new ArrayList<TestSuiteParams>();
+        testsuites = new ArrayList<>();
     }
 
     public String getTestbed() {

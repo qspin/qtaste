@@ -25,7 +25,6 @@
 package com.qspin.qtaste.ui.reporter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.SwingUtilities;
 
@@ -38,7 +37,7 @@ import com.qspin.qtaste.reporter.testresults.TestResult;
 public class TestCaseReporter {
 
     private static TestCaseReporter instance = null;
-    static private ArrayList<TestCaseReportTable> reportTableList = new ArrayList<TestCaseReportTable>();
+    static private ArrayList<TestCaseReportTable> reportTableList = new ArrayList<>();
 
     synchronized public static TestCaseReporter getInstance() {
         if (instance == null) {
@@ -58,13 +57,10 @@ public class TestCaseReporter {
     }
 
     public void putEntry(final TestResult tr) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                String reportName = CampaignReportManager.getInstance().getReportName();
-                Iterator<TestCaseReportTable> it = reportTableList.iterator();
-                while (it.hasNext()) {
-                    it.next().putEntry(tr, reportName);
-                }
+        SwingUtilities.invokeLater(() -> {
+            String reportName = CampaignReportManager.getInstance().getReportName();
+            for (TestCaseReportTable reportTable : reportTableList) {
+                reportTable.putEntry(tr, reportName);
             }
         });
 

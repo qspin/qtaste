@@ -237,7 +237,7 @@ public class TextUtilities {
      * @param tabSize The tab size
      */
     public static String tabsToSpaces(String in, int tabSize) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int width = 0;
         for (int i = 0; i < in.length(); i++) {
             switch (in.charAt(i)) {

@@ -46,7 +46,7 @@ public class ReturnCodeValidator extends Validator {
     }
 
     protected String getExtraDetails() {
-        String output = new String("Return code expected " + expected);
+        String output = "Return code expected " + expected;
         if (validate()) {
             output += " and";
         } else {

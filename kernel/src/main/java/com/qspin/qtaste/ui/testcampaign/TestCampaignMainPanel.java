@@ -103,21 +103,16 @@ public class TestCampaignMainPanel extends JPanel {
         JLabel label = new JLabel("Campaign:");
         saveMetaCampaignButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/save_32"));
         saveMetaCampaignButton.setToolTipText("Save campaign");
-        saveMetaCampaignButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
+        saveMetaCampaignButton.addActionListener(e -> {
                 if (selectedCampaign == null) {
                     logger.warn("No Campaign created");
                     return;
                 }
                 treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
-            }
         });
         addNewMetaCampaignButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/add"));
         addNewMetaCampaignButton.setToolTipText("Define a new campaign");
-        addNewMetaCampaignButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
+        addNewMetaCampaignButton.addActionListener(e -> {
                 String newCampaign = JOptionPane.showInputDialog(null, "New campaign creation:", "Campaign name:",
                       JOptionPane.QUESTION_MESSAGE);
                 if (newCampaign != null && newCampaign.length() > 0) {
@@ -130,7 +125,6 @@ public class TestCampaignMainPanel extends JPanel {
                     metaCampaignComboBox.validate();
                     metaCampaignComboBox.repaint();
                 }
-            }
         });
 
         // get last selected campaign
@@ -151,9 +145,7 @@ public class TestCampaignMainPanel extends JPanel {
             component.addMouseListener(testcampaignMouseListener);
         }
 
-        metaCampaignComboBox.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
+        metaCampaignComboBox.addActionListener(e -> {
                 MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
                 if (currentSelectedCampaign != selectedCampaign) {
                     selectedCampaign = currentSelectedCampaign;
@@ -163,10 +155,10 @@ public class TestCampaignMainPanel extends JPanel {
                             treeTable.load(selectedCampaign.getFileName());
                         }
 
-                        GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-                        guiConfiguration.setProperty(LAST_SELECTED_CAMPAIGN_PROPERTY, selectedCampaign.getCampaignName());
+                    GUIConfiguration guiConfiguration1 = GUIConfiguration.getInstance();
+                    guiConfiguration1.setProperty(LAST_SELECTED_CAMPAIGN_PROPERTY, selectedCampaign.getCampaignName());
                         try {
-                            guiConfiguration.save();
+                        guiConfiguration1.save();
                         } catch (ConfigurationException ex) {
                             logger.error("Error while saving GUI configuration: " + ex.getMessage(), ex);
                         }
@@ -174,7 +166,6 @@ public class TestCampaignMainPanel extends JPanel {
                         treeTable.removeAll();
                     }
                 }
-            }
         });
 
         boolean setLastSelectedCampaign = false;
@@ -194,9 +185,7 @@ public class TestCampaignMainPanel extends JPanel {
 
         runMetaCampaignButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/running_32"));
         runMetaCampaignButton.setToolTipText("Run campaign");
-        runMetaCampaignButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
+        runMetaCampaignButton.addActionListener(e -> {
                 try {
                     if (selectedCampaign == null) {
                         logger.warn("No Campaign created");
@@ -220,7 +209,6 @@ public class TestCampaignMainPanel extends JPanel {
                     //
                     logger.error(ex.getMessage(), ex);
                 }
-            }
         });
 
         builder.add(addNewMetaCampaignButton, cc.xy(colIndex, 2));
@@ -282,7 +270,7 @@ public class TestCampaignMainPanel extends JPanel {
         // add the campaign in the list, keeping sorted order
         int index = 0;
         while (index < metaCampaignComboBox.getItemCount()) {
-            String elementCampaignName = ((MetaCampaignFile) metaCampaignComboBox.getItemAt(index)).getCampaignName();
+            String elementCampaignName = metaCampaignComboBox.getItemAt(index).getCampaignName();
             int comparison = campaignName.compareToIgnoreCase(elementCampaignName);
             if (comparison < 0) {
                 // insert new campaign at this index

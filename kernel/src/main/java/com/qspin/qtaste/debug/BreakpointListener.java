@@ -36,12 +36,12 @@ public interface BreakpointListener extends EventListener {
      *
      * @param event - a BreakpoinkEvent Object
      */
-    public void addBreakpoint(BreakpoinkEvent event);
+    void addBreakpoint(BreakpoinkEvent event);
 
     /**
      * Gets called before the execution of a test case
      *
      * @param event - a BreakpoinkEvent Object
      */
-    public void removeBreakpoint(BreakpoinkEvent event);
+    void removeBreakpoint(BreakpoinkEvent event);
 }

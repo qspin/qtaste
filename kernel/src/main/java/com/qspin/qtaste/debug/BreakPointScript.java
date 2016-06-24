@@ -26,7 +26,6 @@ package com.qspin.qtaste.debug;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -50,7 +49,7 @@ public class BreakPointScript {
 
     public BreakPointScript(Document doc) {
         mScriptDocument = doc;
-        breakpoints = new HashMap<Integer, Boolean>();
+        breakpoints = new HashMap<>();
 
         mScriptDocument.putProperty(BREAKPOINT_PROPERTY, breakpoints);
         doc.addDocumentListener(new DocumentListener() {
@@ -85,7 +84,7 @@ public class BreakPointScript {
 
     public void toggleBreakpoint(int line) {
         if (this.getBreakpoints().containsKey(line)) {
-            boolean value = (boolean) getBreakpoints().get(line);
+            boolean value = getBreakpoints().get(line);
             if (value) {
                 removeBreakpoint(line);
             } else {
@@ -108,9 +107,7 @@ public class BreakPointScript {
     }
 
     public void removeAllBreakpoints() {
-        Iterator<Integer> it = getBreakpoints().keySet().iterator();
-        while (it.hasNext()) {
-            int line = it.next();
+        for (Integer line : getBreakpoints().keySet()) {
             getBreakpoints().put(line, false);
             eventBreakpointHandler.removeBreakpoint(mFileName, line);
         }

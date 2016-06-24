@@ -104,7 +104,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
     }
 
     protected Node getComponentByName(String name) throws QTasteTestFailException {
-        mFoundComponents = new ArrayList<Node>();
+        mFoundComponents = new ArrayList<>();
         mFoundComponent = null;
         mFindWithEqual = false;
         LOGGER.debug("try to find a component with the name : " + name);
@@ -158,9 +158,8 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
     }
 
     protected Component lookForComponent(String name, ObservableList<Node> components) {
-        for (int i = 0; i < components.size(); i++) {
+        for (Node c : components) {
             //String componentName = ComponentNamer.getInstance().getNameForComponent(components[c]);
-            Node c = components.get(i);
             if (checkName(name, c)) {
                 LOGGER.debug("Component " + c.getId() + " added to the list of found components");
                 mFoundComponents.add(c);

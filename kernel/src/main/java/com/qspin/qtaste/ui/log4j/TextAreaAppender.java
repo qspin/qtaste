@@ -36,7 +36,7 @@ import org.apache.log4j.spi.LoggingEvent;
  */
 public class TextAreaAppender extends WriterAppender {
 
-    static private ArrayList<Log4jPanel> jTextAreaList = new ArrayList<Log4jPanel>();
+    static private ArrayList<Log4jPanel> jTextAreaList = new ArrayList<>();
 
     /**
      * Set the target JTextArea for the logging information to appear.
@@ -56,11 +56,9 @@ public class TextAreaAppender extends WriterAppender {
      */ public void append(final LoggingEvent loggingEvent) {
 
         // Append formatted message to textarea using the Swing Thread.
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                for (Log4jPanel log4jPanel : jTextAreaList) {
-                    log4jPanel.appendLog(loggingEvent);
-                }
+        SwingUtilities.invokeLater(() -> {
+            for (Log4jPanel log4jPanel : jTextAreaList) {
+                log4jPanel.appendLog(loggingEvent);
             }
         });
     }

@@ -45,7 +45,7 @@ public class PopupTextGetter extends ComponentCommander {
     @Override
     List<String> executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
         boolean onlyWithFocus = (Boolean) data[0];
-        List<String> texts = new ArrayList<String>();
+        List<String> texts = new ArrayList<>();
         for (JDialog dialog : findPopups()) {
             //			if ( onlyWithFocus && !activateAndFocusComponentWindow(dialog) )
             //			{

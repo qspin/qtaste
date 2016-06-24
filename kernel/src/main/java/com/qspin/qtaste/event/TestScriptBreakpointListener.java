@@ -35,5 +35,5 @@ public interface TestScriptBreakpointListener extends EventListener {
      *
      * @param event - a TestCaseEvent Object
      */
-    public void doAction(TestScriptBreakpointEvent event);
+    void doAction(TestScriptBreakpointEvent event);
 }

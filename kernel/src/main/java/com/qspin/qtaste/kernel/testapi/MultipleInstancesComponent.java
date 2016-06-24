@@ -32,7 +32,7 @@ public interface MultipleInstancesComponent extends Component {
      * parameter, the instance id. <br>
      * The id of the instance is specified by the <code>INSTANCE_ID</code> test data.
      */
-    public static final ComponentFactory factory = MultipleInstancesComponentFactory.getInstance();
+    ComponentFactory factory = MultipleInstancesComponentFactory.getInstance();
 
-    public String getInstanceId();
+    String getInstanceId();
 }

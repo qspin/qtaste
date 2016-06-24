@@ -39,7 +39,7 @@ class EnabledComponentCounter extends ComponentCommander {
     @Override
     Integer executeCommand(int timeout, String componentName, Object... data) {
         int counter = 0;
-        List<Container> superContainers = new ArrayList<Container>();
+        List<Container> superContainers = new ArrayList<>();
         for (Window w : Window.getWindows()) {
             if (!superContainers.contains(w)) {
                 superContainers.add(w);

@@ -71,7 +71,7 @@ public class AddOnTableModel extends AbstractTableModel {
                 TestEngineConfiguration.getInstance().addProperty("addons.addon", mAddons.get(rowIndex).getMainClass());
             } else {
                 getAddonManager().unloadAddOn(mAddons.get(rowIndex));
-                List<String> classes = new ArrayList<String>();
+                List<String> classes = new ArrayList<>();
                 TestEngineConfiguration config = TestEngineConfiguration.getInstance();
                 int reportersCount = config.getMaxIndex("addons.addon") + 1;
                 for (int reporterIndex = 0; reporterIndex < reportersCount; reporterIndex++) {

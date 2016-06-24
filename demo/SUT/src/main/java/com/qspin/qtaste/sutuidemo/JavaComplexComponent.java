@@ -1,8 +1,6 @@
 package com.qspin.qtaste.sutuidemo;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,16 +42,14 @@ public class JavaComplexComponent extends JPanel {
 
         m_selectedFile.setName("FILECHOOSER_RESULT");
         m_openJFC.setName("OPEN_FILECHOOSER");
-        m_openJFC.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                m_JFC = new JFileChooser();
-                m_JFC.setBorder(BorderFactory.createTitledBorder("JFileChooser"));
-                m_JFC.setName("FILE_CHOOSER");
-                if (m_JFC.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    m_selectedFile.setText(m_JFC.getSelectedFile().getName());
-                } else {
-                    m_selectedFile.setText(null);
-                }
+        m_openJFC.addActionListener(arg0 -> {
+            m_JFC = new JFileChooser();
+            m_JFC.setBorder(BorderFactory.createTitledBorder("JFileChooser"));
+            m_JFC.setName("FILE_CHOOSER");
+            if (m_JFC.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                m_selectedFile.setText(m_JFC.getSelectedFile().getName());
+            } else {
+                m_selectedFile.setText(null);
             }
         });
     }

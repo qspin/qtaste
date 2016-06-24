@@ -55,7 +55,7 @@ public class TestDataInteractive extends TestDataImpl {
      */
     // TODO: Check if pairs is not more appropriate?
     public TestDataInteractive(String name, int rowId, String[] names, String[] values) {
-        super(rowId, new LinkedHashMap<String, String>());
+        super(rowId, new LinkedHashMap<>());
         ///setId(name, rowId);
         if (names != null) {
             for (int i = 0; i < names.length; i++) {
@@ -67,7 +67,7 @@ public class TestDataInteractive extends TestDataImpl {
     @Override
     public String getValue(String key) throws QTasteDataException {
         try {
-            String input = null;
+            String input;
             if (!hash.containsKey(key)) {
                 if (isGUIMonitored) {
                     input = JOptionPane.showInputDialog(mParent, "Give the value of " + key + "?", "TestData value",

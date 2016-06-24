@@ -44,7 +44,7 @@ public class Version {
     public Version(String jarFileName) {
         URL manifestURL;
         try {
-            jarFileName = new File(jarFileName).getCanonicalPath().toString();
+            jarFileName = new File(jarFileName).getCanonicalPath();
             manifestURL = new URL("jar:file:/" + jarFileName.replace('\\', '/') + "!/META-INF/MANIFEST.MF");
             Manifest manifest = new Manifest(manifestURL.openStream());
             attributes = manifest.getMainAttributes();

@@ -38,62 +38,54 @@ public class TreeNodeGetter extends ComponentCommander {
     @Override
     String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
         try {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Component component = getComponentByName(componentName);
-                        //LOGGER.trace("Component : " + component);
-                        String separator = data[0].toString();
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    Component component = getComponentByName(componentName);
+                    //LOGGER.trace("Component : " + component);
+                    String separator = data[0].toString();
 
-                        if (component instanceof JTree) {
-                            JTree tree = (JTree) component;
-                            TreePath selectedPath = tree.getSelectionPath();
-                            String nodePath = "";
-                            int currentTreePathIndex = 0;
+                    if (component instanceof JTree) {
+                        JTree tree = (JTree) component;
+                        TreePath selectedPath = tree.getSelectionPath();
+                        String nodePath = "";
+                        int currentTreePathIndex = 0;
 
-                            // check if a node has been selected
-                            if (selectedPath == null) {
-                                //LOGGER.debug("No node selected");
-                                m_commandResult = null;
-                                return;
-                            }
-
-                            // if the tree root is not visible, ignore it
-                            if (!tree.isRootVisible()) {
-                                currentTreePathIndex++;
-                            }
-
-                            // loop on the tree path to build the node path string
-                            Object[] treePath = selectedPath.getPath();
-                            //LOGGER.debug("array : " + Arrays.toString(treePath));
-                            for (; currentTreePathIndex < treePath.length - 1; currentTreePathIndex++) {
-                                nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
-                                nodePath += separator;
-                            }
-
-                            // add the last node text without separator
-                            if (currentTreePathIndex < treePath.length) {
-                                nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
-                            }
-
-                            m_commandResult = nodePath;
+                        // check if a node has been selected
+                        if (selectedPath == null) {
+                            //LOGGER.debug("No node selected");
+                            m_commandResult = null;
                             return;
-
-                        } else {
-                            throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
                         }
-                    } catch (QTasteException ex) {
-                        m_commandError = ex;
+
+                        // if the tree root is not visible, ignore it
+                        if (!tree.isRootVisible()) {
+                            currentTreePathIndex++;
+                        }
+
+                        // loop on the tree path to build the node path string
+                        Object[] treePath = selectedPath.getPath();
+                        //LOGGER.debug("array : " + Arrays.toString(treePath));
+                        for (; currentTreePathIndex < treePath.length - 1; currentTreePathIndex++) {
+                            nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
+                            nodePath += separator;
+                        }
+
+                        // add the last node text without separator
+                        if (currentTreePathIndex < treePath.length) {
+                            nodePath += getNodeText(tree, treePath[currentTreePathIndex]);
+                        }
+
+                        m_commandResult = nodePath;
+                    } else {
+                        throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
                     }
+                } catch (QTasteException ex) {
+                    m_commandError = ex;
                 }
             });
 
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    //to synchronize threads
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                //to synchronize threads
             });
         } catch (Exception ex) {
             LOGGER.fatal(ex.getMessage(), ex);

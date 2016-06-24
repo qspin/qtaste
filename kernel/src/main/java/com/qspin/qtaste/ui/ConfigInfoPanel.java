@@ -21,12 +21,12 @@ package com.qspin.qtaste.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -76,7 +76,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     private JLabel mTestSuiteLabel = new LabelWithBar();
     private JLabel mTestResultsLabel = new LabelWithBar();
     private JLabel mTestReportingFormat = new LabelWithBar();
-    private JComboBox mTestbedList = new JComboBox();
+    private JComboBox<String> mTestbedList = new JComboBox<>();
     private JButton m_startTestbed = new JButton("(Re)start testbed");
     private JButton m_stopTestbed = new JButton("Stop testbed");
     private JCheckBox m_ignoreControlScript = new JCheckBox("Ignore control script");
@@ -183,9 +183,9 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
         // add testbed mouse listener, for the "Edit File" action
         TestbedMouseListener testbedMouseListener = new TestbedMouseListener();
-        java.awt.Component[] mTestbedListComponents = mTestbedList.getComponents();
-        for (int i = 0; i < mTestbedListComponents.length; i++) {
-            mTestbedListComponents[i].addMouseListener(testbedMouseListener);
+        java.awt.Component[] testbedListComponents = mTestbedList.getComponents();
+        for (Component testbedListComponent : testbedListComponents) {
+            testbedListComponent.addMouseListener(testbedMouseListener);
         }
 
         // go to second row
@@ -196,20 +196,16 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         adder.add(mTestResultsLabel);
 
         //2d column - 2d row
-        m_ignoreControlScript.addActionListener(new ActionListener() {
+        m_ignoreControlScript.addActionListener(e -> {
+            TestEngine.setIgnoreControlScript(ignoreControlScript());
+            setControlTestbedButtonsEnabled();
 
-            public void actionPerformed(ActionEvent e) {
-                TestEngine.setIgnoreControlScript(ignoreControlScript());
-                setControlTestbedButtonsEnabled();
-
-                GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-                guiConfiguration.setProperty(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY,
-                      m_ignoreControlScript.isSelected());
-                try {
-                    guiConfiguration.save();
-                } catch (ConfigurationException ex) {
-                    logger.error("Error while saving GUI configuration: " + ex.getMessage());
-                }
+            GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
+            guiConfiguration.setProperty(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, m_ignoreControlScript.isSelected());
+            try {
+                guiConfiguration.save();
+            } catch (ConfigurationException ex) {
+                logger.error("Error while saving GUI configuration: " + ex.getMessage());
             }
         });
         adder.add(m_ignoreControlScript);
@@ -220,11 +216,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         m_SUTVersion.setPreferredSize(new Dimension(150, m_SUTVersion.getPreferredSize().height));
         sutPanel.add(m_SUTVersion);
         adder.add(sutPanel);
-        m_SUTVersion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                TestBedConfiguration.setSUTVersion(m_SUTVersion.getText());
-            }
-        });
+        m_SUTVersion.addActionListener(e -> TestBedConfiguration.setSUTVersion(m_SUTVersion.getText()));
         //create a 3d row
         adder.addSeparator();
 
@@ -234,66 +226,57 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
         //2d column - 3d row
         // add a button to manually start the testbed
-        m_startTestbed.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                isStartingOrStoppingTestbed = true;
-                setControlTestbedButtonsEnabled();
-                parent.getTestCasePanel().setStopButtonEnabled(true, true);
-                parent.getTestCasePanel().showTestcaseResultsTab();
-                TestBedConfiguration.setSUTVersion(getSUTVersion());
-                new SUTStartStopThread("start").start();
-            }
+        m_startTestbed.addActionListener(e -> {
+            isStartingOrStoppingTestbed = true;
+            setControlTestbedButtonsEnabled();
+            parent.getTestCasePanel().setStopButtonEnabled(true, true);
+            parent.getTestCasePanel().showTestcaseResultsTab();
+            TestBedConfiguration.setSUTVersion(getSUTVersion());
+            new SUTStartStopThread("start").start();
         });
         m_startTestbed.setEnabled(false);
         adder.add(m_startTestbed);
 
         // add a button to manually stop the testbed
-        m_stopTestbed.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                isStartingOrStoppingTestbed = true;
-                setControlTestbedButtonsEnabled();
-                parent.getTestCasePanel().showTestcaseResultsTab();
-                TestBedConfiguration.setSUTVersion(getSUTVersion());
-                new SUTStartStopThread("stop").start();
-            }
+        m_stopTestbed.addActionListener(e -> {
+            isStartingOrStoppingTestbed = true;
+            setControlTestbedButtonsEnabled();
+            parent.getTestCasePanel().showTestcaseResultsTab();
+            TestBedConfiguration.setSUTVersion(getSUTVersion());
+            new SUTStartStopThread("stop").start();
         });
         m_stopTestbed.setEnabled(false);
         adder.add(m_stopTestbed);
 
-        DefaultComboBoxModel model = (DefaultComboBoxModel) mTestbedList.getModel();
+        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) mTestbedList.getModel();
         model.removeAllElements();
         String testbedDir = testbedConfig.getFile().getParent();
         File fTestbedDir = new File(testbedDir);
         FileMask fileMask = new FileMask();
         fileMask.addExtension("xml");
         File[] fTestbedList = FileUtilities.listSortedFiles(fTestbedDir, fileMask);
-        for (int i = 0; i < fTestbedList.length; i++) {
+        for (File fTestbed : fTestbedList) {
             // remove the extension
-            String testbedName = fTestbedList[i].getName().substring(0, fTestbedList[i].getName().lastIndexOf('.'));
+            String testbedName = fTestbed.getName().substring(0, fTestbed.getName().lastIndexOf('.'));
             model.addElement(testbedName);
         }
 
-        mTestbedList.addActionListener(new ActionListener() {
+        mTestbedList.addActionListener(e -> {
+            if (mTestbedList.getSelectedItem() != null) {
+                String selectedTestbed = (String) mTestbedList.getSelectedItem();
+                String configFile = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + selectedTestbed + "."
+                      + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION;
+                TestBedConfiguration.setConfigFile(configFile);
 
-            public void actionPerformed(ActionEvent e) {
-                if (mTestbedList.getSelectedItem() != null) {
-                    String selectedTestbed = (String) mTestbedList.getSelectedItem();
-                    String configFile = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + selectedTestbed + "."
-                          + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION;
-                    TestBedConfiguration.setConfigFile(configFile);
-
-                    GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-                    guiConfiguration.setProperty(StaticConfiguration.LAST_SELECTED_TESTBED_PROPERTY, selectedTestbed);
-                    try {
-                        guiConfiguration.save();
-                    } catch (ConfigurationException ex) {
-                        logger.error("Error while saving GUI configuration: " + ex.getMessage());
-                    }
+                GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
+                guiConfiguration.setProperty(StaticConfiguration.LAST_SELECTED_TESTBED_PROPERTY, selectedTestbed);
+                try {
+                    guiConfiguration.save();
+                } catch (ConfigurationException ex) {
+                    logger.error("Error while saving GUI configuration: " + ex.getMessage());
                 }
-                refreshData();
             }
+            refreshData();
         });
 
         refreshTestBed();
@@ -302,13 +285,10 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             m_ignoreControlScript.doClick();
         }
 
-        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
-
-            public void onConfigurationChange() {
-                testbedConfig = TestBedConfiguration.getInstance();
-                String configFileName = testbedConfig.getFile().getName();
-                mTestbedList.getModel().setSelectedItem(configFileName.substring(0, configFileName.lastIndexOf('.')));
-            }
+        TestBedConfiguration.registerConfigurationChangeHandler(() -> {
+            testbedConfig = TestBedConfiguration.getInstance();
+            String configFileName = testbedConfig.getFile().getName();
+            mTestbedList.getModel().setSelectedItem(configFileName.substring(0, configFileName.lastIndexOf('.')));
         });
     }
 
@@ -352,14 +332,11 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             reportManager.refresh();
             //reportManager.putEntry(tr);
 
-            SwingUtilities.invokeLater(new Runnable() {
-
-                public void run() {
-                    isStartingOrStoppingTestbed = false;
-                    setControlTestbedButtonsEnabled();
-                    parent.getTestCasePanel().setStopButtonEnabled(false, false);
-                    TestEngine.tearDown();
-                }
+            SwingUtilities.invokeLater(() -> {
+                isStartingOrStoppingTestbed = false;
+                setControlTestbedButtonsEnabled();
+                parent.getTestCasePanel().setStopButtonEnabled(false, false);
+                TestEngine.tearDown();
             });
         }
     }

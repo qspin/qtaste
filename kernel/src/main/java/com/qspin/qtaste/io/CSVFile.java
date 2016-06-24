@@ -64,8 +64,8 @@ public class CSVFile {
     public CSVFile(InputStream csvInputStreamFile, String name) {
         this.csvInputStream = csvInputStreamFile;
         this.name = name;
-        dataSet = new ArrayList<LinkedHashMap<String, String>>();
-        columnNames = new ArrayList<String>();
+        dataSet = new ArrayList<>();
+        columnNames = new ArrayList<>();
     }
 
     public String getName() {
@@ -96,7 +96,7 @@ public class CSVFile {
     public HashMap<String, HashMap<String, String>> getHashMapDataSet(String keyField)
           throws FileNotFoundException, IOException, NoSuchFieldException {
         parseCSVFile();
-        HashMap<String, HashMap<String, String>> result = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap<String, String>> result = new HashMap<>();
         for (int i = 0; i < dataSet.size(); i++) {
             String key = dataSet.get(i).get(keyField);
             if (key == null) {
@@ -147,7 +147,7 @@ public class CSVFile {
                         if ((csvLine.length() != 0) && !csvLine.startsWith("#")) {
                             values = csvLine.split(";", -1);
 
-                            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                            LinkedHashMap<String, String> map = new LinkedHashMap<>();
                             boolean hasNoValues = true;
                             for (int i = 0; i < allNames.length; i++) {
                                 if (allNames[i].length() > 0) {

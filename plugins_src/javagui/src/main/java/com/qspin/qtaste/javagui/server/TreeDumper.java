@@ -41,31 +41,24 @@ public class TreeDumper extends ComponentCommander {
     String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
         final Component c = getComponentByName(componentName);
         try {
-            SwingUtilities.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    String separator = data[0].toString();
-                    if (c instanceof JTree) {
-                        JTree tree = (JTree) c;
-                        List<String> dump = new ArrayList<>();
-                        dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
-                        StringBuilder builder = new StringBuilder();
-                        for (String s : dump) {
-                            builder.append(s).append('\n');
-                        }
-                        m_commandResult = builder.toString();
-                    } else {
-                        m_commandError = new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
+            SwingUtilities.invokeLater(() -> {
+                String separator = data[0].toString();
+                if (c instanceof JTree) {
+                    JTree tree = (JTree) c;
+                    List<String> dump = new ArrayList<>();
+                    dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
+                    StringBuilder builder = new StringBuilder();
+                    for (String s : dump) {
+                        builder.append(s).append('\n');
                     }
+                    m_commandResult = builder.toString();
+                } else {
+                    m_commandError = new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
                 }
             });
 
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    //to synchronize threads
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                //to synchronize threads
             });
         } catch (Exception ex) {
             LOGGER.fatal(ex.getMessage(), ex);

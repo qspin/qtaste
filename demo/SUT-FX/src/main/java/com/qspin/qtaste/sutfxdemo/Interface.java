@@ -58,19 +58,17 @@ public class Interface {
             @Override
             public ListCell<Person> call(ListView<Person> p) {
 
-                ListCell<Person> cell = new ListCell<Person>() {
-
+                return new ListCell<Person>() {
                     @Override
-                    protected void updateItem(Person p, boolean bln) {
-                        super.updateItem(p, bln);
-                        if (p != null) {
-                            String current = p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
+                    protected void updateItem(Person p1, boolean bln) {
+                        super.updateItem(p1, bln);
+                        if (p1 != null) {
+                            String current =
+                                  p1.getFirstName().get() + " " + p1.getLastName().get() + " (" + p1.getAge().get() + ")";
                             setText(current);
                         }
                     }
-
                 };
-                return cell;
             }
         });
     }

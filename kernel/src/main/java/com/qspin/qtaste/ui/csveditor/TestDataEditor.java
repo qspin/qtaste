@@ -103,7 +103,7 @@ public class TestDataEditor extends JPanel {
     private boolean isModified;
     private TableModelListener tableListener;
     private boolean m_forInteractiveMode;
-    private int ROW_HEIGHT = 20;
+    private static final int ROW_HEIGHT = 20;
     private MyTableColumnModelListener m_TableColumnModelListener;
     private Clipboard m_systemClipboard;
 
@@ -233,7 +233,7 @@ public class TestDataEditor extends JPanel {
 
             int rowCount = 0;
             for (LinkedHashMap<String, String> csvData : csvDataSet) {
-                LinkedHashMap<String, String> data = new LinkedHashMap<String, String>();
+                LinkedHashMap<String, String> data = new LinkedHashMap<>();
                 data.put("#", String.valueOf(rowCount + 1));
                 data.putAll(csvData);
                 m_TestDataModel.addRow(data.values().toArray());
@@ -266,7 +266,7 @@ public class TestDataEditor extends JPanel {
         m_TestDataModel.setRowCount(0);
         m_TestDataModel.setColumnCount(0);
         m_TestDataModel.addColumn("Comment");
-        ArrayList<String> dataRow = new ArrayList<String>();
+        ArrayList<String> dataRow = new ArrayList<>();
         dataRow.add("QTaste_interactive");
 
         for (Entry<String, String> dataEntry : data.getDataHash().entrySet()) {
@@ -431,26 +431,23 @@ public class TestDataEditor extends JPanel {
             }
         });
 
-        m_TestDataModel.addTableModelListener(new TableModelListener() {
-
-            public void tableChanged(TableModelEvent e) {
-                // build the test data
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    try {
-                        if (e.getFirstRow() >= 0) {
-                            setModified(true);
-                        }
-                        if (m_TestData == null) {
-                            return;
-                        }
-                        if (e.getColumn() > 0) {
-                            String header = m_TestDataModel.getColumnName(e.getColumn());
-                            String value = (String) m_TestDataModel.getValueAt(0, e.getColumn());
-                            m_TestData.setValue(header, value);
-                        }
-                    } catch (QTasteDataException ex) {
-                        logger.error(ex.getMessage());
+        m_TestDataModel.addTableModelListener(e -> {
+            // build the test data
+            if (e.getType() == TableModelEvent.UPDATE) {
+                try {
+                    if (e.getFirstRow() >= 0) {
+                        setModified(true);
                     }
+                    if (m_TestData == null) {
+                        return;
+                    }
+                    if (e.getColumn() > 0) {
+                        String header = m_TestDataModel.getColumnName(e.getColumn());
+                        String value = (String) m_TestDataModel.getValueAt(0, e.getColumn());
+                        m_TestData.setValue(header, value);
+                    }
+                } catch (QTasteDataException ex) {
+                    logger.error(ex.getMessage());
                 }
             }
         });
@@ -478,12 +475,12 @@ public class TestDataEditor extends JPanel {
     }
 
     private void copySelectionToClipboard() {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         int[] selectedRows = m_TestDataTable.getSelectedRows();
         int[] selectedCols = m_TestDataTable.getSelectedColumns();
-        for (int i = 0; i < selectedRows.length; i++) {
+        for (int selectedRow : selectedRows) {
             for (int j = 0; j < selectedCols.length; j++) {
-                stringBuffer.append(m_TestDataTable.getValueAt(selectedRows[i], selectedCols[j]));
+                stringBuffer.append(m_TestDataTable.getValueAt(selectedRow, selectedCols[j]));
                 if (j < selectedCols.length - 1) {
                     stringBuffer.append("\t");
                 }
@@ -954,8 +951,8 @@ public class TestDataEditor extends JPanel {
         colIds.removeElementAt(columnModelIndex);
 
         // Remove the column data
-        for (int r = 0; r < data.size(); r++) {
-            Vector<?> row = (Vector<?>) data.get(r);
+        for (Object aData : data) {
+            Vector<?> row = (Vector<?>) aData;
             row.removeElementAt(columnModelIndex);
         }
         model.setDataVector(data, colIds);

@@ -298,9 +298,9 @@ public class RLogin {
      * -log4jconf <properties_file>: use given file as log4j properties file
      * }
      */
-    public static final void main(String[] args) {
+    public static void main(String[] args) {
         // parameters
-        String remoteHost = null;
+        String remoteHost;
         String remoteUser = "";
         boolean reboot = false;
         String command = null;

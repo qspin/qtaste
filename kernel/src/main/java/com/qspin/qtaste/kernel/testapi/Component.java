@@ -34,7 +34,7 @@ public interface Component {
      *
      * @throws QTasteException if component cannot be initialized
      */
-    public void initialize() throws QTasteException;
+    void initialize() throws QTasteException;
 
     /**
      * Terminates the component.
@@ -42,7 +42,7 @@ public interface Component {
      *
      * @throws QTasteException if component cannot be terminated
      */
-    public void terminate() throws QTasteException;
+    void terminate() throws QTasteException;
 
     /**
      * All Test API verbs have the following signature:

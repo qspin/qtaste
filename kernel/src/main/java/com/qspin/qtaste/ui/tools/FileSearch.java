@@ -26,7 +26,6 @@ package com.qspin.qtaste.ui.tools;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * @author vdubois
@@ -36,7 +35,7 @@ public class FileSearch {
     private ArrayList<String> searchPaths;
 
     public FileSearch() {
-        searchPaths = new ArrayList<String>();
+        searchPaths = new ArrayList<>();
     }
 
     public void addSearchPath(String path) {
@@ -44,9 +43,7 @@ public class FileSearch {
     }
 
     public String getFirstFileFound(String fileName) {
-        Iterator<String> it = searchPaths.iterator();
-        while (it.hasNext()) {
-            String path = it.next();
+        for (String path : searchPaths) {
             File file = new File(path + File.separator + fileName);
             if (file.exists()) {
                 return path + File.separator + fileName;

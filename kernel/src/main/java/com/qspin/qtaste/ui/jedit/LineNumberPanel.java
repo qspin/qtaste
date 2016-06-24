@@ -41,7 +41,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -251,9 +250,7 @@ public class LineNumberPanel extends JComponent implements SyntaxComponent, Prop
         boolean valid = true;
         NonWrappingTextPane textPane = (NonWrappingTextPane) pane;
         HashMap<Integer, Boolean> breakpoints = textPane.getBreakpointScript().getBreakpoints();
-        Iterator<Integer> it = breakpoints.keySet().iterator();
-        while (it.hasNext()) {
-            int line = it.next();
+        for (Integer line : breakpoints.keySet()) {
             Element lineElement = pane.getDocument().getRootElements()[0].getElement(line - 1);
             if (lineElement == null) {
                 valid = false;

@@ -30,11 +30,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Time;
@@ -94,15 +91,14 @@ public class Log4jPanel extends JPanel {
     private static final int LOG_MESSAGE = 5;
     private static final int MAX_ROWS = 25000; // number of LOG4J rows displayed
     private static final Pattern BEGIN_STEP_PATTERN = Pattern.compile("^Begin of step ([\\w.]+) \\(([\\w.]+)\\)");
-    protected Map<String, String> m_FilterMethod = new HashMap<String, String>();
+    protected Map<String, String> m_FilterMethod = new HashMap<>();
     private ArrayList<JCheckBox> m_LevelFilterCheckBoxes, m_SourceFilterCheckBoxes, m_MessageFilterCheckBoxes;
     private TableRowSorter<TableModel> m_LogSorterTable;
-    private Log4jRowFilter m_LogFilter;
     private JPanel m_LevelAndMessageFilterPanel, m_SourceFilterPanel;
     private JScrollPane m_SourceScrollPane;
     private boolean m_UserScrollPosition = false;
-    private Stack<String> m_currentStepStack = new Stack<String>();
-    private Collection<String> m_applications = new HashSet<String>();
+    private Stack<String> m_currentStepStack = new Stack<>();
+    private final Collection<String> m_applications = new HashSet<>();
 
     //private JTreeTable m_TreeLogTable;
     //private Log4JTableModel m_TreeLogModel;
@@ -174,85 +170,86 @@ public class Log4jPanel extends JPanel {
         JCheckBox checkBox = new JCheckBox(name);
         checkBox.setSelected(defaultValue);
         checkBox.setName(name);
-        checkBox.addActionListener(new ActionListener() {
+        checkBox.addActionListener(e -> {
+            Rectangle visibleRect = m_LogTable.getVisibleRect();
 
-            public void actionPerformed(ActionEvent e) {
-                Rectangle visibleRect = m_LogTable.getVisibleRect();
+            // get top fully visible row in view
+            int topRowView = m_LogTable.rowAtPoint(new Point(0, (int) visibleRect.getMinY()));
+            if ((topRowView != -1) && !visibleRect.contains(m_LogTable.getCellRect(topRowView, 0, true)) && (topRowView < (
+                  m_LogTable.getRowCount() - 1))) {
+                // use next fully visible row
+                topRowView++;
+            }
 
-                // get top fully visible row in view
-                int topRowView = m_LogTable.rowAtPoint(new Point(0, (int) visibleRect.getMinY()));
-                if ((topRowView != -1) && !visibleRect.contains(m_LogTable.getCellRect(topRowView, 0, true)) && (topRowView < (
-                      m_LogTable.getRowCount() - 1))) {
-                    // use next fully visible row
-                    topRowView++;
+            // get bottom fully visible row in view
+            int bottomRowView = m_LogTable.rowAtPoint(new Point(0, (int) visibleRect.getMaxY()));
+            if (bottomRowView == -1) {
+                // use last row
+                bottomRowView = m_LogTable.getRowCount() - 1;
+            } else {
+                if (!visibleRect.contains(m_LogTable.getCellRect(bottomRowView, 0, true)) && (bottomRowView > 0)) {
+                    // use previous fully visible row
+                    bottomRowView--;
                 }
+            }
 
-                // get bottom fully visible row in view
-                int bottomRowView = m_LogTable.rowAtPoint(new Point(0, (int) visibleRect.getMaxY()));
-                if (bottomRowView == -1) {
-                    // use last row
-                    bottomRowView = m_LogTable.getRowCount() - 1;
-                } else {
-                    if (!visibleRect.contains(m_LogTable.getCellRect(bottomRowView, 0, true)) && (bottomRowView > 0)) {
-                        // use previous fully visible row
-                        bottomRowView--;
-                    }
+            // compute difference of top/bottom rows in view
+            int diffRowsView = bottomRowView - topRowView;
+
+            // convert top row in model
+            int topRowModel = topRowView == -1 ? -1 : m_LogTable.convertRowIndexToModel(topRowView);
+
+            // get eventual selected row in view and model
+            int selectedRowView = m_LogTable.getSelectedRow();
+            int selectedRowModel = -1;
+            if ((selectedRowView != -1) && (selectedRowView >= topRowView) && (selectedRowView <= bottomRowView)) {
+                selectedRowModel = m_LogTable.convertRowIndexToModel(selectedRowView);
+            }
+
+            // filter logs based on updated filters
+            m_LogSorterTable.sort();
+
+            if (topRowView != -1) {
+                // get top row in updated view
+                while (((topRowView = m_LogTable.convertRowIndexToView(topRowModel)) == -1) && (topRowModel < (
+                      m_LogModel.getRowCount() - 1))) {
+                    topRowModel++;
                 }
+            }
 
-                // compute difference of top/bottom rows in view
-                int diffRowsView = bottomRowView - topRowView;
+            // compute bottom row in updated view
+            bottomRowView = Math.min(m_LogTable.getRowCount() - 1, topRowView + diffRowsView);
 
-                // convert top row in model
-                int topRowModel = topRowView == -1 ? -1 : m_LogTable.convertRowIndexToModel(topRowView);
+            // make top and bottom rows visible
+            if (topRowView != -1) {
+                m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(topRowView, 0, true));
+            }
+            if (bottomRowView != -1) {
+                m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(bottomRowView, 0, true));
+            }
 
-                // get eventual selected row in view and model
-                int selectedRowView = m_LogTable.getSelectedRow();
-                int selectedRowModel = -1;
-                if ((selectedRowView != -1) && (selectedRowView >= topRowView) && (selectedRowView <= bottomRowView)) {
-                    selectedRowModel = m_LogTable.convertRowIndexToModel(selectedRowView);
-                }
-
-                // filter logs based on updated filters
-                m_LogSorterTable.sort();
-
-                if (topRowView != -1) {
-                    // get top row in updated view
-                    while (((topRowView = m_LogTable.convertRowIndexToView(topRowModel)) == -1) && (topRowModel < (
-                          m_LogModel.getRowCount() - 1))) {
-                        topRowModel++;
-                    }
-                }
-
-                // compute bottom row in updated view
-                bottomRowView = Math.min(m_LogTable.getRowCount() - 1, topRowView + diffRowsView);
-
-                // make top and bottom rows visible
-                if (topRowView != -1) {
-                    m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(topRowView, 0, true));
-                }
-                if (bottomRowView != -1) {
-                    m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(bottomRowView, 0, true));
-                }
-
-                // if there was a selected row and it was visible, and it's not filtered out
-                // then make it visible
-                if (selectedRowModel != -1) {
-                    selectedRowView = m_LogTable.convertRowIndexToView(selectedRowModel);
-                    if (selectedRowView != -1) {
-                        m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(selectedRowView, 0, true));
-                    }
+            // if there was a selected row and it was visible, and it's not filtered out
+            // then make it visible
+            if (selectedRowModel != -1) {
+                selectedRowView = m_LogTable.convertRowIndexToView(selectedRowModel);
+                if (selectedRowView != -1) {
+                    m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(selectedRowView, 0, true));
                 }
             }
         });
-        if (type.equals("Level")) {
-            m_LevelFilterCheckBoxes.add(checkBox);
-            m_LevelAndMessageFilterPanel.add(checkBox);
-        } else if (type.equals("TestCaseOrVerb")) {
-            m_MessageFilterCheckBoxes.add(checkBox);
-            m_LevelAndMessageFilterPanel.add(checkBox);
-        } else if (type.equals("Source")) {
-            m_SourceFilterCheckBoxes.add(checkBox);
-            m_SourceFilterPanel.add(checkBox);
+        switch (type) {
+            case "Level":
+                m_LevelFilterCheckBoxes.add(checkBox);
+                m_LevelAndMessageFilterPanel.add(checkBox);
+                break;
+            case "TestCaseOrVerb":
+                m_MessageFilterCheckBoxes.add(checkBox);
+                m_LevelAndMessageFilterPanel.add(checkBox);
+                break;
+            case "Source":
+                m_SourceFilterCheckBoxes.add(checkBox);
+                m_SourceFilterPanel.add(checkBox);
+                break;
         }
         return checkBox;
     }
@@ -261,9 +258,9 @@ public class Log4jPanel extends JPanel {
         try {
             m_LevelAndMessageFilterPanel = new JPanel(new SpringLayout());
             m_SourceFilterPanel = new JPanel(new SpringLayout());
-            m_LevelFilterCheckBoxes = new ArrayList<JCheckBox>();
-            m_MessageFilterCheckBoxes = new ArrayList<JCheckBox>();
-            m_SourceFilterCheckBoxes = new ArrayList<JCheckBox>();
+            m_LevelFilterCheckBoxes = new ArrayList<>();
+            m_MessageFilterCheckBoxes = new ArrayList<>();
+            m_SourceFilterCheckBoxes = new ArrayList<>();
 
             m_LevelAndMessageFilterPanel.add(new JLabel("Level: "));
             addFilterLogCheckBox("Level", "Trace", "doLogLevelFilter", false);
@@ -277,22 +274,16 @@ public class Log4jPanel extends JPanel {
             final JCheckBox qtasteCheckBox = addFilterLogCheckBox("Source", "QTaste", "filterMessageSource", true);
 
             // when selecting "Invoking" force "QTaste" to be selected
-            testCaseOrVerbCheckBox.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    if (testCaseOrVerbCheckBox.isSelected()) {
-                        qtasteCheckBox.setSelected(true);
-                    }
+            testCaseOrVerbCheckBox.addActionListener(e -> {
+                if (testCaseOrVerbCheckBox.isSelected()) {
+                    qtasteCheckBox.setSelected(true);
                 }
             });
 
             // when unselecting "QTaste" force "Invoking" to be unselected
-            qtasteCheckBox.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    if (!qtasteCheckBox.isSelected()) {
-                        testCaseOrVerbCheckBox.setSelected(false);
-                    }
+            qtasteCheckBox.addActionListener(e -> {
+                if (!qtasteCheckBox.isSelected()) {
+                    testCaseOrVerbCheckBox.setSelected(false);
                 }
             });
 
@@ -359,10 +350,9 @@ public class Log4jPanel extends JPanel {
                 m_LogTable.setDefaultRenderer(Class.forName("java.lang.Object"), new QTasteTableCellRenderer());
             } catch (ClassNotFoundException ex) {
             }
-            m_LogFilter = new Log4jRowFilter();
 
-            m_LogSorterTable = new TableRowSorter<TableModel>(m_LogModel);
-            m_LogSorterTable.setRowFilter(m_LogFilter);
+            m_LogSorterTable = new TableRowSorter<>(m_LogModel);
+            m_LogSorterTable.setRowFilter(new Log4jRowFilter());
             // disable row sorting
             for (int i = 0; i < m_LogTable.getColumnCount(); i++) {
                 m_LogSorterTable.setSortable(i, false);
@@ -468,19 +458,14 @@ public class Log4jPanel extends JPanel {
             m_currentStepStack.pop();
         }
 
-        long currentScrollBarMax = 0;
+        long currentScrollBarMax;
         //int lastRow = m_LogModel.getRowCount();
         // check if the user has change the scrolling position
         JScrollPane scrollPane = (JScrollPane) m_LogTable.getParent().getParent();
         JScrollBar scrollbar = scrollPane.getVerticalScrollBar();
         if (scrollbar != null) {
             if (scrollbar.getMouseListeners().length == 1) {
-                scrollPane.addMouseWheelListener(new MouseWheelListener() {
-
-                    public void mouseWheelMoved(MouseWheelEvent e) {
-                        m_UserScrollPosition = true;
-                    }
-                });
+                scrollPane.addMouseWheelListener(e -> m_UserScrollPosition = true);
                 scrollbar.addMouseListener(new MouseAdapter() {
 
                     @Override
@@ -510,11 +495,9 @@ public class Log4jPanel extends JPanel {
             }
             if (!m_UserScrollPosition) {
                 m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(m_LogTable.getRowCount() - 1, 0, true));
-                return;
             } else if (scrollbar.getValue() >= currentScrollBarMax) {
                 m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(m_LogTable.getRowCount() - 1, 0, true));
                 m_UserScrollPosition = false;
-                return;
             }
         } else {
             this.m_LogModel.addRow(cols);
@@ -632,31 +615,24 @@ public class Log4jPanel extends JPanel {
                 try {
                     // get level method
                     String methodName = m_FilterMethod.get("Level");
-                    Method method = this.getClass().getMethod(methodName, new Class[] {String.class, String.class, String.class});
+                    Method method = this.getClass().getMethod(methodName, String.class, String.class, String.class);
                     Object returnValue = method.invoke(this, type, source, message);
                     boolean filterLevel = Boolean.parseBoolean(returnValue.toString());
 
                     // get "TestCaseOrVerb" method
                     methodName = m_FilterMethod.get("TestCaseOrVerb");
-                    method = this.getClass().getMethod(methodName, new Class[] {String.class, String.class, String.class});
+                    method = this.getClass().getMethod(methodName, String.class, String.class, String.class);
                     returnValue = method.invoke(this, type, source, message);
                     boolean filterTestCaseOrVerb = Boolean.parseBoolean(returnValue.toString());
 
                     methodName = m_FilterMethod.get("Source");
-                    method = this.getClass().getMethod(methodName, new Class[] {String.class, String.class, String.class});
+                    method = this.getClass().getMethod(methodName, String.class, String.class, String.class);
                     returnValue = method.invoke(this, type, source, message);
                     boolean filterSource = Boolean.parseBoolean(returnValue.toString());
 
                     return !(filterSource || (filterTestCaseOrVerb && filterLevel));
-                } catch (IllegalAccessException ex) {
-                    logger.equals(ex);
-                } catch (IllegalArgumentException ex) {
-                    logger.equals(ex);
-                } catch (InvocationTargetException ex) {
-                    logger.equals(ex);
-                } catch (NoSuchMethodException ex) {
-                    logger.equals(ex);
-                } catch (SecurityException ex) {
+                } catch (IllegalAccessException | SecurityException | NoSuchMethodException | InvocationTargetException |
+                      IllegalArgumentException ex) {
                     logger.equals(ex);
                 }
                 return true;
@@ -748,8 +724,8 @@ public class Log4jPanel extends JPanel {
             final String eol = System.getProperty("line.separator");
             // get the selected table lines
             int[] selectedRows = m_LogTable.getSelectedRows();
-            for (int row = 0; row < selectedRows.length; row++) {
-                String message = (String) m_LogTable.getValueAt(selectedRows[row], LOG_MESSAGE);
+            for (int selectedRow : selectedRows) {
+                String message = (String) m_LogTable.getValueAt(selectedRow, LOG_MESSAGE);
                 if (message != null) {
                     if (messages.length() > 0) {
                         messages.append(eol);
@@ -781,23 +757,30 @@ public class Log4jPanel extends JPanel {
             // display the color depending on level and message
             String level = (String) table.getValueAt(row, LOG_LEVEL);
             Color foregroundColor;
-            if (level.equals("ERROR")) {
-                foregroundColor = Color.RED;
-            } else if (level.equals("FATAL")) {
-                foregroundColor = Color.RED;
-            } else if (level.equals("WARN")) {
-                foregroundColor = Color.ORANGE.darker();
-            } else if (level.equals("DEBUG")) {
-                foregroundColor = Color.GRAY;
-            } else if (level.equals("TRACE")) {
-                foregroundColor = Color.DARK_GRAY;
-            } else {
-                String message = (String) table.getValueAt(row, LOG_MESSAGE);
-                if (message.startsWith("Executing test script: ") || message.startsWith("Retrying test script: ")) {
-                    foregroundColor = Color.BLUE;
-                } else {
-                    foregroundColor = Color.BLACK;
-                }
+            switch (level) {
+                case "ERROR":
+                    foregroundColor = Color.RED;
+                    break;
+                case "FATAL":
+                    foregroundColor = Color.RED;
+                    break;
+                case "WARN":
+                    foregroundColor = Color.ORANGE.darker();
+                    break;
+                case "DEBUG":
+                    foregroundColor = Color.GRAY;
+                    break;
+                case "TRACE":
+                    foregroundColor = Color.DARK_GRAY;
+                    break;
+                default:
+                    String message = (String) table.getValueAt(row, LOG_MESSAGE);
+                    if (message.startsWith("Executing test script: ") || message.startsWith("Retrying test script: ")) {
+                        foregroundColor = Color.BLUE;
+                    } else {
+                        foregroundColor = Color.BLACK;
+                    }
+                    break;
             }
             setForeground(foregroundColor);
 

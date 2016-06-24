@@ -127,7 +127,7 @@ public class XMLReportFormatter extends XMLFormatter {
     }
 
     private void generateMainFile(boolean testSuiteEnded) throws FileNotFoundException, IOException {
-        NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+        NamesValuesList<String, String> namesValues = new NamesValuesList<>();
         namesValues.add("###QTaste_KERNEL_VERSION###", kernelVersion);
         namesValues.add("###QTaste_TESTAPI_VERSION###", getTestAPIVersion());
         namesValues.add("###RESULTS_FILE###", reportFileName);
@@ -182,7 +182,7 @@ public class XMLReportFormatter extends XMLFormatter {
 
     private void writeTestResult(TestResult tr) {
         try {
-            NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+            NamesValuesList<String, String> namesValues = new NamesValuesList<>();
             namesValues.add("###TEST_CASE###", tr.getId());
             String testScriptVersion = tr.getTestScriptVersion();
             if (testScriptVersion != null) {
@@ -224,7 +224,7 @@ public class XMLReportFormatter extends XMLFormatter {
             String stepsContent = "";
             // Display steps.
             for (StepResult stepResult : tr.getStepResults()) {
-                NamesValuesList<String, String> stepsNamesValues = new NamesValuesList<String, String>();
+                NamesValuesList<String, String> stepsNamesValues = new NamesValuesList<>();
                 stepsNamesValues.add("###STEP_ID###", stepResult.getStepId());
                 stepsNamesValues.add("###STEP_NAME###", stepResult.getFunctionName());
                 stepsNamesValues.add("###STEP_DESCRIPTION###", stepResult.getStepDescription());

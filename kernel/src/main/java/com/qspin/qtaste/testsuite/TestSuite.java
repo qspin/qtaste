@@ -52,7 +52,7 @@ public abstract class TestSuite implements TestReportListener {
     private int nbTestsFailed = 0;
     private int nbTestsNotAvailable = 0;
     private int nbTestsRetries = 0;
-    private List<TestReportListener> testReportListeners = new LinkedList<TestReportListener>();
+    private List<TestReportListener> testReportListeners = new LinkedList<>();
 
     /**
      * Creates a new instance of TestSuite
@@ -91,7 +91,7 @@ public abstract class TestSuite implements TestReportListener {
         if (nbTestsToExecute != 0 || !TestEngine.isAbortedByUser()) {
             if (!initializeTestEngine || TestEngine.initialize()) {
                 if (numberLoops != 1 || loopsInTime) {
-                    boolean continueExecution = true;
+                    boolean continueExecution;
                     int currentExecution = 1;
                     long startTime_ms = System.currentTimeMillis();
                     do {

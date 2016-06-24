@@ -45,7 +45,7 @@ public class CampaignReportManager extends ReportManager {
 
     private CampaignReportManager() {
         super();
-        results = new ArrayList<CampaignResult>();
+        results = new ArrayList<>();
         initFormatters();
     }
 
@@ -61,7 +61,7 @@ public class CampaignReportManager extends ReportManager {
                 outputDir.mkdirs();
             }
 
-            HashMap<String, String> templates = new HashMap<String, String>();
+            HashMap<String, String> templates = new HashMap<>();
             templates.put("start", StaticConfiguration.CONFIG_DIRECTORY + "/reporting/campaign/campaign_start_template.html");
             templates.put("rowData", StaticConfiguration.CONFIG_DIRECTORY + "/reporting/campaign/campaign_row_data.html");
             templates.put("end", StaticConfiguration.CONFIG_DIRECTORY + "/reporting/campaign/campaign_end_template.html");
