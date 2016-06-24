@@ -35,8 +35,6 @@ import com.qspin.qtaste.config.TestEngineConfiguration;
 public class EngineTestConfigPanel extends ConfigPanelTemplate {
 
     private TestEngineConfiguration engineConfig;
-    private JPanel scriptPanel, reportingPanel;
-    private JComboBox reportingFormatLabelComboBox;
     private JTextField reportingDirLabelTextField;
 
     public EngineTestConfigPanel() {
@@ -85,18 +83,18 @@ public class EngineTestConfigPanel extends ConfigPanelTemplate {
     }
 
     public void genUI() {
-        scriptPanel = new JPanel();
-        reportingPanel = new JPanel();
+        JPanel scriptPanel = new JPanel();
+        JPanel reportingPanel = new JPanel();
 
         JLabel reportingFormatLabel = new JLabel();
-        reportingFormatLabelComboBox = new JComboBox();
+        JComboBox<String> reportingFormatLabelComboBox = new JComboBox<>();
         JLabel reportingDirLabel = new javax.swing.JLabel();
         reportingDirLabelTextField = new javax.swing.JTextField();
 
         reportingPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Reporting"));
         reportingFormatLabel.setText("Format");
 
-        reportingFormatLabelComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"HTML", "XML"}));
+        reportingFormatLabelComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"HTML", "XML"}));
         reportingDirLabel.setText("Directory:");
 
         reportingDirLabelTextField.setText("jTextField3");

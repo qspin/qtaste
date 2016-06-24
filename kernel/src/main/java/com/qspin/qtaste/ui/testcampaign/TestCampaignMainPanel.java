@@ -20,6 +20,7 @@
 package com.qspin.qtaste.ui.testcampaign;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -47,7 +48,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
-import org.python.core.PyException;
 
 import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
@@ -69,7 +69,7 @@ public class TestCampaignMainPanel extends JPanel {
 
     private MainPanel parent;
     private JTreeTable treeTable;
-    private JComboBox metaCampaignComboBox = new JComboBox();
+    private JComboBox<MetaCampaignFile> metaCampaignComboBox = new JComboBox<>();
     private JButton addNewMetaCampaignButton = new JButton("Add");
     private JButton saveMetaCampaignButton = new JButton("Save");
     private JButton runMetaCampaignButton = new JButton("Run");
@@ -123,8 +123,7 @@ public class TestCampaignMainPanel extends JPanel {
                 if (newCampaign != null && newCampaign.length() > 0) {
                     int index = addTestCampaign(newCampaign);
                     metaCampaignComboBox.setSelectedIndex(index);
-                    MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
-                    selectedCampaign = currentSelectedCampaign;
+                    selectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
                     if (selectedCampaign != null) {
                         treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
                     }
@@ -148,8 +147,8 @@ public class TestCampaignMainPanel extends JPanel {
         // add test campaign mouse listener, for the Rename and Remove actions
         TestcampaignMouseListener testcampaignMouseListener = new TestcampaignMouseListener();
         java.awt.Component[] mTestcampaignListComponents = metaCampaignComboBox.getComponents();
-        for (int i = 0; i < mTestcampaignListComponents.length; i++) {
-            mTestcampaignListComponents[i].addMouseListener(testcampaignMouseListener);
+        for (Component component : mTestcampaignListComponents) {
+            component.addMouseListener(testcampaignMouseListener);
         }
 
         metaCampaignComboBox.addActionListener(new ActionListener() {
@@ -244,8 +243,8 @@ public class TestCampaignMainPanel extends JPanel {
         // clear the list
         metaCampaignComboBox.removeAllItems();
         MetaCampaignFile[] campaigns = MetaCampaignFile.getExistingCampaigns();
-        for (int i = 0; i < campaigns.length; i++) {
-            metaCampaignComboBox.addItem(campaigns[i]);
+        for (MetaCampaignFile campaign : campaigns) {
+            metaCampaignComboBox.addItem(campaign);
         }
         return campaigns;
     }
@@ -329,10 +328,6 @@ public class TestCampaignMainPanel extends JPanel {
                               JOptionPane.ERROR_MESSAGE);
                     }
                 }
-            } catch (PyException ex) {
-                logger.error(ex.getMessage(), ex);
-                JOptionPane.showMessageDialog(null, "Error during generation of TPO file\n" + ex.getMessage(), "Error",
-                      JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
                 JOptionPane.showMessageDialog(null, "Error during generation of TPO file\n" + ex.getMessage(), "Error",
@@ -345,7 +340,7 @@ public class TestCampaignMainPanel extends JPanel {
 
         private String xmlFileName;
 
-        public CampaignExecutionThread(final String xmlFileName) {
+        CampaignExecutionThread(final String xmlFileName) {
             this.xmlFileName = xmlFileName;
         }
 
@@ -417,7 +412,7 @@ public class TestCampaignMainPanel extends JPanel {
 
         class RenameCampaignAction extends AbstractAction {
 
-            public RenameCampaignAction() {
+            RenameCampaignAction() {
                 super("Rename Campaign");
             }
 

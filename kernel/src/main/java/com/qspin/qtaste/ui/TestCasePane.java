@@ -37,7 +37,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -421,9 +420,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                         } else {
                             setTestCaseInfo(null);
                         }
-                    } catch (MalformedURLException e1) {
-                        logger.error(e1);
-                        setTestCaseInfo(null);
                     } catch (IOException e1) {
                         logger.error(e1);
                         setTestCaseInfo(null);
@@ -583,7 +579,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             return textPane;
         }
         if (f.exists() && f.canRead()) {
-            StringBuffer contents = new StringBuffer();
+            StringBuilder contents = new StringBuilder();
             BufferedReader in = null;
             try {
                 in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
@@ -746,7 +742,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 }
                 // remove all breakpoints and listeners if any
                 currentPane.removeAllBreakpoints();
-                currentPane = null;
             } else {
                 TestDataEditor currentDataPane = getTestDataPane(0);
                 if (currentDataPane != null) {
@@ -758,7 +753,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                             currentDataPane.save();
                         }
                     }
-                    currentDataPane = null;
                 } else {
                     TestRequirementEditor currentrequirementPane = getTestRequirementPane(0);
                     if (currentrequirementPane != null) {
@@ -771,7 +765,6 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                                 currentrequirementPane.save();
                             }
                         }
-                        currentrequirementPane = null;
                     }
                 }
             }
@@ -817,7 +810,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     }
 
     public NonWrappingTextPane[] getVisibleTextPanes() {
-        ArrayList<NonWrappingTextPane> textPanes = new ArrayList<NonWrappingTextPane>();
+        ArrayList<NonWrappingTextPane> textPanes = new ArrayList<>();
         for (int i = 0; i < editorTabbedPane.getTabCount(); i++) {
             NonWrappingTextPane tabTextPane = getTextPane(i);
             if (tabTextPane == null) {
@@ -1101,8 +1094,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 debugPanel.setVisible(false);
                 //this.getTe
                 NonWrappingTextPane[] panes = this.getVisibleTextPanes();
-                for (int i = 0; i < panes.length; i++) {
-                    NonWrappingTextPane textPane = panes[i];
+                for (NonWrappingTextPane textPane : panes) {
                     textPane.getDefaultLineNumberPanel().update(event);
                 }
                 break;
@@ -1124,10 +1116,10 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
                     // load the file into the tabbedPaned
                     File f = new File(breakpoint.getFileName());
-                    NonWrappingTextPane textPane = null;
                     if (f.exists() && f.canRead()) {
+                        NonWrappingTextPane textPane = loadTestCaseSource(f, true,
+                              f.getName().equals(StaticConfiguration.TEST_SCRIPT_FILENAME));
 
-                        textPane = loadTestCaseSource(f, true, f.getName().equals(StaticConfiguration.TEST_SCRIPT_FILENAME));
                         tabbedPane.setSelectedIndex(TestCasePane.SOURCE_INDEX);
                         // now go to the given line
                         textPane.selectLine(breakpoint.getLineIndex());
