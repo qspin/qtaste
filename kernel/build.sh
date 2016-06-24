@@ -3,7 +3,6 @@
 #remove previous python compilation classes.
 rm -f ../tools/jython/lib/Lib/*.class
 
-mvn clean -P qtaste-install-3rd-artifacts || exit 1
 mvn install -P qtaste-build-kernel-first || exit 1
 
 # restore pom.xml if modified

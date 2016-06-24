@@ -718,6 +718,9 @@ class ModuleParser:
     # comment lines to the current comment.
 
     def process_comment_body(self, type, token, start, end, line):
+        if type == tokenize.NL:
+            # ignore non-terminating newline
+            return self.process_comment_body
         if type == tokenize.COMMENT:
             if start[1] != self.comment_start[1]:
                 self.warning(

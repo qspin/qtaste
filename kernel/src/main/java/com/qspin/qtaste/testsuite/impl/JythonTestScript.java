@@ -22,6 +22,7 @@ package com.qspin.qtaste.testsuite.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -34,9 +35,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -44,23 +44,25 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.python.core.Py;
 import org.python.core.PyArray;
-import org.python.core.PyClass;
 import org.python.core.PyDictionary;
 import org.python.core.PyException;
-import org.python.core.PyFunction;
+import org.python.core.PyFrame;
 import org.python.core.PyInstance;
 import org.python.core.PyInteger;
-import org.python.core.PyJavaInstance;
 import org.python.core.PyList;
 import org.python.core.PyObject;
+import org.python.core.PyObjectDerived;
 import org.python.core.PyString;
 import org.python.core.PyStringMap;
 import org.python.core.PySyntaxError;
 import org.python.core.PySystemState;
+import org.python.core.PyTraceback;
 import org.python.core.PyTuple;
+import org.python.core.PyType;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
@@ -159,11 +161,13 @@ public class JythonTestScript extends TestScript implements Executable {
         TestAPI testAPI = TestAPIImpl.getInstance();
         Collection<String> registeredComponents = testAPI.getRegisteredComponents();
 
-        if (engine != null) {
-            Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-            if (bindings != null) {
-                bindings.clear();
-            }
+        // install line buffered auto-flush writers for stdout/sterr
+        engine.getContext().setWriter(new LineBufferedPrintWriter(System.out));
+        engine.getContext().setErrorWriter(new LineBufferedPrintWriter(System.err));
+
+        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+        if (bindings != null) {
+            bindings.clear();
         }
 
         globalBindings = engine.createBindings();
@@ -181,18 +185,13 @@ public class JythonTestScript extends TestScript implements Executable {
                     "    pass\n" +
                     "class StepsException(Exception):\n" +
                     "    pass\n" +
-                    "class ImportTestScriptException(Exception):\n" +
-                    "    pass\n" +
                     "class __TestAPIWrapper:\n" +
                     "    def __init__(self, testScript):\n" +
-                    "        self.testScript = testScript\n";
-
-            code +=
-                    //   new-style test api - direct method call
-                    "    def __invoke(self, method, arguments):\n" +
-                    "        self.testScript.logInvoke(method.im_self, method.__name__, str(arguments)[1:-1-(len(arguments)==1)])\n" +
+                    "        self.testScript = testScript\n" +
+                    "    def __invoke(self, method, args):\n" +
+                    "        self.testScript.logInvoke(method.im_self, method.__name__, str(args)[1:-1-(len(args)==1)])\n" +
                     "        try:\n" +
-                    "            return method(*arguments)\n" +
+                    "            return method(*args)\n" +
                     "        except TypeError, e:\n" +
                     "            raise QTasteDataException('Invalid argument(s): ' + str(e))\n" +
                     "    def stopTest(self, status, message):\n" +
@@ -205,33 +204,38 @@ public class JythonTestScript extends TestScript implements Executable {
 
             // add get<Component>() methods to the __TestAPIWrapper class
             for (String component : registeredComponents) {
-                code += "    def get" + component + "(self, **keywords):\n" +
-                        "        component = self.testScript.getComponent('" + component + "', keywords)\n" +
-                        "        return __TestAPIWrapper." + component + "Wrapper(self, component)\n";
+                code += "    def get" + component + "(self, **kw):\n" +
+                      "        component = self.testScript.getComponent('" + component + "', kw)\n" +
+                      "        return __TestAPIWrapper." + component + "Wrapper(self, component)\n";
+            }
+            engine.eval(code, globalBindings);
 
+            for (String component : registeredComponents) {
                 // declare the <Component>Wrapper class, of which the objects returned
                 // by get<Component>() methods will be instances
-                code += "    class " + component + "Wrapper:\n" +
-                        "        def __init__(self, testAPI, component):\n" +
-                        "            self.testAPI = testAPI\n" +
-                        "            self.component = component\n" +
-                        "        def __nonzero__(self):\n" +
-                        "            return self.component\n";
+                code = "class __TestAPIWrapper_" + component + "Wrapper:\n" +
+                       "    def __init__(self, testAPI, component):\n" +
+                       "        self.testAPI = testAPI\n" +
+                       "        self.component = component\n" +
+                       "    def __nonzero__(self):\n" +
+                       "        return self.component\n"+
+                       "    def __getattr__(self, attr):\n" + // only called when self.attr doesn't exist
+                       "        raise AttributeError('Component " + component + " has no \\'' + attr + '\\' verb')\n"+
+                       "    def __checkPresent(self):\n" +
+                       "        if not self.component:\n" +
+                       "            raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
 
                 // add verbs methods to the ComponentWrapper class
                 Collection<String> verbs = testAPI.getRegisteredVerbs(component);
                 for (String verb : verbs) {
-                    code += "        def " + verb + "(self, *arguments, **keywords):\n" +
-                            "            if self.component:\n";
-
-                    code += "                return self.testAPI._TestAPIWrapper__invoke(self.component." + verb + ", arguments)\n";
-
-                    code +=
-                            "            else:\n" +
-                            "                raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
+                    code += "    def " + verb + "(self, *args):\n" +
+                            "        self.__checkPresent()\n" +
+                            "        return self.testAPI._TestAPIWrapper__invoke(self.component." + verb + ", args)\n";
                 }
+                code += "__TestAPIWrapper." + component + "Wrapper = __TestAPIWrapper_" + component + "Wrapper\n";
+                code += "del __TestAPIWrapper_" + component + "Wrapper\n";
+                engine.eval(code, globalBindings);
             }
-            engine.eval(code, globalBindings);
         } catch (ScriptException e) {
             logger.fatal("Couldn't create __TestAPIWrapper Python class", e);
             TestEngine.shutdown();
@@ -241,7 +245,6 @@ public class JythonTestScript extends TestScript implements Executable {
         try {
             String code =
                     "import os as __os\n" +
-                    "from com.sun.script.jython import JythonScope as __JythonScope\n" +
                     "from com.qspin.qtaste.testsuite.impl import JythonTestScript as __JythonTestScript\n" +
                     "__isInTestScriptImport = 0\n" +
                     "def isInTestScriptImport():\n" +
@@ -263,8 +266,6 @@ public class JythonTestScript extends TestScript implements Executable {
                     "                import TestScript\n" +
                     "            except ImportError:\n" +
                     "                raise ImportError('No test script found in ' + testCasePath)\n" +
-                    "            except:\n" +
-                    "                raise ImportTestScriptException('Error while importing test script ' + testCasePath)\n" +
                     "            if wasInTestScriptImport:\n" +
                     "                # test script is imported\n" +
                     "                __sys._getframe(1).f_globals[testCaseName] = TestScript\n" +
@@ -289,7 +290,6 @@ public class JythonTestScript extends TestScript implements Executable {
                     "import time as __time, sys as __sys\n" +
                     "from java.lang import ThreadDeath as __ThreadDeath\n" +
                     "from java.lang.reflect import UndeclaredThrowableException as __UndeclaredThrowableException\n" +
-                    "from com.sun.script.jython import JythonScope as __JythonScope\n" +
                     "from com.qspin.qtaste.testsuite import QTasteTestFailException\n" +
                     "import com.qspin.qtaste.reporter.testresults.TestResult.Status as __TestResultStatus\n" +
                     "def doStep(idOrFunc, func=None):\n" +
@@ -317,15 +317,14 @@ public class JythonTestScript extends TestScript implements Executable {
                     "    status = __TestResultStatus.SUCCESS\n" +
                     "    begin_time = __time.clock()\n" +
                     "    try:\n" +
-                    "        try:\n" +
-                    "            testScript.addStepResult(stepId, __TestResultStatus.RUNNING, stepName, stepDoc, 0)\n" +
-                    "            func()\n" +
-                    "        except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
-                    "            status = __TestResultStatus.FAIL\n" +
-                    "            raise\n" +
-                    "        except:\n" +
-                    "            status = __TestResultStatus.NOT_AVAILABLE\n" +
-                    "            raise\n" +
+                    "        testScript.addStepResult(stepId, __TestResultStatus.RUNNING, stepName, stepDoc, 0)\n" +
+                    "        func()\n" +
+                    "    except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
+                    "        status = __TestResultStatus.FAIL\n" +
+                    "        raise\n" +
+                    "    except:\n" +
+                    "        status = __TestResultStatus.NOT_AVAILABLE\n" +
+                    "        raise\n" +
                     "    finally:\n" +
                     "        end_time = __time.clock()\n" +
                     "        elapsed_time = end_time - begin_time\n" +
@@ -344,7 +343,6 @@ public class JythonTestScript extends TestScript implements Executable {
         try {
             String code =
                     "import sys as __sys\n" +
-                    "from com.sun.script.jython import JythonScope as __JythonScope\n" +
                     "def __findStepIndex(table, id):\n" +
                     "   for index in range(len(table)):\n" +
                     "       stepId = str(table[index][0])\n" +
@@ -752,87 +750,64 @@ public class JythonTestScript extends TestScript implements Executable {
     }
 
     private void dumpScriptPythonStackDetails(TestResult result, Throwable error) {
-        StackTraceElement stack[] = (error != null ? error.getStackTrace() : Thread.currentThread().getStackTrace());
+        StringBuilder stackTrace = new StringBuilder();
 
-        // get the stack trace and extract all necessary details
-        boolean stackLastDataExtracted = false;
-        String stackTrace = new String();
-        for (int i = 0; i < stack.length; i++) {
-            StackTraceElement stackElement = stack[i];
-            if (stackElement.getLineNumber() != -1) {
-                String className = stackElement.getClassName();
-                if (className.startsWith("org.python.pycode.") || className.endsWith("$py") ||
-                        className.equals(getClass().getCanonicalName() + "$ScriptTestData")) {
-                    String methodName = stackElement.getMethodName();
-                    String fileName = stackElement.getFileName();
-                    int lineNumber = stackElement.getLineNumber();
+        // get stacktrace from PyException traceback, because easier and line number is not always correct in Java stack trace
+        if (error instanceof PyException) {
+            List<PyFrame> stacktrace = new ArrayList<>();
+            PyTraceback previousTraceback = null;
+            PyTraceback traceback = ((PyException) error).traceback;
+            while (traceback != null && traceback != previousTraceback) {
+                PyFrame frame = traceback.tb_frame;
+                String fileName;
+                String function;
 
-                    if ((fileName.equals("embedded_jython") &&
-                            (methodName.equals("f$0") || methodName.startsWith("doStep$") || methodName.startsWith("doSteps$") || methodName.startsWith("_TestAPIWrapper__invoke$") || methodName.startsWith("user_line$")))
-							|| fileName.endsWith(File.separator + "bdb.py")) {
-                        // this is the execfile() call in the embedded jython
-                        // or the doStep() or doSteps function
-                        // or a private __invokexxx() method of the __TestAPIWrapper class
-                        // or the user_line() method of the __ScriptDebugger class
-                        // or a function of the debugger
-                        // so just skip
-                        continue;
+                if (frame != null && frame.f_code != null && (fileName = frame.f_code.co_filename) != null
+                      && (function = frame.f_code.co_name) != null) {
+                    // skip execfile() call in the embedded jython, doStep() and doSteps() functions,
+                    // private __invokexxx() methods of the __TestAPIWrapper class,
+                    // private __checkPresent() method of a test API wrapper class,
+                    // user_line() method of the __ScriptDebugger class and a function of the debugger
+                    if ((!fileName.equals("embedded_jython") || (!function.equals("<module>") && !function.equals("doStep")
+                          && !function.equals("doSteps") && !function.startsWith("_TestAPIWrapper__invoke") && !function
+                          .endsWith("__checkPresent") && !function.equals("user_line"))) && !fileName
+                          .endsWith(File.separator + "bdb.py")) {
+                        stacktrace.add(frame);
                     }
-
-                    if (methodName.equals("f$0")) {
-                        stackTrace += "\nat file " + fileName + " line " + lineNumber;
-                    } else {
-                        // remove $i suffix from method name
-                        int dollarIndex = methodName.indexOf("$");
-                        if (dollarIndex > 0) {
-                            methodName = methodName.substring(0, dollarIndex);
-                        }
-
-                        stackTrace += "\n";
-
-                        // check if function is a step, i.e. executed by doStep
-                        if ((i + 6 < stack.length) && stack[i + 6].getMethodName().startsWith("doStep$")) {
-                            String stepId;
-                            Object doStep = engine.getBindings(ScriptContext.ENGINE_SCOPE).get("doStep");
-                            if (doStep instanceof PyFunction) {
-                                stepId = ((PyFunction) doStep).__getattr__("stepId").toString();
-                                stackTrace += "step " + stepId + " ";
-                            }
-                        }
-
-                        stackTrace += "function " + methodName;
-                        if (!fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
-                            stackTrace += " at file " + fileName + " line " + lineNumber;
-                        }
-                    }
-                    if (!stackLastDataExtracted && !fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
-                        stackLastDataExtracted = true;
-                        result.setFailedLineNumber(lineNumber);
-                        result.setFailedFunctionId(methodName);
-                    }
-                    result.addStackTraceElement(stackElement);
                 }
+
+                previousTraceback = traceback;
+                traceback = (PyTraceback) traceback.tb_next;
+            }
+
+            // extract all necessary details from stacktrace from last frame to first one
+            boolean stackLastDataExtracted = false;
+            ListIterator<PyFrame> frameIterator = stacktrace.listIterator(stacktrace.size());
+            while (frameIterator.hasPrevious()) {
+                PyFrame frame = frameIterator.previous();
+                String fileName = frame.f_code.co_filename;
+                String function = frame.f_code.co_name;
+                int lineNumber = frame.f_lineno;
+
+                if (function.equals("<module>")) {
+                    stackTrace.append("at file ").append(fileName).append(" line ").append(lineNumber);
+                } else {
+                    stackTrace.append("function ").append(function);
+                    if (!fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
+                        stackTrace.append(" at file ").append(fileName).append(" line ").append(lineNumber);
+                    }
+                }
+                stackTrace.append('\n');
+                if (!stackLastDataExtracted && !fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
+                    stackLastDataExtracted = true;
+                    result.setFailedLineNumber(lineNumber);
+                    result.setFailedFunctionId(function);
+                }
+                result.addStackTraceElement(new StackTraceElement("", function, fileName, lineNumber));
             }
         }
-        if (stackTrace.isEmpty() && (error != null)) {
-            // in some case stack seems corrupted, e.g. timeout while script never returns
-            // in this case, try to parse the printed stack trace to get filename and line number
-            StringWriter stackTraceWriter = new StringWriter();
-            error.printStackTrace(new PrintWriter(stackTraceWriter));
-            String printedStackTrace = stackTraceWriter.toString();
-            Pattern printedStackTracePattern = Pattern.compile(".*^  File \"(.*?)\", line (\\d+), .*", Pattern.MULTILINE | Pattern.DOTALL);
-            Matcher printedStackTraceMatcher = printedStackTracePattern.matcher(printedStackTrace);
-            if (printedStackTraceMatcher.matches()) {
-                stackTrace = "at file " + printedStackTraceMatcher.group(1) +
-                        " line " + printedStackTraceMatcher.group(2);
-            } else {
-                stackTrace = "?";
-            }
-        }
-        if (stackTrace.startsWith("\n")) {
-            stackTrace = stackTrace.substring(1);
-        }
-        result.setStackTrace(stackTrace);
+
+        result.setStackTrace(stackTrace.toString().trim());
     }
 
     private void handleScriptException(ScriptException e, TestResult result) {
@@ -841,7 +816,7 @@ public class JythonTestScript extends TestScript implements Executable {
         // handle ThreadDeath exception
         if (cause instanceof PyException) {
             PyException pe = (PyException) cause;
-            if (pe.value instanceof PyJavaInstance) {
+            if (pe.value instanceof PyObjectDerived) {
                 Object javaError = pe.value.__tojava__(Throwable.class);
                 if (javaError != null && javaError != Py.NoConversion) {
                     if (javaError instanceof ThreadDeath) {
@@ -874,18 +849,16 @@ public class JythonTestScript extends TestScript implements Executable {
                     lineNumber = (PyInteger) syntaxError.value.__getattr__(new PyString("lineno"));
                     columnNumber = (PyInteger) syntaxError.value.__getattr__(new PyString("offset"));
                     text = (PyString) syntaxError.value.__getattr__(new PyString("text"));
-                    message = "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n" + text;
-
                 }
                 message = "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n" + text;
-                result.addStackTraceElement(new StackTraceElement("", "", fileName.toString(), Integer.parseInt(lineNumber.toString())));
+                result.addStackTraceElement(new StackTraceElement("", "", fileName.toString(), lineNumber.getValue()));
                 dumpStack = false;
             } catch (PyException pye) {
                 message = "Python syntax error (Couldn't decode localization of error)";
             }
         } else if (cause instanceof PyException) {
             PyException pe = (PyException) cause;
-            if (pe.value instanceof PyJavaInstance) {
+            if (pe.value instanceof PyObjectDerived) {
                 // check  if exception is UndeclaredThrowableException
                 // in this case status is "failed" and message is taken from cause exception
                 Object javaError = pe.value.__tojava__(Throwable.class);
@@ -897,7 +870,7 @@ public class JythonTestScript extends TestScript implements Executable {
                         result.setStatus(TestResult.Status.FAIL);
                         Throwable undeclaredThrowable = ((UndeclaredThrowableException) javaError).getCause();
                         if (undeclaredThrowable instanceof InvocationTargetException) {
-                            message = getThrowableDescription(((InvocationTargetException) undeclaredThrowable).getCause());
+                            message = getThrowableDescription(undeclaredThrowable.getCause());
                         } else {
                             message = getThrowableDescription(undeclaredThrowable);
                         }
@@ -907,7 +880,7 @@ public class JythonTestScript extends TestScript implements Executable {
                 }
             }
             if (message == null) {
-                if (pe.type instanceof PyClass) {
+                if (pe.type instanceof PyType) {
                     String errorName = null, errorValue;
                     try {
                         PyObject doc = pe.value.__getattr__(new PyString("__doc__"));
@@ -920,11 +893,7 @@ public class JythonTestScript extends TestScript implements Executable {
                     } catch (PyException pye) {
                     }
                     if (errorName == null) {
-                        if (pe.type instanceof PyClass) {
-                            errorName = ((PyClass) pe.type).__name__;
-                        } else {
-                            errorName = pe.type.toString();
-                        }
+                        errorName = ((PyType) pe.type).getName();
                     }
 
                     try {
@@ -966,6 +935,57 @@ public class JythonTestScript extends TestScript implements Executable {
             descriptionWriter.getBuffer().setLength(sunReflectPos);
         }
         return descriptionWriter.toString();
+    }
+
+    /**
+     * Line buffered auto-flush print writer.
+     * <p>
+     * Output is flushed each time a newline character is written.
+     */
+    private static class LineBufferedPrintWriter extends PrintWriter {
+        private LineBufferedPrintWriter(OutputStream pOut) {
+            super(pOut, true);
+        }
+
+        @Override
+        public void write(int c) {
+            super.write(c);
+            if (c == (int) '\n') {
+                flush();
+            }
+        }
+
+        @Override
+        public void write(char[] buf, int off, int len) {
+            int lastNewline = ArrayUtils.lastIndexOf(buf, '\n', off + len - 1);
+            if (lastNewline != -1) {
+                // write part before last newline character (including it)
+                super.write(buf, off, lastNewline - off + 1);
+                flush();
+                // write remaining part if any
+                if (lastNewline != off + len - 1) {
+                    super.write(buf, lastNewline + 1, len - (lastNewline - off + 1));
+                }
+            } else {
+                super.write(buf, off, len);
+            }
+        }
+
+        @Override
+        public void write(String s, int off, int len) {
+            int lastNewline = s.lastIndexOf('\n', off + len - 1);
+            if (lastNewline != -1) {
+                // write part before last newline character (including it)
+                super.write(s, off, lastNewline - off + 1);
+                flush();
+                // write remaining part if any
+                if (lastNewline != off + len - 1) {
+                    super.write(s, lastNewline + 1, len - (lastNewline - off + 1));
+                }
+            } else {
+                super.write(s, off, len);
+            }
+        }
     }
 
     /**
@@ -1097,7 +1117,6 @@ public class JythonTestScript extends TestScript implements Executable {
                 Object variableValue = globalContext.get(variableName);
                 if (!variableName.startsWith("__") &&
                         !(variableValue instanceof PySystemState) &&
-                        !(variableValue instanceof com.sun.script.jython.JythonScriptEngine) &&
                         !(variableValue instanceof javax.script.SimpleScriptContext) &&
                         !variableName.equals("javax.script.filename")
                         //                    (!(variableValue instanceof PyClass)) &&
@@ -1232,8 +1251,8 @@ public class JythonTestScript extends TestScript implements Executable {
                 debugVar = dumpJavaObject(o, debugVar);
             }
             return debugVar;
-        } else if (value instanceof PyJavaInstance) {
-            PyJavaInstance pythonValue = (PyJavaInstance) value;
+        } else if (value instanceof PyObjectDerived) {
+            PyObjectDerived pythonValue = (PyObjectDerived) value;
             Object javaObject = pythonValue.__tojava__(Object.class);
             if (javaObject instanceof ArrayList) {
                 ArrayList<?> javaObjectArray = (ArrayList<?>) javaObject;

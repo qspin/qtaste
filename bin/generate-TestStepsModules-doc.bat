@@ -27,7 +27,7 @@ set FORMATTER_DIR="%QTASTE_ROOT%\tools\TestScriptDoc"
 
 echo.
 echo Generating Test steps module XML doc...
-java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %FORMATTER_DIR%\stepsmoduledoc_xmlformatter.py %ARG%
+java -cp %QTASTE_ROOT%\kernel\target\qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %FORMATTER_DIR%\stepsmoduledoc_xmlformatter.py %ARG%
 
 endlocal
 

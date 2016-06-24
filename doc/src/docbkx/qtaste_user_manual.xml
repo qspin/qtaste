@@ -2818,7 +2818,7 @@ will be presented as “smartsockets.host” in the description tables.</screen>
 
         <para>In the QTaste framework, it is possible to write those control
         scripts using some classes as provided by the
-        tools/jython/lib/lib/control_script.py python module. This python
+        tools/jython/lib/Lib/control_script.py python module. This python
         module has the purpose to give an easier way to write new control
         scripts but also to be OS independent.</para>
 
@@ -2971,9 +2971,9 @@ The example here upper performs 2 actions:</literallayout>
     <section>
       <title><emphasis>General</emphasis></title>
 
-      <para>QTaste scripts are written in Python language v2.2 and interpreted
-      by Jython v2.2.1, (http://www.jython.org). Any Python feature supported
-      by Jython v2.2.1 is thus supported by QTaste.</para>
+      <para>QTaste scripts are written in Python language v2.7 and interpreted
+      by Jython v2.7.0, (http://www.jython.org). Any Python feature supported
+      by Jython v2.7.0 is thus supported by QTaste.</para>
 
       <para>A scan of all the (sub)directories from "test script" to "TestSuites"
       is performed. If there is a directory called pythonlib, it is automatically

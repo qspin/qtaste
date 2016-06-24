@@ -21,22 +21,23 @@ package com.qspin.qtaste.ui.tools;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.python.core.PyException;
-import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
+import com.qspin.qtaste.util.PythonHelper;
 
 public class PythonTestScript {
     private static Logger logger = Log4jLoggerFactory.getLogger(PythonTestScript.class);
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 	private File m_ScriptFile;
 	private File m_ScriptFileDir;
@@ -90,33 +91,24 @@ public class PythonTestScript {
             String testCasename = m_ScriptFileDir.getCanonicalPath();
             // get the current TestSuitesDirectory
             m_TestSuiteDir = m_TestSuiteDir.replace("\\", "/");
-            StringWriter output = new StringWriter();
-            PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-            interp.setOut(output);
-            interp.setErr(output);
-            interp.cleanup();
-            //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!            
-            String args = "import sys;sys.argv[1:]= ['-f', '-s', '-Otestscriptdoc_xmlformatter'";
+            List<String> args = new ArrayList<>(Arrays.asList("-f", "-s", "-Otestscriptdoc_xmlformatter"));
             if (new File(m_TestSuiteDir).getCanonicalFile() == new File("TestSuites").getCanonicalFile()) {
-            	args += ",\"-DrootTestSuiteDir=" + m_TestSuiteDir + "\"";
+                args.add("-DrootTestSuiteDir=" + m_TestSuiteDir);
             }
-            args+=", r'" + testCasename + "']";
-            interp.exec(args);
-            interp.exec("__name__ = '__main__'");
-            interp.exec("execfile(r'" + StaticConfiguration.JYTHON_LIB + "/pythondoc.py')");
-            interp.cleanup();
-            interp = null;
+            args.add(testCasename);
+            String output = PythonHelper.execute(StaticConfiguration.PYTHON_DOC, args.toArray(new String[args.size()]));
+
             if (xmlDocFile.exists()) {
-                final String[] args2 = new String[]{"-XSLTC", "-XT", "-IN", xmlDocFilename, "-XSL", StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR + "/testscriptdoc_xml2html.xsl", "-OUT", htmlDocFilename};
+                final String[] args2 = { "-XSLTC", "-XT", "-IN", xmlDocFilename, "-XSL", StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR + "/testscriptdoc_xml2html.xsl", "-OUT", htmlDocFilename};
                 org.apache.xalan.xslt.Process.main(args2);
                 xmlDocFile.delete();
-                String outputString = output.toString();
-                if (outputString.endsWith(StaticConfiguration.TEST_SCRIPT_DOC_XML_FILENAME + " ok" + LINE_SEPARATOR)) {
-                    int endOfBeforeLastLine = outputString.lastIndexOf(LINE_SEPARATOR, outputString.length() - (LINE_SEPARATOR.length() + 4));
+                String outputString = output.trim();
+                if (outputString.endsWith(StaticConfiguration.TEST_SCRIPT_DOC_XML_FILENAME + " ok")) {
+                    int endOfBeforeLastLine = outputString.lastIndexOf('\n');
                     if (endOfBeforeLastLine == -1) {
                         outputString = null;
                     } else {
-                        outputString = outputString.substring(0, endOfBeforeLastLine);
+                        outputString = outputString.substring(0, endOfBeforeLastLine).trim();
                     }
                 }
                 if (outputString != null) {
@@ -133,7 +125,7 @@ public class PythonTestScript {
         }
         return testcaseDoc;		
 	}
-	
+
     public File getTestcaseData() {
     	if (m_ScriptData==null) {
         	m_ScriptData = findFileIn(StaticConfiguration.TEST_DATA_FILENAME, m_ScriptFileDir);

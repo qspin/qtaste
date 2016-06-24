@@ -48,6 +48,7 @@ import com.qspin.qtaste.reporter.testresults.TestResultImpl;
 import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.testsuite.impl.DirectoryTestSuite;
+import com.qspin.qtaste.testsuite.impl.JythonTestScript;
 import com.qspin.qtaste.util.Exec;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
@@ -72,6 +73,20 @@ public class TestEngine {
 	private static volatile boolean isSUTStartedManually = false;
     private static volatile boolean isSUTRunning = false;
 
+	static {
+		// pre-load JythonTestScript class and dependencies in the background which takes several seconds
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					Class.forName(JythonTestScript.class.getName());
+				} catch (Throwable pE) {
+					// ignore
+				}
+			}
+		}.start();
+	}
+
 	/**
 	 * Check if Test was aborted by user.
 	 *
@@ -91,7 +106,7 @@ public class TestEngine {
 
     /**
      * Set Running Mode and define if was started manually
-     * @param define if testbed started with ignore control script or manually
+     * @param startedManually define if testbed started with ignore control script or manually
      */
     private static void setSUTAsRunning(boolean startedManually) {
     	isSUTStartedManually = startedManually;
@@ -222,21 +237,17 @@ public class TestEngine {
 			List<String> scriptEngineCommand = new ArrayList<String>();
 
 			if (scriptFilename.endsWith(".py")) {
-				final String jythonHome = StaticConfiguration.JYTHON_HOME;
-				final String jythonJar = jythonHome + "/jython.jar";
-				final String jythonLib = StaticConfiguration.JYTHON_LIB.trim();
-				final String additionnalJythonLib = StaticConfiguration.ADDITIONNAL_JYTHON_LIB.trim();
+				final String qtasteJar = StaticConfiguration.QTASTE_ROOT + "/kernel/target/qtaste-kernel-deploy.jar";
+				final String jythonLib = StaticConfiguration.JYTHON_LIB;
+				final String additionalJythonLib = StaticConfiguration.ADDITIONAL_JYTHON_LIB.trim();
 				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
 				
 				scriptEngineCommand.add("java");
-				scriptEngineCommand.add("-Dpython.path=\"" + jythonJar + "\"" + File.pathSeparator + "\"" + jythonLib 
-								 + "\"" + File.pathSeparator + "\"" + additionnalJythonLib + "\"");
+				scriptEngineCommand.add("-Dpython.path=" + qtasteJar + File.pathSeparator  + jythonLib
+								 + (additionalJythonLib.isEmpty() ? "" : File.pathSeparator + additionalJythonLib));
 				scriptEngineCommand.add("-cp");
-				scriptEngineCommand.add("\"" + jythonHome + "/../build/jython-engine.jar" + File.pathSeparator
-								 + jythonJar + File.pathSeparator + classPath + "\"");
+				scriptEngineCommand.add(qtasteJar + File.pathSeparator + classPath);
 				scriptEngineCommand.add("org.python.util.jython");
-
-				logger.trace("script engine command: " + StringUtils.join(scriptEngineCommand, " "));
 			}
 			
 			// then, build the 'start or stop' command as a list
@@ -253,8 +264,8 @@ public class TestEngine {
 			if (isRestartingSUT) {
 				startOrStopCommand.add("-restart true");
 			}
-			
-			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" + 
+
+			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" +
 						StringUtils.join(startOrStopCommand, " ") + "'");
 
 			// report the control script

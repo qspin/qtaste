@@ -4,16 +4,20 @@
 # If testsuite_dir is defined, a TestSuite-doc.xml file will be generated in this directory
 ##
 
-import string, os, re, codecs, java
+import string, os, re, codecs, java.lang
+from com.qspin.qtaste.config import StaticConfiguration
+from com.qspin.qtaste.util import OS
 
 try:
     import xml.etree.ElementTree as et
     from xml.etree.ElementTree import XMLTreeBuilder as TreeBuilder
-
 except ImportError:
     import elementtree.ElementTree as et
     from elementtree.SimpleXMLTreeBuilder import TreeBuilder
 
+
+# conditional expression
+IF = lambda a,b,c:(a and [b] or [c])[0]
 
 
 def relpath(path, reldir):
@@ -76,10 +80,9 @@ class PythonDocGenerator:
             self._handleDirectories(directory)
             # add name, relative filename and summary to testsuite
             testSuiteScript = et.SubElement(self.currentNodePath[-1], 'testscript', {'name':testScriptName, 'docfilename':relativeFilename})
-            try:
-                testSuiteScript.append(module.find('info/summary'))
-            except:
-                pass
+            infoSummary = module.find('info/summary')
+            if infoSummary is not None:
+                testSuiteScript.append(infoSummary)
         # split data names, types and descriptions
         for elem in module.getiterator('data'):
             try:
@@ -114,7 +117,7 @@ class PythonDocGenerator:
         et.SubElement(info, 'version').text = self._getVersion(testScriptFileName)
         # create steps functions dictionary
         for elem in module.getiterator('function'):
-            if not elem.find('info/step') is None:
+            if elem.find('info/step') is not None:
                 name = elem.findtext('info/name')
                 step = elem.find('info')
                 step.tag = 'step'
@@ -127,7 +130,7 @@ class PythonDocGenerator:
         for i in range(len(self.executedSteps)):
             stepId, stepName = self.executedSteps[i]
             declaredStep = self.declaredSteps.get(stepName)
-            if declaredStep:
+            if declaredStep is not None:
                 self._addStep(steps, stepId, declaredStep)
             else:
                 print 'Warning: function step ' + stepName + ' of test script ' + testScriptName + ' is used in doStep() but not declared or not documented with @step tag'
@@ -135,91 +138,88 @@ class PythonDocGenerator:
         self._addTestData(testScriptFileName, testScript)
         self._addTestRequirement(testScriptFileName, testScript)
         tree = et.ElementTree(testScript)
-        file = open(filename, 'wb')
-        tree.write(file, self.encoding)
-        file.close()
+        with open(filename, 'wb') as file:
+            tree.write(file, self.encoding)
         return filename
 
     def done(self):
         if self.createTestSuiteDoc:
-            filename = self.testSuiteDir + r'%sTestSuite-doc.xml' %(os.sep)
+            filename = self.testSuiteDir + r'%sTestSuite-doc.xml' % os.sep
             print 'Saving', filename
             tree = et.ElementTree(self.testSuite)
-            file = open(filename, 'wb')
-            tree.write(file, self.encoding)
-            file.close()
+            with open(filename, 'wb') as file:
+                tree.write(file, self.encoding)
             return filename
 
     # parse test script file for modules imported from pythonlib directories (self.importedModulesStepsDoc)
     # and executed steps (self.executedSteps)
     def _parseTestScriptFile(self, filename):
         import re
-        file = open(filename, 'r')
-        self.executedSteps = []
-        self.declaredSteps = {}
-        self.declaredStepsTables = {}
-        stepsTablesParsed = False
-        pythonLibDirectories = self._getPythonLibDirectories(filename)
-        content = ''
-        for line in file:
-            if line:
-                line = line.split('#', 1)[0]  # remove comment
+        with open(filename, 'r') as file:
+            self.executedSteps = []
+            self.declaredSteps = {}
+            self.declaredStepsTables = {}
+            stepsTablesParsed = False
+            pythonLibDirectories = self._getPythonLibDirectories(filename)
+            content = ''
+            for line in file:
                 if line:
-                    content += line
-                    match = self.importSymbolsPattern.match(line)
-                    if match:
-                        module = match.group(1)
-                        modulePath = module.replace(".", os.sep)
-                        symbols = re.split('\s*,\s*', match.group(2))
-                        for symbol in symbols :
-                            if symbol:
-                                if symbol == '*':
-                                    self._addFullyImportedModuleStepsDocAndTables(modulePath, pythonLibDirectories)
-                                else:
-                                    self._addImportedStepDocOrTable(symbol, modulePath, pythonLibDirectories)
-                    else:
-                        for match in self.importModulePattern.finditer(line):
-                            modules = re.split('\s*,\s*', match.group(1))
-                            for module in modules:
-                                modulePath = module.replace(".", os.sep)
-                                self._addImportedModuleStepsDocAndTables(modulePath, pythonLibDirectories)
-
-                    if self.importTestScriptPattern.match(line):
-                        modulePath = line.split('(')[1].split(')')[0].replace('"', '')
-                        target = filename.replace("TestScript.py", "") + "../" + modulePath
-                        target = target.replace("/",os.sep)
-                        self._addImportedTestScriptModuleStepsDocAndTables(target.split(os.sep)[-1], target)
-
-                    for match in self.doStepPattern.finditer(line):
-                        if match.group(2):
-                            stepName = match.group(2)
-                            stepId = match.group(1)
+                    line = line.split('#', 1)[0]  # remove comment
+                    if line:
+                        content += line
+                        match = self.importSymbolsPattern.match(line)
+                        if match:
+                            module = match.group(1)
+                            modulePath = module.replace(".", os.sep)
+                            symbols = re.split('\s*,\s*', match.group(2))
+                            for symbol in symbols :
+                                if symbol:
+                                    if symbol == '*':
+                                        self._addFullyImportedModuleStepsDocAndTables(modulePath, pythonLibDirectories)
+                                    else:
+                                        self._addImportedStepDocOrTable(symbol, modulePath, pythonLibDirectories)
                         else:
-                            stepName = match.group(1)
-                            stepId = str(len(self.executedSteps)+1)
-                        self.executedSteps.append((stepId, stepName))
-                    for match in self.doStepsPattern.finditer(line):
-                        # if not yet done parse content for steps table declarations
-                        if not stepsTablesParsed:
-                            for defMatch in self.stepsTableDefPattern.finditer(content):
-                                stepsTableName = defMatch.group(1)
-                                stepsIdAndNames = re.split('\W+', defMatch.group(2))[1:-1]
-                                stepsId = stepsIdAndNames[::2]
-                                stepsNames = stepsIdAndNames[1::2]
-                                self.declaredStepsTables[stepsTableName] = zip(stepsId, stepsNames)
-                            stepsTablesParsed = True
+                            for match in self.importModulePattern.finditer(line):
+                                modules = re.split('\s*,\s*', match.group(1))
+                                for module in modules:
+                                    modulePath = module.replace(".", os.sep)
+                                    self._addImportedModuleStepsDocAndTables(modulePath, pythonLibDirectories)
 
-                        stepsTableName = match.group(1)
-                        selectorStart = match.group(2)
-                        selectorEnd = match.group(3)
-                        if selectorEnd is None:
-                            selectorEnd = selectorStart
-                        stepsTable = self.declaredStepsTables.get(stepsTableName)
-                        if stepsTable:
-                            self._addExecutedSteps(stepsTable, selectorStart, selectorEnd)
-                        else:
-                            print 'Warning: steps table ' + stepsTableName + ' of test script ' + filename + ' is used in doSteps() but not declared'
-        file.close();
+                        if self.importTestScriptPattern.match(line):
+                            modulePath = line.split('(')[1].split(')')[0].replace('"', '')
+                            target = filename.replace("TestScript.py", "") + "../" + modulePath
+                            target = target.replace("/",os.sep)
+                            self._addImportedTestScriptModuleStepsDocAndTables(target.split(os.sep)[-1], target)
+
+                        for match in self.doStepPattern.finditer(line):
+                            if match.group(2):
+                                stepName = match.group(2)
+                                stepId = match.group(1)
+                            else:
+                                stepName = match.group(1)
+                                stepId = str(len(self.executedSteps)+1)
+                            self.executedSteps.append((stepId, stepName))
+                        for match in self.doStepsPattern.finditer(line):
+                            # if not yet done parse content for steps table declarations
+                            if not stepsTablesParsed:
+                                for defMatch in self.stepsTableDefPattern.finditer(content):
+                                    stepsTableName = defMatch.group(1)
+                                    stepsIdAndNames = re.split('\W+', defMatch.group(2))[1:-1]
+                                    stepsId = stepsIdAndNames[::2]
+                                    stepsNames = stepsIdAndNames[1::2]
+                                    self.declaredStepsTables[stepsTableName] = zip(stepsId, stepsNames)
+                                stepsTablesParsed = True
+
+                            stepsTableName = match.group(1)
+                            selectorStart = match.group(2)
+                            selectorEnd = match.group(3)
+                            if selectorEnd is None:
+                                selectorEnd = selectorStart
+                            stepsTable = self.declaredStepsTables.get(stepsTableName)
+                            if stepsTable:
+                                self._addExecutedSteps(stepsTable, selectorStart, selectorEnd)
+                            else:
+                                print 'Warning: steps table ' + stepsTableName + ' of test script ' + filename + ' is used in doSteps() but not declared'
 
     # get python libs directories for given test script
     def _getPythonLibDirectories(self, filename):
@@ -246,14 +246,10 @@ class PythonDocGenerator:
 
     def _addImportedTestScriptModuleStepsDocAndTables(self, moduleName, directory):
         #create the step-doc.xml file for the imported test script
-        testScriptFilePath = directory + "/TestScript.py"
-        generatorScript = "generate-TestStepsModules-doc"
-        osName = java.lang.System.getProperty('os.name')
-        if "win" in str(osName).lower():
-            generatorScript = generatorScript + ".bat"
-        else:
-            generatorScript = generatorScript + ".sh"
-        command = generatorScript + ' "' + testScriptFilePath.replace("/", os.sep) + '"'
+        testScriptFilePath = directory.replace("/", os.sep) + os.sep + StaticConfiguration.TEST_SCRIPT_FILENAME
+        shellScriptExtension = IF(OS.getType() == OS.Type.WINDOWS, ".bat", ".sh")
+        generatorScript = "generate-TestStepsModules-doc" + shellScriptExtension
+        command = StaticConfiguration.QTASTE_ROOT + os.sep + "bin" + os.sep + generatorScript + ' "' + testScriptFilePath + '"'
         os.system(command)
 
         stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables("TestScript", [directory])
@@ -299,13 +295,13 @@ class PythonDocGenerator:
                     stepsModuleDocTree = et.parse(stepsDocFileName, TreeBuilder())
                     stepsDocDict = {}
                     stepsDocTree = stepsModuleDocTree.find('steps')
-                    if stepsDocTree:
+                    if stepsDocTree is not None:
                         for stepElem in stepsDocTree.getiterator('step'):
                             stepName = stepElem.get('name')
                             stepsDocDict[stepName] = stepElem
                     stepsTablesDict = {}
                     stepsTablesTree = stepsModuleDocTree.find('stepsTables')
-                    if stepsTablesTree:
+                    if stepsTablesTree is not None:
                         for stepsTableElem in stepsTablesTree.getiterator('stepsTable'):
                             stepsTableName = stepsTableElem.get('name')
                             stepsTable = []
@@ -337,7 +333,7 @@ class PythonDocGenerator:
         description = declaredStep.find('description')
         expected = declaredStep.find('expected')
         stepElement.append(description)
-        if not expected is None:
+        if expected is not None:
             stepElement.append(expected)
 
     # add a undefined step to steps with given id, and name
@@ -368,26 +364,25 @@ class PythonDocGenerator:
         testData = et.SubElement(testScript, 'testdata')
         dataFileName = os.path.dirname(testScriptFileName) + os.sep + 'TestData.csv'
         try:
-            dataFile = open(dataFileName, 'rb')
-            dataNames = dataFile.readline().rstrip('\r\n').split(';')
-            testDataNames = et.SubElement(testData, 'names')
-            for dataName in dataNames:
-                if dataName:
-                    et.SubElement(testDataNames, 'name').text = unicode(dataName, 'utf-8')
-            row = 1
-            for dataLine in dataFile:
-                if not dataLine.startswith('#'):
-                    dataValues = dataLine.rstrip('\r\n').split(';')
-                    notEmpty = 0
-                    for dataValue in dataValues:
-                        notEmpty += len(dataValue)
-                    if notEmpty:
-                        testDataValues = et.SubElement(testData, 'row', {'id':str(row)})
-                        for dataName, dataValue in zip(dataNames, dataValues):
-                            if dataName:
-                                et.SubElement(testDataValues, 'value').text = unicode(dataValue, 'utf-8')
-                row = row + 1
-            dataFile.close()
+            with open(dataFileName, 'rb') as dataFile:
+                dataNames = dataFile.readline().rstrip('\r\n').split(';')
+                testDataNames = et.SubElement(testData, 'names')
+                for dataName in dataNames:
+                    if dataName:
+                        et.SubElement(testDataNames, 'name').text = unicode(dataName, 'utf-8')
+                row = 1
+                for dataLine in dataFile:
+                    if not dataLine.startswith('#'):
+                        dataValues = dataLine.rstrip('\r\n').split(';')
+                        notEmpty = 0
+                        for dataValue in dataValues:
+                            notEmpty += len(dataValue)
+                        if notEmpty:
+                            testDataValues = et.SubElement(testData, 'row', {'id':str(row)})
+                            for dataName, dataValue in zip(dataNames, dataValues):
+                                if dataName:
+                                    et.SubElement(testDataValues, 'value').text = unicode(dataValue, 'utf-8')
+                    row = row + 1
         except IOError:
             pass
 

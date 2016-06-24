@@ -57,20 +57,18 @@ class PythonDocGenerator:
                 for stepId, stepName in stepsTable:
                     et.SubElement(stepsTableElement, 'step', {'id':stepId, 'name':stepName})
         tree = et.ElementTree(stepsModuleElement)
-        file = open(filename, 'wb')
-        tree.write(file, self.encoding)
-        file.close()
+        with open(filename, 'wb') as file:
+            tree.write(file, self.encoding)
         return filename
 
     def _parseStepsModuleFile(self, filename):
-        file = open(filename, 'rb')
-        content = ''
-        for line in file:
-            if line:
-                line = line.split('#', 1)[0]  # remove comment
+        with open(filename, 'rb') as file:
+            content = ''
+            for line in file:
                 if line:
-                    content += line
-        file.close()
+                    line = line.split('#', 1)[0]  # remove comment
+                    if line:
+                        content += line
         self.stepsTables = {}
         self.stepsTablesNames = []
         for match in self.stepsTableDefPattern.finditer(content):

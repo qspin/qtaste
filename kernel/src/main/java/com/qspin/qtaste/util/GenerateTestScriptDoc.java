@@ -20,11 +20,8 @@
 package com.qspin.qtaste.util;
 
 import java.io.File;
-import java.io.StringWriter;
-import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 
@@ -54,23 +51,8 @@ public class GenerateTestScriptDoc {
         
         try {
             System.out.println("Generate test script documentation.");
-            StringWriter output = new StringWriter();
-            Properties properties = new Properties();
-            properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
-            properties.setProperty("python.path", StaticConfiguration.JYTHON_LIB);
-            PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
-            PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-            interp.setOut(output);
-            interp.setErr(output);
-            interp.cleanup();
-            //java -cp %JYTHON_HOME%/jython.jar;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter %TEST_SCRIPT% -V
-            //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
-            String args = "import sys;sys.argv[1:]= ['-V', '-f', '-s', '-Otestscriptdoc_xmlformatter', '" + testScriptFile.getAbsolutePath() + "']";
-            interp.exec(args);
-            interp.exec("__name__ = '__main__'");
-            interp.exec("execfile(r'" + StaticConfiguration.JYTHON_HOME + "/Lib/pythondoc.py')");
-            interp.cleanup();
-            interp = null;
+            PythonHelper.execute(StaticConfiguration.PYTHON_DOC, "-V", "-f", "-s", "-Otestscriptdoc_xmlformatter",
+                  testScriptFile.getAbsolutePath());
         } catch (Exception e) {
             System.err.println("Error executing PythonInterpreter: " + e);
         }

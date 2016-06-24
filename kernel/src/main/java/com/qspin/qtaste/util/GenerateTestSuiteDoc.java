@@ -29,10 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 
@@ -54,52 +52,35 @@ public class GenerateTestSuiteDoc {
             System.out.println("Directory " + testSuiteDir + " doesn't exist");
             System.exit(2);
         }
-        File [] testScripts = searchTestScripts(testSuiteDirFile);
+        File[] testScripts = searchTestScripts(testSuiteDirFile);
         if (testScripts.length == 0) {
             System.out.println("No testscript found!");
             System.exit(3);
         }
 
-        StringBuffer testScriptsList = new StringBuffer();
-        boolean firstTime = true;
         System.out.println("list of testscripts: " );
         for (File f : testScripts) {
-            System.out.println("\t" + f.toString() );
-            if (firstTime)
-                testScriptsList.append("'" + f.getAbsolutePath() + "'");
-            else
-                testScriptsList.append(", '" + f.getAbsolutePath() + "'");
-            firstTime = false;
+            System.out.println("\t" + f);
         }
-        System.out.println("testscripts:" + testScriptsList.toString());
         System.out.println("Generating Test Scripts and Test suite XML doc...");
   
 
         StringWriter outputs = new StringWriter();
         try {
-            Properties properties = new Properties();
-            properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
-            properties.setProperty("python.path", StaticConfiguration.FORMATTER_DIR);
-            PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
-            PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-            interp.setOut(outputs);
-            interp.setErr(outputs);
-            interp.cleanup();
-            //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
-            String args = "import sys;sys.argv[1:]= ['-f', '-s', '-Otestscriptdoc_xmlformatter', '-Dtestsuite_dir=" + testSuiteDir.replace(File.separator, "/") + "'," + testScriptsList.toString().replace(File.separator, "/") + "]";
-            System.out.println(args);
-            interp.exec(args);
-            interp.exec("__name__ = '__main__'");
-            interp.exec("execfile(r'" + StaticConfiguration.JYTHON_HOME + "/Lib/pythondoc.py')");
-            interp.cleanup();
-            interp = null;
+            List<String> args = new ArrayList<>(Arrays.asList("-f", "-s", "-Otestscriptdoc_xmlformatter",
+                  "-Dtestsuite_dir=" + testSuiteDir.replace(File.separator, "/")));
+            for (File testScriptFile : testScripts) {
+                args.add(testScriptFile.getAbsolutePath().replace(File.separator, "/"));
+            }
+
+            PythonHelper.execute(StaticConfiguration.PYTHON_DOC, args.toArray(new String[args.size()]));
         }
         catch (Exception e) {
             System.err.println("GenerateTestSuiteDoc - Exception occurs executing PythonInterpreter:" + e.getMessage());
             e.printStackTrace();
         }
         finally{
-        	System.out.println(outputs.getBuffer().toString());
+            System.out.println(outputs.getBuffer().toString());
         }
 
         for (File testscript : testScripts) {

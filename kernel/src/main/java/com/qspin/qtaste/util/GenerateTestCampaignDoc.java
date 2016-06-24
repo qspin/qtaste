@@ -19,15 +19,16 @@
 
 package com.qspin.qtaste.util;
 
-import java.io.StringWriter;
-import java.util.Properties;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.python.core.PyException;
-import org.python.util.PythonInterpreter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -50,30 +51,21 @@ public class GenerateTestCampaignDoc {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.parse(campaignFile);
             NodeList nodelist = doc.getElementsByTagName("testsuite");
+            Set<String> testSuites = new HashSet<>();
+            Pattern testSuitePattern = Pattern.compile("^(TestSuites/.*?)/.*$");
             for (int i = 0; i < nodelist.getLength(); i++) {
                 String directory = nodelist.item(i).getAttributes().getNamedItem("directory").getNodeValue();
-                // TODO: Keep only the first level
-                System.out.println("Directory is " + directory);
-                GenerateTestSuiteDoc.generate(directory);
+                Matcher matcher = testSuitePattern.matcher(directory);
+                String testSuite = matcher.matches() ? matcher.group(1) : directory;
+                testSuites.add(testSuite);
+            }
+            for (String testSuite: testSuites) {
+                GenerateTestSuiteDoc.generate(testSuite);
             }
 
             try {
-                StringWriter output = new StringWriter();
-                Properties properties = new Properties();
-                properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
-                PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
-                PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-                interp.setOut(output);
-                interp.setErr(output);
-                interp.cleanup();
-                //java -cp %JYTHON_HOME%\jython.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
-                String args = "import sys;sys.argv[1:]= ['" + campaignFile +  "']";
-                interp.exec(args);
-                interp.exec("__name__ = '__main__'");
-                interp.exec("execfile(r'" + StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py')");
-                interp.cleanup();
-                interp = null;
-
+                PythonHelper.execute(StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py",
+                      campaignFile);
             } catch (PyException e) {
                 System.err.println("Exception occurs executing PythonInterpreter:" + e.value);
             }

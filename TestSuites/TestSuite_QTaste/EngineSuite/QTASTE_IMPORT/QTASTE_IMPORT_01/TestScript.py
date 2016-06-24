@@ -1,4 +1,4 @@
-# encoding= utf-8
+# coding=utf-8
 
 #    Copyright 2007-2009 QSpin - www.qspin.be
 #
@@ -24,7 +24,7 @@ from lib import *
 ##
 #  QTaste documentation management:
 # <p>
-# This test case has the goal to verify that  when a test step is imported, this documentation is well imported too.
+# This test case has the goal to verify that when a test step is imported, this documentation is well imported too.
 ##
 
 
@@ -33,8 +33,8 @@ def Step2():
     @step Define a Python script&nbsp;containing the following a syntax error:
           if myValue eq True:
     @expected Test result is "Not available" with the following reason:<p>
-              <i>Python syntax errorin file Testcase.py at line 18, column 20:
-              if myValue eq True:</i><p>
+              <i>Python syntax error in file .../TestScript.py at line 40, column 15:</i>
+              <pre><i>    if myValue eq True:</i></pre><p>
               Script call stack is reported.
     """
     if myValue eq True:

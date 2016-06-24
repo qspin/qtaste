@@ -1,5 +1,5 @@
 @echo off
 setlocal
 set QTASTE_ROOT=%~dp0\..
-java -Xms64m -Xmx512m -cp %QTASTE_ROOT%/plugins/*;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar;testapi/target/qtaste-testapi-deploy.jar com.qspin.qtaste.kernel.campaign.CampaignLauncher %*
+java -Xms64m -Xmx512m -cp %QTASTE_ROOT%\plugins\*;%QTASTE_ROOT%\kernel\target\qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar com.qspin.qtaste.kernel.campaign.CampaignLauncher %*
 endlocal

@@ -16,25 +16,23 @@
 #
 #    You should have received a copy of the GNU Lesser General Public License
 #    along with QTaste. If not, see <http://www.gnu.org/licenses/>.
-
-##
-# QTaste scripting language test: Check call to inexistent verb.
-# <p>
-# The goal of this test case is to verify the QTaste behavior when the script contains a call to an undefined test API verb
-# <p>
-# Execute a test script containing a call to an undefined test API verb, QTaste will set the test result to "Not available" with the details of the error.
-# @preparation None
-##
+#
 
 from qtaste import *
+importTestScript("../QTASTE_IMPORT/QTASTE_IMPORT_01")
+
+##
+#  QTaste Test result management: Check reporting of import test script failure.
+# <p>
+# This test case has the goal to verify that failure during import of a test script is correctly reported.
+##
+
 
 def Step1():
     """
-    @step Define a script calling the verb nonExistentVerb()
-    @expected Test result set to "Not available" with the following reason:<p>
-              <i>AttributeError: nonExistentVerb.</i><p>
-              Script call stack is reported.
+    @step Do nothing
     """
-    testAPI.getEngineTest().nonExistentVerb()
+    pass
+
 
 doStep(Step1)

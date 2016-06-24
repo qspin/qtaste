@@ -51,7 +51,7 @@ set FORMATTER_DIR=%FORMATTER_DIR:\=\\%
 
 echo.
 echo Generating Test scripts and Test suite XML doc...
-java -cp %JYTHON_HOME%/jython.jar;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
+java -cp %QTASTE_ROOT%\kernel\target\qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -Dpython.home=%JYTHON_HOME% -Dpython.path=%FORMATTER_DIR% org.python.util.jython %JYTHON_HOME%\Lib\pythondoc.py -f -s -Otestscriptdoc_xmlformatter -Dtestsuite_dir=%TEST_SUITE_DIR% !TEST_SCRIPTS!
 echo.
 
 set TEST_SCRIPT_DIRS=
@@ -65,12 +65,12 @@ for /R %TEST_SUITE_DIR% %%F in (*.py) do if "%%~nxF" == "TestScript.py" (
   )
 )
 
-jrunscript -cp %QTASTE_JYTHON_LIB%;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -e "for (i in arguments) { println('Converting Test script XML doc to HTML for ' + arguments[i]); xmlDocFile = arguments[i] + '\\TestScript-doc.xml'; org.apache.xalan.xslt.Process.main(['-XSLTC', '-XT', '-IN', xmlDocFile, '-XSL', '%FORMATTER_DIR%\\testscriptdoc_xml2html.xsl', '-OUT', arguments[i] + '\\TestScript-doc.html']); java.io.File(xmlDocFile).deleteOnExit() }" !TEST_SCRIPT_DIRS!
+jrunscript -cp %QTASTE_JYTHON_LIB%;%QTASTE_ROOT%\kernel\target\qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -e "for (i in arguments) { println('Converting Test script XML doc to HTML for ' + arguments[i]); xmlDocFile = arguments[i] + '\\TestScript-doc.xml'; org.apache.xalan.xslt.Process.main(['-XSLTC', '-XT', '-IN', xmlDocFile, '-XSL', '%FORMATTER_DIR%\\testscriptdoc_xml2html.xsl', '-OUT', arguments[i] + '\\TestScript-doc.html']); java.io.File(xmlDocFile).deleteOnExit() }" !TEST_SCRIPT_DIRS!
 
 if exist %TEST_SUITE_DIR%\TestSuite-doc.xml (
   echo.
   echo Converting Test suite XML doc to HTML list and summary...
-  jrunscript -cp %QTASTE_JYTHON_LIB%;%QTASTE_ROOT%/kernel/target/qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -e "org.apache.xalan.xslt.Process.main(['-XSLTC', '-XT', '-IN', arguments[0] + '\\TestSuite-doc.xml', '-XSL', '%FORMATTER_DIR%\\testsuitedoc_list_xml2html.xsl', '-OUT', arguments[0] + '\\TestSuite-doc-list.html']); org.apache.xalan.xslt.Process.main(['-XSLTC', '-XT', '-IN', arguments[0] + '\\TestSuite-doc.xml', '-XSL', '%FORMATTER_DIR%\\testsuitedoc_summary_xml2html.xsl', '-OUT', arguments[0] + '\\TestSuite-doc-summary.html'])" %TEST_SUITE_DIR%
+  jrunscript -cp %QTASTE_JYTHON_LIB%;%QTASTE_ROOT%\kernel\target\qtaste-kernel-deploy.jar;testapi\target\qtaste-testapi-deploy.jar -e "org.apache.xalan.xslt.Process.main(['-XSLTC', '-XT', '-IN', arguments[0] + '\\TestSuite-doc.xml', '-XSL', '%FORMATTER_DIR%\\testsuitedoc_list_xml2html.xsl', '-OUT', arguments[0] + '\\TestSuite-doc-list.html']); org.apache.xalan.xslt.Process.main(['-XSLTC', '-XT', '-IN', arguments[0] + '\\TestSuite-doc.xml', '-XSL', '%FORMATTER_DIR%\\testsuitedoc_summary_xml2html.xsl', '-OUT', arguments[0] + '\\TestSuite-doc-summary.html'])" %TEST_SUITE_DIR%
 
   echo.
   echo Creating Test suite frameset...

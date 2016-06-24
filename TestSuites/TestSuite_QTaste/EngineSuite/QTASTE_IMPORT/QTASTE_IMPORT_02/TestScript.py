@@ -16,25 +16,37 @@
 #
 #    You should have received a copy of the GNU Lesser General Public License
 #    along with QTaste. If not, see <http://www.gnu.org/licenses/>.
-
-##
-# QTaste scripting language test: Check call to inexistent verb.
-# <p>
-# The goal of this test case is to verify the QTaste behavior when the script contains a call to an undefined test API verb
-# <p>
-# Execute a test script containing a call to an undefined test API verb, QTaste will set the test result to "Not available" with the details of the error.
-# @preparation None
-##
+#
 
 from qtaste import *
+importTestScript("../QTASTE_DATA/QTASTE_DATA_01")
+
+##
+#  QTaste import test script feature:
+# <p>
+# This test case has the goal to verify that steps of an imported test script are accessible.
+##
+
 
 def Step1():
     """
-    @step Define a script calling the verb nonExistentVerb()
-    @expected Test result set to "Not available" with the following reason:<p>
-              <i>AttributeError: nonExistentVerb.</i><p>
-              Script call stack is reported.
+    @step Check that NEW_DATA test data doesn't exist
+    @expected NEW_DATA test data doesn't exist
     """
-    testAPI.getEngineTest().nonExistentVerb()
+    if testData.contains('NEW_DATA'):
+        testAPI.stopTest(Status.FAIL, "the test data 'NEW_DATA' already exists")
+
+
+def Step2():
+    """
+    @step Execute Step3 of QTASTE_DATA_01
+    @expected NEW_DATA test data exists and has value 'new'
+    """
+    doSubStep(QTASTE_DATA_01.Step3)
+
+    if testData.getValue('NEW_DATA') != 'new':
+        testAPI.stopTest(Status.FAIL, "the test data 'NEW_DATA' doesn't have 'new' value")
+
 
 doStep(Step1)
+doStep(Step2)

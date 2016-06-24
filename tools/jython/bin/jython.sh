@@ -1,2 +1,6 @@
 #!/bin/bash
-java -Dpython.path=../lib/jython.jar:$QTASTE_JYTHON_LIB:../lib/Lib -cp ../build/jython-engine.jar:../lib/jython.jar:$CLASSPATH org.python.util.jython $*
+
+QTASTE_ROOT="$(dirname "$0")/../../.."
+QTASTE_KERNEL="$QTASTE_ROOT/kernel/target/qtaste-kernel-deploy.jar"
+JYTHON_HOME=$QTASTE_ROOT/tools/jython
+java -Dpython.path=$QTASTE_KERNEL:$QTASTE_JYTHON_LIB:$JYTHON_HOME/lib/Lib -cp $QTASTE_KERNEL:$CLASSPATH org.python.util.jython "$@"
