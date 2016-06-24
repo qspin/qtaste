@@ -4,7 +4,7 @@
 # If testsuite_dir is defined, a TestSuite-doc.xml file will be generated in this directory
 ##
 
-import string, os, re, codecs, java.lang
+import string, os, re, codecs, subprocess, java.lang
 from com.qspin.qtaste.config import StaticConfiguration
 from com.qspin.qtaste.util import OS
 
@@ -249,8 +249,7 @@ class PythonDocGenerator:
         testScriptFilePath = directory.replace("/", os.sep) + os.sep + StaticConfiguration.TEST_SCRIPT_FILENAME
         shellScriptExtension = IF(OS.getType() == OS.Type.WINDOWS, ".bat", ".sh")
         generatorScript = "generate-TestStepsModules-doc" + shellScriptExtension
-        command = StaticConfiguration.QTASTE_ROOT + os.sep + "bin" + os.sep + generatorScript + ' "' + testScriptFilePath + '"'
-        os.system(command)
+        subprocess.call([StaticConfiguration.QTASTE_ROOT + os.sep + "bin" + os.sep + generatorScript, testScriptFilePath])
 
         stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables("TestScript", [directory])
         if stepsDocDict:
