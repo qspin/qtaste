@@ -28,14 +28,13 @@ package com.qspin.qtaste.util;
 import java.io.Serializable;
 
 /**
- *
  * @author der
  */
-public class NameValue<N,V> implements Serializable {
+public class NameValue<N, V> implements Serializable {
     static final long serialVersionUID = 7411230514645455527L;
     public N name;
     public V value;
-    
+
     public NameValue(N name, V value) {
         this.name = name;
         this.value = value;

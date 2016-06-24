@@ -19,16 +19,18 @@
 
 package com.qspin.qtaste.datacollection.collection;
 
-import org.apache.log4j.Logger;
-
-import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.util.Log4jLoggerFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.qspin.qtaste.config.TestBedConfiguration;
+import com.qspin.qtaste.util.Log4jLoggerFactory;
+
 /**
  * The Probe manager is responsible for the starting of probes depending on the Testbed configuration.
+ *
  * @author lvb
  */
 public class ProbeManager {
@@ -57,7 +59,7 @@ public class ProbeManager {
                 List<Object> l = config.getList("probe_manager.probe");
                 if (l != null) {
 
-                    for (Iterator<Object> i = l.iterator(); i.hasNext();) {
+                    for (Iterator<Object> i = l.iterator(); i.hasNext(); ) {
                         String probeName = (String) i.next();
                         logger.info("Starting probe:" + probeName);
                         try {
@@ -65,8 +67,7 @@ public class ProbeManager {
                             Probe probe = (Probe) probeClass.newInstance();
                             probes.add(probe);
                             probe.start();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             logger.fatal("Cannot start probe " + probeName, e);
                         }
                     }
@@ -82,7 +83,7 @@ public class ProbeManager {
     public synchronized void stop() {
         numberUsers--;
         if (numberUsers == 0) {
-            for (Iterator<Probe> p = probes.iterator(); p.hasNext();) {
+            for (Iterator<Probe> p = probes.iterator(); p.hasNext(); ) {
                 Probe probe = p.next();
                 logger.info("Stopping probe:" + probe);
                 probe.stop();

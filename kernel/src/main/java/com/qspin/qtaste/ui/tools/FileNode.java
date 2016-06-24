@@ -31,19 +31,20 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.io.CSVFile;
 import com.qspin.qtaste.util.FileUtilities;
-import org.apache.commons.lang.StringEscapeUtils;
 
-public class FileNode extends TreeNodeImpl{
-	
-	private PythonTestScript m_PythonTestScript;
-	private String m_TestSuiteDir;
+public class FileNode extends TreeNodeImpl {
+
+    private PythonTestScript m_PythonTestScript;
+    private String m_TestSuiteDir;
 
     public boolean isTestcaseDir() {
         if (f.isDirectory()) {
-        	
+
             File[] childFiles = FileUtilities.listSortedFiles(f);
             for (int i = 0; i < childFiles.length; i++) {
                 if (childFiles[i].getName().equalsIgnoreCase(StaticConfiguration.TEST_SCRIPT_FILENAME)) {
@@ -55,12 +56,12 @@ public class FileNode extends TreeNodeImpl{
     }
 
     // method to be improved
-    public String getTestcaseHeader()  {
+    public String getTestcaseHeader() {
         BufferedReader br = null;
         try {
             File testscriptFile = new File(f + File.separator + StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME);
             br = new BufferedReader(new FileReader(testscriptFile));
-            String description="";
+            String description = "";
             String line;
             while ((line = br.readLine()) != null) {
                 description += line;
@@ -88,7 +89,9 @@ public class FileNode extends TreeNodeImpl{
             //
         } finally {
             try {
-            	if (br!=null) br.close();
+                if (br != null) {
+                    br.close();
+                }
             } catch (IOException ex) {
                 //
             }
@@ -96,6 +99,7 @@ public class FileNode extends TreeNodeImpl{
         return "";
 
     }
+
     public int getTestcaseCount() {
         File testDataFileName = new File(f + File.separator + StaticConfiguration.TEST_DATA_FILENAME);
         try {
@@ -125,7 +129,7 @@ public class FileNode extends TreeNodeImpl{
         } catch (Exception ex) {
             return false;
         }
-    }    
+    }
 
     public File getTestcaseFile() {
         if (isTestcaseDir()) {
@@ -142,22 +146,25 @@ public class FileNode extends TreeNodeImpl{
     public String getId() {
         return this.f.getPath().replace("\\", "/");
     }
-    
+
     public FileNode(File f, String displayValue, String testSuiteDir) {
         super(f, displayValue);
         m_TestSuiteDir = testSuiteDir;
         if (this.isTestcaseDir()) {
             File testScriptFile = new File(f + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
-        	m_PythonTestScript = new PythonTestScript (testScriptFile,testSuiteDir);
+            m_PythonTestScript = new PythonTestScript(testScriptFile, testSuiteDir);
         }
     }
-    
+
     public PythonTestScript getPythonTestScript() {
-    	return m_PythonTestScript;
+        return m_PythonTestScript;
     }
+
     protected boolean checkIfDirectoryContainsTestScriptFile(File file) {
         File[] childFiles = FileUtilities.listSortedFiles(file);
-        if (childFiles==null) return false;
+        if (childFiles == null) {
+            return false;
+        }
         for (int i = 0; i < childFiles.length; i++) {
             if (childFiles[i].isDirectory()) {
                 FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(), m_TestSuiteDir);
@@ -175,20 +182,22 @@ public class FileNode extends TreeNodeImpl{
         }
         return false;
     }
-    
+
     /**
      * Loads the children, caching the results in the children ivar.
      */
     public Object[] getChildren() {
-	if (children != null) {
-	    return children; 
-	}
+        if (children != null) {
+            return children;
+        }
         if (this.isTestcaseDir()) {
             try {
                 ArrayList<TestDataNode> arrayDataNode = new ArrayList<TestDataNode>();
                 // load test case data
                 File tcDataFile = this.getPythonTestScript().getTestcaseData();
-                if (tcDataFile== null) return new Object[]{};
+                if (tcDataFile == null) {
+                    return new Object[] {};
+                }
                 CSVFile csvDataFile = new CSVFile(tcDataFile);
                 List<LinkedHashMap<String, String>> data = csvDataFile.getCSVDataSet();
                 Iterator<LinkedHashMap<String, String>> it = data.iterator();
@@ -197,22 +206,20 @@ public class FileNode extends TreeNodeImpl{
                     LinkedHashMap<String, String> dataRow = it.next();
                     if (dataRow.containsKey("COMMENT")) {
                         String comment = dataRow.get("COMMENT");
-                        arrayDataNode.add(new TestDataNode(tcDataFile, comment,rowIndex));
+                        arrayDataNode.add(new TestDataNode(tcDataFile, comment, rowIndex));
                     }
                     rowIndex++;
                 }
                 children = arrayDataNode.toArray();
-                return  children;
+                return children;
             } catch (FileNotFoundException ex) {
                 // no data found
             } catch (IOException ex) {
                 // unable to read data file
-                
+
             }
-            
-          
-        }
-        else {
+
+        } else {
             ArrayList<FileNode> arrayFileNode = new ArrayList<FileNode>();
             if (f.isDirectory()) {
                 File[] childFiles = FileUtilities.listSortedFiles(f);
@@ -231,8 +238,10 @@ public class FileNode extends TreeNodeImpl{
             }
             children = arrayFileNode.toArray();
         }
-        if (children==null)
-            return new Object[]{};
-        else return children; 
+        if (children == null) {
+            return new Object[] {};
+        } else {
+            return children;
+        }
     }
 }

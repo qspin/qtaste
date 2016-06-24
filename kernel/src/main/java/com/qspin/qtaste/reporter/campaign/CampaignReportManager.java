@@ -34,6 +34,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * A CampaignReportManager is responsible to maintain the results of a campaign report
+ *
  * @author lvboque
  */
 public class CampaignReportManager extends ReportManager {
@@ -50,7 +51,7 @@ public class CampaignReportManager extends ReportManager {
 
     private void initFormatters() {
         try {
-        	formatters.clear();
+            formatters.clear();
             TestEngineConfiguration config = TestEngineConfiguration.getInstance();
             String output = config.getString("reporting.generated_report_path");
 
@@ -58,7 +59,7 @@ public class CampaignReportManager extends ReportManager {
             File outputDir = new File(output);
             if (!outputDir.exists()) {
                 outputDir.mkdirs();
-            }        
+            }
 
             HashMap<String, String> templates = new HashMap<String, String>();
             templates.put("start", StaticConfiguration.CONFIG_DIRECTORY + "/reporting/campaign/campaign_start_template.html");
@@ -72,7 +73,8 @@ public class CampaignReportManager extends ReportManager {
     }
 
     /**
-     * Get an instance of the CampaignReportManager. 
+     * Get an instance of the CampaignReportManager.
+     *
      * @return The TestResultsReportManager.
      */
     synchronized public static CampaignReportManager getInstance() {
@@ -93,7 +95,7 @@ public class CampaignReportManager extends ReportManager {
     public void stopReport() {
         super.stopReport();
     }
-    
+
     public void putEntry(CampaignResult result) {
         results.add(result);
     }

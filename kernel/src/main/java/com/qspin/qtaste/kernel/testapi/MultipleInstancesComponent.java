@@ -21,7 +21,7 @@ package com.qspin.qtaste.kernel.testapi;
 
 /**
  * Interface for all Test API multiple instances components
- * 
+ *
  * @author David Ergo
  */
 public interface MultipleInstancesComponent extends Component {
@@ -33,6 +33,6 @@ public interface MultipleInstancesComponent extends Component {
      * The id of the instance is specified by the <code>INSTANCE_ID</code> test data.
      */
     public static final ComponentFactory factory = MultipleInstancesComponentFactory.getInstance();
-    
+
     public String getInstanceId();
 }

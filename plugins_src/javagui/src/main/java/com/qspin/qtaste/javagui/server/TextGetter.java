@@ -28,18 +28,18 @@ import javax.swing.text.JTextComponent;
 import com.qspin.qtaste.testsuite.QTasteException;
 
 class TextGetter extends ComponentCommander {
-	
-	@Override
-	public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		if (c instanceof JLabel) {
-			return ((JLabel) c).getText();
-		} else if (c instanceof JTextComponent) {
-			return ((JTextComponent) c).getText();
-		} else if (c instanceof AbstractButton) {
-			return ((AbstractButton) c).getText();
-		}
-		return null;
-	}
+
+    @Override
+    public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        if (c instanceof JLabel) {
+            return ((JLabel) c).getText();
+        } else if (c instanceof JTextComponent) {
+            return ((JTextComponent) c).getText();
+        } else if (c instanceof AbstractButton) {
+            return ((AbstractButton) c).getText();
+        }
+        return null;
+    }
 
 }

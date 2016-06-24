@@ -19,36 +19,36 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
-
 import javafx.scene.Node;
+
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class Snapshotter extends UpdateComponentCommander {
 
-	public void doActionsInEventThread() throws QTasteTestFailException{
-		try {
+    public void doActionsInEventThread() throws QTasteTestFailException {
+        try {
 
-//			Dimension size = component.getSize();
-//			BufferedImage myImage = new BufferedImage(size.width, size.height,
-//													  BufferedImage.TYPE_INT_RGB);
-//			Graphics2D g2 = myImage.createGraphics();
-//			component.paint(g2);
-//
-//			File file = new File(mData[0].toString());
-//			file.createNewFile();
-//			System.out.println("creating empty file");
-//			ImageIO.write(myImage, "jpg", file);
-		}
-		catch (Exception e) {
-			throw new QTasteTestFailException("Error saving snapshot " + mData[0].toString() + ":", e);
-		}
-	}
+            //			Dimension size = component.getSize();
+            //			BufferedImage myImage = new BufferedImage(size.width, size.height,
+            //													  BufferedImage.TYPE_INT_RGB);
+            //			Graphics2D g2 = myImage.createGraphics();
+            //			component.paint(g2);
+            //
+            //			File file = new File(mData[0].toString());
+            //			file.createNewFile();
+            //			System.out.println("creating empty file");
+            //			ImageIO.write(myImage, "jpg", file);
+        } catch (Exception e) {
+            throw new QTasteTestFailException("Error saving snapshot " + mData[0].toString() + ":", e);
+        }
+    }
 
-	@Override
-	protected boolean isAccessible(Node c) {
-		return true;
-	}
+    @Override
+    protected boolean isAccessible(Node c) {
+        return true;
+    }
 
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {}
+    @Override
+    protected void prepareActions() throws QTasteTestFailException {
+    }
 }

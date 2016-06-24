@@ -48,7 +48,6 @@ import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author lvboque
  */
 public class TestDataImpl implements TestData, Serializable {
@@ -73,12 +72,12 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public LinkedHashMap<String, String> getDataHash() {
+    public LinkedHashMap<String, String> getDataHash() {
         return hash;
     }
 
     @Override
-	public String getValue(String key) throws QTasteDataException {
+    public String getValue(String key) throws QTasteDataException {
         if (!hash.containsKey(key)) {
             if (key.equals("INSTANCE_ID")) {
                 try {
@@ -104,7 +103,7 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public int getIntValue(String key) throws QTasteDataException {
+    public int getIntValue(String key) throws QTasteDataException {
         try {
             return Integer.parseInt(getValue(key));
         } catch (NumberFormatException e) {
@@ -113,7 +112,7 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public double getDoubleValue(String key) throws QTasteDataException {
+    public double getDoubleValue(String key) throws QTasteDataException {
         try {
             return Double.parseDouble(getValue(key));
         } catch (NumberFormatException e) {
@@ -122,7 +121,7 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public boolean getBooleanValue(String key) throws QTasteDataException {
+    public boolean getBooleanValue(String key) throws QTasteDataException {
         String value = getValue(key);
         if (value.equalsIgnoreCase("true")) {
             return true;
@@ -145,17 +144,18 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException {
+    public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException {
         String value = getValue(key);
         try {
             return new DoubleWithPrecision(value);
         } catch (NumberFormatException e) {
-            throw new QTasteDataException("Error while parsing DoubleWithPrecision data " + key + " for input string: \"" + value + "\"", e);
+            throw new QTasteDataException(
+                  "Error while parsing DoubleWithPrecision data " + key + " for input string: \"" + value + "\"", e);
         }
     }
 
     @Override
-	public byte[] getFileContentAsByteArray(String key) throws QTasteDataException {
+    public byte[] getFileContentAsByteArray(String key) throws QTasteDataException {
         getValue(key); // to check if data exists
         if (hashFiles.containsKey(key)) {
             byte[] array = (byte[]) hashFiles.get(key);
@@ -166,22 +166,21 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public String getFileContentAsString(String key) throws QTasteDataException {
-    	return new String(getFileContentAsByteArray(key), StandardCharsets.UTF_8);
+    public String getFileContentAsString(String key) throws QTasteDataException {
+        return new String(getFileContentAsByteArray(key), StandardCharsets.UTF_8);
     }
 
     @Override
-	public String getFileContentAsString(String key, String charset) throws QTasteDataException {
-    	try {
-    		return new String(getFileContentAsByteArray(key), charset);
-    	} catch (UnsupportedEncodingException e) {
-    		throw new QTasteDataException("Error while decoding the content of file " + key
-                    + ": Unsupported charset " + charset);
-    	}
+    public String getFileContentAsString(String key, String charset) throws QTasteDataException {
+        try {
+            return new String(getFileContentAsByteArray(key), charset);
+        } catch (UnsupportedEncodingException e) {
+            throw new QTasteDataException("Error while decoding the content of file " + key + ": Unsupported charset " + charset);
+        }
     }
 
     @Override
-	public void setValue(String key, String value) throws QTasteDataException {
+    public void setValue(String key, String value) throws QTasteDataException {
         if (key.startsWith("FILE_")) {
             loadFile(key, value);
         }
@@ -189,7 +188,7 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public void remove(String key) {
+    public void remove(String key) {
         hash.remove(key);
         if (key.startsWith("FILE_")) {
             hashFiles.remove(key);
@@ -197,12 +196,12 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public boolean contains(String key) {
+    public boolean contains(String key) {
         return hash.containsKey(key);
     }
 
     @Override
-	public String dump() {
+    public String dump() {
         TreeSet<String> sortedKeys = new TreeSet<String>(hash.keySet());
         String result = new String("{");
         Iterator<String> iKey = sortedKeys.iterator();
@@ -218,7 +217,7 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public void loadFileIfAny() {
+    public void loadFileIfAny() {
         // Load files defined in testdata if any
         Iterator<String> i = hash.keySet().iterator();
         while (i.hasNext()) {
@@ -235,12 +234,12 @@ public class TestDataImpl implements TestData, Serializable {
 
     private void loadFile(String key, String filename) throws QTasteDataException {
         Path filePath = Paths.get(filename);
-    	if (!filePath.isAbsolute()) {
-    		filePath = Paths.get(this.getTestCaseDirectory() + File.separator + filename);
+        if (!filePath.isAbsolute()) {
+            filePath = Paths.get(this.getTestCaseDirectory() + File.separator + filename);
         }
 
         try {
-        	byte[] buffer = Files.readAllBytes(filePath);
+            byte[] buffer = Files.readAllBytes(filePath);
             logger.debug("Loaded file: " + filePath.toString() + " size:" + buffer.length);
             hashFiles.put(key, buffer);
         } catch (IOException e) {
@@ -249,27 +248,27 @@ public class TestDataImpl implements TestData, Serializable {
     }
 
     @Override
-	public void setTestCaseDirectory(String directory) {
+    public void setTestCaseDirectory(String directory) {
         testCaseDirectory = directory;
     }
 
     @Override
-	public String getTestCaseDirectory() {
+    public String getTestCaseDirectory() {
         return testCaseDirectory;
     }
 
     @Override
-	public int getRowId() {
+    public int getRowId() {
         return rowId;
     }
 
     @Override
-	public void setSelected(boolean selected) {
+    public void setSelected(boolean selected) {
         isSelected = selected;
     }
 
     @Override
-	public boolean isSelected() {
+    public boolean isSelected() {
         return isSelected;
     }
 }

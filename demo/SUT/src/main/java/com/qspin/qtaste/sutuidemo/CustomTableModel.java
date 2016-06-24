@@ -6,46 +6,49 @@ import javax.swing.table.AbstractTableModel;
 
 final class CustomTableModel extends AbstractTableModel {
 
-	public CustomTableModel(List<Person> pPeople)
-	{
-		super();
-		mData = pPeople;
-	}
-	
-	public int getRowCount() {
-		return mData.size();
-	}
+    public CustomTableModel(List<Person> pPeople) {
+        super();
+        mData = pPeople;
+    }
 
-	public int getColumnCount() {
-		return COLUMN_NAMES.length;
-	}
+    public int getRowCount() {
+        return mData.size();
+    }
 
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		Person p = mData.get(rowIndex);
-		switch(columnIndex)
-		{
-		case 0 : return p.getFirstName();
-		case 1 : return p.getLastName();
-		case 2 : return p.getAge();
-		case 3 : return p.getAdress();
-		}
-		return null;
-	}
+    public int getColumnCount() {
+        return COLUMN_NAMES.length;
+    }
 
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		switch(columnIndex)
-		{
-		case 2 : return Integer.class;
-		default : return String.class;
-		}
-	}
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Person p = mData.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return p.getFirstName();
+            case 1:
+                return p.getLastName();
+            case 2:
+                return p.getAge();
+            case 3:
+                return p.getAdress();
+        }
+        return null;
+    }
 
-	@Override
-	public String getColumnName(int columnIndex) {
-		return COLUMN_NAMES[columnIndex];
-	}
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 2:
+                return Integer.class;
+            default:
+                return String.class;
+        }
+    }
 
-	private static final String[] COLUMN_NAMES = {"First name", "Last name", "Age", "Adress"}; 
-	private List<Person> mData;
+    @Override
+    public String getColumnName(int columnIndex) {
+        return COLUMN_NAMES[columnIndex];
+    }
+
+    private static final String[] COLUMN_NAMES = {"First name", "Last name", "Age", "Adress"};
+    private List<Person> mData;
 }

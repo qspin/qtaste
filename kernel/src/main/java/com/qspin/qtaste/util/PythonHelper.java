@@ -48,7 +48,7 @@ public class PythonHelper {
         Properties properties = new Properties();
         properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
         properties.setProperty("python.path", StaticConfiguration.FORMATTER_DIR);
-        PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
+        PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
 
         PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
         StringWriter output = new StringWriter();

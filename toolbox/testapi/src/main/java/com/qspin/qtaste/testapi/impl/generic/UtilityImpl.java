@@ -30,12 +30,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import com.qspin.qtaste.testapi.api.Utility;
-import com.qspin.qtaste.testsuite.QTasteException;
 import org.apache.commons.lang.mutable.MutableBoolean;
 
+import com.qspin.qtaste.testapi.api.Utility;
+import com.qspin.qtaste.testsuite.QTasteException;
+
 /**
- *
  * @author Vincent Dubois
  */
 public class UtilityImpl implements Utility {
@@ -53,32 +53,26 @@ public class UtilityImpl implements Utility {
     }
 
     public void createScreenshot(String fileName) throws QTasteException {
-		try {
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			Rectangle screenRectangle = new Rectangle(screenSize);
-			Robot robot = new Robot();
-			BufferedImage image = robot.createScreenCapture(screenRectangle);
-			ImageIO.write(image, "png", new File(fileName));
-		}
-		catch (Exception e) {
-			throw new QTasteException("Error in createScreenshot: " + e.getMessage());
-		}
-	}
+        try {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            Rectangle screenRectangle = new Rectangle(screenSize);
+            Robot robot = new Robot();
+            BufferedImage image = robot.createScreenCapture(screenRectangle);
+            ImageIO.write(image, "png", new File(fileName));
+        } catch (Exception e) {
+            throw new QTasteException("Error in createScreenshot: " + e.getMessage());
+        }
+    }
 
-    public void showMessageDialog(final String title, final String message) throws QTasteException  {
-        try
-        {
-            SwingUtilities.invokeAndWait(new Runnable()
-            {
+    public void showMessageDialog(final String title, final String message) throws QTasteException {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new QTasteException("Error while showing message dialog", e);
         }
     }
@@ -86,20 +80,15 @@ public class UtilityImpl implements Utility {
     @Override
     public String getUserStringValue(final String message, final Object defaultValue) throws QTasteException {
         final StringBuilder valueBuilder = new StringBuilder();
-        try
-        {
-            SwingUtilities.invokeAndWait(new Runnable()
-            {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     String value = JOptionPane.showInputDialog(message, defaultValue);
                     valueBuilder.append(value);
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new QTasteException("Error while showing user input dialog", e);
         }
         return valueBuilder.toString();
@@ -108,20 +97,15 @@ public class UtilityImpl implements Utility {
     @Override
     public boolean getUserConfirmation(final String title, final String message) throws QTasteException {
         final MutableBoolean confirmed = new MutableBoolean();
-        try
-        {
-            SwingUtilities.invokeAndWait(new Runnable()
-            {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     int result = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
                     confirmed.setValue(result == JOptionPane.YES_OPTION);
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new QTasteException("Error while showing user confirmation dialog", e);
         }
         return confirmed.booleanValue();

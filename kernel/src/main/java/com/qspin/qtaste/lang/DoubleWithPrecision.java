@@ -27,6 +27,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * A DoubleWithPrecision object represents a Double with a given precision.
+ *
  * @author Laurent Vanboquestal
  */
 public class DoubleWithPrecision implements Serializable, Comparable<Object> {
@@ -35,7 +36,9 @@ public class DoubleWithPrecision implements Serializable, Comparable<Object> {
     private Double mValue;
     private Double mPrecision;
 
-    /** Constructs a new instance of DoubleWithPrecision from given value and precision.
+    /**
+     * Constructs a new instance of DoubleWithPrecision from given value and precision.
+     *
      * @param value the value
      * @param precision the precision
      */
@@ -43,11 +46,12 @@ public class DoubleWithPrecision implements Serializable, Comparable<Object> {
         this.mValue = value;
         this.mPrecision = precision;
     }
-    
+
     /**
-     * Constructs a new instance of DoubleWithPrecision from its string representation. 
+     * Constructs a new instance of DoubleWithPrecision from its string representation.
+     *
      * @param s the string representation using the format "<CODE>double(precision_double)</CODE>",
-     *            e.g. "<CODE>1.3(0.001)</CODE>", or simply a double which means precision is 0.0, e.g. "<CODE>1.3</CODE>"
+     * e.g. "<CODE>1.3(0.001)</CODE>", or simply a double which means precision is 0.0, e.g. "<CODE>1.3</CODE>"
      * @throws java.lang.NumberFormatException if the string does not contain a parsable DoubleWithPrecision
      */
     public DoubleWithPrecision(String s) throws NumberFormatException {
@@ -68,33 +72,38 @@ public class DoubleWithPrecision implements Serializable, Comparable<Object> {
 
     /**
      * Returns the value of this DoubleWithPrecision object.
+     *
      * @return the value of this object
      */
     public Double getValue() {
         return mValue;
     }
-    
+
     /**
      * Returns the precision of this DoubleWithPrecision object.
+     *
      * @return the precision of this object
      */
     public Double getPrecision() {
         return mPrecision;
-    }    
-    
+    }
+
     /**
-     * Compares this DoubleWithPrecision object to the specified object. 
+     * Compares this DoubleWithPrecision object to the specified object.
+     *
      * @param obj the object to compare with this object, null or of type Double, Integer or DoubleWithPrecision.
-     * @return <code>true</code> if the argument is not null and is a Double or Integer object representing a value between (value - precision) and (value + precision) or
-     *         a DoubleWithPrecision object whoose value is between (value - (precision + obj_precision)) and (value + (precision + obj_precision)),
-     *         <code>false</code> otherwise.
+     * @return <code>true</code> if the argument is not null and is a Double or Integer object representing a value between (value
+     * - precision) and (value + precision) or
+     * a DoubleWithPrecision object whoose value is between (value - (precision + obj_precision)) and (value + (precision +
+     * obj_precision)),
+     * <code>false</code> otherwise.
      */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
-        
+
         if (obj instanceof Double || obj instanceof Integer) {
             Double d;
             if (obj instanceof Double) {
@@ -102,12 +111,13 @@ public class DoubleWithPrecision implements Serializable, Comparable<Object> {
             } else {
                 d = ((Integer) obj).doubleValue();
             }
-            return ((d >= (mValue - mPrecision)) &&  (d <= (mValue + mPrecision)));
+            return ((d >= (mValue - mPrecision)) && (d <= (mValue + mPrecision)));
         }
-        
+
         if (obj instanceof DoubleWithPrecision) {
-            DoubleWithPrecision dwp = (DoubleWithPrecision)obj;
-            return ((dwp.mValue >= (mValue - (mPrecision + dwp.mPrecision))) && (dwp.mValue <= (mValue + (mPrecision + dwp.mPrecision))));
+            DoubleWithPrecision dwp = (DoubleWithPrecision) obj;
+            return ((dwp.mValue >= (mValue - (mPrecision + dwp.mPrecision))) && (dwp.mValue <= (mValue + (mPrecision
+                  + dwp.mPrecision))));
         }
         LOGGER.warn("Comparison between a DoubleWithPrecision and a " + obj.getClass().getName() + " is not supported");
         return false;
@@ -115,6 +125,7 @@ public class DoubleWithPrecision implements Serializable, Comparable<Object> {
 
     /**
      * Returns a hash code for this DoubleWithPrecision object.
+     *
      * @return a hash code for this object
      */
     @Override
@@ -124,28 +135,32 @@ public class DoubleWithPrecision implements Serializable, Comparable<Object> {
         hash = 97 * hash + (this.mPrecision != null ? this.mPrecision.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * Returns a string representation of this DoubleWithPrecision object.
+     *
      * @return a String representation of this object using "<CODE>value(precision)</CODE>" format
      */
     @Override
     public String toString() {
         return "" + mValue + "(" + mPrecision + ")";
     }
-    
+
     public int compareTo(Object o) {
-        if (this.equals(o))
+        if (this.equals(o)) {
             return 0;
+        }
         if (o instanceof DoubleWithPrecision) {
-            if (this.mValue < ((DoubleWithPrecision)o).mValue)
+            if (this.mValue < ((DoubleWithPrecision) o).mValue) {
                 return -1;
+            }
             // this.mValue is bigger than o.mValue
             return 1;
         }
         if (o instanceof Double) {
-            if (this.mValue < (Double) o)
+            if (this.mValue < (Double) o) {
                 return -1;
+            }
             // this.mValue is bigger than o.mValue
             return 1;
         }

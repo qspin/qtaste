@@ -29,15 +29,26 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
 public abstract class ConfigPanelTemplate extends JPanel {
 
-    void Apply() {};
-    void Save() {};
-    void Refresh() {};
+    void Apply() {
+    }
+
+    ;
+
+    void Save() {
+    }
+
+    ;
+
+    void Refresh() {
+    }
+
+    ;
+
     public ConfigPanelTemplate() {
         super(new BorderLayout());
 

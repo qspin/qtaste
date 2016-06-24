@@ -23,6 +23,7 @@ import com.thoughtworks.selenium.Selenium;
 
 /**
  * WebBrowser is just a Selenium Wrapper
+ *
  * @author lvboque
  */
 public class WebBrowser implements Selenium {

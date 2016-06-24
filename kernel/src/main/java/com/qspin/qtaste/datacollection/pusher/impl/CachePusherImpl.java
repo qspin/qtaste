@@ -32,18 +32,19 @@ import com.qspin.qtaste.util.HashtableLinkedList;
 /**
  * This class is responsible to broadcast Data object into the Cache respecting the timing of a previously
  * recorded sequence of data.
+ *
  * @author lvb
  */
 public class CachePusherImpl extends AbstractPusher {
     //private static Logger logger = Log4jLoggerFactory.getLogger(CachePusherImpl.class);
     private ArrayList<Data> array;
-    
-     @SuppressWarnings("unchecked")
+
+    @SuppressWarnings("unchecked")
     public CachePusherImpl(File file) throws Exception {
-        super((HashtableLinkedList<String,Data>) new ObjectFile(file.toString()).load());
+        super((HashtableLinkedList<String, Data>) new ObjectFile(file.toString()).load());
     }
-    
-    public CachePusherImpl(HashtableLinkedList<String,Data> data) throws Exception {
+
+    public CachePusherImpl(HashtableLinkedList<String, Data> data) throws Exception {
         super(data);
         this.array = new ArrayList<Data>();
     }
@@ -59,9 +60,10 @@ public class CachePusherImpl extends AbstractPusher {
         DataReceivedListener listener = CacheImpl.getInstance();
         while (i.hasNext()) {
             data = i.next();
-            listener.dataReceived(data.getTimestamp(), data.getSender(), data.getDest(), data.getName(), data.getValue(), data.getSource(), data.getType());
+            listener.dataReceived(data.getTimestamp(), data.getSender(), data.getDest(), data.getName(), data.getValue(),
+                  data.getSource(), data.getType());
             //logger.debug("Publishing " + data.getName() + " timestamp " + data.getTimestamp());       
         }
         array.clear();
-     }
+    }
 }

@@ -25,14 +25,14 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * MultipleInstancesTest is the interface of the QTaste Test API component providing verbs
  * for the testing of the QTaste MultipleInstancesComponent class.
- * 
+ *
  * @author Laurent Vanboquestal
  */
 public interface MultipleInstancesTest extends MultipleInstancesComponent {
-        
+
     /**
      * Checks that multipleInstanceId is equals to the given one.
-     * 
+     *
      * @param expectedInstance the expected instances id
      * @throws QTasteTestFailException if the returned instance id is not equals to expected instance
      */

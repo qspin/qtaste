@@ -27,22 +27,22 @@ package com.qspin.qtaste.ui.tools;
 import java.io.File;
 
 /**
- *
  * @author vdubois
  */
 public interface JTreeNode {
-    
 
     public File getFile();
 
     public boolean isDir();
 
     public String toString();
-    
 
-    public Object[] getChildren();    
+    public Object[] getChildren();
+
     public String getId();
+
     public boolean isShowTestData();
+
     public void setShowTestdata(boolean value);
 
 }

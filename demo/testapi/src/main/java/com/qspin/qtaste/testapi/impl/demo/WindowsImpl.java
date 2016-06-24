@@ -18,18 +18,21 @@ along with QTaste. If not, see <http://www.gnu.org/licenses/>.
 */
 package com.qspin.qtaste.testapi.impl.demo;
 
-import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
-import com.qspin.qtaste.testapi.api.Windows;
-import com.qspin.qtaste.testsuite.QTasteException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
+import com.qspin.qtaste.config.TestBedConfiguration;
+import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
+import com.qspin.qtaste.testapi.api.Windows;
+import com.qspin.qtaste.testsuite.QTasteException;
+
 /**
  * Implementation of the Windows Test API
+ *
  * @author Laurent Vanbboquestal
  */
 public class WindowsImpl implements Windows {
@@ -50,7 +53,7 @@ public class WindowsImpl implements Windows {
         this.client = new XmlRpcClient();
         try {
             XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-            
+
             config.setServerURL(new URL("http://" + host + ":" + port));
             client.setConfig(config);
         } catch (MalformedURLException ex) {
@@ -60,13 +63,13 @@ public class WindowsImpl implements Windows {
     }
 
     public void startApplication(String name) throws Exception {
-        Object[] params = new Object[]{name};
+        Object[] params = new Object[] {name};
         this.sessionID = (Integer) client.execute("startApplication", params);
         logger.info("sessionID:" + sessionID);
     }
 
     public void stopApplication() throws Exception {
-        Object[] params = new Object[]{sessionID};
+        Object[] params = new Object[] {sessionID};
         int result = (Integer) client.execute("stopApplication", params);
         logger.info("sessionID:" + sessionID);
 
@@ -74,27 +77,27 @@ public class WindowsImpl implements Windows {
 
     public void selectTreeViewItem(String windowName, String treeviewName, String item) throws Exception {
         logger.info("Selecting the item  " + item + " of the treeview " + treeviewName);
-        send("selectTreeViewItem", new String[]{windowName, treeviewName, item});
+        send("selectTreeViewItem", new String[] {windowName, treeviewName, item});
     }
 
     public void pressButton(String windowName, String name) throws Exception {
         logger.info("Selecting the button " + name);
-        send("pressButton", new String[]{windowName, name});
+        send("pressButton", new String[] {windowName, name});
     }
 
     public void selectMenu(String windowName, String menu) throws Exception {
         logger.info("Pressing the menu " + menu);
-        send("selectMenu", new String[]{windowName, menu});
+        send("selectMenu", new String[] {windowName, menu});
     }
 
     public String getText(String windowName, String name) throws Exception {
-        Object[] params = new Object[]{sessionID, windowName, name};
+        Object[] params = new Object[] {sessionID, windowName, name};
         return (String) client.execute("getText", params).toString();
     }
 
     public void setText(String windowName, String name, String value) {
         try {
-            Object[] params = new Object[]{sessionID, windowName, name, value};
+            Object[] params = new Object[] {sessionID, windowName, name, value};
             client.execute("setText", params);
         } catch (Exception e) {
             logger.fatal("Cannot setText of window called " + windowName + ":" + name + " with value " + value, e);
@@ -102,7 +105,7 @@ public class WindowsImpl implements Windows {
     }
 
     public void listElements() throws Exception {
-        Object[] params = new Object[]{sessionID};
+        Object[] params = new Object[] {sessionID};
         int result = (Integer) client.execute("listElements", params);
     }
 
@@ -116,15 +119,14 @@ public class WindowsImpl implements Windows {
     }
 
     public void execute(String command) throws Exception {
-        Object[] params = new Object[]{sessionID, command};
+        Object[] params = new Object[] {sessionID, command};
         client.execute("execute", params);
     }
 
     public void executeWithoutEval(String command) throws Exception {
-        Object[] params = new Object[]{sessionID, command};
+        Object[] params = new Object[] {sessionID, command};
         client.execute("executeWithoutEval", params);
     }
-
 
     @Override
     public void terminate() throws QTasteException {

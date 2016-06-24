@@ -23,25 +23,30 @@ import com.qspin.qtaste.kernel.testapi.SingletonComponent;
 
 /**
  * Generic Windows GUI Automation API
+ *
  * @author Laurent Vanboquestal
  */
 public interface Windows extends SingletonComponent {
     /**
      * Start the application specified as parameter
+     *
      * @param name the name of the application (full path to executable)
      * @return -1 if the application cannot be started, a positive value in other cases
      * @throws Exception if an error occurs during the communication with the application
      */
     public void startApplication(String name) throws Exception;
+
     /**
      * Stop the application
+     *
      * @return -1 if the application cannot be stopped, a positive value in other cases
      * @throws Exception if an error occurs during the communication with the application
      */
-    public void stopApplication()  throws Exception;
+    public void stopApplication() throws Exception;
 
     /**
      * Press the specified button on the specified window
+     *
      * @param windowName the window name containing the button (i.e: Calculator)
      * @param name the name of the button to be pressed
      * @throws Exception if an error occurs during the communication with the application
@@ -50,6 +55,7 @@ public interface Windows extends SingletonComponent {
 
     /**
      * Select the item of the menu specified as parameter
+     *
      * @param windowName the window name containing the menu (i.e: Calculator)
      * @param menu the item to be selected (i.e: Help->AboutCalculator)
      * @throws Exception if an error occurs during the communication with the application
@@ -58,6 +64,7 @@ public interface Windows extends SingletonComponent {
 
     /**
      * Return the text of the specified component present in the specified window
+     *
      * @param windowName the window name (i.e: Calculator)
      * @param name the name of the component (i.e: Edit)
      * @return The text value identified by the specified component name in the specified window name
@@ -67,6 +74,7 @@ public interface Windows extends SingletonComponent {
 
     /**
      * Set the text of a component present on the specified window with the specified value
+     *
      * @param windowName the window name (i.e: Calculator)
      * @param name the name of the component (i.e: Edit)
      * @param value the new text value for the component
@@ -76,6 +84,7 @@ public interface Windows extends SingletonComponent {
 
     /**
      * Select an item in the specified treeview
+     *
      * @param windowName the window name (i.e: Calculator)
      * @param treeviewName the treeview name
      * @param item the item in the treeview to be selected
@@ -85,8 +94,9 @@ public interface Windows extends SingletonComponent {
 
     /**
      * List all the elements controllable in the started application
+     *
      * @throws Exception if an error occurs during the communication with the application
      */
     public void listElements() throws Exception;
-    
+
 }

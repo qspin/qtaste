@@ -24,20 +24,23 @@ import java.io.Serializable;
 /**
  * A Data object is the structure used by the datacollection package
  * It consists of a key/value pair containg some extra data like source of data, timestamp
+ *
  * @author lvboque
  */
 
 public class Data implements Serializable {
 
-	private static final long serialVersionUID = -5501674332646234262L;
+    private static final long serialVersionUID = -5501674332646234262L;
 
-	public enum DataSource {
+    public enum DataSource {
         OTHER,
         OPC,
         JMX
-    
-    }; 
-    
+
+    }
+
+    ;
+
     private long timestamp;
     private String sender;
     private String dest;
@@ -45,9 +48,10 @@ public class Data implements Serializable {
     private Object value;
     private Object type;
     private DataSource source;
-    
+
     /**
      * Create a new instance of Data
+     *
      * @param timestamp representing the time when the data has been received
      * @param name of the data (key)
      * @param value is an object (or value) mapped to the name (key)
@@ -63,10 +67,11 @@ public class Data implements Serializable {
         this.dest = dest;
         this.source = source;
     }
-    
+
     /**
      * Return the type of Data depending on the DataSource
-     * @return an object identifying the type of data 
+     *
+     * @return an object identifying the type of data
      */
     public Object getType() {
         return this.type;
@@ -74,6 +79,7 @@ public class Data implements Serializable {
 
     /**
      * Return the sender of Data
+     *
      * @return an string identifying the sender of the data
      */
     public String getSender() {
@@ -82,59 +88,61 @@ public class Data implements Serializable {
 
     /**
      * Return the destination of Data
+     *
      * @return an string identifying the destination of the data
      */
     public String getDest() {
         return this.dest;
     }
-    
-    
+
     /**
      * Return a timestamp representing the time when the data has been received
+     *
      * @return timestamp
      */
     public long getTimestamp() {
         return this.timestamp;
     }
-    
-   
+
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
-    
+
     /**
      * Return an Object representing the value mapped to the name/key
+     *
      * @return the value mapped to the name/key
      */
     public Object getValue() {
         return this.value;
     }
-    
+
     /**
      * Return the name identifying the data
+     *
      * @return the identifier of the data
      */
     public String getName() {
         return this.name;
     }
-    
+
     /**
      * Return the identifier of the provider of the data
+     *
      * @return the identifier of the provider
      */
     public DataSource getSource() {
         return this.source;
     }
-    
+
     /**
      * Display a string representation of this object to stdout
      */
     public void dump() {
-        System.out.println("" + 
-                          timestamp + "," +
-                           name + "," +
-                           value + "," +
-                           type
-                );
+        System.out.println("" +
+              timestamp + "," +
+              name + "," +
+              value + "," +
+              type);
     }
 }

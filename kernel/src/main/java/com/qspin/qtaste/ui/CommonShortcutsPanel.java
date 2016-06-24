@@ -35,9 +35,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
-
 /**
- *
  * @author vdubois
  */
 
@@ -47,6 +45,7 @@ public class CommonShortcutsPanel extends JPanel {
         super(new BorderLayout());
         genUI();
     }
+
     private void genUI() {
         showTestAPIButton.setIcon(ResourceManager.getInstance().getImageIcon("icons/testAPIDoc"));
         showTestAPIButton.setToolTipText("Show test API documentation");
@@ -69,7 +68,6 @@ public class CommonShortcutsPanel extends JPanel {
         });
         this.add(showTestAPIButton, BorderLayout.CENTER);
     }
- 
 
     protected JButton showTestAPIButton = new JButton();
     private static Logger logger = Log4jLoggerFactory.getLogger(CommonShortcutsPanel.class);

@@ -18,6 +18,7 @@
 */
 
 package com.qspin.qtaste.ui.csveditor;
+
 import java.util.Vector;
 
 import javax.swing.JTable;
@@ -29,24 +30,25 @@ import javax.swing.table.DefaultTableModel;
 @SuppressWarnings("serial")
 public class TestDataTableModel extends DefaultTableModel {
 
-   /**
-    * Stores modified state of document
-    */
-   //private boolean modified;
-   /** Stores file name of current document */
-   //private JTable table;
-   
-   public TestDataTableModel(JTable table) {
-	  super();
-      //modified = false;
-      //this.table = table;	   
-   }
-   
-   public void setModified(boolean modified)
-   {
-      //this.modified = modified;
-   }   
-   
+    /**
+     * Stores modified state of document
+     */
+    //private boolean modified;
+
+    /**
+     * Stores file name of current document
+     */
+    //private JTable table;
+    public TestDataTableModel(JTable table) {
+        super();
+        //modified = false;
+        //this.table = table;
+    }
+
+    public void setModified(boolean modified) {
+        //this.modified = modified;
+    }
+
     public Vector<?> getColumnIdentifiers() {
         return columnIdentifiers;
     }

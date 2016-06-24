@@ -18,6 +18,7 @@
 */
 
 package com.qspin.qtaste.ui.widget;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -33,177 +34,148 @@ import javax.swing.event.PopupMenuListener;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
-class InfoCbModel extends DefaultComboBoxModel
-{
-   public void addInfo(InfoCbBox.Info pInfo)
-   {
-      addElement(pInfo);
-      setSelectedItem(pInfo);
-   }
+class InfoCbModel extends DefaultComboBoxModel {
+    public void addInfo(InfoCbBox.Info pInfo) {
+        addElement(pInfo);
+        setSelectedItem(pInfo);
+    }
 }
 
 @SuppressWarnings("serial")
-public class InfoCbBox extends JComboBox implements PopupMenuListener
-{
-   private class InfoRenderer extends JLabel implements ListCellRenderer
-   {
-      public InfoRenderer(InfoCbBox pBox)
-      {
-         mBox = pBox;
-      }
+public class InfoCbBox extends JComboBox implements PopupMenuListener {
+    private class InfoRenderer extends JLabel implements ListCellRenderer {
+        public InfoRenderer(InfoCbBox pBox) {
+            mBox = pBox;
+        }
 
-      public void highlight(boolean pEnable)
-      {
-         if(pEnable && !mHighlight)
-         {
+        public void highlight(boolean pEnable) {
+            if (pEnable && !mHighlight) {
+                mHighlight = pEnable;
+
+                Thread th = new Thread() {
+                    public void run() {
+                        int i = 0;
+                        while (i < 10 && mHighlight) {
+                            if ((i % 2) == 0) {
+                                mForeground = ResourceManager.getInstance().getNormalColor();
+                            } else {
+                                mForeground = ResourceManager.getInstance().getDarkColor();
+                            }
+
+                            mBox.repaint();
+                            ++i;
+                            try {
+                                sleep(500);
+                            } catch (InterruptedException e) {
+                                i = 10;
+                            }
+                        }
+                        mHighlight = false;
+                        mForeground = Color.BLACK;
+                        mBox.repaint();
+                    }
+                };
+                th.start();
+            }
+
             mHighlight = pEnable;
+        }
 
-            Thread th = new Thread()
-            {
-               public void run()
-               {
-                  int i = 0;
-                  while(i < 10 && mHighlight)
-                  {
-                     if((i % 2) == 0)
-                     {
-                        mForeground = ResourceManager.getInstance().getNormalColor();
-                     }
-                     else
-                     {
-                        mForeground = ResourceManager.getInstance().getDarkColor();
-                     }
+        public Color getForeground() {
+            return mForeground;
+        }
 
-                     mBox.repaint();
-                     ++i;
-                     try
-                     {
-                        sleep(500);
-                     }
-                     catch (InterruptedException e)
-                     {
-                        i = 10;
-                     }
-                  }
-                  mHighlight = false;
-                  mForeground = Color.BLACK;
-                  mBox.repaint();
-               }
-            };
-            th.start();
-         }
+        public Component getListCellRendererComponent(JList pList, Object pValue, int pIndex, boolean pIsSelected, boolean
+              pCellHasFocus) {
+            if (pValue != null) {
+                Info info = (Info) pValue;
 
-         mHighlight = pEnable;
-      }
-
-      public Color getForeground()
-      {
-          return mForeground;
-      }
-
-      public Component getListCellRendererComponent(JList pList, Object pValue, int pIndex, boolean pIsSelected, boolean pCellHasFocus)
-      {
-         if(pValue != null)
-         {
-            Info info = (Info)pValue;
-
-            setText(info.getMessage());
-            Icon icon = ResourceManager.getInstance().getImageIcon("main/badsmall");  // Default value plus Error Level
-            if (info.getLevel()==Info.Level.WARNING)
-            {
-               icon = ResourceManager.getInstance().getImageIcon("main/beam16");  // TODO: ask for a 'Warning' logo
+                setText(info.getMessage());
+                Icon icon = ResourceManager.getInstance().getImageIcon("main/badsmall");  // Default value plus Error Level
+                if (info.getLevel() == Info.Level.WARNING) {
+                    icon = ResourceManager.getInstance().getImageIcon("main/beam16");  // TODO: ask for a 'Warning' logo
+                } else if (info.getLevel() == Info.Level.INFO) {
+                    icon = ResourceManager.getInstance().getImageIcon("main/goodsmall");
+                }
+                setIcon(icon);
             }
-            else if (info.getLevel()==Info.Level.INFO)
-            {
-               icon = ResourceManager.getInstance().getImageIcon("main/goodsmall");
-            }
-            setIcon(icon);
-         }
-         return this;
-      }
+            return this;
+        }
 
-      InfoCbBox mBox;
-      boolean mHighlight = false;
-      private Color mForeground = Color.BLACK;
-   }
+        InfoCbBox mBox;
+        boolean mHighlight = false;
+        private Color mForeground = Color.BLACK;
+    }
 
-   public interface Info
-   {
-      enum Level
-      {
-         /** Information level. */
-         INFO,
-         /** Warning level. */
-         WARNING,
-         /** Error level. */
-         ERROR;
-      }
+    public interface Info {
+        enum Level {
+            /**
+             * Information level.
+             */
+            INFO,
+            /**
+             * Warning level.
+             */
+            WARNING,
+            /**
+             * Error level.
+             */
+            ERROR;
+        }
 
-      Level getLevel();
-      String getMessage();
-   }
+        Level getLevel();
 
-   public class DefaultInfo implements Info
-   {
-      public DefaultInfo(Level pLevel, String pMsg)
-      {
-         mLevel = pLevel;
-         mMessage = pMsg;
-      }
+        String getMessage();
+    }
 
-      public Level getLevel()
-      {
-         return mLevel;
-      }
+    public class DefaultInfo implements Info {
+        public DefaultInfo(Level pLevel, String pMsg) {
+            mLevel = pLevel;
+            mMessage = pMsg;
+        }
 
-      public String getMessage()
-      {
-         return mMessage;
-      }
+        public Level getLevel() {
+            return mLevel;
+        }
 
-      private Level mLevel;
-      private String mMessage;
-   }
+        public String getMessage() {
+            return mMessage;
+        }
 
+        private Level mLevel;
+        private String mMessage;
+    }
 
+    public InfoCbBox() {
+        super(new InfoCbModel());
+        mRenderer = new InfoRenderer(this);
+        setRenderer(mRenderer);
+        this.setFocusable(false);
 
-   public InfoCbBox()
-   {
-      super(new InfoCbModel());
-      mRenderer = new InfoRenderer(this);
-      setRenderer(mRenderer);
-      this.setFocusable(false);
+        addPopupMenuListener(this);
+    }
 
-      addPopupMenuListener(this);
-   }
+    public void addInfo(Info pInfo) {
+        ((InfoCbModel) getModel()).addInfo(pInfo);
+        mRenderer.highlight(true);
+    }
 
-   public void addInfo(Info pInfo)
-   {
-      ((InfoCbModel)getModel()).addInfo(pInfo);
-      mRenderer.highlight(true);
-   }
+    public void addInfo(Info.Level pLevel, String pMsg) {
+        addInfo(new DefaultInfo(pLevel, pMsg));
+    }
 
+    public void popupMenuWillBecomeVisible(PopupMenuEvent pE) {
+        mRenderer.highlight(false);
+        repaint();
+    }
 
-   public void addInfo(Info.Level pLevel, String pMsg)
-   {
-      addInfo(new DefaultInfo(pLevel, pMsg));
-   }
+    public void popupMenuWillBecomeInvisible(PopupMenuEvent pE) {
 
-   public void popupMenuWillBecomeVisible(PopupMenuEvent pE)
-   {
-      mRenderer.highlight(false);
-      repaint();
-   }
+    }
 
-   public void popupMenuWillBecomeInvisible(PopupMenuEvent pE)
-   {
+    public void popupMenuCanceled(PopupMenuEvent pE) {
 
-   }
+    }
 
-   public void popupMenuCanceled(PopupMenuEvent pE)
-   {
-
-   }
-
-   private InfoRenderer mRenderer;
+    private InfoRenderer mRenderer;
 }

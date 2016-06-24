@@ -30,6 +30,7 @@ import com.qspin.qtaste.util.NameValue;
 
 /**
  * Interface of the Cache
+ *
  * @author lvboque
  */
 public interface Cache extends DataReceivedListener {
@@ -55,12 +56,14 @@ public interface Cache extends DataReceivedListener {
 
     /**
      * Invalidate the data present in the cache for the reason specified as parameter
+     *
      * @param reason the reason
      */
     public void invalidate(String reason);
 
     /**
      * Return the last Data structure for the specified variable
+     *
      * @param name the variable of which to get the value
      * @return the data object
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if data in the cache have been invalidated
@@ -84,6 +87,7 @@ public interface Cache extends DataReceivedListener {
 
     /**
      * Get comparator from its string representation
+     *
      * @param comparatorString string representation of the comparator: "==", "!=", "&lt;", "&gt;", "&lt;=" or "&gt;="
      * @return comparator corresponding to comparatorString
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if comparatorString is invalid
@@ -95,15 +99,19 @@ public interface Cache extends DataReceivedListener {
      * and return corresponding Data structure.
      * <p>
      * Note that the variable value class must be implement the Comparable interface.
+     *
      * @param name the variable for which to wait the value for
      * @param comparator the comparator to use to compare the variable value
      * @param value the value to compare the variable value with, of the same class as the variable values
      * @param timeout the maximum time to wait for, in milliseconds
      * @return the data object
-     * @throws com.qspin.qtaste.testsuite.QTasteException if data in the cache have been invalidated or if value is not an instance of Comparable
+     * @throws com.qspin.qtaste.testsuite.QTasteException if data in the cache have been invalidated or if value is not an
+     * instance of Comparable
      * @throws com.qspin.qtaste.testsuite.QTasteTestFailException if there is no data in the cache for the specified variable,
-     *         or its value didn't compares to given value as specified by the given comparator within given time
+     * or its value didn't compares to given value as specified by the given comparator within given time
      */
-    public Data waitForValue(String name, Comparator comparator, Object value, long timeout) throws QTasteTestFailException, QTasteException;
+    public Data waitForValue(String name, Comparator comparator, Object value, long timeout)
+          throws QTasteTestFailException, QTasteException;
+
     public HashMap<String, Data> getCopyContent();
 }

@@ -33,7 +33,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
 /**
- *
  * @author vdubois
  */
 public class BreakPointScript {
@@ -41,13 +40,14 @@ public class BreakPointScript {
     private Document mScriptDocument;
     private String mFileName;
     private HashMap<Integer, Boolean> breakpoints;
-    public static String BREAKPOINT_PROPERTY="breakpoints";
-    public static Color BreakpointColor = new Color(252,157,159);
+    public static String BREAKPOINT_PROPERTY = "breakpoints";
+    public static Color BreakpointColor = new Color(252, 157, 159);
     protected BreakpointEventHandler eventBreakpointHandler = BreakpointEventHandler.getInstance();
 
     public void setFileName(String fileName) {
         mFileName = fileName;
     }
+
     public BreakPointScript(Document doc) {
         mScriptDocument = doc;
         breakpoints = new HashMap<Integer, Boolean>();
@@ -56,17 +56,17 @@ public class BreakPointScript {
         doc.addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
-                
+
             }
 
             public void removeUpdate(DocumentEvent e) {
-                
+
             }
 
             public void changedUpdate(DocumentEvent e) {
-                
+
             }
-        });       
+        });
     }
 
     public Document getScriptDocument() {
@@ -76,33 +76,37 @@ public class BreakPointScript {
     public void setScriptDocument(Document mScriptDocument) {
         this.mScriptDocument = mScriptDocument;
     }
+
     public void addBreakpoint(int line) {
         getBreakpoints().put(line, true);
         eventBreakpointHandler.addBreakpoint(mFileName, line);
-        
-       
+
     }
+
     public void toggleBreakpoint(int line) {
-        if (this.getBreakpoints().containsKey(line))
-        {
-            boolean value = (boolean)getBreakpoints().get(line);
-            if (value)
+        if (this.getBreakpoints().containsKey(line)) {
+            boolean value = (boolean) getBreakpoints().get(line);
+            if (value) {
                 removeBreakpoint(line);
-            else
+            } else {
                 addBreakpoint(line);
+            }
+        } else {
+            addBreakpoint(line);
         }
-        else addBreakpoint(line);
     }
+
     public void removeBreakpoint(int line) {
-        if (getBreakpoints().containsKey(line))
-        {
+        if (getBreakpoints().containsKey(line)) {
             getBreakpoints().put(line, false);
             eventBreakpointHandler.removeBreakpoint(mFileName, line);
         }
     }
+
     public boolean isBreakPoint(int line) {
         return getBreakpoints().containsKey(line);
     }
+
     public void removeAllBreakpoints() {
         Iterator<Integer> it = getBreakpoints().keySet().iterator();
         while (it.hasNext()) {
@@ -116,7 +120,5 @@ public class BreakPointScript {
     public HashMap<Integer, Boolean> getBreakpoints() {
         return breakpoints;
     }
-
-    
 
 }

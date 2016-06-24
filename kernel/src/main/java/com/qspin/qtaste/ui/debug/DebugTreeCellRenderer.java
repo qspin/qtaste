@@ -19,7 +19,6 @@
 
 package com.qspin.qtaste.ui.debug;
 
-import com.qspin.qtaste.ui.tools.ResourceManager;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -28,52 +27,46 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
-public class DebugTreeCellRenderer extends DefaultTreeCellRenderer{
-	// ///////////////////////////////////////////////////////////////////
+public class DebugTreeCellRenderer extends DefaultTreeCellRenderer {
+    // ///////////////////////////////////////////////////////////////////
 
-	   private static final Font SMALL_FONT = new Font("Dialog", Font.PLAIN, 10);
-	   //private static final Font NORMAL_FONT = new Font("Dialog", Font.PLAIN, 12);
+    private static final Font SMALL_FONT = new Font("Dialog", Font.PLAIN, 10);
+    //private static final Font NORMAL_FONT = new Font("Dialog", Font.PLAIN, 12);
 
+    public DebugTreeCellRenderer() {
+        //	      setBorderSelectionColor(mGreen);
+        //      setBackgroundSelectionColor(mLightGreen);
+    }
 
-	   public DebugTreeCellRenderer()
-	   {
-//	      setBorderSelectionColor(mGreen);
-	//      setBackgroundSelectionColor(mLightGreen);
-	   }
+    public Component getTreeCellRendererComponent(JTree pTree, Object pValue, boolean pSel, boolean pExpanded, boolean pLeaf,
+          int pRow, boolean pHasFocus) {
+        super.getTreeCellRendererComponent(pTree, pValue, pSel, pExpanded, pLeaf, pRow, pHasFocus);
+        formatNode((DefaultMutableTreeNode) pValue, pTree);
+        return this;
+    }
 
-	   public Component getTreeCellRendererComponent(JTree pTree, Object pValue, boolean pSel, boolean pExpanded, boolean pLeaf, int pRow, boolean pHasFocus)
-	   {
-	      super.getTreeCellRendererComponent(pTree, pValue, pSel, pExpanded, pLeaf, pRow, pHasFocus);
-	      formatNode((DefaultMutableTreeNode) pValue, pTree);
-	      return this;
-	   }
+    private void formatNode(DefaultMutableTreeNode pNode, JTree pTree) {
+        setFont(SMALL_FONT);
+        if (pNode instanceof VariableNode) {
+            //	    	  VariableNode node = (VariableNode) pNode;
+            //	    	  if (node.getChildren().length==0) {
+            //	              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
+            //	              setIcon(icon);
+            //	    	  }
+            //	    	  else {
+            Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
+            setIcon(icon);
+            //	    	  }
+        } else if (pNode instanceof DebugRootNode) {
+            setIcon(null);
+        }
+        if (getText() != null) {
+            setToolTipText(getText());
+        }
 
-	   private void formatNode(DefaultMutableTreeNode pNode, JTree pTree)
-	   {
-	      setFont(SMALL_FONT);
-	      if (pNode instanceof VariableNode)
-	      {
-//	    	  VariableNode node = (VariableNode) pNode;
-//	    	  if (node.getChildren().length==0) {
-//	              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
-//	              setIcon(icon);
-//	    	  }
-//	    	  else {
-              Icon icon = ResourceManager.getInstance().getImageIcon("icons/debugvar");
-              setIcon(icon);
-//	    	  }
-	      }
-	      else if (pNode instanceof DebugRootNode)
-	   	  {
-	    	  setIcon(null);
-	   	  }
-	      if (getText() != null)
-	      {
-	         setToolTipText(getText());
-	      }
-
-	   }
+    }
 
 }

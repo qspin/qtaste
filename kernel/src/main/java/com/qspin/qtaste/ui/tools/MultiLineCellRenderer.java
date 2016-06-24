@@ -31,27 +31,25 @@ import javax.swing.JTextArea;
 import javax.swing.table.TableCellRenderer;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
-public class MultiLineCellRenderer extends JTextArea implements TableCellRenderer{
+public class MultiLineCellRenderer extends JTextArea implements TableCellRenderer {
 
-    
-  public MultiLineCellRenderer() {
-    setLineWrap(true);
-    setWrapStyleWord(true);
-    setOpaque(true);
-  }
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-    	  setText((String)value);
-          setSize(table.getColumnModel().getColumn(column).getWidth(),
-                  getPreferredSize().height);
-          if (table.getRowHeight(row) != getPreferredSize().height) {
-                  table.setRowHeight(row, getPreferredSize().height);
-          }
-          return this;
+    public MultiLineCellRenderer() {
+        setLineWrap(true);
+        setWrapStyleWord(true);
+        setOpaque(true);
     }
-    
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
+          int column) {
+        setText((String) value);
+        setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
+        if (table.getRowHeight(row) != getPreferredSize().height) {
+            table.setRowHeight(row, getPreferredSize().height);
+        }
+        return this;
+    }
+
 }

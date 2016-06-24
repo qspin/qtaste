@@ -29,7 +29,6 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -38,8 +37,8 @@ public class TestbedConfigPanel extends JPanel {
         super(new BorderLayout());
         genUI();
     }
-    
+
     public void genUI() {
-        
+
     }
 }

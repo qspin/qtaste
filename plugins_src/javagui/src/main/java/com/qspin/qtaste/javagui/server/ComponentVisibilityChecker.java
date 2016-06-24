@@ -26,38 +26,32 @@ import com.qspin.qtaste.testsuite.QTasteException;
 
 public class ComponentVisibilityChecker extends ComponentCommander {
 
-	@Override
-	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		Component currentComponent = c;
-		if ( c == null )
-		{
-			LOGGER.debug("checkComponentIsVisible on a null component");
-			return false;
-		}
-		while (currentComponent != null )
-		{
-			boolean lastRun = currentComponent instanceof Window; //Dialog can have another window as parent.
-			
-			if ( !currentComponent.isVisible() )
-			{
-				if ( c == currentComponent )
-				{
-					LOGGER.debug("The component " + c.getName() + " is not visible.");
-				}
-				else
-				{
-					LOGGER.debug("The parent (" + currentComponent.getName() + ") of the component " + c.getName() + " is not visible.");
-				}
-				return false;
-			}
-			if ( lastRun )
-			{
-				break;
-			}
-			else
-				currentComponent = currentComponent.getParent();
-		}
-		return true;
-	}
+    @Override
+    Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        Component currentComponent = c;
+        if (c == null) {
+            LOGGER.debug("checkComponentIsVisible on a null component");
+            return false;
+        }
+        while (currentComponent != null) {
+            boolean lastRun = currentComponent instanceof Window; //Dialog can have another window as parent.
+
+            if (!currentComponent.isVisible()) {
+                if (c == currentComponent) {
+                    LOGGER.debug("The component " + c.getName() + " is not visible.");
+                } else {
+                    LOGGER.debug(
+                          "The parent (" + currentComponent.getName() + ") of the component " + c.getName() + " is not visible.");
+                }
+                return false;
+            }
+            if (lastRun) {
+                break;
+            } else {
+                currentComponent = currentComponent.getParent();
+            }
+        }
+        return true;
+    }
 }

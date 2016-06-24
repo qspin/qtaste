@@ -67,8 +67,7 @@ import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 @SuppressWarnings("serial")
-public class TestCaseTree extends JTree implements DragSourceListener,
-    DropTargetListener, DragGestureListener {
+public class TestCaseTree extends JTree implements DragSourceListener, DropTargetListener, DragGestureListener {
 
     private static Logger logger = Log4jLoggerFactory.getLogger(TestCaseTree.class);
     private final String TESTUITE_DIR = "TestSuites";
@@ -78,25 +77,23 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     DragSource ds;
     DropTarget dt;
 
-    StringSelection transferable;    
+    StringSelection transferable;
+
     public TestCaseTree(JTreeTable destinationComponent) {
         super();
         ds = new DragSource();
-        dt = new DropTarget();        
+        dt = new DropTarget();
         mTestCaseTree = this;
         this.treeTable = destinationComponent;
-        
+
         ds.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY, this);
-        try
-        {
+        try {
             dt.setComponent(destinationComponent);
             dt.addDropTargetListener(this);
-        }
-        catch (java.util.TooManyListenersException e)
-        {
+        } catch (java.util.TooManyListenersException e) {
             System.out.println("Too many Listeners");
         }
-        
+
         this.setCellRenderer(new TestCaseTreeCellRenderer());
 
         FileNode rootFileNode = createRootFileNode();
@@ -128,7 +125,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
     protected FileNode createRootFileNode() {
         String scriptDir = TESTUITE_DIR;
-        FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases",TESTUITE_DIR);
+        FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases", TESTUITE_DIR);
         return tcFn;
     }
 
@@ -158,7 +155,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         File[] childFiles = FileUtilities.listSortedFiles(file);
         for (int i = 0; i < childFiles.length; i++) {
             if (childFiles[i].isDirectory()) {
-                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(),TESTUITE_DIR);
+                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(), TESTUITE_DIR);
                 if (childNode.isTestcaseDir()) {
                     return true;
                 } else {
@@ -178,7 +175,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         if (!file.isDirectory()) {
             return;
         }
-        FileNode fn = new FileNode(file, file.getName(),TESTUITE_DIR);
+        FileNode fn = new FileNode(file, file.getName(), TESTUITE_DIR);
         // check if the directory is the child one containing data files
         boolean nodeToAdd = fn.isTestcaseDir();
         if (!fn.isTestcaseDir()) {
@@ -190,11 +187,11 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         }
         TCTreeNode node = new TCTreeNode(fn, !fn.isTestcaseDir());
         final int NON_EXISTENT = -1;
-        if (parent.getIndex(node) == NON_EXISTENT &&
-                !file.isHidden()) {
+        if (parent.getIndex(node) == NON_EXISTENT && !file.isHidden()) {
             parent.add(node);
         }
     }
+
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
@@ -224,8 +221,9 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         public void valueChanged(TreeSelectionEvent e) {
             //TreePath path = e.getNewLeadSelectionPath();
         }
-        private void evaluatePopup(MouseEvent e) { 
-            if (e.isPopupTrigger()) { 
+
+        private void evaluatePopup(MouseEvent e) {
+            if (e.isPopupTrigger()) {
                 // display a popup menu to run/debug a test
                 // display the context dialog
                 JPopupMenu menu = new JPopupMenu();
@@ -242,10 +240,11 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         @Override
         public void mouseClicked(MouseEvent e) {
-               if (e.getButton() == MouseEvent.BUTTON1) {
+            if (e.getButton() == MouseEvent.BUTTON1) {
                 if (e.getClickCount() == 2) { // double click
                     // add the testcase into the test campaign
-                    String selectedPath = ((FileNode)((TCTreeNode)getSelectionPath().getLastPathComponent()).getUserObject()).getFile().getPath().toString();
+                    String selectedPath = ((FileNode) ((TCTreeNode) getSelectionPath().getLastPathComponent()).getUserObject())
+                          .getFile().getPath().toString();
                     TestCaseTree.this.addSelectedTestdirectoryToMetaCampaign(selectedPath);
                 }
             }
@@ -279,17 +278,18 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     }
 
     public void dragDropEnd(DragSourceDropEvent dsde) {
-       //
+        //
     }
 
     public void dragGestureRecognized(DragGestureEvent dge) {
-        transferable = new StringSelection(((FileNode)((TCTreeNode)this.getSelectionPath().getLastPathComponent()).getUserObject()).getFile().getPath());
+        transferable = new StringSelection(
+              ((FileNode) ((TCTreeNode) this.getSelectionPath().getLastPathComponent()).getUserObject()).getFile().getPath());
         //dge.startDrag(DragSource.DefaultCopyDrop, transferable);
         ds.startDrag(dge, DragSource.DefaultCopyDrop, transferable, this);
     }
 
     public void dragEnter(DropTargetDragEvent dtde) {
-       dtde.acceptDrag (DnDConstants.ACTION_COPY_OR_MOVE);
+        dtde.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
     }
 
     public void dragOver(DropTargetDragEvent dtde) {
@@ -305,42 +305,41 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     }
 
     public void addSelectedTestdirectoryToMetaCampaign(String directory) {
-        TestCampaignTreeModel model = (TestCampaignTreeModel)treeTable.getTreeTableModel();
+        TestCampaignTreeModel model = (TestCampaignTreeModel) treeTable.getTreeTableModel();
         directory = directory.replace('\\', '/');
-        model.addTestSuite(directory);              
+        model.addTestSuite(directory);
         treeTable.expandPath(directory);
         treeTable.repaint();
     }
+
     public void drop(DropTargetDropEvent dtde) {
-    try
-        {
+        try {
             Transferable tr = dtde.getTransferable();
-            if (tr.isDataFlavorSupported (DataFlavor.stringFlavor))
-            {
-                dtde.acceptDrop (
-                    DnDConstants.ACTION_COPY_OR_MOVE);
-                String  data = (String)
-                    tr.getTransferData(DataFlavor.stringFlavor);
+            if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                String data = (String) tr.getTransferData(DataFlavor.stringFlavor);
                 // create the new TreeTable containing the selected dragged path
                 this.addSelectedTestdirectoryToMetaCampaign(data);
                 dtde.getDropTargetContext().dropComplete(true);
-          } else {
-            System.err.println ("Rejected");
-            dtde.rejectDrop();
-          }
+            } else {
+                System.err.println("Rejected");
+                dtde.rejectDrop();
+            }
         } catch (IOException io) {
             logger.error(io);
             dtde.rejectDrop();
         } catch (UnsupportedFlavorException ufe) {
             logger.error(ufe);
             dtde.rejectDrop();
-        }    }
+        }
+    }
 
     class SelectAllAction extends AbstractAction {
 
         boolean select;
+
         public SelectAllAction(boolean select) {
-            super(select?"Select all":"Unselect all");
+            super(select ? "Select all" : "Unselect all");
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -353,5 +352,5 @@ public class TestCaseTree extends JTree implements DragSourceListener,
             return true;
         }
     }
-    
+
 }

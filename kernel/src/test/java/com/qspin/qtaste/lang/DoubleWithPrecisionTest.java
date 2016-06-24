@@ -19,11 +19,9 @@
 
 package com.qspin.qtaste.lang;
 
-import com.qspin.qtaste.lang.DoubleWithPrecision;
 import junit.framework.TestCase;
 
 /**
- *
  * @author dergo
  */
 public class DoubleWithPrecisionTest extends TestCase {

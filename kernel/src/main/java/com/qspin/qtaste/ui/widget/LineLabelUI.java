@@ -19,49 +19,43 @@
 
 package com.qspin.qtaste.ui.widget;
 
-import com.qspin.qtaste.ui.tools.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.metal.*;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+import javax.swing.JLabel;
+import javax.swing.plaf.metal.MetalLabelUI;
+
+import com.qspin.qtaste.ui.tools.ResourceManager;
 
 /**
  * The LineLabelUI is responsible for painting a label with a specific look.
  * The text is painted followed by a horizontal line.
  */
-public class LineLabelUI extends MetalLabelUI
-{
-   private static final int SPACE_INC = 8;
-   protected void paintDisabledText(JLabel pLabel,
-            Graphics pG,
-            String pStr,
-            int pTextX,
-            int pTextY)
-   {
-      pG.setColor(ResourceManager.getInstance().getBackColor().darker());
-      pG.drawString(pStr, pTextX, pTextY);
+public class LineLabelUI extends MetalLabelUI {
+    private static final int SPACE_INC = 8;
 
-      FontMetrics fm = pG.getFontMetrics();
-      Rectangle strrect = fm.getStringBounds(pStr, pG).getBounds();
-      pG.setColor(ResourceManager.getInstance().getBackColor());
+    protected void paintDisabledText(JLabel pLabel, Graphics pG, String pStr, int pTextX, int pTextY) {
+        pG.setColor(ResourceManager.getInstance().getBackColor().darker());
+        pG.drawString(pStr, pTextX, pTextY);
 
-      int ypos = pTextY + (strrect.y + (strrect.height / 2));
-      pG.drawLine(pTextX + strrect.width + SPACE_INC, ypos, pLabel.getWidth(), ypos);
-   }
+        FontMetrics fm = pG.getFontMetrics();
+        Rectangle strrect = fm.getStringBounds(pStr, pG).getBounds();
+        pG.setColor(ResourceManager.getInstance().getBackColor());
 
-   protected void paintEnabledText(JLabel pLabel,
-            Graphics pG,
-            String pStr,
-            int pTextX,
-            int pTextY)
-   {
-      pG.setColor(ResourceManager.getInstance().getNormalColor());
-      pG.drawString(pStr, pTextX, pTextY);
+        int ypos = pTextY + (strrect.y + (strrect.height / 2));
+        pG.drawLine(pTextX + strrect.width + SPACE_INC, ypos, pLabel.getWidth(), ypos);
+    }
 
-      FontMetrics fm = pG.getFontMetrics();
-      Rectangle strrect = fm.getStringBounds(pStr, pG).getBounds();
-      pG.setColor(ResourceManager.getInstance().getBackColor());
+    protected void paintEnabledText(JLabel pLabel, Graphics pG, String pStr, int pTextX, int pTextY) {
+        pG.setColor(ResourceManager.getInstance().getNormalColor());
+        pG.drawString(pStr, pTextX, pTextY);
 
-      int ypos = pTextY + (strrect.y + (strrect.height / 2));
-      pG.drawLine(pTextX + strrect.width + SPACE_INC, ypos, pLabel.getWidth(), ypos);
-   }
+        FontMetrics fm = pG.getFontMetrics();
+        Rectangle strrect = fm.getStringBounds(pStr, pG).getBounds();
+        pG.setColor(ResourceManager.getInstance().getBackColor());
+
+        int ypos = pTextY + (strrect.y + (strrect.height / 2));
+        pG.drawLine(pTextX + strrect.width + SPACE_INC, ypos, pLabel.getWidth(), ypos);
+    }
 }

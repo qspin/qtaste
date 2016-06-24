@@ -19,25 +19,23 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import javax.swing.text.JTextComponent;
+import javafx.scene.Node;
 
 import com.qspin.qtaste.testsuite.QTasteException;
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
-
-import javafx.scene.Node;
 
 public class ComponentForegroundColorGetter extends ComponentBackgroundColorGetter {
 
-	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node c = getComponentByName(componentName);
-		if (c != null) {
-//			if (c instanceof JTextComponent) {
-////				return getHexadecimalColor(((JTextComponent) c).getForeground());
-//			} else {
-//				throw new QTasteTestFailException("It is not possible to retrieve the foreground color of this kind of component " + c.getClass() );
-//			}
-		}
-		return "";
-	}
+    @Override
+    String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node c = getComponentByName(componentName);
+        if (c != null) {
+            //			if (c instanceof JTextComponent) {
+            ////				return getHexadecimalColor(((JTextComponent) c).getForeground());
+            //			} else {
+            //				throw new QTasteTestFailException("It is not possible to retrieve the foreground color of this kind
+            // of component " + c.getClass() );
+            //			}
+        }
+        return "";
+    }
 }

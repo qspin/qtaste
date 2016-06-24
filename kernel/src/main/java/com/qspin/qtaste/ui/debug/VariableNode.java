@@ -24,43 +24,49 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class VariableNode extends DebugNode {
 
-	private DebugVariable mVariable;
-	Object[] children; 
-	
-	public VariableNode(DebugVariable variable) {
-		mVariable = variable;
-	}
-	public DebugVariable getVariable() {
-		return mVariable;
-	}
-    public String toString() { 
-    	if (mVariable==null) return "";
-    	return mVariable.getVarName();
-        }
+    private DebugVariable mVariable;
+    Object[] children;
 
-    public boolean hasChildren(){
-    	if (mVariable==null) return true;
-    	return mVariable.getFieldList().size()>0;
+    public VariableNode(DebugVariable variable) {
+        mVariable = variable;
+    }
+
+    public DebugVariable getVariable() {
+        return mVariable;
+    }
+
+    public String toString() {
+        if (mVariable == null) {
+            return "";
+        }
+        return mVariable.getVarName();
+    }
+
+    public boolean hasChildren() {
+        if (mVariable == null) {
+            return true;
+        }
+        return mVariable.getFieldList().size() > 0;
     }
 
     /**
      * Loads the children, caching the results in the children ivar.
      */
     protected Object[] getChildren() {
-		if (children != null) {
-		    return children; 
-		}
-			
-		ArrayList<DebugVariable> fields =mVariable.getFieldList();
-		if (fields!=null) {
-			children = new VariableNode[fields.size()];
-			for (int i=0; i < fields.size(); i++) {
-				DebugVariable variable = fields.get(i);
-				children[i] = new VariableNode(variable);
-			}
-			return children;
-		}
-		return null;
+        if (children != null) {
+            return children;
+        }
+
+        ArrayList<DebugVariable> fields = mVariable.getFieldList();
+        if (fields != null) {
+            children = new VariableNode[fields.size()];
+            for (int i = 0; i < fields.size(); i++) {
+                DebugVariable variable = fields.get(i);
+                children[i] = new VariableNode(variable);
+            }
+            return children;
+        }
+        return null;
     }
-    
+
 }

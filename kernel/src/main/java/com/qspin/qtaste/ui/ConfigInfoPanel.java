@@ -67,11 +67,10 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
-public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */{
+public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */ {
 
     private MainPanel parent;
     private JLabel mTestSuiteLabel = new LabelWithBar();
@@ -87,7 +86,6 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     private String testSuiteName;
     private boolean isStartingOrStoppingTestbed;
     private static final Logger logger = Log4jLoggerFactory.getLogger(ConfigInfoPanel.class);
-
 
     /**
      * Label with hyphen.
@@ -115,14 +113,14 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     }
 
     public boolean isStartingOrStoppingTestbed() {
-    	return isStartingOrStoppingTestbed;
+        return isStartingOrStoppingTestbed;
     }
 
     public void setTestSuite(String testSuiteName) {
         this.testSuiteName = testSuiteName;
     }
 
-    public String getSUTVersion () {
+    public String getSUTVersion() {
         return m_SUTVersion.getText().trim();
     }
 
@@ -151,7 +149,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
     }
 
     public void setControlTestbedButtonsEnabled() {
-        boolean isExecutingTestCaseOrStartingOrStoppingTestbed = parent.getTestCasePanel().isExecuting || isStartingOrStoppingTestbed;
+        boolean isExecutingTestCaseOrStartingOrStoppingTestbed =
+              parent.getTestCasePanel().isExecuting || isStartingOrStoppingTestbed;
         boolean enabled = ignoreControlScript() && !isExecutingTestCaseOrStartingOrStoppingTestbed;
         m_startTestbed.setEnabled(enabled);
         m_stopTestbed.setEnabled(enabled);
@@ -196,7 +195,6 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         adder.add(new JLabel("Test results directory:"));
         adder.add(mTestResultsLabel);
 
-
         //2d column - 2d row
         m_ignoreControlScript.addActionListener(new ActionListener() {
 
@@ -205,7 +203,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
                 setControlTestbedButtonsEnabled();
 
                 GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-                guiConfiguration.setProperty(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, m_ignoreControlScript.isSelected());
+                guiConfiguration.setProperty(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY,
+                      m_ignoreControlScript.isSelected());
                 try {
                     guiConfiguration.save();
                 } catch (ConfigurationException ex) {
@@ -272,8 +271,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
         File[] fTestbedList = FileUtilities.listSortedFiles(fTestbedDir, fileMask);
         for (int i = 0; i < fTestbedList.length; i++) {
             // remove the extension
-            String testbedName = fTestbedList[i].getName().substring(0,
-                    fTestbedList[i].getName().lastIndexOf('.'));
+            String testbedName = fTestbedList[i].getName().substring(0, fTestbedList[i].getName().lastIndexOf('.'));
             model.addElement(testbedName);
         }
 
@@ -282,7 +280,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             public void actionPerformed(ActionEvent e) {
                 if (mTestbedList.getSelectedItem() != null) {
                     String selectedTestbed = (String) mTestbedList.getSelectedItem();
-                    String configFile = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + selectedTestbed + "." + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION;
+                    String configFile = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + selectedTestbed + "."
+                          + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION;
                     TestBedConfiguration.setConfigFile(configFile);
 
                     GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
@@ -299,8 +298,9 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
 
         refreshTestBed();
         refreshData();
-        if ( GUIConfiguration.getInstance().getBoolean(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, false) )
-        	m_ignoreControlScript.doClick();
+        if (GUIConfiguration.getInstance().getBoolean(StaticConfiguration.IGNORE_CONTROL_SCRIPT_PROPERTY, false)) {
+            m_ignoreControlScript.doClick();
+        }
 
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
@@ -329,22 +329,21 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             TestBedConfiguration.reloadConfigFileIfModified();
 
             boolean start = command.equals("start");
-	        TestResult tr = new TestResultImpl((start ? "(Re)start" : "Stop") + " SUT", null, null, 1, 1);
+            TestResult tr = new TestResultImpl((start ? "(Re)start" : "Stop") + " SUT", null, null, 1, 1);
             tr.start();
             // TODO: Check this!
-            TestResultsReportManager reportManager = TestResultsReportManager.getInstance(); //getReporters("Manual SUT " + (start ? "start" : "stop"));
-            if ( CampaignManager.getInstance().getCurrentCampaign() != null )
-            {
-            	reportManager.startReport(CampaignManager.getInstance().getTimeStampCampaign(), "Manual SUT " + (start ? "start" : "stop"));
-            }
-            else
-            {
-            	reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));
+            TestResultsReportManager reportManager = TestResultsReportManager
+                  .getInstance(); //getReporters("Manual SUT " + (start ? "start" : "stop"));
+            if (CampaignManager.getInstance().getCurrentCampaign() != null) {
+                reportManager.startReport(CampaignManager.getInstance().getTimeStampCampaign(),
+                      "Manual SUT " + (start ? "start" : "stop"));
+            } else {
+                reportManager.startReport(new Date(), "Manual SUT " + (start ? "start" : "stop"));
             }
             reportManager.putEntry(tr);
             TestEngine.tearDown();
             if (start) {
-            	TestEngine.stopSUT(null);
+                TestEngine.stopSUT(null);
                 TestEngine.startSUT(tr, true);
             } else {
                 TestEngine.stopSUT(tr);
@@ -375,7 +374,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
                 menu.add(new EditFileAction());
                 testbedConfig = TestBedConfiguration.getInstance();
 
-               	menu.add(new EditControlScriptFileAction());
+                menu.add(new EditControlScriptFileAction());
                 Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), mTestbedList);
                 menu.show(mTestbedList, pt.x, pt.y);
             }
@@ -391,7 +390,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             evaluatePopup(e);
         }
 
-		class ViewFileAction extends AbstractAction {
+        class ViewFileAction extends AbstractAction {
 
             public ViewFileAction() {
                 super("View File");
@@ -418,8 +417,8 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             }
 
             public void actionPerformed(ActionEvent e) {
-                 parent.getTestCasePanel().loadTestCaseSource(testbedConfig.getFile(), true, false);
-                 parent.getTreeTabsPanel().setSelectedIndex(0);
+                parent.getTestCasePanel().loadTestCaseSource(testbedConfig.getFile(), true, false);
+                parent.getTreeTabsPanel().setSelectedIndex(0);
             }
 
             @Override
@@ -427,6 +426,7 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
                 return Desktop.isDesktopSupported();
             }
         }
+
         class EditControlScriptFileAction extends AbstractAction {
 
             public EditControlScriptFileAction() {
@@ -434,18 +434,18 @@ public class ConfigInfoPanel extends JPanel /*implements SmartSocketsListener */
             }
 
             public void actionPerformed(ActionEvent e) {
-                 testbedConfig = TestBedConfiguration.getInstance();
-                 String scriptFilename = testbedConfig.getControlScriptFileName();
-                 // use the internal editor
-                 parent.getTestCasePanel().loadTestCaseSource(new File(scriptFilename), true, false);
-                 parent.getTreeTabsPanel().setSelectedIndex(0);
+                testbedConfig = TestBedConfiguration.getInstance();
+                String scriptFilename = testbedConfig.getControlScriptFileName();
+                // use the internal editor
+                parent.getTestCasePanel().loadTestCaseSource(new File(scriptFilename), true, false);
+                parent.getTreeTabsPanel().setSelectedIndex(0);
             }
 
             @Override
             public boolean isEnabled() {
                 testbedConfig = TestBedConfiguration.getInstance();
                 if (testbedConfig == null) {
-                	return false;
+                    return false;
                 }
                 String scriptFilename = testbedConfig.getControlScriptFileName();
                 return Desktop.isDesktopSupported() && scriptFilename != null;

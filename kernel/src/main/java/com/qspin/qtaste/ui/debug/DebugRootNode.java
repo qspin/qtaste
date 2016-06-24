@@ -23,50 +23,52 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 @SuppressWarnings("serial")
-public class DebugRootNode extends DebugNode 
-{
+public class DebugRootNode extends DebugNode {
 
-	private ArrayList<DebugVariable> mDebugVariables;
-	Object[] children; 
-	
-	public DebugRootNode() {
-		
-	}
+    private ArrayList<DebugVariable> mDebugVariables;
+    Object[] children;
 
-	public void setDebugVariables(ArrayList<DebugVariable> debugVariables) {
-		mDebugVariables = debugVariables;
-	}
-    public String toString() { 
-    	return "Variables";
-        }
+    public DebugRootNode() {
 
-    public boolean hasChildren(){
-    	if (mDebugVariables!=null)
-    		return mDebugVariables.size()>0;
-    		else return false;
     }
-    	
 
+    public void setDebugVariables(ArrayList<DebugVariable> debugVariables) {
+        mDebugVariables = debugVariables;
+    }
+
+    public String toString() {
+        return "Variables";
+    }
+
+    public boolean hasChildren() {
+        if (mDebugVariables != null) {
+            return mDebugVariables.size() > 0;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Loads the children, caching the results in the children ivar.
      */
     protected Object[] getChildren() {
-    	if (mDebugVariables==null) return null;
-		if (children != null) {
-		    return children; 
-		}
-		Object[] returnc = new Object[mDebugVariables.size()];
-		int i=0;
-		Iterator<DebugVariable> debugVariables = mDebugVariables.iterator();
-		while (debugVariables.hasNext()) {
-			DebugVariable debugVariable =debugVariables.next();
-			VariableNode variableNode = new VariableNode(debugVariable);
-			returnc[i] = variableNode;
-			i++;
-		}
-		children = returnc;
-		return returnc;
+        if (mDebugVariables == null) {
+            return null;
+        }
+        if (children != null) {
+            return children;
+        }
+        Object[] returnc = new Object[mDebugVariables.size()];
+        int i = 0;
+        Iterator<DebugVariable> debugVariables = mDebugVariables.iterator();
+        while (debugVariables.hasNext()) {
+            DebugVariable debugVariable = debugVariables.next();
+            VariableNode variableNode = new VariableNode(debugVariable);
+            returnc[i] = variableNode;
+            i++;
+        }
+        children = returnc;
+        return returnc;
     }
-	
+
 }

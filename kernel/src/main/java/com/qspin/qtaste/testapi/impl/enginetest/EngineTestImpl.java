@@ -30,6 +30,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * EngineTest component is providing verbs for testing the QTaste engine.
+ *
  * @author lvb
  */
 public class EngineTestImpl implements EngineTest {

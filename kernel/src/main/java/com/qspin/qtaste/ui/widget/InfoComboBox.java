@@ -19,187 +19,159 @@
 
 package com.qspin.qtaste.ui.widget;
 
-import com.qspin.qtaste.ui.tools.*;
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+
+import com.qspin.qtaste.ui.tools.ResourceManager;
 
 @SuppressWarnings("serial")
-public class InfoComboBox extends JComboBox implements PopupMenuListener
-{
-   private class InfoRenderer extends JLabel implements ListCellRenderer
-   {
-      public InfoRenderer(InfoComboBox pBox, ResourceBundle pRes)
-      {
-         mBox = pBox;
-         mRes = pRes;
-      }
+public class InfoComboBox extends JComboBox implements PopupMenuListener {
+    private class InfoRenderer extends JLabel implements ListCellRenderer {
+        public InfoRenderer(InfoComboBox pBox, ResourceBundle pRes) {
+            mBox = pBox;
+            mRes = pRes;
+        }
 
-      public void setBundle(ResourceBundle pRes)
-      {
-         mRes = pRes;
-      }
+        public void setBundle(ResourceBundle pRes) {
+            mRes = pRes;
+        }
 
-      public void highlight(boolean pEnable)
-      {
-         if(pEnable && !mHighlight)
-         {
+        public void highlight(boolean pEnable) {
+            if (pEnable && !mHighlight) {
+                mHighlight = pEnable;
+
+                Thread th = new Thread() {
+                    public void run() {
+                        int i = 0;
+                        while (i < 10 && mHighlight) {
+                            if ((i % 2) == 0) {
+                                mForeground = ResourceManager.getInstance().getNormalColor();
+                            } else {
+                                mForeground = ResourceManager.getInstance().getDarkColor();
+                            }
+                            mBox.repaint();
+                            ++i;
+                            try {
+                                sleep(500);
+                            } catch (InterruptedException e) {
+                                i = 10;
+                            }
+                        }
+                        mHighlight = false;
+                        mForeground = Color.BLACK;
+                        mBox.repaint();
+                    }
+                };
+                th.start();
+            }
             mHighlight = pEnable;
+        }
 
-            Thread th = new Thread()
-            {
-               public void run()
-               {
-                  int i = 0;
-                  while(i < 10 && mHighlight)
-                  {
-                     if((i % 2) == 0)
-                     {
-                        mForeground = ResourceManager.getInstance().getNormalColor();
-                     }
-                     else
-                     {
-                        mForeground = ResourceManager.getInstance().getDarkColor();
-                     }
-                     mBox.repaint();
-                     ++i;
-                     try
-                     {
-                        sleep(500);
-                     }
-                     catch (InterruptedException e)
-                     {
-                        i = 10;
-                     }
-                  }
-                  mHighlight = false;
-                  mForeground = Color.BLACK;
-                  mBox.repaint();
-               }
-            };
-            th.start();
-         }
-         mHighlight = pEnable;
-      }
+        public Color getForeground() {
+            return mForeground;
+        }
 
-      public Color getForeground()
-      {
-          return mForeground;
-      }
+        public Component getListCellRendererComponent(JList pList, Object pValue, int pIndex, boolean pIsSelected, boolean
+              pCellHasFocus) {
+            if (pValue != null) {
+                Info i = (Info) pValue;
 
-      public Component getListCellRendererComponent(JList pList, Object pValue, int pIndex, boolean pIsSelected, boolean pCellHasFocus)
-      {
-         if(pValue != null)
-         {
-            Info i = (Info)pValue;
+                StringBuffer msg = new StringBuffer();
+                try {
+                    String translated = mRes.getString(i.getMessage());
+                    msg.append(translated);
+                } catch (MissingResourceException e) {
+                    msg.append("NOT LOCALIZED!!   ");
+                    msg.append(i.getMessage());
+                }
 
-            StringBuffer msg = new StringBuffer();
-            try
-            {
-               String translated = mRes.getString(i.getMessage());
-               msg.append(translated);
+                if (i.getParams() != null && i.getParams().length > 0) {
+                    msg.append(": ");
+                    for (int c = 0; c < i.getParams().length; ++c) {
+                        msg.append(i.getParams()[c]);
+                        if (c < i.getParams().length - 1) {
+                            msg.append(", ");
+                        }
+                    }
+                }
+
+                setText(msg.toString());
+                setIcon(ResourceManager.getInstance().getImageIcon("main/badsmall"));
+            } else {
+                setText("");
+                setIcon(null);
             }
-            catch(MissingResourceException e)
-            {
-               msg.append("NOT LOCALIZED!!   ");
-               msg.append(i.getMessage());
-            }
+            return this;
+        }
 
-            if(i.getParams()!= null && i.getParams().length > 0)
-            {
-               msg.append(": ");
-               for(int c = 0; c < i.getParams().length; ++c)
-               {
-                  msg.append(i.getParams()[c]);
-                  if(c < i.getParams().length-1)
-                  {
-                     msg.append(", ");
-                  }
-               }
-            }
+        private ResourceBundle mRes;
+        private InfoComboBox mBox;
+        private boolean mHighlight = false;
+        private Color mForeground = Color.BLACK;
+    }
 
-            setText(msg.toString());
-            setIcon(ResourceManager.getInstance().getImageIcon("main/badsmall"));
-         }
-         else
-         {
-            setText("");
-            setIcon(null);
-         }
-         return this;
-      }
+    public class Info {
+        public Info(int pLevel, String pMsg, Object[] pParams) {
+            mLevel = pLevel;
+            mMessage = pMsg;
+            mParams = pParams;
+        }
 
-      private ResourceBundle mRes;
-      private InfoComboBox mBox;
-      private boolean mHighlight = false;
-      private Color mForeground = Color.BLACK;
-   }
+        public int getLevel() {
+            return mLevel;
+        }
 
-   public class Info
-   {
-      public Info(int pLevel, String pMsg, Object[] pParams)
-      {
-         mLevel = pLevel;
-         mMessage = pMsg;
-         mParams = pParams;
-      }
+        public String getMessage() {
+            return mMessage;
+        }
 
-      public int getLevel()
-      {
-         return mLevel;
-      }
+        public Object[] getParams() {
+            return mParams;
+        }
 
-      public String getMessage()
-      {
-         return mMessage;
-      }
+        private int mLevel;
+        private String mMessage;
+        private Object[] mParams;
+    }
 
-      public Object[] getParams()
-      {
-         return mParams;
-      }
+    public InfoComboBox(ResourceBundle pRes) {
+        super(new InfoComboBoxModel());
+        mRenderer = new InfoRenderer(this, pRes);
+        setRenderer(mRenderer);
 
-      private int mLevel;
-      private String mMessage;
-      private Object[] mParams;
-   }
+        addPopupMenuListener(this);
+    }
 
-   public InfoComboBox(ResourceBundle pRes)
-   {
-      super(new InfoComboBoxModel());
-      mRenderer = new InfoRenderer(this, pRes);
-      setRenderer(mRenderer);
+    public void addInfo(Info pInfo) {
+        ((InfoComboBoxModel) getModel()).addInfo(pInfo);
+        mRenderer.highlight(true);
+    }
 
-      addPopupMenuListener(this);
-   }
+    public void popupMenuWillBecomeVisible(PopupMenuEvent pE) {
+        mRenderer.highlight(false);
+        repaint();
+    }
 
-   public void addInfo(Info pInfo)
-   {
-      ((InfoComboBoxModel)getModel()).addInfo(pInfo);
-      mRenderer.highlight(true);
-   }
+    public void setBundle(ResourceBundle pRes) {
+        mRenderer.setBundle(pRes);
+    }
 
-   public void popupMenuWillBecomeVisible(PopupMenuEvent pE)
-   {
-      mRenderer.highlight(false);
-      repaint();
-   }
+    public void popupMenuWillBecomeInvisible(PopupMenuEvent pE) {
 
-   public void setBundle(ResourceBundle pRes)
-   {
-      mRenderer.setBundle(pRes);
-   }
+    }
 
-   public void popupMenuWillBecomeInvisible(PopupMenuEvent pE)
-   {
+    public void popupMenuCanceled(PopupMenuEvent pE) {
 
-   }
+    }
 
-   public void popupMenuCanceled(PopupMenuEvent pE)
-   {
-
-   }
-
-   private InfoRenderer mRenderer;
+    private InfoRenderer mRenderer;
 }

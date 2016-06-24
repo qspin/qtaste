@@ -19,50 +19,54 @@
 
 package com.qspin.qtaste.javagui.server;
 
+import java.awt.Component;
+import java.awt.Label;
+
+import javax.swing.AbstractButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.ListCellRenderer;
+
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class ValueGetter extends ComponentCommander {
 
-	@Override
-	Object executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component component = getComponentByName(componentName);
-        
-		if (component instanceof JComboBox) {
+    @Override
+    Object executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component component = getComponentByName(componentName);
+
+        if (component instanceof JComboBox) {
             JComboBox<?> combo = (JComboBox<?>) component;
             ListCellRenderer<?> renderer = combo.getRenderer();
             return getItemText(combo.getModel().getSelectedItem(), renderer);
-        } 
-		else if (component instanceof JList) {
-			JList<?> list = (JList<?>) component;
-			ListCellRenderer<?> renderer = list.getCellRenderer();
+        } else if (component instanceof JList) {
+            JList<?> list = (JList<?>) component;
+            ListCellRenderer<?> renderer = list.getCellRenderer();
             return getItemText(list.getSelectedValue(), renderer);
-		} 
-		else if (component instanceof JSpinner) {
+        } else if (component instanceof JSpinner) {
             return ((JSpinner) component).getModel().getValue().toString();
-        }
-		else if (component instanceof JSlider) {
+        } else if (component instanceof JSlider) {
             return Integer.toString(((JSlider) component).getModel().getValue());
+        } else if (component instanceof AbstractButton) {
+            return Boolean.toString(((AbstractButton) component).isSelected());
         }
-		else if (component instanceof AbstractButton) {
-			return Boolean.toString(((AbstractButton)component).isSelected());
-		}
-		
-		throw new QTasteTestFailException("The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
-	}
 
-    protected String getItemText(Object item, ListCellRenderer renderer)
-    {
+        throw new QTasteTestFailException(
+              "The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
+    }
+
+    protected String getItemText(Object item, ListCellRenderer renderer) {
         Component component = renderer.getListCellRendererComponent(new JList(), item, 0, false, false);
 
         if (component instanceof Label) {
-            return ((Label)component).getText();
+            return ((Label) component).getText();
         }
         if (component instanceof JLabel) {
-            return ((JLabel)component).getText();
+            return ((JLabel) component).getText();
         }
 
         return item.toString();

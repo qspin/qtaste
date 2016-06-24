@@ -22,18 +22,17 @@ package com.qspin.qtaste.kernel.engine;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.commons.lang.StringUtils;
-
 import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
@@ -60,56 +59,57 @@ import com.qspin.qtaste.util.versioncontrol.VersionControl;
  */
 public class TestEngine {
 
-	protected static Logger logger = Log4jLoggerFactory.getLogger(TestEngine.class);
-	private static TestSuite currentTestSuite;
-	private static boolean needToRestartSUT;
-	private static boolean isRestartingSUT;
-	private static Exec sutStartStopExec = new Exec();
-	private static volatile boolean isStartStopSUTCancellable = false;
-	public static volatile boolean isStartStopSUTCancelled = false;
-	private static volatile boolean ignoreControlScript = false;
-	private static volatile boolean abortedByUser = false;
-	private static volatile boolean isSUTStartingManually = false;
-	private static volatile boolean isSUTStartedManually = false;
+    protected static Logger logger = Log4jLoggerFactory.getLogger(TestEngine.class);
+    private static TestSuite currentTestSuite;
+    private static boolean needToRestartSUT;
+    private static boolean isRestartingSUT;
+    private static Exec sutStartStopExec = new Exec();
+    private static volatile boolean isStartStopSUTCancellable = false;
+    public static volatile boolean isStartStopSUTCancelled = false;
+    private static volatile boolean ignoreControlScript = false;
+    private static volatile boolean abortedByUser = false;
+    private static volatile boolean isSUTStartingManually = false;
+    private static volatile boolean isSUTStartedManually = false;
     private static volatile boolean isSUTRunning = false;
 
-	static {
-		// pre-load JythonTestScript class and dependencies in the background which takes several seconds
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					Class.forName(JythonTestScript.class.getName());
-				} catch (Throwable pE) {
-					// ignore
-				}
-			}
-		}.start();
-	}
+    static {
+        // pre-load JythonTestScript class and dependencies in the background which takes several seconds
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Class.forName(JythonTestScript.class.getName());
+                } catch (Throwable pE) {
+                    // ignore
+                }
+            }
+        }.start();
+    }
 
-	/**
-	 * Check if Test was aborted by user.
-	 *
-	 * @return true if test was aborted by the user, false otherwise (aborted)
-	 */
-	public static boolean isAbortedByUser() {
+    /**
+     * Check if Test was aborted by user.
+     *
+     * @return true if test was aborted by the user, false otherwise (aborted)
+     */
+    public static boolean isAbortedByUser() {
         return abortedByUser;
     }
 
-	/**
-	 * Set as current Test sequence is aborted by user.
-	 */
+    /**
+     * Set as current Test sequence is aborted by user.
+     */
     public static void setAbortedByUser() {
-		logger.info("Test aborted by user");
+        logger.info("Test aborted by user");
         abortedByUser = true;
     }
 
     /**
      * Set Running Mode and define if was started manually
+     *
      * @param startedManually define if testbed started with ignore control script or manually
      */
     private static void setSUTAsRunning(boolean startedManually) {
-    	isSUTStartedManually = startedManually;
+        isSUTStartedManually = startedManually;
         isSUTRunning = true;
     }
 
@@ -117,435 +117,432 @@ public class TestEngine {
      * Set as Not Running
      */
     private static void setSUTAsStopped() {
-    	isSUTStartedManually = false;
-    	isSUTRunning = false;
+        isSUTStartedManually = false;
+        isSUTRunning = false;
     }
 
     /**
      * Return if testbed is Running
      */
     public static boolean isSUTRunning() {
-    	return isSUTRunning;
+        return isSUTRunning;
     }
 
     /**
      * Return if testbed was started manually
      */
     public static boolean isSUTStartedManually() {
-    	return isSUTRunning && isSUTStartedManually;
+        return isSUTRunning && isSUTStartedManually;
     }
 
-	/**
-	 * Execute a test suite.
-	 *
-	 * @param testSuite
-	 *            the test suite to execute
-	 * @return true if execution successful, false otherwise (aborted)
-	 */
-	public static boolean execute(TestSuite testSuite) {
-		return execute(testSuite, false);
-	}
+    /**
+     * Execute a test suite.
+     *
+     * @param testSuite the test suite to execute
+     * @return true if execution successful, false otherwise (aborted)
+     */
+    public static boolean execute(TestSuite testSuite) {
+        return execute(testSuite, false);
+    }
 
-	/**
-	 * Execute a test suite.
-	 *
-	 * @param testSuite
-	 *            the test suite to execute
-	 * @param debug
-	 *            true to execute in debug mode, false otherwise
-	 * @return true if execution successful, false otherwise (aborted)
-	 */
-	public static boolean execute(TestSuite testSuite, boolean debug) {
-		TestBedConfiguration.reloadConfigFileIfModified();
-		currentTestSuite = testSuite;
-		TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-		if ( CampaignManager.getInstance().getCurrentCampaign() != null )
-        {
-        	reportManager.startReport(CampaignManager.getInstance().getTimeStampCampaign(), testSuite.getName());
+    /**
+     * Execute a test suite.
+     *
+     * @param testSuite the test suite to execute
+     * @param debug true to execute in debug mode, false otherwise
+     * @return true if execution successful, false otherwise (aborted)
+     */
+    public static boolean execute(TestSuite testSuite, boolean debug) {
+        TestBedConfiguration.reloadConfigFileIfModified();
+        currentTestSuite = testSuite;
+        TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
+        if (CampaignManager.getInstance().getCurrentCampaign() != null) {
+            reportManager.startReport(CampaignManager.getInstance().getTimeStampCampaign(), testSuite.getName());
+        } else {
+            reportManager.startReport(new Date(), testSuite.getName());
         }
-        else
-        {
-        	reportManager.startReport(new Date(), testSuite.getName());
+        boolean executionSuccess = testSuite.execute(debug, true);
+        reportManager.stopReport();
+        currentTestSuite = null;
+        return executionSuccess;
+    }
+
+    public static TestSuite getCurrentTestSuite() {
+        return currentTestSuite;
+    }
+
+    public static boolean ignoreControlScript() {
+        return ignoreControlScript;
+    }
+
+    public static void setIgnoreControlScript(boolean pIgnoreControlScript) {
+        ignoreControlScript = pIgnoreControlScript;
+    }
+
+    public static boolean startSUT(TestResult tr) {
+        return startSUT(tr, false);
+    }
+
+    public static boolean startSUT(TestResult tr, boolean manually) {
+        isStartStopSUTCancellable = true;
+        isSUTStartingManually = manually;
+        boolean status = startOrStopSUT(true, tr);
+        if (status) {
+            isSUTStartingManually = false;
+            setSUTAsRunning(ignoreControlScript);
         }
-		boolean executionSuccess = testSuite.execute(debug, true);
-		reportManager.stopReport();
-		currentTestSuite = null;
-		return executionSuccess;
-	}
+        return status;
+    }
 
-	public static TestSuite getCurrentTestSuite() {
-		return currentTestSuite;
-	}
+    public static boolean stopSUT(TestResult tr) {
+        setSUTAsStopped();
+        return startOrStopSUT(false, tr);
+    }
 
-	public static boolean ignoreControlScript() {
-		return ignoreControlScript;
-	}
+    /**
+     * Cancels start/stop of SUT. SUT stop in terminate() if is not cancellable.
+     */
+    public static void cancelStartStopSUT() {
+        if (isStartStopSUTCancellable) {
+            logger.info("Cancel start/stop SUT");
+            if (isSUTStartingManually) {
+                stopSUT(null);
+            }
+            isStartStopSUTCancelled = true;
+            sutStartStopExec.kill();
+        }
+    }
 
-	public static void setIgnoreControlScript(boolean pIgnoreControlScript) {
-		ignoreControlScript = pIgnoreControlScript;
-	}
+    private static boolean startOrStopSUT(boolean start, TestResult tr) {
+        needToRestartSUT = !start;
+        String startOrStop = start ? "start" : "stop";
+        TestBedConfiguration config = TestBedConfiguration.getInstance();
+        if (hasControlScript()) {
+            if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
+                if (tr != null) {
+                    tr.setStatus(Status.FAIL);
+                    tr.setExtraResultDetails("SUT " + startOrStop + " command cancelled");
+                }
+                return false;
+            }
 
-	public static boolean startSUT(TestResult tr) {
-		return startSUT(tr, false);
-	}
+            // build the engine script command as a list to avoid mistakes with spaces (see ticket #7)
+            String scriptFilename = config.getControlScriptFileName();
+            List<String> scriptEngineCommand = new ArrayList<String>();
 
-	public static boolean startSUT(TestResult tr, boolean manually) {
-		isStartStopSUTCancellable = true;
-		isSUTStartingManually = manually;
-		boolean status = startOrStopSUT(true, tr);
-		if (status) {
-			isSUTStartingManually = false;
-			setSUTAsRunning(ignoreControlScript);
-		}
-		return status;
-	}
+            if (scriptFilename.endsWith(".py")) {
+                final String qtasteJar = StaticConfiguration.QTASTE_ROOT + "/kernel/target/qtaste-kernel-deploy.jar";
+                final String jythonLib = StaticConfiguration.JYTHON_LIB;
+                final String additionalJythonLib = StaticConfiguration.ADDITIONAL_JYTHON_LIB.trim();
+                final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
 
-	public static boolean stopSUT(TestResult tr) {
-		setSUTAsStopped();
-		return startOrStopSUT(false, tr);
-	}
+                scriptEngineCommand.add("java");
+                scriptEngineCommand.add(
+                      "-Dpython.path=" + qtasteJar + File.pathSeparator + jythonLib + (additionalJythonLib.isEmpty() ? "" :
+                            File.pathSeparator + additionalJythonLib));
+                scriptEngineCommand.add("-cp");
+                scriptEngineCommand.add(qtasteJar + File.pathSeparator + classPath);
+                scriptEngineCommand.add("org.python.util.jython");
+            }
 
-	/**
-	 * Cancels start/stop of SUT. SUT stop in terminate() if is not cancellable.
-	 */
-	public static void cancelStartStopSUT() {
-		if (isStartStopSUTCancellable) {
-			logger.info("Cancel start/stop SUT");
-			if (isSUTStartingManually) {
-				stopSUT(null);
-			}
-			isStartStopSUTCancelled = true;
-			sutStartStopExec.kill();
-		}
-	}
+            // then, build the 'start or stop' command as a list
+            List<String> startOrStopCommand = new ArrayList<String>();
 
-	private static boolean startOrStopSUT(boolean start, TestResult tr) {
-		needToRestartSUT = !start;
-		String startOrStop = start ? "start" : "stop";
-		TestBedConfiguration config = TestBedConfiguration.getInstance();
-		if (hasControlScript()) {
-			if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
-				if (tr != null) {
-					tr.setStatus(Status.FAIL);
-					tr.setExtraResultDetails("SUT " + startOrStop + " command cancelled");
-				}
-				return false;
-			}
+            startOrStopCommand.add(scriptFilename);
+            startOrStopCommand.add(startOrStop);
 
-			// build the engine script command as a list to avoid mistakes with spaces (see ticket #7)
-			String scriptFilename = config.getControlScriptFileName();
-			List<String> scriptEngineCommand = new ArrayList<String>();
+            String scriptArguments = config.getControlScriptArguments();
+            if (scriptArguments != null) {
+                startOrStopCommand.add(scriptArguments);
+            }
 
-			if (scriptFilename.endsWith(".py")) {
-				final String qtasteJar = StaticConfiguration.QTASTE_ROOT + "/kernel/target/qtaste-kernel-deploy.jar";
-				final String jythonLib = StaticConfiguration.JYTHON_LIB;
-				final String additionalJythonLib = StaticConfiguration.ADDITIONAL_JYTHON_LIB.trim();
-				final String classPath = System.getProperties().getProperty("java.class.path", "").trim();
-				
-				scriptEngineCommand.add("java");
-				scriptEngineCommand.add("-Dpython.path=" + qtasteJar + File.pathSeparator  + jythonLib
-								 + (additionalJythonLib.isEmpty() ? "" : File.pathSeparator + additionalJythonLib));
-				scriptEngineCommand.add("-cp");
-				scriptEngineCommand.add(qtasteJar + File.pathSeparator + classPath);
-				scriptEngineCommand.add("org.python.util.jython");
-			}
-			
-			// then, build the 'start or stop' command as a list
-			List<String> startOrStopCommand = new ArrayList<String>();
-			
-			startOrStopCommand.add(scriptFilename);
-			startOrStopCommand.add(startOrStop);
-			
-			String scriptArguments = config.getControlScriptArguments();
-			if (scriptArguments != null) {
-				startOrStopCommand.add(scriptArguments);
-			}
+            if (isRestartingSUT) {
+                startOrStopCommand.add("-restart true");
+            }
 
-			if (isRestartingSUT) {
-				startOrStopCommand.add("-restart true");
-			}
+            logger.info((start ? "Starting" : "Stopping") + " SUT using command '" +
+                  StringUtils.join(startOrStopCommand, " ") + "'");
 
-			logger.info((start ? "Starting" : "Stopping") + " SUT using command '" +
-						StringUtils.join(startOrStopCommand, " ") + "'");
+            // report the control script
+            try {
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                Map<String, String> env = new HashMap<String, String>(System.getenv());
+                env.put("TESTBED", config.getFileName());
 
-			// report the control script
-			try {
-				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				Map<String, String> env = new HashMap<String, String>(System.getenv());
-				env.put("TESTBED", config.getFileName());
+                // build the full command to execute
+                List<String> startOrStopFullCommand = new ArrayList<String>();
+                startOrStopFullCommand.addAll(scriptEngineCommand);
+                startOrStopFullCommand.addAll(startOrStopCommand);
 
-				// build the full command to execute
-				List<String> startOrStopFullCommand = new ArrayList<String>();
-				startOrStopFullCommand.addAll(scriptEngineCommand);
-				startOrStopFullCommand.addAll(startOrStopCommand);
-				
-				logger.trace("FULL COMMAND : '" + StringUtils.join(startOrStopFullCommand, " ") + "'");
+                logger.trace("FULL COMMAND : '" + StringUtils.join(startOrStopFullCommand, " ") + "'");
 
-				// execute the full command
-				int exitCode = sutStartStopExec.exec(startOrStopFullCommand.toArray(new String[startOrStopFullCommand.size()]), 
-													 env, output);
-				
-				if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
-					String errMsg = "SUT " + startOrStop + " command cancelled";
-					logger.info(errMsg);
-					if (tr != null) {
-						tr.setStatus(Status.FAIL);
-						tr.setExtraResultDetails(errMsg);
-					}
-					return false;
-				} else if (exitCode == 0) {
-					logger.info("SUT " + (start ? "started" : "stopped"));
-					return true;
-				} else {
-					String errMsg = "SUT " + startOrStop + " command '" + startOrStopCommand + "' exited with error code " + exitCode + ". Output:\n" + output.toString();
-					logger.error(errMsg);
-					if (tr != null) {
-						tr.setExtraResultDetails(errMsg);
-					}
-				}
-			} catch (IOException e) {
-				String errMsg = "Couldn't execute SUT " + startOrStop + " command '" + startOrStopCommand + "': " + e.getMessage();
-				logger.error(errMsg);
-				if (tr != null) {
-					tr.setExtraResultDetails(errMsg);
-				}
-			} catch (InterruptedException e) {
-				String errMsg = "Interrupted while executing SUT " + startOrStop + " command '" + startOrStopCommand + "': " + e.getMessage();
-				logger.error(errMsg);
-				if (tr != null) {
-					tr.setExtraResultDetails(errMsg);
-				}
-			}
-			logger.error("Couldn't " + startOrStop + " SUT");
-			if (tr != null) {
-				tr.setStatus(Status.FAIL);
-			}
-		} else {
-			logger.info("No SUT control script available for this testbed!");
-		}
-		return false;
-	}
+                // execute the full command
+                int exitCode = sutStartStopExec.exec(startOrStopFullCommand.toArray(new String[startOrStopFullCommand.size()]),
+                      env, output);
 
-	public static boolean restartSUT() {
-		if (useControlScript()) {
-			logger.info("Restarting SUT");
-			TestResult tr = new TestResultImpl("Restart SUT", null, null, 1, 1);
-			tr.setTestScriptVersion("-");
-			tr.start();
-			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-			reportManager.putEntry(tr);
-			isRestartingSUT = true;
-			boolean returnValue = stopSUT(tr) && startSUT(tr);
-			isRestartingSUT = false;
-			tr.stop();
-			reportManager.refresh();
-			// reportManager.stopReport();
-			return returnValue;
-		} else {
-			return false;
-		}
-	}
+                if (isStartStopSUTCancelled || (start && isAbortedByUser())) {
+                    String errMsg = "SUT " + startOrStop + " command cancelled";
+                    logger.info(errMsg);
+                    if (tr != null) {
+                        tr.setStatus(Status.FAIL);
+                        tr.setExtraResultDetails(errMsg);
+                    }
+                    return false;
+                } else if (exitCode == 0) {
+                    logger.info("SUT " + (start ? "started" : "stopped"));
+                    return true;
+                } else {
+                    String errMsg =
+                          "SUT " + startOrStop + " command '" + startOrStopCommand + "' exited with error code " + exitCode
+                                + ". Output:\n" + output.toString();
+                    logger.error(errMsg);
+                    if (tr != null) {
+                        tr.setExtraResultDetails(errMsg);
+                    }
+                }
+            } catch (IOException e) {
+                String errMsg =
+                      "Couldn't execute SUT " + startOrStop + " command '" + startOrStopCommand + "': " + e.getMessage();
+                logger.error(errMsg);
+                if (tr != null) {
+                    tr.setExtraResultDetails(errMsg);
+                }
+            } catch (InterruptedException e) {
+                String errMsg = "Interrupted while executing SUT " + startOrStop + " command '" + startOrStopCommand + "': " + e
+                      .getMessage();
+                logger.error(errMsg);
+                if (tr != null) {
+                    tr.setExtraResultDetails(errMsg);
+                }
+            }
+            logger.error("Couldn't " + startOrStop + " SUT");
+            if (tr != null) {
+                tr.setStatus(Status.FAIL);
+            }
+        } else {
+            logger.info("No SUT control script available for this testbed!");
+        }
+        return false;
+    }
 
-	public static boolean needToRestartSUT() {
-		return useControlScript() && needToRestartSUT;
-	}
+    public static boolean restartSUT() {
+        if (useControlScript()) {
+            logger.info("Restarting SUT");
+            TestResult tr = new TestResultImpl("Restart SUT", null, null, 1, 1);
+            tr.setTestScriptVersion("-");
+            tr.start();
+            TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
+            reportManager.putEntry(tr);
+            isRestartingSUT = true;
+            boolean returnValue = stopSUT(tr) && startSUT(tr);
+            isRestartingSUT = false;
+            tr.stop();
+            reportManager.refresh();
+            // reportManager.stopReport();
+            return returnValue;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Set need to restart SUT.
-	 *
-	 * @return value of needToRestartSUT, which may be set to false if no
-	 *         control_script declared
-	 */
-	public static boolean setNeedToRestartSUT() {
-		if (useControlScript()) {
-			needToRestartSUT = true;
-		} else {
-			needToRestartSUT = false;
-		}
-		return needToRestartSUT;
-	}
+    public static boolean needToRestartSUT() {
+        return useControlScript() && needToRestartSUT;
+    }
 
-	/**
-	 * Initialize Test Engine by starting the test bed
-	 *
-	 */
-	public static boolean initialize() {
-		if (useControlScript()) {
-			isStartStopSUTCancellable = true;
-			isStartStopSUTCancelled = false;
-			boolean success = true;
+    /**
+     * Set need to restart SUT.
+     *
+     * @return value of needToRestartSUT, which may be set to false if no
+     * control_script declared
+     */
+    public static boolean setNeedToRestartSUT() {
+        if (useControlScript()) {
+            needToRestartSUT = true;
+        } else {
+            needToRestartSUT = false;
+        }
+        return needToRestartSUT;
+    }
 
-			TestResult tr = new TestResultImpl("Start SUT", null, null, 1, 1);
-			tr.setTestScriptVersion("-");
-			tr.start();
-			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-			reportManager.putEntry(tr);
-			success &= stopSUT(tr);
-			if (success) {
-				success &= startSUT(tr);
-			}
-			tr.stop();
-			reportManager.refresh();
-			if (!success) {
-				return false;
-			}
-		}
+    /**
+     * Initialize Test Engine by starting the test bed
+     */
+    public static boolean initialize() {
+        if (useControlScript()) {
+            isStartStopSUTCancellable = true;
+            isStartStopSUTCancelled = false;
+            boolean success = true;
 
-		logger.info("Starting TestEngine");
-		ProbeManager.getInstance().start();
-		return true;
-	}
+            TestResult tr = new TestResultImpl("Start SUT", null, null, 1, 1);
+            tr.setTestScriptVersion("-");
+            tr.start();
+            TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
+            reportManager.putEntry(tr);
+            success &= stopSUT(tr);
+            if (success) {
+                success &= startSUT(tr);
+            }
+            tr.stop();
+            reportManager.refresh();
+            if (!success) {
+                return false;
+            }
+        }
 
-	/**
-	 * Terminate Test Engine by stopping all Probes and Test bed.
-	 *
-	 */
-	public static void terminate() {
-		// Stop all the probes
-		ProbeManager.getInstance().stop();
+        logger.info("Starting TestEngine");
+        ProbeManager.getInstance().start();
+        return true;
+    }
 
-		isStartStopSUTCancellable = false;
-		isStartStopSUTCancelled = false;
+    /**
+     * Terminate Test Engine by stopping all Probes and Test bed.
+     */
+    public static void terminate() {
+        // Stop all the probes
+        ProbeManager.getInstance().stop();
 
-		if (useControlScript()) {
-			TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-			TestResult tr = new TestResultImpl("Stop SUT", null, null, 1, 1);
-			tr.setTestScriptVersion("-");
-			tr.start();
-			reportManager.putEntry(tr);
-			stopSUT(tr);
-			tr.stop();
-			reportManager.refresh();
-		}
+        isStartStopSUTCancellable = false;
+        isStartStopSUTCancelled = false;
 
-		logger.info("TestEngine terminated");
-	}
+        if (useControlScript()) {
+            TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
+            TestResult tr = new TestResultImpl("Stop SUT", null, null, 1, 1);
+            tr.setTestScriptVersion("-");
+            tr.start();
+            reportManager.putEntry(tr);
+            stopSUT(tr);
+            tr.stop();
+            reportManager.refresh();
+        }
 
-	/**
-	 * Reset Test Engine configuration and close any opened probe.
-	 *
-	 */
-	public static void tearDown() {
-		abortedByUser = false;
-		isStartStopSUTCancellable = false;
-		isStartStopSUTCancelled = false;
-	}
+        logger.info("TestEngine terminated");
+    }
 
-	public static void shutdown() {
-		Log4jServer.getInstance().shutdown();
-		LogManager.shutdown();
-	}
+    /**
+     * Reset Test Engine configuration and close any opened probe.
+     */
+    public static void tearDown() {
+        abortedByUser = false;
+        isStartStopSUTCancellable = false;
+        isStartStopSUTCancelled = false;
+    }
 
-	private static boolean hasControlScript() {
-		return TestBedConfiguration.getInstance().hasControlScript();
-	}
+    public static void shutdown() {
+        Log4jServer.getInstance().shutdown();
+        LogManager.shutdown();
+    }
 
-	private static boolean useControlScript() {
-		return hasControlScript() && !ignoreControlScript();
-	}
+    private static boolean hasControlScript() {
+        return TestBedConfiguration.getInstance().hasControlScript();
+    }
 
-	private static void showUsage() {
-		System.err.println("Usage: <command> -testsuite <testsuiteDirectory> -testbed <configFileName.xml> [-engine <engineFileName.xml>] [-loop [<count> | <hours>h]] [-sutversion <sut_version_identifier>]");
-		shutdown();
-		System.exit(1);
-	}
+    private static boolean useControlScript() {
+        return hasControlScript() && !ignoreControlScript();
+    }
 
-	public static void main(String[] args) {
-		boolean executionResult = false;
-		try {
-			// Log4j Configuration
-			PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
+    private static void showUsage() {
+        System.err.println(
+              "Usage: <command> -testsuite <testsuiteDirectory> -testbed <configFileName.xml> [-engine <engineFileName.xml>] "
+                    + "[-loop [<count> | <hours>h]] [-sutversion <sut_version_identifier>]");
+        shutdown();
+        System.exit(1);
+    }
 
-			// log version information
-			logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-			logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
+    public static void main(String[] args) {
+        boolean executionResult = false;
+        try {
+            // Log4j Configuration
+            PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
 
-			// handle optional config file name
-			if ((args.length < 4) || (args.length > 10)) {
-				showUsage();
-			}
-			String testSuiteDir = null;
-			String testbed = null;
-			int numberLoops = 1;
-			boolean loopsInHours = false;
-			int i = 0;
-			while (i < args.length) {
-				if (args[i].equals("-testsuite") && (i + 1 < args.length)) {
-					logger.info("Using " + args[i + 1] + " as test suite directory");
-					testSuiteDir = args[i + 1];
-					i += 2;
-				} else if (args[i].equals("-testbed") && (i + 1 < args.length)) {
-					logger.info("Using " + args[i + 1] + " as testbed configuration file");
-					testbed = args[i + 1];
-					i += 2;
-				} else if (args[i].equals("-engine") && (i + 1 < args.length)) {
-					logger.info("Using " + args[i + 1] + " as engine configuration file");
-					TestEngineConfiguration.setConfigFile(args[i + 1]);
-					i += 2;
-				} else if (args[i].equals("-loop")) {
-					String message = "Running test suite in loop";
-					numberLoops = -1;
-					if ((i + 1 < args.length)) {
-						// more arguments, check if next argument is a loop argument
-						if (args[i + 1].startsWith("-")) {
-							i++;
-						} else {
-							String countOrHoursStr;
-							if (args[i + 1].endsWith("h")) {
-								loopsInHours = true;
-								countOrHoursStr = args[i + 1].substring(0, args[i + 1].length() - 1);
-							} else {
-								loopsInHours = false;
-								countOrHoursStr = args[i + 1];
-							}
-							try {
-								numberLoops = Integer.parseInt(countOrHoursStr);
-								if (numberLoops <= 0) {
-									throw new NumberFormatException();
-								}
-								message += (loopsInHours ? " during " : " ")
-										+ numberLoops + " "
-										+ (loopsInHours ? "hour" : "time")
-										+ (numberLoops > 1 ? "s" : "");
-								i += 2;
-							} catch (NumberFormatException e) {
-								showUsage();
-							}
-						}
-					} else {
-						// no more arguments
-						i++;
-					}
-					logger.info(message);
-				} else if (args[i].equals("-sutversion") && (i + 1 < args.length)) {
-					logger.info("Using " + args[i + 1] + " as sutversion");
-					TestBedConfiguration.setSUTVersion(args[i + 1]);
-					i += 2;
-				} else {
-					showUsage();
-				}
-			}
+            // log version information
+            logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
+            logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
-			if (testSuiteDir == null || testbed == null) {
-				showUsage();
-			}
+            // handle optional config file name
+            if ((args.length < 4) || (args.length > 10)) {
+                showUsage();
+            }
+            String testSuiteDir = null;
+            String testbed = null;
+            int numberLoops = 1;
+            boolean loopsInHours = false;
+            int i = 0;
+            while (i < args.length) {
+                if (args[i].equals("-testsuite") && (i + 1 < args.length)) {
+                    logger.info("Using " + args[i + 1] + " as test suite directory");
+                    testSuiteDir = args[i + 1];
+                    i += 2;
+                } else if (args[i].equals("-testbed") && (i + 1 < args.length)) {
+                    logger.info("Using " + args[i + 1] + " as testbed configuration file");
+                    testbed = args[i + 1];
+                    i += 2;
+                } else if (args[i].equals("-engine") && (i + 1 < args.length)) {
+                    logger.info("Using " + args[i + 1] + " as engine configuration file");
+                    TestEngineConfiguration.setConfigFile(args[i + 1]);
+                    i += 2;
+                } else if (args[i].equals("-loop")) {
+                    String message = "Running test suite in loop";
+                    numberLoops = -1;
+                    if ((i + 1 < args.length)) {
+                        // more arguments, check if next argument is a loop argument
+                        if (args[i + 1].startsWith("-")) {
+                            i++;
+                        } else {
+                            String countOrHoursStr;
+                            if (args[i + 1].endsWith("h")) {
+                                loopsInHours = true;
+                                countOrHoursStr = args[i + 1].substring(0, args[i + 1].length() - 1);
+                            } else {
+                                loopsInHours = false;
+                                countOrHoursStr = args[i + 1];
+                            }
+                            try {
+                                numberLoops = Integer.parseInt(countOrHoursStr);
+                                if (numberLoops <= 0) {
+                                    throw new NumberFormatException();
+                                }
+                                message +=
+                                      (loopsInHours ? " during " : " ") + numberLoops + " " + (loopsInHours ? "hour" : "time") + (
+                                            numberLoops > 1 ? "s" : "");
+                                i += 2;
+                            } catch (NumberFormatException e) {
+                                showUsage();
+                            }
+                        }
+                    } else {
+                        // no more arguments
+                        i++;
+                    }
+                    logger.info(message);
+                } else if (args[i].equals("-sutversion") && (i + 1 < args.length)) {
+                    logger.info("Using " + args[i + 1] + " as sutversion");
+                    TestBedConfiguration.setSUTVersion(args[i + 1]);
+                    i += 2;
+                } else {
+                    showUsage();
+                }
+            }
 
-			TestBedConfiguration.setConfigFile(testbed);
+            if (testSuiteDir == null || testbed == null) {
+                showUsage();
+            }
 
-			// start the log4j server
-			Log4jServer.getInstance().start();
+            TestBedConfiguration.setConfigFile(testbed);
 
-			// initialize Python interpreter
-			Properties properties = new Properties();
-			properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
-			properties.setProperty("python.path", StaticConfiguration.JYTHON_LIB);
-			PythonInterpreter.initialize(System.getProperties(), properties, new String[] { "" });
-			TestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteDir);
-			testSuite.setExecutionLoops(numberLoops, loopsInHours);
-			executionResult = execute(testSuite);
-		} finally {
-			shutdown();
-		}
-        System.exit(executionResult?0:1);
-	}
+            // start the log4j server
+            Log4jServer.getInstance().start();
+
+            // initialize Python interpreter
+            Properties properties = new Properties();
+            properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
+            properties.setProperty("python.path", StaticConfiguration.JYTHON_LIB);
+            PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
+            TestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteDir);
+            testSuite.setExecutionLoops(numberLoops, loopsInHours);
+            executionResult = execute(testSuite);
+        } finally {
+            shutdown();
+        }
+        System.exit(executionResult ? 0 : 1);
+    }
 }

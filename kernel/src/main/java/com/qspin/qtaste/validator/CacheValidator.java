@@ -38,6 +38,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
  * CacheValidator is responsible for comparaison between expected values and values present in the Cache.
+ *
  * @author lvboque
  */
 public class CacheValidator extends Validator {
@@ -62,12 +63,13 @@ public class CacheValidator extends Validator {
     /**
      * Note that since nameExpectedValues is a map, it can only contain one expected value per name.
      */
-    public static void check(LinkedHashMap<String, Object> nameExpectedValues, long timeout, String failMessagePrefix) throws QTasteTestFailException {
+    public static void check(LinkedHashMap<String, Object> nameExpectedValues, long timeout, String failMessagePrefix)
+          throws QTasteTestFailException {
         CacheValidator validator = new CacheValidator(nameExpectedValues, timeout);
         validator.validate(failMessagePrefix);
     }
 
-    /**     
+    /**
      * Creates a new instance of CacheValidator .
      * Note that since nameExpectedValues is a map, it can only contain one expected value per name.
      */
@@ -136,13 +138,15 @@ public class CacheValidator extends Validator {
                 } catch (InterruptedException e) {
                     return false;
                 }
-            } while (elapsedTime_ms < timeout); // Wait checkTimeInterval_ms
+            }
+            while (elapsedTime_ms < timeout); // Wait checkTimeInterval_ms
 
             if (mismatchVariableName != null) {
                 if (mismatchVariableValue == null) {
                     extraDetails = "Expected to get a value for variable " + mismatchVariableName + " but didn't.";
                 } else {
-                    extraDetails = "Expected to get " + mismatchVariableExpectedValue + " for variable " + mismatchVariableName + " but got " + mismatchVariableValue + ".";
+                    extraDetails = "Expected to get " + mismatchVariableExpectedValue + " for variable " + mismatchVariableName
+                          + " but got " + mismatchVariableValue + ".";
                 }
 
                 assert expectedValues.size() == currentValues.size() : "currentValues has not same size as expectedValues";

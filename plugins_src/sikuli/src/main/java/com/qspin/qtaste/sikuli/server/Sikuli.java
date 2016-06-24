@@ -34,175 +34,150 @@ import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
- *  Sikuli is a java agent started with the same VM as the Sikuli application.
- *  It implements all the SikuliMBean services using JMX.
+ * Sikuli is a java agent started with the same VM as the Sikuli application.
+ * It implements all the SikuliMBean services using JMX.
  */
 public class Sikuli extends JMXAgent implements SikuliMBean {
 
-	/** Default timeout value expressed in seconds. */
-	public final static double DEFAULT_TIMEOUT = 3;
-	
-	private boolean mPreviousScriptFailed;
+    /**
+     * Default timeout value expressed in seconds.
+     */
+    public final static double DEFAULT_TIMEOUT = 3;
 
-	public Sikuli() {
-		mPreviousScriptFailed = false;
-		init();
-	}
-	
-	private Image loadImageFromPath(String path) throws QTasteTestFailException
-	{
-		try
-		{
-			return new Image(ImageIO.read(new File(path)));
-		}
-		catch(Exception ex)
-		{
-			throw new QTasteTestFailException("Cannot load the image file locate in " + path + " : " + ex.getMessage(), ex);
-		}
-	}
-	
-	private Region getRegion(String imageFilePath) throws QTasteTestFailException
-	{
-		try
-		{
-			return Screen.all().find(loadImageFromPath(imageFilePath));
-		}
-		catch(FindFailed ex)
-		{
-			throw new QTasteTestFailException("Cannot find the image on screen : " + ex.getMessage(), ex);
-		}
-	}
+    private boolean mPreviousScriptFailed;
 
-	@Override
-	public boolean exist(String fileName) throws QTasteException{
-		//out of the try catch to ensure the error doesn't come from test data
-		getRegion(fileName);
-		try
-		{
-			return getRegion(fileName) != null;
-		}
-		catch(Exception ex)
-		{
-			return false;
-		}
-	}
+    public Sikuli() {
+        mPreviousScriptFailed = false;
+        init();
+    }
 
-	@Override
-	public void takeSnapShot(String directory, String fileName) throws QTasteException {
-		Screen.all().capture().save(directory, fileName);
-	}
+    private Image loadImageFromPath(String path) throws QTasteTestFailException {
+        try {
+            return new Image(ImageIO.read(new File(path)));
+        } catch (Exception ex) {
+            throw new QTasteTestFailException("Cannot load the image file locate in " + path + " : " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void wait(String fileName) throws QTasteException {
-		wait(fileName, DEFAULT_TIMEOUT);
-	}
-	
-	@Override
-	public void wait(String fileName, double timeout) throws QTasteException {
-		try
-		{
-			Screen.all().wait(loadImageFromPath(fileName), timeout);	
-		}
-		catch(FindFailed ex)
-		{
-			throw new QTasteTestFailException("Cannot find the image on screen : " + ex.getMessage(), ex);
-		}
-	}
+    private Region getRegion(String imageFilePath) throws QTasteTestFailException {
+        try {
+            return Screen.all().find(loadImageFromPath(imageFilePath));
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot find the image on screen : " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void waitVanish(String fileName, double timeout) throws QTasteException {
-		if (!Screen.all().waitVanish(loadImageFromPath(fileName), timeout))
-		{				
-			throw new QTasteTestFailException("The target is still displayed");
-		}
-	}
+    @Override
+    public boolean exist(String fileName) throws QTasteException {
+        //out of the try catch to ensure the error doesn't come from test data
+        getRegion(fileName);
+        try {
+            return getRegion(fileName) != null;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 
-	@Override
-	public void waitVanish(String fileName) throws QTasteException {
-		waitVanish(fileName, DEFAULT_TIMEOUT);
-	}
+    @Override
+    public void takeSnapShot(String directory, String fileName) throws QTasteException {
+        Screen.all().capture().save(directory, fileName);
+    }
 
-	@Override
-	public void hover(String fileName) throws QTasteException {
-		getRegion(fileName).mouseMove();
-	}
+    @Override
+    public void wait(String fileName) throws QTasteException {
+        wait(fileName, DEFAULT_TIMEOUT);
+    }
 
-	@Override
-	public void dragDrop(String targetFileName, String destinationFileName)
-			throws QTasteException {
-		try
-		{
-			Screen.all().dragDrop(loadImageFromPath(targetFileName), loadImageFromPath(destinationFileName));
-		}
-		catch(FindFailed ex)
-		{
-			throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public void wait(String fileName, double timeout) throws QTasteException {
+        try {
+            Screen.all().wait(loadImageFromPath(fileName), timeout);
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot find the image on screen : " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void rightClick(String fileName) throws QTasteException {
-		getRegion(fileName).rightClick();
-	}
+    @Override
+    public void waitVanish(String fileName, double timeout) throws QTasteException {
+        if (!Screen.all().waitVanish(loadImageFromPath(fileName), timeout)) {
+            throw new QTasteTestFailException("The target is still displayed");
+        }
+    }
 
-	@Override
-	public void click(String fileName) throws QTasteException {
-		getRegion(fileName).click();
-	}
+    @Override
+    public void waitVanish(String fileName) throws QTasteException {
+        waitVanish(fileName, DEFAULT_TIMEOUT);
+    }
 
-	@Override
-	public void doubleClick(String fileName) throws QTasteException {
-		getRegion(fileName).doubleClick();
-	}
+    @Override
+    public void hover(String fileName) throws QTasteException {
+        getRegion(fileName).mouseMove();
+    }
 
-	@Override
-	public void type(String fileName, String value) throws QTasteException {
-		try
-		{
-			Screen.all().type(loadImageFromPath(fileName),value);
-		}
-		catch(FindFailed ex)
-		{
-			throw new QTasteTestFailException("Cannot execute the type command : " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public void dragDrop(String targetFileName, String destinationFileName) throws QTasteException {
+        try {
+            Screen.all().dragDrop(loadImageFromPath(targetFileName), loadImageFromPath(destinationFileName));
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void type(String value) throws QTasteException {
-		Screen.all().type(value);
-	}
+    @Override
+    public void rightClick(String fileName) throws QTasteException {
+        getRegion(fileName).rightClick();
+    }
 
-	@Override
-	public void paste(String fileName, String value) throws QTasteException {
-		try
-		{
-			Screen.all().paste(loadImageFromPath(fileName),value);
-		}
-		catch(FindFailed ex)
-		{
-			throw new QTasteTestFailException("Cannot execute the type command : " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public void click(String fileName) throws QTasteException {
+        getRegion(fileName).click();
+    }
 
-	@Override
-	public void paste(String value) throws QTasteException {
-		Screen.all().paste(value);
-	}
-	
-	@Override
-	public void openAndRunScript(String scriptPath) throws QTasteException
-	{
-		if (mPreviousScriptFailed)
-		{
-			throw new QTasteTestFailException("Cannot execute another script after a script failure, the sikuli module have to be restarted!");
-		}
-		
-		int retCode;
-		if ((retCode = Runner.runScripts(new String[]{"-r", scriptPath})) != 0)
-		{
-			mPreviousScriptFailed = true;
-			throw new QTasteTestFailException("Execution failed... (return code : " + retCode + ")" );
-		}
-	}
-	
+    @Override
+    public void doubleClick(String fileName) throws QTasteException {
+        getRegion(fileName).doubleClick();
+    }
+
+    @Override
+    public void type(String fileName, String value) throws QTasteException {
+        try {
+            Screen.all().type(loadImageFromPath(fileName), value);
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot execute the type command : " + ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void type(String value) throws QTasteException {
+        Screen.all().type(value);
+    }
+
+    @Override
+    public void paste(String fileName, String value) throws QTasteException {
+        try {
+            Screen.all().paste(loadImageFromPath(fileName), value);
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot execute the type command : " + ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void paste(String value) throws QTasteException {
+        Screen.all().paste(value);
+    }
+
+    @Override
+    public void openAndRunScript(String scriptPath) throws QTasteException {
+        if (mPreviousScriptFailed) {
+            throw new QTasteTestFailException(
+                  "Cannot execute another script after a script failure, the sikuli module have to be restarted!");
+        }
+
+        int retCode;
+        if ((retCode = Runner.runScripts(new String[] {"-r", scriptPath})) != 0) {
+            mPreviousScriptFailed = true;
+            throw new QTasteTestFailException("Execution failed... (return code : " + retCode + ")");
+        }
+    }
+
 }

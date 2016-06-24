@@ -33,37 +33,40 @@ import com.qspin.qtaste.reporter.campaign.CampaignReportManager;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 
 /**
- *
  * @author vdubois
  */
 public class TestCaseReporter {
 
-   private static TestCaseReporter instance = null;    
-   static private ArrayList<TestCaseReportTable> reportTableList = new ArrayList<TestCaseReportTable> ();
-    
-   synchronized public static TestCaseReporter getInstance() {
-      if(instance == null) {
-         instance = new TestCaseReporter();
-      }
-      return instance;
-   }
+    private static TestCaseReporter instance = null;
+    static private ArrayList<TestCaseReportTable> reportTableList = new ArrayList<TestCaseReportTable>();
+
+    synchronized public static TestCaseReporter getInstance() {
+        if (instance == null) {
+            instance = new TestCaseReporter();
+        }
+        return instance;
+    }
+
     static public void addTestCaseReportTableListener(TestCaseReportTable table) {
-            reportTableList.add(table);
+        reportTableList.add(table);
     }
+
     static public void removeTestCaseReportTableListener(TestCaseReportTable table) {
-        if (reportTableList.contains(table))
+        if (reportTableList.contains(table)) {
             reportTableList.remove(table);
+        }
     }
-    
+
     public void putEntry(final TestResult tr) {
-            SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        String reportName = CampaignReportManager.getInstance().getReportName();
-                        Iterator<TestCaseReportTable> it = reportTableList.iterator();
-                        while (it.hasNext())
-                            it.next().putEntry(tr,reportName);
-                    }
-            });
-        
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                String reportName = CampaignReportManager.getInstance().getReportName();
+                Iterator<TestCaseReportTable> it = reportTableList.iterator();
+                while (it.hasNext()) {
+                    it.next().putEntry(tr, reportName);
+                }
+            }
+        });
+
     }
 }

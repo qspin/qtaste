@@ -36,7 +36,6 @@ import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author lvboque
  */
 public abstract class TestSuite implements TestReportListener {
@@ -55,13 +54,16 @@ public abstract class TestSuite implements TestReportListener {
     private int nbTestsRetries = 0;
     private List<TestReportListener> testReportListeners = new LinkedList<TestReportListener>();
 
-    /** Creates a new instance of TestSuite */
+    /**
+     * Creates a new instance of TestSuite
+     */
     public TestSuite(String name) {
         this.name = name;
     }
 
     /**
      * Computes and returns the number of tests to execute.
+     *
      * @return number of tests to execute or -1 if unknown
      */
     public abstract int computeNumberTestsToExecute();
@@ -74,7 +76,8 @@ public abstract class TestSuite implements TestReportListener {
      */
     public abstract boolean executeOnce(boolean debug);
 
-    /** Executes a test suite, the number of times specified by numberLoops/loopsInHours.
+    /**
+     * Executes a test suite, the number of times specified by numberLoops/loopsInHours.
      *
      * @param debug true to execute in debug mode, false otherwise
      * @param initializeTestEngine true to initialize/terminate the test engine, false otherwise
@@ -92,7 +95,9 @@ public abstract class TestSuite implements TestReportListener {
                     int currentExecution = 1;
                     long startTime_ms = System.currentTimeMillis();
                     do {
-                        logger.info("Execution " + currentExecution + (numberLoops != -1 && !loopsInTime ? " of " + numberLoops : "") + " of test suite " + getName());
+                        logger.info(
+                              "Execution " + currentExecution + (numberLoops != -1 && !loopsInTime ? " of " + numberLoops : "")
+                                    + " of test suite " + getName());
                         if (!executeOnce(debug)) {
                             executionSuccess = false;
                         }
@@ -101,16 +106,17 @@ public abstract class TestSuite implements TestReportListener {
                             long elapsedTime_m = elapsedTime_ms / 1000 / 60;
                             continueExecution = elapsedTime_m < numberLoops;
                         } else {
-                        	continueExecution = numberLoops == -1 || currentExecution < numberLoops;
+                            continueExecution = numberLoops == -1 || currentExecution < numberLoops;
                         }
                         continueExecution &= !TestEngine.isAbortedByUser();
                         currentExecution++;
-                    } while (continueExecution);
+                    }
+                    while (continueExecution);
                 } else {
                     executionSuccess = executeOnce(debug);
                 }
             } else {
-            	executionSuccess = false;
+                executionSuccess = false;
             }
             if (initializeTestEngine) {
                 TestEngine.terminate();
@@ -129,7 +135,7 @@ public abstract class TestSuite implements TestReportListener {
     public void reportTestSuiteStarted() {
         TestResultsReportManager.getInstance().refresh();
 
-        for (TestReportListener testReportListener: testReportListeners) {
+        for (TestReportListener testReportListener : testReportListeners) {
             testReportListener.reportTestSuiteStarted();
         }
     }
@@ -137,16 +143,16 @@ public abstract class TestSuite implements TestReportListener {
     public void reportTestSuiteStopped() {
         TestResultsReportManager.getInstance().refresh();
 
-        for (TestReportListener testReportListener: testReportListeners) {
+        for (TestReportListener testReportListener : testReportListeners) {
             testReportListener.reportTestSuiteStopped();
         }
     }
 
     /**
      * @param numberLoops number of executions, number of hours of executions,
-     *                    or -1 for infinite number of executions
+     * or -1 for infinite number of executions
      * @param loopsInHours if true, numberLoops is the number of hours of executions
-     *                     otherwise numberLoops is the number of executions
+     * otherwise numberLoops is the number of executions
      */
     public void setExecutionLoops(int numberLoops, boolean loopsInHours) {
         this.numberLoops = numberLoops;
@@ -177,7 +183,7 @@ public abstract class TestSuite implements TestReportListener {
         return nbTestsExecuted;
     }
 
-     public void reportTestResult(TestResult.Status status) {
+    public void reportTestResult(TestResult.Status status) {
         nbTestsExecuted++;
         switch (status) {
             case SUCCESS:
@@ -193,7 +199,7 @@ public abstract class TestSuite implements TestReportListener {
                 logger.error("Invalid status: " + status);
         }
 
-        for (TestReportListener testReportListener: testReportListeners) {
+        for (TestReportListener testReportListener : testReportListeners) {
             testReportListener.reportTestResult(status);
         }
     }
@@ -201,7 +207,7 @@ public abstract class TestSuite implements TestReportListener {
     public void reportTestRetry() {
         nbTestsRetries++;
 
-        for (TestReportListener testResultListener: testReportListeners) {
+        for (TestReportListener testResultListener : testReportListeners) {
             testResultListener.reportTestRetry();
         }
     }

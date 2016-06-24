@@ -32,12 +32,13 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * This class is responsible for providing test bed configuration parameters
+ *
  * @author lvboque
  */
 @SuppressWarnings("serial")
 public class TestBedConfiguration extends XMLConfiguration {
 
-	private static Logger logger = Log4jLoggerFactory.getLogger(TestBedConfiguration.class);
+    private static Logger logger = Log4jLoggerFactory.getLogger(TestBedConfiguration.class);
     private static TestBedConfiguration instance;
     private static String configFile;
     private static List<ConfigurationChangeHandler> configurationChangeHandlers = new ArrayList<ConfigurationChangeHandler>();
@@ -53,16 +54,17 @@ public class TestBedConfiguration extends XMLConfiguration {
     /**
      * Get an instance of the TestBedConfiguration.
      * setConfFile method can be used to specified another configuration file.
+     *
      * @return The TestBedConfiguration or null if not configuration file has been set.
      */
     synchronized public static TestBedConfiguration getInstance() {
         try {
             if (instance == null) {
-            	if (configFile == null) {
-            		return null;
-            	} else {
-            		instance = new TestBedConfiguration();
-            	}
+                if (configFile == null) {
+                    return null;
+                } else {
+                    instance = new TestBedConfiguration();
+                }
             }
             return instance;
         } catch (ConfigurationException e) {
@@ -73,6 +75,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Set the configuration file to the specified file.
+     *
      * @param file The configuration file.
      */
     public static void setConfigFile(String file) {
@@ -85,6 +88,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Register an handler with callback method which will be called when configuration has changed.
+     *
      * @param handler the configuration change handler to register
      */
     public static void registerConfigurationChangeHandler(ConfigurationChangeHandler handler) {
@@ -95,6 +99,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Unregister an handler with callback method which will be called when configuration has changed.
+     *
      * @param handler the configuration change handler to unregister
      */
     public static void unregisterConfigurationChangeHandler(ConfigurationChangeHandler handler) {
@@ -115,26 +120,30 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Check if testbed has a control script.
+     *
      * @return true if testbed has a control script, false otherwise
      */
     public boolean hasControlScript() {
-    	return containsKey("control_script");
+        return containsKey("control_script");
     }
 
     /**
      * Return the file name of the control script or null if none.
+     *
      * @return the file name of the control script or null if none.
      */
     public String getControlScriptFileName() {
         String scriptFilename = getString("control_script");
-        if (scriptFilename != null && !new File(scriptFilename).isAbsolute() && !scriptFilename.startsWith(StaticConfiguration.CONTROL_SCRIPTS_DIRECTORY)) {
-        	scriptFilename = StaticConfiguration.CONTROL_SCRIPTS_DIRECTORY + "/" + scriptFilename;
+        if (scriptFilename != null && !new File(scriptFilename).isAbsolute() && !scriptFilename.startsWith(
+              StaticConfiguration.CONTROL_SCRIPTS_DIRECTORY)) {
+            scriptFilename = StaticConfiguration.CONTROL_SCRIPTS_DIRECTORY + "/" + scriptFilename;
         }
         return scriptFilename;
     }
 
     /**
      * Return the arguments of the control script or null if none.
+     *
      * @return the arguments of the control script or null if none.
      */
     public String getControlScriptArguments() {
@@ -143,11 +152,11 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Return the id of the default instance
+     *
      * @return id of the default instance
-     * @throws java.util.NoSuchElementException
-     *             if the configuration key is not available.
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a int value.
+     * @throws java.util.NoSuchElementException if the configuration key is not available.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a int value.
      */
     public String getDefaultInstanceId() {
         return getString("multiple_instances_components[@default]");
@@ -155,6 +164,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Return the index corresponding to the instance id specified as parameter
+     *
      * @param instanceId the instance id
      * @param component The component name.
      * @return the index of the instance id, -1 if the instance is not found
@@ -162,8 +172,9 @@ public class TestBedConfiguration extends XMLConfiguration {
     public int getMIIndex(String instanceId, String component) {
         for (int i = 0; i <= instance.getMaxIndex("multiple_instances_components." + component); i++) {
             String id = instance.getString("multiple_instances_components." + component + "(" + i + ") [@id]");
-            if (id == null)
+            if (id == null) {
                 return -1;
+            }
             if (id.equals(instanceId)) {
                 return i;
             }
@@ -173,6 +184,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get the String associated with the given configuration key for the specified instanceId
+     *
      * @param instanceId The instance Id id
      * @param component The component name.
      * @param key The Configuration key
@@ -185,6 +197,7 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get the String associated with the given configuration key for the specified instanceId
+     *
      * @param instanceId The instance Id id
      * @param component The component name.
      * @param key The Configuration key
@@ -198,14 +211,14 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get a int associated with the given configuration key for the specified instanceId.
+     *
      * @param instanceId The instance Id id.
      * @param component The component name.
      * @param key The Configuration key.
      * @return The value of the parameter identified by the key.
-     * @throws java.util.NoSuchElementException
-     *             if the configuration key is not available.
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a int value.
+     * @throws java.util.NoSuchElementException if the configuration key is not available.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a int value.
      */
     public int getMIInt(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -214,13 +227,14 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get a int associated with the given configuration key for the specified instanceId.
+     *
      * @param instanceId The instance Id id.
      * @param component The component name.
      * @param key The Configuration key.
      * @param defaultValue The default value if the configuration key is not available
      * @return The value of the parameter identified by the key or defaultValue if the key is not present
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a int value.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a int value.
      */
     public int getMIInt(String instanceId, String component, String key, int defaultValue) throws ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -229,45 +243,48 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get a boolean associated with the given configuration key for the specified instanceId.
+     *
      * @param instanceId The instance Id id.
      * @param component The component name.
      * @param key The Configuration key.
      * @return The value of the parameter identified by the key.
-     * @throws java.util.NoSuchElementException
-     *             if the configuration key is not available.
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a boolean value.
+     * @throws java.util.NoSuchElementException if the configuration key is not available.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a boolean value.
      */
-    public boolean getMIBoolean(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
+    public boolean getMIBoolean(String instanceId, String component, String key)
+          throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
-        return instance.getBoolean("multiple_instances_components." + component +"(" + index + ")." + key);
+        return instance.getBoolean("multiple_instances_components." + component + "(" + index + ")." + key);
     }
 
     /**
      * Get a boolean associated with the given configuration key for the specified instanceId.
+     *
      * @param instanceId The instance Id id.
      * @param component The component name.
      * @param key The Configuration key.
      * @param defaultValue The default value if the configuration key is not available
      * @return The value of the parameter identified by the key or defaultValue if the key is not present
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a boolean value.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a boolean value.
      */
-    public boolean getMIBoolean(String instanceId, String component, String key, boolean defaultValue) throws ConversionException {
+    public boolean getMIBoolean(String instanceId, String component, String key, boolean defaultValue)
+          throws ConversionException {
         int index = getMIIndex(instanceId, component);
         return instance.getBoolean("multiple_instances_components." + component + "(" + index + ")." + key, defaultValue);
     }
 
     /**
      * Get a short associated with the given configuration key for the specified instanceId.
+     *
      * @param instanceId The instance Id id.
      * @param component The component name.
      * @param key The Configuration key.
      * @return The value of the parameter identified by the key.
-     * @throws java.util.NoSuchElementException
-     *             if the configuration key is not available.
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a short value.
+     * @throws java.util.NoSuchElementException if the configuration key is not available.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a short value.
      */
     public short getMIShort(String instanceId, String component, String key) throws NoSuchElementException, ConversionException {
         int index = getMIIndex(instanceId, component);
@@ -276,17 +293,18 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get a short associated with the given configuration key for the specified instanceId.
+     *
      * @param instanceId The instance Id id.
      * @param component The component name.
      * @param key The Configuration key.
      * @param defaultValue The default value if the configuration key is not available
      * @return The value of the parameter identified by the key or defaultValue if the key is not present
-     * @throws org.apache.commons.configuration.ConversionException
-     *             if the value associated to the configuration key is convertible into a short value.
+     * @throws org.apache.commons.configuration.ConversionException if the value associated to the configuration key is
+     * convertible into a short value.
      */
     public short getMIShort(String instanceId, String component, String key, short defaultValue) throws ConversionException {
         int index = getMIIndex(instanceId, component);
-         return instance.getShort("multiple_instances_components." + component + "(" + index + ")." + key, defaultValue);
+        return instance.getShort("multiple_instances_components." + component + "(" + index + ")." + key, defaultValue);
     }
 
     /**
@@ -294,12 +312,12 @@ public class TestBedConfiguration extends XMLConfiguration {
      */
     protected static void onConfigurationChange() {
         for (ConfigurationChangeHandler handler : configurationChangeHandlers) {
-        	try {
-        		handler.onConfigurationChange();
-        	} catch (Exception pExc)
-        	{
-        		logger.error("An error occured during the testbed configuration change event management:" + pExc.getMessage(), pExc);
-        	}
+            try {
+                handler.onConfigurationChange();
+            } catch (Exception pExc) {
+                logger.error("An error occured during the testbed configuration change event management:" + pExc.getMessage(),
+                      pExc);
+            }
         }
     }
 
@@ -314,9 +332,9 @@ public class TestBedConfiguration extends XMLConfiguration {
         void onConfigurationChange();
     }
 
-
-     /**
+    /**
      * Set the SUT version used by this testbed.
+     *
      * @param sutVersion The sut version.
      */
     public static void setSUTVersion(String sutVersion) {
@@ -325,11 +343,13 @@ public class TestBedConfiguration extends XMLConfiguration {
 
     /**
      * Get the SUT version used by this testbed
+     *
      * @return The SUT version
      */
     public static String getSUTVersion() {
-     if (sutVersion == null)
-         return "undefined";
-     return sutVersion;
+        if (sutVersion == null) {
+            return "undefined";
+        }
+        return sutVersion;
     }
 }

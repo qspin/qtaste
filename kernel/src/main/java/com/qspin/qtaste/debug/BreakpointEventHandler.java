@@ -27,47 +27,46 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
-public class BreakpointEventHandler{
-
+public class BreakpointEventHandler {
 
     private static BreakpointEventHandler eventHandler;
-    private final List<BreakpointListener> breakpointListeners = Collections.synchronizedList(new LinkedList<BreakpointListener>());
+    private final List<BreakpointListener> breakpointListeners = Collections.synchronizedList(
+          new LinkedList<BreakpointListener>());
     private final List<Breakpoint> breakpoints = Collections.synchronizedList(new LinkedList<Breakpoint>());
 
-    private BreakpointEventHandler(){}
+    private BreakpointEventHandler() {
+    }
 
-    public static BreakpointEventHandler getInstance(){
+    public static BreakpointEventHandler getInstance() {
         if (eventHandler == null) {
             eventHandler = new BreakpointEventHandler();
         }
         return eventHandler;
     }
 
-    public void clearInstance(){
+    public void clearInstance() {
         eventHandler = null;
     }
 
-    
-    public void addBreakpointListener(BreakpointListener tcl){
-        if (tcl != null && !breakpointListeners.contains(tcl)){
+    public void addBreakpointListener(BreakpointListener tcl) {
+        if (tcl != null && !breakpointListeners.contains(tcl)) {
             breakpointListeners.add(tcl);
         }
     }
 
-    public List<BreakpointListener> getBreakpointListeners(){
+    public List<BreakpointListener> getBreakpointListeners() {
         return breakpointListeners;
     }
 
-    public void removeBreakpointListener(BreakpointListener tcl){
+    public void removeBreakpointListener(BreakpointListener tcl) {
         breakpointListeners.remove(tcl);
     }
 
-    public void addBreakpoint(String fileName, int lineIndex){
+    public void addBreakpoint(String fileName, int lineIndex) {
         BreakpoinkEvent tce = new BreakpoinkEvent(lineIndex, true);
-        synchronized(breakpointListeners){
+        synchronized (breakpointListeners) {
             breakpoints.add(new Breakpoint(fileName, lineIndex));
-            
+
             Iterator<BreakpointListener> it = breakpointListeners.iterator();
             BreakpointListener tcl;
             while (it.hasNext()) {
@@ -77,24 +76,22 @@ public class BreakpointEventHandler{
         }
     }
 
-    private Breakpoint getBreakPoint(String fileName, int lineIndex){
+    private Breakpoint getBreakPoint(String fileName, int lineIndex) {
         Iterator<Breakpoint> breakpointIterator = breakpoints.iterator();
-        while (breakpointIterator.hasNext())
-        {
+        while (breakpointIterator.hasNext()) {
             Breakpoint breakPoint = breakpointIterator.next();
-            if (breakPoint.getFileName().equals(fileName) &&
-                breakPoint.getLineIndex()==lineIndex)
-            {
+            if (breakPoint.getFileName().equals(fileName) && breakPoint.getLineIndex() == lineIndex) {
                 return breakPoint;
             }
         }
         return null;
     }
-    public void removeBreakpoint(String fileName, int lineIndex){
+
+    public void removeBreakpoint(String fileName, int lineIndex) {
         BreakpoinkEvent tce = new BreakpoinkEvent(lineIndex, false);
-        synchronized(breakpointListeners){
+        synchronized (breakpointListeners) {
             Breakpoint breakpoint = this.getBreakPoint(fileName, lineIndex);
-            if (breakpoint!=null) {
+            if (breakpoint != null) {
                 breakpoints.remove(breakpoint);
             }
             Iterator<BreakpointListener> it = breakpointListeners.iterator();
@@ -105,7 +102,7 @@ public class BreakpointEventHandler{
             }
         }
     }
-    
+
     public List<Breakpoint> getBreakpoints() {
         return breakpoints;
     }

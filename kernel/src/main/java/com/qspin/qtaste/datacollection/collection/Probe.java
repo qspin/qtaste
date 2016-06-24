@@ -20,10 +20,10 @@
 package com.qspin.qtaste.datacollection.collection;
 
 /**
- *
  * @author lvboque
  */
 public interface Probe {
-    public void start();    
+    public void start();
+
     public void stop();
 }

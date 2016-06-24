@@ -51,17 +51,16 @@ import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
-public class ConfigEditPanel  extends JDialog {
+public class ConfigEditPanel extends JDialog {
 
-        static private Logger logger = Log4jLoggerFactory.getLogger(ConfigEditPanel.class);
-        private InfoCbBox mInfoBox;
-        private JPanel mDetailsPanel;
-        private JScrollPane mDetailsScrollPane;
-        private Properties mSelectedProperties;         
+    static private Logger logger = Log4jLoggerFactory.getLogger(ConfigEditPanel.class);
+    private InfoCbBox mInfoBox;
+    private JPanel mDetailsPanel;
+    private JScrollPane mDetailsScrollPane;
+    private Properties mSelectedProperties;
 
     public ConfigEditPanel(Window owner) {
         super(owner, "QTaste Configuration", ModalityType.APPLICATION_MODAL);
@@ -69,24 +68,23 @@ public class ConfigEditPanel  extends JDialog {
         this.setLayout(new GridBagLayout());
         GridBagLineAdder adder = new GridBagLineAdder(this);
         mSelectedProperties = new Properties();
-        
-        
+
         // add the Site selection panel
         JPanel siteSelectionPanel = new JPanel(new BorderLayout());
-        
+
         mInfoBox = new InfoCbBox();
         this.initSiteCb(mInfoBox);
         mInfoBox.addActionListener(new CbActionListener(this));
         siteSelectionPanel.add(mInfoBox);
-        
-        
+
         adder.addToEnd(mainConfigPanel);
         adder.addToEnd(siteSelectionPanel);
         adder.addSeparator("Details");
-        
-        mDetailsPanel = new JPanel(new GridLayout(1,4, 10,10));
-        mDetailsScrollPane = new JScrollPane(mDetailsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        mDetailsScrollPane.setPreferredSize(new Dimension(500,600)); 
+
+        mDetailsPanel = new JPanel(new GridLayout(1, 4, 10, 10));
+        mDetailsScrollPane = new JScrollPane(mDetailsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        mDetailsScrollPane.setPreferredSize(new Dimension(500, 600));
         //mDetailsPanel.setLayout(new GridLayout(1,4, 10,10));
         //jsp.getViewport().add(mDetailsPanel);
 
@@ -97,17 +95,16 @@ public class ConfigEditPanel  extends JDialog {
     }
 
     @SuppressWarnings("unchecked")
-    public void fillSiteDetails(File siteFile)
-    {
+    public void fillSiteDetails(File siteFile) {
         try {
             // the file must be selected through CongigManager
             mSelectedProperties.load(new FileInputStream(siteFile.getAbsoluteFile().getCanonicalPath()));
-            
+
             GridLayout gridLayout = (GridLayout) mDetailsPanel.getLayout();
             gridLayout.setRows(mSelectedProperties.size());
             gridLayout.setColumns(4);
             mDetailsPanel.removeAll();
-            
+
             Iterator it = mSelectedProperties.entrySet().iterator();
             //mDetailsPanel.setLayout(new GridLayout(cfg.getConfig().getKeysSize(), 2));
             // clear the objects
@@ -129,49 +126,51 @@ public class ConfigEditPanel  extends JDialog {
             //this.pack();
         } catch (FileNotFoundException ex) {
             logger.error(ex);
-        }
-         catch (IOException ex) {
+        } catch (IOException ex) {
             logger.error(ex);
         }
-                
+
     }
+
     public void initSiteCb(InfoCbBox cb) {
         // get the properties files in the configuration directory
         String confDirectory = "conf";
         File confDirectoryFile = new File(confDirectory);
-        File[] configFiles = FileUtilities.listSortedFiles(confDirectoryFile, new FileMask("properties", "QTaste configuration file"));
-        for (File configFile : configFiles)
-        {
-            if (!configFile.isDirectory())  {
-                
-            
-            ConfigInfo fileInfo = new ConfigInfo(configFile.getName(), configFile );
-            cb.addInfo(fileInfo);
+        File[] configFiles = FileUtilities.listSortedFiles(confDirectoryFile,
+              new FileMask("properties", "QTaste configuration file"));
+        for (File configFile : configFiles) {
+            if (!configFile.isDirectory()) {
+
+                ConfigInfo fileInfo = new ConfigInfo(configFile.getName(), configFile);
+                cb.addInfo(fileInfo);
             }
         }
     }
 
     private class CbActionListener implements ActionListener {
-        
+
         private ConfigEditPanel mPanel;
-        public CbActionListener(ConfigEditPanel panel)
-        {
+
+        public CbActionListener(ConfigEditPanel panel) {
             mPanel = panel;
         }
 
-        public void actionPerformed(ActionEvent e)  {
-            InfoCbBox info = (InfoCbBox)e.getSource();
-            mPanel.fillSiteDetails(((ConfigInfo)info.getItemAt(info.getSelectedIndex())).mFile);
+        public void actionPerformed(ActionEvent e) {
+            InfoCbBox info = (InfoCbBox) e.getSource();
+            mPanel.fillSiteDetails(((ConfigInfo) info.getItemAt(info.getSelectedIndex())).mFile);
         }
     }
+
     private class ConfigInfo implements Info {
 
         private String mSiteName;
         private File mFile;
+
         public ConfigInfo(String siteName, File file) {
             mSiteName = siteName;
             mFile = file;
         }
+
         public Level getLevel() {
             return Level.INFO;
         }
@@ -179,6 +178,6 @@ public class ConfigEditPanel  extends JDialog {
         public String getMessage() {
             return mSiteName;
         }
-        
+
     }
 }

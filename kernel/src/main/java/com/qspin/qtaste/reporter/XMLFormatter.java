@@ -32,21 +32,23 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * XMLFormatter is a formatter able to generate XML reports using templates files
+ *
  * @author lvboque
  */
 public abstract class XMLFormatter extends ReportFormatter {
 
     private static Logger logger = Log4jLoggerFactory.getLogger(XMLFormatter.class);
-    protected String templateContent,  rowTemplateContent,  rowStepsTemplateContent;
-    
-    public XMLFormatter(String template, String rowTemplate, String rowStepsTemplate, File reportDirectory, String reportName) throws IOException {
+    protected String templateContent, rowTemplateContent, rowStepsTemplateContent;
+
+    public XMLFormatter(String template, String rowTemplate, String rowStepsTemplate, File reportDirectory, String reportName)
+          throws IOException {
         super(reportDirectory, reportName);
         this.templateContent = FileUtilities.readFileContent(template);
         this.rowTemplateContent = FileUtilities.readFileContent(rowTemplate);
-        this.rowStepsTemplateContent = FileUtilities.readFileContent(rowStepsTemplate);    
+        this.rowStepsTemplateContent = FileUtilities.readFileContent(rowStepsTemplate);
     }
-                   
-    public void refresh() {        
+
+    public void refresh() {
         try {
             File outputFile = new File(reportFile.getAbsoluteFile() + ".tmp");
             File tempOutputFile = new File(outputFile.getPath());
@@ -57,14 +59,14 @@ public abstract class XMLFormatter extends ReportFormatter {
             if (reportFile.exists()) {
                 reportFile.delete();
             }
-            
+
             if (!tempOutputFile.renameTo(reportFile)) {
                 logger.error("Couldn't rename XML report file " + tempOutputFile + " into " + outputFile);
             }
         } catch (IOException e) {
             logger.error("Cannot refresh the XML report", e);
-        }        
+        }
     }
-    
+
     public abstract void generateReport();
 }

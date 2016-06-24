@@ -26,6 +26,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * This class is responsible for providing GUI configuration parameters
+ *
  * @author lvboque
  */
 @SuppressWarnings("serial")
@@ -37,6 +38,7 @@ public class GUIConfiguration extends XMLConfiguration {
 
     /**
      * Constructs an instance of GUIConfiguration.
+     *
      * @throws ConfigurationException
      */
     private GUIConfiguration() throws ConfigurationException {

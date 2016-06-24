@@ -39,31 +39,34 @@ import com.qspin.qtaste.util.PythonHelper;
 public class PythonTestScript {
     private static Logger logger = Log4jLoggerFactory.getLogger(PythonTestScript.class);
 
-	private File m_ScriptFile;
-	private File m_ScriptFileDir;
-	private String m_TestSuiteDir;
-	private File m_ScriptDoc = null;
-	private File m_ScriptData = null;
-	private File m_ScriptReq = null;
-	
-	public PythonTestScript(File file, String testSuiteDir) {
-		m_ScriptFile = file;
-		m_ScriptFileDir = file.getParentFile();
-		m_TestSuiteDir = testSuiteDir;
-	}
-	public File getTestScriptFile() {
-		return m_ScriptFile;
-	}
-	public void setTestScriptFile(File file) {
-		m_ScriptFile = file;
-		m_ScriptFileDir = file.getParentFile();
-		m_ScriptDoc = null;
-		m_ScriptData = null;
-		m_ScriptReq = null;
-		
-	}
-	public boolean isDocSynchronized() {
-		File doc = getTestcaseDoc();
+    private File m_ScriptFile;
+    private File m_ScriptFileDir;
+    private String m_TestSuiteDir;
+    private File m_ScriptDoc = null;
+    private File m_ScriptData = null;
+    private File m_ScriptReq = null;
+
+    public PythonTestScript(File file, String testSuiteDir) {
+        m_ScriptFile = file;
+        m_ScriptFileDir = file.getParentFile();
+        m_TestSuiteDir = testSuiteDir;
+    }
+
+    public File getTestScriptFile() {
+        return m_ScriptFile;
+    }
+
+    public void setTestScriptFile(File file) {
+        m_ScriptFile = file;
+        m_ScriptFileDir = file.getParentFile();
+        m_ScriptDoc = null;
+        m_ScriptData = null;
+        m_ScriptReq = null;
+
+    }
+
+    public boolean isDocSynchronized() {
+        File doc = getTestcaseDoc();
         if ((doc != null) && (m_ScriptFile != null)) {
             long lastTestCaseModifiedDate = m_ScriptFile.lastModified();
             File testcaseData = this.getTestcaseData();
@@ -77,10 +80,11 @@ public class PythonTestScript {
             long lastTestDocModifiedDate = doc.lastModified();
             return lastTestCaseModifiedDate < lastTestDocModifiedDate;
         }
-		return false;
-	}
-	public File generateDoc() {
-		GeneratePythonlibDoc.generate();
+        return false;
+    }
+
+    public File generateDoc() {
+        GeneratePythonlibDoc.generate();
         File testcaseDoc = null;
         String xmlDocFilename = m_ScriptFileDir + "/" + StaticConfiguration.TEST_SCRIPT_DOC_XML_FILENAME;
         File xmlDocFile = new File(xmlDocFilename);
@@ -99,7 +103,8 @@ public class PythonTestScript {
             String output = PythonHelper.execute(StaticConfiguration.PYTHON_DOC, args.toArray(new String[args.size()]));
 
             if (xmlDocFile.exists()) {
-                final String[] args2 = { "-XSLTC", "-XT", "-IN", xmlDocFilename, "-XSL", StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR + "/testscriptdoc_xml2html.xsl", "-OUT", htmlDocFilename};
+                final String[] args2 = {"-XSLTC", "-XT", "-IN", xmlDocFilename, "-XSL",
+                      StaticConfiguration.TEST_SCRIPT_DOC_TOOLS_DIR + "/testscriptdoc_xml2html.xsl", "-OUT", htmlDocFilename};
                 org.apache.xalan.xslt.Process.main(args2);
                 xmlDocFile.delete();
                 String outputString = output.trim();
@@ -112,10 +117,11 @@ public class PythonTestScript {
                     }
                 }
                 if (outputString != null) {
-                    JOptionPane.showMessageDialog(null, outputString, "Documentation generation warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, outputString, "Documentation generation warning",
+                          JOptionPane.WARNING_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(null , output, "Documentation generation error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, output, "Documentation generation error", JOptionPane.ERROR_MESSAGE);
             }
             testcaseDoc = getTestcaseDoc();
         } catch (PyException ex) {
@@ -123,46 +129,45 @@ public class PythonTestScript {
         } catch (Exception ex) {
             logger.error(ex);
         }
-        return testcaseDoc;		
-	}
+        return testcaseDoc;
+    }
 
     public File getTestcaseData() {
-    	if (m_ScriptData==null) {
-        	m_ScriptData = findFileIn(StaticConfiguration.TEST_DATA_FILENAME, m_ScriptFileDir);
-    	}
-    	return m_ScriptData;
+        if (m_ScriptData == null) {
+            m_ScriptData = findFileIn(StaticConfiguration.TEST_DATA_FILENAME, m_ScriptFileDir);
+        }
+        return m_ScriptData;
 
     }
-	
+
     public File getTestcaseDoc() {
-    	if (m_ScriptDoc==null) {
-        	m_ScriptDoc = findFileIn(StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME, m_ScriptFileDir);
-    	}
-    	return m_ScriptDoc;
+        if (m_ScriptDoc == null) {
+            m_ScriptDoc = findFileIn(StaticConfiguration.TEST_SCRIPT_DOC_HTML_FILENAME, m_ScriptFileDir);
+        }
+        return m_ScriptDoc;
     }
-    
+
     public File getTestcaseRequirements() {
-    	if (m_ScriptReq==null) {
-    		m_ScriptReq = findFileIn(StaticConfiguration.TEST_REQUIREMENTS_FILENAME, m_ScriptFileDir);
-    		if ( m_ScriptReq == null )
-    		{
-    			//create an empty file
-    			try {
-    				m_ScriptReq = new File(m_ScriptFileDir, StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
-    				File templateFile = new File(StaticConfiguration.CONFIG_DIRECTORY + "/templates/TestScript", StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
-    				FileUtilities.copy(templateFile, m_ScriptReq);
-				} catch (IOException e) {
-					m_ScriptReq = null;
-					logger.error(e);
-				}
-    		}
-    	}
-    	return m_ScriptReq;
+        if (m_ScriptReq == null) {
+            m_ScriptReq = findFileIn(StaticConfiguration.TEST_REQUIREMENTS_FILENAME, m_ScriptFileDir);
+            if (m_ScriptReq == null) {
+                //create an empty file
+                try {
+                    m_ScriptReq = new File(m_ScriptFileDir, StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
+                    File templateFile = new File(StaticConfiguration.CONFIG_DIRECTORY + "/templates/TestScript",
+                          StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
+                    FileUtilities.copy(templateFile, m_ScriptReq);
+                } catch (IOException e) {
+                    m_ScriptReq = null;
+                    logger.error(e);
+                }
+            }
+        }
+        return m_ScriptReq;
     }
-    
-    protected File findFileIn(String pFileName, File pDirectory)
-    {
-    	File[] childFiles = FileUtilities.listSortedFiles(pDirectory);
+
+    protected File findFileIn(String pFileName, File pDirectory) {
+        File[] childFiles = FileUtilities.listSortedFiles(pDirectory);
         for (int i = 0; i < childFiles.length; i++) {
             if (childFiles[i].getName().equalsIgnoreCase(pFileName)) {
                 return childFiles[i];

@@ -22,7 +22,6 @@ package com.qspin.qtaste.kernel.campaign;
 import java.util.SortedSet;
 
 /**
- *
  * @author lvboque
  */
 public class TestSuiteParams {
@@ -30,35 +29,35 @@ public class TestSuiteParams {
     private SortedSet<Integer> selectedDataRows;
     private int count = 1; // default value for counter
     private boolean loopInHours;
-    
+
     public String getDirectory() {
         return directory;
     }
-    
+
     public void setDirectory(String directory) {
         this.directory = directory;
     }
-    
+
     public SortedSet<Integer> getSelectedDataRows() {
         return selectedDataRows;
     }
-    
+
     public void setDataRows(SortedSet<Integer> dataRows) {
         this.selectedDataRows = dataRows;
     }
-    
+
     public int getCount() {
         return count;
     }
-    
+
     public void setCount(int count) {
         this.count = count;
     }
-    
+
     public boolean loopInHours() {
         return loopInHours;
     }
-    
+
     public void setLoopInHours(boolean loopInHours) {
         this.loopInHours = loopInHours;
     }

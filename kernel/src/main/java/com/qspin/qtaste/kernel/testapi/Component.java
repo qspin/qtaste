@@ -23,7 +23,7 @@ import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
  * Interface for all Test API components
- * 
+ *
  * @author David Ergo
  */
 public interface Component {
@@ -31,23 +31,23 @@ public interface Component {
     /**
      * Initializes the component.
      * This method is called before executing a test.
-     * 
+     *
      * @throws QTasteException if component cannot be initialized
      */
     public void initialize() throws QTasteException;
-    
+
     /**
      * Terminates the component.
      * This method is called after executing a test.
-     * 
+     *
      * @throws QTasteException if component cannot be terminated
      */
     public void terminate() throws QTasteException;
-    
+
     /**
      * All Test API verbs have the following signature:
      *   ReturnType verbName(TestData data) throws QTasteException;
-     * 
+     *
      * @param data the test data
      * @return optional return value, can be any type, including void
      * @throws com.qspin.qtaste.testsuite.QTasteTestFailException

@@ -31,29 +31,30 @@ package com.qspin.qtaste.validator;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
- *
  * @author lvboque
  */
 public class EventValidator extends Validator {
-    
+
     public static void check() throws QTasteTestFailException {
         check(null);
     }
-    
+
     public static void check(String failMessagePrefix) throws QTasteTestFailException {
         EventValidator validator = new EventValidator();
         validator.validate(failMessagePrefix);
     }
 
-    /** Creates a new instance of EventValidator */
+    /**
+     * Creates a new instance of EventValidator
+     */
     private EventValidator() {
     }
-        
-    protected boolean validate() {        
+
+    protected boolean validate() {
         return false;
     }
-    
-    protected String getExtraDetails() {        
+
+    protected String getExtraDetails() {
         return "Not yet implemented!";
-    }    
+    }
 }

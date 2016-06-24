@@ -82,8 +82,7 @@ public class ScriptCheckSyntaxValidator {
                 if (stepDescription == null) {
                     throw new FunctionDocumentationException(
                           "Function " + stepFunctionName + " documentation contains no @step tag");
-                }
-                else if (stepDescription.length() == 0) {
+                } else if (stepDescription.length() == 0) {
                     throw new FunctionDocumentationException(
                           "Function " + stepFunctionName + " documentation contains no description for the @step tag");
                 }
@@ -105,9 +104,7 @@ public class ScriptCheckSyntaxValidator {
         Matcher stepsTableDefMatcher = STEPS_TABLE_DEF_PATTERN.matcher(mScriptContent);
         while (stepsTableDefMatcher.find()) {
             String[] stepFunctionNamesAndIds = stepsTableDefMatcher.group(2).split("\\W+");
-            for (int i = 2;
-                  i < stepFunctionNamesAndIds.length;
-                  i += 2) {
+            for (int i = 2; i < stepFunctionNamesAndIds.length; i += 2) {
                 stepsFunctionsNames.add(stepFunctionNamesAndIds[i]);
             }
         }
@@ -115,8 +112,8 @@ public class ScriptCheckSyntaxValidator {
         return stepsFunctionsNames;
     }
 
-    private String getFunctionDoc(String functionName) throws FunctionDefinitionNotFoundException,
-          FunctionDocumentationException {
+    private String getFunctionDoc(String functionName)
+          throws FunctionDefinitionNotFoundException, FunctionDocumentationException {
         Pattern functionDefinitionPattern = Pattern.compile("^def\\s+" + functionName + "\\(\\)\\s*:\\s*$", Pattern.MULTILINE);
         Matcher functionDefinitionMatcher = functionDefinitionPattern.matcher(mScriptContent);
         if (functionDefinitionMatcher.find()) {
@@ -126,8 +123,7 @@ public class ScriptCheckSyntaxValidator {
             if (notInFunctionAnymoreMatcher.find(functionDefinitionMatcher.end())) {
                 functionDefinition = mScriptContent.substring(functionDefinitionMatcher.end() + 1,
                       notInFunctionAnymoreMatcher.start() - 1);
-            }
-            else {
+            } else {
                 functionDefinition = mScriptContent.substring(functionDefinitionMatcher.end() + 1);
             }
 
@@ -135,12 +131,10 @@ public class ScriptCheckSyntaxValidator {
             Matcher docStringMatcher = docStringPattern.matcher(functionDefinition);
             if (docStringMatcher.find()) {
                 return docStringMatcher.group(2);
-            }
-            else {
+            } else {
                 throw new FunctionDocumentationException("Function " + functionName + " is not documented by a docstring");
             }
-        }
-        else {
+        } else {
             throw new FunctionDefinitionNotFoundException("Definition of function " + functionName + " not found");
         }
     }

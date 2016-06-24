@@ -42,19 +42,21 @@ public class MetaTestSuite extends TestSuite {
 
     /**
      * Create a Meta TestSuite.
+     *
      * @param name the test suite name
      * @param testSuitesParams the list of test suites parameters
      */
     public static MetaTestSuite createMetaTestSuite(String name, List<TestSuiteParams> testSuitesParams) {
-    	MetaTestSuite ts = new MetaTestSuite(name);
-    	if (!ts.init(testSuitesParams) || TestEngine.isAbortedByUser()) {
-    		return null;
-    	}
-    	return ts;
+        MetaTestSuite ts = new MetaTestSuite(name);
+        if (!ts.init(testSuitesParams) || TestEngine.isAbortedByUser()) {
+            return null;
+        }
+        return ts;
     }
 
     /**
      * Create a Meta TestSuite.
+     *
      * @param name the test suite name
      * @param testSuitesParams the list of test suites parameters
      */
@@ -62,23 +64,22 @@ public class MetaTestSuite extends TestSuite {
         super(name);
     }
 
-
     private boolean init(List<TestSuiteParams> testSuitesParams) {
-    	for (TestSuiteParams testSuiteParams: testSuitesParams) {
-        	if (TestEngine.isAbortedByUser()) {
-        		return false;
-        	}
-        	DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteParams.getDirectory());
-        	if (testSuite == null) {
-        		continue;
-        	}
-        	testSuite.selectRows(testSuiteParams.getSelectedDataRows());
+        for (TestSuiteParams testSuiteParams : testSuitesParams) {
+            if (TestEngine.isAbortedByUser()) {
+                return false;
+            }
+            DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteParams.getDirectory());
+            if (testSuite == null) {
+                continue;
+            }
+            testSuite.selectRows(testSuiteParams.getSelectedDataRows());
             testSuite.setExecutionLoops(testSuiteParams.getCount(), testSuiteParams.loopInHours());
             testSuite.addTestReportListener(this);
             testSuites.add(testSuite);
         }
 
-    	return true;
+        return true;
     }
 
     @Override
@@ -109,7 +110,7 @@ public class MetaTestSuite extends TestSuite {
 
     @Override
     public boolean executeOnce(boolean debug) {
-    	boolean result = true;
+        boolean result = true;
         for (TestSuite testSuite : testSuites) {
             if (!testSuite.execute(debug, false)) {
                 if (TestEngine.isAbortedByUser()) {

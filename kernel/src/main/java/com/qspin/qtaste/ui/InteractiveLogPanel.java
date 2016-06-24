@@ -32,50 +32,49 @@ import com.qspin.qtaste.ui.reporter.TestCaseReporter;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
 public class InteractiveLogPanel extends JPanel {
 
-   protected DefaultTableModel tcModel, tcTraceEventModel;
-   protected JTable tcTraceEventTable; 
-   protected TestCaseInteractivePanel tcInteractivePanel;
-   private TestCaseReportTable tcTable;
+    protected DefaultTableModel tcModel, tcTraceEventModel;
+    protected JTable tcTraceEventTable;
+    protected TestCaseInteractivePanel tcInteractivePanel;
+    private TestCaseReportTable tcTable;
 
     protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
-    
+
     public InteractiveLogPanel() {
-    	this(null);
+        this(null);
     }
-    
+
     public InteractiveLogPanel(TestCaseInteractivePanel tcInteractivePanel) {
         super(new BorderLayout());
         this.tcInteractivePanel = tcInteractivePanel;
     }
 
     private void initIcons() {
-        passedImg= ResourceManager.getInstance().getImageIcon("icons/passed");
-        failedImg= ResourceManager.getInstance().getImageIcon("icons/failed");
-        runningImg= ResourceManager.getInstance().getImageIcon("icons/running_32");
-        naImg= ResourceManager.getInstance().getImageIcon("icons/na");
-        snapShotImg= ResourceManager.getInstance().getImageIcon("icons/snapshot");
+        passedImg = ResourceManager.getInstance().getImageIcon("icons/passed");
+        failedImg = ResourceManager.getInstance().getImageIcon("icons/failed");
+        runningImg = ResourceManager.getInstance().getImageIcon("icons/running_32");
+        naImg = ResourceManager.getInstance().getImageIcon("icons/na");
+        snapShotImg = ResourceManager.getInstance().getImageIcon("icons/snapshot");
     }
 
-    public void startTestCaseListener()
-    {
+    public void startTestCaseListener() {
         TestCaseReporter.addTestCaseReportTableListener(getTcTable());
     }
-    public void stopTestCaseListener()
-    {
+
+    public void stopTestCaseListener() {
         TestCaseReporter.removeTestCaseReportTableListener(getTcTable());
     }
+
     public void init() {
         initIcons();
         this.setName("Test results");
-        
+
         tcTable = new TestCaseReportTable(tcInteractivePanel);
-        
+
         this.add(new JScrollPane(getTcTable().getTable()), BorderLayout.CENTER);
     }
 

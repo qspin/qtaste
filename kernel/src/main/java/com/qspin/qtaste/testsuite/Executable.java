@@ -28,9 +28,8 @@ package com.qspin.qtaste.testsuite;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 
 /**
- *
  * @author lvboque
  */
-public interface Executable {    
+public interface Executable {
     boolean execute(TestData data, TestResult result, boolean debug);
 }

@@ -25,12 +25,14 @@ import com.qspin.qtaste.lang.DoubleWithPrecision;
 
 /**
  * This is the interface to access the TestData associated to a TestScript
+ *
  * @author lvboque
  */
 public interface TestData {
 
     /**
      * Return the value to which the specified key is mapped in this container
+     *
      * @param key a key in the container
      * @return the value as string to which the specified key is mapped in this container.
      * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists
@@ -39,65 +41,81 @@ public interface TestData {
 
     /**
      * Return the value to which the specified key is mapped in this container
+     *
      * @param key a key in the container
      * @return the value as int to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to int.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * int.
      */
     public int getIntValue(String key) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
+     *
      * @param key a key in the container
      * @return the value as double to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to double.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * double.
      */
     public double getDoubleValue(String key) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
+     *
      * @param key a key in the container
      * @return the value as boolean to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * boolean.
      */
     public boolean getBooleanValue(String key) throws QTasteDataException;
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a byte array.
+     *
      * @param key a key in the container, starting with "FILE_"
      * @return a byte array containing the content of the file to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * boolean.
      */
     public byte[] getFileContentAsByteArray(String key) throws QTasteDataException;
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
      * By default, the content of the file is decoded using UTF-8 charset.
+     *
      * @param key a key in the container, starting with "FILE_"
      * @return a string containing the content of the file to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * boolean.
      */
     public String getFileContentAsString(String key) throws QTasteDataException;
 
     /**
      * Return the content of the file to which the specified key is mapped in this container, as a string.
      * The content of the file is decoded using the given charset.
+     *
      * @param key a key in the container, starting with "FILE_"
      * @param charset the character set used to decode the content of the file (e.g: 'UTF-8', 'ISO-8859-1')
      * @return a string containing the content of the file to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to boolean.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * boolean.
      */
     public String getFileContentAsString(String key, String charset) throws QTasteDataException;
 
     /**
      * Return the value to which the specified key is mapped in this container
+     *
      * @param key a key in the container
-     * @return the value as com.qspin.qtaste.lang.DoubleWithPrecision object to which the specified key is mapped in this container.
-     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to DoubleWithPrecision object.
+     * @return the value as com.qspin.qtaste.lang.DoubleWithPrecision object to which the specified key is mapped in this
+     * container.
+     * @throws com.qspin.qtaste.testsuite.QTasteDataException if the key doesn't exists or if the value cannot be converted to
+     * DoubleWithPrecision object.
      */
     public DoubleWithPrecision getDoubleWithPrecisionValue(String key) throws QTasteDataException;
 
     /**
      * Maps the specified key to the specified value in this container. Neither the key not the value can be null.
+     *
      * @param key a key in the container
      * @param value the value
      * @throws com.qspin.qtaste.testsuite.QTasteDataException
@@ -105,21 +123,25 @@ public interface TestData {
     public void setValue(String key, String value) throws QTasteDataException;
 
     /**
-     * Removes the key and its corresponding value from this container. This method does nothing if the key is not in this container.
+     * Removes the key and its corresponding value from this container. This method does nothing if the key is not in this
+     * container.
+     *
      * @param key the key that need to be removed
      */
     public void remove(String key);
 
     /**
      * Checks if this container contains a value for the specified key.
+     *
      * @param key the key to be checked
      * @return true if a value is contained for the specified key,
-     *         false otherwise
+     * false otherwise
      */
     public boolean contains(String key);
 
     /**
      * Dump all the content of the container to a String
+     *
      * @return the String
      */
     public String dump();
@@ -134,7 +156,6 @@ public interface TestData {
     public LinkedHashMap<String, String> getDataHash();
 
     /**
-     *
      * @return diretory containing the testcase
      */
     public String getTestCaseDirectory();
@@ -146,18 +167,21 @@ public interface TestData {
 
     /**
      * Get the data row id.
+     *
      * @return the data row id
      */
     public int getRowId();
 
     /**
      * Set if the data is selected or not (default is selected).
+     *
      * @param selected true if the data is selected, false otherwise
      */
     public void setSelected(boolean selected);
 
     /**
      * Check if the data is selected or not.
+     *
      * @return true if the data is selected, false otherwise
      */
     public boolean isSelected();

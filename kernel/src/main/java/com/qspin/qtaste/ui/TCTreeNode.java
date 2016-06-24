@@ -27,32 +27,32 @@ import com.qspin.qtaste.ui.tools.FileNode;
 import com.qspin.qtaste.ui.tools.TestDataNode;
 
 @SuppressWarnings("serial")
-public class TCTreeNode extends DefaultMutableTreeNode{
+public class TCTreeNode extends DefaultMutableTreeNode {
 
-
-    public TCTreeNode(Object userObject, boolean allowsChildren){
-        super( userObject, allowsChildren );
+    public TCTreeNode(Object userObject, boolean allowsChildren) {
+        super(userObject, allowsChildren);
     }
 
-    protected boolean isTestcaseDir()
-    {
+    protected boolean isTestcaseDir() {
         if (getUserObject() instanceof FileNode) {
-            FileNode fn = (FileNode)getUserObject();
+            FileNode fn = (FileNode) getUserObject();
             return !fn.isTestcaseDir() && getParent() != null;
+        } else {
+            return false;
         }
-        else return false;
-        
+
     }
-    
+
     public boolean isLeaf() {
         if (getUserObject() instanceof FileNode) {
-            FileNode fn = (FileNode)getUserObject();
-            return fn.isTestcaseDir() && getParent() != null && (fn.isTestcaseDir() && !fn.isShowTestData() || fn.getChildren()== null || fn.getChildren().length==0);
-        }
-        else if (getUserObject() instanceof TestDataNode) {
+            FileNode fn = (FileNode) getUserObject();
+            return fn.isTestcaseDir() && getParent() != null && (fn.isTestcaseDir() && !fn.isShowTestData()
+                  || fn.getChildren() == null || fn.getChildren().length == 0);
+        } else if (getUserObject() instanceof TestDataNode) {
             return true;
+        } else {
+            return false;
         }
-        else return false;
     }
 
 }

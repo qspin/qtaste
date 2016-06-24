@@ -26,41 +26,42 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * This class is responsible for providing TestEngine parameters
+ *
  * @author lvboque
  */
 @SuppressWarnings("serial")
 public class TestEngineConfiguration extends XMLConfiguration {
 
-	private static Logger logger = Log4jLoggerFactory.getLogger(TestEngineConfiguration.class);
-    private static TestEngineConfiguration instance;    
+    private static Logger logger = Log4jLoggerFactory.getLogger(TestEngineConfiguration.class);
+    private static TestEngineConfiguration instance;
     private static final String DEFAULT_CONF_FILE = StaticConfiguration.CONFIG_DIRECTORY + "/engine.xml";
     private static String confFile = DEFAULT_CONF_FILE;
 
-    
-    private TestEngineConfiguration() throws ConfigurationException {        
-            super(confFile);        
+    private TestEngineConfiguration() throws ConfigurationException {
+        super(confFile);
     }
-    
+
     /**
      * Get an instance of the TestEngineConfiguration. By default, it uses the default configuration file.
      * setConfFile method can be used to specified another configuration file.
+     *
      * @return The TestEngineConfiguration.
      */
     synchronized public static TestEngineConfiguration getInstance() {
         try {
-            if (instance == null) {            
+            if (instance == null) {
                 instance = new TestEngineConfiguration();
             }
             return instance;
-        }
-        catch (ConfigurationException e) {
+        } catch (ConfigurationException e) {
             logger.fatal("Cannot load configuration", e);
         }
         return null;
     }
-    
-     /**
+
+    /**
      * Set the configuration file to the specified confFile.
+     *
      * @param confFile The configuration file.
      */
     public static void setConfigFile(String confFile) {

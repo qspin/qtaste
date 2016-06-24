@@ -30,22 +30,22 @@ import com.qspin.qtaste.reporter.ReportFormatter;
 import com.qspin.qtaste.ui.reporter.TestCampaignReporter;
 
 /**
- *
  * @author vdubois
  */
 public class CampaignGUIFormatter extends ReportFormatter {
 
     @Override
     public void refresh() {
-            TestCampaignReporter.getInstance().refresh();
+        TestCampaignReporter.getInstance().refresh();
     }
+
     @Override
     public void startReport(Date timeStamp, String name) {
-            TestCampaignReporter.getInstance().startReport(timeStamp, name);
+        TestCampaignReporter.getInstance().startReport(timeStamp, name);
     }
-    
+
     @Override
-    public void stopReport() {        
+    public void stopReport() {
         TestCampaignReporter.getInstance().stopReport();
     }
 

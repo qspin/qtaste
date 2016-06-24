@@ -25,7 +25,6 @@ package com.qspin.qtaste.testapi.api;
 import com.qspin.qtaste.kernel.testapi.SingletonComponent;
 import com.qspin.qtaste.testsuite.QTasteException;
 
-
 /**
  * Utility is the interface of the QTaste Test API component providing some utility verbs,
  * for example to show message dialogs and load XStream files.

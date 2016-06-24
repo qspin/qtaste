@@ -29,9 +29,9 @@ import javax.swing.table.JTableHeader;
 import com.qspin.qtaste.ui.tools.TableSorter;
 
 @SuppressWarnings("serial")
-public class SortableJTable extends JTable{
+public class SortableJTable extends JTable {
 
-    public SortableJTable(TableSorter tableModel){
+    public SortableJTable(TableSorter tableModel) {
         super(tableModel);
         tableModel.setTableHeader(getTableHeader());
     }
@@ -43,10 +43,9 @@ public class SortableJTable extends JTable{
                 java.awt.Point p = e.getPoint();
                 int index = columnModel.getColumnIndexAtX(p.x);
                 if (index < 0) {
-                	return null;
+                    return null;
                 }
-                int realIndex =
-                        columnModel.getColumn(index).getModelIndex();
+                int realIndex = columnModel.getColumn(index).getModelIndex();
                 return SortableJTable.this.getModel().getColumnName(realIndex);
             }
         };

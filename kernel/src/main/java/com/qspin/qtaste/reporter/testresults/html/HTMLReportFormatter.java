@@ -66,6 +66,7 @@ import com.qspin.qtaste.util.NamesValuesList;
 
 /**
  * HTMLReportFormatter is a HTML formatter able to generate "test results" reports
+ *
  * @author lvboque
  */
 public class HTMLReportFormatter extends HTMLFormatter {
@@ -117,28 +118,25 @@ public class HTMLReportFormatter extends HTMLFormatter {
             templates.put("testRequirement", template_root + File.separator + "report_test_requirement_header.html");
             templates.put("executiveSummary", template_root + File.separator + "executive_summary_line.html");
 
-
         } catch (Exception e) {
             logger.fatal("Exception initialising the HTML report:" + e);
         }
     }
 
-    private static void copyImages(File targetDirectory)
-    {
-    	try{
-	        String template_root = config.getString("reporting.html_template");
-	        if (!new File(template_root).isAbsolute()) {
-	            template_root = StaticConfiguration.QTASTE_ROOT + File.separator + template_root;
-	        }
+    private static void copyImages(File targetDirectory) {
+        try {
+            String template_root = config.getString("reporting.html_template");
+            if (!new File(template_root).isAbsolute()) {
+                template_root = StaticConfiguration.QTASTE_ROOT + File.separator + template_root;
+            }
 
-	        // copy images to report directory
-	        String[] imagesExtensions = {"gif", "jpg", "png"};
-	        FileUtilities.copyFiles(template_root, targetDirectory.getAbsolutePath(), new FileMask(imagesExtensions));
-	    } catch (IOException e) {
-	        logger.fatal("Exception initialising the HTML report:" + e);
-	    }
+            // copy images to report directory
+            String[] imagesExtensions = {"gif", "jpg", "png"};
+            FileUtilities.copyFiles(template_root, targetDirectory.getAbsolutePath(), new FileMask(imagesExtensions));
+        } catch (IOException e) {
+            logger.fatal("Exception initialising the HTML report:" + e);
+        }
     }
-
 
     public HTMLReportFormatter(String reportName) throws FileNotFoundException, IOException {
         super(HTMLReportFormatter.templates, new File(outputDir), String.format(FILE_NAME_FORMAT, new Date()));
@@ -152,7 +150,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
         if (!this.generateStepsRows) {
             // remove the hyperlink
             String content = this.templateContents.get("testResult");
-            content = this.templateContents.get("testScriptRowResult").replace("<a href=\"javascript:showHide('###ROW_ID###')\">###TEST_ID###</a>", "###TEST_ID###");
+            content = this.templateContents.get("testScriptRowResult").replace(
+                  "<a href=\"javascript:showHide('###ROW_ID###')\">###TEST_ID###</a>", "###TEST_ID###");
             this.templateContents.remove("testScriptRowResult");
             this.templateContents.put("testScriptRowResult", content);
         }
@@ -180,7 +179,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
         }
 
         if (currentTestSuite != null) {
-            String nbTestsToExecuteStr = currentTestSuite.getNbTestsToExecute() != -1 ? "" + currentTestSuite.getNbTestsToExecute() : "-";
+            String nbTestsToExecuteStr =
+                  currentTestSuite.getNbTestsToExecute() != -1 ? "" + currentTestSuite.getNbTestsToExecute() : "-";
             namesValues.add("###TESTS_EXECUTED###", currentTestSuite.getNbTestsExecuted() + "/" + nbTestsToExecuteStr);
             namesValues.add("###TESTS_PASSED###", currentTestSuite.getNbTestsPassed() + "/" + nbTestsToExecuteStr);
             namesValues.add("###TESTS_FAILED###", currentTestSuite.getNbTestsFailed() + "/" + nbTestsToExecuteStr);
@@ -220,7 +220,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     continue;
                 }
 
-				// If no Test Data (Start/Restart/...), no summary line
+                // If no Test Data (Start/Restart/...), no summary line
                 if (tr.getTestData() == null) {
                     continue;
                 }
@@ -259,7 +259,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
                 }
 
-
                 content.append(getSubstitutedTemplateContent(templateContent, namesValues));
             } catch (Exception e) {
                 logger.fatal("Error occurs while generating summary report", e);
@@ -274,18 +273,15 @@ public class HTMLReportFormatter extends HTMLFormatter {
         try {
             TestData data = tr.getTestData();
             Set<Entry<String, String>> entrySet = data.getDataHash().entrySet();
-            if ( !entrySet.isEmpty() )
-            {
-	            for (Entry<String, String> entry : entrySet) {
-	                NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
-	                namesValues.add("###DATA_NAME###", entry.getKey());
-	                namesValues.add("###DATA_VALUE###", StringEscapeUtils.escapeHtml(entry.getValue()));
-	                dataColumnContent += getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
-	            }
-            }
-            else
-            {
-            	dataColumnContent = "None";
+            if (!entrySet.isEmpty()) {
+                for (Entry<String, String> entry : entrySet) {
+                    NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
+                    namesValues.add("###DATA_NAME###", entry.getKey());
+                    namesValues.add("###DATA_VALUE###", StringEscapeUtils.escapeHtml(entry.getValue()));
+                    dataColumnContent += getSubstitutedTemplateContent(templateContents.get("dataColumn"), namesValues);
+                }
+            } else {
+                dataColumnContent = "None";
             }
 
         } catch (Exception e) {
@@ -298,13 +294,14 @@ public class HTMLReportFormatter extends HTMLFormatter {
     private String generateRequirementColumn(TestResult tr) throws FileNotFoundException {
         String requirementColumnContent = "";
         try {
-        	if ( tr.getTestRequirements() == null || tr.getTestRequirements().isEmpty() ) {
-        		return "Not specified";
-        	}
+            if (tr.getTestRequirements() == null || tr.getTestRequirements().isEmpty()) {
+                return "Not specified";
+            }
             for (TestRequirement req : tr.getTestRequirements()) {
                 NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
                 namesValues.add("###REQ_ID###", req.getId());
-                namesValues.add("###REQ_DESC###", req.getDescription() != null? StringEscapeUtils.escapeHtml(req.getDescription()) : "");
+                namesValues.add("###REQ_DESC###",
+                      req.getDescription() != null ? StringEscapeUtils.escapeHtml(req.getDescription()) : "");
                 requirementColumnContent += getSubstitutedTemplateContent(templateContents.get("requirementColumn"), namesValues);
             }
 
@@ -339,9 +336,9 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     namesValues.add("###TEST_SCRIPT###", testcaseName);
                     String testScriptVersion = tr.getTestScriptVersion();
                     if (testScriptVersion == null || testScriptVersion.equalsIgnoreCase("undefined")) {
-                    	namesValues.add("###TEST_SCRIPT_VERSION###", "");
+                        namesValues.add("###TEST_SCRIPT_VERSION###", "");
                     } else {
-                    	namesValues.add("###TEST_SCRIPT_VERSION###", "<b>Version:</b> "+testScriptVersion);
+                        namesValues.add("###TEST_SCRIPT_VERSION###", "<b>Version:</b> " + testScriptVersion);
                     }
 
                     output.print("</table>");
@@ -353,26 +350,25 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     }
 
                     if (testcaseName.equals("Start SUT") ||
-                		testcaseName.equals("(Re)start SUT") ||
-                		testcaseName.equals("Stop SUT")) {
-                    	substituteAndWriteFile(templateContents.get("testStartStopScript"), namesValues);
+                          testcaseName.equals("(Re)start SUT") ||
+                          testcaseName.equals("Stop SUT")) {
+                        substituteAndWriteFile(templateContents.get("testStartStopScript"), namesValues);
                     } else {
-                    	String requirementColumn = generateRequirementColumn(tr);
-                        if (!requirementColumn.equalsIgnoreCase("Not specified"))
-                        {
+                        String requirementColumn = generateRequirementColumn(tr);
+                        if (!requirementColumn.equalsIgnoreCase("Not specified")) {
                             NamesValuesList<String, String> requirementValue = new NamesValuesList<String, String>();
                             requirementValue.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
-                            requirementColumn = "<p><h4>Verified requirement(s)</h4>" +
-                            					getSubstitutedTemplateContent(templateContents.get("testRequirement"), requirementValue);
+                            requirementColumn = "<p><h4>Verified requirement(s)</h4>" + getSubstitutedTemplateContent(
+                                  templateContents.get("testRequirement"), requirementValue);
                         } else {
-                        	requirementColumn = "";
+                            requirementColumn = "";
                         }
                         namesValues.add("###REQUIREMENT_TEMPLATE###", requirementColumn);
                         substituteAndWriteFile(templateContents.get("testScript"), namesValues);
                     }
                     previousTestSuiteName = testcaseName;
                 }
-				// TODO: Convert String into HTML String
+                // TODO: Convert String into HTML String
 
                 NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
                 String testId = tr.getId();
@@ -386,7 +382,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 namesValues.add("###TEST_SCRIPT_SECTION_ID###", tr.getName() + "-" + (tr.getCurrentRowIndex() + 1));
                 if (tr.getTestData() != null) {
                     namesValues.add("###TESTDATA_ROW_ID###", "" + tr.getTestData().getRowId());
-                    namesValues.add("###TEST_ID###", tr.getTestData().getRowId() + " - " + StringEscapeUtils.escapeHtml(testComment));
+                    namesValues.add("###TEST_ID###",
+                          tr.getTestData().getRowId() + " - " + StringEscapeUtils.escapeHtml(testComment));
 
                 } else {
                     namesValues.add("###TESTDATA_ROW_ID###", "" + "");
@@ -443,7 +440,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
                         break;
                 }
 
-
                 String dataColumn = generateDataColumn(tr);
                 NamesValuesList<String, String> dataValues = new NamesValuesList<String, String>();
                 dataValues.add("###DATA_TEMPLATE###", dataColumn);
@@ -451,7 +447,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
                 namesValues.add("###DATA_CONTENT###", dataColumn);
 
-				// add step entries if any
+                // add step entries if any
                 String stepsContent = "";
 
                 Collection<StepResult> steps = tr.getStepResults();
@@ -508,13 +504,13 @@ public class HTMLReportFormatter extends HTMLFormatter {
 
                         }
 
-
                         stepsNamesValues.add("###STEP_TIME###", String.valueOf(Math.round(step.getElpasedTime())));
                         stepsContent += getSubstitutedTemplateContent(templateContents.get("rowSteps"), stepsNamesValues);
                     }
 
                     namesValues.add("###STEPS###", stepsContent); // default
-                    namesValues.add("###STEP_CONTENT###", getSubstitutedTemplateContent(templateContents.get("stepsHeader"), namesValues)); // default
+                    namesValues.add("###STEP_CONTENT###",
+                          getSubstitutedTemplateContent(templateContents.get("stepsHeader"), namesValues)); // default
                 } else {
                     namesValues.add("###STEP_CONTENT###", ""); // do not generate the steps content
                 }
@@ -543,16 +539,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 String pathToReport = new File(outputDir).toURI().relativize(reportFile.toURI()).getPath();
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
                 index.println(
-                		"<html>"
-        				+	"<head>"
-                		+ 		"<meta http-equiv=\"refresh\" content=\"0; url=" + pathToReport + "\"/>"
-        				+ 	"</head>"
-        				+ 	"<body>"
-        				+ 		"<a href=\"" + pathToReport + "\">"
-						+ 			"Redirection"
-						+ 		"</a>"
-						+ 	"</body>"
-						+ "</html>");
+                      "<html>" + "<head>" + "<meta http-equiv=\"refresh\" content=\"0; url=" + pathToReport + "\"/>" + "</head>"
+                            + "<body>" + "<a href=\"" + pathToReport + "\">" + "Redirection" + "</a>" + "</body>" + "</html>");
                 index.close();
                 copyImages(reportFile.getParentFile());
             }
@@ -567,11 +555,14 @@ public class HTMLReportFormatter extends HTMLFormatter {
         NamesValuesList<String, String> namesValues = new NamesValuesList<String, String>();
         namesValues.add("###SUMMARY_PICTURE###", testSummaryFileName);
         namesValues.add("###TESTBED_CONFIGURATION_FILE_NAME###", StringEscapeUtils.escapeHtml(getTestbedConfigurationFileName()));
-        namesValues.add("###TESTBED_CONFIGURATION_FILE_CONTENT###", StringEscapeUtils.escapeHtml(getTestbedConfigurationFileContent()));
+        namesValues.add("###TESTBED_CONFIGURATION_FILE_CONTENT###",
+              StringEscapeUtils.escapeHtml(getTestbedConfigurationFileContent()));
         String testbedControlScriptFileName = getTestbedControlScriptFileName();
         if (testbedControlScriptFileName != null) {
-            namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_NAME###", StringEscapeUtils.escapeHtml(getTestbedControlScriptFileName()));
-            namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###", StringEscapeUtils.escapeHtml(getTestbedControlScriptFileContent()));
+            namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_NAME###",
+                  StringEscapeUtils.escapeHtml(getTestbedControlScriptFileName()));
+            namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###",
+                  StringEscapeUtils.escapeHtml(getTestbedControlScriptFileContent()));
         } else {
             namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_NAME###", "none");
             namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###", "");
@@ -600,7 +591,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
         pieDataSet.setValue("Passed", new Integer(currentTestSuite.getNbTestsPassed()));
         pieDataSet.setValue("Failed", new Integer(currentTestSuite.getNbTestsFailed()));
         pieDataSet.setValue("Tests in error", new Integer(currentTestSuite.getNbTestsNotAvailable()));
-        pieDataSet.setValue("Not executed", new Integer(currentTestSuite.getNbTestsToExecute() - currentTestSuite.getNbTestsExecuted()));
+        pieDataSet.setValue("Not executed",
+              new Integer(currentTestSuite.getNbTestsToExecute() - currentTestSuite.getNbTestsExecuted()));
         JFreeChart chart = null;
         final boolean drilldown = true;
 
@@ -616,12 +608,10 @@ public class HTMLReportFormatter extends HTMLFormatter {
             plot.setLabelGenerator(new TestSectiontLabelPieGenerator());
             chart = new JFreeChart("Test summary", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         } else {
-            chart = ChartFactory.createPieChart(
-                    "Test summary", // chart title
-                    pieDataSet, // data
-                    true, // include legend
-                    true,
-                    false);
+            chart = ChartFactory.createPieChart("Test summary", // chart title
+                  pieDataSet, // data
+                  true, // include legend
+                  true, false);
         }
 
         chart.setBackgroundPaint(java.awt.Color.white);
@@ -671,7 +661,6 @@ public class HTMLReportFormatter extends HTMLFormatter {
          *
          * @param aDataset Dataset destined for pie chart.
          * @param aKey The identifying key for each section of the pie chart.
-         *
          * @return Customized label for section of pie chart identified by aKey.
          */
         public String generateSectionLabel(final PieDataset aDataset, @SuppressWarnings("rawtypes") final Comparable aKey) {

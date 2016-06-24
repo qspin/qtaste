@@ -23,20 +23,21 @@ import java.util.ArrayList;
 
 /**
  * A campaign run is an execution of several testsuites on a specified testbed
+ *
  * @author lvboque
  */
 public class CampaignRun {
     String testbed;
     ArrayList<TestSuiteParams> testsuites;
-    
+
     public CampaignRun() {
         testsuites = new ArrayList<TestSuiteParams>();
     }
-    
+
     public String getTestbed() {
         return testbed;
     }
-    
+
     public ArrayList<TestSuiteParams> getTestsuites() {
         return testsuites;
     }

@@ -19,27 +19,27 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
+import javafx.scene.Node;
+
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-import javafx.scene.Node;
-
 /**
  * Component asker which return the enabled stated of a component.
- * @author simjan
  *
+ * @author simjan
  */
 class EnabledStateGetter extends ComponentCommander {
 
-	/**
-	 * @param data the component's name.
-	 * @return <code>true</code> if the component is enabled.
-	 * @throws QTasteTestFailException if no component is found.
-	 */
-	@Override
-	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node c = getComponentByName(componentName);
-		return c==null?false:!c.isDisabled();
-	}
+    /**
+     * @param data the component's name.
+     * @return <code>true</code> if the component is enabled.
+     * @throws QTasteTestFailException if no component is found.
+     */
+    @Override
+    Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node c = getComponentByName(componentName);
+        return c == null ? false : !c.isDisabled();
+    }
 
 }

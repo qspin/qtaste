@@ -38,7 +38,6 @@ import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
  */
 public class TestScriptCreation {
@@ -54,15 +53,16 @@ public class TestScriptCreation {
 
     public void copyTestSuite(String sourceTestDir) {
         String sourceFileName = sourceTestDir + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
-        String destFileName = mTestSuiteDir + File.separator + mTestName + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
+        String destFileName =
+              mTestSuiteDir + File.separator + mTestName + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
         // check if file already exists
-        File destFile = new File (destFileName);
+        File destFile = new File(destFileName);
         if (destFile.exists()) {
-                if (JOptionPane.showConfirmDialog(null,
-                        "Test " + mTestName + " already exists. Do you want to overwrite the already existing test?",
-                        "Confirmation",
-                        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE
-                        ) == JOptionPane.NO_OPTION) return;
+            if (JOptionPane.showConfirmDialog(null,
+                  "Test " + mTestName + " already exists. Do you want to overwrite the already existing test?", "Confirmation",
+                  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+                return;
+            }
         }
         FileUtilities.copy(sourceFileName, destFileName);
         // copy TestData files
@@ -73,13 +73,13 @@ public class TestScriptCreation {
         BufferedWriter output = null;
         String testSuiteDirectoryName = mTestSuiteDir + File.separator + mTestName;
         String outputFileName = testSuiteDirectoryName + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
-        File destFile = new File (outputFileName);
+        File destFile = new File(outputFileName);
         if (destFile.exists()) {
-                if (JOptionPane.showConfirmDialog(null,
-                        "Test " + mTestName + " already exists. Do you want to overwrite the already existing test?",
-                        "Confirmation",
-                        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE
-                        ) == JOptionPane.NO_OPTION) return;
+            if (JOptionPane.showConfirmDialog(null,
+                  "Test " + mTestName + " already exists. Do you want to overwrite the already existing test?", "Confirmation",
+                  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+                return;
+            }
         }
         try {
             String templateFile = TEMPLATE_DIR + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME;
@@ -88,18 +88,18 @@ public class TestScriptCreation {
 
             File outputFile = new File(outputFileName);
             outputFile.getParentFile().mkdirs();
-            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),"UTF-8"));
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
             output.append(strContents);
             output.close();
 
             // copy the TestData files
             copyTestData(TEMPLATE_DIR, testSuiteDirectoryName);
             // create empty requirement xml file
-        	copyTestRequirement(TEMPLATE_DIR, testSuiteDirectoryName);
+            copyTestRequirement(TEMPLATE_DIR, testSuiteDirectoryName);
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
         } finally {
-            if (output != null ) {
+            if (output != null) {
                 try {
                     output.close();
                 } catch (IOException ex) {
@@ -112,7 +112,8 @@ public class TestScriptCreation {
     }
 
     private void copyTestData(String sourceDir, String DestDir) {
-        String testDataFileNameWithoutExtension = StaticConfiguration.TEST_DATA_FILENAME.substring(0, StaticConfiguration.TEST_DATA_FILENAME.lastIndexOf('.'));
+        String testDataFileNameWithoutExtension = StaticConfiguration.TEST_DATA_FILENAME.substring(0,
+              StaticConfiguration.TEST_DATA_FILENAME.lastIndexOf('.'));
 
         String extension = ".csv";
         String testDataSourceFileName = sourceDir + File.separator + testDataFileNameWithoutExtension + extension;
@@ -122,23 +123,22 @@ public class TestScriptCreation {
         extension = ".xls";
         testDataSourceFileName = sourceDir + File.separator + testDataFileNameWithoutExtension + extension;
         if (new File(testDataSourceFileName).exists()) {
-	        testDataDestFileName = DestDir + File.separator + testDataFileNameWithoutExtension + extension;
-	        FileUtilities.copy(testDataSourceFileName, testDataDestFileName);
+            testDataDestFileName = DestDir + File.separator + testDataFileNameWithoutExtension + extension;
+            FileUtilities.copy(testDataSourceFileName, testDataDestFileName);
         }
     }
 
     private void copyTestRequirement(String sourceDir, String DestDir) {
-    	logger.debug("Create test requirement XML file");
+        logger.debug("Create test requirement XML file");
         String testRequirementSourceFileName = sourceDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
-    	logger.debug("test Requirement Source Filename : " + testRequirementSourceFileName);
+        logger.debug("test Requirement Source Filename : " + testRequirementSourceFileName);
         if (new File(testRequirementSourceFileName).exists()) {
-	        String testRequirementDestFileName = DestDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
-	        FileUtilities.copy(testRequirementSourceFileName, testRequirementDestFileName);
+            String testRequirementDestFileName = DestDir + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME;
+            FileUtilities.copy(testRequirementSourceFileName, testRequirementDestFileName);
         }
     }
 
-    private String getTemplateContent(String templateName) throws FileNotFoundException, IOException
-    {
+    private String getTemplateContent(String templateName) throws FileNotFoundException, IOException {
         BufferedReader input = null;
         StringBuilder contents = new StringBuilder();
         input = new BufferedReader(new InputStreamReader(new FileInputStream(templateName), "UTF-8"));

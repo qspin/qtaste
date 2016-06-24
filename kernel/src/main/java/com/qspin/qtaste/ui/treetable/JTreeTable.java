@@ -115,7 +115,7 @@ public class JTreeTable extends JTable {
 
         tree.setSelectionModel(new DefaultTreeSelectionModel() {
             // Extend the implementation of the constructor, as if:
-	/*  public this()*/ {
+    /*  public this()*/ {
                 setSelectionModel(listSelectionModel);
             }
         });
@@ -164,10 +164,9 @@ public class JTreeTable extends JTable {
                 java.awt.Point p = e.getPoint();
                 int index = columnModel.getColumnIndexAtX(p.x);
                 if (index < 0) {
-                	return null;
+                    return null;
                 }
-                int realIndex =
-                        columnModel.getColumn(index).getModelIndex();
+                int realIndex = columnModel.getColumn(index).getModelIndex();
                 return JTreeTable.this.getModel().getColumnName(realIndex);
             }
         };
@@ -210,43 +209,43 @@ public class JTreeTable extends JTable {
 
     public void expandSelected() {
 
-    	DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         TCTreeNode rootNode = (TCTreeNode) model.getRoot();
         expandSelected(rootNode);
     }
 
     public void expandSelected(TCTreeNode node) {
-    	if (tree.getModel() instanceof TestCampaignTreeModel) {
-	        TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-	        Enumeration<?> children = node.children();
-	        while (children.hasMoreElements()) {
-	            TCTreeNode childNode = (TCTreeNode) children.nextElement();
-	            for (int i = 1; i < model.getColumnCount(); i++) {
-	                TristateCheckBox.State state = (TristateCheckBox.State) model.getValueAt(childNode, i);
-	                if (state == TristateCheckBox.DONT_CARE) {
-	                    TreeNode[] nodes = childNode.getPath();
-	                    TreePath treepath = new TreePath(nodes);
-	                    tree.expandPath(treepath);
-	                }
-	            }
-	            expandSelected(childNode);
-	        }
-    	}
+        if (tree.getModel() instanceof TestCampaignTreeModel) {
+            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+            Enumeration<?> children = node.children();
+            while (children.hasMoreElements()) {
+                TCTreeNode childNode = (TCTreeNode) children.nextElement();
+                for (int i = 1; i < model.getColumnCount(); i++) {
+                    TristateCheckBox.State state = (TristateCheckBox.State) model.getValueAt(childNode, i);
+                    if (state == TristateCheckBox.DONT_CARE) {
+                        TreeNode[] nodes = childNode.getPath();
+                        TreePath treepath = new TreePath(nodes);
+                        tree.expandPath(treepath);
+                    }
+                }
+                expandSelected(childNode);
+            }
+        }
     }
 
     public void updateParentCells(int childRow, int col) {
-    	if (tree.getModel() instanceof TestCampaignTreeModel) {
-	        TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-	        // retrieve Treepath associated to the child row
-	        TreePath treePath = tree.getPathForRow(childRow);
-	        // get its node
-	        TCTreeNode node = (TCTreeNode) treePath.getLastPathComponent();
-	        // only applicable if the child is a JTreeNode (otherwise there is no parent (rootNode)
-	        if (node.getUserObject() instanceof JTreeNode) {
-	            String testbedName = getColumnName(col);
-	            model.updateParent((JTreeNode) node.getUserObject(), testbedName);
-	        }
-    	}
+        if (tree.getModel() instanceof TestCampaignTreeModel) {
+            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+            // retrieve Treepath associated to the child row
+            TreePath treePath = tree.getPathForRow(childRow);
+            // get its node
+            TCTreeNode node = (TCTreeNode) treePath.getLastPathComponent();
+            // only applicable if the child is a JTreeNode (otherwise there is no parent (rootNode)
+            if (node.getUserObject() instanceof JTreeNode) {
+                String testbedName = getColumnName(col);
+                model.updateParent((JTreeNode) node.getUserObject(), testbedName);
+            }
+        }
     }
 
     public void removeAll() {
@@ -270,60 +269,59 @@ public class JTreeTable extends JTable {
     }
 
     public void save(String fileName, String campaignName) {
-    	if (tree.getModel() instanceof TestCampaignTreeModel) {
-	        TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-	        model.save(fileName, campaignName);
-	        hasChanged = false;
-	        displayNecessaryColumns();
-    	}
+        if (tree.getModel() instanceof TestCampaignTreeModel) {
+            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+            model.save(fileName, campaignName);
+            hasChanged = false;
+            displayNecessaryColumns();
+        }
     }
 
     public void load(String fileName) {
         try {
-        	if (tree.getModel() instanceof TestCampaignTreeModel) {
-	            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-	            model.load(fileName);
-	            hasChanged = false;
-	            displayNecessaryColumns();
-	            expandSelected();
-        	}
+            if (tree.getModel() instanceof TestCampaignTreeModel) {
+                TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+                model.load(fileName);
+                hasChanged = false;
+                displayNecessaryColumns();
+                expandSelected();
+            }
         } catch (Exception ex) {
             logger.error(ex);
         }
     }
 
     public void updateChildCells(TreePath treePath, int col) {
-    	if (tree.getModel() instanceof TestCampaignTreeModel) {
-	        TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-	        // get the node associated to the treepath
-	        TCTreeNode node = (TCTreeNode) treePath.getLastPathComponent();
-	        JTreeNode fNode = null;
-	        // retrieve userObject only if based on a JTreeNode
-	        if (node.getUserObject() instanceof FileNode || node.getUserObject() instanceof TestDataNode) {
-	            fNode = (JTreeNode) node.getUserObject();
-	        }
-	        int childCount = node.getChildCount();
-	        if (fNode != null) {
-	            childCount = fNode.getChildren().length;
-	        } // it can be different is user didn't expand the tree view
+        if (tree.getModel() instanceof TestCampaignTreeModel) {
+            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+            // get the node associated to the treepath
+            TCTreeNode node = (TCTreeNode) treePath.getLastPathComponent();
+            JTreeNode fNode = null;
+            // retrieve userObject only if based on a JTreeNode
+            if (node.getUserObject() instanceof FileNode || node.getUserObject() instanceof TestDataNode) {
+                fNode = (JTreeNode) node.getUserObject();
+            }
+            int childCount = node.getChildCount();
+            if (fNode != null) {
+                childCount = fNode.getChildren().length;
+            } // it can be different is user didn't expand the tree view
 
-
-	        String testbedName = getColumnName(col);
-	        if (fNode != null) {
-	            model.updateChild(fNode, testbedName);
-	            return;
-	        } else {
-	            // update child from root
-	            for (int i = 0; i < childCount; i++) {
-	                TCTreeNode childNode = (TCTreeNode) node.getChildAt(i);
-	                JTreeNode childFileNode = (JTreeNode) childNode.getUserObject();
-	                // set the value to child from its parent
-	                TristateCheckBox.State rootState = model.getNodeState(node.toString(), testbedName);
-	                model.setNodeState(childFileNode, testbedName, rootState);
-	                model.updateChild(childFileNode, testbedName);
-	            }
-	        }
-    	}
+            String testbedName = getColumnName(col);
+            if (fNode != null) {
+                model.updateChild(fNode, testbedName);
+                return;
+            } else {
+                // update child from root
+                for (int i = 0; i < childCount; i++) {
+                    TCTreeNode childNode = (TCTreeNode) node.getChildAt(i);
+                    JTreeNode childFileNode = (JTreeNode) childNode.getUserObject();
+                    // set the value to child from its parent
+                    TristateCheckBox.State rootState = model.getNodeState(node.toString(), testbedName);
+                    model.setNodeState(childFileNode, testbedName, rootState);
+                    model.updateChild(childFileNode, testbedName);
+                }
+            }
+        }
     }
 
     public TCTreeNode getTreeNode(TCTreeNode parentNode, JTreeNode childNode) {
@@ -369,11 +367,8 @@ public class JTreeTable extends JTable {
             super.paint(g);
         }
 
-        public Component getTableCellRendererComponent(JTable table,
-                Object value,
-                boolean isSelected,
-                boolean hasFocus,
-                int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int
+              row, int column) {
             if (isSelected) {
                 setBackground(table.getSelectionBackground());
             } else {
@@ -397,8 +392,7 @@ public class JTreeTable extends JTable {
     //
     public class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int r, int c) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int r, int c) {
             return tree;
         }
 
@@ -422,15 +416,11 @@ public class JTreeTable extends JTable {
          */
         public boolean isCellEditable(EventObject e) {
             if (e instanceof MouseEvent) {
-                for (int counter = getColumnCount() - 1; counter >= 0;
-                        counter--) {
+                for (int counter = getColumnCount() - 1; counter >= 0; counter--) {
                     if (getColumnClass(counter) == TreeTableModel.class) {
                         MouseEvent me = (MouseEvent) e;
-                        MouseEvent newME = new MouseEvent(tree, me.getID(),
-                                me.getWhen(), me.getModifiers(),
-                                me.getX() - getCellRect(0, counter, true).x,
-                                me.getY(), me.getClickCount(),
-                                me.isPopupTrigger());
+                        MouseEvent newME = new MouseEvent(tree, me.getID(), me.getWhen(), me.getModifiers(),
+                              me.getX() - getCellRect(0, counter, true).x, me.getY(), me.getClickCount(), me.isPopupTrigger());
                         tree.dispatchEvent(newME);
                         break;
                     }
@@ -443,11 +433,12 @@ public class JTreeTable extends JTable {
     public TreeTableModel getTreeTableModel() {
         return mTreeTableModel;
     }
+
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
     public class TCTreeListener extends MouseAdapter {
-    	JPopupMenu menu;
+        JPopupMenu menu;
 
         private void evaluatePopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
@@ -477,8 +468,7 @@ public class JTreeTable extends JTable {
                     TCTreeNode treeNode = (TCTreeNode) obj;
                     boolean areAllTestbedsSelected = true;
                     for (int i = 1; i < JTreeTable.this.getColumnCount(); i++) {
-                        if (mTreeTableModel.getValueAt(treeNode, convertColumnIndexToModel(i)) != TristateCheckBox.SELECTED)
-                        {
+                        if (mTreeTableModel.getValueAt(treeNode, convertColumnIndexToModel(i)) != TristateCheckBox.SELECTED) {
                             areAllTestbedsSelected = false;
                         }
                     }
@@ -491,35 +481,35 @@ public class JTreeTable extends JTable {
 
         @Override
         public void mousePressed(MouseEvent e) {
-        	selectRow(e);
+            selectRow(e);
             evaluatePopup(e);
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-        	selectRow(e);
+            selectRow(e);
             evaluatePopup(e);
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-        	if (menu == null || !menu.isVisible()) {
-        		selectRow(e);
-        	}
+            if (menu == null || !menu.isVisible()) {
+                selectRow(e);
+            }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-        	if (menu == null || !menu.isVisible()) {
-        		tree.clearSelection();
-        	}
+            if (menu == null || !menu.isVisible()) {
+                tree.clearSelection();
+            }
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
-        	if (menu == null || !menu.isVisible()) {
-        		selectRow(e);
-        	}
+            if (menu == null || !menu.isVisible()) {
+                selectRow(e);
+            }
         }
 
         private void selectRow(MouseEvent e) {
@@ -530,16 +520,16 @@ public class JTreeTable extends JTable {
     }
 
     public void removeSelectedTestSuites() {
-    	if (tree.getModel() instanceof TestCampaignTreeModel) {
-	        TreePath[] selectedPaths = tree.getSelectionPaths();
-	        for (TreePath selectedPath : selectedPaths) {
-	            TCTreeNode node = (TCTreeNode) selectedPath.getLastPathComponent();
-	            //
-	            //remove it from the model
-	            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-	            model.removeTestSuite(node);
-	        }
-    	}
+        if (tree.getModel() instanceof TestCampaignTreeModel) {
+            TreePath[] selectedPaths = tree.getSelectionPaths();
+            for (TreePath selectedPath : selectedPaths) {
+                TCTreeNode node = (TCTreeNode) selectedPath.getLastPathComponent();
+                //
+                //remove it from the model
+                TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+                model.removeTestSuite(node);
+            }
+        }
     }
 
     class RemoveTestSuite extends AbstractAction {
@@ -610,13 +600,14 @@ public class JTreeTable extends JTable {
                                         TableColumn col = new TableColumn(colIndex);
                                         JTreeTable.this.addColumn(col);
                                     } else {
-                                        TableColumn col = JTreeTable.this.getColumnModel().getColumn(JTreeTable.this.convertColumnIndexToView(colIndex));
+                                        TableColumn col = JTreeTable.this.getColumnModel().getColumn(
+                                              JTreeTable.this.convertColumnIndexToView(colIndex));
                                         JTreeTable.this.getColumnModel().removeColumn(col);
                                         // remove it from the model
-                                    	if (tree.getModel() instanceof TestCampaignTreeModel) {
-                                    		TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
-                                    		model.removeTestbed(colName);
-                                    	}
+                                        if (tree.getModel() instanceof TestCampaignTreeModel) {
+                                            TestCampaignTreeModel model = (TestCampaignTreeModel) tree.getModel();
+                                            model.removeTestbed(colName);
+                                        }
                                     }
                                     break;
                                 }

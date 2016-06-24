@@ -28,30 +28,28 @@ import javax.swing.table.TableCellRenderer;
 import com.qspin.qtaste.ui.tools.TristateCheckBox;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
-public class TristateRenderer extends TristateCheckBox implements TableCellRenderer{
- 
-        TristateRenderer(){
-            this.setHorizontalAlignment(JLabel.CENTER);
-        }
-   
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        if(isSelected){
+public class TristateRenderer extends TristateCheckBox implements TableCellRenderer {
+
+    TristateRenderer() {
+        this.setHorizontalAlignment(JLabel.CENTER);
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row,
+          int column) {
+        if (isSelected) {
             setForeground(table.getSelectionForeground());
             setBackground(table.getSelectionBackground());
-        }
-        else{
+        } else {
             setForeground(table.getForeground());
             setBackground(table.getBackground());
         }
-        this.setState((TristateCheckBox.State)value);
+        this.setState((TristateCheckBox.State) value);
         //if (row==0) return null;
         return this;
     }
-
 
 }
 

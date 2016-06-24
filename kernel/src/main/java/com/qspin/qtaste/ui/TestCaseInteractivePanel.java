@@ -75,7 +75,6 @@ import com.qspin.qtaste.ui.log4j.TextAreaAppender;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -89,7 +88,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
     private JButton mStopInteractiveTestButton;
     private InteractiveLogPanel mLogPanel = new InteractiveLogPanel(this);
     protected Map<String, Integer> testCases = new HashMap<String, Integer>();
-    protected ImageIcon passedImg,  failedImg,  runningImg,  snapShotImg,  naImg;
+    protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
     private boolean isStarted = false;
     private TestDataInteractive m_testData;
     private int commandId = 0;
@@ -156,8 +155,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
                     onChange();
                 }
 
-                private void onChange()
-                {
+                private void onChange() {
                     mExecuteButton.setEnabled(!mInteractiveText.getText().isEmpty());
                 }
             });
@@ -346,15 +344,14 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
          * Invoked when an action occurs.
          */
         public void actionPerformed(ActionEvent e) {
-        	final String command = mInteractiveText.getText();
-            if (!command.isEmpty())
-            {
+            final String command = mInteractiveText.getText();
+            if (!command.isEmpty()) {
                 new Thread(new Runnable() {
-            	@Override
-            		public void run() {
-            			executeCommand(command);
-            		}
-            }).start();
+                    @Override
+                    public void run() {
+                        executeCommand(command);
+                    }
+                }).start();
             }
         }
     }
@@ -364,43 +361,40 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
         public void valueChanged(TreeSelectionEvent e) {
 
             TreePath path = e.getNewLeadSelectionPath();
-            if (path != null) 
-            {
-                if (path.getParentPath() != null && path.getParentPath().getParentPath() != null) 
-                {
+            if (path != null) {
+                if (path.getParentPath() != null && path.getParentPath().getParentPath() != null) {
                     DefaultMutableTreeNode tn = (DefaultMutableTreeNode) path.getLastPathComponent();
                     String methodName = (String) tn.getUserObject();
-                    String componentName = (String) ((DefaultMutableTreeNode) path.getParentPath().getLastPathComponent()).getUserObject();
-                    
+                    String componentName = (String) ((DefaultMutableTreeNode) path.getParentPath().getLastPathComponent())
+                          .getUserObject();
+
                     TestAPI testAPI = TestAPIImpl.getInstance();
                     Method method = testAPI.getMethod(componentName, methodName);
-                    
+
                     boolean argumentAdded = false;
                     String text = "";
                     String methodParameters = "";
                     String componentParameter = "";
                     if (method != null) {
-                    	if ( !method.getReturnType().equals(Void.TYPE) )
-                        {
-                        	text = "return ";
+                        if (!method.getReturnType().equals(Void.TYPE)) {
+                            text = "return ";
                         }
-                    	
-                    	Class<?> componentClass = ComponentsLoader.getInstance().getComponentImplementationClass(componentName);
-                    	if ( MultipleInstancesComponent.class.isAssignableFrom(componentClass) )
-                    	{
-                    		componentParameter = "INSTANCE_ID='YOUR_INSTANCE'";
-                    	}
-                    	
-                    	for (Class<?> parameterType : method.getParameterTypes()) {
-                    		methodParameters += parameterType.getSimpleName() + ", ";
-                        	argumentAdded = true;
-                    	}
-                	}
-                    if (argumentAdded) 
-                    { // remove last ", " characters
-                    	methodParameters = methodParameters.substring(0, methodParameters.length() - 2);
+
+                        Class<?> componentClass = ComponentsLoader.getInstance().getComponentImplementationClass(componentName);
+                        if (MultipleInstancesComponent.class.isAssignableFrom(componentClass)) {
+                            componentParameter = "INSTANCE_ID='YOUR_INSTANCE'";
+                        }
+
+                        for (Class<?> parameterType : method.getParameterTypes()) {
+                            methodParameters += parameterType.getSimpleName() + ", ";
+                            argumentAdded = true;
+                        }
                     }
-                    text += "testAPI.get" + componentName + "(" + componentParameter + ")." + methodName + "( " + methodParameters + ")";
+                    if (argumentAdded) { // remove last ", " characters
+                        methodParameters = methodParameters.substring(0, methodParameters.length() - 2);
+                    }
+                    text += "testAPI.get" + componentName + "(" + componentParameter + ")." + methodName + "( " + methodParameters
+                          + ")";
                     mInteractiveText.setText(text);
                 }
             }

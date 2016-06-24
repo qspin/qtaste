@@ -27,22 +27,20 @@ import javax.swing.JOptionPane;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
- *
  * @author lvboque
  */
-public class VisualValidator extends Validator {    
+public class VisualValidator extends Validator {
     private String message;
-    
-    
+
     public static void check(String message) throws QTasteTestFailException {
         check(message, null);
     }
-    
+
     public static void check(String message, String failMessagePrefix) throws QTasteTestFailException {
         VisualValidator validator = new VisualValidator(message);
         validator.validate(failMessagePrefix);
-    }    
-    
+    }
+
     private VisualValidator(String message) {
         this.message = message;
     }
@@ -52,12 +50,12 @@ public class VisualValidator extends Validator {
         Frame frame = new Frame();
         Window window = new Window(frame);
         window.requestFocus();
- 
+
         int response = JOptionPane.showConfirmDialog(window, message, "Confirmation", JOptionPane.YES_NO_OPTION);
-        return response == 0;        
+        return response == 0;
     }
-    
-    protected String getExtraDetails() {        
+
+    protected String getExtraDetails() {
         return "Not yet implemented!";
-    }    
+    }
 }

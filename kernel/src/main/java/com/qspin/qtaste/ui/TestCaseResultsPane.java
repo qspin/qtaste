@@ -61,11 +61,11 @@ public class TestCaseResultsPane extends JSplitPane {
     //private static Logger logger = Log4jLoggerFactory.getLogger(TestCaseResultsPane.class);
     private static final long serialVersionUID = 1L;
     protected Log4jPanel tcLogsPane = new Log4jPanel();
-    protected ImageIcon passedImg,  failedImg,  runningImg,  snapShotImg,  naImg;
+    protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
     private List<TestScript> results = new ArrayList<TestScript>();
     private TestCasePane mTestCasePane;
-    private JTabbedPane runTabbedPane = new  JTabbedPane(JTabbedPane.TOP);
-    private int runIndex=0;
+    private JTabbedPane runTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+    private int runIndex = 0;
 
     public TestCaseResultsPane(TestCasePane testCasePane) {
         super(JSplitPane.VERTICAL_SPLIT);
@@ -147,7 +147,6 @@ public class TestCaseResultsPane extends JSplitPane {
             }
         });
 
-
         runIndex++;
         this.addRunTab("Run" + runIndex);
         setResizeWeight(0.65);
@@ -163,17 +162,18 @@ public class TestCaseResultsPane extends JSplitPane {
         results.clear();
         //stackTrace.setText("");
         int tabIndex = this.getTabIndex("Run1");
-        if (tabIndex==-1) return;
+        if (tabIndex == -1) {
+            return;
+        }
 
         Object reportObject = runTabbedPane.getClientProperty("TestCaseReportTable_" + runTabbedPane.getTitleAt(tabIndex));
         if (reportObject instanceof TestCaseReportTable) {
-            TestCaseReportTable reportTable = (TestCaseReportTable)reportObject;
+            TestCaseReportTable reportTable = (TestCaseReportTable) reportObject;
             reportTable.resetTable();
         }
 
         tcLogsPane.clearLogs();
     }
-
 
     /**
      * Table cell renderer.
@@ -181,8 +181,8 @@ public class TestCaseResultsPane extends JSplitPane {
     static class TableReasonCellRenderer extends DefaultTableCellRenderer {
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int
+              row, int column) {
             JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             // set text alignment
@@ -197,25 +197,26 @@ public class TestCaseResultsPane extends JSplitPane {
     }
 
     private int getTabIndex(String tabName) {
-        for (int i=0; i< runTabbedPane.getTabCount() ; i++) {
-            if (runTabbedPane.getTitleAt(i).equals(tabName))
+        for (int i = 0; i < runTabbedPane.getTabCount(); i++) {
+            if (runTabbedPane.getTitleAt(i).equals(tabName)) {
                 return i;
+            }
         }
         return -1;
     }
 
     public void setRunTab(String tabName) {
-       runTabbedPane.setSelectedIndex(getTabIndex(tabName));
+        runTabbedPane.setSelectedIndex(getTabIndex(tabName));
     }
 
     public void addRunTab(String tabName) {
         // if already added, clear the content of the table
         int tabIndex = this.getTabIndex(tabName);
-        if (tabIndex!=-1) {
+        if (tabIndex != -1) {
             // clear the result
             Object reportObject = runTabbedPane.getClientProperty("TestCaseReportTable_" + tabName);
             if (reportObject instanceof TestCaseReportTable) {
-                TestCaseReportTable reportTable = (TestCaseReportTable)reportObject;
+                TestCaseReportTable reportTable = (TestCaseReportTable) reportObject;
                 reportTable.resetTable();
                 // listen to events
                 TestCaseReporter.addTestCaseReportTableListener(reportTable);
@@ -225,7 +226,7 @@ public class TestCaseResultsPane extends JSplitPane {
         }
         // create a new tab
         JTextArea nstackTrace = new JTextArea();
-        DefaultTableModel ntcReasonModel = new DefaultTableModel(new Object[]{"Line", "File", "Method", "."}, 0) {
+        DefaultTableModel ntcReasonModel = new DefaultTableModel(new Object[] {"Line", "File", "Method", "."}, 0) {
 
             @Override
             public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -243,9 +244,9 @@ public class TestCaseResultsPane extends JSplitPane {
                 Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
                 int colIndex = columnAtPoint(p);
-				if (colIndex < 0) {
-					return null;
-				}
+                if (colIndex < 0) {
+                    return null;
+                }
                 return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
             }
 
@@ -261,16 +262,14 @@ public class TestCaseResultsPane extends JSplitPane {
                         java.awt.Point p = e.getPoint();
                         int index = columnModel.getColumnIndexAtX(p.x);
                         if (index < 0) {
-                        	return null;
+                            return null;
                         }
-                        int realIndex =
-                                columnModel.getColumn(index).getModelIndex();
+                        int realIndex = columnModel.getColumn(index).getModelIndex();
                         return getColumnName(realIndex);
                     }
                 };
             }
         };
-
 
         ntcReasonTable.getColumn("Line").setPreferredWidth(40);
         ntcReasonTable.getColumn("Line").setMaxWidth(40);
@@ -312,7 +311,6 @@ public class TestCaseResultsPane extends JSplitPane {
         reasonPanel.setBottomComponent(new JScrollPane(stackTracePanel));
         reasonMainPanel.add(reasonPanel, BorderLayout.CENTER);
 
-
         resultMainpanel.setResizeWeight(0.5);
 
         resultMainpanel.setTopComponent(new JScrollPane(ntcTable.getTable()));
@@ -320,7 +318,7 @@ public class TestCaseResultsPane extends JSplitPane {
 
         runTabbedPane.putClientProperty("TestCaseReportTable_" + tabName, ntcTable);
         runTabbedPane.addTab(tabName, resultMainpanel);
-        this.runTabbedPane.setSelectedIndex(this.runTabbedPane.getTabCount() -1);
+        this.runTabbedPane.setSelectedIndex(this.runTabbedPane.getTabCount() - 1);
     }
 
     public void refreshCampaign() {
@@ -333,15 +331,17 @@ public class TestCaseResultsPane extends JSplitPane {
 
     public void stopCampaign() {
 
-     // get the current Campaign
+        // get the current Campaign
         String report = CampaignReportManager.getInstance().getReportName();
-        if (report==null) return;
+        if (report == null) {
+            return;
+        }
         int tabIndex = this.getTabIndex(report);
-        if (tabIndex!=-1) {
+        if (tabIndex != -1) {
             // clear the result
             Object reportObject = runTabbedPane.getClientProperty("TestCaseReportTable_" + report);
             if (reportObject instanceof TestCaseReportTable) {
-                TestCaseReportTable reportTable = (TestCaseReportTable)reportObject;
+                TestCaseReportTable reportTable = (TestCaseReportTable) reportObject;
                 TestCaseReporter.removeTestCaseReportTableListener(reportTable);
             }
             return;
@@ -362,17 +362,18 @@ public class TestCaseResultsPane extends JSplitPane {
         public TabRemoveAction() {
             super("Close");
         }
+
         @Override
         public boolean isEnabled() {
-            if (runTabbedPane.getSelectedIndex()>0)
+            if (runTabbedPane.getSelectedIndex() > 0) {
                 return true;
-            else
+            } else {
                 return false;
+            }
         }
 
         public void actionPerformed(ActionEvent e) {
-            if (runTabbedPane.getSelectedIndex()>0)
-            {
+            if (runTabbedPane.getSelectedIndex() > 0) {
                 int tabIndex = runTabbedPane.getSelectedIndex();
                 runTabbedPane.remove(tabIndex);
             }
@@ -406,7 +407,8 @@ public class TestCaseResultsPane extends JSplitPane {
                             textPane = mTestCasePane.loadTestCaseSource(f, true, false);
                             //mTestCasepane.setTestCaseSourceURL(fileName);
 
-                            //TestResult tr = (TestResult)tcReasonTable.getModel().getValueAt(rowIndex, TCResultsSelectionListeners.OBJECT);
+                            //TestResult tr = (TestResult)tcReasonTable.getModel().getValueAt(rowIndex,
+                            // TCResultsSelectionListeners.OBJECT);
                             //int gotoLine = tr.getFailedLineNumber();
                             mTestCasePane.tabbedPane.setSelectedIndex(TestCasePane.SOURCE_INDEX);
                             // now go to the given line

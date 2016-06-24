@@ -26,21 +26,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
  * @author lvboque
  */
 public interface JDBCClient {
-                  
+
     /**
      * Open a JDBC connection to the database
+     *
      * @throws java.sql.SQLException If a SQL error occurs
      * @throws java.lang.ClassNotFoundException If the driver class does not exists
      */
     public void open() throws SQLException, ClassNotFoundException;
-    
-     /**
+
+    /**
      * Execute the specified query
      * If the SQL connection if not open, it will be opened automatically
+     *
      * @param query The specified query
      * @return the ResultSet object. The returned ResultSet has to be closed manually.
      * @throws java.sql.SQLException If a SQL error occurs
@@ -49,11 +50,13 @@ public interface JDBCClient {
     public ResultSet executeQuery(String query) throws SQLException, ClassNotFoundException;
 
     public boolean executeCommand(String query) throws SQLException, ClassNotFoundException;
-    
-    public void executeSQLScript(String scriptFile) throws SQLException, FileNotFoundException, ClassNotFoundException, IOException;
-    
+
+    public void executeSQLScript(String scriptFile)
+          throws SQLException, FileNotFoundException, ClassNotFoundException, IOException;
+
     /**
      * Close the JDBC conncetion to the database
+     *
      * @throws java.sql.SQLException If a SQL error occurs
      */
     public void close() throws SQLException;

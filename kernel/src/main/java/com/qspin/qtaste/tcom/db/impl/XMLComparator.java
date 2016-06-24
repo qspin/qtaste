@@ -37,43 +37,46 @@ import org.w3c.dom.NodeList;
  * XMLComparator class enables to compare XML Documents structured as described bellow
  * <pre>
  *  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
- * 
- *     &lt;Results&gt;    	
+ *
+ *     &lt;Results&gt;
  *          &lt;Row&gt;
  *              ...
  *          &lt;/Row&gt;
- * 
+ *
  *          &lt;Row&gt;
  *              ...
  *          &lt;/Row&gt;
  *     &lt;/Results&gt;
  * </pre>
- * <br> 
+ * <br>
+ *
  * @author lvboque
  */
 public class XMLComparator {
     private List<String> errorsList = new ArrayList<String>();
-   
+
     private static Node setParameterValues(Node node, HashMap<String, String> parameters) {
-        String nodeValue=null;
-        Node valueNode= node.getFirstChild();
-        if (valueNode!=null)
+        String nodeValue = null;
+        Node valueNode = node.getFirstChild();
+        if (valueNode != null) {
             nodeValue = valueNode.getNodeValue();
-        if (nodeValue !=null) {
+        }
+        if (nodeValue != null) {
             Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, String> parameter = it.next();
-                nodeValue = nodeValue.replace("$"+parameter.getKey(), parameter.getValue());
+                nodeValue = nodeValue.replace("$" + parameter.getKey(), parameter.getValue());
                 valueNode.setNodeValue(nodeValue);
             }
         }
         NodeList nl = node.getChildNodes();
-        for (int i =0; i<nl.getLength();i++) {
+        for (int i = 0; i < nl.getLength(); i++) {
             Node childNode = nl.item(i);
             childNode = setParameterValues(childNode, parameters);
         }
         return node;
     }
+
     public static org.w3c.dom.Document setParameterValues(org.w3c.dom.Document doc, HashMap<String, String> parameters) {
         // traverse de doc
         org.w3c.dom.Element rootElement = doc.getDocumentElement();
@@ -86,9 +89,9 @@ public class XMLComparator {
             String parameterValue = parameter.getValue();
             String[] values = parameterValue.split(";");
             parameterMap.put(parameter.getKey(), values);
-        }        
+        }
         NodeList nl = rootElement.getElementsByTagName("Row");
-        for (int i =0; i<nl.getLength();i++) {
+        for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
             HashMap<String, String> rowParameters = new HashMap<String, String>();
             Iterator<Entry<String, String[]>> rowIt = parameterMap.entrySet().iterator();
@@ -100,6 +103,7 @@ public class XMLComparator {
         }
         return doc;
     }
+
     public org.w3c.dom.Document getDocumentFromFile(File file) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -108,6 +112,7 @@ public class XMLComparator {
 
     /**
      * Create a structure to store all the rows and key/value for the specified document
+     *
      * @param doc the specified Document
      * @return a List containing all the rows and the key/value pairs
      */
@@ -122,8 +127,10 @@ public class XMLComparator {
             // check if the rows belongs to the table name
             Node tableNodeNameAttr = n.getParentNode().getAttributes().getNamedItem("name");
             String tableNameAttr = tableNodeNameAttr.getNodeValue();
-            if (!tableNameAttr.equals(tableName)) continue;
-            
+            if (!tableNameAttr.equals(tableName)) {
+                continue;
+            }
+
             if (n.hasChildNodes()) {
                 NodeList child = n.getChildNodes();
                 HashMap<String, String> hash = new HashMap<String, String>();
@@ -134,7 +141,8 @@ public class XMLComparator {
                     if (childNode.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
                     }
-                    //System.out.println("childNode is :" + childNode.getNodeName() + " with value " + childNode.getTextContent());
+                    //System.out.println("childNode is :" + childNode.getNodeName() + " with value " + childNode.getTextContent
+                    // ());
                     hash.put(childNode.getNodeName(), childNode.getTextContent());
                 }
             }
@@ -144,6 +152,7 @@ public class XMLComparator {
 
     /**
      * Check that all the rows and elements defined in the doc1 are included in doc2
+     *
      * @param doc1 The source document
      * @param doc2 The checked document
      * @return True if all the elements defined in the doc1 exists in the doc2
@@ -155,17 +164,21 @@ public class XMLComparator {
             // check if the rows belongs to the table name
             Node tableNodeNameAttr = n.getParentNode().getAttributes().getNamedItem("name");
             String tableNameAttr = tableNodeNameAttr.getNodeValue();
-            if (!tableNameAttr.equals(tableName)) continue;
+            if (!tableNameAttr.equals(tableName)) {
+                continue;
+            }
             Node tableNodeKeyAttr = n.getParentNode().getAttributes().getNamedItem("key");
             String tableKeyAttr = tableNodeKeyAttr.getNodeValue();
-            String[] primaryKeyFields = new String[]{tableKeyAttr};
+            String[] primaryKeyFields = new String[] {tableKeyAttr};
             return compare(doc1, doc2, tableName, primaryKeyFields);
-            
+
         }
         return true; // table is not to be compared (not found)
     }
+
     /**
      * Check that all the rows and elements defined in the doc1 are included in doc2
+     *
      * @param doc1 The source document
      * @param doc2 The checked document
      * @param primaryKeyFields A String array containing all the field names composing the primary key
@@ -179,12 +192,12 @@ public class XMLComparator {
         List<HashMap<String, String>> doc1Hash = createRowsHashMap(doc1, tableName);
         List<HashMap<String, String>> doc2Hash = createRowsHashMap(doc2, tableName);
 
-        for (Iterator<HashMap<String, String>> row1 = doc1Hash.iterator(); row1.hasNext();) {
+        for (Iterator<HashMap<String, String>> row1 = doc1Hash.iterator(); row1.hasNext(); ) {
             HashMap<String, String> hash1 = row1.next();
             //System.out.println(hash1.toString());
 
             boolean found = false;
-            for (Iterator<HashMap<String, String>> row2 = doc2Hash.iterator(); row2.hasNext();) {
+            for (Iterator<HashMap<String, String>> row2 = doc2Hash.iterator(); row2.hasNext(); ) {
                 HashMap<String, String> hash2 = row2.next();
                 int i = 0;
 
@@ -218,14 +231,16 @@ public class XMLComparator {
                         String value1 = hash1.get(key);
                         String value2 = hash2.get(key);
                         if (!value1.equals(value2)) {
-                            errorsList.add("Expected to get " + value1 + " for the field " + key + " but got " + value2 + " for row" + getPrimaryKeysExtraDetails(hash1, primaryKeyFields));
+                            errorsList.add(
+                                  "Expected to get " + value1 + " for the field " + key + " but got " + value2 + " for row"
+                                        + getPrimaryKeysExtraDetails(hash1, primaryKeyFields));
                         }
                     }
                     break;
                 }
             }
             // The row with the primary key is not found
-            if (!found) {               
+            if (!found) {
                 errorsList.add("Cannot find row " + getPrimaryKeysExtraDetails(hash1, primaryKeyFields));
             }
         }
@@ -233,9 +248,9 @@ public class XMLComparator {
     }
 
     private String getPrimaryKeysExtraDetails(HashMap<String, String> hash, String[] primaryKeyFields) {
-        String message = " with primary key";        
-        for (int i = 0; i < primaryKeyFields.length; i++) {            
-            message += " " + primaryKeyFields[i] + "=" + hash.get(primaryKeyFields[i]);            
+        String message = " with primary key";
+        for (int i = 0; i < primaryKeyFields.length; i++) {
+            message += " " + primaryKeyFields[i] + "=" + hash.get(primaryKeyFields[i]);
         }
         return message;
     }
@@ -272,6 +287,7 @@ public class XMLComparator {
 
     /**
      * Return an Iterator of String containing all the differences detected while comparing the documents
+     *
      * @return an iterator of String describing all the differences
      */
     public Iterator<String> getErrorsList() {

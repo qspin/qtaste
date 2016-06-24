@@ -20,24 +20,25 @@
 package com.qspin.qtaste.util;
 
 public class OS {
-	
-	/**
-	 * OS types.
-	 */
-	public enum Type {
-		UNKNOWN,
-		WINDOWS,
-		LINUX,
-		MAC
-	}
-	
-	/**
-	 * Get OS type.
-	 * @return OS type
-	 */
+
+    /**
+     * OS types.
+     */
+    public enum Type {
+        UNKNOWN,
+        WINDOWS,
+        LINUX,
+        MAC
+    }
+
+    /**
+     * Get OS type.
+     *
+     * @return OS type
+     */
     public static Type getType() {
         String osName = System.getProperty("os.name").toLowerCase();
-        
+
         if (osName.indexOf("windows") > -1) {
             return Type.WINDOWS;
         } else if (osName.indexOf("linux") > -1) {

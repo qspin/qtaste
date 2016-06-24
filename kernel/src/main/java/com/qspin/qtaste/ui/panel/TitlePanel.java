@@ -19,59 +19,60 @@
 
 package com.qspin.qtaste.ui.panel;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
+
 import com.qspin.qtaste.ui.tools.GridBagLineAdder;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.widget.StepLabelUI;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
+
 /**
  * A TitlePanel is a standard panel used to gather multiple graphical components related together.
  * It is enclosed with a simple border. It displays a title and an icon.
  */
 @SuppressWarnings("serial")
-public class TitlePanel extends JPanel
-{
-   public TitlePanel(String pTitle, String pIcon, boolean pPanes)
-   {
-      super(new GridBagLayout());
-      Border b = BorderFactory.createLineBorder(ResourceManager.getInstance().getBackColor());
-      setBorder(b);
-      GridBagLineAdder adder = new GridBagLineAdder(this);
-      JLabel title = new JLabel(ResourceManager.getInstance().getImageIcon(pIcon));
-      title.setText(pTitle);
-      title.setFont(ResourceManager.getInstance().getLargerFont());
-      title.setUI(new StepLabelUI());
+public class TitlePanel extends JPanel {
+    public TitlePanel(String pTitle, String pIcon, boolean pPanes) {
+        super(new GridBagLayout());
+        Border b = BorderFactory.createLineBorder(ResourceManager.getInstance().getBackColor());
+        setBorder(b);
+        GridBagLineAdder adder = new GridBagLineAdder(this);
+        JLabel title = new JLabel(ResourceManager.getInstance().getImageIcon(pIcon));
+        title.setText(pTitle);
+        title.setFont(ResourceManager.getInstance().getLargerFont());
+        title.setUI(new StepLabelUI());
 
-      mContentPanel = new JPanel();
+        mContentPanel = new JPanel();
 
-      JPanel titlepanel = new JPanel(new BorderLayout());
-      titlepanel.add(title, BorderLayout.WEST);
+        JPanel titlepanel = new JPanel(new BorderLayout());
+        titlepanel.add(title, BorderLayout.WEST);
 
-      adder.setWeight(1.0f, 0.0f);
-      adder.add(titlepanel);
-      adder.next();
+        adder.setWeight(1.0f, 0.0f);
+        adder.add(titlepanel);
+        adder.next();
 
-      if(pPanes)
-      {
-         JTabbedPane pane = new JTabbedPane();
-         pane.addTab("Main", mContentPanel);
+        if (pPanes) {
+            JTabbedPane pane = new JTabbedPane();
+            pane.addTab("Main", mContentPanel);
 
-         adder.setWeight(1.0f, 1.0f);
-         adder.addWithVerticalFill(pane);
-      }
-      else
-      {
-         adder.addSeparator();
-         adder.setWeight(1.0f, 1.0f);
-         adder.addWithVerticalFill(mContentPanel);
-      }
-   }
+            adder.setWeight(1.0f, 1.0f);
+            adder.addWithVerticalFill(pane);
+        } else {
+            adder.addSeparator();
+            adder.setWeight(1.0f, 1.0f);
+            adder.addWithVerticalFill(mContentPanel);
+        }
+    }
 
-   public JPanel getContentPanel()
-   {
-      return mContentPanel;
-   }
+    public JPanel getContentPanel() {
+        return mContentPanel;
+    }
 
-   private JPanel mContentPanel;
+    private JPanel mContentPanel;
 }

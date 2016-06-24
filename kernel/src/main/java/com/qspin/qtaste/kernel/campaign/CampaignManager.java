@@ -46,6 +46,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * The CampaignManager is responsible for the execution of a campaign and the generation of a campaign report
+ *
  * @author lvboque
  */
 public class CampaignManager implements TestReportListener {
@@ -63,6 +64,7 @@ public class CampaignManager implements TestReportListener {
 
     /**
      * Get an instance of the CampaignManager.
+     *
      * @return The CampaignManager.
      */
     synchronized public static CampaignManager getInstance() {
@@ -74,6 +76,7 @@ public class CampaignManager implements TestReportListener {
 
     /**
      * Read the xml campaign file
+     *
      * @param fileName the xml campaign file
      * @return an object describing the campaign
      * @throws java.lang.Exception
@@ -142,6 +145,7 @@ public class CampaignManager implements TestReportListener {
 
     /**
      * Return the currently selected campaign
+     *
      * @return the currently selected campaign
      */
     public Campaign getCurrentCampaign() {
@@ -150,6 +154,7 @@ public class CampaignManager implements TestReportListener {
 
     /**
      * Return the current campaign start timestamp
+     *
      * @return the current campaign start timestamp
      */
     public Date getTimeStampCampaign() {
@@ -158,39 +163,39 @@ public class CampaignManager implements TestReportListener {
 
     /**
      * Executes a campaign
+     *
      * @param campaign the campaign to execute.
      */
     public boolean execute(Campaign campaign) {
-    	campaignResult = true;
+        campaignResult = true;
         currentCampaign = campaign;
         campaignStartTimeStamp = new Date();
-        try
-        {
-	        createReport();
+        try {
+            createReport();
 
-	        for (CampaignRun run : currentCampaign.getRuns()) {
-	        	if (TestEngine.isAbortedByUser()) {
-	                break;
-	            }
-	        	currentTestBed = run.getTestbed();
-	            String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0, currentTestBed.lastIndexOf('.'));
-	            TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
-	            currentTestSuite = MetaTestSuite.createMetaTestSuite(testSuiteName, run.getTestsuites());
-	            if (currentTestSuite == null) {
-	            	continue;
-	            }
-	            currentTestSuite.addTestReportListener(this);
-	            campaignResult &= TestEngine.execute(currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
-	            currentTestSuite.removeTestReportListener(this);
-	            currentTestSuite = null;
-	        }
-	        CampaignReportManager.getInstance().stopReport();
-        }
-        finally
-        {
-        	TestEngine.tearDown();
-        	campaignStartTimeStamp = null;
-        	currentCampaign = null;
+            for (CampaignRun run : currentCampaign.getRuns()) {
+                if (TestEngine.isAbortedByUser()) {
+                    break;
+                }
+                currentTestBed = run.getTestbed();
+                String testSuiteName = currentCampaign.getName() + " - " + currentTestBed.substring(0,
+                      currentTestBed.lastIndexOf('.'));
+                TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + currentTestBed);
+                currentTestSuite = MetaTestSuite.createMetaTestSuite(testSuiteName, run.getTestsuites());
+                if (currentTestSuite == null) {
+                    continue;
+                }
+                currentTestSuite.addTestReportListener(this);
+                campaignResult &= TestEngine.execute(
+                      currentTestSuite); // NOSONAR - Potentially dangerous use of non-short-circuit logic
+                currentTestSuite.removeTestReportListener(this);
+                currentTestSuite = null;
+            }
+            CampaignReportManager.getInstance().stopReport();
+        } finally {
+            TestEngine.tearDown();
+            campaignStartTimeStamp = null;
+            currentCampaign = null;
         }
         return campaignResult;
     }

@@ -19,9 +19,9 @@
 
 package com.qspin.qtaste.javagui.server;
 
-import javax.swing.JTabbedPane;
 import java.awt.Component;
 
+import javax.swing.JTabbedPane;
 
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
@@ -44,57 +44,57 @@ class TabSelector extends UpdateComponentCommander {
     protected void prepareActions() throws QTasteTestFailException {
 
         // sanity checks
-        if ( mData.length == 0 || mData[0] == null )
+        if (mData.length == 0 || mData[0] == null) {
             throw new QTasteTestFailException("No tab index, tab title or tab component id provided!");
-        
-        switch (mSelectorIdentifier) {
-        case SELECT_BY_INDEX:
-            mTabIndex = Integer.parseInt(mData[0].toString());
-
-            if (mTabIndex < -1 || mTabIndex >= ((JTabbedPane)component).getTabCount()) {
-                throw new QTasteTestFailException("Tab index " + mTabIndex + " out of bounds.");
-            }
-            break;
-
-        case SELECT_BY_TITLE:
-        	String tabTitle = mData[0].toString();
-
-        	mTabIndex = ((JTabbedPane)component).indexOfTab(tabTitle);
-
-            if (mTabIndex < 0) {
-                throw new QTasteTestFailException("Unable to find tab titled '" + tabTitle + "'");
-            }
-            break;
-            
-        case SELECT_BY_COMPONENT_ID:
-        	String componentName = mData[0].toString();
-        	
-            mTabIndex = -1;
-            int count = ((JTabbedPane)component).getTabCount();
-            for (int i = 0; i < count; i++) {
-                Component cmpIter = ((JTabbedPane)component).getComponentAt(i);
-                if (cmpIter.getName() != null && cmpIter.getName().equals(componentName)) {
-                	mTabIndex = i;
-                	break;
-                }
-            }
-
-            if (mTabIndex < 0) {
-                throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
-            }
-            break;
-
-        default:
-            throw new QTasteTestFailException("Bad selector identifier");
         }
 
-        
+        switch (mSelectorIdentifier) {
+            case SELECT_BY_INDEX:
+                mTabIndex = Integer.parseInt(mData[0].toString());
+
+                if (mTabIndex < -1 || mTabIndex >= ((JTabbedPane) component).getTabCount()) {
+                    throw new QTasteTestFailException("Tab index " + mTabIndex + " out of bounds.");
+                }
+                break;
+
+            case SELECT_BY_TITLE:
+                String tabTitle = mData[0].toString();
+
+                mTabIndex = ((JTabbedPane) component).indexOfTab(tabTitle);
+
+                if (mTabIndex < 0) {
+                    throw new QTasteTestFailException("Unable to find tab titled '" + tabTitle + "'");
+                }
+                break;
+
+            case SELECT_BY_COMPONENT_ID:
+                String componentName = mData[0].toString();
+
+                mTabIndex = -1;
+                int count = ((JTabbedPane) component).getTabCount();
+                for (int i = 0; i < count; i++) {
+                    Component cmpIter = ((JTabbedPane) component).getComponentAt(i);
+                    if (cmpIter.getName() != null && cmpIter.getName().equals(componentName)) {
+                        mTabIndex = i;
+                        break;
+                    }
+                }
+
+                if (mTabIndex < 0) {
+                    throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
+                }
+                break;
+
+            default:
+                throw new QTasteTestFailException("Bad selector identifier");
+        }
+
     }
 
     @Override
-    protected void doActionsInSwingThread() throws QTasteTestFailException {    	
+    protected void doActionsInSwingThread() throws QTasteTestFailException {
         if (component instanceof JTabbedPane) {
-            ((JTabbedPane)component).setSelectedIndex(mTabIndex);
+            ((JTabbedPane) component).setSelectedIndex(mTabIndex);
         }
     }
 }

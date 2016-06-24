@@ -32,19 +32,19 @@ import javax.swing.text.Keymap;
 import com.qspin.qtaste.ui.TestCasePane;
 
 /**
- *
  * @author vdubois
  */
 public class GenericShortcuts {
 
     private TestCasePane m_TCPane;
-    public GenericShortcuts(TestCasePane tcPane){
+
+    public GenericShortcuts(TestCasePane tcPane) {
         m_TCPane = tcPane;
         init();
     }
-    
+
     public void init() {
-        
+
         Keymap parent = m_TCPane.getActiveTextPane().getKeymap();
         Keymap newmap = JTextComponent.addKeymap("KeymapExampleMap", parent);
 
@@ -54,28 +54,34 @@ public class GenericShortcuts {
         //newmap.addActionForKeyStroke(ctrlZkey, new UndoAction());
 
         m_TCPane.getActiveTextPane().setKeymap(newmap);
-         
+
     }
 
     protected class SaveAction implements Action {
-            public Object getValue(String key) {
-                return null;
-            }
-            public void putValue(String key, Object value) {
-            }
-            public void setEnabled(boolean b) {
-            }
-            public boolean isEnabled() {
-                return true;
-            }
-            public void addPropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void removePropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void actionPerformed(ActionEvent e) {
-               m_TCPane.saveActiveDocument(); 
-                    
-            }
+        public Object getValue(String key) {
+            return null;
+        }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            m_TCPane.saveActiveDocument();
 
         }
+
+    }
 }

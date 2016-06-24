@@ -97,17 +97,19 @@ import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 @SuppressWarnings("serial")
-public class TestCaseTree extends JTree implements DragSourceListener,
-    DropTargetListener, DragGestureListener {
+public class TestCaseTree extends JTree implements DragSourceListener, DropTargetListener, DragGestureListener {
 
     static DataFlavor localObjectFlavor;
-        static {
-            try {
-                localObjectFlavor =
-                    new DataFlavor (DataFlavor.javaJVMLocalObjectMimeType);
-            } catch (ClassNotFoundException cnfe) { cnfe.printStackTrace(); }
+
+    static {
+        try {
+            localObjectFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType);
+        } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
         }
-    static DataFlavor[] supportedFlavors = { localObjectFlavor };
+    }
+
+    static DataFlavor[] supportedFlavors = {localObjectFlavor};
 
     private static Logger logger = Log4jLoggerFactory.getLogger(TestCaseTree.class);
     private final String TESTUITE_DIR = "TestSuites";
@@ -146,53 +148,44 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         dt = new DropTarget();
 
         ds.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
-        try
-        {
+        try {
             dt.setComponent(this);
             dt.addDropTargetListener(this);
-        }
-        catch (java.util.TooManyListenersException e)
-        {
+        } catch (java.util.TooManyListenersException e) {
             logger.error(e.getMessage());
         }
     }
 
     @Override
-     public String getToolTipText(MouseEvent e) {
-        if (getRowForLocation(e.getX(), e.getY()) == -1)
+    public String getToolTipText(MouseEvent e) {
+        if (getRowForLocation(e.getX(), e.getY()) == -1) {
             return null;
-        else {
+        } else {
             TreePath tp = this.getPathForLocation(e.getX(), e.getY());
             TreeNode node = this.getTreeNode(tp);
-            if (node != null)
-            {
-               TCTreeNode tcTreeNode =  (TCTreeNode)node;
-               if ( (tcTreeNode.getUserObject() !=null) &&
-                     (tcTreeNode.getUserObject() instanceof FileNode))
-               {
-                   FileNode fNode = (FileNode)tcTreeNode.getUserObject();
-                   //node
-                   if (fNode.isTestcaseDir()) {
-                       if (fNode.isTestcaseCheckOk())
-                       {
-                           // compute the number of test cases (based on test data)
-                    	   String text = fNode.getTestcaseCount() + " testcase(s) defined.";
-                    	   String testcaseHeader = fNode.getTestcaseHeader();
-                    	   if (!testcaseHeader.isEmpty()) {
-                    		   text += "\n\nDescription:\n" + testcaseHeader;
-                    	   }
-                           return text;
-                       }
-                       else
-                       {
-                           return "no TestData file found or file is empty.";
-                       }
-                   }
-               }
+            if (node != null) {
+                TCTreeNode tcTreeNode = (TCTreeNode) node;
+                if ((tcTreeNode.getUserObject() != null) && (tcTreeNode.getUserObject() instanceof FileNode)) {
+                    FileNode fNode = (FileNode) tcTreeNode.getUserObject();
+                    //node
+                    if (fNode.isTestcaseDir()) {
+                        if (fNode.isTestcaseCheckOk()) {
+                            // compute the number of test cases (based on test data)
+                            String text = fNode.getTestcaseCount() + " testcase(s) defined.";
+                            String testcaseHeader = fNode.getTestcaseHeader();
+                            if (!testcaseHeader.isEmpty()) {
+                                text += "\n\nDescription:\n" + testcaseHeader;
+                            }
+                            return text;
+                        } else {
+                            return "no TestData file found or file is empty.";
+                        }
+                    }
+                }
             }
             return null;
         }
-   }
+    }
 
     public TestCasePane getTestCasePane() {
         return testCasePane;
@@ -203,7 +196,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     }
 
     public TCTreeNode generateScriptsTree(FileNode rootFileNode) {
-    	// remove previous nodes if needed
+        // remove previous nodes if needed
         TCTreeNode rootNode = (TCTreeNode) getModel().getRoot();
         rootNode.removeAllChildren();
         rootNode.setUserObject(rootFileNode);
@@ -217,6 +210,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases", getTestCasePane().getTestSuiteDirectory());
         return tcFn;
     }
+
     public void generateScriptsTree(String testSuiteDir) {
         String scriptDir = testSuiteDir;
         FileNode tcFn = new FileNode(new File(scriptDir), "Test Cases", getTestCasePane().getTestSuiteDirectory());
@@ -249,7 +243,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         File[] childFiles = FileUtilities.listSortedFiles(file);
         for (int i = 0; i < childFiles.length; i++) {
             if (childFiles[i].isDirectory()) {
-                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(), getTestCasePane().getTestSuiteDirectory());
+                FileNode childNode = new FileNode(childFiles[i], childFiles[i].getName(),
+                      getTestCasePane().getTestSuiteDirectory());
                 if (childNode.isTestcaseDir()) {
                     return true;
                 } else {
@@ -281,8 +276,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         }
         TCTreeNode node = new TCTreeNode(fn, !fn.isTestcaseDir());
         final int NON_EXISTENT = -1;
-        if (parent.getIndex(node) == NON_EXISTENT &&
-                !file.isHidden()) {
+        if (parent.getIndex(node) == NON_EXISTENT && !file.isHidden()) {
             parent.add(node);
         }
     }
@@ -336,13 +330,14 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 File testcaseFile = fn.getTestcaseFile();
                 if (testCasePane.getTestScripPane() != null) {
                     try {
-						if (testcaseFile.getAbsoluteFile().getCanonicalPath().equals(testCasePane.getTestScripPane().getFileName())) {
-						    return;
-						}
-					} catch (IOException e) {
-						logger.error(e.getMessage());
-						return;
-					}
+                        if (testcaseFile.getAbsoluteFile().getCanonicalPath().equals(
+                              testCasePane.getTestScripPane().getFileName())) {
+                            return;
+                        }
+                    } catch (IOException e) {
+                        logger.error(e.getMessage());
+                        return;
+                    }
                 }
                 if (testcaseFile != null) {
                     testCasePane.setCurrentSelectedFileNode(fn);
@@ -366,26 +361,24 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 //  regenerate the doc if file date of script > file date of doc
                 PythonTestScript script = fn.getPythonTestScript();
 
-                if( GeneratePythonlibDoc.hasAlreadyRunOneTime() )
-                {
-                	boolean generateDoc =  testCasePane.isDocTabSelected() && !script.isDocSynchronized();
+                if (GeneratePythonlibDoc.hasAlreadyRunOneTime()) {
+                    boolean generateDoc = testCasePane.isDocTabSelected() && !script.isDocSynchronized();
 
                     if (generateDoc) {
                         testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                         script.generateDoc();
                         // Generate the documentation
-                    	setTestCaseDoc(script.getTestcaseDoc(), false);
+                        setTestCaseDoc(script.getTestcaseDoc(), false);
                         testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    } else
+                    // update the screen with the doc of the selected test script
+                    {
+                        setTestCaseDoc(script.getTestcaseDoc(), false);
                     }
-                    else
-                    	// update the screen with the doc of the selected test script
-                    	setTestCaseDoc(script.getTestcaseDoc(), false);
+                } else {
+                    setTestCaseDoc(null, false);
                 }
-                else
-                {
-                	setTestCaseDoc(null, false);
-                }
-                
+
                 // Get the user preferences to display the testcase tab
                 GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
                 String testCaseTabOnSelect = "none"; // default
@@ -408,7 +401,8 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 } else if (testCaseTabOnSelect.equals("logs")) {
                     testCasePane.getTabbedPane().setSelectedIndex(TestCasePane.LOGS_INDEX);
                 } else if (!testCaseTabOnSelect.equals("none")) {
-                    logger.warn("Invalid value for GUI configuration property " + TEST_CASE_TAB_ON_SELECT_PROPERTY + " (" + guiConfiguration.getString(TEST_CASE_TAB_ON_SELECT_PROPERTY) + ")");
+                    logger.warn("Invalid value for GUI configuration property " + TEST_CASE_TAB_ON_SELECT_PROPERTY + " ("
+                          + guiConfiguration.getString(TEST_CASE_TAB_ON_SELECT_PROPERTY) + ")");
                 }
             }
         }
@@ -470,37 +464,32 @@ public class TestCaseTree extends JTree implements DragSourceListener,
     public void dragOver(DropTargetDragEvent dtde) {
         Point dropPoint = dtde.getLocation();
         // int index = locationToIndex (dropPoint);
-        TreePath path = getPathForLocation (dropPoint.x, dropPoint.y);
-        if (path == null)
-        {
+        TreePath path = getPathForLocation(dropPoint.x, dropPoint.y);
+        if (path == null) {
             dtde.rejectDrag();
             return;
         }
         Object targetNode = path.getLastPathComponent();
         if (targetNode instanceof TCTreeNode) {
-           TCTreeNode tcTreeNode = (TCTreeNode)targetNode;
-           if (tcTreeNode.getUserObject() instanceof FileNode) {
-               FileNode fn = (FileNode)tcTreeNode.getUserObject();
-               if (fn.isTestcaseDir()) {
-                   dtde.rejectDrag();
-               }
-               else {
-                   try
-               {
-                   TCTreeNode sourceNode = (TCTreeNode) dtde.getTransferable().getTransferData(localObjectFlavor);
-                   if (tcTreeNode.equals(sourceNode.getParent()) || sourceNode.isNodeDescendant(tcTreeNode)) {
-                       // reject copy or move in same directory or in a descendant directory
-                       dtde.rejectDrag();
-                   }
-                   else {
-                       dtde.acceptDrag(dtde.getDropAction());
-                   }
-               }
-                   catch (Exception pE) {
-                       dtde.rejectDrag();
-                   }
-               }
-           }
+            TCTreeNode tcTreeNode = (TCTreeNode) targetNode;
+            if (tcTreeNode.getUserObject() instanceof FileNode) {
+                FileNode fn = (FileNode) tcTreeNode.getUserObject();
+                if (fn.isTestcaseDir()) {
+                    dtde.rejectDrag();
+                } else {
+                    try {
+                        TCTreeNode sourceNode = (TCTreeNode) dtde.getTransferable().getTransferData(localObjectFlavor);
+                        if (tcTreeNode.equals(sourceNode.getParent()) || sourceNode.isNodeDescendant(tcTreeNode)) {
+                            // reject copy or move in same directory or in a descendant directory
+                            dtde.rejectDrag();
+                        } else {
+                            dtde.acceptDrag(dtde.getDropAction());
+                        }
+                    } catch (Exception pE) {
+                        dtde.rejectDrag();
+                    }
+                }
+            }
         }
     }
 
@@ -533,8 +522,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 Path dest = fn.getFile().toPath().resolve(source.getFileName());
                 if (dtde.getDropAction() == DnDConstants.ACTION_COPY) {
                     FileUtils.copyDirectory(source.toFile(), dest.toFile());
-                }
-                else {
+                } else {
                     Files.move(source, dest);
                 }
                 // update target tree
@@ -547,8 +535,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                     FileNode parentFileNode = (FileNode) parentTreeNode.getUserObject();
                     addTreeToDir(parentFileNode.getFile(), parentTreeNode);
                     ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-                }
-                else {
+                } else {
                     tcTargetNode.removeAllChildren();
                     FileNode targetFileNode = (FileNode) tcTargetNode.getUserObject();
                     addTreeToDir(targetFileNode.getFile(), tcTargetNode);
@@ -561,8 +548,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                     FileNode parentFileNode = (FileNode) parentTreeNode.getUserObject();
                     addTreeToDir(parentFileNode.getFile(), parentTreeNode);
                     ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-                }
-                else {
+                } else {
                     tcTreeNode.removeAllChildren();
                     FileNode targetFileNode = (FileNode) tcTreeNode.getUserObject();
                     addTreeToDir(targetFileNode.getFile(), tcTreeNode);
@@ -570,33 +556,31 @@ public class TestCaseTree extends JTree implements DragSourceListener,
                 }
                 testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 dtde.getDropTargetContext().dropComplete(true);
-            }
-            else {
+            } else {
                 dtde.rejectDrop();
             }
-        }
-        catch (UnsupportedFlavorException ex) {
+        } catch (UnsupportedFlavorException ex) {
             logger.error(ex.getMessage());
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
     }
 
     public void dragGestureRecognized(DragGestureEvent dge) {
-        Transferable trans = new TCTreeNodeTransferable (this.getSelectionPath().getLastPathComponent());
+        Transferable trans = new TCTreeNodeTransferable(this.getSelectionPath().getLastPathComponent());
         ds.startDrag(dge, null, trans, this);
     }
 
     /**
      * Get the option pane component from the component tree.
+     *
      * @param parent the component to check.
      * @return the option pane.
      */
     protected JOptionPane getOptionPane(JComponent parent) {
         JOptionPane pane = null;
         if (!(parent instanceof JOptionPane)) {
-            pane = getOptionPane((JComponent)parent.getParent());
+            pane = getOptionPane((JComponent) parent.getParent());
         } else {
             pane = (JOptionPane) parent;
         }
@@ -605,20 +589,21 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
     /**
      * Show an input dialog to enter a new script name.
-     * This input dialog is initialized with the selected script name and 
+     * This input dialog is initialized with the selected script name and
      * disables the 'OK' button while the new script name is empty or is the
      * same than the previous one.
+     *
      * @param title title of the input dialog
      * @param message message to display inside the input dialog
      * @param initialValue initial value for the text field.
      * @return the new script name or null.
      */
     public String showOptionDialog(final String title, final String message, final String initialValue) {
-        	  JPanel     panel  	= new JPanel();
-        final JButton    okayBtn   	= new JButton("Ok");
-        final JButton    cancelBtn 	= new JButton("Cancel");
-        final JTextField textField  = new JTextField(initialValue);
-        	  String 	 newName    = null;
+        JPanel panel = new JPanel();
+        final JButton okayBtn = new JButton("Ok");
+        final JButton cancelBtn = new JButton("Cancel");
+        final JTextField textField = new JTextField(initialValue);
+        String newName = null;
 
         // create a custom panel to display the message and the text field
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -630,7 +615,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         okayBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent)e.getSource());
+                JOptionPane pane = getOptionPane((JComponent) e.getSource());
                 pane.setValue(okayBtn);
             }
         });
@@ -639,7 +624,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         cancelBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent)e.getSource());
+                JOptionPane pane = getOptionPane((JComponent) e.getSource());
                 pane.setValue(cancelBtn);
             }
         });
@@ -648,7 +633,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         // not empty and is not equal to the initial value.
         textField.getDocument().addDocumentListener(new DocumentListener() {
             protected void update() {
-            	okayBtn.setEnabled(!textField.getText().equals(initialValue) && (textField.getText().length() > 0));
+                okayBtn.setEnabled(!textField.getText().equals(initialValue) && (textField.getText().length() > 0));
             }
 
             @Override
@@ -668,24 +653,18 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         });
 
         // show the custom option dialog
-        int result = JOptionPane.showOptionDialog(null, 
-							                     panel, 
-							                     title, 
-							                     JOptionPane.OK_CANCEL_OPTION,
-							                     JOptionPane.QUESTION_MESSAGE, 
-							                     null, 
-							                     new Object[]{okayBtn, cancelBtn}, 
-							                     okayBtn);
-        
+        int result = JOptionPane.showOptionDialog(null, panel, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+              null, new Object[] {okayBtn, cancelBtn}, okayBtn);
+
         // showOptionDialog returns the index of the clicked button in the options array
         // here, 0 means 'OK' button and 1 means 'Cancel' button
         if (result == 0) {
-        	newName = textField.getText();
+            newName = textField.getText();
         }
-        
+
         return newName;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
@@ -750,16 +729,18 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
                     } else {
                         createTestAction.putValue(Action.NAME, "Create new TestScript...");
-                    	if (selectedPath.getParentPath()==null) {
-                    		menu.add(new ImportTestSuiteAction());
-                    	}
+                        if (selectedPath.getParentPath() == null) {
+                            menu.add(new ImportTestSuiteAction());
+                        }
                     }
                 }
                 menu.add(createTestAction);
-                if (renameTestAction!=null)
+                if (renameTestAction != null) {
                     menu.add(renameTestAction);
-                if (removeTestAction!=null)
+                }
+                if (removeTestAction != null) {
                     menu.add(removeTestAction);
+                }
                 Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), mTestCaseTree);
                 TreePath path = mTestCaseTree.getPathForLocation(pt.x, pt.y);
                 mTestCaseTree.setSelectionPath(path);
@@ -792,8 +773,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         public void actionPerformed(ActionEvent e) {
             if (mLoop) {
                 // show RunDialog
-                TestSuiteRunDialog runDlg = new TestSuiteRunDialog(
-                        new javax.swing.JFrame(), "Run options");
+                TestSuiteRunDialog runDlg = new TestSuiteRunDialog(new javax.swing.JFrame(), "Run options");
                 runDlg.setAlwaysOnTop(true);
                 runDlg.setVisible(true);
                 if (!runDlg.IsCancelled) {
@@ -806,8 +786,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         @Override
         public boolean isEnabled() {
-        	return !getTestCasePane().isExecuting &&
-                	getTestCasePane().isEnabledToExecute;
+            return !getTestCasePane().isExecuting && getTestCasePane().isEnabledToExecute;
         }
     }
 
@@ -824,8 +803,7 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         @Override
         public boolean isEnabled() {
-            return !getTestCasePane().isExecuting &&
-            	getTestCasePane().isEnabledToExecute;
+            return !getTestCasePane().isExecuting && getTestCasePane().isEnabledToExecute;
         }
     }
 
@@ -837,8 +815,12 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         public void actionPerformed(ActionEvent e) {
             FileNode fn = getSelectedFileNode();
-            if (fn==null) return;
-            if (fn.getPythonTestScript()==null) return;
+            if (fn == null) {
+                return;
+            }
+            if (fn.getPythonTestScript() == null) {
+                return;
+            }
             GeneratePythonlibDoc.generate();
             testCasePane.parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             File testcaseDoc = fn.getPythonTestScript().generateDoc();
@@ -906,11 +888,11 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
         public void actionPerformed(ActionEvent e) {
             FileNode fn = getSelectedFileNode();
-            String input = JOptionPane.showInputDialog(null,
-                    "Give the name of the folder",
-                    "folder name:",
-                    JOptionPane.QUESTION_MESSAGE);
-            if (input==null) return;
+            String input = JOptionPane.showInputDialog(null, "Give the name of the folder", "folder name:",
+                  JOptionPane.QUESTION_MESSAGE);
+            if (input == null) {
+                return;
+            }
             File testScriptFile = fn.getFile();
             testScriptFile.renameTo(new File(input));
         }
@@ -928,51 +910,49 @@ public class TestCaseTree extends JTree implements DragSourceListener,
             String testName = tn.toString();
             FileNode fn = (FileNode) tn.getUserObject();
 
-            String input = showOptionDialog("Rename the script " + testName,
-            								"Give the new name of the test " + testName,
-            								testName);
-            
-            if (input == null) return;
+            String input = showOptionDialog("Rename the script " + testName, "Give the new name of the test " + testName,
+                  testName);
+
+            if (input == null) {
+                return;
+            }
 
             // if doc tab is opened, ensure close it first
             testCasePane.getDocPane().setText("");
             File newFile = new File(fn.getFile().getParent() + "/" + input);
             boolean result = fn.getFile().renameTo(newFile);
             if (!result) {
-            	logger.error("Impossible to rename " + fn.getFile().getName() + " to " + input);
-            	return;
+                logger.error("Impossible to rename " + fn.getFile().getName() + " to " + input);
+                return;
             }
             String testScriptFileName;
-			try {
-				// rename necessary classes
-				fn.setFile(newFile);
-				testScriptFileName = fn.getFile().getCanonicalPath() + "/" + StaticConfiguration.TEST_SCRIPT_FILENAME;
-	            fn.getPythonTestScript().setTestScriptFile(new File(testScriptFileName));
-	            // rename the testscript name
-	            NonWrappingTextPane tcPane = testCasePane.getTcSourceTextPane();
-	            if (tcPane!=null)
-	            {
-	            	tcPane.setFileName(testScriptFileName);
-	            }
-	            // rename the testdata name
-	            TestDataEditor tcDataPane = testCasePane.getTestDataPane();
-	            if (tcDataPane!=null)
-	            {
-	            	tcDataPane.setFileName(fn.getPythonTestScript().getTestcaseData().getCanonicalPath());
-	            }
+            try {
+                // rename necessary classes
+                fn.setFile(newFile);
+                testScriptFileName = fn.getFile().getCanonicalPath() + "/" + StaticConfiguration.TEST_SCRIPT_FILENAME;
+                fn.getPythonTestScript().setTestScriptFile(new File(testScriptFileName));
+                // rename the testscript name
+                NonWrappingTextPane tcPane = testCasePane.getTcSourceTextPane();
+                if (tcPane != null) {
+                    tcPane.setFileName(testScriptFileName);
+                }
+                // rename the testdata name
+                TestDataEditor tcDataPane = testCasePane.getTestDataPane();
+                if (tcDataPane != null) {
+                    tcDataPane.setFileName(fn.getPythonTestScript().getTestcaseData().getCanonicalPath());
+                }
 
-	            TCTreeNode parentTreeNode = (TCTreeNode)tn.getParent();
-	            parentTreeNode.removeAllChildren();
-	            FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
-	            addTreeToDir(parentFileNode.getFile(), parentTreeNode);
-	            ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-	            // reload the doc is selected
-            	setTestCaseDoc(fn.getPythonTestScript().getTestcaseDoc(), false);
-            	//
-			} catch (IOException e1) {
-				logger.error(e1.getMessage());
-			}
-
+                TCTreeNode parentTreeNode = (TCTreeNode) tn.getParent();
+                parentTreeNode.removeAllChildren();
+                FileNode parentFileNode = (FileNode) parentTreeNode.getUserObject();
+                addTreeToDir(parentFileNode.getFile(), parentTreeNode);
+                ((DefaultTreeModel) getModel()).reload(parentTreeNode);
+                // reload the doc is selected
+                setTestCaseDoc(fn.getPythonTestScript().getTestcaseDoc(), false);
+                //
+            } catch (IOException e1) {
+                logger.error(e1.getMessage());
+            }
 
         }
 
@@ -991,23 +971,20 @@ public class TestCaseTree extends JTree implements DragSourceListener,
             String testName = tn.toString();
             FileNode fn = (FileNode) tn.getUserObject();
             if (fn.isTestcaseDir()) {
-                if (JOptionPane.showConfirmDialog(null, "Are you sure to remove the script '" + testName + "'", "Confirmation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) ==
-                        JOptionPane.OK_OPTION)
-                {
+                if (JOptionPane.showConfirmDialog(null, "Are you sure to remove the script '" + testName + "'", "Confirmation",
+                      JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
                     // remove the test script directory
                     File testScriptFile = fn.getFile();
                     boolean deleted = DirectoryUtilities.deleteDirectory(testScriptFile);
-                    if (deleted)
-                    {
-                        TCTreeNode parentTreeNode = (TCTreeNode)tn.getParent();
+                    if (deleted) {
+                        TCTreeNode parentTreeNode = (TCTreeNode) tn.getParent();
                         parentTreeNode.removeAllChildren();
-                        FileNode parentFileNode = (FileNode)parentTreeNode.getUserObject();
+                        FileNode parentFileNode = (FileNode) parentTreeNode.getUserObject();
                         addTreeToDir(parentFileNode.getFile(), parentTreeNode);
                         ((DefaultTreeModel) getModel()).reload(parentTreeNode);
-                    }
-                    else
-                    {
-                        JOptionPane.showConfirmDialog(null, "Impossible to delete " + testName, "Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showConfirmDialog(null, "Impossible to delete " + testName, "Error", JOptionPane.OK_OPTION,
+                              JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -1016,14 +993,15 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
     class ImportTestSuiteAction extends AbstractAction {
 
-    	public ImportTestSuiteAction() {
-    		super("Import Testsuite directory");
-    	}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			getTestCasePane().importTestSuites();
+        public ImportTestSuiteAction() {
+            super("Import Testsuite directory");
+        }
 
-		}
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getTestCasePane().importTestSuites();
+
+        }
     }
 
     class CreateNewTestSuite extends AbstractAction {
@@ -1035,36 +1013,37 @@ public class TestCaseTree extends JTree implements DragSourceListener,
         public void actionPerformed(ActionEvent e) {
             TCTreeNode tn = getSelectedTreeNode();
             String testName = tn.toString();
-        	
-        	String input = showOptionDialog("Create a script from " + testName,
-					"Give the new name of the test",
-					testName);
-        	
-            if (input == null) return;
 
-			try {
-	            FileNode fn = (FileNode) tn.getUserObject();
-	            if (fn.isTestcaseDir()) {
-	                // get the source Dir
-	                TestScriptCreation createScriptTool = new TestScriptCreation(input, fn.getFile().getParentFile().getAbsoluteFile().getCanonicalPath());
-	                createScriptTool.copyTestSuite(fn.getFile().getAbsoluteFile().getCanonicalPath());
-	                tn = (TCTreeNode) tn.getParent();
-	                fn = (FileNode) tn.getUserObject();
-	            } else {
-	                TestScriptCreation createScriptTool = new TestScriptCreation(
-	                        input, fn.getFile().getAbsoluteFile().getCanonicalPath());
-	                createScriptTool.createTestSuite();
-	            }
-	            // update the tree view
-	            // add the tree
+            String input = showOptionDialog("Create a script from " + testName, "Give the new name of the test", testName);
 
-	            tn.removeAllChildren();
-	            addTreeToDir(fn.getFile(), tn);
-	            ((DefaultTreeModel) getModel()).reload(tn);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+            if (input == null) {
+                return;
+            }
+
+            try {
+                FileNode fn = (FileNode) tn.getUserObject();
+                if (fn.isTestcaseDir()) {
+                    // get the source Dir
+                    TestScriptCreation createScriptTool = new TestScriptCreation(input,
+                          fn.getFile().getParentFile().getAbsoluteFile().getCanonicalPath());
+                    createScriptTool.copyTestSuite(fn.getFile().getAbsoluteFile().getCanonicalPath());
+                    tn = (TCTreeNode) tn.getParent();
+                    fn = (FileNode) tn.getUserObject();
+                } else {
+                    TestScriptCreation createScriptTool = new TestScriptCreation(input,
+                          fn.getFile().getAbsoluteFile().getCanonicalPath());
+                    createScriptTool.createTestSuite();
+                }
+                // update the tree view
+                // add the tree
+
+                tn.removeAllChildren();
+                addTreeToDir(fn.getFile(), tn);
+                ((DefaultTreeModel) getModel()).reload(tn);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
 
         public boolean isEnabled() {
@@ -1085,20 +1064,24 @@ public class TestCaseTree extends JTree implements DragSourceListener,
 
     public class TCTreeNodeTransferable implements Transferable {
         Object object;
-        public TCTreeNodeTransferable (Object o) {
+
+        public TCTreeNodeTransferable(Object o) {
             object = o;
         }
-        public Object getTransferData(DataFlavor df)
-            throws UnsupportedFlavorException, IOException {
-            if (isDataFlavorSupported (df))
+
+        public Object getTransferData(DataFlavor df) throws UnsupportedFlavorException, IOException {
+            if (isDataFlavorSupported(df)) {
                 return object;
-            else
+            } else {
                 throw new UnsupportedFlavorException(df);
+            }
         }
-        public boolean isDataFlavorSupported (DataFlavor df) {
-            return (df.equals (localObjectFlavor));
+
+        public boolean isDataFlavorSupported(DataFlavor df) {
+            return (df.equals(localObjectFlavor));
         }
-        public DataFlavor[] getTransferDataFlavors () {
+
+        public DataFlavor[] getTransferDataFlavors() {
             return supportedFlavors;
         }
     }

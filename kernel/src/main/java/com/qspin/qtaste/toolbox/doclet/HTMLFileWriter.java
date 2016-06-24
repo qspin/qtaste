@@ -25,7 +25,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qspin.qtaste.util.Strings;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 import com.sun.javadoc.MethodDoc;
@@ -38,10 +37,12 @@ import com.sun.javadoc.Tag;
 import com.sun.javadoc.ThrowsTag;
 import com.sun.javadoc.Type;
 
+import com.qspin.qtaste.util.Strings;
+
 /**
  * An HTMLFileWriter allows to print the different parts of the Test API
  * to a file in HTML format.
- * 
+ *
  * @author David Ergo
  */
 public class HTMLFileWriter {
@@ -53,7 +54,7 @@ public class HTMLFileWriter {
 
     /**
      * Creates file and writes HTML header with optional body starting tag.
-     * 
+     *
      * @param fileName the name of the HTML file to create
      * @param title the title of the HTML page
      * @param withBody true to print body starting tag, false otherwise
@@ -92,7 +93,7 @@ public class HTMLFileWriter {
 
     /**
      * Prints string and terminates line.
-     * 
+     *
      * @param s the string to be written
      */
     public void println(String s) {
@@ -101,7 +102,7 @@ public class HTMLFileWriter {
 
     /**
      * Prints Test API Component header.
-     * 
+     *
      * @param classDoc the ClassDoc specifying the class
      * @param root the RootDoc passed to the doclet
      */
@@ -123,7 +124,8 @@ public class HTMLFileWriter {
             mOut.println("<DT><B>Configuration:</B></DT>");
             List<TestAPIDoclet.NameTypeDescription> configList = TestAPIDoclet.getNameTypeDescriptionList(tags);
             for (TestAPIDoclet.NameTypeDescription config : configList) {
-                mOut.println("<DD><CODE>" + config.name + "</CODE> (<CODE>" + config.type + "</CODE>) - " + config.description + "</DD>");
+                mOut.println("<DD><CODE>" + config.name + "</CODE> (<CODE>" + config.type + "</CODE>) - " + config.description
+                      + "</DD>");
             }
             mOut.println("</DL>");
         }
@@ -139,13 +141,17 @@ public class HTMLFileWriter {
         if (methodDocs.length > 0) {
             mOut.println("<P>");
             mOut.println("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
-            mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Methods Summary</B></FONT></TH></TR>");
+            mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Methods "
+                  + "Summary</B></FONT></TH></TR>");
             for (MethodDoc methodDoc : methodDocs) {
                 String methodName = methodDoc.name();
-                mOut.print("<TR><TD WIDTH=\"1%\"><CODE><B><A HREF=\"#" + methodName + methodDoc.flatSignature() + "\">" + methodName + "</A></B></CODE></TD><TD>");
+                mOut.print(
+                      "<TR><TD WIDTH=\"1%\"><CODE><B><A HREF=\"#" + methodName + methodDoc.flatSignature() + "\">" + methodName
+                            + "</A></B></CODE></TD><TD>");
                 Tag[] firstSentenceTags = methodDoc.firstSentenceTags();
                 if (firstSentenceTags.length == 0) {
-                    System.err.println("Warning: method " + methodName + " of " + methodDoc.containingClass().simpleTypeName() + " has no description");
+                    System.err.println("Warning: method " + methodName + " of " + methodDoc.containingClass().simpleTypeName()
+                          + " has no description");
                 }
                 printInlineTags(firstSentenceTags, classDoc);
                 mOut.println("</TD>");
@@ -154,7 +160,6 @@ public class HTMLFileWriter {
             mOut.println("</TABLE>");
         }
     }
-
 
     /**
      * Prints details of Test API methods, excluding old-style verbs, in HTML format.
@@ -166,7 +171,8 @@ public class HTMLFileWriter {
         if (methodDocs.length > 0) {
             mOut.println("&nbsp;<P>");
             mOut.println("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
-            mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Methods Detail</B></FONT></TH></TR>");
+            mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Methods "
+                  + "Detail</B></FONT></TH></TR>");
             mOut.println("</TABLE>");
             for (int m = 0; m < methodDocs.length; m++) {
                 MethodDoc methodDoc = methodDocs[m];
@@ -174,7 +180,8 @@ public class HTMLFileWriter {
 
                 // get return type
                 String returnTypeString = getTypeString(methodDoc.returnType());
-                int returnTypeLength = returnTypeString.replaceAll("<.*?>", "").replace("&lt;", "<").replace("&gt;", ">").length(); // length without HTML tags and &gt;/&lt; entities
+                int returnTypeLength = returnTypeString.replaceAll("<.*?>", "").replace("&lt;", "<").replace("&gt;", ">")
+                      .length(); // length without HTML tags and &gt;/&lt; entities
 
                 Parameter[] parameters = methodDoc.parameters();
                 String[] parameterSignatures = new String[parameters.length];
@@ -186,11 +193,12 @@ public class HTMLFileWriter {
                 for (int i = 0; i < returnTypeLength + methodName.length() + 2; i++) {
                     parameterSeparator += " ";
                 }
-                
-                
+
                 // begin output
-                mOut.println("<A NAME=\"" + methodName + "\"><A NAME=\"" + methodName + methodDoc.flatSignature() + "\"> <H3>" + methodName + "</H3></A></A>");
-                mOut.print("<PRE>" + returnTypeString + " <B>" + methodName + "</B>(" + Strings.join(parameterSignatures, parameterSeparator) + ")");
+                mOut.println("<A NAME=\"" + methodName + "\"><A NAME=\"" + methodName + methodDoc.flatSignature() + "\"> <H3>"
+                      + methodName + "</H3></A></A>");
+                mOut.print("<PRE>" + returnTypeString + " <B>" + methodName + "</B>(" + Strings
+                      .join(parameterSignatures, parameterSeparator) + ")");
 
                 Type[] exceptions = methodDoc.thrownExceptionTypes();
                 if (exceptions.length > 0) {
@@ -198,7 +206,8 @@ public class HTMLFileWriter {
                     for (int i = 0; i < exceptions.length; i++) {
                         exceptionNames[i] = getTypeString(exceptions[i]);
                     }
-                  mOut.print(parameterSeparator.substring(1, parameterSeparator.length() - 7) + "throws " + Strings.join(exceptionNames, parameterSeparator));
+                    mOut.print(parameterSeparator.substring(1, parameterSeparator.length() - 7) + "throws " + Strings
+                          .join(exceptionNames, parameterSeparator));
                 }
                 mOut.println("</PRE>");
                 mOut.print("<DL><DD>");
@@ -222,10 +231,13 @@ public class HTMLFileWriter {
                             if (!paramTag.parameterComment().isEmpty()) {
                                 printInlineTags(paramTag.inlineTags(), classDoc);
                             } else {
-                                System.out.println("No description in @param tag for " + parameter.name() + " in " + classDoc.name() + "." + methodDoc.name());
+                                System.out.println(
+                                      "No description in @param tag for " + parameter.name() + " in " + classDoc.name() + "."
+                                            + methodDoc.name());
                             }
                         } else {
-                            System.out.println("No @param tag for " + parameter.name() + " in " + classDoc.name() + "." + methodDoc.name());
+                            System.out.println(
+                                  "No @param tag for " + parameter.name() + " in " + classDoc.name() + "." + methodDoc.name());
                         }
                         mOut.println("</DD>");
                     }
@@ -242,12 +254,11 @@ public class HTMLFileWriter {
                 ThrowsTag[] throwsTags = methodDoc.throwsTags();
                 if (throwsTags.length > 0) {
                     mOut.println("<DT><B>Throws:</B></DT>");
-                    for (ThrowsTag throwsTag: throwsTags) {
+                    for (ThrowsTag throwsTag : throwsTags) {
                         String exceptionName = throwsTag.exceptionName();
                         // remove "com.qspin.qtaste.testsuite." prefix if any
-                        if (exceptionName.startsWith("com.qspin.qtaste.testsuite."))
-                        {
-                           exceptionName = exceptionName.substring("com.qspin.qtaste.testsuite.".length());
+                        if (exceptionName.startsWith("com.qspin.qtaste.testsuite.")) {
+                            exceptionName = exceptionName.substring("com.qspin.qtaste.testsuite.".length());
                         }
                         mOut.println("<DD><CODE>" + exceptionName + "</CODE> - ");
                         printInlineTags(throwsTag.inlineTags(), classDoc);
@@ -257,7 +268,7 @@ public class HTMLFileWriter {
 
                 mOut.println("</DL></DD></DL>");
 
-                if (m != methodDocs.length-1) {
+                if (m != methodDocs.length - 1) {
                     mOut.println("<HR>");
                 }
             }
@@ -266,6 +277,7 @@ public class HTMLFileWriter {
 
     /**
      * Returns type string.
+     *
      * @param type type for which to return type string
      * @return type string, including parametrized types, dimensions and links.
      */
@@ -274,7 +286,8 @@ public class HTMLFileWriter {
         typeQualifiedName = typeQualifiedName.replaceFirst("^com\\.qspin\\.qtaste\\.testsuite\\.(QTaste\\w*Exception)", "$1");
         String typeDocFileName = null;
         if (typeQualifiedName.startsWith("com.qspin.")) {
-            String javaDocDir = typeQualifiedName.startsWith("com.qspin.qtaste.") ? QTaste_JAVADOC_URL_PREFIX : SUT_JAVADOC_URL_PREFIX;
+            String javaDocDir = typeQualifiedName.startsWith("com.qspin.qtaste.") ? QTaste_JAVADOC_URL_PREFIX :
+                  SUT_JAVADOC_URL_PREFIX;
             typeDocFileName = javaDocDir + typeQualifiedName.replace('.', '/') + ".html";
         }
         String typeString = typeQualifiedName;
@@ -299,17 +312,19 @@ public class HTMLFileWriter {
 
     /**
      * Prints summary of Test API components, in HTML format.
-     * 
+     *
      * @param testAPIComponents the array of ClassDoc specifying all test API components
      */
     public void printTestAPIComponentsSummary(ClassDoc[] testAPIComponents) {
         mOut.println("<P>");
         mOut.println("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
-        mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Components Summary</B></FONT></TH></TR>");
+        mOut.println("<TR BGCOLOR=\"#CCCCFF\"><TH ALIGN=\"left\" COLSPAN=\"2\"><FONT SIZE=\"+2\"><B>Components "
+              + "Summary</B></FONT></TH></TR>");
         for (int c = 0; c < testAPIComponents.length; c++) {
             ClassDoc classDoc = testAPIComponents[c];
             String componentName = classDoc.name();
-            mOut.print("<TR><TD WIDTH=\"1%\"><CODE><B><A HREF=\"components/" + componentName + ".html\">" + componentName + "</A></B></CODE></TD><TD>");
+            mOut.print("<TR><TD WIDTH=\"1%\"><CODE><B><A HREF=\"components/" + componentName + ".html\">" + componentName
+                  + "</A></B></CODE></TD><TD>");
             printInlineTags(classDoc.firstSentenceTags(), classDoc);
             mOut.println("</TD>");
         }
@@ -318,7 +333,7 @@ public class HTMLFileWriter {
 
     /**
      * Prints heading, in HTML format.
-     * 
+     *
      * @param heading the heading to print
      * @param level heading level
      */
@@ -328,7 +343,7 @@ public class HTMLFileWriter {
 
     /**
      * Prints link to Test API Component HTML file, in HTML format.
-     * 
+     *
      * @param classDoc the classDoc of the Test API component
      */
     public void printTestAPIComponentLink(ClassDoc classDoc) {
@@ -338,40 +353,43 @@ public class HTMLFileWriter {
 
     /**
      * Prints inline tags, in HTML format.
-     * 
+     *
      * @param tags the array of Tag to print
      */
     private void printInlineTags(Tag[] tags, ClassDoc classDoc) {
         for (int i = 0; i < tags.length; i++) {
             if ((tags[i] instanceof SeeTag) && tags[i].name().equals("@link")) {
-            	SeeTag seeTag = (SeeTag) tags[i];
-            	boolean sameClass = seeTag.referencedClass() == classDoc;
-            	String fullClassName = seeTag.referencedClassName();
-            	String memberName = seeTag.referencedMemberName();
+                SeeTag seeTag = (SeeTag) tags[i];
+                boolean sameClass = seeTag.referencedClass() == classDoc;
+                String fullClassName = seeTag.referencedClassName();
+                String memberName = seeTag.referencedMemberName();
 
-            	String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-            	List<String> nameParts = new ArrayList<String>();
-            	if (!sameClass) {
-            		nameParts.add(className);
-            	}
-            	if (memberName != null) {
-            		nameParts.add(memberName);
-            	}
-            	String name = Strings.join(nameParts, ".");
+                String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+                List<String> nameParts = new ArrayList<String>();
+                if (!sameClass) {
+                    nameParts.add(className);
+                }
+                if (memberName != null) {
+                    nameParts.add(memberName);
+                }
+                String name = Strings.join(nameParts, ".");
 
-            	if (fullClassName.lastIndexOf('.') >= 0) {
-	            	String packageName = fullClassName.substring(0, fullClassName.lastIndexOf('.'));
-	            	String urlPrefix = "";
-	                if (!sameClass && packageName.startsWith("com.qspin.") && !packageName.equals("com.qspin.qtaste.testapi.api")) {
-	                    String javaDocDir = packageName.startsWith("com.qspin.qtaste.") ? QTaste_JAVADOC_URL_PREFIX : SUT_JAVADOC_URL_PREFIX;
-	                    urlPrefix = javaDocDir + packageName.replace('.', '/') + "/";
-	                }
-	            	String url = (sameClass ? "" : urlPrefix + className + ".html") + (memberName != null ? "#" + memberName : "") ;
-	
-	            	mOut.print("<A HREF=\"" + url + "\">" + name + "</A>");
-            	} else {
-	            	mOut.print(name);            		
-            	}
+                if (fullClassName.lastIndexOf('.') >= 0) {
+                    String packageName = fullClassName.substring(0, fullClassName.lastIndexOf('.'));
+                    String urlPrefix = "";
+                    if (!sameClass && packageName.startsWith("com.qspin.") && !packageName.equals(
+                          "com.qspin.qtaste.testapi.api")) {
+                        String javaDocDir = packageName.startsWith("com.qspin.qtaste.") ? QTaste_JAVADOC_URL_PREFIX :
+                              SUT_JAVADOC_URL_PREFIX;
+                        urlPrefix = javaDocDir + packageName.replace('.', '/') + "/";
+                    }
+                    String url =
+                          (sameClass ? "" : urlPrefix + className + ".html") + (memberName != null ? "#" + memberName : "");
+
+                    mOut.print("<A HREF=\"" + url + "\">" + name + "</A>");
+                } else {
+                    mOut.print(name);
+                }
             } else {
                 mOut.print(tags[i].text());
             }

@@ -18,6 +18,7 @@
 */
 
 package com.qspin.qtaste.ui.jedit;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.text.JTextComponent;
@@ -27,7 +28,6 @@ import de.sciss.syntaxpane.Token;
 import de.sciss.syntaxpane.TokenType;
 import de.sciss.syntaxpane.actions.ActionUtils;
 import de.sciss.syntaxpane.actions.DefaultSyntaxAction;
-
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.util.Log4jLoggerFactory;
@@ -41,82 +41,86 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
  */
 @SuppressWarnings("serial")
 public class PythonIndentAction extends DefaultSyntaxAction {
-	protected static Logger logger = Log4jLoggerFactory.getLogger(PythonIndentAction.class);
-	
+    protected static Logger logger = Log4jLoggerFactory.getLogger(PythonIndentAction.class);
 
-	/**
-	* Constructor.
-	*/
-	public PythonIndentAction() {
-		super("PYTHON_INDENT");
-	}
-
-	/**
-	* Return a string with number of spaces equal to the tab-stop of the TextComponent
-	* @param target the target component
-	* @return a string with number of spaces equal to the tab-stop of the TextComponent
-	*/
-	public static String getTab(JTextComponent target) {
-		return "\t";
-	}
-	
-    /**      * Get the indentation of a line of text.
-     *   This is the subString from
-     *         beginning of line to the first non-space char      
-     * @param line the line of text      
-     * @return indentation of line.      
+    /**
+     * Constructor.
      */
-     public static String getIndent(String line) {
-    	 if (line == null || line.length() == 0) {
-    		 return "";
-    	 }
-    	 int i = 0;
-    	 while (i < line.length() && line.charAt(i) == '\t') 
-    	 {             
-    		 i++;         
-    		 }         
-    	 return line.substring(0, i);
-     } 	
-	/**
-	* {@inheritDoc}
-	* @param e 
-	*/
-	@Override
-	public void actionPerformed(JTextComponent target, SyntaxDocument sDoc,
-			int dot, ActionEvent e) {
-	int pos = target.getCaretPosition();
-	int start = sDoc.getParagraphElement(pos).getStartOffset();
-	String line = ActionUtils.getLine(target);
-	String lineToPos = line.substring(0, pos - start);
-	String prefix = getIndent(line);
-	Token t = sDoc.getTokenAt(pos);
-	if (TokenType.isComment(t)) {
-		if (line.trim().endsWith("*/")) {
-			prefix = prefix.substring(0, prefix.length() - 1);
-		} else if (line.trim().startsWith("*")) {
-			prefix += "# ";
-		} else if (line.trim().startsWith("##")) {
-			prefix += "#";
-		}
-	} else if (lineToPos.trim().endsWith(":")) {
-		// check if current line is not comment		
-		prefix += getTab(target);
-		} else {
-			
-			String noComment = sDoc.getUncommentedText(start, pos);
-			// skip EOL comments
-			if (noComment.trim().endsWith(":")) {
-				prefix += getTab(target);
-			}
-			if ((lineToPos.length()>0) && (line.equals(prefix))) {
-				if (prefix.length()>0)			
-					prefix = prefix.substring(1);
-			}
-			if ((lineToPos.length()==0)) {
-				if (prefix.length()>0)			
-					prefix="";
-			}
-		}
-		target.replaceSelection("\n" + prefix);
-	}	
+    public PythonIndentAction() {
+        super("PYTHON_INDENT");
+    }
+
+    /**
+     * Return a string with number of spaces equal to the tab-stop of the TextComponent
+     *
+     * @param target the target component
+     * @return a string with number of spaces equal to the tab-stop of the TextComponent
+     */
+    public static String getTab(JTextComponent target) {
+        return "\t";
+    }
+
+    /**
+     * Get the indentation of a line of text.
+     * This is the subString from
+     * beginning of line to the first non-space char
+     *
+     * @param line the line of text
+     * @return indentation of line.
+     */
+    public static String getIndent(String line) {
+        if (line == null || line.length() == 0) {
+            return "";
+        }
+        int i = 0;
+        while (i < line.length() && line.charAt(i) == '\t') {
+            i++;
+        }
+        return line.substring(0, i);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param e
+     */
+    @Override
+    public void actionPerformed(JTextComponent target, SyntaxDocument sDoc, int dot, ActionEvent e) {
+        int pos = target.getCaretPosition();
+        int start = sDoc.getParagraphElement(pos).getStartOffset();
+        String line = ActionUtils.getLine(target);
+        String lineToPos = line.substring(0, pos - start);
+        String prefix = getIndent(line);
+        Token t = sDoc.getTokenAt(pos);
+        if (TokenType.isComment(t)) {
+            if (line.trim().endsWith("*/")) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+            } else if (line.trim().startsWith("*")) {
+                prefix += "# ";
+            } else if (line.trim().startsWith("##")) {
+                prefix += "#";
+            }
+        } else if (lineToPos.trim().endsWith(":")) {
+            // check if current line is not comment
+            prefix += getTab(target);
+        } else {
+
+            String noComment = sDoc.getUncommentedText(start, pos);
+            // skip EOL comments
+            if (noComment.trim().endsWith(":")) {
+                prefix += getTab(target);
+            }
+            if ((lineToPos.length() > 0) && (line.equals(prefix))) {
+                if (prefix.length() > 0) {
+                    prefix = prefix.substring(1);
+                }
+            }
+            if ((lineToPos.length() == 0)) {
+                if (prefix.length() > 0) {
+                    prefix = "";
+                }
+            }
+        }
+        target.replaceSelection("\n" + prefix);
+    }
 }

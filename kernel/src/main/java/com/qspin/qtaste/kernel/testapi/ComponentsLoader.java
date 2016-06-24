@@ -27,6 +27,8 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -36,11 +38,11 @@ import org.apache.log4j.Logger;
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.testsuite.Dependency;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import java.util.Iterator;
-import java.util.List;
 
 /**
- * ComponentLoader is responsible for loading all the TestAPIComponent classes depending on the selected testapi_implementation.import tags and register the component methods to the TestAPI.
+ * ComponentLoader is responsible for loading all the TestAPIComponent classes depending on the selected
+ * testapi_implementation.import tags and register the component methods to the TestAPI.
+ *
  * @author lvboque
  */
 public class ComponentsLoader {
@@ -55,7 +57,6 @@ public class ComponentsLoader {
     private ComponentsLoader() {
         componentMap = new HashMap<String, Class<?>>();
         api = TestAPIImpl.getInstance();
-
 
         TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
         if (testbedConfig != null) {
@@ -85,7 +86,7 @@ public class ComponentsLoader {
     private void initialize(List<Object> testAPIimplementation) {
         componentMap.clear();
         api.unregisterAllMethods();
-	testapiImplementation = testAPIimplementation;
+        testapiImplementation = testAPIimplementation;
 
         // create factory instances to avoid creating them later on a testbed change
         // which would generate a ConcurrentModificationException in configurationChangeHandlers of TestBedConfiguration
@@ -93,7 +94,7 @@ public class ComponentsLoader {
         MultipleInstancesComponentFactory.getInstance();
 
         if (testAPIimplementation != null) {
-            for (Iterator<Object> testAPIIter = testAPIimplementation.iterator(); testAPIIter.hasNext() ; ) {
+            for (Iterator<Object> testAPIIter = testAPIimplementation.iterator(); testAPIIter.hasNext(); ) {
                 register((String) testAPIIter.next(), Component.class);
             }
         }
@@ -101,6 +102,7 @@ public class ComponentsLoader {
 
     /**
      * Get an instance of the ComponentsLoader
+     *
      * @return the instance
      */
     synchronized public static ComponentsLoader getInstance() {
@@ -112,6 +114,7 @@ public class ComponentsLoader {
 
     /**
      * Return the implementation Class of the specified component
+     *
      * @param component the component name
      * @return the implementation class of the specified component or null if the component is not registered.
      */
@@ -122,6 +125,7 @@ public class ComponentsLoader {
     /**
      * Get the dependencies of the specified componentName.
      * This function relies on {@link Dependency} annotation.
+     *
      * @param componentName The specified component name
      * @return names of the dependencies or !!!!!
      */
@@ -135,6 +139,7 @@ public class ComponentsLoader {
 
     /**
      * Analyse the class c and register all the test api methods in to TestAPI
+     *
      * @param c the class to analyse
      */
     private void registerTestAPIMethods(Class<?> c) {
@@ -157,7 +162,6 @@ public class ComponentsLoader {
             // Register
             registerClassMethods(componentName, componentInterface, c, factoryObject);
 
-
             // Register also inherited interfaces
             // API extends A, B, C
             Class<?>[] interfaces = componentInterface.getInterfaces();
@@ -172,7 +176,8 @@ public class ComponentsLoader {
         }
     }
 
-    private void registerClassMethods(String componentName, Class<?> componentInterface, Class<?> component, ComponentFactory factoryObject) {
+    private void registerClassMethods(String componentName, Class<?> componentInterface, Class<?> component, ComponentFactory
+          factoryObject) {
         Method[] methods = componentInterface.getDeclaredMethods();
         for (Method method : methods) {
             // Match the signature
@@ -184,6 +189,7 @@ public class ComponentsLoader {
     /**
      * Register all the classes inheriting or implementing a given
      * class in a given package.
+     *
      * @param pckgname the fully qualified name of the package
      * @param tosubclass the Class object to inherit from
      */
@@ -195,8 +201,8 @@ public class ComponentsLoader {
         name = name.replace('.', '/');
 
         // Get a File object for the package
-		URL url = ComponentsLoader.class.getResource(name);
-		
+        URL url = ComponentsLoader.class.getResource(name);
+
         if (url == null) {
             logger.warn("Package " + pckgname + " doesn't exist, no components to load");
             return;
@@ -206,8 +212,8 @@ public class ComponentsLoader {
         logger.info("Loading components for platform " + platformName + " from " + url);
 
         File directory = new File(url.getFile().toString().replaceAll("%20", "\\ "));
-		
-		if (directory.exists()) {
+
+        if (directory.exists()) {
             // Get the list of the files contained in the package
             String[] files = directory.list();
             for (int i = 0; i < files.length; i++) {
@@ -236,7 +242,8 @@ public class ComponentsLoader {
                 while (e.hasMoreElements()) {
                     ZipEntry entry = (ZipEntry) e.nextElement();
                     String entryname = entry.getName();
-                    if (entryname.startsWith(starts) && (entryname.lastIndexOf('/') <= starts.length()) && entryname.endsWith(".class")) {
+                    if (entryname.startsWith(starts) && (entryname.lastIndexOf('/') <= starts.length()) && entryname.endsWith(
+                          ".class")) {
                         String classname = entryname.substring(0, entryname.length() - 6);
                         if (classname.startsWith("/")) {
                             classname = classname.substring(1);

@@ -25,29 +25,26 @@ import com.qspin.qtaste.testsuite.QTasteException;
 
 public class JavaGUIFXImpl extends com.qspin.qtaste.javaguifx.client.JavaGUIFXImpl implements JavaGUIFX {
 
-	public JavaGUIFXImpl(String instanceId) throws Exception
-    {
-		super(TestBedConfiguration.getInstance().getMIString(instanceId, "JavaGUIFX", "jmx_url"));
-		mInstanceId = instanceId;
-	}
+    public JavaGUIFXImpl(String instanceId) throws Exception {
+        super(TestBedConfiguration.getInstance().getMIString(instanceId, "JavaGUIFX", "jmx_url"));
+        mInstanceId = instanceId;
+    }
 
-	@Override
-	public String getInstanceId() {
-		return mInstanceId;
-	}
+    @Override
+    public String getInstanceId() {
+        return mInstanceId;
+    }
 
-	@Override
-	public void terminate() throws QTasteException
-	{
-		super.terminate();
-	}
+    @Override
+    public void terminate() throws QTasteException {
+        super.terminate();
+    }
 
-	@Override
-	public void initialize() throws QTasteException
-	{
-		super.initialize();
-	}
+    @Override
+    public void initialize() throws QTasteException {
+        super.initialize();
+    }
 
-	protected String mInstanceId;
+    protected String mInstanceId;
 
 }

@@ -78,7 +78,6 @@ import com.qspin.qtaste.ui.tools.SpringUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -104,6 +103,7 @@ public class Log4jPanel extends JPanel {
     private boolean m_UserScrollPosition = false;
     private Stack<String> m_currentStepStack = new Stack<String>();
     private Collection<String> m_applications = new HashSet<String>();
+
     //private JTreeTable m_TreeLogTable;
     //private Log4JTableModel m_TreeLogModel;
     public Log4jPanel() {
@@ -123,19 +123,24 @@ public class Log4jPanel extends JPanel {
     }
 
     public void selectAndScrollToTestCase(TestResult tr) {
-    	if (tr==null) return;
-    	if (tr.getTestData()==null) return;
+        if (tr == null) {
+            return;
+        }
+        if (tr.getTestData() == null) {
+            return;
+        }
         int index = -1;
         String startTime = new Time(tr.getStartDate().getTime()).toString();
         String startMessage;
         if (tr.getRetryCount() > 0) {
-            startMessage = "Retrying test script: " + tr.getName() + " (row " + tr.getTestData().getRowId() + ") after SUT restart";
+            startMessage =
+                  "Retrying test script: " + tr.getName() + " (row " + tr.getTestData().getRowId() + ") after SUT restart";
         } else {
             startMessage = "Executing test script: " + tr.getName() + " (row " + tr.getTestData().getRowId() + ")";
         }
 
         // search for last log line with corresponding time
-        for (int i = m_LogTable.getRowCount()-1; i >= 0; i--) {
+        for (int i = m_LogTable.getRowCount() - 1; i >= 0; i--) {
             if (m_LogTable.getValueAt(i, LOG_TIME).equals(startTime)) {
                 index = i;
                 break;
@@ -176,7 +181,8 @@ public class Log4jPanel extends JPanel {
 
                 // get top fully visible row in view
                 int topRowView = m_LogTable.rowAtPoint(new Point(0, (int) visibleRect.getMinY()));
-                if ((topRowView != -1) && !visibleRect.contains(m_LogTable.getCellRect(topRowView, 0, true)) && (topRowView < (m_LogTable.getRowCount() - 1))) {
+                if ((topRowView != -1) && !visibleRect.contains(m_LogTable.getCellRect(topRowView, 0, true)) && (topRowView < (
+                      m_LogTable.getRowCount() - 1))) {
                     // use next fully visible row
                     topRowView++;
                 }
@@ -211,7 +217,8 @@ public class Log4jPanel extends JPanel {
 
                 if (topRowView != -1) {
                     // get top row in updated view
-                    while (((topRowView = m_LogTable.convertRowIndexToView(topRowModel)) == -1) && (topRowModel < (m_LogModel.getRowCount() - 1))) {
+                    while (((topRowView = m_LogTable.convertRowIndexToView(topRowModel)) == -1) && (topRowModel < (
+                          m_LogModel.getRowCount() - 1))) {
                         topRowModel++;
                     }
                 }
@@ -265,7 +272,8 @@ public class Log4jPanel extends JPanel {
             addFilterLogCheckBox("Level", "Warn", "doLogLevelFilter", true);
             addFilterLogCheckBox("Level", "Error", "doLogLevelFilter", true);
             addFilterLogCheckBox("Level", "Fatal", "doLogLevelFilter", true);
-            final JCheckBox testCaseOrVerbCheckBox = addFilterLogCheckBox("TestCaseOrVerb", "Test case or verb", "filterMessageTestCaseOrVerb", true);
+            final JCheckBox testCaseOrVerbCheckBox = addFilterLogCheckBox("TestCaseOrVerb", "Test case or verb",
+                  "filterMessageTestCaseOrVerb", true);
             final JCheckBox qtasteCheckBox = addFilterLogCheckBox("Source", "QTaste", "filterMessageSource", true);
 
             // when selecting "Invoking" force "QTaste" to be selected
@@ -288,14 +296,13 @@ public class Log4jPanel extends JPanel {
                 }
             });
 
-            m_LogModel = new DefaultTableModel(new Object[]{"Time", "Level", "Source", "@", "Step", "Message"}, 0) {
+            m_LogModel = new DefaultTableModel(new Object[] {"Time", "Level", "Source", "@", "Step", "Message"}, 0) {
 
                 @Override
                 public boolean isCellEditable(int rowIndex, int mColIndex) {
                     return false;
                 }
             };
-
 
             m_LogTable = new JTable(m_LogModel) {
 
@@ -304,10 +311,10 @@ public class Log4jPanel extends JPanel {
                     Point p = e.getPoint();
                     int rowIndex = rowAtPoint(p);
                     int colIndex = columnAtPoint(p);
-    				if (colIndex < 0) {
-    					return null;
-    				}
-    				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
+                    if (colIndex < 0) {
+                        return null;
+                    }
+                    return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
                 }
 
                 //Implement table header tool tips.
@@ -318,13 +325,13 @@ public class Log4jPanel extends JPanel {
                             java.awt.Point p = e.getPoint();
                             int index = columnModel.getColumnIndexAtX(p.x);
                             if (index < 0) {
-                            	return null;
+                                return null;
                             }
                             int realIndex = columnModel.getColumn(index).getModelIndex();
                             if (realIndex == LOG_LOGGER) {
-                               return "Logger name";
+                                return "Logger name";
                             } else {
-                               return m_LogTable.getModel().getColumnName(realIndex);
+                                return m_LogTable.getModel().getColumnName(realIndex);
                             }
                         }
                     };
@@ -354,7 +361,6 @@ public class Log4jPanel extends JPanel {
             }
             m_LogFilter = new Log4jRowFilter();
 
-
             m_LogSorterTable = new TableRowSorter<TableModel>(m_LogModel);
             m_LogSorterTable.setRowFilter(m_LogFilter);
             // disable row sorting
@@ -376,24 +382,24 @@ public class Log4jPanel extends JPanel {
 
             constraint.gridwidth = GridBagConstraints.WEST;
             constraint.ipady = 10;
-            constraint.insets = new Insets(0,5,4,0);
-            m_SourceScrollPane = new JScrollPane(m_SourceFilterPanel,
-            		  ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
-            		  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            constraint.insets = new Insets(0, 5, 4, 0);
+            m_SourceScrollPane = new JScrollPane(m_SourceFilterPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
+                  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             add(new JLabel("Source: "), constraint);
             constraint.gridwidth = GridBagConstraints.REMAINDER;
-            constraint.insets = new Insets(0,0,4,0);
+            constraint.insets = new Insets(0, 0, 4, 0);
             add(m_SourceScrollPane, constraint);
 
             constraint.ipady = 0;
-            constraint.insets = new Insets(0,0,0,0);
+            constraint.insets = new Insets(0, 0, 0, 0);
             constraint.fill = GridBagConstraints.BOTH;
             constraint.gridheight = GridBagConstraints.REMAINDER;
             constraint.weightx = 1.0;
             constraint.weighty = 1.0;
             add(new JScrollPane(m_LogTable), constraint);
 
-            SpringUtilities.makeCompactGrid(m_LevelAndMessageFilterPanel, 1, m_LevelFilterCheckBoxes.size() + m_SourceFilterCheckBoxes.size() + 1, 5, 5, 2, 0);
+            SpringUtilities.makeCompactGrid(m_LevelAndMessageFilterPanel, 1,
+                  m_LevelFilterCheckBoxes.size() + m_SourceFilterCheckBoxes.size() + 1, 5, 5, 2, 0);
             SpringUtilities.makeCompactGrid(m_SourceFilterPanel, 1, m_SourceFilterCheckBoxes.size(), -3, -4, 2, 2);
 
         /*
@@ -503,12 +509,10 @@ public class Log4jPanel extends JPanel {
                 }
             }
             if (!m_UserScrollPosition) {
-                m_LogTable.scrollRectToVisible(
-                        m_LogTable.getCellRect(m_LogTable.getRowCount() - 1, 0, true));
+                m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(m_LogTable.getRowCount() - 1, 0, true));
                 return;
             } else if (scrollbar.getValue() >= currentScrollBarMax) {
-                m_LogTable.scrollRectToVisible(
-                        m_LogTable.getCellRect(m_LogTable.getRowCount() - 1, 0, true));
+                m_LogTable.scrollRectToVisible(m_LogTable.getCellRect(m_LogTable.getRowCount() - 1, 0, true));
                 m_UserScrollPosition = false;
                 return;
             }
@@ -525,7 +529,7 @@ public class Log4jPanel extends JPanel {
         if (m_LogTable.getSelectedRow()!= -1)
         m_LogTable.getSelectionModel().setSelectionInterval(lastRow,lastRow);
          */
-        //}
+            //}
         }
     }
 
@@ -546,12 +550,13 @@ public class Log4jPanel extends JPanel {
 
         /**
          * Returns false if message must not be filtered out because it starts with the name of a checkbox,
-         *         true otherwise.
+         * true otherwise.
+         *
          * @param level the log level
          * @param source the log source
          * @param message the log message
          * @return false if message must not be filtered out because it starts with the name of a checkbox,
-         *         true otherwise
+         * true otherwise
          */
         public boolean filterMessageStartWith(String level, String source, String message) {
             for (JCheckBox checkBox : m_MessageFilterCheckBoxes) {
@@ -564,12 +569,13 @@ public class Log4jPanel extends JPanel {
 
         /**
          * Returns true if message must be filtered out because the checkbox corresponding to its source is unselected,
-         *         false otherwise.
+         * false otherwise.
+         *
          * @param level the log level
          * @param source the log source
          * @param message the log message
          * @return true if message must be filtered out because the checkbox corresponding to its source is unselected,
-         *         false otherwise
+         * false otherwise
          */
         public boolean filterMessageSource(String level, String source, String message) {
             for (JCheckBox checkBox : m_SourceFilterCheckBoxes) {
@@ -582,12 +588,13 @@ public class Log4jPanel extends JPanel {
 
         /**
          * Returns true if message must be filtered out because the checkbox corresponding to its level is unselected,
-         *         false otherwise.
+         * false otherwise.
+         *
          * @param level the log level
          * @param source the log source
          * @param message the log message
          * @return true if message must be filtered out because the checkbox corresponding to its level is unselected,
-         *         false otherwise
+         * false otherwise
          */
         public boolean doLogLevelFilter(String level, String source, String message) {
             for (JCheckBox checkBox : m_LevelFilterCheckBoxes) {
@@ -600,6 +607,7 @@ public class Log4jPanel extends JPanel {
 
         /**
          * Returns false if message must not be filtered out because it is the start of of a test case or a verb invoke.
+         *
          * @param level the log level
          * @param source the log source
          * @param message the log message
@@ -607,14 +615,15 @@ public class Log4jPanel extends JPanel {
          */
         public boolean filterMessageTestCaseOrVerb(String level, String source, String message) {
             for (JCheckBox checkBox : m_MessageFilterCheckBoxes) {
-                if (checkBox.isSelected() && source.equals("QTaste") && (message.startsWith("Invoking ") || message.startsWith("Executing test script: ") || message.startsWith("Retrying test script: "))) {
+                if (checkBox.isSelected() && source.equals("QTaste") && (message.startsWith("Invoking ") || message.startsWith(
+                      "Executing test script: ") || message.startsWith("Retrying test script: "))) {
                     return false;
                 }
             }
             return true;
         }
 
-		@Override
+        @Override
         public boolean include(Entry entry) {
             String type = ((String) entry.getValue(1)).toLowerCase();
             String message = ((String) entry.getValue(LOG_MESSAGE));
@@ -623,18 +632,18 @@ public class Log4jPanel extends JPanel {
                 try {
                     // get level method
                     String methodName = m_FilterMethod.get("Level");
-                    Method method = this.getClass().getMethod(methodName, new Class[]{String.class, String.class, String.class});
+                    Method method = this.getClass().getMethod(methodName, new Class[] {String.class, String.class, String.class});
                     Object returnValue = method.invoke(this, type, source, message);
                     boolean filterLevel = Boolean.parseBoolean(returnValue.toString());
 
                     // get "TestCaseOrVerb" method
                     methodName = m_FilterMethod.get("TestCaseOrVerb");
-                    method = this.getClass().getMethod(methodName, new Class[]{String.class, String.class, String.class});
+                    method = this.getClass().getMethod(methodName, new Class[] {String.class, String.class, String.class});
                     returnValue = method.invoke(this, type, source, message);
                     boolean filterTestCaseOrVerb = Boolean.parseBoolean(returnValue.toString());
 
                     methodName = m_FilterMethod.get("Source");
-                    method = this.getClass().getMethod(methodName, new Class[]{String.class, String.class, String.class});
+                    method = this.getClass().getMethod(methodName, new Class[] {String.class, String.class, String.class});
                     returnValue = method.invoke(this, type, source, message);
                     boolean filterSource = Boolean.parseBoolean(returnValue.toString());
 
@@ -656,6 +665,7 @@ public class Log4jPanel extends JPanel {
             }
         }
     }
+
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
@@ -739,7 +749,7 @@ public class Log4jPanel extends JPanel {
             // get the selected table lines
             int[] selectedRows = m_LogTable.getSelectedRows();
             for (int row = 0; row < selectedRows.length; row++) {
-                String message = (String)m_LogTable.getValueAt(selectedRows[row], LOG_MESSAGE);
+                String message = (String) m_LogTable.getValueAt(selectedRows[row], LOG_MESSAGE);
                 if (message != null) {
                     if (messages.length() > 0) {
                         messages.append(eol);
@@ -764,8 +774,8 @@ public class Log4jPanel extends JPanel {
     static class QTasteTableCellRenderer extends DefaultTableCellRenderer {
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int
+              row, int column) {
             JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             // display the color depending on level and message

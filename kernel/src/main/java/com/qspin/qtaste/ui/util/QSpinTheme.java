@@ -19,118 +19,106 @@
 
 package com.qspin.qtaste.ui.util;
 
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+
+import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
-import org.apache.log4j.Logger;
 
 /**
  * The QSpinTheme is a theme overriding the DefaultMetalTheme and modifying primary colors
  * when displaying gui objects. The white and blue look of all the graphical elements is
  * managed by this object.
  */
-public class QSpinTheme extends DefaultMetalTheme
-{
-   protected static Logger logger = Log4jLoggerFactory.getLogger(QSpinTheme.class);
-   private FontUIResource mFontRes = null;
-   public QSpinTheme()
-   {
-   }
+public class QSpinTheme extends DefaultMetalTheme {
+    protected static Logger logger = Log4jLoggerFactory.getLogger(QSpinTheme.class);
+    private FontUIResource mFontRes = null;
 
-   public String getName()
-   {
-      return "QSpin";
-   }
-   public final String toString()
-   {
-      return getName();
-   }
-   protected ColorUIResource getPrimary1()
-   {
-      return mPrimary1;
-   }
-   protected ColorUIResource getPrimary2()
-   {
-      return mPrimary2;
-   }
-   protected ColorUIResource getPrimary3()
-   {
-      return mPrimary3;
-   }
+    public QSpinTheme() {
+    }
 
-   private final ColorUIResource mPrimary1 = new ColorUIResource(ResourceManager.getInstance().getNormalColor());
-   private final ColorUIResource mPrimary2 = new ColorUIResource(ResourceManager.getInstance().getLightColor());
-   private final ColorUIResource mPrimary3 = new ColorUIResource(ResourceManager.getInstance().getLightColor());
+    public String getName() {
+        return "QSpin";
+    }
 
-   protected ColorUIResource getSecondary1()
-   {
-      return mSecondary1;
-   }
-   protected ColorUIResource getSecondary2()
-   {
-      return mSecondary2;
-   }
-   protected ColorUIResource getSecondary3()
-   {
-      return mSecondary3;
-   }
+    public final String toString() {
+        return getName();
+    }
 
-   private final ColorUIResource mSecondary1 = new ColorUIResource(ResourceManager.getInstance().getBackColor());
-   private final ColorUIResource mSecondary2 = new ColorUIResource(ResourceManager.getInstance().getBackColor());
-   private final ColorUIResource mSecondary3 = new ColorUIResource(ResourceManager.getInstance().getBackgroundColor());
+    protected ColorUIResource getPrimary1() {
+        return mPrimary1;
+    }
 
-   public FontUIResource getControlTextFont()
-   {
-      if(mFontRes != null)
-      {
-         return mFontRes;
-      }
-      return super.getControlTextFont();
-   }
+    protected ColorUIResource getPrimary2() {
+        return mPrimary2;
+    }
 
-   public FontUIResource getSystemTextFont()
-   {
-      if(mFontRes != null)
-      {
-         return mFontRes;
-      }
-      return super.getSystemTextFont();
-   }
+    protected ColorUIResource getPrimary3() {
+        return mPrimary3;
+    }
 
-   public FontUIResource getUserTextFont()
-   {
-      if(mFontRes != null)
-      {
-         return mFontRes;
-      }
-      return super.getUserTextFont();
-   }
+    private final ColorUIResource mPrimary1 = new ColorUIResource(ResourceManager.getInstance().getNormalColor());
+    private final ColorUIResource mPrimary2 = new ColorUIResource(ResourceManager.getInstance().getLightColor());
+    private final ColorUIResource mPrimary3 = new ColorUIResource(ResourceManager.getInstance().getLightColor());
 
-   public FontUIResource getMenuTextFont()
-   {
-      if(mFontRes != null)
-      {
-         return mFontRes;
-      }
-      return super.getMenuTextFont();
-   }
+    protected ColorUIResource getSecondary1() {
+        return mSecondary1;
+    }
 
-   public FontUIResource getWindowTitleFont()
-   {
-      if(mFontRes != null)
-      {
-         return mFontRes;
-      }
-      return super.getWindowTitleFont();
-   }
+    protected ColorUIResource getSecondary2() {
+        return mSecondary2;
+    }
 
-   public FontUIResource getSubTextFont()
-   {
-      if(mFontRes != null)
-      {
-         return mFontRes;
-      }
-      return super.getSubTextFont();
-   }
+    protected ColorUIResource getSecondary3() {
+        return mSecondary3;
+    }
+
+    private final ColorUIResource mSecondary1 = new ColorUIResource(ResourceManager.getInstance().getBackColor());
+    private final ColorUIResource mSecondary2 = new ColorUIResource(ResourceManager.getInstance().getBackColor());
+    private final ColorUIResource mSecondary3 = new ColorUIResource(ResourceManager.getInstance().getBackgroundColor());
+
+    public FontUIResource getControlTextFont() {
+        if (mFontRes != null) {
+            return mFontRes;
+        }
+        return super.getControlTextFont();
+    }
+
+    public FontUIResource getSystemTextFont() {
+        if (mFontRes != null) {
+            return mFontRes;
+        }
+        return super.getSystemTextFont();
+    }
+
+    public FontUIResource getUserTextFont() {
+        if (mFontRes != null) {
+            return mFontRes;
+        }
+        return super.getUserTextFont();
+    }
+
+    public FontUIResource getMenuTextFont() {
+        if (mFontRes != null) {
+            return mFontRes;
+        }
+        return super.getMenuTextFont();
+    }
+
+    public FontUIResource getWindowTitleFont() {
+        if (mFontRes != null) {
+            return mFontRes;
+        }
+        return super.getWindowTitleFont();
+    }
+
+    public FontUIResource getSubTextFont() {
+        if (mFontRes != null) {
+            return mFontRes;
+        }
+        return super.getSubTextFont();
+    }
 }

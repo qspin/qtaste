@@ -82,9 +82,7 @@ import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.ui.tools.TableSorter;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
-
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -105,7 +103,7 @@ public class TestCaseReportTable {
     public static final int TESTBED = 4;
     public static final int EXEC_TIME = 5;
     public static final int TC = 6;
-    protected ImageIcon passedImg,  failedImg,  runningImg,  snapShotImg,  naImg;
+    protected ImageIcon passedImg, failedImg, runningImg, snapShotImg, naImg;
     private boolean interactive;
     private boolean userScrollPosition = false;
     private Timer timer = new Timer("TestCaseReportTable Thread"); // timer for updating elapsed time
@@ -166,7 +164,7 @@ public class TestCaseReportTable {
         final String testbedColumnProperty = tableLayoutProperty + ".testbed";
         final String resultColumnProperty = tableLayoutProperty + ".result";
 
-        tcModel = new DefaultTableModel(new Object[]{"Status", "Test Case", "Details", "Result", "Testbed", "Time", "."}, 0) {
+        tcModel = new DefaultTableModel(new Object[] {"Status", "Test Case", "Details", "Result", "Testbed", "Time", "."}, 0) {
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -188,10 +186,10 @@ public class TestCaseReportTable {
                 Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
                 int colIndex = columnAtPoint(p);
-				if (colIndex < 0) {
-					return null;
-				}
-				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
+                if (colIndex < 0) {
+                    return null;
+                }
+                return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
             }
         };
         tcTable.setColumnSelectionAllowed(false);
@@ -206,30 +204,30 @@ public class TestCaseReportTable {
         List<?> list = guiConfiguration.configurationsAt(tableLayoutProperty);
         if (!list.isEmpty()) {
             try {
-            	tcWidth = guiConfiguration.getInt(testCaseColumnProperty);
+                tcWidth = guiConfiguration.getInt(testCaseColumnProperty);
             } catch (NoSuchElementException ex) {
-            	guiConfiguration.setProperty(testCaseColumnProperty, tcWidth);
+                guiConfiguration.setProperty(testCaseColumnProperty, tcWidth);
             }
             try {
-            	tcStatusWidth = guiConfiguration.getInt(statusColumnProperty);
+                tcStatusWidth = guiConfiguration.getInt(statusColumnProperty);
             } catch (NoSuchElementException ex) {
-            	guiConfiguration.setProperty(statusColumnProperty, tcStatusWidth);
+                guiConfiguration.setProperty(statusColumnProperty, tcStatusWidth);
             }
             try {
-            	tcDetailsWidth = guiConfiguration.getInt(detailsColumnProperty);
+                tcDetailsWidth = guiConfiguration.getInt(detailsColumnProperty);
             } catch (NoSuchElementException ex) {
-            	guiConfiguration.setProperty(detailsColumnProperty, tcDetailsWidth);
+                guiConfiguration.setProperty(detailsColumnProperty, tcDetailsWidth);
             }
             try {
-            	tcTestbedWidth = guiConfiguration.getInt(testbedColumnProperty);
+                tcTestbedWidth = guiConfiguration.getInt(testbedColumnProperty);
             } catch (NoSuchElementException ex) {
-            	guiConfiguration.setProperty(testbedColumnProperty, tcTestbedWidth);
+                guiConfiguration.setProperty(testbedColumnProperty, tcTestbedWidth);
             }
             if (interactive) {
-            	try {
-            		tcResultWidth = guiConfiguration.getInt(resultColumnProperty);
+                try {
+                    tcResultWidth = guiConfiguration.getInt(resultColumnProperty);
                 } catch (NoSuchElementException ex) {
-                	guiConfiguration.setProperty(resultColumnProperty, tcResultWidth);
+                    guiConfiguration.setProperty(resultColumnProperty, tcResultWidth);
                 }
             }
         } else {
@@ -277,7 +275,7 @@ public class TestCaseReportTable {
             public void columnMarginChanged(ChangeEvent e) {
                 try {
                     // save the current layout
-                	int tcStatusWidth = tcTable.getColumnModel().getColumn(STATUS).getWidth();
+                    int tcStatusWidth = tcTable.getColumnModel().getColumn(STATUS).getWidth();
                     int tcWidth = tcTable.getColumnModel().getColumn(TEST_CASE).getWidth();
                     int tcDetailsWidth = tcTable.getColumnModel().getColumn(DETAILS).getWidth();
                     int tcResultWidth = tcTable.getColumnModel().getColumn(RESULT).getWidth();
@@ -333,17 +331,17 @@ public class TestCaseReportTable {
     }
 
     public void putEntry(TestResult tr, String campaignReportName) {
-    	boolean isInteractiveCommand = tr.getTestCaseDirectory().endsWith("QTaste_interactive");
-    	String testReportName = TestResultsReportManager.getInstance().getReportName();
-    	boolean isManualSUTStartOrStop = testReportName != null && testReportName.startsWith("Manual SUT");
-    	if (interactive) {
-    		if (!isInteractiveCommand && !isManualSUTStartOrStop) {
-    			return;
-    		}
-    	} else {
-    		if (isInteractiveCommand) {
-    			return;
-    		}
+        boolean isInteractiveCommand = tr.getTestCaseDirectory().endsWith("QTaste_interactive");
+        String testReportName = TestResultsReportManager.getInstance().getReportName();
+        boolean isManualSUTStartOrStop = testReportName != null && testReportName.startsWith("Manual SUT");
+        if (interactive) {
+            if (!isInteractiveCommand && !isManualSUTStartOrStop) {
+                return;
+            }
+        } else {
+            if (isInteractiveCommand) {
+                return;
+            }
             if (campaignReportName != null && !campaignReportName.equals(runName)) {
                 return;
             }
@@ -405,7 +403,9 @@ public class TestCaseReportTable {
                     userScrollPosition = false;
                     return;
                 } else {
-                    System.out.println("Scrollbar pos=" + scrollbar.getValue() + "; max=" + currentScrollBarMax + "height=" + scrollbar.getSize().height);
+                    System.out.println(
+                          "Scrollbar pos=" + scrollbar.getValue() + "; max=" + currentScrollBarMax + "height=" + scrollbar
+                                .getSize().height);
                 }
             } else {
                 tcModel.addRow(cols);
@@ -447,8 +447,8 @@ public class TestCaseReportTable {
         tcModel.setValueAt(statusImg, rowNum, STATUS);
 
         TestBedConfiguration testbed = TestBedConfiguration.getInstance();
-        tcModel.setValueAt(testbed.getFile().getName().replace("." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION, ""),
-        		rowNum, TESTBED);
+        tcModel.setValueAt(testbed.getFile().getName().replace("." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION, ""), rowNum,
+              TESTBED);
 
         if ((testCaseStatus == TestResult.Status.FAIL) || ((testCaseStatus == TestResult.Status.NOT_AVAILABLE))) {
             int selectedRow = tcTable.getSelectedRow();
@@ -465,7 +465,7 @@ public class TestCaseReportTable {
                     while (it.hasNext()) {
                         StackTraceElement stackElement = it.next();
                         if (stackElement.getFileName().equals("embedded_jython")) {
-                        	continue;
+                            continue;
                         }
                         Object[] row = new Object[6];
                         row[TCResultsSelectionListeners.LINE] = stackElement.getLineNumber();
@@ -563,6 +563,7 @@ public class TestCaseReportTable {
 
         /**
          * Called whenever the value of the selection changes.
+         *
          * @param e the event that characterizes the change.
          */
         public void valueChanged(ListSelectionEvent e) {
@@ -570,15 +571,14 @@ public class TestCaseReportTable {
             int selectedRow = tcTable.getSelectedRow();
             if (selectedRow > -1) {
                 TestResult tr = (TestResult) tcTable.getModel().getValueAt(selectedRow, TestCaseReportTable.TC);
-                if (tr.getStatus() == TestResult.Status.NOT_AVAILABLE ||
-                        tr.getStatus() == TestResult.Status.FAIL) {
+                if (tr.getStatus() == TestResult.Status.NOT_AVAILABLE || tr.getStatus() == TestResult.Status.FAIL) {
                     if (tcReasonModel != null) {
                         ArrayList<StackTraceElement> stack = tr.getStack();
                         Iterator<StackTraceElement> it = stack.iterator();
                         while (it.hasNext()) {
                             StackTraceElement stackElement = it.next();
                             if (stackElement.getFileName().equals("embedded_jython")) {
-                            	continue;
+                                continue;
                             }
                             Object[] row = new Object[6];
                             row[LINE] = stackElement.getLineNumber();
@@ -609,6 +609,7 @@ public class TestCaseReportTable {
             }
         }
     }
+
     /////////////////////////////////////////////////////////////////////////////////////
     //Inner Classes
     /////////////////////////////////////////////////////////////////////////////////////
@@ -619,8 +620,8 @@ public class TestCaseReportTable {
                 // force selection of clicked row if not selected
                 int clickedRow = tcTable.rowAtPoint(e.getPoint());
                 if (!tcTable.isRowSelected(clickedRow)) {
-                	tcTable.clearSelection();
-                	tcTable.addRowSelectionInterval(clickedRow, clickedRow);
+                    tcTable.clearSelection();
+                    tcTable.addRowSelectionInterval(clickedRow, clickedRow);
                 }
 
                 // display the context dialog
@@ -629,10 +630,10 @@ public class TestCaseReportTable {
                 if (interactive) {
                     menu.add(new ClearListAction());
                     menu.add(new ClearAllListAction());
-                	menu.add(new ReExecuteCommandsAction());
+                    menu.add(new ReExecuteCommandsAction());
                 } else {
-                	menu.add(new ReExecuteTestsAction());
-                	menu.add(new GenerateTestCampaignAction());
+                    menu.add(new ReExecuteTestsAction());
+                    menu.add(new GenerateTestCampaignAction());
                 }
                 /*
                 if (table.getName().equals("tcTable")) {
@@ -705,7 +706,7 @@ public class TestCaseReportTable {
         public void actionPerformed(ActionEvent e) {
             // get the selected table line
             int selectedRow = tcTable.getSelectedRow();
-            String message = (String)tcTable.getValueAt(selectedRow, DETAILS);
+            String message = (String) tcTable.getValueAt(selectedRow, DETAILS);
             if (message == null) {
                 message = "";
             }
@@ -726,36 +727,38 @@ public class TestCaseReportTable {
             super("Generate test campaign from failed tests");
         }
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// get the current testbed
-			TestBedConfiguration testbed = TestBedConfiguration.getInstance();
-			// get the list of failed tests
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // get the current testbed
+            TestBedConfiguration testbed = TestBedConfiguration.getInstance();
+            // get the list of failed tests
             CampaignWriter campaign = new CampaignWriter();
-            for (int i=0; i < tcTable.getRowCount(); i++) {
+            for (int i = 0; i < tcTable.getRowCount(); i++) {
                 TestResult tr = (TestResult) tcModel.getValueAt(i, TC);
-            	if (tr.getStatus()== TestResult.Status.FAIL) {
-            		campaign.addCampaign(testbed.getFile().getName().replace("." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION, ""),
-            				tr.getTestCaseDirectory(),
-            				tr.getTestData().getRowId());
-            	}
+                if (tr.getStatus() == TestResult.Status.FAIL) {
+                    campaign.addCampaign(
+                          testbed.getFile().getName().replace("." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION, ""),
+                          tr.getTestCaseDirectory(), tr.getTestData().getRowId());
+                }
             }
             // ask for name of test campaign
-            String newCampaign = JOptionPane.showInputDialog(null,
-                    "Campaign name",
-                    "Campaign name:", JOptionPane.QUESTION_MESSAGE);
+            String newCampaign = JOptionPane.showInputDialog(null, "Campaign name", "Campaign name:",
+                  JOptionPane.QUESTION_MESSAGE);
             if (newCampaign != null) {
                 // add the new campaign in the list
                 if (tcPane.getMainPanel().getTestCampaignPanel().addTestCampaign(newCampaign) >= 0) {
-                   String fileName = StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + newCampaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION;
-                   campaign.save(fileName, newCampaign);
-                   JOptionPane.showMessageDialog(null, "Campaign file has been saved in " + fileName +  ".", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    String fileName = StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + newCampaign + "."
+                          + StaticConfiguration.CAMPAIGN_FILE_EXTENSION;
+                    campaign.save(fileName, newCampaign);
+                    JOptionPane.showMessageDialog(null, "Campaign file has been saved in " + fileName + ".", "Information",
+                          JOptionPane.INFORMATION_MESSAGE);
                 }
             }
 
-		}
+        }
 
     }
+
     class ReExecuteTestsAction extends AbstractAction {
 
         public ReExecuteTestsAction() {
@@ -788,7 +791,7 @@ public class TestCaseReportTable {
             }
             final TestSuite testSuite = MetaTestSuite.createMetaTestSuite("Test(s) re-execution", testSuitesParams);
             if (testSuite != null) {
-            	Thread reExecuteTestsThread = new Thread() {
+                Thread reExecuteTestsThread = new Thread() {
                     @Override
                     public void run() {
                         tcPane.runTestSuite(testSuite, false);
@@ -816,37 +819,36 @@ public class TestCaseReportTable {
         }
     }
 
+    class ReExecuteCommandsAction extends AbstractAction {
 
-    class ReExecuteCommandsAction extends AbstractAction{
-
-        public ReExecuteCommandsAction(){
+        public ReExecuteCommandsAction() {
             super("Re-execute command(s)");
         }
 
-        public void actionPerformed(ActionEvent e){
-        	int[] selectedRows = tcTable.getSelectedRows();
-        	final String[] commands = new String[selectedRows.length];
+        public void actionPerformed(ActionEvent e) {
+            int[] selectedRows = tcTable.getSelectedRows();
+            final String[] commands = new String[selectedRows.length];
             for (int i = 0; i < selectedRows.length; i++) {
                 String tc = (String) tcModel.getValueAt(selectedRows[i], TestCaseReportTable.TEST_CASE);
                 commands[i] = tc.substring(0, tc.lastIndexOf(" - "));
             }
             new Thread() {
-            	@Override
-            	public void run() {
-            		for (final String command: commands) {
-            			tcInteractivePanel.executeCommand(command);
-            		}
-            	}
+                @Override
+                public void run() {
+                    for (final String command : commands) {
+                        tcInteractivePanel.executeCommand(command);
+                    }
+                }
             }.start();
         }
 
-        public boolean isEnabled(){
-        	int[] selectedRows = tcTable.getSelectedRows();
+        public boolean isEnabled() {
+            int[] selectedRows = tcTable.getSelectedRows();
             for (int i = 0; i < selectedRows.length; i++) {
                 String tc = (String) tcModel.getValueAt(selectedRows[i], TestCaseReportTable.TEST_CASE);
                 if (tc.endsWith(" SUT")) {
-                	// disable if contains "Re(start) SUT" or "Stop SUT"
-                	return false;
+                    // disable if contains "Re(start) SUT" or "Stop SUT"
+                    return false;
                 }
             }
 
@@ -854,15 +856,14 @@ public class TestCaseReportTable {
         }
     }
 
-
     /**
      * Table cell renderer.
      */
     static class TableCellRenderer extends DefaultTableCellRenderer {
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int
+              row, int column) {
             JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             // set text alignment

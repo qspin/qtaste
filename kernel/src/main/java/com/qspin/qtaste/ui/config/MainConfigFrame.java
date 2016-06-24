@@ -19,15 +19,15 @@
 
 package com.qspin.qtaste.ui.config;
 
-import com.qspin.qtaste.ui.util.QSpinTheme;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import com.qspin.qtaste.ui.util.QSpinTheme;
+
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -36,43 +36,42 @@ public class MainConfigFrame extends JFrame {
     protected String title = "QTaste Configuration settings";
     private QSpinTheme mTheme;
 
-    public MainConfigFrame(){
+    public MainConfigFrame() {
         super();
         setTitle(title);
         setUpFrame();
     }
-    private void setUpFrame(){
+
+    private void setUpFrame() {
         setName(title);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    } 
-   public void setQSpinTheme()
-   {
-      mTheme = new QSpinTheme();
-      MetalLookAndFeel.setCurrentTheme(mTheme);
-      try
-      {
-         UIManager.setLookAndFeel(new MetalLookAndFeel());
-      }
-      catch (UnsupportedLookAndFeelException ex)
-      {
-        
-      }
-   }    
-    
+    }
+
+    public void setQSpinTheme() {
+        mTheme = new QSpinTheme();
+        MetalLookAndFeel.setCurrentTheme(mTheme);
+        try {
+            UIManager.setLookAndFeel(new MetalLookAndFeel());
+        } catch (UnsupportedLookAndFeelException ex) {
+
+        }
+    }
+
     public void launch() {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 setQSpinTheme();
                 genUI();
             }
-        });        
+        });
     }
-    public void genUI(){
+
+    public void genUI() {
         MainConfigPanel mainPanel = new MainConfigPanel(this);
         this.add(mainPanel);
         setVisible(true);
         this.pack();
         this.setLocationRelativeTo(null);
     }
-    
+
 }

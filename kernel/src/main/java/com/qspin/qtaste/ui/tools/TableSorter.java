@@ -88,9 +88,9 @@ import javax.swing.table.TableModel;
  * <p>
  * This is a long overdue rewrite of a class of the same name that
  * first appeared in the swing table demos in 1997.
- * 
+ *
  * @author Philip Milne
- * @author Brendon McLean 
+ * @author Brendon McLean
  * @author Dan van Enckevort
  * @author Parwinder Sekhon
  * @version 2.0 02/27/04
@@ -182,8 +182,7 @@ public class TableSorter extends AbstractTableModel {
         this.tableHeader = tableHeader;
         if (this.tableHeader != null) {
             this.tableHeader.addMouseListener(mouseListener);
-            this.tableHeader.setDefaultRenderer(
-                    new SortableHeaderRenderer(this.tableHeader.getDefaultRenderer()));
+            this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(this.tableHeader.getDefaultRenderer()));
         }
     }
 
@@ -213,7 +212,7 @@ public class TableSorter extends AbstractTableModel {
         }
     }
 
-   public void setSortingStatus(int column, int status) {
+    public void setSortingStatus(int column, int status) {
         Directive directive = getDirective(column);
         if (directive != EMPTY_DIRECTIVE) {
             sortingColumns.remove(directive);
@@ -236,7 +235,7 @@ public class TableSorter extends AbstractTableModel {
         sortingColumns.clear();
         sortingStatusChanged();
     }
-    
+
     @SuppressWarnings("unchecked")
     public void setColumnComparator(Class type, Comparator comparator) {
         if (comparator == null) {
@@ -319,7 +318,7 @@ public class TableSorter extends AbstractTableModel {
     }
 
     // Helper classes
-    
+
     private class Row implements Comparable<Object> {
         private int modelIndex;
 
@@ -331,7 +330,7 @@ public class TableSorter extends AbstractTableModel {
             int row1 = modelIndex;
             int row2 = ((Row) o).modelIndex;
 
-            for (Iterator<Directive> it = sortingColumns.iterator(); it.hasNext();) {
+            for (Iterator<Directive> it = sortingColumns.iterator(); it.hasNext(); ) {
                 Directive directive = it.next();
                 int column = directive.column;
                 Object o1 = tableModel.getValueAt(row1, column);
@@ -364,7 +363,7 @@ public class TableSorter extends AbstractTableModel {
                 fireTableChanged(e);
                 return;
             }
-                
+
             // If the table structure has changed, cancel the sorting; the             
             // sorting columns may have been either moved or deleted from             
             // the model. 
@@ -393,14 +392,10 @@ public class TableSorter extends AbstractTableModel {
             // which can be a performance problem for large tables. The last 
             // clause avoids this problem. 
             int column = e.getColumn();
-            if (e.getFirstRow() == e.getLastRow()
-                    && column != TableModelEvent.ALL_COLUMNS
-                    && getSortingStatus(column) == NOT_SORTED
-                    && modelToView != null) {
+            if (e.getFirstRow() == e.getLastRow() && column != TableModelEvent.ALL_COLUMNS && getSortingStatus(column)
+                  == NOT_SORTED && modelToView != null) {
                 int viewIndex = getModelToView()[e.getFirstRow()];
-                fireTableChanged(new TableModelEvent(TableSorter.this, 
-                                                     viewIndex, viewIndex, 
-                                                     column, e.getType()));
+                fireTableChanged(new TableModelEvent(TableSorter.this, viewIndex, viewIndex, column, e.getType()));
                 return;
             }
 
@@ -444,13 +439,13 @@ public class TableSorter extends AbstractTableModel {
         }
 
         public void paintIcon(Component c, Graphics g, int x, int y) {
-            Color color = c == null ? Color.GRAY : c.getBackground();             
+            Color color = c == null ? Color.GRAY : c.getBackground();
             // In a compound sort, make each successive triangle 20%
             // smaller than the previous one. 
-            int dx = (int)(size/2*Math.pow(0.8, priority));
+            int dx = (int) (size / 2 * Math.pow(0.8, priority));
             int dy = descending ? dx : -dx;
             // Align icon (roughly) with font baseline. 
-            y = y + 5*size/6 + (descending ? -dy : 0);
+            y = y + 5 * size / 6 + (descending ? -dy : 0);
             int shift = descending ? 1 : -1;
             g.translate(x, y);
 
@@ -458,12 +453,12 @@ public class TableSorter extends AbstractTableModel {
             g.setColor(color.darker());
             g.drawLine(dx / 2, dy, 0, 0);
             g.drawLine(dx / 2, dy + shift, 0, shift);
-            
+
             // Left diagonal. 
             g.setColor(color.brighter());
             g.drawLine(dx / 2, dy, dx, 0);
             g.drawLine(dx / 2, dy + shift, dx, shift);
-            
+
             // Horizontal line. 
             if (descending) {
                 g.setColor(color.darker().darker());
@@ -492,14 +487,9 @@ public class TableSorter extends AbstractTableModel {
             this.tableCellRenderer = tableCellRenderer;
         }
 
-        public Component getTableCellRendererComponent(JTable table, 
-                                                       Object value,
-                                                       boolean isSelected, 
-                                                       boolean hasFocus,
-                                                       int row, 
-                                                       int column) {
-            Component c = tableCellRenderer.getTableCellRendererComponent(table, 
-                    value, isSelected, hasFocus, row, column);
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int
+              row, int column) {
+            Component c = tableCellRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (c instanceof JLabel) {
                 JLabel l = (JLabel) c;
                 l.setHorizontalTextPosition(JLabel.LEFT);

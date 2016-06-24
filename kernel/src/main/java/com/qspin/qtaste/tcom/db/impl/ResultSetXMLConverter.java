@@ -21,8 +21,10 @@ package com.qspin.qtaste.tcom.db.impl;
 
 /**
  * A ResultSetXMLConverter is able to create a XML Document from a JDBC ResultSet object
+ *
  * @author lvboque
  */
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
@@ -46,50 +48,56 @@ import org.w3c.dom.NodeList;
  * The format of the generated XML document will be as follow:
  * <p><pre>
  *  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
- * 
- *     &lt;Results&gt;    	
+ *
+ *     &lt;Results&gt;
  *          &lt;Row&gt;
  *              ...
  *          &lt;/Row&gt;
- * 
+ *
  *          &lt;Row&gt;
  *              ...
  *          &lt;/Row&gt;
  *     &lt;/Results&gt;
  * </pre>
- * <br> 
+ * <br>
+ *
  * @author lvboque
  */
 public class ResultSetXMLConverter {
 
     public static String getField(Document doc, String fieldName) throws Exception {
-        String fieldValues="";
+        String fieldValues = "";
         NodeList nl = doc.getElementsByTagName("Row");
-        for (int i=0; i< nl.getLength(); i++) {
+        for (int i = 0; i < nl.getLength(); i++) {
             Node rowNode = nl.item(i);
-            NodeList colNodes = rowNode.getChildNodes();            
+            NodeList colNodes = rowNode.getChildNodes();
             for (int j = 0; j < colNodes.getLength(); j++) {
                 Node colNode = colNodes.item(j);
                 String columnName = colNode.getNodeName();
                 // get its value
                 Node valueNode = colNode.getFirstChild();
-                if (columnName.equals(fieldName) && (valueNode!=null)) {
+                if (columnName.equals(fieldName) && (valueNode != null)) {
                     String columnValue = valueNode.getNodeValue();
-                    if (columnValue==null) continue;
-                    if (fieldValues.length()>0)
-                        fieldValues +=  ";" + columnValue;
-                    else
-                        fieldValues += columnValue;                        
+                    if (columnValue == null) {
+                        continue;
+                    }
+                    if (fieldValues.length() > 0) {
+                        fieldValues += ";" + columnValue;
+                    } else {
+                        fieldValues += columnValue;
+                    }
                 }
             }
         }
         return fieldValues;
     }
+
     /**
      * Return an XML document containing the specified ResultSet.
+     *
      * @param rs The specified ResultSet
      * @return the XML document
-     * @throws java.lang.Exception 
+     * @throws java.lang.Exception
      */
     public static Document getResultSetAsXML(ResultSet rs, String tableName, String keyName) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -97,16 +105,14 @@ public class ResultSetXMLConverter {
         Document doc = builder.newDocument();
         Element results = doc.createElement("Results");
         doc.appendChild(results);
-       
 
         ResultSetMetaData rsmd = rs.getMetaData();
         // add the name of the table
         Element tableNameElement = doc.createElement("table");
         tableNameElement.setAttribute("name", tableName);
         tableNameElement.setAttribute("key", keyName);
-        results.appendChild(tableNameElement);        
+        results.appendChild(tableNameElement);
 
-        
         int colCount = rsmd.getColumnCount();
 
         while (rs.next()) {
@@ -120,18 +126,17 @@ public class ResultSetXMLConverter {
                     String colType = rsmd.getColumnTypeName(i);
                     Element node = doc.createElement(columnName);
                     if (colType.equals("bytea")) {
-                        String byteaStr="";
+                        String byteaStr = "";
                         byte[] imgBytes = rs.getBytes(i);
                         for (int byteIndex = 0; byteIndex < imgBytes.length; byteIndex++) {
-                            if (byteIndex!=0)
-                                byteaStr= byteaStr + ";" + Byte.toString(imgBytes[byteIndex]);
-                            else
-                                byteaStr= Byte.toString(imgBytes[byteIndex]);
+                            if (byteIndex != 0) {
+                                byteaStr = byteaStr + ";" + Byte.toString(imgBytes[byteIndex]);
+                            } else {
+                                byteaStr = Byte.toString(imgBytes[byteIndex]);
+                            }
                         }
                         node.appendChild(doc.createTextNode(byteaStr));
-                    }
-                    else
-                    {
+                    } else {
                         node.appendChild(doc.createTextNode(value.toString()));
                     }
                     row.appendChild(node);
@@ -140,25 +145,27 @@ public class ResultSetXMLConverter {
         }
         return doc;
     }
+
     /**
      * Return an XML document containing the specified ResultSet.
+     *
      * @param rs The specified ResultSet
      * @return the XML document
-     * @throws java.lang.Exception 
+     * @throws java.lang.Exception
      */
     public static Document getResultSetAsXML(ResultSet rs, String tableName) throws Exception {
         return getResultSetAsXML(rs, tableName, "");
     }
-  
+
     /**
      * Return the XMLDocument formatted as a String
+     *
      * @param doc the XML Document
      * @return A String representation of the XML Document
      * @throws javax.xml.transform.TransformerConfigurationException
      * @throws javax.xml.transform.TransformerException
      */
-    public static String getDocumentAsXmlString(Document doc)
-            throws TransformerConfigurationException, TransformerException {
+    public static String getDocumentAsXmlString(Document doc) throws TransformerConfigurationException, TransformerException {
         DOMSource domSource = new DOMSource(doc);
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();

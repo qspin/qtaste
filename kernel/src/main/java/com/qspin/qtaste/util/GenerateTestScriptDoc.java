@@ -27,6 +27,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
  * This class is responsible for generating the documentation of a TestScript
+ *
  * @author lvboque
  */
 public class GenerateTestScriptDoc {
@@ -48,7 +49,7 @@ public class GenerateTestScriptDoc {
         }
 
         GenerateTestStepsModulesDoc.generate("TestSuites");
-        
+
         try {
             System.out.println("Generate test script documentation.");
             PythonHelper.execute(StaticConfiguration.PYTHON_DOC, "-V", "-f", "-s", "-Otestscriptdoc_xmlformatter",
@@ -61,7 +62,9 @@ public class GenerateTestScriptDoc {
 
         if (testScriptDocXML.exists()) {
             System.out.println("Converting Test script XML doc to HTML...");
-            String[] a = {"-XSLTC", "-XT", "-IN", testDir + FS + "TestScript-doc.xml", "-XSL", StaticConfiguration.FORMATTER_DIR + FS + "testscriptdoc_xml2html.xsl", "-OUT", testDir + FS + "TestScript-doc.html"};
+            String[] a = {"-XSLTC", "-XT", "-IN", testDir + FS + "TestScript-doc.xml", "-XSL",
+                  StaticConfiguration.FORMATTER_DIR + FS + "testscriptdoc_xml2html.xsl", "-OUT",
+                  testDir + FS + "TestScript-doc.html"};
             org.apache.xalan.xslt.Process.main(a);
             testScriptDocXML.delete();
         } else {

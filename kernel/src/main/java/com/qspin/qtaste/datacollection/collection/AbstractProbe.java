@@ -26,6 +26,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 /**
  * An AbstractProbe is the class used to feed the Cache
  * The received variables are stored in the {@link Cache}
+ *
  * @author lvboque
  */
 public abstract class AbstractProbe implements Probe, Runnable {
@@ -36,7 +37,9 @@ public abstract class AbstractProbe implements Probe, Runnable {
     protected DataReceivedListener listener;
     private static Logger logger = Log4jLoggerFactory.getLogger(AbstractProbe.class);
 
-    /** Creates a new instance of AbstractProbe */
+    /**
+     * Creates a new instance of AbstractProbe
+     */
     public AbstractProbe() {
         this.interrupted = false;
         this.running = false;
@@ -61,7 +64,7 @@ public abstract class AbstractProbe implements Probe, Runnable {
     public void register() {
         listener = (DataReceivedListener) CacheImpl.getInstance();
     }
-        
+
     public void unregister() {
         listener = null;
     }

@@ -27,17 +27,16 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- *
  * @author lvboque
  */
 public class ObjectFile extends File {
-    
-	private static final long serialVersionUID = -326049015728080117L;
 
-	public ObjectFile(String f) {
+    private static final long serialVersionUID = -326049015728080117L;
+
+    public ObjectFile(String f) {
         super(f);
     }
-    
+
     public void save(Serializable s) throws Exception {
         FileOutputStream f_out = new FileOutputStream(this);
         ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
@@ -45,11 +44,11 @@ public class ObjectFile extends File {
         obj_out.flush();
         f_out.close();
     }
-    
-    public Serializable load() throws Exception {        
-        FileInputStream f_in = new FileInputStream (this);
-        ObjectInputStream obj_in = new ObjectInputStream (f_in);
-        Serializable ser = (Serializable) obj_in.readObject();        
+
+    public Serializable load() throws Exception {
+        FileInputStream f_in = new FileInputStream(this);
+        ObjectInputStream obj_in = new ObjectInputStream(f_in);
+        Serializable ser = (Serializable) obj_in.readObject();
         f_in.close();
         return ser;
     }

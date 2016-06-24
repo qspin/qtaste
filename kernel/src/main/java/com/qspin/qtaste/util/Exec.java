@@ -31,6 +31,7 @@ import java.util.Map;
 
 /**
  * This class contains methods to start a command in a new process and wait for the process to terminate.
+ *
  * @author lvboque
  */
 public class Exec {
@@ -40,46 +41,53 @@ public class Exec {
 
     /**
      * Executes the a command specified in parameter.
+     *
      * @param cmd a specified system command
      * @return the cancel value of the process. By convention, 0 indicates normal termination.
      */
     public int exec(String cmd) throws IOException, InterruptedException {
         return exec(cmd, null);
     }
+
     public int exec(String[] cmd) throws IOException, InterruptedException {
         return exec(cmd, null);
     }
 
     /**
      * Executes the a command specified in parameter.
+     *
      * @param cmd a specified system command
      * @param env the environment variables map to use or null to inherit process environment
      * @return the cancel value of the process. By convention, 0 indicates normal termination
      */
-    public int exec(String cmd, Map<String,String> env) throws IOException, InterruptedException {
+    public int exec(String cmd, Map<String, String> env) throws IOException, InterruptedException {
         return exec(cmd, env, System.out, System.err, null);
     }
-    public int exec(String[] cmd, Map<String,String> env) throws IOException, InterruptedException {
+
+    public int exec(String[] cmd, Map<String, String> env) throws IOException, InterruptedException {
         return exec(cmd, env, System.out, System.err, null);
     }
 
     /**
      * Executes the a command specified in parameter.
+     *
      * @param cmd a specified system command
      * @param env the environment variables map to use or null to inherit process environment
      * @param output the ByteArrayOutputStream will get a copy of the output and error streams of the subprocess
      * @return the cancel value of the process. By convention, 0 indicates normal termination
      */
-    public int exec(String cmd, Map<String,String> env, ByteArrayOutputStream output) throws IOException, InterruptedException {
+    public int exec(String cmd, Map<String, String> env, ByteArrayOutputStream output) throws IOException, InterruptedException {
         return exec(cmd, env, System.out, System.err, output, null);
     }
 
-    public int exec(String[] cmd, Map<String,String> env, ByteArrayOutputStream output) throws IOException, InterruptedException {
+    public int exec(String[] cmd, Map<String, String> env, ByteArrayOutputStream output)
+          throws IOException, InterruptedException {
         return exec(cmd, env, System.out, System.err, output, null);
     }
-    
+
     /**
      * Executes the a command specified in parameter.
+     *
      * @param cmd a specified system command
      * @param env the environment variables map to use or null to inherit process environment
      * @param out the OutputStream will gets the output stream of the subprocess
@@ -87,39 +95,48 @@ public class Exec {
      * @param output the ByteArrayOutputStream will get a copy of the output and error streams of the subprocess
      * @return the cancel value of the process. By convention, 0 indicates normal termination
      */
-    public int exec(String cmd, Map<String,String> env, OutputStream out, OutputStream err, ByteArrayOutputStream output) throws IOException, InterruptedException {
+    public int exec(String cmd, Map<String, String> env, OutputStream out, OutputStream err, ByteArrayOutputStream output)
+          throws IOException, InterruptedException {
         return exec(cmd, env, out, err, output, null);
     }
 
-    public int exec(String[] cmd, Map<String,String> env, OutputStream out, OutputStream err, ByteArrayOutputStream output) throws IOException, InterruptedException {
+    public int exec(String[] cmd, Map<String, String> env, OutputStream out, OutputStream err, ByteArrayOutputStream output)
+          throws IOException, InterruptedException {
         return exec(cmd, env, out, err, output, null);
     }
-    
+
     /**
      * Executes the a command specified in parameter.
+     *
      * @param cmd a specified system command
      * @param env the environment variables map to use or null to inherit process environment
-     * @param dir the working directory of the subprocess, or null if the subprocess should inherit the working directory of the current process
+     * @param dir the working directory of the subprocess, or null if the subprocess should inherit the working directory of the
+     * current process
      * @return the cancel value of the process. By convention, 0 indicates normal termination
      */
-    public int exec(String cmd, Map<String,String> env, File dir) throws IOException, InterruptedException {
+    public int exec(String cmd, Map<String, String> env, File dir) throws IOException, InterruptedException {
         return exec(cmd, env, System.out, System.err, null, dir);
     }
-    public int exec(String[] cmd, Map<String,String> env, File dir) throws IOException, InterruptedException {
+
+    public int exec(String[] cmd, Map<String, String> env, File dir) throws IOException, InterruptedException {
         return exec(cmd, env, System.out, System.err, null, dir);
     }
 
     /**
      * Executes the a command specified in the specified directory.
+     *
      * @param cmd a specified system command
      * @param env the environment variables map to use or null to inherit process environment
      * @param stdout an OutputStream for stdout
      * @param stderr an OutputStream for stderr
      * @param output the ByteArrayOutputStream will get a copy of the output and error streams of the subprocess
-     * @param dir the working directory of the subprocess, or null if the subprocess should inherit the working directory of the current process
+     * @param dir the working directory of the subprocess, or null if the subprocess should inherit the working directory of the
+     * current process
      * @return the cancel value of the process. By convention, 0 indicates normal termination
      */
-    public int exec(String cmd, Map<String,String> env, OutputStream stdout, OutputStream stderr, ByteArrayOutputStream output, File dir) throws IOException, InterruptedException {
+    public int exec(String cmd, Map<String, String> env, OutputStream stdout, OutputStream stderr, ByteArrayOutputStream
+          output, File dir)
+          throws IOException, InterruptedException {
         //logger.debug("Executing '" + cmd + "'");
         if (output == null) {
             output = new ByteArrayOutputStream();
@@ -127,9 +144,9 @@ public class Exec {
         try {
             String[] envp;
             if (env != null) {
-                envp = new String [env.size()];
-                int i=0;
-                for (Map.Entry<String,String> envMapEntry: env.entrySet()) {
+                envp = new String[env.size()];
+                int i = 0;
+                for (Map.Entry<String, String> envMapEntry : env.entrySet()) {
                     envp[i++] = envMapEntry.getKey() + "=" + envMapEntry.getValue();
                 }
             } else {
@@ -157,7 +174,9 @@ public class Exec {
         }
     }
 
-    public int exec(String[] cmd, Map<String,String> env, OutputStream stdout, OutputStream stderr, ByteArrayOutputStream output, File dir) throws IOException, InterruptedException {
+    public int exec(String[] cmd, Map<String, String> env, OutputStream stdout, OutputStream stderr, ByteArrayOutputStream
+          output, File dir)
+          throws IOException, InterruptedException {
         //logger.debug("Executing ['" + Strings.join(cmd, "', '") + "']");
         if (output == null) {
             output = new ByteArrayOutputStream();
@@ -165,9 +184,9 @@ public class Exec {
         try {
             String[] envp;
             if (env != null) {
-                envp = new String [env.size()];
-                int i=0;
-                for (Map.Entry<String,String> envMapEntry: env.entrySet()) {
+                envp = new String[env.size()];
+                int i = 0;
+                for (Map.Entry<String, String> envMapEntry : env.entrySet()) {
                     envp[i++] = envMapEntry.getKey() + "=" + envMapEntry.getValue();
                 }
             } else {
@@ -194,7 +213,7 @@ public class Exec {
             process = null;
         }
     }
-    
+
     /**
      * Kills the executed process.
      */
@@ -245,6 +264,7 @@ public class Exec {
 
         /**
          * Transfers available bytes from in to out and return number of bytes transferred.
+         *
          * @return number of bytes transferred or -1 if error
          */
         private int transferAvailableBytes() {
@@ -254,7 +274,7 @@ public class Exec {
                 while (numberBytesAvailable > 0) {
                     int numberBytesRead = in.read(buffer, 0, Math.min(numberBytesAvailable, buffer.length));
                     if (out != null) {
-                    	out.write(buffer, 0, numberBytesRead);
+                        out.write(buffer, 0, numberBytesRead);
                     }
                     synchronized (outResult) {
                         outResult.write(buffer, 0, numberBytesRead);

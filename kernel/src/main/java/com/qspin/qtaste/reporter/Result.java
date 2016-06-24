@@ -20,11 +20,10 @@
 package com.qspin.qtaste.reporter;
 
 /**
- *
  * @author lvboque
  */
 public class Result {
-    
+
     protected static String getFormattedElapsedTime(long timeMs, boolean showMilliseconds) {
         int milliseconds = (int) (timeMs % 1000);
         int seconds = (int) ((timeMs / 1000) % 60);
@@ -35,7 +34,7 @@ public class Result {
         String minutesStr = (minutes < 10 ? "0" : "") + minutes;
         String hoursStr = (hours < 10 ? "0" : "") + hours;
         String formattedStr = hoursStr + ":" + minutesStr + ":" + secondsStr;
-        if (showMilliseconds) {            
+        if (showMilliseconds) {
             formattedStr += "." + millisecondsStr;
         }
         return formattedStr;

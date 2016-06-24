@@ -28,12 +28,14 @@ import com.qspin.qtaste.testsuite.TestData;
 
 /**
  * The TestAPI is the interface to interact with TestAPIComponent objects and invoke verbs of TestAPIComponent
+ *
  * @author lvb
  */
 public interface TestAPI {
 
-  /**
+    /**
      * Get the first method with given name of given component
+     *
      * @param componentName The specified component name
      * @param methodName The specified method name
      * @return the first Method with given name of given component or null if the component or method is not found
@@ -42,26 +44,29 @@ public interface TestAPI {
 
     /**
      * Register the specified method of the specified component and the associated manager
+     *
      * @param packageName the package name
      * @param component the component name
      * @param manager the manager associated to this method
-     * @param method the method to register     
+     * @param method the method to register
      */
     public void register(String packageName, String component, ComponentFactory manager, String method);
-    
+
     /**
      * Unregister all methods
      */
     public void unregisterAllMethods();
-    
+
     /**
      * Get an Iterator containing all the names of the registered components
+     *
      * @return a Collection of String
      */
     public Collection<String> getRegisteredComponents();
-    
+
     /**
      * Get the list of verbs available within the specified component
+     *
      * @param componentName the specified component
      * @return the Collection of String or null if the component doesn't exist
      */
@@ -70,24 +75,27 @@ public interface TestAPI {
 
     /**
      * Return the instance of the component specified as parameter.
+     *
      * @param componentName the component name
      * @param data the TestData
      * @return the component instance
      * @throws java.util.NoSuchElementException if component doesn't exist
      * @throws com.qspin.qtaste.testsuite.QTasteException if component cannot be instantiated
      */
-    public Component getComponent(String componentName, TestData data) throws NoSuchElementException, QTasteException ;
-    
+    public Component getComponent(String componentName, TestData data) throws NoSuchElementException, QTasteException;
+
     /**
      * Return the test api component interface class of the given implementation class.
+     *
      * @param implementationClass test api component implementation class
      * @return test api component interface class of the given implementation class
      * @throws java.lang.ClassNotFoundException if the test api interface class of the given implementation class is not found
      */
-    public Class<?> getInterfaceClass(Class<?> implementationClass)throws ClassNotFoundException;
+    public Class<?> getInterfaceClass(Class<?> implementationClass) throws ClassNotFoundException;
 
     /**
      * Return the name of the given component.
+     *
      * @param component Test API component
      * @return name of component
      * @throws java.util.NoSuchElementException if component doesn't exist
@@ -96,6 +104,7 @@ public interface TestAPI {
 
     /**
      * Return the component factory of the given component.
+     *
      * @param componentName Test API component name
      * @return component factory of the given component
      * @throws java.util.NoSuchElementException if component doesn't exist
@@ -103,13 +112,13 @@ public interface TestAPI {
     public ComponentFactory getComponentFactory(String componentName) throws NoSuchElementException;
 
     /**
-     * Initializes all instantiated components. 
+     * Initializes all instantiated components.
      * If a component cannot be initialized, it is unregistered from its factory.
      */
-    public void initializeComponents();        
+    public void initializeComponents();
 
     /**
      * Terminates all instantiated components.
      */
-    public void terminateComponents();        
+    public void terminateComponents();
 }

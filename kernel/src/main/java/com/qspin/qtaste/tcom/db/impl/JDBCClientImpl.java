@@ -37,6 +37,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * JDBCClientImpl is a JDBC connection to a database
+ *
  * @author lvboque
  */
 public class JDBCClientImpl implements JDBCClient {
@@ -50,9 +51,10 @@ public class JDBCClientImpl implements JDBCClient {
     private String password;
 
     public final static char QUERY_ENDS = ';';
-    
+
     /**
      * Create a JDBCClientImpl instance
+     *
      * @param jdbcDriver the jdbcDriver to use for the connection
      * @param jdbcURL the jdbcURL to use to locate the database
      * @param user the username to use for the connection
@@ -67,8 +69,9 @@ public class JDBCClientImpl implements JDBCClient {
         this.password = password;
     }
 
-     /**
+    /**
      * Open a JDBC connection to the database
+     *
      * @throws java.sql.SQLException If a SQL error occurs
      * @throws java.lang.ClassNotFoundException If the driver class does not exists
      */
@@ -81,31 +84,36 @@ public class JDBCClientImpl implements JDBCClient {
         // Exception will be thrown if something went wrong
         connected = true;
     }
+
     private boolean isComment(String line) {
-        if ((line != null) && (line.length() > 0))
-        return (line.charAt(0) == '#');
+        if ((line != null) && (line.length() > 0)) {
+            return (line.charAt(0) == '#');
+        }
         return false;
     }
+
     private boolean checkStatementEnds(String s) {
         return (s.indexOf(QUERY_ENDS) != -1);
     }
 
-    public void executeSQLScript(String scriptFile) throws SQLException, FileNotFoundException, ClassNotFoundException, IOException {
+    public void executeSQLScript(String scriptFile)
+          throws SQLException, FileNotFoundException, ClassNotFoundException, IOException {
         File script = new File(scriptFile);
         BufferedReader reader = new BufferedReader(new FileReader(script));
-        
+
         if (!connected) {
             open();
         }
         Statement stmt = con.createStatement();
-        
+
         String line;
         StringBuffer query = new StringBuffer();
         boolean queryEnds = false;
 
         while ((line = reader.readLine()) != null) {
-            if (isComment(line))
+            if (isComment(line)) {
                 continue;
+            }
             queryEnds = checkStatementEnds(line);
             query.append(line);
             if (queryEnds) {
@@ -114,11 +122,13 @@ public class JDBCClientImpl implements JDBCClient {
             }
         }
         stmt.executeBatch();
-        
+
     }
+
     /**
      * Execute the specified query
      * If the SQL connection if not open, it will be opened automatically
+     *
      * @param query The specified query
      * @return the ResultSet object. The returned ResultSet has to be closed manually.
      * @throws java.sql.SQLException If a SQL error occurs
@@ -129,7 +139,7 @@ public class JDBCClientImpl implements JDBCClient {
             open();
         }
         Statement stmt = con.createStatement();
-        
+
         ResultSet rs = stmt.executeQuery(query);
         return rs;
     }
@@ -137,6 +147,7 @@ public class JDBCClientImpl implements JDBCClient {
     /**
      * Execute the specified SQL command
      * If the SQL connection if not open, it will be opened automatically
+     *
      * @param query The specified query
      * @return the ResultSet object. The returned ResultSet has to be closed manually.
      * @throws java.sql.SQLException If a SQL error occurs
@@ -147,12 +158,13 @@ public class JDBCClientImpl implements JDBCClient {
             open();
         }
         Statement stmt = con.createStatement();
-        
+
         return stmt.execute(query);
     }
 
     /**
      * Close the JDBC conncetion to the database
+     *
      * @throws java.sql.SQLException If a SQL error occurs
      */
     public void close() throws SQLException {

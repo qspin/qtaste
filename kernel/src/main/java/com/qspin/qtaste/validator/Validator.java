@@ -37,7 +37,8 @@ public abstract class Validator {
         waitForValidation(maxTime_ms, 100, null);
     }
 
-    public void waitForValidation(long maxTime_ms, long checkIntervalTime_ms, String failMessagePrefix) throws QTasteTestFailException {
+    public void waitForValidation(long maxTime_ms, long checkIntervalTime_ms, String failMessagePrefix)
+          throws QTasteTestFailException {
         try {
             long beginTime_ms = System.currentTimeMillis(); // begin time
             long elapsedTime_ms = 0; // total elapsed time
@@ -52,7 +53,8 @@ public abstract class Validator {
                 } else {
                     Thread.sleep(Math.min(checkIntervalTime_ms, remainingTime_ms));
                 }
-            } while (true);
+            }
+            while (true);
         } catch (InterruptedException ex) {
             throw new QTasteTestFailException("Thread has been interrupted while waiting in validation");
         }

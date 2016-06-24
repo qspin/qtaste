@@ -34,6 +34,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * MultipleInstancesFactory is a Factory able to create several instances of a TestAPIComponent based on the 'INSTANCE_ID' field.
+ *
  * @author lvboque
  */
 public class MultipleInstancesComponentFactory implements ComponentFactory {
@@ -59,6 +60,7 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
 
     /**
      * Get an instance of the MultipleInstancesFactory.
+     *
      * @return The MultipleInstancesFactory.
      */
     synchronized public static MultipleInstancesComponentFactory getInstance() {
@@ -69,8 +71,9 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
     }
 
     /**
-     * Return the instance of the component associated to the INSTANCE_ID field of the TestData. 
-     * If the INSTANCE_ID is not present in the TestData, the default instance ID of the TestBedConfiguration will be used.     
+     * Return the instance of the component associated to the INSTANCE_ID field of the TestData.
+     * If the INSTANCE_ID is not present in the TestData, the default instance ID of the TestBedConfiguration will be used.
+     *
      * @param component the specified component
      * @param data the testdata
      * @return the instance of the component.
@@ -84,27 +87,28 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
             return map.get(key);
         } else {
             // check if the component is defined in the testbed configuration            
-            int instanceIndex = testbedConfig.getMIIndex(instanceId, component);            
-            String keyToFind = "multiple_instances_components." + component + "(" + instanceIndex + ")";            
-            List<?> list = testbedConfig.configurationsAt(keyToFind);            
-            if (!list.isEmpty()) {                
+            int instanceIndex = testbedConfig.getMIIndex(instanceId, component);
+            String keyToFind = "multiple_instances_components." + component + "(" + instanceIndex + ")";
+            List<?> list = testbedConfig.configurationsAt(keyToFind);
+            if (!list.isEmpty()) {
                 Class<?> c = ComponentsLoader.getInstance().getComponentImplementationClass(component);
                 if (c == null) {
-                    throw new QTasteException("The class implementing the component " + component + " is not registered in testapi_implementation.import(s) selected in the Testbed configuration.");
-                }                
-                Component componentImpl = createComponentInstance(instanceId, c);               
-                map.put(key, componentImpl);                
+                    throw new QTasteException("The class implementing the component " + component
+                          + " is not registered in testapi_implementation.import(s) selected in the Testbed configuration.");
+                }
+                Component componentImpl = createComponentInstance(instanceId, c);
+                map.put(key, componentImpl);
                 return componentImpl;
             } else {
                 logger.warn("Component " + component + " is not loaded because not defined in the testbed configuration.");
-                return null;                
+                return null;
             }
         }
     }
 
     private Component createComponentInstance(String instanceId, Class<?> component) throws QTasteException {
-        try {            
-            Component componentImpl = (Component) component.getConstructor(String.class).newInstance(new String(instanceId));            
+        try {
+            Component componentImpl = (Component) component.getConstructor(String.class).newInstance(new String(instanceId));
             return componentImpl;
         } catch (NoSuchMethodException e) {
             logger.error("MultipleInstancesFactory cannot get the constructor of " + component.getName(), e);
@@ -113,10 +117,11 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
         } catch (IllegalAccessException e) {
             logger.error("MultipleInstancesFactory cannot access the constructor of " + component.getName(), e);
         } catch (InvocationTargetException e) {
-            logger.error("MultipleInstancesFactory cannot invoke the constructor of " + component.getName(), e.getTargetException());
+            logger.error("MultipleInstancesFactory cannot invoke the constructor of " + component.getName(),
+                  e.getTargetException());
             Throwable targetException = e.getTargetException();
             if (targetException instanceof QTasteException) {
-                throw (QTasteException)targetException;
+                throw (QTasteException) targetException;
             }
         }
         throw new QTasteException("ComponentClass " + component + " cannot be instantiated");
@@ -127,12 +132,12 @@ public class MultipleInstancesComponentFactory implements ComponentFactory {
     }
 
     public void removeComponentInstance(Component component) {
-    	for (Map.Entry<String, Component> entry: map.entrySet()) {
-    		if (entry.getValue() == component) {
-    			map.remove(entry.getKey());
-    			return;
-    		}
-    	}
-    	logger.error("Component instance not found");
+        for (Map.Entry<String, Component> entry : map.entrySet()) {
+            if (entry.getValue() == component) {
+                map.remove(entry.getKey());
+                return;
+            }
+        }
+        logger.error("Component instance not found");
     }
 }

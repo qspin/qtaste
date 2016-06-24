@@ -51,6 +51,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * A DirectoryTestSuite is a TestSuite containing all the test scripts located in a directory (or sub-directories).
+ *
  * @author lvboque
  */
 public class DirectoryTestSuite extends TestSuite {
@@ -60,15 +61,16 @@ public class DirectoryTestSuite extends TestSuite {
     private File directory;
 
     public static DirectoryTestSuite createDirectoryTestSuite(String strDirectory) {
-    	DirectoryTestSuite ts = new DirectoryTestSuite(strDirectory);
+        DirectoryTestSuite ts = new DirectoryTestSuite(strDirectory);
         if (!ts.init() || TestEngine.isAbortedByUser()) {
-    		return null;
-    	}
-    	return ts;
+            return null;
+        }
+        return ts;
     }
 
     /**
      * Create a Directory TestSuite with the specified root directory.
+     *
      * @param strDirectory the directory root
      */
     private DirectoryTestSuite(String strDirectory) {
@@ -77,15 +79,15 @@ public class DirectoryTestSuite extends TestSuite {
     }
 
     private boolean init() {
-    	if (directory == null) {
-    		return false;
-    	}
+        if (directory == null) {
+            return false;
+        }
         return addTestScripts(directory);
     }
 
     /**
      * @param dataRows set of data rows for which to execute test scripts
-     *                 or null to execute test scripts for all data rows
+     * or null to execute test scripts for all data rows
      */
     public void selectRows(SortedSet<Integer> dataRows) {
         for (TestScript testScript : testScripts) {
@@ -107,7 +109,7 @@ public class DirectoryTestSuite extends TestSuite {
     }
 
     public boolean executeOnce(boolean debug) {
-    	boolean result = true;
+        boolean result = true;
         for (TestScript testScript : testScripts) {
             if (!testScript.execute(debug)) {
                 if (testScript.isAbortedByUser() || TestEngine.isAbortedByUser()) {
@@ -125,13 +127,14 @@ public class DirectoryTestSuite extends TestSuite {
 
     /**
      * Add test scripts from given directory and its sub-directories.
+     *
      * @param directory directory from which to start adding test scripts
      */
     private boolean addTestScripts(File directory) {
-    	if (TestEngine.isAbortedByUser()) {
-    		return false;
-    	}
-    	File scriptFile = new File(directory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
+        if (TestEngine.isAbortedByUser()) {
+            return false;
+        }
+        File scriptFile = new File(directory + File.separator + StaticConfiguration.TEST_SCRIPT_FILENAME);
         File csvFile = new File(directory + File.separator + StaticConfiguration.TEST_DATA_FILENAME);
         File xmlFile = new File(directory + File.separator + StaticConfiguration.TEST_REQUIREMENTS_FILENAME);
         if (scriptFile.exists() && csvFile.exists()) {
@@ -139,16 +142,17 @@ public class DirectoryTestSuite extends TestSuite {
             try {
                 List<LinkedHashMap<String, String>> csvDataSet = new CSVFile(csvFile).getCSVDataSet();
                 List<TestRequirement> xmlRequirements;
-                if ( xmlFile.exists() ) {
-                	xmlRequirements = new XMLFile(xmlFile).getXMLDataSet();
+                if (xmlFile.exists()) {
+                    xmlRequirements = new XMLFile(xmlFile).getXMLDataSet();
                 } else {
-                	xmlRequirements = new ArrayList<TestRequirement>();
+                    xmlRequirements = new ArrayList<TestRequirement>();
                 }
                 if (csvDataSet.isEmpty()) {
                     logger.warn("Ignoring test case " + directory + " because it contains no data row");
                 } else {
                     logger.info("Adding test case " + directory);
-                    TestScript ts = new JythonTestScript(csvDataSet, xmlRequirements, scriptFile, directory, DirectoryTestSuite.this);
+                    TestScript ts = new JythonTestScript(csvDataSet, xmlRequirements, scriptFile, directory,
+                          DirectoryTestSuite.this);
                     testScripts.add(ts);
                 }
             } catch (IOException | SAXException | ParserConfigurationException e) {
@@ -172,7 +176,7 @@ public class DirectoryTestSuite extends TestSuite {
                 });
                 for (File subdir : subdirectories) {
                     if (!addTestScripts(subdir)) {
-                    	break;
+                        break;
                     }
                 }
             }

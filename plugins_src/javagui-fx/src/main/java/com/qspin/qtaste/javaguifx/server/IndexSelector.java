@@ -19,54 +19,54 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
-
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
  * Component controller responsible for the selection of a specific index on a {@link ComboBox} or on a {@link ListView}.
  * This selection is processed by the Swing Thread.
  *
  * @author simjan
- *
  */
 class IndexSelector extends UpdateComponentCommander {
 
-	protected int mIndex;
+    protected int mIndex;
 
-	/**
-	 * Takes the index in the user data (the second parameter) and checks the component's type.
-	 * @throws QTasteTestFailException if the component is not a ComboBox or a ListView.
-	 */
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {
-		mIndex = Integer.parseInt(mData[0].toString());
-		if (component instanceof ComboBox) {
-			ComboBox<?> combo = (ComboBox<?>) component;
-			if (combo.getItems().size() < mIndex) {
-				throw new QTasteTestFailException("Specified index is out of bounds");
-			}
-		} else if (component instanceof ListView) {
-			ListView<?> list = (ListView<?>) component;
-			if (list.getItems().size() < mIndex) {
-				throw new QTasteTestFailException("Specified index is out of bounds");
-			}
-		} else {
-			throw new QTasteTestFailException("Unsupported component");
-		}
-	}
+    /**
+     * Takes the index in the user data (the second parameter) and checks the component's type.
+     *
+     * @throws QTasteTestFailException if the component is not a ComboBox or a ListView.
+     */
+    @Override
+    protected void prepareActions() throws QTasteTestFailException {
+        mIndex = Integer.parseInt(mData[0].toString());
+        if (component instanceof ComboBox) {
+            ComboBox<?> combo = (ComboBox<?>) component;
+            if (combo.getItems().size() < mIndex) {
+                throw new QTasteTestFailException("Specified index is out of bounds");
+            }
+        } else if (component instanceof ListView) {
+            ListView<?> list = (ListView<?>) component;
+            if (list.getItems().size() < mIndex) {
+                throw new QTasteTestFailException("Specified index is out of bounds");
+            }
+        } else {
+            throw new QTasteTestFailException("Unsupported component");
+        }
+    }
 
-	/**
-	 * Selects the index.
-	 */
-	@Override
-	protected void doActionsInEventThread() {
-		if (component instanceof ComboBox) {
-			((ComboBox<?>) component).getSelectionModel().select(mIndex);
-		} else if (component instanceof ListView) {
-			((ListView<?>) component).getSelectionModel().select(mIndex);
-		}
-	}
+    /**
+     * Selects the index.
+     */
+    @Override
+    protected void doActionsInEventThread() {
+        if (component instanceof ComboBox) {
+            ((ComboBox<?>) component).getSelectionModel().select(mIndex);
+        } else if (component instanceof ListView) {
+            ((ListView<?>) component).getSelectionModel().select(mIndex);
+        }
+    }
 
 }

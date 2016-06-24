@@ -35,7 +35,6 @@ import com.qspin.qtaste.testsuite.impl.TestDataImpl;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author lvboque
  */
 public class TestDataSet {
@@ -54,7 +53,7 @@ public class TestDataSet {
     public TestDataSet(List<LinkedHashMap<String, String>> data) {
         testDataList = new ArrayList<TestData>();
         int i = 1;
-        for (LinkedHashMap<String, String> testData: data) {
+        for (LinkedHashMap<String, String> testData : data) {
             TestData td = new TestDataImpl(i++, testData);
             testDataList.add(td);
         }
@@ -63,39 +62,39 @@ public class TestDataSet {
     public void selectRows(SortedSet<Integer> selectedRows) {
         this.selectedRows = selectedRows;
         boolean selectAllRows = (selectedRows == null);
-        for (TestData testData: testDataList) {
+        for (TestData testData : testDataList) {
             testData.setSelected(selectAllRows);
         }
         if (selectedRows != null) {
-            for (Integer selectedRow: selectedRows) {
+            for (Integer selectedRow : selectedRows) {
                 if (selectedRow >= 1 && selectedRow <= testDataList.size()) {
-                    testDataList.get(selectedRow-1).setSelected(true);
+                    testDataList.get(selectedRow - 1).setSelected(true);
                 } else {
                     logger.warn("Selected data row (" + selectedRow + ") doesn't exist");
                 }
             }
         }
     }
-    
+
     public List<TestData> getData() {
         return testDataList;
     }
-    
+
     public int size() {
         return testDataList.size();
     }
-    
+
     public int getNumberSelectedRows() {
         int numberSelectedRows = 0;
-        for (TestData testData: testDataList) {
+        for (TestData testData : testDataList) {
             if (testData.isSelected()) {
                 numberSelectedRows++;
             }
         }
         return numberSelectedRows;
     }
-    
+
     public SortedSet<Integer> getSelectedRows() {
-    	return selectedRows;
+        return selectedRows;
     }
 }

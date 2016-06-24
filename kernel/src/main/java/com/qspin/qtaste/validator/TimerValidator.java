@@ -28,32 +28,32 @@
 
 package com.qspin.qtaste.validator;
 
-
 /**
- *
  * @author lvboque
  */
 public class TimerValidator extends Validator {
-    private long start; 
+    private long start;
     private long acceptableMillis;
     private long end;
 
-
-    /** Creates a new instance of TimerValidator */
+    /**
+     * Creates a new instance of TimerValidator
+     */
     public TimerValidator(long acceptableMillis) {
-        this.acceptableMillis = acceptableMillis; 
+        this.acceptableMillis = acceptableMillis;
         this.start = System.currentTimeMillis();
     }
-    
+
     protected boolean validate() {
-          this.end = System.currentTimeMillis();
-          return ((end - start) <= acceptableMillis);
+        this.end = System.currentTimeMillis();
+        return ((end - start) <= acceptableMillis);
     }
-    
+
     protected String getExtraDetails() {
-        if (validate())
+        if (validate()) {
             return "";
-        else
-            return "TimerValidator expect to expire before " + acceptableMillis +  " but expires after " + (this.end - this.start);
+        } else {
+            return "TimerValidator expect to expire before " + acceptableMillis + " but expires after " + (this.end - this.start);
+        }
     }
 }

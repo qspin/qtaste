@@ -18,9 +18,6 @@ along with QTaste. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.qspin.qtaste.reporter.testresults.xml;
 
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.config.TestEngineConfiguration;
-import com.qspin.qtaste.reporter.testresults.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,15 +31,20 @@ import java.util.Date;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
+import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.reporter.XMLFormatter;
+import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResultImpl.StepResult;
+import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.testsuite.TestSuite;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NamesValuesList;
 
 /**
  * XMLReportFormatter is a XML formatter able to generate "test results" reports
+ *
  * @author lvboque
  */
 public class XMLReportFormatter extends XMLFormatter {
@@ -53,7 +55,7 @@ public class XMLReportFormatter extends XMLFormatter {
     private static final String RESULTS_FILE_NAME_FORMAT = "log-results-" + FILE_NAME_DATE_FORMAT + ".xml";
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private String testSuiteDir;
-	private static String outputDir;
+    private static String outputDir;
     private String fileName;
     private Date date;
     private TestSuite currentTestSuite;
@@ -73,7 +75,6 @@ public class XMLReportFormatter extends XMLFormatter {
         outputDir = config.getString("reporting.generated_report_path");
     }
 
-    
     public XMLReportFormatter(String reportName) throws FileNotFoundException, IOException {
         super(template, rowTemplate, rowStepsTemplate, new File(outputDir), String.format(RESULTS_FILE_NAME_FORMAT, new Date()));
         this.testSuiteDir = reportName;
@@ -98,12 +99,11 @@ public class XMLReportFormatter extends XMLFormatter {
         fileName += new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(timeStamp) + File.separator;
         fileName += String.format(FILE_NAME_FORMAT, date);
         File file = new File(fileName);
-        if ( !file.getParentFile().exists() )
-        {
-        	file.getParentFile().mkdirs();
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
         }
         if (file.exists()) {
-        	file.delete();
+            file.delete();
         }
 
         try {
@@ -134,11 +134,13 @@ public class XMLReportFormatter extends XMLFormatter {
         namesValues.add("###LOG_DATE###", DATE_FORMAT.format(date));
         namesValues.add("###TESTBED###", getTestbedConfigurationName());
         namesValues.add("###TESTBED_CONFIGURATION_FILE_NAME###", getTestbedConfigurationFileName());
-        namesValues.add("###TESTBED_CONFIGURATION_FILE_CONTENT###", StringEscapeUtils.escapeXml(getTestbedConfigurationFileContent()));
+        namesValues.add("###TESTBED_CONFIGURATION_FILE_CONTENT###",
+              StringEscapeUtils.escapeXml(getTestbedConfigurationFileContent()));
         String testbedControlScriptFileName = getTestbedControlScriptFileName();
         if (testbedControlScriptFileName != null) {
             namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_NAME###", getTestbedControlScriptFileName());
-            namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###", StringEscapeUtils.escapeXml(getTestbedControlScriptFileContent()));
+            namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###",
+                  StringEscapeUtils.escapeXml(getTestbedControlScriptFileContent()));
         } else {
             namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_NAME###", "none");
             namesValues.add("###TESTBED_CONTROL_SCRIPT_FILE_CONTENT###", "");

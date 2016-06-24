@@ -19,8 +19,6 @@
 
 package com.qspin.qtaste.ui.tools;
 
-import com.qspin.qtaste.ui.util.QSpinTheme;
-
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -49,17 +47,18 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.NumberFormatter;
 
+import com.qspin.qtaste.ui.util.QSpinTheme;
+
 /**
- *
  * @author vdubois
  */
 
 @SuppressWarnings("serial")
 public class TestSuiteRunDialog extends JDialog {
-//public class TestBedConfigSelectionPanel extends JFrame {
+    //public class TestBedConfigSelectionPanel extends JFrame {
 
-    private JRadioButton  mNumberofLoopsOption = new JRadioButton ("Number of loops:");
-    private JRadioButton  mNumberofLoopsInTimeOption = new JRadioButton ("Loop during time:");
+    private JRadioButton mNumberofLoopsOption = new JRadioButton("Number of loops:");
+    private JRadioButton mNumberofLoopsInTimeOption = new JRadioButton("Loop during time:");
     private JFormattedTextField mNumberOfLoopsTextArea;
 
     private JFormattedTextField mNumberOfLoopsInHoursTextArea;
@@ -76,38 +75,42 @@ public class TestSuiteRunDialog extends JDialog {
     public boolean IsCancelled = false;
     //private static Logger logger = Log4jLoggerFactory.getLogger(TestSuiteRunDialog.class);
 
-    public TestSuiteRunDialog(Window owner,String title) {
+    public TestSuiteRunDialog(Window owner, String title) {
 
         super(owner, title, ModalityType.APPLICATION_MODAL);
         //super();
         setTitle(title);
         setUpFrame();
         addWindowListener(new WindowAdapter() {
-        	public void windowClosing(WindowEvent e) {
-        		IsCancelled = true;
-        	}
-		});
+            public void windowClosing(WindowEvent e) {
+                IsCancelled = true;
+            }
+        });
 
         genUI();
     }
 
     public int getNumberOfLoops() {
         if (mNumberofLoopsOption.isSelected()) {
-        	int nLoops = 0;
-        	if (!mNumberOfLoopsTextArea.getText().trim().isEmpty())
-        		nLoops = Integer.parseInt(mNumberOfLoopsTextArea.getText());
-        	return nLoops;
+            int nLoops = 0;
+            if (!mNumberOfLoopsTextArea.getText().trim().isEmpty()) {
+                nLoops = Integer.parseInt(mNumberOfLoopsTextArea.getText());
+            }
+            return nLoops;
         }
         if (mNumberofLoopsInTimeOption.isSelected()) {
-        	int nLoopMinutes = 0;
-        	if (!mNumberOfLoopsInHoursTextArea.getText().trim().isEmpty())
-        		nLoopMinutes += (Integer.parseInt(mNumberOfLoopsInHoursTextArea.getText()) * 60);
-        	if (!mNumberOfLoopsInMinutesTextArea.getText().trim().isEmpty())
-        		nLoopMinutes += (Integer.parseInt(mNumberOfLoopsInMinutesTextArea.getText()));
-        	return nLoopMinutes;
+            int nLoopMinutes = 0;
+            if (!mNumberOfLoopsInHoursTextArea.getText().trim().isEmpty()) {
+                nLoopMinutes += (Integer.parseInt(mNumberOfLoopsInHoursTextArea.getText()) * 60);
+            }
+            if (!mNumberOfLoopsInMinutesTextArea.getText().trim().isEmpty()) {
+                nLoopMinutes += (Integer.parseInt(mNumberOfLoopsInMinutesTextArea.getText()));
+            }
+            return nLoopMinutes;
         }
         return 1;
     }
+
     public boolean isLoopsInTime() {
         return mNumberofLoopsInTimeOption.isSelected();
     }
@@ -120,15 +123,14 @@ public class TestSuiteRunDialog extends JDialog {
         numberFormat.setMinimumIntegerDigits(0);
         numberFormat.setMaximumIntegerDigits(3);
         NumberFormatter formatter = new NumberFormatter(numberFormat) {
-        	// This is to fix a known bug: allow null value/empty text on JFormattedTextField
-        	@Override
-        	public Object stringToValue(String string)
-                     throws ParseException {
-                     if (string == null || string.length() == 0) {
-                         return null;
-                     }
-                     return super.stringToValue(string);
-                 }
+            // This is to fix a known bug: allow null value/empty text on JFormattedTextField
+            @Override
+            public Object stringToValue(String string) throws ParseException {
+                if (string == null || string.length() == 0) {
+                    return null;
+                }
+                return super.stringToValue(string);
+            }
         };
         formatter.setValueClass(Integer.class);
         formatter.setAllowsInvalid(false);
@@ -165,40 +167,40 @@ public class TestSuiteRunDialog extends JDialog {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0;
-        c.gridx=0;
-        c.gridy=0;
-        c.insets = new Insets(10,10,0,10);  //top padding
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = new Insets(10, 10, 0, 10);  //top padding
         mainPanel.add(mNumberofLoopsOption, c);
 
-        c.gridx=1;
-        c.gridy=0;
+        c.gridx = 1;
+        c.gridy = 0;
         mNumberOfLoopsTextArea.setColumns(3);
         mainPanel.add(mNumberOfLoopsTextArea, c);
 
-        c.gridx=0;
-        c.gridy=1;
+        c.gridx = 0;
+        c.gridy = 1;
         mainPanel.add(mNumberofLoopsInTimeOption, c);
 
         c.gridwidth = 1;
-        c.gridx=1;
-        c.gridy=1;
+        c.gridx = 1;
+        c.gridy = 1;
         mNumberOfLoopsInHoursTextArea.setColumns(3);
         mNumberOfLoopsInHoursTextArea.setEnabled(false);
         mainPanel.add(mNumberOfLoopsInHoursTextArea, c);
 
-        c.gridx=2;
-        c.gridy=1;
+        c.gridx = 2;
+        c.gridy = 1;
         mNumberOfLoopsInHoursLabel.setEnabled(false);
         mainPanel.add(mNumberOfLoopsInHoursLabel, c);
 
-        c.gridx=3;
-        c.gridy=1;
+        c.gridx = 3;
+        c.gridy = 1;
         mNumberOfLoopsInMinutesTextArea.setColumns(3);
         mNumberOfLoopsInMinutesTextArea.setEnabled(false);
         mainPanel.add(mNumberOfLoopsInMinutesTextArea, c);
 
-        c.gridx=4;
-        c.gridy=1;
+        c.gridx = 4;
+        c.gridy = 1;
         mNumberOfLoopsInMinutesLabel.setEnabled(false);
         mainPanel.add(mNumberOfLoopsInMinutesLabel, c);
 
@@ -211,25 +213,26 @@ public class TestSuiteRunDialog extends JDialog {
         cancelButton.addActionListener(cancelActionListener);
 
         // ok on ENTER keypress
-        getRootPane().registerKeyboardAction(okActionListener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        getRootPane().registerKeyboardAction(okActionListener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+              JComponent.WHEN_IN_FOCUSED_WINDOW);
         // cancel on ESCAPE keypress
-        getRootPane().registerKeyboardAction(cancelActionListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        getRootPane().registerKeyboardAction(cancelActionListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+              JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
-        c.gridx=0;
-        c.gridy=0;
-        c.insets = new Insets(10,10,0,10);  //top padding
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = new Insets(10, 10, 0, 10);  //top padding
         this.add(mainPanel, c);
-
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0;
-        c.gridx=1;
-        c.gridy=1;
+        c.gridx = 1;
+        c.gridy = 1;
         c.weighty = 1.0;   //request any extra vertical space
         c.anchor = GridBagConstraints.PAGE_END; //bottom of space
-        c.insets = new Insets(30,10,10,10);  //top padding
+        c.insets = new Insets(30, 10, 10, 10);  //top padding
 
         this.add(bottomPanel, c);
         this.pack();
@@ -237,7 +240,7 @@ public class TestSuiteRunDialog extends JDialog {
     }
 
     private void setUpFrame() {
-//        setName(title);
+        //        setName(title);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
@@ -251,27 +254,27 @@ public class TestSuiteRunDialog extends JDialog {
         }
     }
 
-
     protected class OkActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-                /**
-                 * when the windows is closing, the isCancelled variable is always set to true. (see the constructor)
-                 * The variable has to be reset to false.
-                 */
-                IsCancelled = false;
+            setVisible(false);
+            dispose();
+            /**
+             * when the windows is closing, the isCancelled variable is always set to true. (see the constructor)
+             * The variable has to be reset to false.
+             */
+            IsCancelled = false;
         }
-    };
+    }
 
+    ;
 
     protected class CancelActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-                IsCancelled = true;
-                setVisible(false);
-                dispose();
+            IsCancelled = true;
+            setVisible(false);
+            dispose();
         }
     }
 }

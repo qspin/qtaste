@@ -31,7 +31,8 @@ import org.apache.log4j.Logger;
 
 /**
  * JMXNotificationHandler is responsible to store AttributeChangeNotification in a PropertyHistory container and
- * keep track of the JMX connnection status.  
+ * keep track of the JMX connnection status.
+ *
  * @author lvboque
  */
 public class JMXNotificationHandler implements NotificationListener {
@@ -55,7 +56,7 @@ public class JMXNotificationHandler implements NotificationListener {
     }
 
     public void setSubComponentName(String subComponentClassName, String subComponentName) {
-    	subComponentsMap.put(subComponentClassName, subComponentName);
+        subComponentsMap.put(subComponentClassName, subComponentName);
     }
 
     // This handler relies on the "message" field of the notification to extract the information
@@ -64,10 +65,13 @@ public class JMXNotificationHandler implements NotificationListener {
         if (notification instanceof JMXConnectionNotification) {
             JMXConnectionNotification jmxcNotification = (JMXConnectionNotification) notification;
             if (jmxcNotification.getType().equals(JMXConnectionNotification.FAILED)) {
-                logger.error("JMX connection to " + componentName + " (" + jmxcNotification.getConnectionId() + ") has been lost !\n" + jmxcNotification.getMessage());
+                logger.error(
+                      "JMX connection to " + componentName + " (" + jmxcNotification.getConnectionId() + ") has been lost !\n"
+                            + jmxcNotification.getMessage());
                 propertiesHistory.signalPossibleNotificationLoss();
             } else if (jmxcNotification.getType().equals(JMXConnectionNotification.NOTIFS_LOST)) {
-                logger.error("JMX connection to " + componentName + " (" + jmxcNotification.getConnectionId() + ") could have lost some notifications:\n" + jmxcNotification.getMessage());
+                logger.error("JMX connection to " + componentName + " (" + jmxcNotification.getConnectionId()
+                      + ") could have lost some notifications:\n" + jmxcNotification.getMessage());
                 /*
                  if (jmxcNotification.getUserData() instanceof Long) {
                     lastNotificationSequenceNumber += (Long)jmxcNotification.getUserData();
@@ -79,19 +83,24 @@ public class JMXNotificationHandler implements NotificationListener {
 
         // handle JMX attribute change notification
         if (!(notification instanceof AttributeChangeNotification)) {
-            logger.error("Received a JMX notification from " + componentName + " which is not of type AttributeChangeNotification (" + notification.getClass().getName() + ")");
+            logger.error(
+                  "Received a JMX notification from " + componentName + " which is not of type AttributeChangeNotification ("
+                        + notification.getClass().getName() + ")");
             return;
         }
 
         AttributeChangeNotification attributeChangeNotification = (AttributeChangeNotification) notification;
         Object source = attributeChangeNotification.getSource();
         if (!(source instanceof String)) {
-            // ignore AttributeChangeDetected sent by RequiredModelMBean#sendAttributeChangeNotification because sequence number is always set to 1
-            if (source instanceof ObjectName && "AttributeChangeDetected".equals(attributeChangeNotification.getMessage()))
-            {
-                logger.warn("Ignoring JMX AttributeChangeDetected notification from " + componentName + " for attribute " + attributeChangeNotification.getAttributeName() );
+            // ignore AttributeChangeDetected sent by RequiredModelMBean#sendAttributeChangeNotification because sequence
+            // number is always set to 1
+            if (source instanceof ObjectName && "AttributeChangeDetected".equals(attributeChangeNotification.getMessage())) {
+                logger.warn("Ignoring JMX AttributeChangeDetected notification from " + componentName + " for attribute "
+                      + attributeChangeNotification.getAttributeName());
             } else {
-                logger.error("JMX notification source from " + componentName + " is not of type String (" + source.getClass().getName() + ")");
+                logger.error(
+                      "JMX notification source from " + componentName + " is not of type String (" + source.getClass().getName()
+                            + ")");
             }
             return;
         }
@@ -100,7 +109,8 @@ public class JMXNotificationHandler implements NotificationListener {
         long notificationSequenceNumber = notification.getSequenceNumber();
         if (lastNotificationSequenceNumber != -1) {
             if (notificationSequenceNumber != (lastNotificationSequenceNumber + 1)) {
-                logger.error("Missed a JMX notification from " + componentName + "! (Received sequence number " + notificationSequenceNumber + " while last was " + lastNotificationSequenceNumber + ")");
+                logger.error("Missed a JMX notification from " + componentName + "! (Received sequence number "
+                      + notificationSequenceNumber + " while last was " + lastNotificationSequenceNumber + ")");
                 propertiesHistory.signalPossibleNotificationLoss();
             }
         }
@@ -111,7 +121,8 @@ public class JMXNotificationHandler implements NotificationListener {
         String subComponent = ((separatorIndex != -1) ? message.substring(0, separatorIndex) : "");
         String subComponentName = subComponentsMap.get(subComponent);
         if (subComponentName == null) {
-            logger.error("Received JMX notification from " + componentName + " from unknown sub-component " + subComponent + " - message: " + attributeChangeNotification.getMessage());
+            logger.error("Received JMX notification from " + componentName + " from unknown sub-component " + subComponent
+                  + " - message: " + attributeChangeNotification.getMessage());
             return;
         }
 
@@ -133,7 +144,8 @@ public class JMXNotificationHandler implements NotificationListener {
             attributeName = "state";
         }
 
-        String propertyName = (subComponentName.isEmpty() ? "" : subComponentName.toLowerCase() + ".") + attributeName.toLowerCase();
+        String propertyName =
+              (subComponentName.isEmpty() ? "" : subComponentName.toLowerCase() + ".") + attributeName.toLowerCase();
         String oldValue = String.valueOf(attributeChangeNotification.getOldValue()).toLowerCase();
         String newValue = String.valueOf(attributeChangeNotification.getNewValue()).toLowerCase();
 
@@ -144,7 +156,7 @@ public class JMXNotificationHandler implements NotificationListener {
         if (newValue.isEmpty()) {
             newValue = "null";
         }
-        
+
         boolean checkOldValue = (attributeChangeNotification.getOldValue() != null);
 
         propertiesHistory.addChange(propertyName, oldValue, newValue, notificationSequenceNumber, checkOldValue);

@@ -19,18 +19,17 @@
 
 package com.qspin.qtaste.testapi;
 
-
 /**
  * Class for getting the QTaste testapi version informations.
  */
 public class Version extends com.qspin.qtaste.util.Version {
-	private static Version instance = null;
-	
-	public static Version getInstance() {
-		if (instance == null) {
-			instance = new Version();
-		}
-		
-		return instance;
-	}
+    private static Version instance = null;
+
+    public static Version getInstance() {
+        if (instance == null) {
+            instance = new Version();
+        }
+
+        return instance;
+    }
 }

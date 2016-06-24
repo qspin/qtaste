@@ -19,30 +19,30 @@
 
 package com.qspin.qtaste.ui.widget;
 
-import com.qspin.qtaste.ui.tools.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.metal.*;
+import java.awt.Color;
+import java.awt.Graphics;
+
+import javax.swing.JComponent;
+import javax.swing.plaf.metal.MetalSeparatorUI;
+
+import com.qspin.qtaste.ui.tools.ResourceManager;
+
 /**
  * A separator ui is responsible to draw a line in the back color given by the ResourceManager.
  */
-public class SeparatorUI extends MetalSeparatorUI
-{
-   private boolean mVisible;
-   public SeparatorUI(boolean pVisible)
-   {
-      mVisible = pVisible;
-   }
-   public void paint(Graphics pG, JComponent pComp)
-   {
-      if(mVisible)
-      {
-         pG.setColor(ResourceManager.getInstance().getBackColor());
-      }
-      else
-      {
-         pG.setColor(Color.WHITE);
-      }
-      pG.drawLine(0, 0, pComp.getWidth(), 0);
-   }
+public class SeparatorUI extends MetalSeparatorUI {
+    private boolean mVisible;
+
+    public SeparatorUI(boolean pVisible) {
+        mVisible = pVisible;
+    }
+
+    public void paint(Graphics pG, JComponent pComp) {
+        if (mVisible) {
+            pG.setColor(ResourceManager.getInstance().getBackColor());
+        } else {
+            pG.setColor(Color.WHITE);
+        }
+        pG.drawLine(0, 0, pComp.getWidth(), 0);
+    }
 }

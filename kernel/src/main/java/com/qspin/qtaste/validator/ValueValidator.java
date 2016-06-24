@@ -31,37 +31,38 @@ package com.qspin.qtaste.validator;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
- *
  * @author lvboque
  */
 public class ValueValidator extends Validator {
     private Object actual;
     private Object expected;
 
-    
     public static void check(Object expected, Object actual) throws QTasteTestFailException {
         check(expected, actual, null);
     }
-    
+
     public static void check(Object expected, Object actual, String failMessagePrefix) throws QTasteTestFailException {
         ValueValidator validator = new ValueValidator(expected, actual);
         validator.validate(failMessagePrefix);
     }
 
-    /** Creates a new instance of ValueValidator */
+    /**
+     * Creates a new instance of ValueValidator
+     */
     private ValueValidator(Object expected, Object actual) {
         this.expected = expected;
         this.actual = actual;
     }
-    
+
     protected boolean validate() {
         return actual.toString().equals(expected.toString());
     }
-    
+
     protected String getExtraDetails() {
-        if (validate())
+        if (validate()) {
             return "";
-        else
+        } else {
             return "ValueValidator expect: " + expected.toString() + " but got: " + actual.toString();
+        }
     }
 }

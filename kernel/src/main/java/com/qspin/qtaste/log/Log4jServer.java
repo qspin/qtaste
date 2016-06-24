@@ -32,7 +32,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * Log4j TCP server.
- * 
+ *
  * @author David Ergo
  */
 public class Log4jServer extends Thread {
@@ -64,7 +64,7 @@ public class Log4jServer extends Thread {
     @Override
     public void run() {
         mIsTerminating = false;
-        
+
         try {
             LOGGER.info("Starting log4j server on port " + port);
             mServerSocket = new ServerSocket(port);

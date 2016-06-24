@@ -35,99 +35,102 @@ import com.qspin.qtaste.debug.Breakpoint;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
  */
 public class TestScriptBreakpointHandler {
     private static Logger logger = Log4jLoggerFactory.getLogger(TestScriptBreakpointHandler.class);
     private static TestScriptBreakpointHandler eventHandler;
-    private final List<TestScriptBreakpointListener> testbreakPointListeners = 
-            Collections.synchronizedList(new LinkedList<TestScriptBreakpointListener>());
+    private final List<TestScriptBreakpointListener> testbreakPointListeners = Collections.synchronizedList(
+          new LinkedList<TestScriptBreakpointListener>());
 
-    private TestScriptBreakpointHandler(){}
+    private TestScriptBreakpointHandler() {
+    }
 
-    public static TestScriptBreakpointHandler getInstance(){
+    public static TestScriptBreakpointHandler getInstance() {
         if (eventHandler == null) {
             eventHandler = new TestScriptBreakpointHandler();
         }
         return eventHandler;
     }
 
-    public void clearInstance(){
+    public void clearInstance() {
         eventHandler = null;
     }
 
-    
-    public void addTestScriptBreakpointListener(TestScriptBreakpointListener tcl){
-        if (tcl != null && !testbreakPointListeners.contains(tcl)){
+    public void addTestScriptBreakpointListener(TestScriptBreakpointListener tcl) {
+        if (tcl != null && !testbreakPointListeners.contains(tcl)) {
             testbreakPointListeners.add(tcl);
         }
     }
 
-    public List<TestScriptBreakpointListener> getTestCaseListeners(){
+    public List<TestScriptBreakpointListener> getTestCaseListeners() {
         return testbreakPointListeners;
     }
 
-    public void removeTestScriptBreakpointListener(TestScriptBreakpointListener tcl){
-    	if (tcl==null) return;
+    public void removeTestScriptBreakpointListener(TestScriptBreakpointListener tcl) {
+        if (tcl == null) {
+            return;
+        }
         testbreakPointListeners.remove(tcl);
     }
 
-    public void break_(String fileName, int lineNumber){
-        TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this , TestScriptBreakpointEvent.Action.BREAK, new Breakpoint(fileName, lineNumber));
+    public void break_(String fileName, int lineNumber) {
+        TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.BREAK,
+              new Breakpoint(fileName, lineNumber));
         doAction(event);
         logger.debug("DoAction TestScriptBreakpointEvent.Action.BREAK at " + fileName + ":" + lineNumber);
     }
 
-    public void continue_(){
+    public void continue_() {
         TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.CONTINUE, null);
         doAction(event);
         logger.debug("DoAction TestScriptBreakpointEvent.Action.CONTINUE");
     }
-    
-    public void step(){
+
+    public void step() {
         TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.STEP, null);
         doAction(event);
         logger.debug("DoAction TestScriptBreakpointEvent.Action.STEP");
     }
 
-    public void stepInto(){
+    public void stepInto() {
         TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.STEPINTO, null);
         doAction(event);
         logger.debug("DoAction TestScriptBreakpointEvent.Action.STEPINTO");
     }
-    
-    public void stop(){
-        TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this , TestScriptBreakpointEvent.Action.STOP, null);
+
+    public void stop() {
+        TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.STOP, null);
         doAction(event);
         logger.debug("DoAction TestScriptBreakpointEvent.Action.STOP");
     }
 
-    public void dumpStack(){
+    public void dumpStack() {
         TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.DUMP_STACK, null);
         doAction(event);
         logger.debug("DoAction TestScriptBreakpointEvent.Action.DUMP_STACK");
     }
-    
+
     /**
      * This method is invoked by the UI to dump the variable content
      */
-    public void dumpVar(Object varName){
+    public void dumpVar(Object varName) {
         TestScriptBreakpointEvent event = new TestScriptBreakpointEvent(this, TestScriptBreakpointEvent.Action.DUMP_VAR, varName);
         doAction(event);
     }
-    
-	private void doAction(TestScriptBreakpointEvent event){    	
-        synchronized(testbreakPointListeners){
+
+    private void doAction(TestScriptBreakpointEvent event) {
+        synchronized (testbreakPointListeners) {
             Iterator<TestScriptBreakpointListener> it = testbreakPointListeners.iterator();
             TestScriptBreakpointListener tcl;
             while (it.hasNext()) {
                 try {
-                    tcl = it.next();                    
-                    logger.debug("TestScriptBreakpointHandler: send event " + event.getAction().toString() + " to " + tcl.getClass().getName());
+                    tcl = it.next();
+                    logger.debug(
+                          "TestScriptBreakpointHandler: send event " + event.getAction().toString() + " to " + tcl.getClass()
+                                .getName());
                     tcl.doAction(event);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     logger.error(e.getMessage());
                     e.printStackTrace();
                     //return;

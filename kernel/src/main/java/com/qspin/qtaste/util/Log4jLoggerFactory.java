@@ -26,13 +26,13 @@ import org.apache.log4j.Logger;
  */
 public class Log4jLoggerFactory {
 
-	private static String PREFIX = "";
-	
-	public static Logger getLogger(Class<?> clazz) {
-		return Logger.getLogger(PREFIX + clazz.getName());
-	}
+    private static String PREFIX = "";
 
-	public static Logger getLogger(String name) {
-		return Logger.getLogger(PREFIX + name);
-	}
+    public static Logger getLogger(Class<?> clazz) {
+        return Logger.getLogger(PREFIX + clazz.getName());
+    }
+
+    public static Logger getLogger(String name) {
+        return Logger.getLogger(PREFIX + name);
+    }
 }

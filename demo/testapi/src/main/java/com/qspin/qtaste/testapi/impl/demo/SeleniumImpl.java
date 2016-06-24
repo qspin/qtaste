@@ -19,16 +19,18 @@
 
 package com.qspin.qtaste.testapi.impl.demo;
 
+import com.thoughtworks.selenium.DefaultSelenium;
+import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.tcom.WebBrowser;
 import com.qspin.qtaste.testapi.api.Selenium;
 import com.qspin.qtaste.testsuite.QTasteException;
-import com.thoughtworks.selenium.DefaultSelenium;
-import org.apache.log4j.Logger;
 
 /**
  * Implementation of the Selenium Test API
+ *
  * @author Laurent Vanbboquestal
  */
 public class SeleniumImpl extends WebBrowser implements Selenium {
@@ -48,20 +50,18 @@ public class SeleniumImpl extends WebBrowser implements Selenium {
         logger.debug("Target url : " + this.URL);
     }
 
-    
     @Override
     public void openBrowser(String browserName) {
         setSelenium(new DefaultSelenium(host, port, browserName, URL));
         this.start();
     }
 
-    
     @Override
     public void closeBrowser() {
-	if (selenium != null) {
-        	stop();
-        	setSelenium(null);
-	}
+        if (selenium != null) {
+            stop();
+            setSelenium(null);
+        }
     }
 
     @Override

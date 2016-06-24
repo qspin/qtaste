@@ -21,7 +21,7 @@ package com.qspin.qtaste.kernel.testapi;
 
 /**
  * Interface for all Test API singleton components
- * 
+ *
  * @author David Ergo
  */
 public interface SingletonComponent extends Component {

@@ -26,14 +26,14 @@ import javax.swing.JComponent;
 import com.qspin.qtaste.testsuite.QTasteException;
 
 class ToolTipGetter extends ComponentCommander {
-	
-	@Override
-	public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		if (c instanceof JComponent) {
-			return ((JComponent) c).getToolTipText();
-		}
-		return null;
-	}
+
+    @Override
+    public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        if (c instanceof JComponent) {
+            return ((JComponent) c).getToolTipText();
+        }
+        return null;
+    }
 
 }

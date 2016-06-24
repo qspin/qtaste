@@ -23,29 +23,30 @@ import com.qspin.qtaste.reporter.testresults.TestResult;
 
 /**
  * Listener of test report (test result or test retry).
- * 
+ *
  * @author David Ergo
  */
 public interface TestReportListener {
-    
+
     /**
      * Method called after test suite has been started.
      */
-     public void reportTestSuiteStarted();
-     
+    public void reportTestSuiteStarted();
+
     /**
      * Method called after test suite has been stopped.
      */
-     public void reportTestSuiteStopped();
-     
+    public void reportTestSuiteStopped();
+
     /**
      * Method called when a test result is reported.
+     *
      * @param status test result status
      */
-     public void reportTestResult(TestResult.Status status);
-     
-     /**
-      * Method called when a test retry occurs.
-      */
-     public void reportTestRetry();     
+    public void reportTestResult(TestResult.Status status);
+
+    /**
+     * Method called when a test retry occurs.
+     */
+    public void reportTestRetry();
 }

@@ -31,22 +31,21 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NameValue;
 
 /**
- *
  * @author lvboque
  */
 public abstract class AbstractPusher implements Runnable {
     protected static Logger logger = Log4jLoggerFactory.getLogger(AbstractPusher.class);
-    private HashtableLinkedList<String,Data> hash;
+    private HashtableLinkedList<String, Data> hash;
     private Thread thread;
     private boolean interrupted;
     private boolean running;
-    private ListIterator<NameValue<String,Data>> iCacheValues;
+    private ListIterator<NameValue<String, Data>> iCacheValues;
     private long startTimestamp;
 
     /**
      * Creates a new instance of AbstractPusher
      */
-    public AbstractPusher(HashtableLinkedList<String,Data> data) {
+    public AbstractPusher(HashtableLinkedList<String, Data> data) {
         this.hash = data;
         this.thread = new Thread(this);
         this.interrupted = false;
@@ -67,7 +66,7 @@ public abstract class AbstractPusher implements Runnable {
 
         startTimestamp = cache.getClearHistoryTimestamp();
 
-        broadcastTill(hash.getClearHistoryTimestamp(), false);       
+        broadcastTill(hash.getClearHistoryTimestamp(), false);
         thread.start();
     }
 
@@ -75,19 +74,20 @@ public abstract class AbstractPusher implements Runnable {
         try {
             thread.join();
         } catch (InterruptedException ex) {
-            
+
         }
     }
+
     public void stop() {
         //logger.info("AbstractPusher has been stopped");
-         assert running;
+        assert running;
         interrupted = true;
         try {
             while (running) {
                 Thread.sleep(10);
             }
         } catch (InterruptedException e) {
-            logger.fatal("Exception in stop", e);            
+            logger.fatal("Exception in stop", e);
         }
     }
 
@@ -102,24 +102,23 @@ public abstract class AbstractPusher implements Runnable {
     }
 
     /**
-     * 
      * @param tillTimestamp timestamp till which values must be broadcasted
      * @param respectInsertionTime true to insert values at the rate respecting
-     *                                  timestamps
-     *                             false to insert all values immediately
+     * timestamps
+     * false to insert all values immediately
      */
     private void broadcastTill(long tillTimestamp, boolean respectInsertionTime) {
         long previousCacheValueTimestamp = 0;
         boolean hasPreparedData = false;
 
         while (!interrupted && iCacheValues.hasNext()) {
-            NameValue<String,Data> nameValue = iCacheValues.next();
+            NameValue<String, Data> nameValue = iCacheValues.next();
             String name = nameValue.name;
             Data value = nameValue.value;
 
             // get timestamp
             long cacheValueTimestamp = value.getTimestamp();
-            
+
             // break out of loop if "till" timestamp is reached
             if (cacheValueTimestamp >= tillTimestamp) {
                 iCacheValues.previous();
@@ -158,7 +157,7 @@ public abstract class AbstractPusher implements Runnable {
         }
         if (hasPreparedData) {
             publish();
-            
+
         }
     }
 }

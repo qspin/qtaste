@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.qspin.qtaste.util.FileUtilities;
-import com.qspin.qtaste.util.Strings;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.DocErrorReporter;
@@ -40,6 +38,9 @@ import com.sun.javadoc.Parameter;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 
+import com.qspin.qtaste.util.FileUtilities;
+import com.qspin.qtaste.util.Strings;
+
 /**
  * TestAPIDoclet is the Javadoc doclet used to generate HTML documentation
  * for the QTaste Test API Component interfaces.
@@ -47,12 +48,12 @@ import com.sun.javadoc.Tag;
  * Command-line option:
  * <dl>
  * <dt><b>-d</b> <var>directory</var>
- * <dd> Specifies the destination directory where javadoc saves the 
+ * <dd> Specifies the destination directory where javadoc saves the
  * generated HTML files (the "d" means "destination"). Omitting this
- * option causes the files to be saved in the current directory.  
- * The value <var>directory</var> can be 
- * absolute, or relative to the current working directory.  
- * If the destination directory doesn't exist, it is automatically 
+ * option causes the files to be saved in the current directory.
+ * The value <var>directory</var> can be
+ * absolute, or relative to the current working directory.
+ * If the destination directory doesn't exist, it is automatically
  * created when javadoc is run.
  * </dl>
  *
@@ -63,11 +64,13 @@ public class TestAPIDoclet {
     // destination directory, including ending directory separator
     private static String mDestinationDirectory = "";
     private static final String TEST_API_KERNEL_PACKAGE = "com.qspin.qtaste.kernel.testapi";
-    private static final Pattern NAME_TYPE_DESCRIPTION_PATTERN = Pattern.compile("^(\\w+)\\s+\\[(.+?)\\]\\s+(.+)$", Pattern.DOTALL); // name/type/description text format: "NAME [Type] Description"
+    private static final Pattern NAME_TYPE_DESCRIPTION_PATTERN = Pattern.compile("^(\\w+)\\s+\\[(.+?)\\]\\s+(.+)$",
+          Pattern.DOTALL); // name/type/description text format: "NAME [Type] Description"
     private static final String TESTAPI_DOC_STATIC_DIRECTORY = "/TestAPI-doc-static";
 
     /**
      * Returns Java language version.
+     *
      * @return LanguageVersion.JAVA_1_5
      */
     public static LanguageVersion languageVersion() {
@@ -78,7 +81,7 @@ public class TestAPIDoclet {
      * Generates documentation.
      * <p>
      * This method is required for all doclets.
-     * 
+     *
      * @param root the RootDoc object provided by javadoc
      * @return true if success, false otherwise
      */
@@ -98,7 +101,8 @@ public class TestAPIDoclet {
         // copy static files
         try {
             FileUtilities.copyResourceFiles(TestAPIDoclet.class, TESTAPI_DOC_STATIC_DIRECTORY, mDestinationDirectory);
-            FileUtilities.copyResourceFiles(TestAPIDoclet.class, TESTAPI_DOC_STATIC_DIRECTORY + "/QTaste", mDestinationDirectory + "/QTaste");
+            FileUtilities.copyResourceFiles(TestAPIDoclet.class, TESTAPI_DOC_STATIC_DIRECTORY + "/QTaste",
+                  mDestinationDirectory + "/QTaste");
         } catch (Exception e) {
             System.err.println("Error while copying static documentation files: " + e.getMessage());
             return false;
@@ -111,29 +115,31 @@ public class TestAPIDoclet {
         }
 
         try {
-            HTMLFileWriter listOut = new HTMLFileWriter(mDestinationDirectory + "allcomponents-frame.html", "all components", true);
+            HTMLFileWriter listOut = new HTMLFileWriter(mDestinationDirectory + "allcomponents-frame.html", "all components",
+                  true);
             listOut.printHeading("QTaste Test API <A HREF=\"components-summary.html\" TARGET=\"detailsFrame\">components</A>", 3);
 
-            HTMLFileWriter summaryOut = new HTMLFileWriter(mDestinationDirectory + "components-summary.html", "components summary", true);
+            HTMLFileWriter summaryOut = new HTMLFileWriter(mDestinationDirectory + "components-summary.html",
+                  "components summary", true);
             summaryOut.printHeading("QTaste Test API components", 2);
             summaryOut.printTestAPIComponentsSummary(testAPIComponents);
             summaryOut.close();
-           
 
             for (int i = 0; i < testAPIComponents.length; i++) {
                 ClassDoc classDoc = testAPIComponents[i];
-                HTMLFileWriter out = new HTMLFileWriter(mDestinationDirectory + "components/" + classDoc.name() + ".html", classDoc.name(), true);
+                HTMLFileWriter out = new HTMLFileWriter(mDestinationDirectory + "components/" + classDoc.name() + ".html",
+                      classDoc.name(), true);
                 out.printTestAPIComponentHeader(classDoc, root);
                 out.printMethodsSummary(classDoc);
                 out.printMethodsDetails(classDoc);
                 out.close();
 
                 listOut.printTestAPIComponentLink(classDoc);
-               
+
             }
 
             listOut.close();
-            
+
         } catch (java.io.IOException e) {
             System.err.println(e);
             return false;
@@ -143,19 +149,19 @@ public class TestAPIDoclet {
     }
 
     /**
-     * Check for doclet-added options. 
+     * Check for doclet-added options.
      * <p>
-     * Returns the number of arguments you must specify on the command line for 
+     * Returns the number of arguments you must specify on the command line for
      * the given option. For example, "-d docs" would return 2.
      * <p>
-     * This method is required if the doclet contains any options. 
-     * If this method is missing, Javadoc will print an invalid flag error for 
-     * every option. 
-     * 
+     * This method is required if the doclet contains any options.
+     * If this method is missing, Javadoc will print an invalid flag error for
+     * every option.
+     *
      * @param option the option to check
      * @return the number of arguments on the command line for the specified
-     *         option including the option name itself.
-     *         Zero means option not known. Negative value means error occurred.
+     * option including the option name itself.
+     * Zero means option not known. Negative value means error occurred.
      */
     public static int optionLength(String option) {
         // "-d directory" option (destination directory)
@@ -169,13 +175,13 @@ public class TestAPIDoclet {
     /**
      * Checks that options have the correct arguments.
      * <p>
-     * This method is not required, but is recommended, as every option will be 
-     * considered valid if this method is not present. It will default 
+     * This method is not required, but is recommended, as every option will be
+     * considered valid if this method is not present. It will default
      * gracefully (to true) if absent.
      * <p>
-     * Printing option related error messages (using the provided 
-     * DocErrorReporter) is the responsibility of this method. 
-     * 
+     * Printing option related error messages (using the provided
+     * DocErrorReporter) is the responsibility of this method.
+     *
      * @param options the array of options to validate
      * @param reporter DocErrorReporter to which to report errors if options are not valid
      * @return true if the options are valid, false otherwise
@@ -185,41 +191,42 @@ public class TestAPIDoclet {
         return true;
     }
 
-    /** 
+    /**
      * Returns true if given class is a Test API component interface.
-     * 
+     *
      * @param classDoc the ClassDoc specifying the class
      * @param root the RootDoc passed to the doclet
      * @return true if specified class is a Test API component interface, false otherwise
      */
     public static boolean isTestAPI(ClassDoc classDoc, RootDoc root) {
         try {
-        	ClassDoc TestAPIComponent = root.classNamed(TEST_API_KERNEL_PACKAGE + ".Component");
-        	return classDoc.isInterface() && classDoc.subclassOf(TestAPIComponent) && (classDoc != TestAPIComponent);
-        }        
-        catch (Exception e) {
-        	return false;
+            ClassDoc TestAPIComponent = root.classNamed(TEST_API_KERNEL_PACKAGE + ".Component");
+            return classDoc.isInterface() && classDoc.subclassOf(TestAPIComponent) && (classDoc != TestAPIComponent);
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    /** 
+    /**
      * Returns true if given class is a Test API instance Id component interface.
-     * 
+     *
      * @param classDoc the ClassDoc specifying the class
      * @param root the RootDoc passed to the doclet
      * @return true if specified class is a Test API instance Id component interface, false otherwise
      */
     public static boolean isMultipleInstancesComponent(ClassDoc classDoc, RootDoc root) {
         ClassDoc TestAPIMultipleInstancesComponent = root.classNamed(TEST_API_KERNEL_PACKAGE + ".MultipleInstancesComponent");
-        return classDoc.isInterface() && classDoc.subclassOf(TestAPIMultipleInstancesComponent) && (classDoc != TestAPIMultipleInstancesComponent);
+        return classDoc.isInterface() && classDoc.subclassOf(TestAPIMultipleInstancesComponent) && (classDoc
+              != TestAPIMultipleInstancesComponent);
     }
 
     /**
      * Returns the factory field doc of a Test API component interface.
+     *
      * @param classDoc the ClassDoc specifying the Test API component interface
      * @param root the RootDoc passed to the doclet
      * @return the FieldDoc of the factory field inherited from extended interface
-     *         or null if no factory field found
+     * or null if no factory field found
      */
     public static FieldDoc getFactoryField(ClassDoc classDoc, RootDoc root) {
         ClassDoc ComponentFactory = root.classNamed(TEST_API_KERNEL_PACKAGE + ".ComponentFactory");
@@ -240,6 +247,7 @@ public class TestAPIDoclet {
 
     /**
      * Returns the methods of a Test API component.
+     *
      * @param classDoc the ClassDoc specifying the Test API component
      * @return an array of MethodDoc representing the methods
      */
@@ -250,20 +258,20 @@ public class TestAPIDoclet {
             methodsList.add(methodDoc);
         }
         // Also add the methods provided by the kernel
-        for (ClassDoc interface_ : classDoc.interfaces()) {            
+        for (ClassDoc interface_ : classDoc.interfaces()) {
             if (!interface_.qualifiedName().startsWith(TEST_API_KERNEL_PACKAGE)) {
                 for (MethodDoc methodDoc_ : interface_.methods()) {
                     methodsList.add(methodDoc_);
                 }
             }
-        }       
+        }
         return methodsList.toArray(methods);
     }
 
     /**
      * Parses command-line options.
      * The supported option is: -d directory (destination directory).
-     * 
+     *
      * @param options the options passed to javadoc
      */
     private static void parseOptions(String[][] options) {
@@ -282,6 +290,7 @@ public class TestAPIDoclet {
 
     /**
      * Checks that directory exists or create it if necessary.
+     *
      * @param directoryPath directory path
      */
     private static boolean makeDirectory(String directoryPath) {
@@ -300,7 +309,7 @@ public class TestAPIDoclet {
 
     /**
      * Sorts classes array by alphabetic order of the class name.
-     * 
+     *
      * @param classes array of ClassDoc to sort
      */
     private static void sortClassesAlphabetically(ClassDoc[] classes) {
@@ -317,10 +326,10 @@ public class TestAPIDoclet {
     /**
      * Returns an array of the classes that are Test API components interfaces,
      * sorted alphabetically.
-     * 
+     *
      * @param root the RootDoc passed to the doclet
      * @return an array of the classes that are Test API components interfaces,
-     *         sorted alphabetically
+     * sorted alphabetically
      */
     private static ClassDoc[] filterTestAPIComponents(RootDoc root) {
         ClassDoc[] classes = root.classes();
@@ -343,6 +352,7 @@ public class TestAPIDoclet {
     /**
      * Prints the dummy __TestAPI Python class declaration used for code completion,
      * including the stopTest method.
+     *
      * @param out the PrintWriter to print to
      */
     @SuppressWarnings("unused")
@@ -352,13 +362,15 @@ public class TestAPIDoclet {
         out.println("class __TestAPI:");
         out.println("	\"\"\"Provides access to the Test API components and the stopTest method.\"\"\"");
         out.println("	def stopTest(self, status, message):");
-        out.println("		\"\"\"Stops the test execution and set its status to \"failed\" or \"not available\", with an associated message.\"\"\"");
+        out.println("		\"\"\"Stops the test execution and set its status to \"failed\" or \"not available\", with an "
+              + "associated " + "message.\"\"\"");
         out.println("		pass");
     }
 
     /**
      * Prints the dummy __TestAPI Python class declaration used for code completion,
      * including the stopTest method.
+     *
      * @param out the PrintWriter to print to
      * @param classDoc the ClassDoc specifying the class
      * @param root the RootDoc passed to the doclet
@@ -368,12 +380,15 @@ public class TestAPIDoclet {
         String component = classDoc.name();
         boolean isMultipleInstancesComponent = isMultipleInstancesComponent(classDoc, root);
         out.println("	def get" + component + "(self" + (isMultipleInstancesComponent ? ", INSTANCE_ID=int" : "") + "):");
-        out.println("		\"\"\"Gets the instance of the " + component + " Test API component" + (isMultipleInstancesComponent ? " for given instance Id" : "") + ".\"\"\"");
+        out.println(
+              "		\"\"\"Gets the instance of the " + component + " Test API component" + (isMultipleInstancesComponent ?
+                    " for given instance Id" : "") + ".\"\"\"");
         out.println("		return __TestAPIComponents.__" + component + "()");
     }
 
     /**
      * Prints the dummy __<i>Component</i> Python class declaration used for code completion.
+     *
      * @param out the PrintWriter to print to
      * @param classDoc the ClassDoc specifying the class
      */
@@ -398,7 +413,8 @@ public class TestAPIDoclet {
                 out.println("		return False");
             } else if (returnType.equals("int") || returnType.equals("Integer")) {
                 out.println("		return 0");
-            } else if (returnType.equals("double") || returnType.equals("Double") || returnType.equals("float") || returnType.equals("Float")) {
+            } else if (returnType.equals("double") || returnType.equals("Double") || returnType.equals("float") || returnType
+                  .equals("Float")) {
                 out.println("		return 0.0");
             } else if (returnType.equals("String")) {
                 out.println("		return \"\"");
@@ -411,8 +427,9 @@ public class TestAPIDoclet {
 
     /**
      * Gets the text of the first sentence of a Doc,
-     * after removing HTML tags, replacing '\n' and '\t' by whitespaces and 
+     * after removing HTML tags, replacing '\n' and '\t' by whitespaces and
      * replacing multiple whitespaces by single ones.
+     *
      * @param doc the Doc specifying the class or method
      * @return the text of the first sentence
      */
@@ -428,6 +445,7 @@ public class TestAPIDoclet {
      * Gets the list of name,type and description parsed from an array of tags using the pattern
      * NAME_TYPE_DESCRIPTION_PATTERN. For non-matching tags, name is set to tag text, and type and description
      * are set to "INVALID_FORMAT".
+     *
      * @param tags array of Tag
      * @return List of NameTypeDescription
      */

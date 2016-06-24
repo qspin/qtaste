@@ -39,21 +39,24 @@ import com.qspin.qtaste.testsuite.TestRequirement;
 
 /**
  * This class is responsible to build a different kind of data structures from an XML file
+ *
  * @author simjan
  */
 public class XMLFile {
 
-	public static final String ROOT_ELEMENT = "REQUIREMENTS_LINKS";
-	public static final String REQUIREMENT_ELEMENT = "REQ";
-	public static final String REQUIREMENT_ID = "id";
-	public static final String DESCRIPTION_ELEMENT = "REQ_DESCRIPTION";
-	public static final String SPACE_REPLACEMENT = "-_-";
+    public static final String ROOT_ELEMENT = "REQUIREMENTS_LINKS";
+    public static final String REQUIREMENT_ELEMENT = "REQ";
+    public static final String REQUIREMENT_ID = "id";
+    public static final String DESCRIPTION_ELEMENT = "REQ_DESCRIPTION";
+    public static final String SPACE_REPLACEMENT = "-_-";
     public static final ArrayList<String> COLUMN_NAMES;
-    static{
-    	COLUMN_NAMES = new ArrayList<String>();
-    	COLUMN_NAMES.add(REQUIREMENT_ID);
-    	COLUMN_NAMES.add(DESCRIPTION_ELEMENT);
+
+    static {
+        COLUMN_NAMES = new ArrayList<String>();
+        COLUMN_NAMES.add(REQUIREMENT_ID);
+        COLUMN_NAMES.add(DESCRIPTION_ELEMENT);
     }
+
     //private static final Logger logger = Log4jLoggerFactory.getLogger(XMLFile.class);
     private File xmlFile;
     private boolean alreadyParsed = false;
@@ -77,6 +80,7 @@ public class XMLFile {
 
     /**
      * Return a list of HashMap of Name/Value from the XML file
+     *
      * @return the list of HashMap of Name/Value read from the XML file
      * @throws java.io.IOException If an error occurs reading the XML file
      */
@@ -87,6 +91,7 @@ public class XMLFile {
 
     /**
      * Return a list of the column names read from the XML file
+     *
      * @return a list of the column names read from the XML file
      */
     public List<String> getColumnNames() {
@@ -95,11 +100,11 @@ public class XMLFile {
 
     private void parseXMLFile() throws IOException, SAXException, ParserConfigurationException {
         if (!alreadyParsed) {
-        	XMLHandler xmlHandler = new XMLHandler();
-			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-			SAXParser parser = parserFactory.newSAXParser();
-			parser.parse(xmlFile, xmlHandler);
-			dataSet = xmlHandler.getDecodedRequirement();
+            XMLHandler xmlHandler = new XMLHandler();
+            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+            SAXParser parser = parserFactory.newSAXParser();
+            parser.parse(xmlFile, xmlHandler);
+            dataSet = xmlHandler.getDecodedRequirement();
         }
         alreadyParsed = true;
     }

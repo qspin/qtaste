@@ -28,27 +28,28 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 /**
- *
  * @author lvboque
  */
-public class HashtableLinkedList<N,V> implements Serializable {
+public class HashtableLinkedList<N, V> implements Serializable {
 
     static final long serialVersionUID = 2363181376252177998L;
     private transient Hashtable<N, LinkedList<V>> hash;
-    private LinkedList<NameValue<N,V>> order;
+    private LinkedList<NameValue<N, V>> order;
     private long clearHistoryTimestamp;
     //private static Logger logger = Log4jLoggerFactory.getLogger(HashtableLinkedList.class);
 
-    /** Creates a new instance of HashtableLinkedList */
+    /**
+     * Creates a new instance of HashtableLinkedList
+     */
     public HashtableLinkedList() {
         hash = new Hashtable<N, LinkedList<V>>();
-        order = new LinkedList<NameValue<N,V>>();
+        order = new LinkedList<NameValue<N, V>>();
         clearHistoryTimestamp = System.currentTimeMillis();
     }
 
     public synchronized void put(N name, V value) {
         putInHash(name, value);
-        order.add(new NameValue<N,V>(name, value));
+        order.add(new NameValue<N, V>(name, value));
     }
 
     public synchronized boolean remove(N name, V value) {
@@ -60,8 +61,9 @@ public class HashtableLinkedList<N,V> implements Serializable {
     }
 
     /**
-     * Warning: you may get a ConcurrentModificationException when using the 
-     *          ListIterator if this object is modified concurrently
+     * Warning: you may get a ConcurrentModificationException when using the
+     * ListIterator if this object is modified concurrently
+     *
      * @param name a name
      * @return a list iterator to the list mapped to name
      */
@@ -90,11 +92,12 @@ public class HashtableLinkedList<N,V> implements Serializable {
     }
 
     /**
-     * Warning: you may get a ConcurrentModificationException when using the 
-     *          ListIterator if this object is modified concurrently
+     * Warning: you may get a ConcurrentModificationException when using the
+     * ListIterator if this object is modified concurrently
+     *
      * @return a list iterator to the list of insertions sorted by time
      */
-    public synchronized ListIterator<NameValue<N,V>> getByInsertionTime() {
+    public synchronized ListIterator<NameValue<N, V>> getByInsertionTime() {
         return order.listIterator(0);
     }
 
@@ -118,9 +121,9 @@ public class HashtableLinkedList<N,V> implements Serializable {
         }
 
         // remove all values but last from order
-        Iterator<NameValue<N,V>> i = order.iterator();
+        Iterator<NameValue<N, V>> i = order.iterator();
         while (i.hasNext()) {
-            NameValue<N,V> nameValue = i.next();
+            NameValue<N, V> nameValue = i.next();
             LinkedList<V> l = hash.get(nameValue.name);
             if (!l.contains(nameValue.value)) {
                 i.remove();
@@ -129,7 +132,7 @@ public class HashtableLinkedList<N,V> implements Serializable {
 
         clearHistoryTimestamp = System.currentTimeMillis();
     }
-    
+
     public synchronized long getClearHistoryTimestamp() {
         return clearHistoryTimestamp;
     }
@@ -157,9 +160,9 @@ public class HashtableLinkedList<N,V> implements Serializable {
 
         // rebuild hash hashtable
         hash = new Hashtable<N, LinkedList<V>>();
-        Iterator<NameValue<N,V>> i = order.iterator();
+        Iterator<NameValue<N, V>> i = order.iterator();
         while (i.hasNext()) {
-            NameValue<N,V> nameValue = i.next();
+            NameValue<N, V> nameValue = i.next();
             putInHash(nameValue.name, nameValue.value);
         }
     }

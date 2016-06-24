@@ -36,6 +36,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * JMXClient is a connection to a JMX server
+ *
  * @author lvboque
  */
 public class JMXClient {
@@ -105,6 +106,7 @@ public class JMXClient {
 
     /**
      * Removes listener as notification and connection notification listener.
+     *
      * @return true if successful, false otherwise
      * @throws java.lang.Exception
      */

@@ -46,7 +46,7 @@ import com.qspin.qtaste.util.PythonHelper;
 
 /**
  * Base class for QTaste simulators.
- * 
+ *
  * @author David Ergo
  */
 public class SimulatorImpl implements SimulatorMBean {
@@ -60,7 +60,6 @@ public class SimulatorImpl implements SimulatorMBean {
      */
     protected Object mSimulator;
 
-    
     /**
      * Constructs a new instance.
      */
@@ -69,22 +68,21 @@ public class SimulatorImpl implements SimulatorMBean {
         Properties properties = new Properties();
         properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
         properties.setProperty("python.path", StaticConfiguration.JYTHON_LIB);
-        PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
+        PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
 
         // initialize the shutdown hook to terminate application properly
-        Runtime.getRuntime().addShutdownHook(new ShutdownHookThread ());
+        Runtime.getRuntime().addShutdownHook(new ShutdownHookThread());
 
-        if (OS.getType() == OS.Type.WINDOWS)
-        {
-           // create hidden window to handle WM_CLOSE messages on Windows to react to taskkill
-           JFrame frame = new JFrame();
-           frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-           frame.pack();
+        if (OS.getType() == OS.Type.WINDOWS) {
+            // create hidden window to handle WM_CLOSE messages on Windows to react to taskkill
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.pack();
         }
     }
-    
+
     /**
-     * Shuts down properly. 
+     * Shuts down properly.
      * This method is typically called from a shutdown hook to terminate the simulator properly.
      * <p>
      * Cancels the timer thread used for task scheduling.
@@ -102,7 +100,7 @@ public class SimulatorImpl implements SimulatorMBean {
     /**
      * Sets the internal simulator instance (Python or default java implementation).
      * This method is called from the default java implementation or from within the Python script.
-     * 
+     *
      * @param simulator the simulator instance.
      */
     public void setSimulator(Object simulator) {
@@ -111,7 +109,7 @@ public class SimulatorImpl implements SimulatorMBean {
 
     /**
      * Schedules the specified task for execution after the specified delay.
-     * 
+     *
      * @param task Python object callable without arguments, to schedule
      * @param delay delay in seconds before task is to be executed
      */
@@ -120,11 +118,11 @@ public class SimulatorImpl implements SimulatorMBean {
     }
 
     /**
-     * Schedules the specified task for repeated <i>fixed-delay execution</i>, beginning after the specified delay. 
+     * Schedules the specified task for repeated <i>fixed-delay execution</i>, beginning after the specified delay.
      * Subsequent executions take place at approximately regular intervals separated by the specified period.
      * <p>
      * See {@link Timer} documentation for more information.
-     * 
+     *
      * @param task Python object callable without arguments, to schedule
      * @param delay delay in seconds before task is to be executed
      * @param period time in seconds between successive task executions
@@ -134,11 +132,11 @@ public class SimulatorImpl implements SimulatorMBean {
     }
 
     /**
-     * Schedules the specified task for repeated <i>fixed-rate execution</i>, beginning after the specified delay. 
-     * Subsequent executions take place at approximately regular intervals, separated by the specified period. 
+     * Schedules the specified task for repeated <i>fixed-rate execution</i>, beginning after the specified delay.
+     * Subsequent executions take place at approximately regular intervals, separated by the specified period.
      * <p>
      * See {@link Timer} documentation for more information.
-     * 
+     *
      * @param task Python object callable without arguments, to schedule
      * @param delay delay in seconds before task is to be executed
      * @param period time in seconds between successive task executions
@@ -246,6 +244,7 @@ public class SimulatorImpl implements SimulatorMBean {
 
     /**
      * Logs a message with Log4j using info level.
+     *
      * @param message message to log
      */
     public void log(String message) {
@@ -254,6 +253,7 @@ public class SimulatorImpl implements SimulatorMBean {
 
     /**
      * Logs a message with Log4j using given level.
+     *
      * @param message message to log
      * @param level log level
      */
@@ -263,6 +263,7 @@ public class SimulatorImpl implements SimulatorMBean {
 
     /**
      * Logs message and throws Exception.
+     *
      * @param message message
      * @throws java.lang.Exception Exception built with given message
      */
@@ -273,6 +274,7 @@ public class SimulatorImpl implements SimulatorMBean {
 
     /**
      * Logs message and exception and throws Exception.
+     *
      * @param message message
      * @param e PyException
      * @throws java.lang.Exception Exception built with 'message + ":\n" + message_of_e'
@@ -301,7 +303,7 @@ public class SimulatorImpl implements SimulatorMBean {
             }
         }
     }
-    
+
     /**
      * Shutdown hook thread.
      * Shuts down calls the shutdown method.

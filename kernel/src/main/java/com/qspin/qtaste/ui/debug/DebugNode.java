@@ -28,12 +28,12 @@ public abstract class DebugNode extends DefaultMutableTreeNode {
      * Loads the children, caching the results in the children ivar.
      */
     protected Object[] getChildren() {
-    	return null;   	
-    	
-    }	
-    
-    public boolean hasChildren(){
-    	return false;
+        return null;
+
     }
-    
+
+    public boolean hasChildren() {
+        return false;
+    }
+
 }

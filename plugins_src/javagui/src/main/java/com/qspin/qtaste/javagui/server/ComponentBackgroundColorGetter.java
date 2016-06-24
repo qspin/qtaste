@@ -28,32 +28,35 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 public class ComponentBackgroundColorGetter extends ComponentCommander {
 
-	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (c instanceof Container) {
-				return getHexadecimalColor(c.getBackground());
-			} else {
-				throw new QTasteTestFailException("It is not possible to retrieve the background color of this kind of component " + c.getClass() );
-			}
-		}
-		return "";
-	}
-	
-	protected String getHexadecimalColor(Color c)
-	{
-		String colorCode = "#";
-		if ( c.getRed() < 16 )
-			colorCode += "0";
-		colorCode += Integer.toHexString(c.getRed());
-		if ( c.getGreen() < 16 )
-			colorCode += "0";
-		colorCode += Integer.toHexString(c.getGreen());
-		if ( c.getBlue() < 16 )
-			colorCode += "0";
-		colorCode += Integer.toHexString(c.getBlue());
-		return colorCode;
-	}
+    @Override
+    String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        if (c != null) {
+            if (c instanceof Container) {
+                return getHexadecimalColor(c.getBackground());
+            } else {
+                throw new QTasteTestFailException(
+                      "It is not possible to retrieve the background color of this kind of component " + c.getClass());
+            }
+        }
+        return "";
+    }
+
+    protected String getHexadecimalColor(Color c) {
+        String colorCode = "#";
+        if (c.getRed() < 16) {
+            colorCode += "0";
+        }
+        colorCode += Integer.toHexString(c.getRed());
+        if (c.getGreen() < 16) {
+            colorCode += "0";
+        }
+        colorCode += Integer.toHexString(c.getGreen());
+        if (c.getBlue() < 16) {
+            colorCode += "0";
+        }
+        colorCode += Integer.toHexString(c.getBlue());
+        return colorCode;
+    }
 
 }

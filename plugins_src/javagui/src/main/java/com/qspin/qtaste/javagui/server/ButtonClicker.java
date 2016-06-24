@@ -7,27 +7,27 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * Component controller that simulates a click on an {@link AbstractButton} through the doClick method.
  * The doClick(int) method call will be executed in the Swing Thread.
- * @author simjan
  *
+ * @author simjan
  */
 class ButtonClicker extends UpdateComponentCommander {
 
-	protected int mPressTime;
+    protected int mPressTime;
 
-	/**
-	 * Takes from the data the time to hold down the button.
-	 */
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {
-		mPressTime = (Integer)mData[0];
-	}
+    /**
+     * Takes from the data the time to hold down the button.
+     */
+    @Override
+    protected void prepareActions() throws QTasteTestFailException {
+        mPressTime = (Integer) mData[0];
+    }
 
-	/**
-	 * Simulates the click on the button through a call to the doClick method.
-	 */
-	@Override
-	protected void doActionsInSwingThread() {
-		((AbstractButton) component).doClick(mPressTime);
-	}
+    /**
+     * Simulates the click on the button through a call to the doClick method.
+     */
+    @Override
+    protected void doActionsInSwingThread() {
+        ((AbstractButton) component).doClick(mPressTime);
+    }
 
 }

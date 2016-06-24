@@ -33,7 +33,6 @@ import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author lvboque
  */
 public class TestAPIImpl implements TestAPI {
@@ -58,7 +57,7 @@ public class TestAPIImpl implements TestAPI {
     /**
      * {@inheritDoc}
      * <p>
-     * Only the ComponentsLoader is supposed to call this method.        
+     * Only the ComponentsLoader is supposed to call this method.
      */
     public void register(String packageName, String component, ComponentFactory factory, String method) {
         ArrayList<String> verbs;
@@ -90,8 +89,9 @@ public class TestAPIImpl implements TestAPI {
         String classString = componentName;
         try {
             FactoryVerbs fv = map.get(componentName);
-            if (fv == null)
+            if (fv == null) {
                 return null;
+            }
 
             classString = fv.packageName + "." + componentName;
 
@@ -112,14 +112,14 @@ public class TestAPIImpl implements TestAPI {
     }
 
     /**
-     * {@inheritDoc}          
+     * {@inheritDoc}
      */
     public Collection<String> getRegisteredComponents() {
         return map.keySet();
     }
 
     /**
-     * {@inheritDoc}          
+     * {@inheritDoc}
      */
     public Collection<String> getRegisteredVerbs(String component) throws NoSuchElementException {
         FactoryVerbs fv = map.get(component);
@@ -130,7 +130,7 @@ public class TestAPIImpl implements TestAPI {
     }
 
     /**
-     * {@inheritDoc}          
+     * {@inheritDoc}
      */
     public Component getComponent(String component, TestData data) throws QTasteException {
         FactoryVerbs fv = map.get(component);
@@ -144,8 +144,7 @@ public class TestAPIImpl implements TestAPI {
         Class<?>[] interfaces = implementationClass.getInterfaces();
         for (Class<?> interfaceClass : interfaces) {
 
-            if ((interfaceClass != Component.class) &&
-                    (Component.class.isAssignableFrom(implementationClass))) {
+            if ((interfaceClass != Component.class) && (Component.class.isAssignableFrom(implementationClass))) {
                 return interfaceClass;
             }
         }
@@ -153,7 +152,7 @@ public class TestAPIImpl implements TestAPI {
     }
 
     /**
-     * {@inheritDoc}          
+     * {@inheritDoc}
      */
     public String getComponentName(Component component) throws NoSuchElementException {
         try {
@@ -193,7 +192,8 @@ public class TestAPIImpl implements TestAPI {
             try {
                 component.initialize();
             } catch (QTasteException e) {
-                logger.warn("Couldn't initialize component " + component.getClass().getSimpleName() + ": " + e.getMessage() + ".\nInstance will be deleted.");
+                logger.warn("Couldn't initialize component " + component.getClass().getSimpleName() + ": " + e.getMessage()
+                      + ".\nInstance will be deleted.");
                 componentsToBeRemoved.add(component);
             }
         }
@@ -208,7 +208,8 @@ public class TestAPIImpl implements TestAPI {
                 component.initialize();
             } catch (QTasteException e) {
                 componentsToBeRemoved.add(component);
-                logger.warn("Couldn't initialize component " + component.getClass().getSimpleName() + ": " + e.getMessage() + ".\nInstance will be deleted.");
+                logger.warn("Couldn't initialize component " + component.getClass().getSimpleName() + ": " + e.getMessage()
+                      + ".\nInstance will be deleted.");
             }
         }
         for (Component component : componentsToBeRemoved) {

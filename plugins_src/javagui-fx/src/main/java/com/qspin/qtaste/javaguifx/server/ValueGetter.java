@@ -26,49 +26,49 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import javafx.scene.Node;
+
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-import javafx.scene.Node;
-
 public class ValueGetter extends ComponentCommander {
 
-	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node component = getComponentByName(componentName);
+    @Override
+    String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node component = getComponentByName(componentName);
 
-//		if (component instanceof JComboBox) {
-//            JComboBox<?> combo = (JComboBox<?>) component;
-//            ListCellRenderer<?> renderer = combo.getRenderer();
-//            return getItemText(combo.getModel().getSelectedItem(), renderer);
-//        }
-//		else if (component instanceof JList) {
-//			JList<?> list = (JList<?>) component;
-//			ListCellRenderer<?> renderer = list.getCellRenderer();
-//            return getItemText(list.getSelectedValue(), renderer);
-//		}
-//		else if (component instanceof JSpinner) {
-//            return ((JSpinner) component).getModel().getValue().toString();
-//        }
-//		else if (component instanceof JSlider) {
-//            return Integer.toString(((JSlider) component).getModel().getValue());
-//        }
-//		else if (component instanceof AbstractButton) {
-//			return Boolean.toString(((AbstractButton)component).isSelected());
-//		}
+        //		if (component instanceof JComboBox) {
+        //            JComboBox<?> combo = (JComboBox<?>) component;
+        //            ListCellRenderer<?> renderer = combo.getRenderer();
+        //            return getItemText(combo.getModel().getSelectedItem(), renderer);
+        //        }
+        //		else if (component instanceof JList) {
+        //			JList<?> list = (JList<?>) component;
+        //			ListCellRenderer<?> renderer = list.getCellRenderer();
+        //            return getItemText(list.getSelectedValue(), renderer);
+        //		}
+        //		else if (component instanceof JSpinner) {
+        //            return ((JSpinner) component).getModel().getValue().toString();
+        //        }
+        //		else if (component instanceof JSlider) {
+        //            return Integer.toString(((JSlider) component).getModel().getValue());
+        //        }
+        //		else if (component instanceof AbstractButton) {
+        //			return Boolean.toString(((AbstractButton)component).isSelected());
+        //		}
 
-		throw new QTasteTestFailException("The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
-	}
+        throw new QTasteTestFailException(
+              "The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
+    }
 
-    protected String getItemText(Object item, ListCellRenderer renderer)
-    {
+    protected String getItemText(Object item, ListCellRenderer renderer) {
         Component component = renderer.getListCellRendererComponent(new JList(), item, 0, false, false);
 
         if (component instanceof Label) {
-            return ((Label)component).getText();
+            return ((Label) component).getText();
         }
         if (component instanceof JLabel) {
-            return ((JLabel)component).getText();
+            return ((JLabel) component).getText();
         }
 
         return item.toString();

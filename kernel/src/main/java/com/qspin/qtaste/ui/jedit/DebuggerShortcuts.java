@@ -37,19 +37,19 @@ import javax.swing.text.Keymap;
 import com.qspin.qtaste.ui.TestCasePane;
 
 /**
- *
  * @author vdubois
  */
 public class DebuggerShortcuts {
 
     private TestCasePane m_TCPane;
-    public DebuggerShortcuts(TestCasePane tcPane){
+
+    public DebuggerShortcuts(TestCasePane tcPane) {
         m_TCPane = tcPane;
         init();
     }
-    
+
     public void init() {
-        
+
         Keymap parent = m_TCPane.getActiveTextPane().getKeymap();
         Keymap newmap = JTextComponent.addKeymap("KeymapExampleMap", parent);
 
@@ -58,7 +58,7 @@ public class DebuggerShortcuts {
 
         KeyStroke F5key = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
         newmap.addActionForKeyStroke(F5key, new F5Action());
-        
+
         KeyStroke F6Key = KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0);
         newmap.addActionForKeyStroke(F6Key, new F6Action());
 
@@ -68,115 +68,152 @@ public class DebuggerShortcuts {
         KeyStroke CTRLF2Key = KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.CTRL_DOWN_MASK);
         newmap.addActionForKeyStroke(CTRLF2Key, new CTRLF2Action());
         m_TCPane.getActiveTextPane().setKeymap(newmap);
-         
+
     }
 
     protected class F5Action implements Action {
-            public Object getValue(String key) {
-                return null;
-            }
-            public void putValue(String key, Object value) {
-            }
-            public void setEnabled(boolean b) {
-            }
-            public boolean isEnabled() {
-                return true;
-            }
-            public void addPropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void removePropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void actionPerformed(ActionEvent e) {
-            	if (m_TCPane.isExecuting)
-                 m_TCPane.continueStepInto();
-                    
+        public Object getValue(String key) {
+            return null;
+        }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (m_TCPane.isExecuting) {
+                m_TCPane.continueStepInto();
             }
 
         }
-    
+
+    }
+
     protected class CTRLF2Action implements Action {
         public Object getValue(String key) {
             return null;
         }
+
         public void putValue(String key, Object value) {
         }
+
         public void setEnabled(boolean b) {
         }
+
         public boolean isEnabled() {
             return true;
         }
+
         public void addPropertyChangeListener(PropertyChangeListener listener) {
         }
+
         public void removePropertyChangeListener(PropertyChangeListener listener) {
         }
+
         public void actionPerformed(ActionEvent e) {
-        	if (m_TCPane.isExecuting)
-        		m_TCPane.stopExecution();
+            if (m_TCPane.isExecuting) {
+                m_TCPane.stopExecution();
+            }
         }
 
     }
+
     protected class F6Action implements Action {
-            public Object getValue(String key) {
-                return null;
-            }
-            public void putValue(String key, Object value) {
-            }
-            public void setEnabled(boolean b) {
-            }
-            public boolean isEnabled() {
-                return true;
-            }
-            public void addPropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void removePropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void actionPerformed(ActionEvent e) {
-            	if (m_TCPane.isExecuting)
-            		m_TCPane.continueStep();
-            }
-
+        public Object getValue(String key) {
+            return null;
         }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (m_TCPane.isExecuting) {
+                m_TCPane.continueStep();
+            }
+        }
+
+    }
+
     protected class F8Action implements Action {
-            public Object getValue(String key) {
-                return null;
-            }
-            public void putValue(String key, Object value) {
-            }
-            public void setEnabled(boolean b) {
-            }
-            public boolean isEnabled() {
-                return true;
-            }
-            public void addPropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void removePropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void actionPerformed(ActionEvent e) {
-            	if (m_TCPane.isExecuting)
-            		m_TCPane.continueDebug();
-            }
-
+        public Object getValue(String key) {
+            return null;
         }
-        
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (m_TCPane.isExecuting) {
+                m_TCPane.continueDebug();
+            }
+        }
+
+    }
+
     protected class ShiftF5Action implements Action {
-            public Object getValue(String key) {
-                return null;
-            }
-            public void putValue(String key, Object value) {
-            }
-            public void setEnabled(boolean b) {
-            }
-            public boolean isEnabled() {
-                return true;
-            }
-            public void addPropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void removePropertyChangeListener(PropertyChangeListener listener) {
-            }
-            public void actionPerformed(ActionEvent e) {
-            	if (m_TCPane.isExecuting)
-            		m_TCPane.stopDebug();
-            }
-
+        public Object getValue(String key) {
+            return null;
         }
+
+        public void putValue(String key, Object value) {
+        }
+
+        public void setEnabled(boolean b) {
+        }
+
+        public boolean isEnabled() {
+            return true;
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (m_TCPane.isExecuting) {
+                m_TCPane.stopDebug();
+            }
+        }
+
+    }
 }

@@ -25,12 +25,14 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * Bugzilla is the interface of the QTaste Test API component providing verbs
  * for testing the Bugzilla application.
+ *
  * @author lvboque
  */
 public interface Bugzilla extends MultipleInstancesComponent {
 
     /**
      * Compare the content of the specified defectID record with the expected value provided as parameter
+     *
      * @param defectId the identified of the record
      * @param shortDescription the title of the defect
      * @param longDescription the long description of the defect
@@ -38,5 +40,6 @@ public interface Bugzilla extends MultipleInstancesComponent {
      * @throws QTasteTestFailException If the content of the DB doesn't correspond to the specified values
      * @throws Exception Throw an exception in case of database connection errors
      */
-    public void checkDatabase(int defectId, String shortDescription, String longDescription, String assignee) throws QTasteTestFailException, Exception;
+    public void checkDatabase(int defectId, String shortDescription, String longDescription, String assignee)
+          throws QTasteTestFailException, Exception;
 }

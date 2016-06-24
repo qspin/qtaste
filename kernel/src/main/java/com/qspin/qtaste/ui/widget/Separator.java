@@ -18,20 +18,19 @@
 */
 
 package com.qspin.qtaste.ui.widget;
- 
-import javax.swing.*;
+
+import javax.swing.JSeparator;
+
 /**
  * A separator is a JSeparator drawing a line in the back color given by the ResourceManager.
  */
 @SuppressWarnings("serial")
-public class Separator extends JSeparator
-{
-   public Separator()
-   {
-      this(true);
-   }
-   public Separator(boolean pVisible)
-   {
-      setUI(new SeparatorUI(pVisible));
-   }
+public class Separator extends JSeparator {
+    public Separator() {
+        this(true);
+    }
+
+    public Separator(boolean pVisible) {
+        setUI(new SeparatorUI(pVisible));
+    }
 }

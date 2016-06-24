@@ -62,7 +62,6 @@ import com.qspin.qtaste.util.PythonHelper;
 import com.qspin.qtaste.util.ThreadManager;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -94,7 +93,8 @@ public class TestCampaignMainPanel extends JPanel {
         TestCampaignTreeModel model = new TestCampaignTreeModel("Test Campaign");
         treeTable = new JTreeTable(model);
 
-        FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow", "6px, fill:pref, 6px");
+        FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow",
+              "6px, fill:pref, 6px");
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
@@ -118,16 +118,15 @@ public class TestCampaignMainPanel extends JPanel {
         addNewMetaCampaignButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                String newCampaign = JOptionPane.showInputDialog(null,
-                        "New campaign creation:",
-                        "Campaign name:", JOptionPane.QUESTION_MESSAGE);
+                String newCampaign = JOptionPane.showInputDialog(null, "New campaign creation:", "Campaign name:",
+                      JOptionPane.QUESTION_MESSAGE);
                 if (newCampaign != null && newCampaign.length() > 0) {
                     int index = addTestCampaign(newCampaign);
                     metaCampaignComboBox.setSelectedIndex(index);
                     MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
                     selectedCampaign = currentSelectedCampaign;
                     if (selectedCampaign != null) {
-                    	treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
+                        treeTable.save(selectedCampaign.getFileName(), selectedCampaign.getCampaignName());
                     }
                     metaCampaignComboBox.validate();
                     metaCampaignComboBox.repaint();
@@ -142,15 +141,15 @@ public class TestCampaignMainPanel extends JPanel {
         // add campaigns found in the list
         MetaCampaignFile[] campaigns = populateCampaignList();
         builder.add(label, cc.xy(colIndex, 2));
-        colIndex+=2;
+        colIndex += 2;
         builder.add(metaCampaignComboBox, cc.xy(colIndex, 2));
-        colIndex+=2;
+        colIndex += 2;
 
         // add test campaign mouse listener, for the Rename and Remove actions
         TestcampaignMouseListener testcampaignMouseListener = new TestcampaignMouseListener();
         java.awt.Component[] mTestcampaignListComponents = metaCampaignComboBox.getComponents();
         for (int i = 0; i < mTestcampaignListComponents.length; i++) {
-        	mTestcampaignListComponents[i].addMouseListener(testcampaignMouseListener);
+            mTestcampaignListComponents[i].addMouseListener(testcampaignMouseListener);
         }
 
         metaCampaignComboBox.addActionListener(new ActionListener() {
@@ -159,27 +158,27 @@ public class TestCampaignMainPanel extends JPanel {
                 MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
                 if (currentSelectedCampaign != selectedCampaign) {
                     selectedCampaign = currentSelectedCampaign;
-	                if (selectedCampaign != null) {
-	                    treeTable.removeAll();
-	                    if (new File(selectedCampaign.getFileName()).exists()) {
-	                        treeTable.load(selectedCampaign.getFileName());
-	                    }
+                    if (selectedCampaign != null) {
+                        treeTable.removeAll();
+                        if (new File(selectedCampaign.getFileName()).exists()) {
+                            treeTable.load(selectedCampaign.getFileName());
+                        }
 
-	                    GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-	                    guiConfiguration.setProperty(LAST_SELECTED_CAMPAIGN_PROPERTY, selectedCampaign.getCampaignName());
-	                    try {
-	                        guiConfiguration.save();
-	                    } catch (ConfigurationException ex) {
-	                        logger.error("Error while saving GUI configuration: " + ex.getMessage(), ex);
-	                    }
-	                } else {
-	                	treeTable.removeAll();
-	                }
+                        GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
+                        guiConfiguration.setProperty(LAST_SELECTED_CAMPAIGN_PROPERTY, selectedCampaign.getCampaignName());
+                        try {
+                            guiConfiguration.save();
+                        } catch (ConfigurationException ex) {
+                            logger.error("Error while saving GUI configuration: " + ex.getMessage(), ex);
+                        }
+                    } else {
+                        treeTable.removeAll();
+                    }
                 }
             }
         });
 
-    	boolean setLastSelectedCampaign = false;
+        boolean setLastSelectedCampaign = false;
         if (lastSelectedCampaign != null) {
             // select last selected campaign
             for (int i = 0; i < campaigns.length; i++) {
@@ -216,8 +215,8 @@ public class TestCampaignMainPanel extends JPanel {
                     testExecutionHandler = new CampaignExecutionThread(selectedCampaign.getFileName());
                     Thread t = new Thread(testExecutionHandler);
                     t.start();
-                // set the window to test result
-                // TO DO
+                    // set the window to test result
+                    // TO DO
                 } catch (Exception ex) {
                     //
                     logger.error(ex.getMessage(), ex);
@@ -226,11 +225,11 @@ public class TestCampaignMainPanel extends JPanel {
         });
 
         builder.add(addNewMetaCampaignButton, cc.xy(colIndex, 2));
-        colIndex+=2;
+        colIndex += 2;
         builder.add(saveMetaCampaignButton, cc.xy(colIndex, 2));
-        colIndex+=2;
+        colIndex += 2;
         builder.add(runMetaCampaignButton, cc.xy(colIndex, 2));
-        colIndex+=2;
+        colIndex += 2;
 
         JScrollPane sp = new JScrollPane(treeTable);
         this.add(builder.getPanel(), BorderLayout.NORTH);
@@ -238,20 +237,20 @@ public class TestCampaignMainPanel extends JPanel {
     }
 
     public void setExecuteButtonsEnabled(boolean enabled) {
-    	runMetaCampaignButton.setEnabled(enabled);
+        runMetaCampaignButton.setEnabled(enabled);
     }
 
     private MetaCampaignFile[] populateCampaignList() {
-    	// clear the list
-    	metaCampaignComboBox.removeAllItems();
+        // clear the list
+        metaCampaignComboBox.removeAllItems();
         MetaCampaignFile[] campaigns = MetaCampaignFile.getExistingCampaigns();
         for (int i = 0; i < campaigns.length; i++) {
             metaCampaignComboBox.addItem(campaigns[i]);
         }
         return campaigns;
-	}
+    }
 
-	public JTreeTable getTreeTable() {
+    public JTreeTable getTreeTable() {
         return treeTable;
     }
 
@@ -281,17 +280,18 @@ public class TestCampaignMainPanel extends JPanel {
      * @return index of the added test campaign in the combobox or -1 if not added
      */
     public int addTestCampaign(String campaignName) {
-      // add the campaign in the list, keeping sorted order
+        // add the campaign in the list, keeping sorted order
         int index = 0;
         while (index < metaCampaignComboBox.getItemCount()) {
-            String elementCampaignName = ((MetaCampaignFile)metaCampaignComboBox.getItemAt(index)).getCampaignName();
+            String elementCampaignName = ((MetaCampaignFile) metaCampaignComboBox.getItemAt(index)).getCampaignName();
             int comparison = campaignName.compareToIgnoreCase(elementCampaignName);
             if (comparison < 0) {
                 // insert new campaign at this index
                 break;
             } else if (comparison == 0) {
                 // error: a campaign with the same name already exists
-                JOptionPane.showMessageDialog(null, "A test campaign named '" + elementCampaignName + "' already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "A test campaign named '" + elementCampaignName + "' already exists!",
+                      "Error", JOptionPane.ERROR_MESSAGE);
                 index = -1;
                 break;
             }
@@ -315,30 +315,28 @@ public class TestCampaignMainPanel extends JPanel {
 
                 File campaingFile = new File(selectedCampaign.getFileName());
                 if (campaingFile.exists()) {
-                	File resultsFile = new File(campaingFile.getParentFile().getCanonicalPath() + "/" + selectedCampaign.getCampaignName() + "-doc.html");
-                	if (resultsFile.exists()) {
-	                	if (Desktop.isDesktopSupported()) {
-	                		Desktop.getDesktop().open(resultsFile);
-	                	} else {
-	                		logger.error("Feature not supported by this platform");
-	                	}
-                	}
-                	else {
-                		JOptionPane.showMessageDialog(null,
-                				"Error during generation of TPO file",
-                				"Error", JOptionPane.ERROR_MESSAGE);
-                	}
+                    File resultsFile = new File(
+                          campaingFile.getParentFile().getCanonicalPath() + "/" + selectedCampaign.getCampaignName()
+                                + "-doc.html");
+                    if (resultsFile.exists()) {
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop.getDesktop().open(resultsFile);
+                        } else {
+                            logger.error("Feature not supported by this platform");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error during generation of TPO file", "Error",
+                              JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             } catch (PyException ex) {
                 logger.error(ex.getMessage(), ex);
-        		JOptionPane.showMessageDialog(null,
-        				"Error during generation of TPO file\n" + ex.getMessage(),
-        				"Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error during generation of TPO file\n" + ex.getMessage(), "Error",
+                      JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
-        		JOptionPane.showMessageDialog(null,
-        				"Error during generation of TPO file\n" + ex.getMessage(),
-        				"Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error during generation of TPO file\n" + ex.getMessage(), "Error",
+                      JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -352,7 +350,7 @@ public class TestCampaignMainPanel extends JPanel {
         }
 
         public void stop() {
-        	ThreadGroup root = Thread.currentThread().getThreadGroup();
+            ThreadGroup root = Thread.currentThread().getThreadGroup();
             ThreadManager.stopThread(root, 0);
         }
 
@@ -417,54 +415,54 @@ public class TestCampaignMainPanel extends JPanel {
             evaluatePopup(e);
         }
 
-		class RenameCampaignAction extends AbstractAction {
+        class RenameCampaignAction extends AbstractAction {
 
             public RenameCampaignAction() {
                 super("Rename Campaign");
             }
 
             public void actionPerformed(ActionEvent e) {
-            	MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
-            	String input = JOptionPane.showInputDialog(null,
-                        "Give the new name of the test " + currentSelectedCampaign.getCampaignName(),
-                        currentSelectedCampaign.getCampaignName()
-                        );
-                if (input==null) return;
+                MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
+                String input = JOptionPane.showInputDialog(null,
+                      "Give the new name of the test " + currentSelectedCampaign.getCampaignName(),
+                      currentSelectedCampaign.getCampaignName());
+                if (input == null) {
+                    return;
+                }
 
                 boolean result = currentSelectedCampaign.renameFile(input);
                 if (!result) {
-                	logger.error("Impossible to rename " + currentSelectedCampaign.getFileName() + " to " + input);
-                	return;
+                    logger.error("Impossible to rename " + currentSelectedCampaign.getFileName() + " to " + input);
+                    return;
                 }
                 metaCampaignComboBox.validate();
                 metaCampaignComboBox.repaint();
             }
         }
 
-		class RemoveCampaignAction extends AbstractAction {
+        class RemoveCampaignAction extends AbstractAction {
 
             public RemoveCampaignAction() {
                 super("Remove Campaign");
             }
 
             public void actionPerformed(ActionEvent e) {
-            	MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
+                MetaCampaignFile currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
 
-            	if (JOptionPane.showConfirmDialog(null, "Are you sure to remove the campaign '" + currentSelectedCampaign.getCampaignName() + "'",
-            			"Confirmation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) ==
-                        JOptionPane.OK_OPTION)
-                {
-            		// delete file
-            		currentSelectedCampaign.removeFile();
-            		// remove from combo box
-            		metaCampaignComboBox.removeItemAt(metaCampaignComboBox.getSelectedIndex());
-            		if (metaCampaignComboBox.getItemCount() > 0) {
+                if (JOptionPane.showConfirmDialog(null,
+                      "Are you sure to remove the campaign '" + currentSelectedCampaign.getCampaignName() + "'", "Confirmation",
+                      JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+                    // delete file
+                    currentSelectedCampaign.removeFile();
+                    // remove from combo box
+                    metaCampaignComboBox.removeItemAt(metaCampaignComboBox.getSelectedIndex());
+                    if (metaCampaignComboBox.getItemCount() > 0) {
                         metaCampaignComboBox.setSelectedIndex(0);
                         currentSelectedCampaign = (MetaCampaignFile) metaCampaignComboBox.getSelectedItem();
                         selectedCampaign = currentSelectedCampaign;
                     } else {
-                    	selectedCampaign =  null;
-                    	metaCampaignComboBox.setSelectedIndex(-1);
+                        selectedCampaign = null;
+                        metaCampaignComboBox.setSelectedIndex(-1);
                     }
 
                 }

@@ -21,88 +21,79 @@ package com.qspin.qtaste.javaguifx.server;
 
 import java.awt.Component;
 import java.awt.Label;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.TreeModel;
-
-import com.qspin.qtaste.testsuite.QTasteException;
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 import javafx.scene.Node;
 
+import com.qspin.qtaste.testsuite.QTasteException;
+
 public class TreeDumper extends ComponentCommander {
 
-	private String m_commandResult;
-	private QTasteException m_commandError;
+    private String m_commandResult;
+    private QTasteException m_commandError;
 
-	@Override
-	String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
-		final Node c = getComponentByName(componentName);
-		try
-		{
-//			SwingUtilities.invokeAndWait(new Runnable() {
-//
-//				@Override
-//				public void run() {
-//					String separator = data[0].toString();
-//					if ( c instanceof JTree )
-//					{
-//						JTree tree = (JTree) c;
-//						List<String> dump = new ArrayList<String>();
-//						dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
-//						StringBuilder builder = new StringBuilder();
-//						for (String s : dump)
-//						{
-//							builder.append(s + "\n");
-//						}
-//						m_commandResult =  builder.toString();
-//					} else {
-//						m_commandError = new QTasteTestFailException("The component \"" + componentName + "\" is not a JTree");
-//					}
-//				}
-//			});
-		}
-		catch(Exception ex)
-		{
-			LOGGER.fatal(ex.getMessage(), ex);
-		}
+    @Override
+    String executeCommand(final int timeout, final String componentName, final Object... data) throws QTasteException {
+        final Node c = getComponentByName(componentName);
+        try {
+            //			SwingUtilities.invokeAndWait(new Runnable() {
+            //
+            //				@Override
+            //				public void run() {
+            //					String separator = data[0].toString();
+            //					if ( c instanceof JTree )
+            //					{
+            //						JTree tree = (JTree) c;
+            //						List<String> dump = new ArrayList<String>();
+            //						dumpNode(dump, tree, tree.getModel().getRoot(), 0, "", separator);
+            //						StringBuilder builder = new StringBuilder();
+            //						for (String s : dump)
+            //						{
+            //							builder.append(s + "\n");
+            //						}
+            //						m_commandResult =  builder.toString();
+            //					} else {
+            //						m_commandError = new QTasteTestFailException("The component \"" + componentName + "\" is not
+            // a JTree");
+            //					}
+            //				}
+            //			});
+        } catch (Exception ex) {
+            LOGGER.fatal(ex.getMessage(), ex);
+        }
 
-		if ( m_commandError != null )
-		{
-			throw m_commandError;
-		}
-		return m_commandResult;
-	}
+        if (m_commandError != null) {
+            throw m_commandError;
+        }
+        return m_commandResult;
+    }
 
-	protected void dumpNode(List<String> dump, JTree tree, Object node, int level, String prefix, String separator)
-	{
-		LOGGER.trace("Dump node '" + node + "' for level " + level);
-		TreeModel model = tree.getModel();
-		String dumpLine = prefix + getNodeText(tree, node);
-		dump.add(dumpLine);
-		LOGGER.trace("node '" + node + "' has " + model.getChildCount(node) + " child(ren)");
-		for ( int childIndex = 0; childIndex < model.getChildCount(node); childIndex++ )
-		{
-			dumpNode(dump, tree, model.getChild(node, childIndex), level+1, dumpLine + separator, separator);
-		}
-	}
+    protected void dumpNode(List<String> dump, JTree tree, Object node, int level, String prefix, String separator) {
+        LOGGER.trace("Dump node '" + node + "' for level " + level);
+        TreeModel model = tree.getModel();
+        String dumpLine = prefix + getNodeText(tree, node);
+        dump.add(dumpLine);
+        LOGGER.trace("node '" + node + "' has " + model.getChildCount(node) + " child(ren)");
+        for (int childIndex = 0; childIndex < model.getChildCount(node); childIndex++) {
+            dumpNode(dump, tree, model.getChild(node, childIndex), level + 1, dumpLine + separator, separator);
+        }
+    }
 
-	private String getNodeText(JTree tree, Object node)
-	{
-		Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
-		if (nodeComponent instanceof JLabel) {
-			System.out.println("component extend JLabel");
-			return ((JLabel) nodeComponent).getText();
-		} else if (nodeComponent instanceof Label) {
-			System.out.println("component extend TextComponent");
-			return ((Label) nodeComponent).getText();
-		} else {
-			System.out.println("component extend something else");
-			return node.toString();
-		}
-	}
+    private String getNodeText(JTree tree, Object node) {
+        Component nodeComponent = tree.getCellRenderer().getTreeCellRendererComponent(tree, node, true, false, true, 0, false);
+        if (nodeComponent instanceof JLabel) {
+            System.out.println("component extend JLabel");
+            return ((JLabel) nodeComponent).getText();
+        } else if (nodeComponent instanceof Label) {
+            System.out.println("component extend TextComponent");
+            return ((Label) nodeComponent).getText();
+        } else {
+            System.out.println("component extend something else");
+            return node.toString();
+        }
+    }
 }

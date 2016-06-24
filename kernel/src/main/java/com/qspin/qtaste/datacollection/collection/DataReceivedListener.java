@@ -23,11 +23,11 @@ import com.qspin.qtaste.datacollection.Data;
 
 /**
  * This is the interface to receive data from a DataSource
+ *
  * @author lvboque
  */
 
-
 public interface DataReceivedListener {
-    
+
     void dataReceived(long timestamp, String sender, String dest, String name, Object value, Data.DataSource source, Object type);
 }

@@ -39,6 +39,7 @@ import com.qspin.qtaste.util.NamesValuesList;
 
 /**
  * CampaignHTMLFormatter is a HTML formatter able to generate "Campaign" reports
+ *
  * @author lvboque
  */
 public class CampaignHTMLFormatter extends HTMLFormatter {
@@ -88,10 +89,10 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 namesValues.add("###TESTS_NOT_AVAILABLE###", "&nbsp;");
                 namesValues.add("###TESTS_RETRIES###", "&nbsp;");
                 namesValues.add("###ELAPSED_TIME###", "&nbsp;");
-            } else {                
+            } else {
                 String testBedHtmlFile = new File(cr.getDetailedURL()).getName();
                 String nbTestsToExecuteStr = cr.getNbTestsToExecute() != -1 ? "" + cr.getNbTestsToExecute() : "-";
-                namesValues.add("###TESTBED###", "<a href=" + testBedHtmlFile + ">" + cr.getTestBed() + "</a>");        
+                namesValues.add("###TESTBED###", "<a href=" + testBedHtmlFile + ">" + cr.getTestBed() + "</a>");
                 namesValues.add("###TESTS_EXECUTED###", cr.getNbTestsExecuted() + "/" + nbTestsToExecuteStr);
                 namesValues.add("###TESTS_PASSED###", cr.getNbTestsPassed() + "/" + nbTestsToExecuteStr);
                 namesValues.add("###TESTS_FAILED###", cr.getNbTestsFailed() + "/" + nbTestsToExecuteStr);
@@ -140,16 +141,9 @@ public class CampaignHTMLFormatter extends HTMLFormatter {
                 String indexFileName = outputDir + File.separator + INDEX_FILE_NAME;
                 PrintWriter index = new PrintWriter(new BufferedWriter(new FileWriter(indexFileName)));
                 String pathToReport = new File(outputDir).toURI().relativize(reportFile.toURI()).getPath();
-                index.println("<html>"
-            		+ 			"<head>"
-            		+ 				"<meta http-equiv=\"refresh\" content=\"0; url=" + pathToReport + "\"/>"
-    				+ 			"</head>"
-    				+ 			"<body>"
-    				+ 				"<a href=\"" + pathToReport + "\">"
-					+ 					"Redirection"
-					+ 				"</a>"
-					+ 			"</body>"
-					+ 		 "</html>");
+                index.println(
+                      "<html>" + "<head>" + "<meta http-equiv=\"refresh\" content=\"0; url=" + pathToReport + "\"/>" + "</head>"
+                            + "<body>" + "<a href=\"" + pathToReport + "\">" + "Redirection" + "</a>" + "</body>" + "</html>");
                 index.close();
             }
         } catch (IOException e) {

@@ -31,48 +31,42 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
  * Component asker which return the editable state of a component.
- * @author simjan
  *
+ * @author simjan
  */
 class EditableStateGetter extends ComponentCommander {
 
-	/**
-	 * @param data the component's name.
-	 * @return <code>true</code> if the component is editable.
-	 * @throws QTasteTestFailException if no component is found.
-	 */
-	@Override
-	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		if ( c == null )
-			return false;
-		
-		if( c instanceof JTextComponent )
-			return ((JTextComponent) c).isEditable();
-		
-		else if( c instanceof JComboBox )
-			return ((JComboBox) c).isEditable();
-		
-		else if( c instanceof JTable )
-		{
-			for (int x = 0; x < ((JTable)c).getColumnCount(); x++)
-			{
-				for (int y = 0; y < ((JTable)c).getRowCount(); y++)
-				{
-					if ( ((JTable)c).isCellEditable(y, x) )
-					{
-						return true;
-					}
-				}
-			}
-		}
-		else if( c instanceof JTree )
-			return ((JTree) c).isEditable();
-		
-		else 
-			throw new QTasteTestFailException("Cannot get the editable state of a component of type " + c.getClass() + ".");
-		
-		return false;
-	}
+    /**
+     * @param data the component's name.
+     * @return <code>true</code> if the component is editable.
+     * @throws QTasteTestFailException if no component is found.
+     */
+    @Override
+    Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        if (c == null) {
+            return false;
+        }
+
+        if (c instanceof JTextComponent) {
+            return ((JTextComponent) c).isEditable();
+        } else if (c instanceof JComboBox) {
+            return ((JComboBox) c).isEditable();
+        } else if (c instanceof JTable) {
+            for (int x = 0; x < ((JTable) c).getColumnCount(); x++) {
+                for (int y = 0; y < ((JTable) c).getRowCount(); y++) {
+                    if (((JTable) c).isCellEditable(y, x)) {
+                        return true;
+                    }
+                }
+            }
+        } else if (c instanceof JTree) {
+            return ((JTree) c).isEditable();
+        } else {
+            throw new QTasteTestFailException("Cannot get the editable state of a component of type " + c.getClass() + ".");
+        }
+
+        return false;
+    }
 
 }

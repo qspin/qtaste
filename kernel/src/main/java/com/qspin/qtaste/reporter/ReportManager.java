@@ -17,7 +17,6 @@
     along with QTaste. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 package com.qspin.qtaste.reporter;
 
 import java.util.ArrayList;
@@ -27,37 +26,38 @@ import java.util.Date;
  * The class that will extends a report manager is responsible for:
  * - keep track of the formatters of the report
  * - maintain the content (results) of the report
+ *
  * @author lvboque
  */
 public abstract class ReportManager {
     protected String reportName;
     protected ArrayList<ReportFormatter> formatters = new ArrayList<ReportFormatter>();
-    
+
     public ReportManager() {
-        formatters = new ArrayList<ReportFormatter> ();
+        formatters = new ArrayList<ReportFormatter>();
     }
-    
-    public void startReport(Date timeStamp, String name) {        
+
+    public void startReport(Date timeStamp, String name) {
         this.reportName = name;
         for (ReportFormatter formatter : formatters) {
             formatter.startReport(timeStamp, name);
-        }        
+        }
     }
-    
+
     public String getReportName() {
         return this.reportName;
     }
-    
+
     public void stopReport() {
         for (ReportFormatter formatter : formatters) {
             formatter.stopReport();
         }
         reportName = null;
     }
-    
+
     public void refresh() {
-         for (ReportFormatter formatter : formatters) {
-           formatter.refresh();
-       }      
-    }    
+        for (ReportFormatter formatter : formatters) {
+            formatter.refresh();
+        }
+    }
 }

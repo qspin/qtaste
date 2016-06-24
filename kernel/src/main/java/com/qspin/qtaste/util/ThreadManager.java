@@ -23,27 +23,25 @@ import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.testsuite.TestScript.TaskThread;
 
 /**
- *
  * @author vdubois
  */
 public class ThreadManager {
-        public static void stopThread(ThreadGroup group,int level) {
-            // Get threads in `group'
-            int numThreads = group.activeCount();
-            Thread[] threads = new Thread[numThreads * 2];
-            numThreads = group.enumerate(threads, false);
+    public static void stopThread(ThreadGroup group, int level) {
+        // Get threads in `group'
+        int numThreads = group.activeCount();
+        Thread[] threads = new Thread[numThreads * 2];
+        numThreads = group.enumerate(threads, false);
 
-            // Enumerate each thread in `group'
-            for (int i = 0; i < numThreads; i++) {
-                // Get thread
-                Thread thread = threads[i];
-                if (thread instanceof TaskThread)
-                {
-                    TaskThread taskThread = (TaskThread)thread;
-                    taskThread.abort("Test aborted by the user", TestResult.Status.NOT_AVAILABLE, true);
-                }
-
+        // Enumerate each thread in `group'
+        for (int i = 0; i < numThreads; i++) {
+            // Get thread
+            Thread thread = threads[i];
+            if (thread instanceof TaskThread) {
+                TaskThread taskThread = (TaskThread) thread;
+                taskThread.abort("Test aborted by the user", TestResult.Status.NOT_AVAILABLE, true);
             }
-        }        
+
+        }
+    }
 
 }

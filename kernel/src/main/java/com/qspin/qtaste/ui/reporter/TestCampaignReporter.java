@@ -26,18 +26,17 @@ import javax.swing.SwingUtilities;
 
 import com.qspin.qtaste.ui.TestCaseResultsPane;
 
-
 /**
- *
  * @author vdubois
  */
-public class TestCampaignReporter  {
-    
+public class TestCampaignReporter {
+
     private static TestCampaignReporter instance = null;
-    static private ArrayList<TestCaseResultsPane> reportListeners = new ArrayList<TestCaseResultsPane> ();
-    
+    static private ArrayList<TestCaseResultsPane> reportListeners = new ArrayList<TestCaseResultsPane>();
+
     /**
-     * Get an instance of the CampaignReportManager. 
+     * Get an instance of the CampaignReportManager.
+     *
      * @return The TestResultsReportManager.
      */
     synchronized public static TestCampaignReporter getInstance() {
@@ -47,34 +46,34 @@ public class TestCampaignReporter  {
         return instance;
     }
 
-    
+    static public void addTestCampaignListener(TestCaseResultsPane panel) {
+        reportListeners.add(panel);
+    }
 
-   static public void addTestCampaignListener(TestCaseResultsPane panel) {
-            reportListeners.add(panel);
-    }
-    
     static public void removeTestCaseReportTableListener(TestCaseResultsPane panel) {
-        if (reportListeners.contains(panel))
+        if (reportListeners.contains(panel)) {
             reportListeners.remove(panel);
+        }
     }
-   
+
     public void refresh() {
-       SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-             for (TestCaseResultsPane panel : reportListeners) {
-                panel.refreshCampaign();
-             }
-          }
-       });
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                for (TestCaseResultsPane panel : reportListeners) {
+                    panel.refreshCampaign();
+                }
+            }
+        });
     }
+
     public void startReport(Date timeStamp, final String name) {
-       SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-             for (TestCaseResultsPane panel : reportListeners) {
-                panel.startCampaign(name);
-             }
-          }
-       });
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                for (TestCaseResultsPane panel : reportListeners) {
+                    panel.startCampaign(name);
+                }
+            }
+        });
     }
 
     public void stopReport() {

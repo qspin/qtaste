@@ -19,14 +19,12 @@
 
 package com.qspin.qtaste.ui.widget;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
-public class InfoComboBoxModel extends DefaultComboBoxModel
-{
-   public void addInfo(InfoComboBox.Info pInfo)
-   {
-      addElement(pInfo);
-      setSelectedItem(pInfo);
-   }
+public class InfoComboBoxModel extends DefaultComboBoxModel {
+    public void addInfo(InfoComboBox.Info pInfo) {
+        addElement(pInfo);
+        setSelectedItem(pInfo);
+    }
 }

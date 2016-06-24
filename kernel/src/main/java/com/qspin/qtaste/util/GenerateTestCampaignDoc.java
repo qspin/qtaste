@@ -35,7 +35,9 @@ import org.w3c.dom.NodeList;
 import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
- * This class is responsible for generating a HTML document containing all the documentation of the tests included in a specified test campaign file
+ * This class is responsible for generating a HTML document containing all the documentation of the tests included in a specified
+ * test campaign file
+ *
  * @author lvboque
  */
 public class GenerateTestCampaignDoc {
@@ -59,7 +61,7 @@ public class GenerateTestCampaignDoc {
                 String testSuite = matcher.matches() ? matcher.group(1) : directory;
                 testSuites.add(testSuite);
             }
-            for (String testSuite: testSuites) {
+            for (String testSuite : testSuites) {
                 GenerateTestSuiteDoc.generate(testSuite);
             }
 

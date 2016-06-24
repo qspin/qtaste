@@ -46,12 +46,11 @@ import com.qspin.qtaste.kernel.testapi.SingletonComponentFactory;
 import com.qspin.qtaste.kernel.testapi.TestAPI;
 import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 
-
 @SuppressWarnings("serial")
 public class TestAPIDocsTree extends JTree {
 
     TestAPIPanel mLinkedpanel;
-    
+
     public TestAPIDocsTree(TestAPIPanel linkedPanel) {
         super();
         final DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("API verbs");
@@ -60,7 +59,7 @@ public class TestAPIDocsTree extends JTree {
         final DefaultTreeModel tm = new DefaultTreeModel(rootNode);
         setModel(tm);
         linkedPanel.setTestCaseTree(this);
-        mLinkedpanel= linkedPanel;
+        mLinkedpanel = linkedPanel;
         TreeSelectionModel selModel = this.getSelectionModel();
         selModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -83,13 +82,15 @@ public class TestAPIDocsTree extends JTree {
                 Collection<String> hashComponents = testAPI.getRegisteredComponents();
                 TreeSet<String> sortedComponents = new TreeSet<String>(hashComponents);
                 TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
-                for (String componentName: sortedComponents) {
+                for (String componentName : sortedComponents) {
                     boolean componentPresentInTestbed = true;
                     ComponentFactory componentFactory = testAPI.getComponentFactory(componentName);
                     if (componentFactory instanceof SingletonComponentFactory) {
-                        componentPresentInTestbed = !testbedConfig.configurationsAt("singleton_components." + componentName).isEmpty();
+                        componentPresentInTestbed = !testbedConfig.configurationsAt("singleton_components." + componentName)
+                              .isEmpty();
                     } else if (componentFactory instanceof MultipleInstancesComponentFactory) {
-                        componentPresentInTestbed = !testbedConfig.configurationsAt("multiple_instances_components." + componentName).isEmpty();
+                        componentPresentInTestbed = !testbedConfig.configurationsAt(
+                              "multiple_instances_components." + componentName).isEmpty();
                     }
                     if (componentPresentInTestbed) {
                         DefaultMutableTreeNode node = new DefaultMutableTreeNode(componentName, true);
@@ -97,7 +98,7 @@ public class TestAPIDocsTree extends JTree {
                         // get all methods from this component
                         List<String> methods = new ArrayList<String>(testAPI.getRegisteredVerbs(componentName));
                         Collections.sort(methods);
-                        for (String methodName: methods) {
+                        for (String methodName : methods) {
                             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(methodName, true);
                             node.add(childNode);
                         }
@@ -122,7 +123,7 @@ public class TestAPIDocsTree extends JTree {
 
         protected TestAPIDocsTree mTree;
 
-        public TestAPITreeListener (TestAPIDocsTree tree) {
+        public TestAPITreeListener(TestAPIDocsTree tree) {
             this.mTree = tree;
         }
 
@@ -131,8 +132,8 @@ public class TestAPIDocsTree extends JTree {
 
         public void treeWillExpand(TreeExpansionEvent event) {
             TreePath path = event.getPath();
-            if ( path.getParentPath() == null ) {
-                DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)path.getLastPathComponent();
+            if (path.getParentPath() == null) {
+                DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) path.getLastPathComponent();
                 buildTree(rootNode, mTree);
             }
         }
@@ -146,5 +147,5 @@ public class TestAPIDocsTree extends JTree {
         }
     }
 
-  }
+}
 

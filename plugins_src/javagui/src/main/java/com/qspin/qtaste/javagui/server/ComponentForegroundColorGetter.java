@@ -28,16 +28,17 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 public class ComponentForegroundColorGetter extends ComponentBackgroundColorGetter {
 
-	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		if (c != null) {
-			if (c instanceof JTextComponent) {
-				return getHexadecimalColor(c.getForeground());
-			} else {
-				throw new QTasteTestFailException("It is not possible to retrieve the foreground color of this kind of component " + c.getClass() );
-			}
-		}
-		return "";
-	}
+    @Override
+    String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        if (c != null) {
+            if (c instanceof JTextComponent) {
+                return getHexadecimalColor(c.getForeground());
+            } else {
+                throw new QTasteTestFailException(
+                      "It is not possible to retrieve the foreground color of this kind of component " + c.getClass());
+            }
+        }
+        return "";
+    }
 }

@@ -19,23 +19,23 @@
 
 package com.qspin.qtaste.reporter.testresults.gui;
 
-import com.qspin.qtaste.reporter.testresults.*;
 import com.qspin.qtaste.reporter.ReportFormatter;
+import com.qspin.qtaste.reporter.testresults.TestResult;
+import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
 import com.qspin.qtaste.ui.reporter.TestCaseReporter;
 
 /**
- * 
  * @author vdubois
  */
 public class GUIReportFormatter extends ReportFormatter {
-        
+
     public GUIReportFormatter(String reportName) {
-        super();       
+        super();
     }
-       
-    public void refresh() {        
-        for (TestResult result : TestResultsReportManager.getInstance().getResults()) {            
-            TestCaseReporter.getInstance().putEntry(result);    
-        }         
+
+    public void refresh() {
+        for (TestResult result : TestResultsReportManager.getInstance().getResults()) {
+            TestCaseReporter.getInstance().putEntry(result);
+        }
     }
 }

@@ -26,6 +26,7 @@ import com.qspin.qtaste.testsuite.TestSuite;
 
 /**
  * Description of all the fields present in the campaign reports
+ *
  * @author lvboque
  */
 public class CampaignResult extends Result {
@@ -95,11 +96,11 @@ public class CampaignResult extends Result {
         } else if (nbTestsFailed > 0) {
             setStatus(Status.FAIL);
         } else if (nbTestsNotAvailable > 0) {
-            setStatus(Status.NOT_AVAILABLE);            
+            setStatus(Status.NOT_AVAILABLE);
         } else if (nbTestsExecuted == 0) {
             setStatus(Status.NOT_AVAILABLE);
         } else {
-            if ( (nbTestsExecuted == nbTestsToExecute) ) {
+            if ((nbTestsExecuted == nbTestsToExecute)) {
                 setStatus(Status.SUCCESS);
             } else {
                 // Something went wrong ... Probably SUT was not started properly
@@ -150,8 +151,8 @@ public class CampaignResult extends Result {
             return System.currentTimeMillis() - startExecutionDate.getTime();
         }
     }
-    
-     public String getFormattedElapsedTime(boolean showMilliseconds) {
+
+    public String getFormattedElapsedTime(boolean showMilliseconds) {
         return getFormattedElapsedTime(getElapsedTimeMs(), showMilliseconds);
     }
 }

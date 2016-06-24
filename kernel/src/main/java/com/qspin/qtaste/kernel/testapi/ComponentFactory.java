@@ -31,26 +31,31 @@ import com.qspin.qtaste.testsuite.TestData;
 
 /**
  * A ComponentFactory is responsible to manage the creation of TestAPIComponent instances.
+ *
  * @author lvboque
  */
 public interface ComponentFactory {
     /**
-     * Gets an instance of the component specified as parameter. The returned instance may be linked to a field specified in the TestData.
+     * Gets an instance of the component specified as parameter. The returned instance may be linked to a field specified in the
+     * TestData.
+     *
      * @param component the name of the component
      * @param data the testdata
      * @return the instance of the component or null if the component specified doesn't exist
      * @throws com.qspin.qtaste.testsuite.QTasteException if the component cannot be instantiated
      */
-    public Component getComponentInstance(String component, TestData data) throws QTasteException;           
-    
+    public Component getComponentInstance(String component, TestData data) throws QTasteException;
+
     /**
      * Gets all instances of components instantiated by the factory.
+     *
      * @return a Collection of the instantiated TestAPIComponent
      */
     public Collection<Component> getComponentsInstances();
 
     /**
      * Removes an instance of component.
+     *
      * @param component component instance to remove
      */
     public void removeComponentInstance(Component component);

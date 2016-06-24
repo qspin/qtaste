@@ -27,12 +27,12 @@ package com.qspin.qtaste.event;
 import java.util.EventListener;
 
 /**
- *
  * @author vdubois
  */
 public interface TestScriptBreakpointListener extends EventListener {
-  /**
+    /**
      * Gets called to trace specific event to report to GUI
+     *
      * @param event - a TestCaseEvent Object
      */
     public void doAction(TestScriptBreakpointEvent event);

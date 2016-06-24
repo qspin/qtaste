@@ -35,10 +35,9 @@ import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.testsuite.TestRequirement;
 
 /**
- *
  * @author lvboque
  */
-public class TestResultImpl extends Result implements TestResult  {
+public class TestResultImpl extends Result implements TestResult {
 
     private TestData data;
     private List<TestRequirement> mRequirements;
@@ -55,24 +54,26 @@ public class TestResultImpl extends Result implements TestResult  {
     private int failedLineNumber;
     private String failedFunctionId;
     private String stackTrace;
-    private ArrayList<StackTraceElement> stack=null;
-    private int retryCount=0;
+    private ArrayList<StackTraceElement> stack = null;
+    private int retryCount = 0;
     private int mCurrentRowIndex;
     private int mNumberRows;
 
-    
     public int getCurrentRowIndex() {
-    	return mCurrentRowIndex;
+        return mCurrentRowIndex;
     }
+
     public int getNumberRows() {
-    	return mNumberRows;
+        return mNumberRows;
     }
-    
+
     // stores the step execution result
     private LinkedHashMap<String, StepResult> stepResults;
     //private TestResultsReportManager reportFormaterManager;
 
-    /** Creates a new instance of TestResultImpl */
+    /**
+     * Creates a new instance of TestResultImpl
+     */
     public TestResultImpl(String name, TestData data, List<TestRequirement> requirements, int currentRowIndex, int numberRows) {
         this.data = data;
         this.mRequirements = requirements;
@@ -89,7 +90,7 @@ public class TestResultImpl extends Result implements TestResult  {
         status = Status.NOT_EXECUTED;
         extraResultDetails = "N/A";
         stepResults = new LinkedHashMap<String, StepResult>();
-        this.stack  = new ArrayList<StackTraceElement>();
+        this.stack = new ArrayList<StackTraceElement>();
     }
 
     public TestData getTestData() {
@@ -99,9 +100,10 @@ public class TestResultImpl extends Result implements TestResult  {
     public List<TestRequirement> getTestRequirements() {
         return mRequirements;
     }
-    
+
     /**
      * Getter for property extraResultDetails.
+     *
      * @return Value of property extraResultDetails.
      */
     public String getExtraResultDetails() {
@@ -110,6 +112,7 @@ public class TestResultImpl extends Result implements TestResult  {
 
     /**
      * Setter for property extraResultDetails.
+     *
      * @param extraResultDetails New value of property extraResultDetails.
      */
     public void setExtraResultDetails(String extraResultDetails) {
@@ -124,7 +127,7 @@ public class TestResultImpl extends Result implements TestResult  {
         this.name = name;
         id = name;
         if (data != null && this.getNumberRows() > 1) {
-          id += " - " + data.getRowId();
+            id += " - " + data.getRowId();
         }
     }
 
@@ -164,6 +167,7 @@ public class TestResultImpl extends Result implements TestResult  {
 
     /**
      * Setter for property status.
+     *
      * @param status New value of property status.
      */
     public void setStatus(Status status) {
@@ -177,7 +181,7 @@ public class TestResultImpl extends Result implements TestResult  {
     public Date getEndDate() {
         return new Date(end);
     }
-    
+
     public long getElapsedTimeMs() {
         if (start == 0) {
             return 0;
@@ -188,7 +192,7 @@ public class TestResultImpl extends Result implements TestResult  {
             return System.currentTimeMillis() - start;
         }
     }
-    
+
     public String getFormattedElapsedTime(boolean showMilliseconds) {
         return getFormattedElapsedTime(getElapsedTimeMs(), showMilliseconds);
     }
@@ -240,15 +244,16 @@ public class TestResultImpl extends Result implements TestResult  {
     public void setRetryCount(int retryCount) {
         this.retryCount = retryCount;
     }
-    
-    public void addStepResult(String stepId, String functionName, String stepDescription, String expectedResult, Status stepStatus, double elapsedTime) {
+
+    public void addStepResult(String stepId, String functionName, String stepDescription, String expectedResult, Status
+          stepStatus, double elapsedTime) {
         StepResult stepResult;
         if (stepResults.containsKey(stepId)) {
             stepResult = stepResults.get(stepId);
         } else {
-            stepResult =  new StepResult();
-        	stepResult.setStepDescription(stepDescription);
-        	stepResult.setExpectedResult(expectedResult);
+            stepResult = new StepResult();
+            stepResult.setStepDescription(stepDescription);
+            stepResult.setExpectedResult(expectedResult);
             stepResults.put(stepId, stepResult);
         }
         stepResult.setStepId(stepId);
@@ -260,7 +265,7 @@ public class TestResultImpl extends Result implements TestResult  {
     public Collection<StepResult> getStepResults() {
         return stepResults.values();
     }
-    
+
     public class StepResult {
         private Status status;
         private double elpasedTime;
@@ -269,9 +274,9 @@ public class TestResultImpl extends Result implements TestResult  {
         private String stepDescription;
         private String expectedResult;
 
-        public StepResult()
-        {}
-        
+        public StepResult() {
+        }
+
         public Status getStatus() {
             return status;
         }
@@ -304,30 +309,30 @@ public class TestResultImpl extends Result implements TestResult  {
             this.stepId = stepId;
         }
 
-		public void setStepDescription(String stepDescription) {
-			this.stepDescription = stepDescription;
-		}
+        public void setStepDescription(String stepDescription) {
+            this.stepDescription = stepDescription;
+        }
 
-		public String getStepDescription() {
-			return stepDescription;
-		}
+        public String getStepDescription() {
+            return stepDescription;
+        }
 
-		public void setExpectedResult(String expectedResult) {
-			this.expectedResult = expectedResult;
-		}
+        public void setExpectedResult(String expectedResult) {
+            this.expectedResult = expectedResult;
+        }
 
-		public String getExpectedResult() {
-			return expectedResult;
-		}
+        public String getExpectedResult() {
+            return expectedResult;
+        }
     }
 
-//    public TestResultsReportManager getReportManager() {
-//        return this.reportFormaterManager;
-//    }
+    //    public TestResultsReportManager getReportManager() {
+    //        return this.reportFormaterManager;
+    //    }
 
-//    public void setReportManager(TestResultsReportManager reportFormaterManager) {
-//        this.reportFormaterManager = reportFormaterManager;
-//    }
+    //    public void setReportManager(TestResultsReportManager reportFormaterManager) {
+    //        this.reportFormaterManager = reportFormaterManager;
+    //    }
 
     public void setStack(ArrayList<StackTraceElement> stack) {
         this.stack = stack;
@@ -337,16 +342,15 @@ public class TestResultImpl extends Result implements TestResult  {
         return stack;
     }
 
-    public void addStackTraceElement(StackTraceElement stackElement)
-    {
+    public void addStackTraceElement(StackTraceElement stackElement) {
         stack.add(stackElement);
     }
 
-	public String getTestScriptVersion() {
-		return testScriptVersion;
-	}
+    public String getTestScriptVersion() {
+        return testScriptVersion;
+    }
 
-	public void setTestScriptVersion(String version) {
-		testScriptVersion = version;
-	}
+    public void setTestScriptVersion(String version) {
+        testScriptVersion = version;
+    }
 }

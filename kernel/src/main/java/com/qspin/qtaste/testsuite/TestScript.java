@@ -45,7 +45,6 @@ import com.qspin.qtaste.util.Environment;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author lvboque
  */
 public abstract class TestScript implements Executable {
@@ -64,7 +63,8 @@ public abstract class TestScript implements Executable {
     private static final int DEFAULT_TIMEOUT = 60 * 1000;
     private int RETRY_COUNTER;
 
-    public TestScript(File fileName, File testSuiteDirectory, String name, TestDataSet data, List<TestRequirement> requirements, TestSuite testSuite) {
+    public TestScript(File fileName, File testSuiteDirectory, String name, TestDataSet data, List<TestRequirement>
+          requirements, TestSuite testSuite) {
         this.name = name;
         this.ds = data;
         this.requirements = requirements;
@@ -82,6 +82,7 @@ public abstract class TestScript implements Executable {
 
     /**
      * This method will run the TestCase with all the TestData defined
+     *
      * @param debug true if in debug mode, false otherwise
      * @return true if success, false otherwise
      */
@@ -89,8 +90,8 @@ public abstract class TestScript implements Executable {
         final String INTERACTIVE_REPORT_NAME = "Interactive";
         boolean returnStatus = true;
         TestResultsReportManager reportManager = TestResultsReportManager.getInstance();
-        if (testSuite == null &&
-        		(reportManager.getReportName() == null ||  reportManager.getReportName().equals(INTERACTIVE_REPORT_NAME)) ) {
+        if (testSuite == null && (reportManager.getReportName() == null || reportManager.getReportName().equals(
+              INTERACTIVE_REPORT_NAME))) {
             reportManager.startReport(new Date(), INTERACTIVE_REPORT_NAME);
         }
         testResults = new LinkedList<TestResult>();
@@ -105,9 +106,9 @@ public abstract class TestScript implements Executable {
                 boolean needToRetry = false;
                 // Retry the script "RETRY_COUNTER" times in case of failure
                 do {
-                	if (TestEngine.isAbortedByUser()) {
+                    if (TestEngine.isAbortedByUser()) {
                         return false;
-                	}
+                    }
 
                     if (TestEngine.needToRestartSUT()) {
                         logger.info("SUT has to be restarted");
@@ -126,24 +127,27 @@ public abstract class TestScript implements Executable {
                         }
                     }
 
-                    TestResult testResult = initTestResult(data, requirements, trial, reportManager, ds.getData().indexOf(data), ds.getData().size());
+                    TestResult testResult = initTestResult(data, requirements, trial, reportManager, ds.getData().indexOf(data),
+                          ds.getData().size());
                     testResults.add(testResult);
 
                     int timeout = DEFAULT_TIMEOUT;
                     if (debug) {
                         logger.info("Not using test timeout because running in debug mode");
                     } else {
-	                    try {
-	                        timeout = data.getIntValue("TIMEOUT");
-	                        logger.info("Using test timeout of " + timeout + " seconds");
-	                        timeout = timeout * 1000;
-	                    } catch (QTasteDataException e) {
-	                        if (e.getMessage().contains("doesn't contain")) {
-	                            logger.info("No TIMEOUT test data, using default test timeout (" + DEFAULT_TIMEOUT / 1000 + " seconds)");
-	                        } else {
-	                            logger.error(e.getMessage() + ". Using default test timeout (" + DEFAULT_TIMEOUT / 1000 + " seconds)");
-	                        }
-	                    }
+                        try {
+                            timeout = data.getIntValue("TIMEOUT");
+                            logger.info("Using test timeout of " + timeout + " seconds");
+                            timeout = timeout * 1000;
+                        } catch (QTasteDataException e) {
+                            if (e.getMessage().contains("doesn't contain")) {
+                                logger.info("No TIMEOUT test data, using default test timeout (" + DEFAULT_TIMEOUT / 1000
+                                      + " seconds)");
+                            } else {
+                                logger.error(
+                                      e.getMessage() + ". Using default test timeout (" + DEFAULT_TIMEOUT / 1000 + " seconds)");
+                            }
+                        }
                     }
 
                     TaskThread taskThread = new TaskThread(debug, data, testResult, timeout);
@@ -162,7 +166,8 @@ public abstract class TestScript implements Executable {
                     taskThread.start();
                     boolean taskThreadTerminated = taskThread.waitForEnd();
                     //TODO: Issue #141: "... handle the test timeout by subtracting the time passed while the pop-up is displayed"
-                    // One possibility is to implement a Timeout manager to be able to change timeout behavior while thread is still running.
+                    // One possibility is to implement a Timeout manager to be able to change timeout behavior while thread is
+                    // still running.
                     // In this case, this shall be available from e.g. Utility (open input pop-up).
                     // One idea to implement the timeout mechanism is to use conditional variables + mutex.
 
@@ -184,15 +189,15 @@ public abstract class TestScript implements Executable {
                     }
 
                     status = testResult.getStatus();
-                    if (status != TestResult.Status.SUCCESS)
-                    {
+                    if (status != TestResult.Status.SUCCESS) {
                         if (status == TestResult.Status.FAIL) {
-                           needToRetry = TestEngine.setNeedToRestartSUT();
+                            needToRetry = TestEngine.setNeedToRestartSUT();
                         }
                         returnStatus = false;
                     }
                     trial++;
-                } while (needToRetry && trial <= RETRY_COUNTER);
+                }
+                while (needToRetry && trial <= RETRY_COUNTER);
 
                 if (testSuite != null) {
                     testSuite.reportTestResult(status);
@@ -219,7 +224,8 @@ public abstract class TestScript implements Executable {
         return fileName.toString();
     }
 
-    private TestResult initTestResult(TestData data, List<TestRequirement> requirements, int retryCount, TestResultsReportManager reporter, int currentRowIndex, int numberRows) {
+    private TestResult initTestResult(TestData data, List<TestRequirement> requirements, int retryCount,
+          TestResultsReportManager reporter, int currentRowIndex, int numberRows) {
         String testCaseDirectory = getTestCaseDirectory();
         String testSuiteDirectory = this.testSuiteDirectory.toString();
         String testCaseName;
@@ -229,7 +235,7 @@ public abstract class TestScript implements Executable {
             testCaseName = testCaseDirectory.substring(testSuiteDirectory.length() + 1);
         }
         if (testCaseName.equals("QTaste_interactive")) {
-        	testCaseName = name;
+            testCaseName = name;
         }
 
         TestResult result = new TestResultImpl(testCaseName, data, requirements, currentRowIndex, numberRows);
@@ -260,9 +266,9 @@ public abstract class TestScript implements Executable {
                 message += "\ncaused by " + cause;
                 message += getStackTrace(cause.getStackTrace());
             }
-    	} else if (e instanceof QTasteDataException) {
+        } else if (e instanceof QTasteDataException) {
             result.setStatus(TestResult.Status.NOT_AVAILABLE);
-    	} else {
+        } else {
             result.setStatus(TestResult.Status.NOT_AVAILABLE);
             if (cause != null) {
                 message += "\ncaused by " + cause;
@@ -270,20 +276,21 @@ public abstract class TestScript implements Executable {
             } else {
                 message += getStackTrace(e.getStackTrace());
             }
-    	}
+        }
 
-    	result.stop();
+        result.stop();
         result.setExtraResultDetails(message);
     }
 
-    private String getStackTrace(StackTraceElement[] pElements)
-    {
+    private String getStackTrace(StackTraceElement[] pElements) {
         String stackTrace = "";
-        for (int i = 0,  n = pElements.length; i < n; i++) {
+        for (int i = 0, n = pElements.length; i < n; i++) {
             if (pElements[i].getMethodName().startsWith("invoke")) {
                 break;
             }
-            stackTrace += "\nat " + pElements[i].getClassName() + "." + pElements[i].getMethodName() + "(" + pElements[i].getFileName() + ":" + pElements[i].getLineNumber() + ")";
+            stackTrace +=
+                  "\nat " + pElements[i].getClassName() + "." + pElements[i].getMethodName() + "(" + pElements[i].getFileName()
+                        + ":" + pElements[i].getLineNumber() + ")";
         }
         return stackTrace;
     }
@@ -297,7 +304,7 @@ public abstract class TestScript implements Executable {
     }
 
     public void setVersion(String value) {
-    	version = value;
+        version = value;
     }
 
     public String getVersion() {
@@ -325,11 +332,11 @@ public abstract class TestScript implements Executable {
 
         public boolean waitForEnd() {
             try {
-            	if (debug) {
-            		join();
-            	} else {
-            		join(timeout);
-            	}
+                if (debug) {
+                    join();
+                } else {
+                    join(timeout);
+                }
 
                 if (getState() == Thread.State.TERMINATED) {
                     return true;
@@ -371,8 +378,8 @@ public abstract class TestScript implements Executable {
             execute(data, result, debug);
 
             if (TestEngine.isAbortedByUser()) {
-	            result.setStatus(TestResult.Status.NOT_AVAILABLE);
-	            result.setExtraResultDetails("Test aborted by the user");
+                result.setStatus(TestResult.Status.NOT_AVAILABLE);
+                result.setExtraResultDetails("Test aborted by the user");
             }
 
             result.stop();

@@ -12,69 +12,66 @@ import javafx.util.StringConverter;
 
 public class Interface {
 
-	@FXML
-	private ComboBox<Person> m_combo;
-	@FXML
-	private Slider m_slider;
-	@FXML
-	private Spinner<Integer> m_spinner;
-	@FXML
-	private ListView<Person> m_list;
+    @FXML
+    private ComboBox<Person> m_combo;
+    @FXML
+    private Slider m_slider;
+    @FXML
+    private Spinner<Integer> m_spinner;
+    @FXML
+    private ListView<Person> m_list;
 
-	public Interface()
-	{
-	}
+    public Interface() {
+    }
 
-	@FXML
+    @FXML
     private void initialize() {
-		m_combo.setItems(Person.DEFAULT_DATA);
-		m_combo.setConverter(new StringConverter<Person>() {
+        m_combo.setItems(Person.DEFAULT_DATA);
+        m_combo.setConverter(new StringConverter<Person>() {
 
-			@Override
-			public String toString(Person p) {
-				return p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
-			}
+            @Override
+            public String toString(Person p) {
+                return p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
+            }
 
-			@Override
-			public Person fromString(String string) {
-				for (Person p : m_combo.getItems())
-				{
-					String current = p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
-					if (current.equals(string))
-					{
-						return p;
-					}
-				}
-				return null;
-			}
-		});
+            @Override
+            public Person fromString(String string) {
+                for (Person p : m_combo.getItems()) {
+                    String current = p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
+                    if (current.equals(string)) {
+                        return p;
+                    }
+                }
+                return null;
+            }
+        });
 
-		m_slider.setMin(0);
-		m_slider.setMax(100);
-		m_slider.setValue(50);
+        m_slider.setMin(0);
+        m_slider.setMax(100);
+        m_slider.setValue(50);
 
-		m_spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        m_spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
 
-		m_list.setItems(Person.DEFAULT_DATA);
-		m_list.setCellFactory(new Callback<ListView<Person>, ListCell<Person>>(){
+        m_list.setItems(Person.DEFAULT_DATA);
+        m_list.setCellFactory(new Callback<ListView<Person>, ListCell<Person>>() {
 
-	            @Override
-	            public ListCell<Person> call(ListView<Person> p) {
+            @Override
+            public ListCell<Person> call(ListView<Person> p) {
 
-	                ListCell<Person> cell = new ListCell<Person>(){
+                ListCell<Person> cell = new ListCell<Person>() {
 
-	                    @Override
-	                    protected void updateItem(Person p, boolean bln) {
-	                        super.updateItem(p, bln);
-	                        if (p != null) {
-	        					String current = p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
-	                            setText(current);
-	                        }
-	                    }
+                    @Override
+                    protected void updateItem(Person p, boolean bln) {
+                        super.updateItem(p, bln);
+                        if (p != null) {
+                            String current = p.getFirstName().get() + " " + p.getLastName().get() + " (" + p.getAge().get() + ")";
+                            setText(current);
+                        }
+                    }
 
-	                };
-	                return cell;
-	            }
-	        });
-	}
+                };
+                return cell;
+            }
+        });
+    }
 }

@@ -45,8 +45,6 @@ import org.apache.log4j.Logger;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.ui.tools.ResourceManager;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
-import com.qspin.qtaste.util.versioncontrol.VersionControl;
-import com.qspin.qtaste.util.versioncontrol.VersionControlInterface;
 
 public class AboutDialog extends JDialog {
 
@@ -63,12 +61,14 @@ public class AboutDialog extends JDialog {
         Box b = Box.createVerticalBox();
         b.add(Box.createGlue());
         b.add(new JLabel("Description:"));
-        JLabel descriptionLabel = new JLabel("<html><blockquote>QTaste is a data-driven automated testing tool.</blockquote></html>");
+        JLabel descriptionLabel = new JLabel(
+              "<html><blockquote>QTaste is a data-driven automated testing tool.</blockquote></html>");
         descriptionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
         b.add(descriptionLabel);
         // Third products link
 
-        JLabel thirdProductsLink = new URLLabel("<html><blockquote>Information about third products</blockquote></html>", "file://" + StaticConfiguration.QTASTE_ROOT + "/doc/third_products/ThirdProducts.htm");
+        JLabel thirdProductsLink = new URLLabel("<html><blockquote>Information about third products</blockquote></html>",
+              "file://" + StaticConfiguration.QTASTE_ROOT + "/doc/third_products/ThirdProducts.htm");
         thirdProductsLink.setFont(ResourceManager.getInstance().getStandardFontLight());
         b.add(thirdProductsLink);
 
@@ -79,13 +79,14 @@ public class AboutDialog extends JDialog {
         kernelVersionLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
         b.add(kernelVersionLabel);
         if (!kernelVersion.equals("unknown") && !kernelVersion.endsWith("SNAPSHOT")) {
-            JLabel kernelReleaseNotesLabel = new URLLabel("<html><blockquote>Release notes</blockquote></html>", "file://" + StaticConfiguration.QTASTE_RELEASE_NOTES_FILE);
+            JLabel kernelReleaseNotesLabel = new URLLabel("<html><blockquote>Release notes</blockquote></html>",
+                  "file://" + StaticConfiguration.QTASTE_RELEASE_NOTES_FILE);
             kernelReleaseNotesLabel.setFont(ResourceManager.getInstance().getStandardFontLight());
             thirdProductsLink.setFont(ResourceManager.getInstance().getStandardFontLight());
             b.add(kernelReleaseNotesLabel);
         }
         JLabel javaVersionVendor = new JLabel("<html><br><b>Java version:</b> " + System.getProperty("java.version") +
-                           " from " + System.getProperty("java.vendor") + "</html>");
+              " from " + System.getProperty("java.vendor") + "</html>");
         javaVersionVendor.setFont(ResourceManager.getInstance().getStandardFontLight());
         b.add(javaVersionVendor);
 
@@ -109,7 +110,6 @@ public class AboutDialog extends JDialog {
                 dispose();
             }
         });
-
 
         setSize(450, 250);
         setResizable(false);

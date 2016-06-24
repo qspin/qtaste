@@ -27,54 +27,45 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.tree.ConfigurationNode;
 
 @SuppressWarnings("serial")
-public abstract class XMLConfiguration extends org.apache.commons.configuration.XMLConfiguration {                    
-  
-	public XMLConfiguration() {               
-        super();            
+public abstract class XMLConfiguration extends org.apache.commons.configuration.XMLConfiguration {
+
+    public XMLConfiguration() {
+        super();
     }
-                
-	public XMLConfiguration(String file) throws ConfigurationException {               
-        super(file);            
+
+    public XMLConfiguration(String file) throws ConfigurationException {
+        super(file);
     }
-                
+
     /**
      * Fetches the specified property. This task is delegated to the associated
      * expression engine.
      *
      * @param key the key to be looked up
      * @return the found value
-     */    
+     */
     @Override
-    public List<Object> getProperty(String key)
-    {
+    public List<Object> getProperty(String key) {
         List<?> nodes = fetchNodeList(key);
 
-        if (nodes.size() == 0)
-        {
+        if (nodes.size() == 0) {
             return null;
-        }
-        else
-        {
+        } else {
             List<Object> list = new ArrayList<Object>();
-            for (Iterator<?> it = nodes.iterator(); it.hasNext();)
-            {
+            for (Iterator<?> it = nodes.iterator(); it.hasNext(); ) {
                 ConfigurationNode node = (ConfigurationNode) it.next();
-                if (node.getValue() != null)
-                {                                              
+                if (node.getValue() != null) {
                     list.add(node.getValue());
                 }
             }
 
-            if (list.size() < 1)
-            {
+            if (list.size() < 1) {
                 return null;
-            }
-            else
-            {
+            } else {
                 return list;
             }
         }
-    }      
+    }
 }
 
 

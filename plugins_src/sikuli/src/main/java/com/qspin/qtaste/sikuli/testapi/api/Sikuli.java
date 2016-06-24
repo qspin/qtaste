@@ -21,7 +21,6 @@ package com.qspin.qtaste.sikuli.testapi.api;
 
 import com.qspin.qtaste.kernel.testapi.MultipleInstancesComponent;
 
-
 public interface Sikuli extends com.qspin.qtaste.sikuli.Sikuli, MultipleInstancesComponent {
 
 }

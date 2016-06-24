@@ -30,44 +30,44 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author vdubois
  */
 public class DumpPythonResultEventHandler {
     private static DumpPythonResultEventHandler eventHandler;
-    private final List<DumpPythonResultListener> dumpPythonResultListeners = Collections.synchronizedList(new LinkedList<DumpPythonResultListener>());
+    private final List<DumpPythonResultListener> dumpPythonResultListeners = Collections.synchronizedList(
+          new LinkedList<DumpPythonResultListener>());
 
-    private DumpPythonResultEventHandler(){}
+    private DumpPythonResultEventHandler() {
+    }
 
-    public static DumpPythonResultEventHandler getInstance(){
+    public static DumpPythonResultEventHandler getInstance() {
         if (eventHandler == null) {
             eventHandler = new DumpPythonResultEventHandler();
         }
         return eventHandler;
     }
 
-    public void clearInstance(){
+    public void clearInstance() {
         eventHandler = null;
     }
 
-    
-    public void addPythonResultListener(DumpPythonResultListener tcl){
-        if (tcl != null && !dumpPythonResultListeners.contains(tcl)){
+    public void addPythonResultListener(DumpPythonResultListener tcl) {
+        if (tcl != null && !dumpPythonResultListeners.contains(tcl)) {
             dumpPythonResultListeners.add(tcl);
         }
     }
 
-    public List<DumpPythonResultListener> getPythonResultListeners(){
+    public List<DumpPythonResultListener> getPythonResultListeners() {
         return dumpPythonResultListeners;
     }
 
-    public void removePythonResultListener(DumpPythonResultListener tcl){
+    public void removePythonResultListener(DumpPythonResultListener tcl) {
         dumpPythonResultListeners.remove(tcl);
     }
 
-    public void pythonResult(Object result){
+    public void pythonResult(Object result) {
         DumpPythonResultEvent tce = new DumpPythonResultEvent(result);
-        synchronized(dumpPythonResultListeners){
+        synchronized (dumpPythonResultListeners) {
             Iterator<DumpPythonResultListener> it = dumpPythonResultListeners.iterator();
             DumpPythonResultListener tcl;
             while (it.hasNext()) {

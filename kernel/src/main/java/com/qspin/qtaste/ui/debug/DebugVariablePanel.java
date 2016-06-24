@@ -32,7 +32,6 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -43,7 +42,7 @@ public class DebugVariablePanel extends JPanel {
     //private ArrayList<DebugVariable> mDebugVariables;
     private DebugTreeTable mTree;
     private DebugVariableTreeTableModel mTableModel;
-    
+
     /*
     public DebugVariablePanel() {
         super(new BorderLayout());
@@ -54,10 +53,10 @@ public class DebugVariablePanel extends JPanel {
         super(new BorderLayout());
         genUI();
     }
-    
-	public void setDebugVariables(ArrayList<DebugVariable> debugVariables) {
-    	/*
-    	// do a copy
+
+    public void setDebugVariables(ArrayList<DebugVariable> debugVariables) {
+        /*
+        // do a copy
     	ArrayList<DebugVariable> copyDebugVariables = (ArrayList<DebugVariable>)debugVariables.clone();
         mDebugVariables = copyDebugVariables;
         */
@@ -65,9 +64,9 @@ public class DebugVariablePanel extends JPanel {
         mTree.repaint();
         mTree.getTree().expandPath(mTree.getTree().getPathForRow(0));
     }
-    
+
     private void genUI() {
-    	/*
+        /*
             tableModel = new DefaultTableModel(new Object[]{"Variable", "Value"}, 0) {
                 @Override
                 public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -78,27 +77,28 @@ public class DebugVariablePanel extends JPanel {
             add(new JScrollPane(variableTable));
             
     	*/
-    	mTableModel = new DebugVariableTreeTableModel();
-    	mTree = new DebugTreeTable(mTableModel);
-    	JScrollPane sp = new JScrollPane(mTree);
+        mTableModel = new DebugVariableTreeTableModel();
+        mTree = new DebugTreeTable(mTableModel);
+        JScrollPane sp = new JScrollPane(mTree);
         this.add(sp);
-        
-    	//mTree = new VariableTree(mDebugVariables);
-    	
+
+        //mTree = new VariableTree(mDebugVariables);
+
     }
+
     public DebugTreeTable getTreeTable() {
-    	return mTree;
+        return mTree;
     }
-    
+
     public void dumpPythonVar(String s) {
         // parse the string
         tableModel.setRowCount(0);
         String[] lines = s.split("\\n");
-        for (int i=0; i < lines.length; i++) {
+        for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            String[] data= line.split("' = '");
-            if (data.length==2) {
-                   tableModel.addRow(new Object[]{data[0].replace("'", ""), "'" + data[1]});                
+            String[] data = line.split("' = '");
+            if (data.length == 2) {
+                tableModel.addRow(new Object[] {data[0].replace("'", ""), "'" + data[1]});
             }
         }
     }

@@ -21,48 +21,54 @@ package com.qspin.qtaste.ui.debug;
 
 import java.util.ArrayList;
 
-public class DebugVariable  {
-	
-	private ArrayList<DebugVariable> mFieldList;
-	private String m_Value;
-	private String m_Type;
-	private String m_VarName;
-	
-	public ArrayList<DebugVariable> getFieldList() {
-		return mFieldList;
-	}
-	public void setValue(String value) {
-		this.m_Value = value;
-	}
-	public String getValue() {
-		return m_Value;
-	}
-	public void setVariableType(String type) {
-		this.m_Type = type;
-	}
-	public String getType() {
-		return m_Type;
-	}
-	
-	public DebugVariable(String variableName, String variableType, String value) {
-		m_Value = value;
-		m_Type = variableType;
-		m_VarName = variableName;
-		mFieldList = new ArrayList<DebugVariable>();
-	}
+public class DebugVariable {
 
-	public ArrayList<DebugVariable> getFields() {
-		return mFieldList;
-	}
-	public void addField(DebugVariable variableField)
-	{
-		mFieldList.add(variableField);
-	}
-	public void setVarName(String varName) {
-		this.m_VarName = varName;
-	}
-	public String getVarName() {
-		return m_VarName;
-	}
-	
+    private ArrayList<DebugVariable> mFieldList;
+    private String m_Value;
+    private String m_Type;
+    private String m_VarName;
+
+    public ArrayList<DebugVariable> getFieldList() {
+        return mFieldList;
+    }
+
+    public void setValue(String value) {
+        this.m_Value = value;
+    }
+
+    public String getValue() {
+        return m_Value;
+    }
+
+    public void setVariableType(String type) {
+        this.m_Type = type;
+    }
+
+    public String getType() {
+        return m_Type;
+    }
+
+    public DebugVariable(String variableName, String variableType, String value) {
+        m_Value = value;
+        m_Type = variableType;
+        m_VarName = variableName;
+        mFieldList = new ArrayList<DebugVariable>();
+    }
+
+    public ArrayList<DebugVariable> getFields() {
+        return mFieldList;
+    }
+
+    public void addField(DebugVariable variableField) {
+        mFieldList.add(variableField);
+    }
+
+    public void setVarName(String varName) {
+        this.m_VarName = varName;
+    }
+
+    public String getVarName() {
+        return m_VarName;
+    }
+
 }

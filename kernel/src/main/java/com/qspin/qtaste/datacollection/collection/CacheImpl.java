@@ -37,7 +37,6 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NameValue;
 
 /**
- * 
  * @author lvboque
  */
 public class CacheImpl implements Cache, DataReceivedListener {
@@ -45,8 +44,7 @@ public class CacheImpl implements Cache, DataReceivedListener {
     private static Logger logger = Log4jLoggerFactory.getLogger(CacheImpl.class);
     private static Cache instance = null;
     private HashtableLinkedList<String, Data> hash;
-    private final Map<String, Data> hash2 =
-            Collections.synchronizedMap(new HashMap<String, Data>());
+    private final Map<String, Data> hash2 = Collections.synchronizedMap(new HashMap<String, Data>());
     private boolean isValid; // data in the cache are still valid
     private String reason; // reason why data are not valid
 
@@ -57,7 +55,9 @@ public class CacheImpl implements Cache, DataReceivedListener {
         return instance;
     }
 
-    /** Creates a new instance of CacheImpl */
+    /**
+     * Creates a new instance of CacheImpl
+     */
     private CacheImpl() {
         hash = new HashtableLinkedList<String, Data>();
         init();
@@ -68,7 +68,8 @@ public class CacheImpl implements Cache, DataReceivedListener {
         reason = null;
     }
 
-    public void dataReceived(long timestamp, String sender, String dest, String name, Object value, Data.DataSource source, Object type) {
+    public void dataReceived(long timestamp, String sender, String dest, String name, Object value, Data.DataSource source,
+          Object type) {
         // logger.debug("CacheImpl: dataReceived got " + name + " value:" + value);
         hash.put(name, new Data(timestamp, sender, dest, name, value, source, type));
     }
@@ -76,17 +77,17 @@ public class CacheImpl implements Cache, DataReceivedListener {
     public Iterator<NameValue<String, Data>> getContent() {
         return hash.getByInsertionTime();
     }
+
     public HashMap<String, Data> getCopyContent() {
         HashMap<String, Data> returnHash = new HashMap<String, Data>();
-        synchronized(hash2){
+        synchronized (hash2) {
             Iterator<NameValue<String, Data>> it = hash.getByInsertionTime();
             NameValue<String, Data> value;
             while (it.hasNext()) {
                 try {
-                    value = (NameValue<String, Data>)it.next();
+                    value = (NameValue<String, Data>) it.next();
                     returnHash.put(value.name, value.value);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     logger.error(e.getMessage());
                     return null;
                 }
@@ -104,8 +105,9 @@ public class CacheImpl implements Cache, DataReceivedListener {
             NameValue<String, Data> nameValue = i.next();
             //if (!inBlackList(nameValue.name)) {
             Data entry = nameValue.value;
-            System.out.println("name:" + nameValue.name + " value:" + entry.getValue() + " timestamp:" + (entry.getTimestamp() - t0));
-        //}
+            System.out.println(
+                  "name:" + nameValue.name + " value:" + entry.getValue() + " timestamp:" + (entry.getTimestamp() - t0));
+            //}
         }
         System.out.println("End of dump (Cache contains " + hash.size() + " entries)");
     }
@@ -152,7 +154,8 @@ public class CacheImpl implements Cache, DataReceivedListener {
     }
 
     @SuppressWarnings("unchecked")
-    public Data waitForValue(String name, Comparator comparator, Object value, long timeout) throws QTasteException, QTasteTestFailException {
+    public Data waitForValue(String name, Comparator comparator, Object value, long timeout)
+          throws QTasteException, QTasteTestFailException {
         final long beginTime_ms = System.currentTimeMillis(); // begin time
         long elapsedTime_ms = 0; // total elapsed time
         final long checkTimeInterval_ms = 100; // check every 100 ms
@@ -218,7 +221,9 @@ public class CacheImpl implements Cache, DataReceivedListener {
                         comparatorStr = ">=";
                         break;
                 }
-                throw new QTasteTestFailException("Variable " + name + " value (" + lastValueStr + ") didn't reach expected value (" + comparatorStr + " " + value + ")");
+                throw new QTasteTestFailException(
+                      "Variable " + name + " value (" + lastValueStr + ") didn't reach expected value (" + comparatorStr + " "
+                            + value + ")");
             }
             // wait
             try {
@@ -227,7 +232,8 @@ public class CacheImpl implements Cache, DataReceivedListener {
             } catch (InterruptedException e) {
                 throw new QTasteDataException("Sleep interrupted");
             }
-        } while (true);
+        }
+        while (true);
     }
 
     public Comparator getComparatorFromString(String comparatorString) throws QTasteDataException {

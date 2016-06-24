@@ -24,8 +24,9 @@ import com.qspin.qtaste.javagui.JavaGUI;
 /**
  * This interface describe all the methods usable to perform actions or control on a Java GUI application.
  * This interface is called "MBean" as methods may be used remotely using JMX.
+ *
  * @author lvboque
  */
 public interface JavaGUIMBean extends JavaGUI {
-  
+
 }

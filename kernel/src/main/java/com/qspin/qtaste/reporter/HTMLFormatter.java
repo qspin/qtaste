@@ -34,6 +34,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * HTMLFormatter is a formatter able to generate HTML reports using templates files
+ *
  * @author lvboque
  */
 public abstract class HTMLFormatter extends ReportFormatter {
@@ -41,7 +42,7 @@ public abstract class HTMLFormatter extends ReportFormatter {
     private static Logger logger = Log4jLoggerFactory.getLogger(HTMLFormatter.class);
     protected HashMap<String, String> templateContents;
 
-    public HTMLFormatter(HashMap<String, String> templates,  File reportDirectory, String reportFileName) throws IOException {
+    public HTMLFormatter(HashMap<String, String> templates, File reportDirectory, String reportFileName) throws IOException {
         super(reportDirectory, reportFileName);
         templateContents = new HashMap<String, String>();
         Iterator<String> templateNames = templates.keySet().iterator();
@@ -51,7 +52,7 @@ public abstract class HTMLFormatter extends ReportFormatter {
             templateContents.put(templateName, FileUtilities.readFileContent(templateFileName));
         }
     }
-   
+
     public void refresh() {
         try {
             File outputFile = new File(reportFile.getAbsoluteFile() + ".tmp");
@@ -65,7 +66,7 @@ public abstract class HTMLFormatter extends ReportFormatter {
             if (reportFile.exists()) {
                 reportFile.delete();
             }
-            
+
             if (!tempOutputFile.renameTo(reportFile)) {
                 logger.error("Couldn't rename HTML report file " + tempOutputFile + " into " + outputFile);
             }
@@ -75,6 +76,8 @@ public abstract class HTMLFormatter extends ReportFormatter {
     }
 
     public abstract void generateHeader();
+
     public abstract void makeBody();
+
     public abstract void generateFooter();
 }

@@ -19,19 +19,19 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import com.qspin.qtaste.testsuite.QTasteException;
-
 import javafx.scene.Node;
+
+import com.qspin.qtaste.testsuite.QTasteException;
 
 public class ComponentRawNameGetter extends ComponentCommander {
 
-	@Override
-	String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node c = getComponentByName(componentName);
-		if (c != null) {
-			return c.getId();
-		}
-		return null;
-	}
+    @Override
+    String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node c = getComponentByName(componentName);
+        if (c != null) {
+            return c.getId();
+        }
+        return null;
+    }
 
 }

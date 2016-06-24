@@ -33,6 +33,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * An abstract Agent is a JMX Agent
+ *
  * @author lvboque
  */
 public abstract class JMXAgent extends NotificationBroadcasterSupport {
@@ -41,8 +42,8 @@ public abstract class JMXAgent extends NotificationBroadcasterSupport {
     private ObjectName mbeanName = null;
     private long notifSequenceNumber = 0;
 
-    /** Initialization method for spring.
-     * 
+    /**
+     * Initialization method for spring.
      */
     public void init() {
         try {
@@ -67,6 +68,7 @@ public abstract class JMXAgent extends NotificationBroadcasterSupport {
 
     /**
      * Register the JMX agent
+     *
      * @throws java.lang.Exception
      */
     public synchronized void register() throws Exception {
@@ -93,7 +95,7 @@ public abstract class JMXAgent extends NotificationBroadcasterSupport {
 
     /**
      * Send a JMX notification of a property change event
-     * 
+     *
      * @param pEvt a property change event
      */
     public synchronized void sendNotification(PropertyChangeEvent pEvt) {
@@ -101,8 +103,8 @@ public abstract class JMXAgent extends NotificationBroadcasterSupport {
         String newValue = pEvt.getNewValue() == null ? "null" : pEvt.getNewValue().toString();
         String sourceName = pEvt.getSource().getClass().getCanonicalName();
         String message = sourceName + ":" + pEvt.getPropertyName() + " changed from " + oldValue + " to " + newValue;
-        Notification n = new AttributeChangeNotification(sourceName, notifSequenceNumber++, System.currentTimeMillis(),
-                message, pEvt.getPropertyName(), "java.lang.String", oldValue, newValue);
+        Notification n = new AttributeChangeNotification(sourceName, notifSequenceNumber++, System.currentTimeMillis(), message,
+              pEvt.getPropertyName(), "java.lang.String", oldValue, newValue);
         sendNotification(n);
         logger.trace("Sent notification: " + message);
     }

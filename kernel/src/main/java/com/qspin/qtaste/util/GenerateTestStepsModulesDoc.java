@@ -25,7 +25,6 @@ import org.apache.log4j.PropertyConfigurator;
 import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
- *
  * @author lvboque
  */
 public class GenerateTestStepsModulesDoc {
@@ -34,11 +33,10 @@ public class GenerateTestStepsModulesDoc {
 
     public static void generate(String directory) {
         logger.debug("Generating Test steps module XML doc...");
-      
+
         try {
             PythonHelper.execute(StaticConfiguration.FORMATTER_DIR + "/stepsmoduledoc_xmlformatter.py", directory);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Exception occurs executing PythonInterpreter:" + e);
         }
     }
@@ -49,7 +47,7 @@ public class GenerateTestStepsModulesDoc {
         System.exit(1);
     }
 
-    public static void main(String [] args) {
+    public static void main(String[] args) {
         // Log4j Configuration
         PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
 

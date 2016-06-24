@@ -31,9 +31,9 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  */
 public class TabGetter extends ComponentCommander {
 
-	/**
-	 * Information to get from the selected tab
-	 */
+    /**
+     * Information to get from the selected tab
+     */
     public enum InfoSelector {
         GET_INDEX,
         GET_TITLE,
@@ -42,6 +42,7 @@ public class TabGetter extends ComponentCommander {
 
     /**
      * Constructor
+     *
      * @param infoSelector information to get from the selected tab
      */
     public TabGetter(InfoSelector infoSelector) {
@@ -49,55 +50,56 @@ public class TabGetter extends ComponentCommander {
     }
 
     /**
-	 * Executes the a command on a component.
+     * Executes the a command on a component.
+     *
      * @param timeout a timeout for the command execution (not used here)
      * @param componentName name of the component to execute the command on.
      * @param data additional data (not used here)
      * @return the selected tab index, title or id, according to the specified info selector.
      * @throws QTasteException
      */
-	@Override
-	public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		
-		Component component = getComponentByName(componentName);
+    @Override
+    public String executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
 
-		// sanity checks
-		if (component == null) {
-			throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
-		}
-		
-		if (!(component instanceof JTabbedPane)) {
-			throw new QTasteTestFailException("The component named '" + componentName + "' is not a JTabbedPane");
-		}
-		
-		// get the requested value
-		JTabbedPane tabbedPane   = (JTabbedPane)component;
-		int 		currentIndex = tabbedPane.getSelectedIndex();
-		String	    result 		 = null;
-		
-		switch (mInfoSelector) {
-		case GET_INDEX:
-			result = String.valueOf(currentIndex);
-			break;
-		
-		case GET_TITLE:
-			if (currentIndex >= 0) {
-				result = tabbedPane.getTitleAt(currentIndex);
-			}
-			break;
-		
-		case GET_COMPONENT_ID:
-			if (currentIndex >= 0) {
-				result = tabbedPane.getComponentAt(currentIndex).getName();
-			}
-			break;
+        Component component = getComponentByName(componentName);
 
-		default:
-            throw new QTasteTestFailException("Bad selector identifier");
-		}
+        // sanity checks
+        if (component == null) {
+            throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
+        }
 
-		return result;
-	}
-	
+        if (!(component instanceof JTabbedPane)) {
+            throw new QTasteTestFailException("The component named '" + componentName + "' is not a JTabbedPane");
+        }
+
+        // get the requested value
+        JTabbedPane tabbedPane = (JTabbedPane) component;
+        int currentIndex = tabbedPane.getSelectedIndex();
+        String result = null;
+
+        switch (mInfoSelector) {
+            case GET_INDEX:
+                result = String.valueOf(currentIndex);
+                break;
+
+            case GET_TITLE:
+                if (currentIndex >= 0) {
+                    result = tabbedPane.getTitleAt(currentIndex);
+                }
+                break;
+
+            case GET_COMPONENT_ID:
+                if (currentIndex >= 0) {
+                    result = tabbedPane.getComponentAt(currentIndex).getName();
+                }
+                break;
+
+            default:
+                throw new QTasteTestFailException("Bad selector identifier");
+        }
+
+        return result;
+    }
+
     private InfoSelector mInfoSelector;
 }

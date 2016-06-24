@@ -25,13 +25,14 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 /**
  * MultipleInstancesTest component is providing verbs for testing the QTaste engine.
+ *
  * @author lvboque
  */
 
-public class MultipleInstancesTestImpl implements MultipleInstancesTest  {
-    
+public class MultipleInstancesTestImpl implements MultipleInstancesTest {
+
     private String instanceId;
-    
+
     public MultipleInstancesTestImpl(String id) {
         this.instanceId = id;
     }
@@ -39,15 +40,15 @@ public class MultipleInstancesTestImpl implements MultipleInstancesTest  {
     public String getInstanceId() {
         return this.instanceId;
     }
-    
+
     public void initialize() throws QTasteException {
         // nothing to do
     }
-    
+
     public void terminate() throws QTasteException {
         // nothing to do
     }
-    
+
     public void checkInstanceId(String expectedInstance) throws QTasteTestFailException {
         if (!instanceId.equals(expectedInstance)) {
             throw new QTasteTestFailException("instanceId should be equals to " + expectedInstance);

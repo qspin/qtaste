@@ -19,10 +19,10 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
-
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class TabSelector extends UpdateComponentCommander {
 
@@ -43,64 +43,60 @@ class TabSelector extends UpdateComponentCommander {
     protected void prepareActions() throws QTasteTestFailException {
 
         // sanity checks
-        if ( mData.length == 0 || mData[0] == null )
+        if (mData.length == 0 || mData[0] == null) {
             throw new QTasteTestFailException("No tab index, tab title or tab component id provided!");
-
-        switch (mSelectorIdentifier) {
-        case SELECT_BY_INDEX:
-            int tabIndex = Integer.parseInt(mData[0].toString());
-
-            if (tabIndex < -1 || tabIndex >= ((TabPane)component).getTabs().size()) {
-                throw new QTasteTestFailException("Tab index " + tabIndex + " out of bounds.");
-            }
-            mTabToSelect = ((TabPane)component).getTabs().get(tabIndex);
-            break;
-
-        case SELECT_BY_TITLE:
-        	String tabTitle = mData[0].toString();
-
-        	for (Tab t : ((TabPane)component).getTabs())
-        	{
-        		if (t.getText().equals(tabTitle))
-        		{
-        			mTabToSelect = t;
-        			break;
-        		}
-        	}
-
-            if (mTabToSelect == null) {
-                throw new QTasteTestFailException("Unable to find tab titled '" + tabTitle + "'");
-            }
-            break;
-
-        case SELECT_BY_COMPONENT_ID:
-        	String componentName = mData[0].toString();
-
-        	for (Tab t : ((TabPane)component).getTabs())
-        	{
-        		if (t.getId().equals(componentName))
-        		{
-        			mTabToSelect = t;
-        			break;
-        		}
-        	}
-
-        	if (mTabToSelect == null) {
-                throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
-            }
-            break;
-
-        default:
-            throw new QTasteTestFailException("Bad selector identifier");
         }
 
+        switch (mSelectorIdentifier) {
+            case SELECT_BY_INDEX:
+                int tabIndex = Integer.parseInt(mData[0].toString());
+
+                if (tabIndex < -1 || tabIndex >= ((TabPane) component).getTabs().size()) {
+                    throw new QTasteTestFailException("Tab index " + tabIndex + " out of bounds.");
+                }
+                mTabToSelect = ((TabPane) component).getTabs().get(tabIndex);
+                break;
+
+            case SELECT_BY_TITLE:
+                String tabTitle = mData[0].toString();
+
+                for (Tab t : ((TabPane) component).getTabs()) {
+                    if (t.getText().equals(tabTitle)) {
+                        mTabToSelect = t;
+                        break;
+                    }
+                }
+
+                if (mTabToSelect == null) {
+                    throw new QTasteTestFailException("Unable to find tab titled '" + tabTitle + "'");
+                }
+                break;
+
+            case SELECT_BY_COMPONENT_ID:
+                String componentName = mData[0].toString();
+
+                for (Tab t : ((TabPane) component).getTabs()) {
+                    if (t.getId().equals(componentName)) {
+                        mTabToSelect = t;
+                        break;
+                    }
+                }
+
+                if (mTabToSelect == null) {
+                    throw new QTasteTestFailException("Unable to find the component named '" + componentName + "'");
+                }
+                break;
+
+            default:
+                throw new QTasteTestFailException("Bad selector identifier");
+        }
 
     }
 
     @Override
     protected void doActionsInEventThread() throws QTasteTestFailException {
         if (component != null && component instanceof TabPane) {
-            ((TabPane)component).selectionModelProperty().getValue().select(mTabToSelect);
+            ((TabPane) component).selectionModelProperty().getValue().select(mTabToSelect);
         }
     }
 }

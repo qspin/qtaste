@@ -31,56 +31,51 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class TextSetter extends UpdateComponentCommander {
 
-	@Override
-	protected void doActionsInSwingThread() throws QTasteTestFailException{
-		String value = mData[0].toString();
-										
-		// Support for AWT
-		if (component instanceof TextComponent) {					
-			TextComponent t = (TextComponent) component;
-			t.setText(value);
-			forceToLooseFocus(component);						
-		}
-		// Support for Swing
-		else if (component instanceof JFormattedTextField)
-		{
-			try
-			{
-				JFormattedTextField field = ((JFormattedTextField)component);
-				field.requestFocus();
-				field.setText(value);
-				//launch an exception for invalid input
-				field.commitEdit();
-				//lose focus to format the value
-				forceToLooseFocus(component);
-			}
-			catch (ParseException e)
-			{
-				// Invalid value in field
-				//return false;
-				//TODO: Handle the case of invalid values
-			}
-		}
-		else if (component instanceof JTextComponent) {
-			JTextComponent t = (JTextComponent) component;
-			t.setText(value);
-			forceToLooseFocus(component);
-		}
-		//throw new QTasteTestFailException("JavaGUI cannot setText for such component " + c.getClass().getName());
-	}
-	
-	private void forceToLooseFocus(Component c) {
-		Container parent= c.getParent();
-		while ( parent != null && !parent.isFocusable() )
-		{
-			parent = parent.getParent();
-		}
-		if ( parent != null ) {
-			parent.requestFocus();
-		}
-	}
+    @Override
+    protected void doActionsInSwingThread() throws QTasteTestFailException {
+        String value = mData[0].toString();
 
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {}
+        // Support for AWT
+        if (component instanceof TextComponent) {
+            TextComponent t = (TextComponent) component;
+            t.setText(value);
+            forceToLooseFocus(component);
+        }
+        // Support for Swing
+        else if (component instanceof JFormattedTextField) {
+            try {
+                JFormattedTextField field = ((JFormattedTextField) component);
+                field.requestFocus();
+                field.setText(value);
+                //launch an exception for invalid input
+                field.commitEdit();
+                //lose focus to format the value
+                forceToLooseFocus(component);
+            } catch (ParseException e) {
+                // Invalid value in field
+                //return false;
+                //TODO: Handle the case of invalid values
+            }
+        } else if (component instanceof JTextComponent) {
+            JTextComponent t = (JTextComponent) component;
+            t.setText(value);
+            forceToLooseFocus(component);
+        }
+        //throw new QTasteTestFailException("JavaGUI cannot setText for such component " + c.getClass().getName());
+    }
+
+    private void forceToLooseFocus(Component c) {
+        Container parent = c.getParent();
+        while (parent != null && !parent.isFocusable()) {
+            parent = parent.getParent();
+        }
+        if (parent != null) {
+            parent.requestFocus();
+        }
+    }
+
+    @Override
+    protected void prepareActions() throws QTasteTestFailException {
+    }
 
 }

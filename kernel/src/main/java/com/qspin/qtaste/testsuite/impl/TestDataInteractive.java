@@ -35,7 +35,6 @@ import com.qspin.qtaste.testsuite.QTasteDataException;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author lvboque
  */
 @SuppressWarnings("serial")
@@ -69,13 +68,10 @@ public class TestDataInteractive extends TestDataImpl {
     public String getValue(String key) throws QTasteDataException {
         try {
             String input = null;
-            if (!hash.containsKey(key))
-            {
+            if (!hash.containsKey(key)) {
                 if (isGUIMonitored) {
-                    input = JOptionPane.showInputDialog(mParent,
-                            "Give the value of " + key + "?",
-                            "TestData value",
-                            JOptionPane.QUESTION_MESSAGE);
+                    input = JOptionPane.showInputDialog(mParent, "Give the value of " + key + "?", "TestData value",
+                          JOptionPane.QUESTION_MESSAGE);
 
                 } else {
                     System.out.println("QTaste>Give the value of " + key + ":");
@@ -85,13 +81,13 @@ public class TestDataInteractive extends TestDataImpl {
                 hash.put(key, input);
                 if (input == null) {
                     throw new QTasteDataException(key + " input value entry cancelled by user");
-                // fill hashFiles if necessary
+                    // fill hashFiles if necessary
                 }
                 loadFileIfAny();
-            }
-            else
+            } else {
                 input = hash.get(key);
-            
+            }
+
             return input;
         } catch (Exception ex) {
             logger.error(ex);

@@ -23,14 +23,14 @@ import java.util.Collection;
 
 /**
  * Strings utilities.
- * 
+ *
  * @author David Ergo
  */
 public class Strings {
 
     /**
      * Joins strings or objects string representations using given separator.
-     * 
+     *
      * @param objects an array of objects to convert to string and join
      * @param separator a string to use a separator
      * @return string containing strings joined using separator
@@ -52,14 +52,14 @@ public class Strings {
 
     /**
      * Joins strings or objects string representations using given separator.
-     * 
+     *
      * @param objects a collection of objects to convert to string and join
      * @param separator a string to use a separator
      * @return string containing strings joined using separator
      */
     public static String join(Collection<?> objects, String separator) {
         String result = null;
-        
+
         if (objects.size() > 0) {
             for (Object object : objects) {
                 if (result == null) {
@@ -77,7 +77,7 @@ public class Strings {
 
     /**
      * Converts a string to a null-terminated fixed size byte array.
-     * 
+     *
      * @param s string to convert
      * @param length size of the byte array to return
      * @return byte array of specified length containing the string s null-terminated
@@ -94,7 +94,7 @@ public class Strings {
 
     /**
      * Converts a null-terminated byte array into a string.
-     * 
+     *
      * @param array byte array containing a null-terminated string
      * @return string from array
      */

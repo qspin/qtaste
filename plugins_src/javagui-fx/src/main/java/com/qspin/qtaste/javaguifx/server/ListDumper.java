@@ -24,62 +24,53 @@ import java.awt.Label;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import com.qspin.qtaste.testsuite.QTasteException;
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
-
 import javafx.scene.Node;
 
+import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
  * ListDumper is responsible to return the content of a List.
- *
  */
 final class ListDumper extends ComponentCommander {
 
-	@Override
-	String [] executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node c = getComponentByName(componentName);
-		List<String> foundItems = new ArrayList<String>();
-//		if ( c instanceof JList )
-//		{
-//			JList list = (JList) c;
-//			ListCellRenderer renderer = list.getCellRenderer();
-//			for (int i = 0; i < list.getModel().getSize(); i++) {
-//			        foundItems.add(getItemText(list.getModel().getElementAt(i), renderer));
-//			}
-//			return foundItems.toArray(new String []{});
-//		} else if (c instanceof JComboBox){
-//			JComboBox combo = (JComboBox) c;
-//			ListCellRenderer renderer = combo.getRenderer();
-//			for (int i = 0; i < combo.getItemCount(); i++) {
-//				foundItems.add(getItemText(combo.getModel().getElementAt(i), renderer));
-//			}
-			return foundItems.toArray(new String []{});
-//		} else {
-//			throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JList or JComboBox");
-//		}
-	}
-	protected String getItemText(Object item, ListCellRenderer renderer)
-	{
-		Component c = renderer.getListCellRendererComponent(new JList(), item, 0, false, false);
-		if ( c instanceof Label )
-		{
-			return ((Label)c).getText();
-		}
-		else if ( c instanceof JLabel )
-		{
-			return ((JLabel)c).getText();
-		}
-		else
-		{
-			LOGGER.warn("Unknown label type : " + c.getClass());
-			return item.toString();
-		}
-	}
+    @Override
+    String[] executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node c = getComponentByName(componentName);
+        List<String> foundItems = new ArrayList<String>();
+        //		if ( c instanceof JList )
+        //		{
+        //			JList list = (JList) c;
+        //			ListCellRenderer renderer = list.getCellRenderer();
+        //			for (int i = 0; i < list.getModel().getSize(); i++) {
+        //			        foundItems.add(getItemText(list.getModel().getElementAt(i), renderer));
+        //			}
+        //			return foundItems.toArray(new String []{});
+        //		} else if (c instanceof JComboBox){
+        //			JComboBox combo = (JComboBox) c;
+        //			ListCellRenderer renderer = combo.getRenderer();
+        //			for (int i = 0; i < combo.getItemCount(); i++) {
+        //				foundItems.add(getItemText(combo.getModel().getElementAt(i), renderer));
+        //			}
+        return foundItems.toArray(new String[] {});
+        //		} else {
+        //			throw new QTasteTestFailException("The component \"" + componentName + "\" is not a JList or JComboBox");
+        //		}
+    }
+
+    protected String getItemText(Object item, ListCellRenderer renderer) {
+        Component c = renderer.getListCellRendererComponent(new JList(), item, 0, false, false);
+        if (c instanceof Label) {
+            return ((Label) c).getText();
+        } else if (c instanceof JLabel) {
+            return ((JLabel) c).getText();
+        } else {
+            LOGGER.warn("Unknown label type : " + c.getClass());
+            return item.toString();
+        }
+    }
 
 }

@@ -39,16 +39,16 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -90,7 +90,6 @@ import com.qspin.qtaste.testsuite.impl.TestDataImpl;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
@@ -155,16 +154,16 @@ public class TestDataEditor extends JPanel {
         String path = csvFile.getParent();
         BufferedWriter output = null;
 
-		// if the table is being edited, validate the modification before saving data
-		if (m_TestDataTable.isEditing()) {
-			m_TestDataTable.getCellEditor().stopCellEditing();
-		}
+        // if the table is being edited, validate the modification before saving data
+        if (m_TestDataTable.isEditing()) {
+            m_TestDataTable.getCellEditor().stopCellEditing();
+        }
 
-		// save test data
+        // save test data
         try {
             String outputFile = path + File.separator + StaticConfiguration.TEST_DATA_FILENAME;
 
-            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),"UTF-8"));
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
 
             // retrieve the header
             for (int col = 1; col < colCount; col++) {
@@ -180,11 +179,11 @@ public class TestDataEditor extends JPanel {
                         output.append(';');
                     }
                     int columnIndex = m_TestDataTable.getColumnModel().getColumn(col).getModelIndex();
-                    if (m_TestDataModel.getValueAt(row, columnIndex)==null)
-                    	output.append("");
-                    else
-                    	output.append(m_TestDataModel.getValueAt(row, columnIndex).toString());
-
+                    if (m_TestDataModel.getValueAt(row, columnIndex) == null) {
+                        output.append("");
+                    } else {
+                        output.append(m_TestDataModel.getValueAt(row, columnIndex).toString());
+                    }
 
                 }
                 output.append('\n');
@@ -193,12 +192,13 @@ public class TestDataEditor extends JPanel {
             setModified(false);
         } catch (IOException ex) {
             logger.error(ex.getMessage());
-        //
+            //
         } finally {
             try {
                 setModified(false);
-                if (output!=null)
-                	output.close();
+                if (output != null) {
+                    output.close();
+                }
             } catch (IOException ex) {
                 logger.error(ex.getMessage());
             }
@@ -214,7 +214,7 @@ public class TestDataEditor extends JPanel {
         loadCSVFile(currentCSVFile);
         setModified(false);
     }
-    
+
     public void loadCSVFile(String fileName) {
         try {
             m_TestDataModel.removeTableModelListener(tableListener);
@@ -258,7 +258,7 @@ public class TestDataEditor extends JPanel {
     }
 
     public void setFileName(String fileName) {
-    	currentCSVFile = fileName;
+        currentCSVFile = fileName;
     }
 
     public void setTestData(TestData data) {
@@ -310,13 +310,13 @@ public class TestDataEditor extends JPanel {
                 m_TestData.setValue(header, header);
             }
             m_TestDataModel.addColumn(header);
-            TableColumn hcol = new TableColumn(m_TestDataModel.getColumnCount()-1);
+            TableColumn hcol = new TableColumn(m_TestDataModel.getColumnCount() - 1);
             hcol.setHeaderRenderer(new MyTableHeaderRenderer());
             hcol.setCellEditor(new TestDataTableCellEditor());
             m_TestDataTable.addColumn(hcol);
             computeColumnWidths();
             setModified(true);
-        // now add the needed rows
+            // now add the needed rows
 
         } catch (QTasteDataException ex) {
             logger.error(ex.getMessage());
@@ -334,10 +334,10 @@ public class TestDataEditor extends JPanel {
                 Point p = e.getPoint();
                 int rowIndex = rowAtPoint(p);
                 int colIndex = columnAtPoint(p);
-				if (colIndex < 0) {
-					return null;
-				}
-				return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
+                if (colIndex < 0) {
+                    return null;
+                }
+                return convertObjectToToolTip(getValueAt(rowIndex, colIndex));
             }
 
             @Override
@@ -347,10 +347,9 @@ public class TestDataEditor extends JPanel {
                         java.awt.Point p = e.getPoint();
                         int index = columnModel.getColumnIndexAtX(p.x);
                         if (index < 0) {
-                        	return null;
+                            return null;
                         }
-                        int realIndex =
-                                columnModel.getColumn(index).getModelIndex();
+                        int realIndex = columnModel.getColumn(index).getModelIndex();
                         return m_TestDataTable.getColumnName(realIndex);
                     }
                 };
@@ -364,30 +363,24 @@ public class TestDataEditor extends JPanel {
 
             // overwrite cell content when typing on a selected cell
             @Override
-            public Component prepareEditor(TableCellEditor editor, int row, int column)
-            {
-               Component c = super.prepareEditor(editor, row, column);
+            public Component prepareEditor(TableCellEditor editor, int row, int column) {
+                Component c = super.prepareEditor(editor, row, column);
 
-               if (c instanceof JTextComponent)
-               {
-                  ((JTextField) c).selectAll();
-               }
+                if (c instanceof JTextComponent) {
+                    ((JTextField) c).selectAll();
+                }
 
-               return c;
+                return c;
             }
 
             // select entire rows when selecting first column (row id)
             @Override
-            public void columnSelectionChanged(ListSelectionEvent e)
-            {
-               if (e.getFirstIndex() == 0 && e.getValueIsAdjusting())
-               {
-                  setColumnSelectionInterval(1, getColumnCount() - 1);
-               }
-               else
-               {
-                  super.columnSelectionChanged(e);
-               }
+            public void columnSelectionChanged(ListSelectionEvent e) {
+                if (e.getFirstIndex() == 0 && e.getValueIsAdjusting()) {
+                    setColumnSelectionInterval(1, getColumnCount() - 1);
+                } else {
+                    super.columnSelectionChanged(e);
+                }
             }
         };
         m_TestDataTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -420,8 +413,7 @@ public class TestDataEditor extends JPanel {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     // if current row is the last one
-                    if (m_TestDataTable.getSelectedRow() ==
-                            m_TestDataTable.getRowCount() - 1) {
+                    if (m_TestDataTable.getSelectedRow() == m_TestDataTable.getRowCount() - 1) {
                         addNewRow();
                     }
                 }
@@ -429,13 +421,12 @@ public class TestDataEditor extends JPanel {
                     save();
                 }
                 if ((e.getKeyCode() == KeyEvent.VK_C) && (e.isControlDown())) {
-                   copySelectionToClipboard();
+                    copySelectionToClipboard();
                 }
                 if ((e.getKeyCode() == KeyEvent.VK_V) && (e.isControlDown())) {
-                   if (m_TestDataTable.getSelectedColumn() != 0)
-                   {
-                      pasteSelectionFromClipboard();
-                   }
+                    if (m_TestDataTable.getSelectedColumn() != 0) {
+                        pasteSelectionFromClipboard();
+                    }
                 }
             }
         });
@@ -486,60 +477,48 @@ public class TestDataEditor extends JPanel {
         return currentCSVFile;
     }
 
-    private void copySelectionToClipboard()
-    {
-       StringBuffer stringBuffer = new StringBuffer();
-       int[] selectedRows = m_TestDataTable.getSelectedRows();
-       int[] selectedCols = m_TestDataTable.getSelectedColumns();
-       for (int i=0; i < selectedRows.length; i++)
-       {
-          for (int j=0; j < selectedCols.length; j++)
-          {
-             stringBuffer.append(m_TestDataTable.getValueAt(selectedRows[i],selectedCols[j]));
-             if (j < selectedCols.length-1)
-             {
-                stringBuffer.append("\t");
-             }
-          }
-          stringBuffer.append("\n");
-       }
-       StringSelection stringSelection  = new StringSelection(stringBuffer.toString());
-       m_systemClipboard.setContents(stringSelection, stringSelection);
-    }
-
-    private void pasteSelectionFromClipboard()
-    {
-       int startRow = (m_TestDataTable.getSelectedRows())[0];
-       int startCol = (m_TestDataTable.getSelectedColumns())[0];
-       try
-       {
-          String clipboardContent= (String)(m_systemClipboard.getContents(this).getTransferData(DataFlavor.stringFlavor));
-          StringTokenizer tokenizerRow = new StringTokenizer(clipboardContent, "\n");
-          for (int i=0; tokenizerRow.hasMoreTokens(); i++)
-          {
-             String rowString=tokenizerRow.nextToken();
-             StringTokenizer tokenizerTab = new StringTokenizer(rowString, "\t");
-             for (int j=0; tokenizerTab.hasMoreTokens(); j++)
-             {
-                String value = tokenizerTab.nextToken();
-                int row = startRow + i;
-                int col = startCol + j;
-                // add new row if necessary
-                if (row == m_TestDataTable.getRowCount())
-                {
-                   addNewRow();
-                }
-                if (col < m_TestDataTable.getColumnCount())
-                {
-                   m_TestDataTable.setValueAt(value, row, col);
+    private void copySelectionToClipboard() {
+        StringBuffer stringBuffer = new StringBuffer();
+        int[] selectedRows = m_TestDataTable.getSelectedRows();
+        int[] selectedCols = m_TestDataTable.getSelectedColumns();
+        for (int i = 0; i < selectedRows.length; i++) {
+            for (int j = 0; j < selectedCols.length; j++) {
+                stringBuffer.append(m_TestDataTable.getValueAt(selectedRows[i], selectedCols[j]));
+                if (j < selectedCols.length - 1) {
+                    stringBuffer.append("\t");
                 }
             }
-         }
-      }
-      catch(Exception e)
-      {
-         logger.warn("Error while pasting clipboard content into test data editor", e);
-      }
+            stringBuffer.append("\n");
+        }
+        StringSelection stringSelection = new StringSelection(stringBuffer.toString());
+        m_systemClipboard.setContents(stringSelection, stringSelection);
+    }
+
+    private void pasteSelectionFromClipboard() {
+        int startRow = (m_TestDataTable.getSelectedRows())[0];
+        int startCol = (m_TestDataTable.getSelectedColumns())[0];
+        try {
+            String clipboardContent = (String) (m_systemClipboard.getContents(this).getTransferData(DataFlavor.stringFlavor));
+            StringTokenizer tokenizerRow = new StringTokenizer(clipboardContent, "\n");
+            for (int i = 0; tokenizerRow.hasMoreTokens(); i++) {
+                String rowString = tokenizerRow.nextToken();
+                StringTokenizer tokenizerTab = new StringTokenizer(rowString, "\t");
+                for (int j = 0; tokenizerTab.hasMoreTokens(); j++) {
+                    String value = tokenizerTab.nextToken();
+                    int row = startRow + i;
+                    int col = startCol + j;
+                    // add new row if necessary
+                    if (row == m_TestDataTable.getRowCount()) {
+                        addNewRow();
+                    }
+                    if (col < m_TestDataTable.getColumnCount()) {
+                        m_TestDataTable.setValueAt(value, row, col);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Error while pasting clipboard content into test data editor", e);
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -550,12 +529,13 @@ public class TestDataEditor extends JPanel {
         // This method is called each time a column header
         // using this renderer needs to be rendered.
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int
+              row, int column) {
             // 'value' is column header value of column 'vColIndex'
             // rowIndex is always -1
             // isSelected is always false
             // hasFocus is always false
-        	setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+            setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             // Configure the component with the specified value
             setText(value.toString());
 
@@ -600,11 +580,11 @@ public class TestDataEditor extends JPanel {
                     // force selection of clicked cell
                     clickedRow = table.rowAtPoint(e.getPoint());
                     if (clickedRow != -1) {
-                    	table.setRowSelectionInterval(clickedRow, clickedRow);
+                        table.setRowSelectionInterval(clickedRow, clickedRow);
                     }
                     clickedColumn = table.columnAtPoint(e.getPoint());
                     if (clickedColumn != -1) {
-                    	table.setColumnSelectionInterval(clickedColumn, clickedColumn);
+                        table.setColumnSelectionInterval(clickedColumn, clickedColumn);
                     }
                 }
 
@@ -626,7 +606,7 @@ public class TestDataEditor extends JPanel {
                         menu.add(new RemoveRowAction());
                     }
                     menu.add(new SaveAction());
-    				menu.add(new ReloadAction());
+                    menu.add(new ReloadAction());
                 }
                 Point point = e.getPoint();
                 menu.show(e.getComponent(), point.x, point.y);
@@ -651,7 +631,7 @@ public class TestDataEditor extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-        	int selectedRow = m_TestDataTable.getSelectedRow();
+            int selectedRow = m_TestDataTable.getSelectedRow();
             if (selectedRow == -1) {
                 return;
             }
@@ -673,14 +653,14 @@ public class TestDataEditor extends JPanel {
 
     class InsertRowAction extends AbstractAction {
 
-       public InsertRowAction() {
-           super("Insert row");
-       }
+        public InsertRowAction() {
+            super("Insert row");
+        }
 
-       public void actionPerformed(ActionEvent e) {
-           insertNewRow();
-       }
-   }
+        public void actionPerformed(ActionEvent e) {
+            insertNewRow();
+        }
+    }
 
     class DuplicateRowAction extends AbstractAction {
 
@@ -689,7 +669,7 @@ public class TestDataEditor extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-        	int selectedRow = m_TestDataTable.getSelectedRow();
+            int selectedRow = m_TestDataTable.getSelectedRow();
             if (selectedRow == -1) {
                 return;
             }
@@ -708,12 +688,10 @@ public class TestDataEditor extends JPanel {
         }
 
         @SuppressWarnings("unchecked")
-		public void actionPerformed(ActionEvent e) {
-        	String defaultName = (String)m_TestDataTable.getColumnModel().getColumn(m_ColIndex).getHeaderValue();
-            String varName = (String) JOptionPane.showInputDialog(null,
-                    "Give the new name of the variable '" + m_ColName + "' ?",
-                    "TestData name",
-                    JOptionPane.QUESTION_MESSAGE, null, null, defaultName);
+        public void actionPerformed(ActionEvent e) {
+            String defaultName = (String) m_TestDataTable.getColumnModel().getColumn(m_ColIndex).getHeaderValue();
+            String varName = (String) JOptionPane.showInputDialog(null, "Give the new name of the variable '" + m_ColName + "' ?",
+                  "TestData name", JOptionPane.QUESTION_MESSAGE, null, null, defaultName);
             if (varName == null) {
                 return;
             }
@@ -721,7 +699,7 @@ public class TestDataEditor extends JPanel {
             m_TestDataTable.getColumnModel().getColumn(m_ColIndex).setHeaderValue(varName);
             m_TestDataTable.getTableHeader().repaint();
             //computeColumnWidths();
-            Vector<String> v = (Vector<String>)m_TestDataModel.getColumnIdentifiers();
+            Vector<String> v = (Vector<String>) m_TestDataModel.getColumnIdentifiers();
             int columnIndex = m_TestDataTable.getColumnModel().getColumn(m_ColIndex).getModelIndex();
             v.set(columnIndex, varName);
             m_TestDataModel.setColumnIdentifiers(v);
@@ -740,10 +718,8 @@ public class TestDataEditor extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             //if (m_TestData== null) return;
-            String varName = JOptionPane.showInputDialog(null,
-                    "Give the name of the new variable ?",
-                    "TestData name",
-                    JOptionPane.QUESTION_MESSAGE);
+            String varName = JOptionPane.showInputDialog(null, "Give the name of the new variable ?", "TestData name",
+                  JOptionPane.QUESTION_MESSAGE);
             if (varName == null) {
                 return;
             }
@@ -756,33 +732,30 @@ public class TestDataEditor extends JPanel {
         }
     }
 
-	/**
-	 * Reload the current data file (i.e revert unsaved modifications)
-	 */
-	class ReloadAction extends AbstractAction {
-		
-		public ReloadAction() {
-			super("Revert unsaved modifications");
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (JOptionPane.showConfirmDialog(null, 
-										  "Do you want to revert unsaved modifications ?",
-										  "Revert unsaved modifications",
-										  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				reload();
-			}
-		}
+    /**
+     * Reload the current data file (i.e revert unsaved modifications)
+     */
+    class ReloadAction extends AbstractAction {
 
-		@Override
-		public boolean isEnabled() {
-			return isModified();
-		}
-	}
+        public ReloadAction() {
+            super("Revert unsaved modifications");
+        }
 
-    
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (JOptionPane.showConfirmDialog(null, "Do you want to revert unsaved modifications ?",
+                  "Revert unsaved modifications", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                reload();
+            }
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return isModified();
+        }
+    }
+
     class SaveAction extends AbstractAction {
 
         public SaveAction() {
@@ -836,7 +809,9 @@ public class TestDataEditor extends JPanel {
                                 possibleValues[row - 1] = row + ": " + datas.get("COMMENT");
                                 row++;
                             }
-                            String selectedValue = (String) JOptionPane.showInputDialog(TestDataEditor.this, "Select test data row to load:", "Test data row selection", JOptionPane.QUESTION_MESSAGE, null, possibleValues, possibleValues[0]);
+                            String selectedValue = (String) JOptionPane.showInputDialog(TestDataEditor.this,
+                                  "Select test data row to load:", "Test data row selection", JOptionPane.QUESTION_MESSAGE, null,
+                                  possibleValues, possibleValues[0]);
                             if (selectedValue == null) {
                                 return;
                             }
@@ -848,7 +823,8 @@ public class TestDataEditor extends JPanel {
                         csvData.remove("COMMENT");
                         setTestData(new TestDataImpl(1, csvData));
                     } else {
-                        JOptionPane.showMessageDialog(TestDataEditor.this, "No test data found in file!", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(TestDataEditor.this, "No test data found in file!", "Error",
+                              JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException ex) {
                     logger.error(ex.getMessage());
@@ -883,28 +859,27 @@ public class TestDataEditor extends JPanel {
         }
     }
 
-
     private void addNewRow() {
-    	addNewRow(-1);
+        addNewRow(-1);
     }
 
     private void insertNewRow() {
-       int rowIndex = m_TestDataTable.getSelectedRow();
-       if (rowIndex == -1) {
-           return;
-       }
-       Object[] dataValues = new String[m_TestDataModel.getColumnCount()];
-       dataValues[0] = Integer.toString(rowIndex + 1);
-       for (int i = 1; i < dataValues.length; i++) {
-           dataValues[i] = "";
-       }
-       m_TestDataModel.insertRow(rowIndex, dataValues);
-       m_TestDataTable.setRowSelectionInterval(rowIndex, rowIndex);
-       for (int row = rowIndex + 1; row < m_TestDataModel.getRowCount(); row++) {
-          m_TestDataModel.setValueAt(Integer.toString(row + 1), row, 0);
-       }
-       setModified(true);
-     }
+        int rowIndex = m_TestDataTable.getSelectedRow();
+        if (rowIndex == -1) {
+            return;
+        }
+        Object[] dataValues = new String[m_TestDataModel.getColumnCount()];
+        dataValues[0] = Integer.toString(rowIndex + 1);
+        for (int i = 1; i < dataValues.length; i++) {
+            dataValues[i] = "";
+        }
+        m_TestDataModel.insertRow(rowIndex, dataValues);
+        m_TestDataTable.setRowSelectionInterval(rowIndex, rowIndex);
+        for (int row = rowIndex + 1; row < m_TestDataModel.getRowCount(); row++) {
+            m_TestDataModel.setValueAt(Integer.toString(row + 1), row, 0);
+        }
+        setModified(true);
+    }
 
     private void addNewRow(int rowToCopyIndex) {
         Object[] dataValues = new String[m_TestDataModel.getColumnCount()];
@@ -934,8 +909,8 @@ public class TestDataEditor extends JPanel {
         for (int i = 0; i < cols; i++) {
             String columnName = m_TestDataTable.getColumnName(i);
             w[i] = (int) m_TestDataTable.getColumn(columnName).getHeaderRenderer().
-                    getTableCellRendererComponent(m_TestDataTable, columnName, false, false, -1, i).
-                    getPreferredSize().getWidth() + hspace;
+                  getTableCellRendererComponent(m_TestDataTable, columnName, false, false, -1, i).
+                  getPreferredSize().getWidth() + hspace;
         }
 
         //check if cell values fit in their cells and if not
@@ -946,8 +921,8 @@ public class TestDataEditor extends JPanel {
                 int width = 0;
                 if (o != null) {
                     width = (int) m_TestDataTable.getCellRenderer(i, j).
-                            getTableCellRendererComponent(m_TestDataTable, o, false, false, i, j).
-                            getPreferredSize().getWidth() + hspace;
+                          getTableCellRendererComponent(m_TestDataTable, o, false, false, i, j).
+                          getPreferredSize().getWidth() + hspace;
                 }
                 if (w[j] < width) {
                     w[j] = width;
@@ -962,7 +937,7 @@ public class TestDataEditor extends JPanel {
             colModel.getColumn(i).setPreferredWidth(w[i]);
         }
     }
-// Removes the specified column from the table and the associated
+    // Removes the specified column from the table and the associated
     // call data from the table model.
 
     public void removeColumnAndData(JTable table, int vColIndex) {
@@ -988,7 +963,7 @@ public class TestDataEditor extends JPanel {
         // Correct the model indices in the TableColumn objects
         // by decrementing those indices that follow the deleted column
         Enumeration<TableColumn> enumCols = table.getColumnModel().getColumns();
-        for (; enumCols.hasMoreElements();) {
+        for (; enumCols.hasMoreElements(); ) {
             TableColumn c = enumCols.nextElement();
             if (c.getModelIndex() >= columnModelIndex) {
                 c.setModelIndex(c.getModelIndex() - 1);
@@ -997,126 +972,113 @@ public class TestDataEditor extends JPanel {
         model.fireTableStructureChanged();
     }
 
+    public class TestDataTableCellEditor extends DefaultCellEditor implements FocusListener, KeyListener {
 
-        public class TestDataTableCellEditor extends DefaultCellEditor  implements FocusListener,KeyListener {
+        public TestDataTableCellEditor() {
+            super(new JTextField());
 
+            getComponent().addFocusListener(this);
+            getComponent().addKeyListener(this);
+        }
 
-            public TestDataTableCellEditor()
-            {
-                 super( new JTextField() );
+        public void focusGained(FocusEvent e) {
+        }
 
-                 getComponent().addFocusListener( this );
-                 getComponent().addKeyListener(this);
+        public void focusLost(FocusEvent e) {
+        }
+
+        protected void fireEditingStopped() {
+            if (isModified) {
+                super.fireEditingStopped();
+            } else {
+                super.fireEditingCanceled();
             }
-            public void focusGained( FocusEvent e )
-            {
-            }
-            public void focusLost( FocusEvent e )
-            {
-            }
-
-            protected void fireEditingStopped()
-            {
-               if (isModified)
-               {
-                  super.fireEditingStopped();
-               }
-               else
-               {
-                  super.fireEditingCanceled();
-               }
-            }
+        }
 
         public void keyTyped(KeyEvent e) {
 
         }
 
         public void keyPressed(KeyEvent e) {
-                        if (e.getKeyCode() == KeyEvent.VK_UP) {
-                            // check if previous line is empty
-                            return;
-                        }
-                        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                            // if current row is the last one
-                            if (m_TestDataTable.getSelectedRow() ==
-                                    m_TestDataTable.getRowCount() - 1) {
-                                addNewRow();
-                            }
-                            return;
-                        }
-                        if (e.isControlDown()) {
-                           if (e.getKeyCode() == KeyEvent.VK_S) {
-                               // validate the cell
-                               stopCellEditing();
-                               save();
-                               return;
-                           } else if (e.getKeyCode() == KeyEvent.VK_C) {
-                              // copy
-                              // don't set modified
-                              return;
-                           }
-                        }
-                        if ((e.getKeyCode() != KeyEvent.VK_TAB) &&
-                            (e.getKeyCode() != KeyEvent.VK_CONTROL) &&
-                            (e.getKeyCode() != KeyEvent.VK_ALT) &&
-                            (e.getKeyCode() != KeyEvent.VK_ALT_GRAPH) &&
-                            (e.getKeyCode() != KeyEvent.VK_SHIFT) &&
-                            (e.getKeyCode() != KeyEvent.VK_CAPS_LOCK) &&
-                            (e.getKeyCode() != KeyEvent.VK_ENTER) &&
-                            (e.getKeyCode() != KeyEvent.VK_LEFT) &&
-                            (e.getKeyCode() != KeyEvent.VK_RIGHT) &&
-                            (e.getKeyCode() != KeyEvent.VK_HOME) &&
-                            (e.getKeyCode() != KeyEvent.VK_END) &&
-                            (e.getKeyCode() != KeyEvent.VK_PAGE_UP) &&
-                            (e.getKeyCode() != KeyEvent.VK_PAGE_DOWN) &&
-                            (e.getKeyCode() != KeyEvent.VK_NUM_LOCK) &&
-                            (e.getKeyCode() != KeyEvent.VK_SCROLL_LOCK) &&
-                            (e.getKeyCode() != KeyEvent.VK_PRINTSCREEN) &&
-                            (e.getKeyCode() != KeyEvent.VK_PAUSE) &&
-                            (e.getKeyCode() != KeyEvent.VK_ESCAPE)
-                            )
-                        {
-                            setModified(true);
-                        }
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                // check if previous line is empty
+                return;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                // if current row is the last one
+                if (m_TestDataTable.getSelectedRow() == m_TestDataTable.getRowCount() - 1) {
+                    addNewRow();
+                }
+                return;
+            }
+            if (e.isControlDown()) {
+                if (e.getKeyCode() == KeyEvent.VK_S) {
+                    // validate the cell
+                    stopCellEditing();
+                    save();
+                    return;
+                } else if (e.getKeyCode() == KeyEvent.VK_C) {
+                    // copy
+                    // don't set modified
+                    return;
+                }
+            }
+            if ((e.getKeyCode() != KeyEvent.VK_TAB) &&
+                  (e.getKeyCode() != KeyEvent.VK_CONTROL) &&
+                  (e.getKeyCode() != KeyEvent.VK_ALT) &&
+                  (e.getKeyCode() != KeyEvent.VK_ALT_GRAPH) &&
+                  (e.getKeyCode() != KeyEvent.VK_SHIFT) &&
+                  (e.getKeyCode() != KeyEvent.VK_CAPS_LOCK) &&
+                  (e.getKeyCode() != KeyEvent.VK_ENTER) &&
+                  (e.getKeyCode() != KeyEvent.VK_LEFT) &&
+                  (e.getKeyCode() != KeyEvent.VK_RIGHT) &&
+                  (e.getKeyCode() != KeyEvent.VK_HOME) &&
+                  (e.getKeyCode() != KeyEvent.VK_END) &&
+                  (e.getKeyCode() != KeyEvent.VK_PAGE_UP) &&
+                  (e.getKeyCode() != KeyEvent.VK_PAGE_DOWN) &&
+                  (e.getKeyCode() != KeyEvent.VK_NUM_LOCK) &&
+                  (e.getKeyCode() != KeyEvent.VK_SCROLL_LOCK) &&
+                  (e.getKeyCode() != KeyEvent.VK_PRINTSCREEN) &&
+                  (e.getKeyCode() != KeyEvent.VK_PAUSE) &&
+                  (e.getKeyCode() != KeyEvent.VK_ESCAPE)) {
+                setModified(true);
+            }
         }
 
         public void keyReleased(KeyEvent e) {
-//            throw new UnsupportedOperationException("Not supported yet.");
+            //            throw new UnsupportedOperationException("Not supported yet.");
         }
-
-
 
     }
 
     public class MyTableColumnModelListener implements TableColumnModelListener {
 
-		@Override
-		public void columnAdded(TableColumnModelEvent e) {
-		}
+        @Override
+        public void columnAdded(TableColumnModelEvent e) {
+        }
 
-		@Override
-		public void columnMarginChanged(ChangeEvent e) {
-			// TODO Auto-generated method stub
+        @Override
+        public void columnMarginChanged(ChangeEvent e) {
+            // TODO Auto-generated method stub
 
-		}
+        }
 
-		@Override
-		public void columnMoved(TableColumnModelEvent e) {
-		   if (e.getFromIndex() != e.getToIndex())
-		   {
-			   setModified(true);
-		   }
-		}
+        @Override
+        public void columnMoved(TableColumnModelEvent e) {
+            if (e.getFromIndex() != e.getToIndex()) {
+                setModified(true);
+            }
+        }
 
-		@Override
-		public void columnRemoved(TableColumnModelEvent e) {
-		}
+        @Override
+        public void columnRemoved(TableColumnModelEvent e) {
+        }
 
-		@Override
-		public void columnSelectionChanged(ListSelectionEvent e) {
-			// TODO Auto-generated method stub
+        @Override
+        public void columnSelectionChanged(ListSelectionEvent e) {
+            // TODO Auto-generated method stub
 
-		}
+        }
 
     }
 }

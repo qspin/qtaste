@@ -19,46 +19,38 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import java.awt.Window;
+import javafx.scene.Node;
 
 import com.qspin.qtaste.testsuite.QTasteException;
 
-import javafx.scene.Node;
-
 public class ComponentVisibilityChecker extends ComponentCommander {
 
-	@Override
-	Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node c = getComponentByName(componentName);
-		Node currentComponent = c;
-		if ( c == null )
-		{
-			LOGGER.debug("checkComponentIsVisible on a null component");
-			return false;
-		}
-		while (currentComponent != null )
-		{
-			boolean lastRun = currentComponent.getParent() == null; //Dialog can have another window as parent.
+    @Override
+    Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node c = getComponentByName(componentName);
+        Node currentComponent = c;
+        if (c == null) {
+            LOGGER.debug("checkComponentIsVisible on a null component");
+            return false;
+        }
+        while (currentComponent != null) {
+            boolean lastRun = currentComponent.getParent() == null; //Dialog can have another window as parent.
 
-			if ( !currentComponent.isVisible() )
-			{
-				if ( c == currentComponent )
-				{
-					LOGGER.debug("The component " + c.getId() + " is not visible.");
-				}
-				else
-				{
-					LOGGER.debug("The parent (" + currentComponent.getId() + ") of the component " + c.getId() + " is not visible.");
-				}
-				return false;
-			}
-			if ( lastRun )
-			{
-				break;
-			}
-			else
-				currentComponent = currentComponent.getParent();
-		}
-		return true;
-	}
+            if (!currentComponent.isVisible()) {
+                if (c == currentComponent) {
+                    LOGGER.debug("The component " + c.getId() + " is not visible.");
+                } else {
+                    LOGGER.debug(
+                          "The parent (" + currentComponent.getId() + ") of the component " + c.getId() + " is not visible.");
+                }
+                return false;
+            }
+            if (lastRun) {
+                break;
+            } else {
+                currentComponent = currentComponent.getParent();
+            }
+        }
+        return true;
+    }
 }

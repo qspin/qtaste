@@ -19,18 +19,21 @@
 
 package com.qspin.qtaste.testapi.impl.demo;
 
+import java.sql.ResultSet;
+
+import org.apache.log4j.Logger;
+
+import com.qspin.qtaste.config.TestBedConfiguration;
+import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.tcom.db.JDBCClient;
 import com.qspin.qtaste.tcom.db.impl.JDBCClientImpl;
 import com.qspin.qtaste.testapi.api.Bugzilla;
-import com.qspin.qtaste.config.TestBedConfiguration;
-import com.qspin.qtaste.kernel.testapi.TestAPIImpl;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
-import java.sql.ResultSet;
-import org.apache.log4j.Logger;
 
 /**
  * Implementation of the Bugzilla Test API
+ *
  * @author Laurent Vanbboquestal
  */
 public class BugzillaImpl implements Bugzilla {
@@ -58,9 +61,9 @@ public class BugzillaImpl implements Bugzilla {
 
         jdbcClient.open();
         ResultSet result = jdbcClient.executeQuery("select profiles.login_name, bugs.short_desc, longdescs.thetext " +
-                "from profiles, bugs, longdescs " +
-                "where bugs.bug_id = " + defectId + " and profiles.userid = bugs.assigned_to and longdescs.bug_id = " + defectId);
-       
+              "from profiles, bugs, longdescs " +
+              "where bugs.bug_id = " + defectId + " and profiles.userid = bugs.assigned_to and longdescs.bug_id = " + defectId);
+
         while (result.next()) {
             String shortDescDB = result.getString("bugs.short_desc");
             logger.info("shortDesc:" + shortDescDB);
@@ -69,10 +72,12 @@ public class BugzillaImpl implements Bugzilla {
             String loginNameDB = result.getString("profiles.login_name");
             logger.info("login_name:" + loginNameDB);
             if (!shortDescDB.equals(shortDescription)) {
-                throw new QTasteTestFailException("Expected to get '" + shortDescription + "' as short description but got " + shortDescDB);
+                throw new QTasteTestFailException(
+                      "Expected to get '" + shortDescription + "' as short description but got " + shortDescDB);
             }
             if (!theTextDB.equals(longDescription)) {
-                throw new QTasteTestFailException("Expected to get '" + longDescription + "' as long description but got " + theTextDB);
+                throw new QTasteTestFailException(
+                      "Expected to get '" + longDescription + "' as long description but got " + theTextDB);
             }
             if (!loginNameDB.equals(assignee)) {
                 throw new QTasteTestFailException("Expected to get '" + assignee + "' as assignee but got " + loginNameDB);

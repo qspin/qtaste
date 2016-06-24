@@ -21,16 +21,16 @@ package com.qspin.qtaste.javaguifx.server;
 
 import java.awt.Point;
 
-import com.qspin.qtaste.testsuite.QTasteException;
-
 import javafx.scene.Node;
+
+import com.qspin.qtaste.testsuite.QTasteException;
 
 public class ComponentLocationGetter extends ComponentCommander {
 
-	@Override
-	Point executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Node c = getComponentByName(componentName);
-//		return c.getLocationOnScreen();
-		return new Point();
-	}
+    @Override
+    Point executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Node c = getComponentByName(componentName);
+        //		return c.getLocationOnScreen();
+        return new Point();
+    }
 }

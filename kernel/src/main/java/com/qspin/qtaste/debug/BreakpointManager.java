@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
  */
 public class BreakpointManager {
@@ -37,7 +36,7 @@ public class BreakpointManager {
     private Condition startCondition = lock.newCondition();
     private static BreakpointManager instance = null;
     private boolean canStart = false;
-	private static Logger logger = Log4jLoggerFactory.getLogger(BreakpointManager.class);
+    private static Logger logger = Log4jLoggerFactory.getLogger(BreakpointManager.class);
 
     public static BreakpointManager getInstance() {
         if (instance == null) {
@@ -78,7 +77,7 @@ public class BreakpointManager {
             canStart = true;
             startCondition.signal();          // Wakes up all threads waiting for this condition
 
-        // method body
+            // method body
         } finally {
             try {
                 lock.unlock();

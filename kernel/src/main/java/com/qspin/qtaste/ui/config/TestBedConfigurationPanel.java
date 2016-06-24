@@ -31,26 +31,26 @@ import com.qspin.qtaste.ui.tools.FileMask;
 import com.qspin.qtaste.util.FileUtilities;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
 public class TestBedConfigurationPanel extends ConfigPanelTemplate {
 
     private TestBedConfiguration testbedConfig;
+
     public TestBedConfigurationPanel() {
         super();
         testbedConfig = TestBedConfiguration.getInstance();
         //genUI();
         // add listeners
-        jMultipleInstancesComboBox.addActionListener(new ActionListener(){
+        jMultipleInstancesComboBox.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 refreshData();
             }
         });
-        
-        DefaultComboBoxModel model = (DefaultComboBoxModel)jTestbedComboBox.getModel();
+
+        DefaultComboBoxModel model = (DefaultComboBoxModel) jTestbedComboBox.getModel();
         model.removeAllElements();
         File fTestbedDir = new File(StaticConfiguration.TESTBED_CONFIG_DIRECTORY);
         FileMask fileMask = new FileMask();
@@ -61,11 +61,11 @@ public class TestBedConfigurationPanel extends ConfigPanelTemplate {
             String testbedName = fTestbedList[i].getName().substring(0, fTestbedList[i].getName().lastIndexOf("."));
             model.addElement(testbedName);
         }
-        
+
         refreshTestBed();
         refreshData();
-        
-                TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
+
+        TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
             public void onConfigurationChange() {
                 testbedConfig = TestBedConfiguration.getInstance();
@@ -80,16 +80,17 @@ public class TestBedConfigurationPanel extends ConfigPanelTemplate {
         String testbedName = testbedFileName.substring(0, testbedFileName.lastIndexOf('.'));
         jTestbedComboBox.getModel().setSelectedItem(testbedName);
     }
-    
+
     public void refreshData() {
         // retrieve the current testbed
-        DefaultComboBoxModel model = (DefaultComboBoxModel)jTestbedComboBox.getModel();
+        DefaultComboBoxModel model = (DefaultComboBoxModel) jTestbedComboBox.getModel();
         String str = model.getSelectedItem().toString();
         String testbedFilename = StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/" + str + ".xml";
         TestBedConfiguration.setConfigFile(testbedFilename);
         // reload the file
         testbedConfig.reload();
     }
+
     /*protected void Apply() {
         
     }
@@ -102,7 +103,7 @@ public class TestBedConfigurationPanel extends ConfigPanelTemplate {
         }
     }*/
     private javax.swing.JComboBox jMultipleInstancesComboBox;
-    private javax.swing.JLabel jMultipleInstancesLabel;   
+    private javax.swing.JLabel jMultipleInstancesLabel;
     private javax.swing.JPanel jMultipleInstancesPanel;
     private javax.swing.JComboBox jTestbedComboBox;
 }

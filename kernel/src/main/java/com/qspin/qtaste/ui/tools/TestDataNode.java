@@ -27,14 +27,13 @@ package com.qspin.qtaste.ui.tools;
 import java.io.File;
 
 /**
- *
  * @author vdubois
  */
 public class TestDataNode extends TreeNodeImpl {
     private int rowIndex;
 
     public TestDataNode(File f, String displayValue, int rowIndex) {
-        super(f, rowIndex +  " - " + displayValue);
+        super(f, rowIndex + " - " + displayValue);
         this.rowIndex = rowIndex;
     }
 
@@ -49,5 +48,5 @@ public class TestDataNode extends TreeNodeImpl {
     public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
     }
-    
+
 }

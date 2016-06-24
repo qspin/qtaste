@@ -27,11 +27,12 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used as marker for dependencies between the Test api implemenation and SUT
+ *
  * @author Laurent Vanboquestal
  */
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Dependency{
-    String [] value() default {};
+public @interface Dependency {
+    String[] value() default {};
 }

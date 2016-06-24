@@ -38,7 +38,8 @@ import com.qspin.qtaste.util.OS;
 /**
  * Rlogin/TCOM enables the creation of rlogin connection (like the one used by the VME as example).
  * A main method is provided to enable the "reboot" of the VME from a QTaste control script.
- * It also enable the formatting of output using log4j package. 
+ * It also enable the formatting of output using log4j package.
+ *
  * @author lvboque
  */
 public class RLogin {
@@ -58,6 +59,7 @@ public class RLogin {
 
     /**
      * Create a new instance of RLogin client
+     *
      * @param remoteHost the remote host
      * @param localUser the user account on the local machine that is trying to login to the remote host, or empty if not used
      * @param remoteUser the remoteuser or empty if not used
@@ -65,7 +67,8 @@ public class RLogin {
      * @param logOutput enable or disable sending the output to log4j
      * @param interactive enable or disable interactive mode, i.e. sending commands from standard input
      */
-    public RLogin(String remoteHost, String localUser, String remoteUser, String terminalType, boolean logOutput, boolean interactive) {
+    public RLogin(String remoteHost, String localUser, String remoteUser, String terminalType, boolean logOutput, boolean
+          interactive) {
         this.remoteHost = remoteHost;
         this.localUser = localUser;
         this.remoteUser = remoteUser;
@@ -81,6 +84,7 @@ public class RLogin {
 
     /**
      * Create a rlogin connection to the specified remote host.
+     *
      * @return true if connected, false otherwise
      */
     public boolean connect() {
@@ -104,12 +108,12 @@ public class RLogin {
             } catch (InterruptedException ex) {
             }
             if (client.isConnected()) {
-            	return true;
+                return true;
             } else {
-            	logger.fatal("Client has been immediately disconnected from remote host:" + remoteHost);
-            	return false;            	
+                logger.fatal("Client has been immediately disconnected from remote host:" + remoteHost);
+                return false;
             }
-        //outputReaderThread.
+            //outputReaderThread.
         } catch (IOException e) {
             logger.fatal("Could not connect to remote host:" + remoteHost, e);
             return false;
@@ -119,6 +123,7 @@ public class RLogin {
     /**
      * Reboot the remote host by sending the reboot command and check that
      * the remote host is not accessible anymore.
+     *
      * @return true if success, false otherwise
      */
     public boolean reboot() {
@@ -155,13 +160,14 @@ public class RLogin {
             socket = null;
         }
         // Expected to get an exception as the remote host should not be reachable anymore
-        logger.error("Host " + remoteHost + " did not reboot as expected! Please check that no other rlogin client is connected!");
+        logger.error(
+              "Host " + remoteHost + " did not reboot as expected! Please check that no other rlogin client is connected!");
         return false;
     }
 
     /**
-     * 
      * Send the specified command to the remote host
+     *
      * @param command command line, without terminating character
      * @return true if success, false otherwise
      */
@@ -184,6 +190,7 @@ public class RLogin {
 
     /**
      * Return true if the rlogin client is connected to the specified remote host
+     *
      * @return true is connected, false if not connected.
      */
     public boolean isConnected() {
@@ -270,22 +277,25 @@ public class RLogin {
     }
 
     private static void showUsage() {
-        System.err.println("Usage: <command> <remote_host> [-user <user>] [-reboot | -command <command>] [-logOutput] [-wait [seconds]] [-log4jconf <properties_file>]");
+        System.err.println(
+              "Usage: <command> <remote_host> [-user <user>] [-reboot | -command <command>] [-logOutput] [-wait [seconds]] "
+                    + "[-log4jconf <properties_file>]");
         System.exit(1);
     }
 
     /**
      * Main program.
      * <p>
-     * {@code Usage: <command> <remote_host> [-user <user>] [-reboot | -command <command>] [-interactive] [-logOutput] [-wait [seconds]] [-log4jconf <properties_file>]
-     *   remote_host: remote host
-     *   -user <user>: remote user
-     *   -reboot: reboot remote host
-     *   -command <command>: send command to remote host
-     *   -interactive: enable interactive mode, i.e. sending commands from standard input, this also enables the wait parameter
-     *   -logOutput: enable logging of remote host output
-     *   -wait [seconds]: wait until connection is closed or given seconds
-     *   -log4jconf <properties_file>: use given file as log4j properties file
+     * {@code Usage: <command> <remote_host> [-user <user>] [-reboot | -command <command>] [-interactive] [-logOutput] [-wait
+     * [seconds]] [-log4jconf <properties_file>]
+     * remote_host: remote host
+     * -user <user>: remote user
+     * -reboot: reboot remote host
+     * -command <command>: send command to remote host
+     * -interactive: enable interactive mode, i.e. sending commands from standard input, this also enables the wait parameter
+     * -logOutput: enable logging of remote host output
+     * -wait [seconds]: wait until connection is closed or given seconds
+     * -log4jconf <properties_file>: use given file as log4j properties file
      * }
      */
     public static final void main(String[] args) {
@@ -350,7 +360,8 @@ public class RLogin {
 
         try {
             // Log4j Configuration
-            String log4jPropertiesFileName = log4jconf != null ? log4jconf : StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties";
+            String log4jPropertiesFileName =
+                  log4jconf != null ? log4jconf : StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties";
             PropertyConfigurator.configure(log4jPropertiesFileName);
 
             // get local user name
@@ -413,7 +424,9 @@ public class RLogin {
             shutdown();
         }
     }
-    
-    /** Factor used to convert second into millisecond. */
+
+    /**
+     * Factor used to convert second into millisecond.
+     */
     private static final long SEC_TO_MS_FACTOR = 1000;
 }

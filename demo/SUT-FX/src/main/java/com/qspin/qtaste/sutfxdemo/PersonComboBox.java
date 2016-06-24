@@ -5,17 +5,17 @@ import javafx.scene.control.ComboBox;
 
 public class PersonComboBox {
 
-	@FXML
-	private ComboBox<Person> m_combo;
+    @FXML
+    private ComboBox<Person> m_combo;
 
-	private Main m_main;
+    private Main m_main;
 
-	public PersonComboBox() {}
+    public PersonComboBox() {
+    }
 
-	public void setMainApp(Main m)
-	{
-		m_main = m;
+    public void setMainApp(Main m) {
+        m_main = m;
 
-		m_combo.setItems(Person.DEFAULT_DATA);
-	}
+        m_combo.setItems(Person.DEFAULT_DATA);
+    }
 }

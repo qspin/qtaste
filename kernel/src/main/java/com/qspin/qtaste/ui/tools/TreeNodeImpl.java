@@ -27,14 +27,13 @@ package com.qspin.qtaste.ui.tools;
 import java.io.File;
 
 /**
- *
  * @author vdubois
  */
-public class TreeNodeImpl  implements JTreeNode{
+public class TreeNodeImpl implements JTreeNode {
     protected File f;
     protected String displayValue;
-    protected boolean bShowingTestData=false;
-    Object[] children =null; 
+    protected boolean bShowingTestData = false;
+    Object[] children = null;
 
     public TreeNodeImpl(File f, String displayValue) {
         this.f = f;
@@ -44,6 +43,7 @@ public class TreeNodeImpl  implements JTreeNode{
     public File getFile() {
         return f;
     }
+
     public void setFile(File file) {
         f = file;
     }
@@ -57,7 +57,7 @@ public class TreeNodeImpl  implements JTreeNode{
     }
 
     public Object[] getChildren() {
-       return new Object[] {};
+        return new Object[] {};
 
     }
 
@@ -72,5 +72,5 @@ public class TreeNodeImpl  implements JTreeNode{
     public void setShowTestdata(boolean value) {
         bShowingTestData = value;
     }
-    
+
 }

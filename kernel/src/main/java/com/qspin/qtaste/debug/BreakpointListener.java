@@ -27,18 +27,20 @@ package com.qspin.qtaste.debug;
 import java.util.EventListener;
 
 /**
- *
  * @author vdubois
  */
-public interface BreakpointListener extends EventListener{
+public interface BreakpointListener extends EventListener {
 
     /**
      * Gets called before the execution of a test case
+     *
      * @param event - a BreakpoinkEvent Object
      */
     public void addBreakpoint(BreakpoinkEvent event);
+
     /**
      * Gets called before the execution of a test case
+     *
      * @param event - a BreakpoinkEvent Object
      */
     public void removeBreakpoint(BreakpoinkEvent event);

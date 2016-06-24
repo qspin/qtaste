@@ -74,9 +74,7 @@ import com.qspin.qtaste.util.GeneratePythonlibDoc;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
- *
  * @author vdubois
- *
  */
 @SuppressWarnings("serial")
 public class MainPanel extends JFrame {
@@ -105,7 +103,7 @@ public class MainPanel extends JFrame {
         mNumberLoops = numberLoops;
         mLoopsInHour = loopsInHour;
     }
-    
+
     private void setUpFrame() {
         setName(title);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -219,7 +217,8 @@ public class MainPanel extends JFrame {
             mTreeTabsPanel.addTab("Test Cases", sp2);
 
             // add tree view for test campaign definition
-            com.qspin.qtaste.ui.testcampaign.TestCaseTree mtct = new com.qspin.qtaste.ui.testcampaign.TestCaseTree(mTestCampaignPanel.getTreeTable());
+            com.qspin.qtaste.ui.testcampaign.TestCaseTree mtct = new com.qspin.qtaste.ui.testcampaign.TestCaseTree(
+                  mTestCampaignPanel.getTreeTable());
             JScrollPane sp3 = new JScrollPane(mtct);
             mTreeTabsPanel.addTab("Test Campaign", sp3);
 
@@ -245,7 +244,7 @@ public class MainPanel extends JFrame {
             mTestCampaignPanel.addTestCampaignActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    if (e.getID()== TestCampaignMainPanel.RUN_ID) {
+                    if (e.getID() == TestCampaignMainPanel.RUN_ID) {
                         if (e.getActionCommand().equals(TestCampaignMainPanel.STARTED_CMD)) {
                             // open the tab test cases
                             SwingUtilities.invokeLater(new Runnable() {
@@ -256,7 +255,8 @@ public class MainPanel extends JFrame {
                             });
 
                             // update the buttons
-                            mTestCasePanel.setExecutingTestCampaign(true, ((TestCampaignMainPanel)e.getSource()).getExecutionThread());
+                            mTestCasePanel.setExecutingTestCampaign(true,
+                                  ((TestCampaignMainPanel) e.getSource()).getExecutionThread());
                             mTestCasePanel.updateButtons(true);
                         } else if (e.getActionCommand().equals(TestCampaignMainPanel.STOPPED_CMD)) {
                             mTestCasePanel.setExecutingTestCampaign(false, null);
@@ -269,7 +269,8 @@ public class MainPanel extends JFrame {
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mTreeTabsPanel, mRightPanels);
             splitPane.setDividerSize(4);
             GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
-            int mainHorizontalSplitDividerLocation= guiConfiguration.getInt(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY, 285);
+            int mainHorizontalSplitDividerLocation = guiConfiguration.getInt(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY,
+                  285);
             splitPane.setDividerLocation(mainHorizontalSplitDividerLocation);
 
             splitPane.addPropertyChangeListener(new PropertyChangeListener() {
@@ -277,8 +278,9 @@ public class MainPanel extends JFrame {
                     if (evt.getPropertyName().equals("dividerLocation")) {
                         GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
                         if (evt.getSource() instanceof JSplitPane) {
-                            JSplitPane splitPane= (JSplitPane)evt.getSource();
-                            guiConfiguration.setProperty(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY, splitPane.getDividerLocation());
+                            JSplitPane splitPane = (JSplitPane) evt.getSource();
+                            guiConfiguration.setProperty(MAIN_HORIZONTAL_SPLIT_DIVIDER_LOCATION_PROPERTY,
+                                  splitPane.getDividerLocation());
                             try {
                                 guiConfiguration.save();
                             } catch (ConfigurationException ex) {
@@ -300,13 +302,13 @@ public class MainPanel extends JFrame {
             if (mTestSuiteDir != null) {
                 DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(mTestSuiteDir);
                 if (testSuite != null) {
-                	testSuite.setExecutionLoops(mNumberLoops, mLoopsInHour);
+                    testSuite.setExecutionLoops(mNumberLoops, mLoopsInHour);
                     setTestSuite(testSuite.getName());
                     mTestCasePanel.runTestSuite(testSuite, false);
                 }
             }
             setVisible(true);
-        //treeTabs.setMinimumSize(new Dimension(100, this.HEIGHT));
+            //treeTabs.setMinimumSize(new Dimension(100, this.HEIGHT));
 
         } catch (Exception e) {
             logger.fatal(e);
@@ -382,8 +384,8 @@ public class MainPanel extends JFrame {
         importTestSuites.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-               //
-            	mTestCasePanel.importTestSuites();
+                //
+                mTestCasePanel.importTestSuites();
 
             }
         });
@@ -404,7 +406,7 @@ public class MainPanel extends JFrame {
         ateUserManuel.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-               viewQTasteUserManuel();
+                viewQTasteUserManuel();
             }
         });
         help.add(ateUserManuel);
@@ -418,12 +420,13 @@ public class MainPanel extends JFrame {
     public static void main(String args[]) throws Exception {
         Environment.getEnvironment().initializeEnvironment(args);
     }
+
     private void viewQTasteUserManuel() {
         try {
             Desktop.getDesktop().open(new File(StaticConfiguration.QTASTE_USER_MANUAL_FILE));
         } catch (IOException ex) {
             logger.error("Unable to open QTaste user manual document at the following location:'" +
-                    StaticConfiguration.QTASTE_USER_MANUAL_FILE + "'");
+                  StaticConfiguration.QTASTE_USER_MANUAL_FILE + "'");
         }
 
     }

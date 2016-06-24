@@ -96,7 +96,6 @@ import com.qspin.qtaste.util.Strings;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
- *
  * @author David Ergo
  */
 public class JythonTestScript extends TestScript implements Executable {
@@ -123,7 +122,7 @@ public class JythonTestScript extends TestScript implements Executable {
         TestBedConfiguration.registerConfigurationChangeHandler(new TestBedConfiguration.ConfigurationChangeHandler() {
 
             @Override
-			public void onConfigurationChange() {
+            public void onConfigurationChange() {
                 List<Object> newPlatform;
                 TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
                 if (testbedConfig != null) {
@@ -176,31 +175,30 @@ public class JythonTestScript extends TestScript implements Executable {
         globalBindings.put("Status", ScriptTestResultStatus.class);
         try {
             // Declare __TestAPIWrapper class, of which the testAPI variable will be an instance
-            String code =
-                    "import sys as __sys\n" +
-                    "from sets import Set as __Set\n" +
-                    "from com.qspin.qtaste.testsuite import QTasteException, QTasteTestFailException, QTasteDataException\n" +
-                    "import com.qspin.qtaste.testsuite.impl.JythonTestScript.ScriptTestResultStatus as Status\n" +
-                    "class ComponentNotPresentException(Exception):\n" +
-                    "    pass\n" +
-                    "class StepsException(Exception):\n" +
-                    "    pass\n" +
-                    "class __TestAPIWrapper:\n" +
-                    "    def __init__(self, testScript):\n" +
-                    "        self.testScript = testScript\n" +
-                    "    def __invoke(self, method, args):\n" +
-                    "        self.testScript.logInvoke(method.im_self, method.__name__, str(args)[1:-1-(len(args)==1)])\n" +
-                    "        try:\n" +
-                    "            return method(*args)\n" +
-                    "        except TypeError, e:\n" +
-                    "            raise QTasteDataException('Invalid argument(s): ' + str(e))\n" +
-                    "    def stopTest(self, status, message):\n" +
-                    "        if status == Status.FAIL:\n" +
-                    "            raise QTasteTestFailException(message)\n" +
-                    "        elif status == Status.NOT_AVAILABLE:\n" +
-                    "            raise QTasteDataException(message)\n" +
-                    "        else:\n" +
-                    "            raise SyntaxError('Invalid status argument')\n";
+            String code = "import sys as __sys\n" +
+                  "from sets import Set as __Set\n" +
+                  "from com.qspin.qtaste.testsuite import QTasteException, QTasteTestFailException, QTasteDataException\n" +
+                  "import com.qspin.qtaste.testsuite.impl.JythonTestScript.ScriptTestResultStatus as Status\n" +
+                  "class ComponentNotPresentException(Exception):\n" +
+                  "    pass\n" +
+                  "class StepsException(Exception):\n" +
+                  "    pass\n" +
+                  "class __TestAPIWrapper:\n" +
+                  "    def __init__(self, testScript):\n" +
+                  "        self.testScript = testScript\n" +
+                  "    def __invoke(self, method, args):\n" +
+                  "        self.testScript.logInvoke(method.im_self, method.__name__, str(args)[1:-1-(len(args)==1)])\n" +
+                  "        try:\n" +
+                  "            return method(*args)\n" +
+                  "        except TypeError, e:\n" +
+                  "            raise QTasteDataException('Invalid argument(s): ' + str(e))\n" +
+                  "    def stopTest(self, status, message):\n" +
+                  "        if status == Status.FAIL:\n" +
+                  "            raise QTasteTestFailException(message)\n" +
+                  "        elif status == Status.NOT_AVAILABLE:\n" +
+                  "            raise QTasteDataException(message)\n" +
+                  "        else:\n" +
+                  "            raise SyntaxError('Invalid status argument')\n";
 
             // add get<Component>() methods to the __TestAPIWrapper class
             for (String component : registeredComponents) {
@@ -214,23 +212,23 @@ public class JythonTestScript extends TestScript implements Executable {
                 // declare the <Component>Wrapper class, of which the objects returned
                 // by get<Component>() methods will be instances
                 code = "class __TestAPIWrapper_" + component + "Wrapper:\n" +
-                       "    def __init__(self, testAPI, component):\n" +
-                       "        self.testAPI = testAPI\n" +
-                       "        self.component = component\n" +
-                       "    def __nonzero__(self):\n" +
-                       "        return self.component\n"+
-                       "    def __getattr__(self, attr):\n" + // only called when self.attr doesn't exist
-                       "        raise AttributeError('Component " + component + " has no \\'' + attr + '\\' verb')\n"+
-                       "    def __checkPresent(self):\n" +
-                       "        if not self.component:\n" +
-                       "            raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
+                      "    def __init__(self, testAPI, component):\n" +
+                      "        self.testAPI = testAPI\n" +
+                      "        self.component = component\n" +
+                      "    def __nonzero__(self):\n" +
+                      "        return self.component\n" +
+                      "    def __getattr__(self, attr):\n" + // only called when self.attr doesn't exist
+                      "        raise AttributeError('Component " + component + " has no \\'' + attr + '\\' verb')\n" +
+                      "    def __checkPresent(self):\n" +
+                      "        if not self.component:\n" +
+                      "            raise ComponentNotPresentException('Component " + component + " is not present in testbed')\n";
 
                 // add verbs methods to the ComponentWrapper class
                 Collection<String> verbs = testAPI.getRegisteredVerbs(component);
                 for (String verb : verbs) {
                     code += "    def " + verb + "(self, *args):\n" +
-                            "        self.__checkPresent()\n" +
-                            "        return self.testAPI._TestAPIWrapper__invoke(self.component." + verb + ", args)\n";
+                          "        self.__checkPresent()\n" +
+                          "        return self.testAPI._TestAPIWrapper__invoke(self.component." + verb + ", args)\n";
                 }
                 code += "__TestAPIWrapper." + component + "Wrapper = __TestAPIWrapper_" + component + "Wrapper\n";
                 code += "del __TestAPIWrapper_" + component + "Wrapper\n";
@@ -243,41 +241,40 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         try {
-            String code =
-                    "import os as __os\n" +
-                    "from com.qspin.qtaste.testsuite.impl import JythonTestScript as __JythonTestScript\n" +
-                    "__isInTestScriptImport = 0\n" +
-                    "def isInTestScriptImport():\n" +
-                    "    return __isInTestScriptImport != 0\n" +
-                    "def importTestScript(testCasePath):\n" +
-                    "    global __isInTestScriptImport\n" +
-                    "    wasInTestScriptImport = __isInTestScriptImport\n" +
-                    "    __isInTestScriptImport = __isInTestScriptImport + 1\n" +
-                    "    try:\n" +
-                    "        import sys as __sys\n" +
-                    "        testCaseName = __os.path.basename(testCasePath)\n" +
-                    "        basePath = __os.path.dirname(__sys._getframe(1).f_code.co_filename) + __os.sep + '..'\n" +
-                    "        testCasePath = __os.path.realpath(__os.path.join(basePath, testCasePath))\n" +
-                    "        __sys.path.insert(0, testCasePath)\n" +
-                    "        try:\n" +
-                    "            if 'TestScript' in __sys.modules:\n" +
-                    "                del __sys.modules['TestScript']\n" +
-                    "            try:\n" +
-                    "                import TestScript\n" +
-                    "            except ImportError:\n" +
-                    "                raise ImportError('No test script found in ' + testCasePath)\n" +
-                    "            if wasInTestScriptImport:\n" +
-                    "                # test script is imported\n" +
-                    "                __sys._getframe(1).f_globals[testCaseName] = TestScript\n" +
-                    "            else:\n" +
-                    "                # test script is not imported\n" +
-                    "                __JythonTestScript.addToGlobalJythonScope(testCaseName, TestScript)\n" +
-                    "            del __sys.modules['TestScript']\n" +
-                    "            del TestScript\n" +
-                    "        finally:\n" +
-                    "            __sys.path.pop(0)\n" +
-                    "    finally:\n" +
-                    "        __isInTestScriptImport = __isInTestScriptImport - 1\n";
+            String code = "import os as __os\n" +
+                  "from com.qspin.qtaste.testsuite.impl import JythonTestScript as __JythonTestScript\n" +
+                  "__isInTestScriptImport = 0\n" +
+                  "def isInTestScriptImport():\n" +
+                  "    return __isInTestScriptImport != 0\n" +
+                  "def importTestScript(testCasePath):\n" +
+                  "    global __isInTestScriptImport\n" +
+                  "    wasInTestScriptImport = __isInTestScriptImport\n" +
+                  "    __isInTestScriptImport = __isInTestScriptImport + 1\n" +
+                  "    try:\n" +
+                  "        import sys as __sys\n" +
+                  "        testCaseName = __os.path.basename(testCasePath)\n" +
+                  "        basePath = __os.path.dirname(__sys._getframe(1).f_code.co_filename) + __os.sep + '..'\n" +
+                  "        testCasePath = __os.path.realpath(__os.path.join(basePath, testCasePath))\n" +
+                  "        __sys.path.insert(0, testCasePath)\n" +
+                  "        try:\n" +
+                  "            if 'TestScript' in __sys.modules:\n" +
+                  "                del __sys.modules['TestScript']\n" +
+                  "            try:\n" +
+                  "                import TestScript\n" +
+                  "            except ImportError:\n" +
+                  "                raise ImportError('No test script found in ' + testCasePath)\n" +
+                  "            if wasInTestScriptImport:\n" +
+                  "                # test script is imported\n" +
+                  "                __sys._getframe(1).f_globals[testCaseName] = TestScript\n" +
+                  "            else:\n" +
+                  "                # test script is not imported\n" +
+                  "                __JythonTestScript.addToGlobalJythonScope(testCaseName, TestScript)\n" +
+                  "            del __sys.modules['TestScript']\n" +
+                  "            del TestScript\n" +
+                  "        finally:\n" +
+                  "            __sys.path.pop(0)\n" +
+                  "    finally:\n" +
+                  "        __isInTestScriptImport = __isInTestScriptImport - 1\n";
             engine.eval(code, globalBindings);
         } catch (ScriptException e) {
             logger.fatal("Couldn't create importTestScript or isInTestScriptImport Python function", e);
@@ -286,53 +283,53 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         try {
-            String code =
-                    "import time as __time, sys as __sys\n" +
-                    "from java.lang import ThreadDeath as __ThreadDeath\n" +
-                    "from java.lang.reflect import UndeclaredThrowableException as __UndeclaredThrowableException\n" +
-                    "from com.qspin.qtaste.testsuite import QTasteTestFailException\n" +
-                    "import com.qspin.qtaste.reporter.testresults.TestResult.Status as __TestResultStatus\n" +
-                    "def doStep(idOrFunc, func=None):\n" +
-                    "    if __isInTestScriptImport:\n" +
-                    "        # test script is imported, so don't execute step\n" +
-                    "        return\n" +
-                    "    doStep.countStack = getattr(doStep, 'countStack', [0])\n" +
-                    "    doStep.stepIdStack = getattr(doStep, 'stepIdStack', [])\n" +
-                    "    doStep.stepNameStack = getattr(doStep, 'stepNameStack', [])\n" +
-                    "    doStep.countStack[-1] = doStep.countStack[-1] + 1\n" +
-                    "    if func is None:\n" +
-                    "        # idOrFunc is the step function no id is given\n" +
-                    "        id = str(doStep.countStack[-1])\n" +
-                    "        func = idOrFunc\n" +
-                    "    else:\n" +
-                    "        # idOrFunc is the step id, args[0] is the step function\n" +
-                    "        id = str(idOrFunc)\n" +
-                    "    doStep.stepIdStack.append(id)\n" +
-                    "    doStep.stepNameStack.append(func.func_name)\n" +
-                    "    doStep.countStack.append(0)\n" +
-                    "    doStep.stepId = stepId = '.'.join(doStep.stepIdStack)\n" +
-                    "    stepName = '.'.join(doStep.stepNameStack)\n" +
-                    "    stepDoc = func.func_doc\n" +
-                    "    __JythonTestScript.getLogger().info('Begin of step %s (%s)' % (stepId, stepName))\n" +
-                    "    status = __TestResultStatus.SUCCESS\n" +
-                    "    begin_time = __time.clock()\n" +
-                    "    try:\n" +
-                    "        testScript.addStepResult(stepId, __TestResultStatus.RUNNING, stepName, stepDoc, 0)\n" +
-                    "        func()\n" +
-                    "    except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
-                    "        status = __TestResultStatus.FAIL\n" +
-                    "        raise\n" +
-                    "    except:\n" +
-                    "        status = __TestResultStatus.NOT_AVAILABLE\n" +
-                    "        raise\n" +
-                    "    finally:\n" +
-                    "        end_time = __time.clock()\n" +
-                    "        elapsed_time = end_time - begin_time\n" +
-                    "        __JythonTestScript.getLogger().info('End of step %s (%s) - status: %s - elapsed time: %.3f seconds' % (stepId, stepName, status, elapsed_time))\n" +
-                    "        testScript.addStepResult(stepId, status, stepName, stepDoc, elapsed_time)\n" +
-                    "        doStep.countStack.pop()\n" +
-                    "        doStep.stepIdStack.pop()\n" +
-                    "        doStep.stepNameStack.pop()\n";
+            String code = "import time as __time, sys as __sys\n" +
+                  "from java.lang import ThreadDeath as __ThreadDeath\n" +
+                  "from java.lang.reflect import UndeclaredThrowableException as __UndeclaredThrowableException\n" +
+                  "from com.qspin.qtaste.testsuite import QTasteTestFailException\n" +
+                  "import com.qspin.qtaste.reporter.testresults.TestResult.Status as __TestResultStatus\n" +
+                  "def doStep(idOrFunc, func=None):\n" +
+                  "    if __isInTestScriptImport:\n" +
+                  "        # test script is imported, so don't execute step\n" +
+                  "        return\n" +
+                  "    doStep.countStack = getattr(doStep, 'countStack', [0])\n" +
+                  "    doStep.stepIdStack = getattr(doStep, 'stepIdStack', [])\n" +
+                  "    doStep.stepNameStack = getattr(doStep, 'stepNameStack', [])\n" +
+                  "    doStep.countStack[-1] = doStep.countStack[-1] + 1\n" +
+                  "    if func is None:\n" +
+                  "        # idOrFunc is the step function no id is given\n" +
+                  "        id = str(doStep.countStack[-1])\n" +
+                  "        func = idOrFunc\n" +
+                  "    else:\n" +
+                  "        # idOrFunc is the step id, args[0] is the step function\n" +
+                  "        id = str(idOrFunc)\n" +
+                  "    doStep.stepIdStack.append(id)\n" +
+                  "    doStep.stepNameStack.append(func.func_name)\n" +
+                  "    doStep.countStack.append(0)\n" +
+                  "    doStep.stepId = stepId = '.'.join(doStep.stepIdStack)\n" +
+                  "    stepName = '.'.join(doStep.stepNameStack)\n" +
+                  "    stepDoc = func.func_doc\n" +
+                  "    __JythonTestScript.getLogger().info('Begin of step %s (%s)' % (stepId, stepName))\n" +
+                  "    status = __TestResultStatus.SUCCESS\n" +
+                  "    begin_time = __time.clock()\n" +
+                  "    try:\n" +
+                  "        testScript.addStepResult(stepId, __TestResultStatus.RUNNING, stepName, stepDoc, 0)\n" +
+                  "        func()\n" +
+                  "    except (QTasteTestFailException, __ThreadDeath, __UndeclaredThrowableException):\n" +
+                  "        status = __TestResultStatus.FAIL\n" +
+                  "        raise\n" +
+                  "    except:\n" +
+                  "        status = __TestResultStatus.NOT_AVAILABLE\n" +
+                  "        raise\n" +
+                  "    finally:\n" +
+                  "        end_time = __time.clock()\n" +
+                  "        elapsed_time = end_time - begin_time\n" +
+                  "        __JythonTestScript.getLogger().info('End of step %s (%s) - status: %s - elapsed time: %.3f seconds' "
+                  + "% (stepId, stepName, status, elapsed_time))\n" +
+                  "        testScript.addStepResult(stepId, status, stepName, stepDoc, elapsed_time)\n" +
+                  "        doStep.countStack.pop()\n" +
+                  "        doStep.stepIdStack.pop()\n" +
+                  "        doStep.stepNameStack.pop()\n";
             engine.eval(code, globalBindings);
         } catch (ScriptException e) {
             logger.fatal("Couldn't create doStep Python function", e);
@@ -341,47 +338,47 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         try {
-            String code =
-                    "import sys as __sys\n" +
-                    "def __findStepIndex(table, id):\n" +
-                    "   for index in range(len(table)):\n" +
-                    "       stepId = str(table[index][0])\n" +
-                    "       if stepId == id:\n" +
-                    "           return index\n" +
-                    "   raise StepsException('Step %s does not exist in steps table' % id)\n" +
-                    "def doSteps(table, selector = None):\n" +
-                    "    if __isInTestScriptImport:\n" +
-                    "        # test script is imported, so don't execute steps\n" +
-                    "        return\n" +
-                    "    # check that steps id are correct identifiers\n" +
-                    "    import re\n" +
-                    "    idPattern = re.compile(r'^\\w+$')\n" +
-                    "    for index in range(len(table)):\n" +
-                    "       stepId = str(table[index][0])\n" +
-                    "       if not idPattern.match(stepId):\n" +
-                    "           raise StepsException('Step id %s is not a valid identifier' % stepId)\n" +
-                    "    if selector is None:\n" +
-                    "        for (stepId, stepName) in table:\n" +
-                    "            doStep(stepId, stepName)\n" +
-                    "    else:\n" +
-                    "        match = re.match(r'^\\[\\s*(\\w*)(?:\\s*-\\s*(\\w*))?\\s*\\]$', selector)\n" +
-                    "        if match:\n" +
-                    "            startId = match.group(1)\n" +
-                    "            endId = match.group(match.lastindex)\n" +
-                    "        else:\n" +
-                    "            raise StepsException(arg + ' is not a valid format of selector, should be [id], [id1-id2], [id1-] or [-id2]')\n" +
-                    "        if startId == '':\n" +
-                    "            startIndex = 0\n" +
-                    "        else:" +
-                    "            startIndex = __findStepIndex(table, startId)\n" +
-                    "        if endId == '':\n" +
-                    "            endIndex = len(table)-1\n" +
-                    "        else:" +
-                    "            endIndex = __findStepIndex(table, endId)\n" +
-                    "        if endIndex < startIndex:\n" +
-                    "            raise StepsException('Step %s should occur after step %s in steps table' % (startId, endId))\n" +
-                    "        for (stepId, stepName) in table[startIndex:endIndex+1]:\n" +
-                    "            doStep(stepId, stepName)\n";
+            String code = "import sys as __sys\n" +
+                  "def __findStepIndex(table, id):\n" +
+                  "   for index in range(len(table)):\n" +
+                  "       stepId = str(table[index][0])\n" +
+                  "       if stepId == id:\n" +
+                  "           return index\n" +
+                  "   raise StepsException('Step %s does not exist in steps table' % id)\n" +
+                  "def doSteps(table, selector = None):\n" +
+                  "    if __isInTestScriptImport:\n" +
+                  "        # test script is imported, so don't execute steps\n" +
+                  "        return\n" +
+                  "    # check that steps id are correct identifiers\n" +
+                  "    import re\n" +
+                  "    idPattern = re.compile(r'^\\w+$')\n" +
+                  "    for index in range(len(table)):\n" +
+                  "       stepId = str(table[index][0])\n" +
+                  "       if not idPattern.match(stepId):\n" +
+                  "           raise StepsException('Step id %s is not a valid identifier' % stepId)\n" +
+                  "    if selector is None:\n" +
+                  "        for (stepId, stepName) in table:\n" +
+                  "            doStep(stepId, stepName)\n" +
+                  "    else:\n" +
+                  "        match = re.match(r'^\\[\\s*(\\w*)(?:\\s*-\\s*(\\w*))?\\s*\\]$', selector)\n" +
+                  "        if match:\n" +
+                  "            startId = match.group(1)\n" +
+                  "            endId = match.group(match.lastindex)\n" +
+                  "        else:\n" +
+                  "            raise StepsException(arg + ' is not a valid format of selector, should be [id], [id1-id2], "
+                  + "[id1-] or [-id2]')\n" +
+                  "        if startId == '':\n" +
+                  "            startIndex = 0\n" +
+                  "        else:" +
+                  "            startIndex = __findStepIndex(table, startId)\n" +
+                  "        if endId == '':\n" +
+                  "            endIndex = len(table)-1\n" +
+                  "        else:" +
+                  "            endIndex = __findStepIndex(table, endId)\n" +
+                  "        if endIndex < startIndex:\n" +
+                  "            raise StepsException('Step %s should occur after step %s in steps table' % (startId, endId))\n" +
+                  "        for (stepId, stepName) in table[startIndex:endIndex+1]:\n" +
+                  "            doStep(stepId, stepName)\n";
             engine.eval(code, globalBindings);
         } catch (ScriptException e) {
             logger.fatal("Couldn't create doSteps Python function", e);
@@ -391,34 +388,38 @@ public class JythonTestScript extends TestScript implements Executable {
 
         // set code to declare __ScriptDebugger class
         // note: it doesn't work if it is evaluated in the global bindings
-        scriptDebuggerClassCode =
-                "import bdb as __bdb\n" +
-                "class __ScriptDebugger(__bdb.Bdb):\n" +
-                "  def user_line(self, frame):\n" +
-                "    if self.run:\n" +
-                "      self.run = 0\n" +
-                "      self.set_continue()\n" +
-                "    else:\n" +
-                "      # arrived at breakpoint\n" +
-                "      lineNumber = frame.f_lineno\n" +
-                "      fileName = frame.f_code.co_filename\n" +
-                "      action = __scriptBreakpoint.breakScript(fileName, lineNumber, frame.f_locals)\n" +
-                "      if action == 0:\n" +
-                "        testAPI.stopTest(Status.NOT_AVAILABLE, 'Script has been stopped by user')\n" +
-                "      elif action == 1:\n" +
-                "        self.set_next(frame)\n" +
-                "      elif action == 3:\n" +
-                "        self.set_step()\n" +
-                "      elif action == 2:\n" +
-                "        self.set_continue()\n";
+        scriptDebuggerClassCode = "import bdb as __bdb\n" +
+              "class __ScriptDebugger(__bdb.Bdb):\n" +
+              "  def user_line(self, frame):\n" +
+              "    if self.run:\n" +
+              "      self.run = 0\n" +
+              "      self.set_continue()\n" +
+              "    else:\n" +
+              "      # arrived at breakpoint\n" +
+              "      lineNumber = frame.f_lineno\n" +
+              "      fileName = frame.f_code.co_filename\n" +
+              "      action = __scriptBreakpoint.breakScript(fileName, lineNumber, frame.f_locals)\n" +
+              "      if action == 0:\n" +
+              "        testAPI.stopTest(Status.NOT_AVAILABLE, 'Script has been stopped by user')\n" +
+              "      elif action == 1:\n" +
+              "        self.set_next(frame)\n" +
+              "      elif action == 3:\n" +
+              "        self.set_step()\n" +
+              "      elif action == 2:\n" +
+              "        self.set_continue()\n";
     }
 
-    /** Creates a new instance of PythonTestScript
+    /**
+     * Creates a new instance of PythonTestScript
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public JythonTestScript(List<LinkedHashMap<String, String>> data, List<TestRequirement> requirements, File fileName, File testSuiteDirectory, TestSuite testSuite) throws IOException {
-        super(fileName.getParentFile(), testSuiteDirectory, fileName.getParentFile().getName(), new TestDataSet(data), requirements, testSuite);
+    public JythonTestScript(List<LinkedHashMap<String, String>> data, List<TestRequirement> requirements, File fileName, File
+          testSuiteDirectory, TestSuite testSuite)
+          throws IOException {
+        super(fileName.getParentFile(), testSuiteDirectory, fileName.getParentFile().getName(), new TestDataSet(data),
+              requirements, testSuite);
 
         this.fileName = fileName.getCanonicalFile().getAbsoluteFile();
 
@@ -470,9 +471,10 @@ public class JythonTestScript extends TestScript implements Executable {
 
     /**
      * Parses a PythonDoc comment and returns a map of tag names to descriptions
+     *
      * @param pythonDoc a PythonDoc comment
      * @return a map of tag names to descriptions; the description before tags
-     *         is mapped to an empty tag name
+     * is mapped to an empty tag name
      */
     public static HashMap<String, String> parsePythonDoc(String pythonDoc) {
         HashMap<String, String> tagsDoc = new HashMap<String, String>();
@@ -501,7 +503,8 @@ public class JythonTestScript extends TestScript implements Executable {
         globalContext.put(name, value);
     }
 
-    public PyDictionary getTestDataArgumentsDictionary(String[] dataNames, int numberDataToSkip, Method method) throws QTasteDataException {
+    public PyDictionary getTestDataArgumentsDictionary(String[] dataNames, int numberDataToSkip, Method method)
+          throws QTasteDataException {
         Class<?>[] parametersClasses = method.getParameterTypes();
         if (parametersClasses.length == dataNames.length) {
             PyDictionary dictionary = new PyDictionary();
@@ -518,7 +521,8 @@ public class JythonTestScript extends TestScript implements Executable {
                     dataValue = testData.getValue(dataName);
                 } else if (parameterClass == int.class || parameterClass == Integer.class) {
                     dataValue = testData.getIntValue(dataName);
-                } else if (parameterClass == double.class || parameterClass == Double.class || parameterClass == float.class || parameterClass == Float.class) {
+                } else if (parameterClass == double.class || parameterClass == Double.class || parameterClass == float.class
+                      || parameterClass == Float.class) {
                     dataValue = testData.getDoubleValue(dataName);
                 } else if (parameterClass == boolean.class || parameterClass == Boolean.class) {
                     dataValue = testData.getBooleanValue(dataName);
@@ -549,7 +553,8 @@ public class JythonTestScript extends TestScript implements Executable {
                     tempTestData.setValue(tempDataName, (String) argument);
                     if (parameterClass == int.class || parameterClass == Integer.class) {
                         arguments[i] = tempTestData.getIntValue(tempDataName);
-                    } else if (parameterClass == double.class || parameterClass == Double.class || parameterClass == float.class || parameterClass == Float.class) {
+                    } else if (parameterClass == double.class || parameterClass == Double.class || parameterClass == float.class
+                          || parameterClass == Float.class) {
                         arguments[i] = tempTestData.getDoubleValue(tempDataName);
                     } else if (parameterClass == boolean.class || parameterClass == Boolean.class) {
                         arguments[i] = tempTestData.getBooleanValue(tempDataName);
@@ -557,7 +562,8 @@ public class JythonTestScript extends TestScript implements Executable {
                         arguments[i] = tempTestData.getDoubleWithPrecisionValue(tempDataName);
                     } else {
                         logger.error("Unsupported method argument type " + parameterClass.getName());
-                        throw new QTasteDataException("Invalid argument used for method " + method.getName() + " with parameter:" + argument.toString());
+                        throw new QTasteDataException(
+                              "Invalid argument used for method " + method.getName() + " with parameter:" + argument.toString());
                     }
                 }
             }
@@ -574,14 +580,13 @@ public class JythonTestScript extends TestScript implements Executable {
 
     public static List<String> getAdditionalPythonPath(File file) {
         List<String> pythonlibs = new ArrayList<String>();
-	//add librairies references by the environment variable
-	for ( String additionnalPath : StaticConfiguration.JYTHON_LIB.split(File.pathSeparator) )
-	{
-	    File directory = new File(additionnalPath);
+        //add librairies references by the environment variable
+        for (String additionnalPath : StaticConfiguration.JYTHON_LIB.split(File.pathSeparator)) {
+            File directory = new File(additionnalPath);
             pythonlibs.add(directory.toString());
-	}
+        }
 
-	if (!file.getAbsolutePath().contains("TestSuites")) {
+        if (!file.getAbsolutePath().contains("TestSuites")) {
             return pythonlibs;
         }
         try {
@@ -603,7 +608,7 @@ public class JythonTestScript extends TestScript implements Executable {
     }
 
     @Override
-	public boolean execute(TestData data, TestResult result, final boolean debug) {
+    public boolean execute(TestData data, TestResult result, final boolean debug) {
         // Interpret the file
         testData = data;
         testResult = result;
@@ -633,8 +638,8 @@ public class JythonTestScript extends TestScript implements Executable {
 
             // reset doStep count / step id / step name stacks
             engine.eval("doStep.countStack = [0]\n" +
-                    "doStep.stepIdStack = []\n" +
-                    "doStep.stepNameStack = []\n");
+                  "doStep.stepIdStack = []\n" +
+                  "doStep.stepNameStack = []\n");
 
             // add testAPI, testData and scriptBreakpoint to bindings
             bindings.put("this", this);
@@ -651,22 +656,22 @@ public class JythonTestScript extends TestScript implements Executable {
 
             // create QTaste module with testAPI, testData, DoubleWithPrecision, doStep, doSteps, doSubStep, logger and Status
             engine.eval("class __QTaste_Module:\n" +
-                    "    def __init__(self):\n" +
-                    "        self.importTestScript= importTestScript\n" +
-                    "        self.isInTestScriptImport= isInTestScriptImport\n" +
-                    "        self.testAPI= testAPI\n" +
-                    "        self.testData = testData\n" +
-                    "        self.DoubleWithPrecision = DoubleWithPrecision\n" +
-                    "        self.doStep = doStep\n" +
-                    "        self.doSteps = doSteps\n" +
-                    "        self.doSubStep = doStep\n" +
-                    "        self.doSubSteps = doSteps\n" +
-                    "        self.logger = logger\n" +
-                    "        self.Status = Status\n" +
-                    "        self.QTasteException = QTasteException\n" +
-                    "        self.QTasteDataException = QTasteDataException\n" +
-                    "        self.QTasteTestFailException = QTasteTestFailException\n" +
-                    "__sys.modules['qtaste'] = __QTaste_Module()");
+                  "    def __init__(self):\n" +
+                  "        self.importTestScript= importTestScript\n" +
+                  "        self.isInTestScriptImport= isInTestScriptImport\n" +
+                  "        self.testAPI= testAPI\n" +
+                  "        self.testData = testData\n" +
+                  "        self.DoubleWithPrecision = DoubleWithPrecision\n" +
+                  "        self.doStep = doStep\n" +
+                  "        self.doSteps = doSteps\n" +
+                  "        self.doSubStep = doStep\n" +
+                  "        self.doSubSteps = doSteps\n" +
+                  "        self.logger = logger\n" +
+                  "        self.Status = Status\n" +
+                  "        self.QTasteException = QTasteException\n" +
+                  "        self.QTasteDataException = QTasteDataException\n" +
+                  "        self.QTasteTestFailException = QTasteTestFailException\n" +
+                  "__sys.modules['qtaste'] = __QTaste_Module()");
 
             // remove testAPI, testData, DoubleWithPrecision, doStep, doSteps, logger and Status from bindinds
             bindings.remove("__QTaste_Module");
@@ -685,7 +690,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
             // Check if test was aborted by user before execute testscript.py
             if (TestEngine.isAbortedByUser()) {
-            	return false;
+                return false;
             }
 
             if (!debug) {
@@ -769,9 +774,8 @@ public class JythonTestScript extends TestScript implements Executable {
                     // private __checkPresent() method of a test API wrapper class,
                     // user_line() method of the __ScriptDebugger class and a function of the debugger
                     if ((!fileName.equals("embedded_jython") || (!function.equals("<module>") && !function.equals("doStep")
-                          && !function.equals("doSteps") && !function.startsWith("_TestAPIWrapper__invoke") && !function
-                          .endsWith("__checkPresent") && !function.equals("user_line"))) && !fileName
-                          .endsWith(File.separator + "bdb.py")) {
+                          && !function.equals("doSteps") && !function.startsWith("_TestAPIWrapper__invoke") && !function.endsWith(
+                          "__checkPresent") && !function.equals("user_line"))) && !fileName.endsWith(File.separator + "bdb.py")) {
                         stacktrace.add(frame);
                     }
                 }
@@ -850,7 +854,9 @@ public class JythonTestScript extends TestScript implements Executable {
                     columnNumber = (PyInteger) syntaxError.value.__getattr__(new PyString("offset"));
                     text = (PyString) syntaxError.value.__getattr__(new PyString("text"));
                 }
-                message = "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n" + text;
+                message =
+                      "Python syntax error in file " + fileName + " at line " + lineNumber + ", column " + columnNumber + ":\n"
+                            + text;
                 result.addStackTraceElement(new StackTraceElement("", "", fileName.toString(), lineNumber.getValue()));
                 dumpStack = false;
             } catch (PyException pye) {
@@ -999,13 +1005,14 @@ public class JythonTestScript extends TestScript implements Executable {
 
         /**
          * breakScript method is called from the Python Script in order to stop its execution
+         *
          * @param lineNumber script line number
          * @param locals giving the local variables if any
          * @return <ul>
-         *             <li>0 if script execution must be stopped</li>
-         *             <li>1 if script execution must be stopped at next executed line</li>
-         *             <li>2 if script execution must be continued</li>
-         *         </ul>
+         * <li>0 if script execution must be stopped</li>
+         * <li>1 if script execution must be stopped at next executed line</li>
+         * <li>2 if script execution must be continued</li>
+         * </ul>
          */
         public int breakScript(String fileName, int lineNumber, PyObject locals) {
             final int ACTION_STOP = 0;
@@ -1069,7 +1076,8 @@ public class JythonTestScript extends TestScript implements Executable {
                             return ACTION_STOP;
                         default:
                             logger.error("Implementation error: action should be CONTINUE, STEP or STOP but is " + action);
-                            throw new RuntimeException("Implementation error: action should be CONTINUE, STEP or STOP but is " + action);
+                            throw new RuntimeException(
+                                  "Implementation error: action should be CONTINUE, STEP or STOP but is " + action);
                     }
                 } else {
                     return ACTION_STEPINTO;
@@ -1083,10 +1091,11 @@ public class JythonTestScript extends TestScript implements Executable {
 
         /**
          * doAction This function is used to perform actions while the script has been stopped
+         *
          * @param event a test script breapoint event
          */
         @Override
-		public void doAction(TestScriptBreakpointEvent event) {
+        public void doAction(TestScriptBreakpointEvent event) {
             action = event.getAction();
             logger.debug("Received action in Jython testscript: " + event.getAction().toString());
             try {
@@ -1116,16 +1125,17 @@ public class JythonTestScript extends TestScript implements Executable {
             for (String variableName : new TreeSet<String>(globalContext.keySet())) {
                 Object variableValue = globalContext.get(variableName);
                 if (!variableName.startsWith("__") &&
-                        !(variableValue instanceof PySystemState) &&
-                        !(variableValue instanceof javax.script.SimpleScriptContext) &&
-                        !variableName.equals("javax.script.filename")
-                        //                    (!(variableValue instanceof PyClass)) &&
-                        //                  (!(variableValue instanceof PyFunction)) &&
-                        //                (!(variableValue instanceof java.lang.Class)) &&
-                        //              (!(variableValue instanceof PyModule))
-                        ) {
+                      !(variableValue instanceof PySystemState) &&
+                      !(variableValue instanceof javax.script.SimpleScriptContext) &&
+                      !variableName.equals("javax.script.filename")
+                    //                    (!(variableValue instanceof PyClass)) &&
+                    //                  (!(variableValue instanceof PyFunction)) &&
+                    //                (!(variableValue instanceof java.lang.Class)) &&
+                    //              (!(variableValue instanceof PyModule))
+                      ) {
                     //Object variableValue = locals.get(new PyString(localKey));
-                    DebugVariable debugVar = new DebugVariable(variableName, variableValue.getClass().toString(), variableValue.toString());
+                    DebugVariable debugVar = new DebugVariable(variableName, variableValue.getClass().toString(),
+                          variableValue.toString());
                     debugVar = dumpPythonObject(variableValue, debugVar);
                     debugVariables.add(debugVar);
                 }
@@ -1149,8 +1159,8 @@ public class JythonTestScript extends TestScript implements Executable {
                     if (oMap instanceof String) {
                         String localKey = (String) oMap;
                         Object oValue = locals.get(new PyString(localKey));
-                        DebugVariable debugVar = new DebugVariable(localKey.toString(),
-                                oValue.getClass().toString(), oValue.toString());
+                        DebugVariable debugVar = new DebugVariable(localKey.toString(), oValue.getClass().toString(),
+                              oValue.toString());
                         debugVar = dumpPythonObject(oValue, debugVar);
                         debugVariables.add(debugVar);
                     }
@@ -1171,8 +1181,8 @@ public class JythonTestScript extends TestScript implements Executable {
             int index = 0;
             while (arrayListIt.hasNext()) {
                 Object javaObjectInArray = arrayListIt.next();
-                DebugVariable fieldVar = new DebugVariable("[" + index + "]",
-                        javaObjectInArray.getClass().toString(), javaObjectInArray.toString());
+                DebugVariable fieldVar = new DebugVariable("[" + index + "]", javaObjectInArray.getClass().toString(),
+                      javaObjectInArray.toString());
                 fieldVar = dumpJavaObject(javaObjectInArray, fieldVar);
                 debugVar.addField(fieldVar);
                 index++;
@@ -1186,31 +1196,27 @@ public class JythonTestScript extends TestScript implements Executable {
                 Object fieldObject = field.get(javaObject);
 
                 String fieldValue = fieldObject.toString();
-                DebugVariable fieldVar = new DebugVariable(fieldName,
-                        field.getClass().toString(), fieldValue.toString());
+                DebugVariable fieldVar = new DebugVariable(fieldName, field.getClass().toString(), fieldValue.toString());
                 fieldVar = dumpJavaObject(fieldValue, fieldVar);
                 debugVar.addField(fieldVar);
             } catch (IllegalArgumentException e) {
-                debugVar.addField(new DebugVariable(fieldName,
-                        field.getClass().toString(), "Illegal argument"));
+                debugVar.addField(new DebugVariable(fieldName, field.getClass().toString(), "Illegal argument"));
             } catch (IllegalAccessException e) {
-                debugVar.addField(new DebugVariable(fieldName,
-                        field.getClass().toString(), "Illegal Access Exception"));
+                debugVar.addField(new DebugVariable(fieldName, field.getClass().toString(), "Illegal Access Exception"));
             } catch (NullPointerException e) {
-                debugVar.addField(new DebugVariable(fieldName,
-                        field.getClass().toString(), "Null Pointer Exception"));
+                debugVar.addField(new DebugVariable(fieldName, field.getClass().toString(), "Null Pointer Exception"));
             }
         }
         Method[] methods = javaObject.getClass().getMethods();
         for (int methodIndex = 0; methodIndex < methods.length; methodIndex++) {
             Method method = methods[methodIndex];
             if ((method.getName().startsWith("get")) &&
-                    (!(method.getName().equals("getClass"))) &&
-                    (!(method.getName().equals("getAccessorKeys")))) {
+                  (!(method.getName().equals("getClass"))) &&
+                  (!(method.getName().equals("getAccessorKeys")))) {
                 try {
-                    Object returnValue = method.invoke(javaObject, new Object[]{});
-                    DebugVariable fieldVar = new DebugVariable(method.getName(),
-                            javaObject.getClass().toString(), returnValue.toString());
+                    Object returnValue = method.invoke(javaObject, new Object[] {});
+                    DebugVariable fieldVar = new DebugVariable(method.getName(), javaObject.getClass().toString(),
+                          returnValue.toString());
                     fieldVar = dumpJavaObject(returnValue, fieldVar);
                     debugVar.addField(fieldVar);
                 } catch (Exception e) {
@@ -1235,8 +1241,7 @@ public class JythonTestScript extends TestScript implements Executable {
             Object[] dataArray = (Object[]) listValue.getArray();
             for (int i = 0; i < listValue.__len__(); i++) {
                 Object o = dataArray[i];
-                debugVar.addField(new DebugVariable("[" + i + "]",
-                        o.getClass().toString(), o.toString()));
+                debugVar.addField(new DebugVariable("[" + i + "]", o.getClass().toString(), o.toString()));
             }
             return debugVar;
 
@@ -1246,8 +1251,7 @@ public class JythonTestScript extends TestScript implements Executable {
             Object[] dataArray = (Object[]) arrayValue.getArray();
             for (int i = 0; i < arrayValue.__len__(); i++) {
                 Object o = dataArray[i];
-                debugVar.addField(new DebugVariable("[" + i + "]",
-                        o.getClass().toString(), o.toString()));
+                debugVar.addField(new DebugVariable("[" + i + "]", o.getClass().toString(), o.toString()));
                 debugVar = dumpJavaObject(o, debugVar);
             }
             return debugVar;
@@ -1303,7 +1307,7 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         public String getFileContentAsString(String name, String charset) throws QTasteDataException {
-        	return testData.getFileContentAsString(name, charset);
+            return testData.getFileContentAsString(name, charset);
         }
 
         public void setValue(String name, String value) throws QTasteDataException {
@@ -1348,6 +1352,7 @@ public class JythonTestScript extends TestScript implements Executable {
 
         private ScriptTestResultStatus() {
         }
+
         public static final TestResult.Status FAIL = TestResult.Status.FAIL;
         public static final TestResult.Status NOT_AVAILABLE = TestResult.Status.NOT_AVAILABLE;
     }

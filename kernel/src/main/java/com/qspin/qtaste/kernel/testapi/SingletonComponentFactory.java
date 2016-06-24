@@ -33,6 +33,7 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * SingletonFactory is a Factory able to create only one instance of a TestAPIComponent.
+ *
  * @author lvboque
  */
 public class SingletonComponentFactory implements ComponentFactory {
@@ -57,6 +58,7 @@ public class SingletonComponentFactory implements ComponentFactory {
 
     /**
      * Get an instance of the SingletonFactory.
+     *
      * @return The SingletonFactory.
      */
     synchronized public static SingletonComponentFactory getInstance() {
@@ -68,6 +70,7 @@ public class SingletonComponentFactory implements ComponentFactory {
 
     /**
      * Return the instance of the component specified as parameter.
+     *
      * @param component the component name
      * @param data the data. Not used for this type of factory
      * @return the instance of the component or null if the component specified doesn't exist
@@ -82,7 +85,8 @@ public class SingletonComponentFactory implements ComponentFactory {
             if (!list.isEmpty()) {
                 Class<?> c = ComponentsLoader.getInstance().getComponentImplementationClass(component);
                 if (c == null) {
-                    throw new QTasteException("The class implemeting the component " + component + " is not registered in platform selected in the Testbed configuration.");
+                    throw new QTasteException("The class implemeting the component " + component
+                          + " is not registered in platform selected in the Testbed configuration.");
                 }
                 Component componentImpl = createComponentInstance(c);
                 map.put(component, componentImpl);
@@ -97,15 +101,15 @@ public class SingletonComponentFactory implements ComponentFactory {
     public Collection<Component> getComponentsInstances() {
         return map.values();
     }
-    
+
     public void removeComponentInstance(Component component) {
-    	for (Map.Entry<String, Component> entry: map.entrySet()) {
-    		if (entry.getValue() == component) {
-    			map.remove(entry.getKey());
-    			return;
-    		}
-    	}
-    	logger.error("Component instance not found");
+        for (Map.Entry<String, Component> entry : map.entrySet()) {
+            if (entry.getValue() == component) {
+                map.remove(entry.getKey());
+                return;
+            }
+        }
+        logger.error("Component instance not found");
     }
 
     private Component createComponentInstance(Class<?> componentClass) throws QTasteException {

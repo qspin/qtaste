@@ -27,48 +27,41 @@ import java.util.List;
 
 /**
  * Component asker responsible to count the number of GUI component that are enabled/disabled.
- * 
- * @author simjan
  *
+ * @author simjan
  */
 class EnabledComponentCounter extends ComponentCommander {
 
-	/**
-	 * @param data a string representing the boolean enabled state.
-	 * @return the number of GUI component with the given enabled state.
-	 */
-	@Override
-	Integer executeCommand(int timeout, String componentName, Object... data) {
-		int counter = 0;
-		List<Container> superContainers = new ArrayList<>();
-		for( Window w : Window.getWindows() )
-		{
-			if (!superContainers.contains(w))
-			{
-				superContainers.add(w);
-			}
-		}
-		
-		boolean isEnable = Boolean.parseBoolean(componentName);
-		for ( Container c : superContainers )
-		{
-			counter += getEnabledComponentCount(isEnable, c);
-		}
-		return counter;
-	}
-	
-	protected int getEnabledComponentCount(boolean isEnabled, Container c)
-	{
-		int counter = 0;
-		if (c.isEnabled() == isEnabled)
-		{
-			counter++;
-		}
-		for (int i = 0; i < c.getComponentCount(); i++)
-		{
-			Component child = c.getComponent(i);
-			counter += getEnabledComponentCount(isEnabled, (Container)child);
-		}
-		return counter;
-	}
+    /**
+     * @param data a string representing the boolean enabled state.
+     * @return the number of GUI component with the given enabled state.
+     */
+    @Override
+    Integer executeCommand(int timeout, String componentName, Object... data) {
+        int counter = 0;
+        List<Container> superContainers = new ArrayList<>();
+        for (Window w : Window.getWindows()) {
+            if (!superContainers.contains(w)) {
+                superContainers.add(w);
+            }
+        }
+
+        boolean isEnable = Boolean.parseBoolean(componentName);
+        for (Container c : superContainers) {
+            counter += getEnabledComponentCount(isEnable, c);
+        }
+        return counter;
+    }
+
+    protected int getEnabledComponentCount(boolean isEnabled, Container c) {
+        int counter = 0;
+        if (c.isEnabled() == isEnabled) {
+            counter++;
+        }
+        for (int i = 0; i < c.getComponentCount(); i++) {
+            Component child = c.getComponent(i);
+            counter += getEnabledComponentCount(isEnabled, (Container) child);
+        }
+        return counter;
+    }
 }

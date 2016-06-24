@@ -27,14 +27,12 @@ package com.qspin.qtaste.event;
 import java.util.EventObject;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
 public class DumpPythonResultEvent extends EventObject {
 
-
-    public DumpPythonResultEvent(Object returnValue){
+    public DumpPythonResultEvent(Object returnValue) {
         super(returnValue);
     }
 }

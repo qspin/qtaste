@@ -32,7 +32,6 @@ import com.qspin.qtaste.ui.tools.FileMask;
 import com.qspin.qtaste.util.FileUtilities;
 
 /**
- *
  * @author vdubois
  */
 public class MetaCampaignFile {
@@ -42,20 +41,21 @@ public class MetaCampaignFile {
 
     static public MetaCampaignFile[] getExistingCampaigns() {
         ArrayList<MetaCampaignFile> campaignArray = new ArrayList<MetaCampaignFile>();
-        File campaignDir = new File (StaticConfiguration.CAMPAIGN_DIRECTORY);
+        File campaignDir = new File(StaticConfiguration.CAMPAIGN_DIRECTORY);
         FileMask fileMask = new FileMask();
         fileMask.addExtension(StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
-        File[] fCampaignList = FileUtilities.listSortedFiles(campaignDir,fileMask);
+        File[] fCampaignList = FileUtilities.listSortedFiles(campaignDir, fileMask);
         for (int i = 0; i < fCampaignList.length; i++) {
             // remove the extension
-            String campaignName = fCampaignList[i].getName().substring(0,
-                fCampaignList[i].getName().lastIndexOf("."));
+            String campaignName = fCampaignList[i].getName().substring(0, fCampaignList[i].getName().lastIndexOf("."));
             campaignArray.add(new MetaCampaignFile(campaignName));
         }
         return campaignArray.toArray(new MetaCampaignFile[0]);
     }
+
     public MetaCampaignFile(String fileName) {
-        file = new File(StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + fileName + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
+        file = new File(StaticConfiguration.CAMPAIGN_DIRECTORY + File.separator + fileName + "."
+              + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
         campaignName = fileName;
     }
 
@@ -66,39 +66,42 @@ public class MetaCampaignFile {
     public String getCampaignName() {
         return campaignName;
     }
+
     public String getFileName() {
         return file.getPath();
     }
 
     public File getFile() {
-    	return file;
+        return file;
     }
 
     public boolean renameFile(String campaign) {
-    	boolean ret = false;
-    	if (file == null)
-    		return ret;
+        boolean ret = false;
+        if (file == null) {
+            return ret;
+        }
 
-    	File newFile = new File(StaticConfiguration.CAMPAIGN_DIRECTORY +
-    			File.separator + campaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
-    	ret = file.renameTo(newFile);
-    	if (ret) {
-    		file = newFile;
-    		campaignName = campaign;
-    	}
+        File newFile = new File(StaticConfiguration.CAMPAIGN_DIRECTORY +
+              File.separator + campaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);
+        ret = file.renameTo(newFile);
+        if (ret) {
+            file = newFile;
+            campaignName = campaign;
+        }
 
-    	return ret;
+        return ret;
     }
 
     public boolean removeFile() {
-    	if (file == null)
-    		return false;
-    	if (FileUtilities.deleteFile(file)) {
-    		campaignName = "";
-    		return true;
-    	}
+        if (file == null) {
+            return false;
+        }
+        if (FileUtilities.deleteFile(file)) {
+            campaignName = "";
+            return true;
+        }
 
-    	return false;
+        return false;
     }
 
 }

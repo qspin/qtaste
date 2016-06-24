@@ -106,9 +106,7 @@ public class LineNumberPanel extends JComponent implements SyntaxComponent, Prop
         int end = clip.y + clip.height + lh;
         int lineNum = clip.y / lh + 1;
         // round the start to a multiple of lh
-        for (int y = (clip.y / lh) * lh + lh;
-              y <= end;
-              y += lh) {
+        for (int y = (clip.y / lh) * lh + lh; y <= end; y += lh) {
             NonWrappingTextPane textPane = (NonWrappingTextPane) pane;
             HashMap<Integer, Boolean> breakpoints = textPane.getBreakpointScript().getBreakpoints();
             if (breakpoints.containsKey(lineNum) && breakpoints.get(lineNum)) {
@@ -152,7 +150,7 @@ public class LineNumberPanel extends JComponent implements SyntaxComponent, Prop
             return;
         }
         lineCount = newLineCount;
-        int h = (int)pane.getPreferredSize().getHeight();
+        int h = (int) pane.getPreferredSize().getHeight();
         int d = (int) Math.log10(lineCount) + 1;
         if (d < 1) {
             d = 1;

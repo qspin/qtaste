@@ -33,12 +33,13 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
 /**
- * CampaignLauncher is the main command-line program for the execution of a campaign 
+ * CampaignLauncher is the main command-line program for the execution of a campaign
+ *
  * @author lvboque
  */
 public class CampaignLauncher {
 
-	private static Logger logger = Log4jLoggerFactory.getLogger(CampaignLauncher.class);
+    private static Logger logger = Log4jLoggerFactory.getLogger(CampaignLauncher.class);
 
     private static void showUsage() {
         System.err.println("Usage: <command> <campaignFileName.xml> [-sutversion <sut_version_identifier>]");
@@ -55,8 +56,8 @@ public class CampaignLauncher {
         PropertyConfigurator.configure(StaticConfiguration.CONFIG_DIRECTORY + "/log4j.properties");
 
         // log version information
-      	logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
-  		logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
+        logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
+        logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
         // handle config file name and optional -sutversion
         if (args.length != 1 && (args.length != 3 || !args[1].equals("-sutversion"))) {
@@ -73,7 +74,7 @@ public class CampaignLauncher {
         Properties properties = new Properties();
         properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
         properties.setProperty("python.path", StaticConfiguration.JYTHON_LIB);
-        PythonInterpreter.initialize(System.getProperties(), properties, new String[]{""});
+        PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
 
         CampaignManager campaignManager = CampaignManager.getInstance();
         boolean executionResult = false;
@@ -84,6 +85,6 @@ public class CampaignLauncher {
         } finally {
             shutdown();
         }
-        System.exit(executionResult?0:1);
+        System.exit(executionResult ? 0 : 1);
     }
 }

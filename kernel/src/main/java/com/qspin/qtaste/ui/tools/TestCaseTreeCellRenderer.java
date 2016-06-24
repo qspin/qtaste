@@ -28,81 +28,63 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-
-
-
 /**
  * The PatientTreeCellRenderer is responsible for displaying each cell of the tree with a specific look.
- * 
+ *
  * This class relies on PrescriptionValidator.
- * 
+ *
  * @author cbauvir
- * 
  */
 
 @SuppressWarnings("serial")
-public class TestCaseTreeCellRenderer extends DefaultTreeCellRenderer
-{
-   private final Color mLightBlue = new Color(0.78f, 0.67f, 0.87f);
-   private final Color mBlue = new Color(0.38f, 0.12f,  0.69f);
-   //private final Color mDarkGreen = new Color(0.19f, 0.345f, 0.06f);
-   //private final Color mLightRed = new Color(255, 65, 65);
-   //private final Color mDarkRed = new Color(157, 0, 0);
-   //private final Color mLightGray = new Color(215, 215, 215);
-   //private final Color mOrange = new Color(241, 171, 0);
-   //private final Color mBackground = new Color(250, 250, 250);
-   private static final Font NORMAL_FONT = new Font("Dialog", Font.PLAIN, 12);
+public class TestCaseTreeCellRenderer extends DefaultTreeCellRenderer {
+    private final Color mLightBlue = new Color(0.78f, 0.67f, 0.87f);
+    private final Color mBlue = new Color(0.38f, 0.12f, 0.69f);
+    //private final Color mDarkGreen = new Color(0.19f, 0.345f, 0.06f);
+    //private final Color mLightRed = new Color(255, 65, 65);
+    //private final Color mDarkRed = new Color(157, 0, 0);
+    //private final Color mLightGray = new Color(215, 215, 215);
+    //private final Color mOrange = new Color(241, 171, 0);
+    //private final Color mBackground = new Color(250, 250, 250);
+    private static final Font NORMAL_FONT = new Font("Dialog", Font.PLAIN, 12);
 
+    public TestCaseTreeCellRenderer() {
+        setBorderSelectionColor(mBlue);
+        setBackgroundSelectionColor(mLightBlue);
+    }
 
-   public TestCaseTreeCellRenderer()
-   {
-      setBorderSelectionColor(mBlue);
-      setBackgroundSelectionColor(mLightBlue);
-   }
+    public Component getTreeCellRendererComponent(JTree pTree, Object pValue, boolean pSel, boolean pExpanded, boolean pLeaf,
+          int pRow, boolean pHasFocus) {
+        super.getTreeCellRendererComponent(pTree, pValue, pSel, pExpanded, pLeaf, pRow, pHasFocus);
+        formatNode((DefaultMutableTreeNode) pValue, pTree);
+        return this;
+    }
 
-   public Component getTreeCellRendererComponent(JTree pTree, Object pValue, boolean pSel, boolean pExpanded, boolean pLeaf, int pRow, boolean pHasFocus)
-   {
-      super.getTreeCellRendererComponent(pTree, pValue, pSel, pExpanded, pLeaf, pRow, pHasFocus);
-      formatNode((DefaultMutableTreeNode) pValue, pTree);
-      return this;
-   }
+    private void formatNode(DefaultMutableTreeNode pNode, JTree pTree) {
+        setFont(NORMAL_FONT);
+        if (pNode.getUserObject() instanceof FileNode) {
+            FileNode node = (FileNode) pNode.getUserObject();
+            formatFileNode(node);
+            setText(node.getFile().getName());
+        }
+        if (getText() != null) {
+            setToolTipText(getText());
+        }
 
-   private void formatNode(DefaultMutableTreeNode pNode, JTree pTree)
-   {
-      setFont(NORMAL_FONT);
-      if (pNode.getUserObject() instanceof FileNode)
-      {
-         FileNode node = (FileNode) pNode.getUserObject();
-         formatFileNode(node);
-         setText(node.getFile().getName());
-      }
-      if (getText() != null)
-      {
-         setToolTipText(getText());
-      }
+    }
 
-   }
+    private void formatFileNode(FileNode pNode) {
+        if (pNode.isTestcaseDir()) {
+            if (pNode.isTestcaseCheckOk()) {
+                Icon icon = ResourceManager.getInstance().getImageIcon("icons/tc16");
+                setIcon(icon);
+            } else {
+                setIcon(ResourceManager.getInstance().getImageIcon("icons/tc16_nodata"));
+                this.setToolTipText("no TestData.csv file found");
+            }
+        } else {
+            setIcon(ResourceManager.getInstance().getImageIcon("icons/dir16"));
+        }
+    }
 
-   private void formatFileNode(FileNode pNode)
-   {
-       if (pNode.isTestcaseDir())
-       {
-           if (pNode.isTestcaseCheckOk())
-           {
-               Icon icon = ResourceManager.getInstance().getImageIcon("icons/tc16");
-               setIcon(icon);
-           }
-           else
-           {
-               setIcon(ResourceManager.getInstance().getImageIcon("icons/tc16_nodata"));
-               this.setToolTipText("no TestData.csv file found");
-           }
-       }
-       else
-       {
-         setIcon(ResourceManager.getInstance().getImageIcon("icons/dir16"));
-       }
-   }
-
-   
 }

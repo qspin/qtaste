@@ -336,9 +336,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
 
         TabStop[] tabs = new TabStop[10];
 
-        for (int j = 0;
-              j < tabs.length;
-              j++) {
+        for (int j = 0; j < tabs.length; j++) {
             int tab = j + 1;
             tabs[j] = new TabStop(tab * tabWidth);
         }
@@ -550,14 +548,14 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
     class IndentationDocumentFilter extends DocumentFilter {
 
         @Override
-        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attrs) throws
-              BadLocationException {
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attrs)
+              throws BadLocationException {
             super.insertString(fb, offset, text.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING), attrs);
         }
 
         @Override
-        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws
-              BadLocationException {
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+              throws BadLocationException {
             String newText = text;
 
             if (text != null) {

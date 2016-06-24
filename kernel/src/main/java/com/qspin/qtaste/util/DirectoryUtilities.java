@@ -24,41 +24,38 @@
 
 package com.qspin.qtaste.util;
 
-
 import java.io.File;
+
 /**
- *
  * @author vdubois
  */
 
 public class DirectoryUtilities {
 
-  static public boolean createDirectory(File path) {
-	  boolean result = false;
-	  if (!path.exists()) {
-	    try{
-	    	path.mkdir();
-	        result = true;
-	     } catch(SecurityException se){
-	       return false;
-	     }
-	  }
-	  return result;
-  }
-
-
-  static public boolean deleteDirectory(File path) {
-    if( path.exists() ) {
-      File[] files = path.listFiles();
-      for(int i=0; i<files.length; i++) {
-         if(files[i].isDirectory()) {
-           deleteDirectory(files[i]);
-         }
-         else {
-           files[i].delete();
-         }
-      }
+    static public boolean createDirectory(File path) {
+        boolean result = false;
+        if (!path.exists()) {
+            try {
+                path.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                return false;
+            }
+        }
+        return result;
     }
-    return( path.delete() );
-  }
+
+    static public boolean deleteDirectory(File path) {
+        if (path.exists()) {
+            File[] files = path.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                } else {
+                    files[i].delete();
+                }
+            }
+        }
+        return (path.delete());
+    }
 }

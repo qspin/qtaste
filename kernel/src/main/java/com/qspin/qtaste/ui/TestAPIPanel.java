@@ -25,18 +25,18 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
-public class TestAPIPanel extends JPanel{
+public class TestAPIPanel extends JPanel {
 
     protected JTree apiTree;
+
     public TestAPIPanel() {
-            super(new BorderLayout());
+        super(new BorderLayout());
     }
-    public void setTestCaseTree(JTree tree)
-    {
+
+    public void setTestCaseTree(JTree tree) {
         apiTree = tree;
     }
 }

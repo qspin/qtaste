@@ -32,12 +32,15 @@ package com.qspin.qtaste.testsuite;
  * QTasteException represents an error related to the QTaste platform.
  * The QTaste platform is represented by the kernel itself but also by the
  * testapi and all test files.
+ *
  * @author lvboque
  */
 @SuppressWarnings("serial")
 public class QTasteException extends Exception {
-    
-    /** Creates a new instance of QTasteException */
+
+    /**
+     * Creates a new instance of QTasteException
+     */
     public QTasteException(String message) {
         super(message);
     }

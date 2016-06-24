@@ -76,16 +76,17 @@ public class OutputValidator extends Validator {
                         return false;
                     }
                     //					System.out.println("" + lineCounter + ":" + refLine);
-//					System.out.println("" + lineCounter + ":" + gotLine);
+                    //					System.out.println("" + lineCounter + ":" + gotLine);
                     //System.out.print("got line is: " + lineCounter + gotLine + "\n");
                     String[] lineParts = refLine.split(IGNORE_TAG);
-                    for (int i=0; i < lineParts.length; i++) {
+                    for (int i = 0; i < lineParts.length; i++) {
                         lineParts[i] = Pattern.quote(lineParts[i]);
                     }
                     String patternedLine = Strings.join(lineParts, IGNORE_VALUE);
                     if (!gotLine.matches(patternedLine)) {
                         //System.out.println("NO MATCH! with " + patternedLine);
-                        this.extraDetails = new String("Error at line " + lineCounter + ": expecting " + patternedLine + " but got " + gotLine);
+                        this.extraDetails = new String(
+                              "Error at line " + lineCounter + ": expecting " + patternedLine + " but got " + gotLine);
                         return false;
                     }
                     // Get the next String but skip the file.separator
@@ -95,7 +96,8 @@ public class OutputValidator extends Validator {
                     s += (gotLine.length() + 1);
                     lineCounter++;
                 }
-            } while (refLine != null);
+            }
+            while (refLine != null);
             gotLine = readLine(buf, s);
             if (gotLine != null) {
                 this.extraDetails = "Output size (" + lineCounter + " lines) is bigger than the one expected!";

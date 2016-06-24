@@ -23,17 +23,22 @@ package com.qspin.qtaste.testsuite;
  * QTasteDataException represents a error related to the test data.
  * Nothing about the test behavior or the testAPI, just test data.
  * If there is a problem related to an invalid data type or an unexpected value.
- * For example, if a test expects a value between 0 and 10 but the data is not present in the csv file, then a QTasteDataException will be thrown. 
+ * For example, if a test expects a value between 0 and 10 but the data is not present in the csv file, then a
+ * QTasteDataException
+ * will be thrown.
+ *
  * @author dergo
  */
 @SuppressWarnings("serial")
 public class QTasteDataException extends QTasteException {
-    
-    /** Creates a new instance of QTasteDataException */
+
+    /**
+     * Creates a new instance of QTasteDataException
+     */
     public QTasteDataException(String message) {
         super(message);
     }
-    
+
     public QTasteDataException(String message, Throwable e) {
         super(message, e);
     }

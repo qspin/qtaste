@@ -19,29 +19,27 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import com.qspin.qtaste.testsuite.QTasteTestFailException;
-
 import javafx.scene.control.TextInputControl;
+
+import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 class TextSetter extends UpdateComponentCommander {
 
-	@Override
-	protected void doActionsInEventThread() throws QTasteTestFailException{
-		final String value = mData[0].toString();
+    @Override
+    protected void doActionsInEventThread() throws QTasteTestFailException {
+        final String value = mData[0].toString();
 
-		if (component instanceof TextInputControl)
-		{
-			final TextInputControl t = (TextInputControl) component;
-			t.requestFocus();
-			t.setText(value);
-		}
-		else
-		{
-			throw new QTasteTestFailException("JavaGUI-FX cannot set text for such component " + component.getClass().getName());
-		}
-	}
+        if (component instanceof TextInputControl) {
+            final TextInputControl t = (TextInputControl) component;
+            t.requestFocus();
+            t.setText(value);
+        } else {
+            throw new QTasteTestFailException("JavaGUI-FX cannot set text for such component " + component.getClass().getName());
+        }
+    }
 
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {}
+    @Override
+    protected void prepareActions() throws QTasteTestFailException {
+    }
 
 }

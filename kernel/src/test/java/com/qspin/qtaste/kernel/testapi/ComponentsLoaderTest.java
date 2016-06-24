@@ -19,18 +19,17 @@
 
 package com.qspin.qtaste.kernel.testapi;
 
-import com.qspin.qtaste.kernel.testapi.ComponentsLoader;
-import com.qspin.qtaste.config.StaticConfiguration;
-import com.qspin.qtaste.config.TestBedConfiguration;
 import junit.framework.TestCase;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.config.TestBedConfiguration;
+
 /**
- *
  * @author lvboque
  */
-public class ComponentsLoaderTest extends TestCase {    
-    
+public class ComponentsLoaderTest extends TestCase {
+
     public ComponentsLoaderTest(String testName) {
         super(testName);
         // Log4j Configuration
@@ -40,7 +39,8 @@ public class ComponentsLoaderTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        TestBedConfiguration.setConfigFile(StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/enginetest." + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION);
+        TestBedConfiguration.setConfigFile(
+              StaticConfiguration.TESTBED_CONFIG_DIRECTORY + "/enginetest." + StaticConfiguration.TESTBED_CONFIG_FILE_EXTENSION);
     }
 
     @Override
@@ -52,14 +52,14 @@ public class ComponentsLoaderTest extends TestCase {
      * Test of getInstance method, of class ComponentsLoader.
      */
     public void testGetInstance() {
-        System.out.println("getInstance");        
-        ComponentsLoader result = ComponentsLoader.getInstance();                
-        assertNotNull("instance cannot be null", result);        
-        
+        System.out.println("getInstance");
+        ComponentsLoader result = ComponentsLoader.getInstance();
+        assertNotNull("instance cannot be null", result);
+
         ComponentsLoader result2 = ComponentsLoader.getInstance();
-        
+
         assertNotNull(result2);
-        
+
         assertEquals("should get the same instance", result, result2);
     }
 
@@ -70,11 +70,11 @@ public class ComponentsLoaderTest extends TestCase {
         System.out.println("getComponentImplementationClass");
         String component = "";
         ComponentsLoader instance = ComponentsLoader.getInstance();
-        
+
         // Get a non-existing component
         Class<?> result = instance.getComponentImplementationClass(component);
         assertNull(result);
-        
+
         // Get an instance of the EngineTest component
         Class<?> result2 = instance.getComponentImplementationClass("EngineTest");
         assertNotNull(result2);

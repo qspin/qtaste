@@ -35,9 +35,10 @@ import com.qspin.qtaste.util.NameValue;
 import com.qspin.qtaste.util.NamesValuesList;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
-/** 
+/**
  * A report formatter provides methods to ease the generation of test reports
- * @author lvboque 
+ *
+ * @author lvboque
  */
 public abstract class ReportFormatter {
 
@@ -69,6 +70,7 @@ public abstract class ReportFormatter {
 
     /**
      * Substitutes names by values in template and return result.
+     *
      * @param templateContent content of the template to substitute
      * @param namesValues list of names/values to substitute
      * @return result of substitution
@@ -94,6 +96,7 @@ public abstract class ReportFormatter {
 
     /**
      * Gets the name of the testbed configuration.
+     *
      * @return the name of the testbed configuration
      */
     protected static String getTestbedConfigurationName() {
@@ -104,6 +107,7 @@ public abstract class ReportFormatter {
 
     /**
      * Gets the name of the testbed configuration file.
+     *
      * @return the name of the testbed configuration file
      */
     protected static String getTestbedConfigurationFileName() {
@@ -112,6 +116,7 @@ public abstract class ReportFormatter {
 
     /**
      * Gets the sut version string corresponding to the sut selected.
+     *
      * @return the name of the testbed configuration file
      */
     protected static String getSUTVersion() {
@@ -120,19 +125,18 @@ public abstract class ReportFormatter {
 
     /**
      * Gets the testapi version string corresponding to the testapi version depending of the SCM configuration.
+     *
      * @return the name of the testbed configuration file
      */
     protected static String getTestAPIVersion() {
         return VersionControl.getInstance().getTestApiVersion("");
     }
 
-
-
-
     /**
      * Gets the content of the testbed configuration file.
+     *
      * @return the content of the testbed configuration file (with tabs converted to 4 spaces),
-     *         or an error message if an error occurred reading file
+     * or an error message if an error occurred reading file
      */
     protected static String getTestbedConfigurationFileContent() {
         try {
@@ -141,15 +145,17 @@ public abstract class ReportFormatter {
             logger.error("Testbed configuration file not found (" + getTestbedConfigurationFileName() + ")");
             return "File not found!";
         } catch (IOException e) {
-            logger.error("Error while reading testbed configuration file (" + getTestbedConfigurationFileName() + "): " + e.getMessage());
+            logger.error("Error while reading testbed configuration file (" + getTestbedConfigurationFileName() + "): " + e
+                  .getMessage());
             return "Error reading file!";
         }
     }
 
     /**
      * Gets the name of the testbed control script file.
+     *
      * @return the name of the testbed control script file,
-     *         or null if testbed has no control script
+     * or null if testbed has no control script
      */
     protected static String getTestbedControlScriptFileName() {
         return TestBedConfiguration.getInstance().getControlScriptFileName();
@@ -157,9 +163,10 @@ public abstract class ReportFormatter {
 
     /**
      * Gets the content of the testbed control script file.
+     *
      * @return the content of the testbed control script file (with tabs converted to 4 spaces),
-     *         an error message if an error occurred reading file,
-     *         or null if testbed has no control script
+     * an error message if an error occurred reading file,
+     * or null if testbed has no control script
      */
     protected static String getTestbedControlScriptFileContent() {
         final String controlScriptFileName = getTestbedControlScriptFileName();
@@ -180,13 +187,12 @@ public abstract class ReportFormatter {
 
     public void startReport(Date timeStamp, String name) {
         startDate = new Date();
-        if ( reportDirectory != null )
-        {
-	        reportFile = new File( reportDirectory, new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(timeStamp) + File.separator + reportFileName);
-	        if ( !reportFile.getParentFile().exists() )
-	        {
-	        	reportFile.getParentFile().mkdirs();
-	        }
+        if (reportDirectory != null) {
+            reportFile = new File(reportDirectory,
+                  new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(timeStamp) + File.separator + reportFileName);
+            if (!reportFile.getParentFile().exists()) {
+                reportFile.getParentFile().mkdirs();
+            }
         }
         refresh();
     }

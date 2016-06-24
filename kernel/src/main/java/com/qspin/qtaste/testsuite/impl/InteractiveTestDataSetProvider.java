@@ -26,7 +26,6 @@ import com.qspin.qtaste.testsuite.TestData;
 import com.qspin.qtaste.testsuite.TestDataSet;
 
 /**
- *
  * @author lvboque
  */
 public class InteractiveTestDataSetProvider extends TestDataSet {

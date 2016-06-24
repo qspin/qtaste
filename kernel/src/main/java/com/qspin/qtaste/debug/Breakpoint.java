@@ -25,21 +25,22 @@
 package com.qspin.qtaste.debug;
 
 /**
- *
  * @author vdubois
  */
-    public class Breakpoint {
-        private String mFileName;
-        private Integer mLineIndex;
+public class Breakpoint {
+    private String mFileName;
+    private Integer mLineIndex;
 
-        public Breakpoint(String fileName, Integer lineIndex) {
-            mFileName = fileName;
-            mLineIndex= lineIndex;
-        }
-        public String getFileName() {
-            return this.mFileName;
-        }
-        public Integer getLineIndex() {
-            return this.mLineIndex;
-        }
+    public Breakpoint(String fileName, Integer lineIndex) {
+        mFileName = fileName;
+        mLineIndex = lineIndex;
     }
+
+    public String getFileName() {
+        return this.mFileName;
+    }
+
+    public Integer getLineIndex() {
+        return this.mLineIndex;
+    }
+}

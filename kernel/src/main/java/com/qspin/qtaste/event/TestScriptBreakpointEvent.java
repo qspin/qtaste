@@ -20,26 +20,30 @@
 package com.qspin.qtaste.event;
 
 import java.util.EventObject;
+
 /**
- *
  * @author vdubois
- * This class is defined to send event from and to the UI when QTaste is in debug mode
+ *         This class is defined to send event from and to the UI when QTaste is in debug mode
  */
 @SuppressWarnings("serial")
 public class TestScriptBreakpointEvent extends EventObject {
-    public enum Action {BREAK, CONTINUE, STEP, STOP, DUMP_STACK, DUMP_VAR, CALL_METHOD, STEPINTO};
+    public enum Action {BREAK, CONTINUE, STEP, STOP, DUMP_STACK, DUMP_VAR, CALL_METHOD, STEPINTO}
+
+    ;
     private Action mAction;
     private Object mExtraData;
-    
-    public TestScriptBreakpointEvent(Object source, Action startStop, Object extraData){
+
+    public TestScriptBreakpointEvent(Object source, Action startStop, Object extraData) {
         super(source);
         mAction = startStop;
         mExtraData = extraData;
-        
+
     }
+
     public Action getAction() {
         return mAction;
-    }    
+    }
+
     public Object getExtraData() {
         return mExtraData;
     }

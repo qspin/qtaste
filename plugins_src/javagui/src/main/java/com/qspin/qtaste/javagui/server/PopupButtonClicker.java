@@ -34,93 +34,90 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
  */
 public class PopupButtonClicker extends UpdateComponentCommander {
 
-	/**
-	 * Commander which clicks on a popup button.
-	 * @param timeout the timeout value; String - the button text.
-	 * @return true if the command is successfully performed.
-	 * @throws QTasteException
-	 */
-	@Override
-	public Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		setData(data);
-		long maxTime = System.currentTimeMillis() + 1000 * timeout;
-		String buttonText = mData[0].toString();
-		component = null;
-		
-		while ( System.currentTimeMillis() < maxTime )
-		{
-			JDialog targetPopup = null;
-			for (JDialog dialog : findPopups() )
-			{
-				if ( !dialog.isVisible() || !dialog.isEnabled() )
-				{
-					String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
-					if (!dialog.isVisible())
-						msg += "\t is not visible";
-					if (!dialog.isEnabled())
-						msg += "\t is not enabled";
-					LOGGER.info(msg);
-					continue;
-				}
-				if (activateAndFocusComponentWindow(dialog))
-				{
-					targetPopup = dialog;
-				}
-				else
-				{
-					LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
-				}
-			}
-			component = findButtonComponent(targetPopup, buttonText);
-			
-			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-				break;
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				LOGGER.warn("Exception during the component search sleep...");
-			}
-		}
-		
-		if (component == null ) {
-			throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not found.");
-		}
-		if (!component.isEnabled()) {
-			throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not enabled.");
-		}
-		if (! checkComponentIsVisible(component) )
-			throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not visible!");
-		
-		prepareActions();
-		SwingUtilities.invokeLater(this);
-		synchronizeThreads();
-		return true;
-	}
-	
-	private AbstractButton findButtonComponent(Component c, String buttonText)
-	{
-		if ( (c instanceof AbstractButton) && (((AbstractButton)c).getText().equals(buttonText)) )
-			return (AbstractButton)c;
-		else if ( c instanceof Container )
-		{
-			for (Component comp : ((Container)c).getComponents() )
-			{
-				AbstractButton ab = findButtonComponent(comp, buttonText);
-				if ( ab != null )
-					return ab;
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	protected void prepareActions() throws QTasteTestFailException {
-		//Do nothing
-	}
+    /**
+     * Commander which clicks on a popup button.
+     *
+     * @param timeout the timeout value; String - the button text.
+     * @return true if the command is successfully performed.
+     * @throws QTasteException
+     */
+    @Override
+    public Boolean executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        setData(data);
+        long maxTime = System.currentTimeMillis() + 1000 * timeout;
+        String buttonText = mData[0].toString();
+        component = null;
 
-	@Override
-	protected void doActionsInSwingThread() throws QTasteTestFailException {
-		((AbstractButton)component).doClick();
-	}
+        while (System.currentTimeMillis() < maxTime) {
+            JDialog targetPopup = null;
+            for (JDialog dialog : findPopups()) {
+                if (!dialog.isVisible() || !dialog.isEnabled()) {
+                    String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
+                    if (!dialog.isVisible()) {
+                        msg += "\t is not visible";
+                    }
+                    if (!dialog.isEnabled()) {
+                        msg += "\t is not enabled";
+                    }
+                    LOGGER.info(msg);
+                    continue;
+                }
+                if (activateAndFocusComponentWindow(dialog)) {
+                    targetPopup = dialog;
+                } else {
+                    LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
+                }
+            }
+            component = findButtonComponent(targetPopup, buttonText);
+
+            if (component != null && component.isEnabled() && checkComponentIsVisible(component)) {
+                break;
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                LOGGER.warn("Exception during the component search sleep...");
+            }
+        }
+
+        if (component == null) {
+            throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not found.");
+        }
+        if (!component.isEnabled()) {
+            throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not enabled.");
+        }
+        if (!checkComponentIsVisible(component)) {
+            throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not visible!");
+        }
+
+        prepareActions();
+        SwingUtilities.invokeLater(this);
+        synchronizeThreads();
+        return true;
+    }
+
+    private AbstractButton findButtonComponent(Component c, String buttonText) {
+        if ((c instanceof AbstractButton) && (((AbstractButton) c).getText().equals(buttonText))) {
+            return (AbstractButton) c;
+        } else if (c instanceof Container) {
+            for (Component comp : ((Container) c).getComponents()) {
+                AbstractButton ab = findButtonComponent(comp, buttonText);
+                if (ab != null) {
+                    return ab;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void prepareActions() throws QTasteTestFailException {
+        //Do nothing
+    }
+
+    @Override
+    protected void doActionsInSwingThread() throws QTasteTestFailException {
+        ((AbstractButton) component).doClick();
+    }
 }

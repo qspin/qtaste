@@ -20,22 +20,21 @@
 package com.qspin.qtaste.debug;
 
 /**
- *
  * @author vdubois
  */
 public class BreakpoinkEvent {
     private int lineIndex;
     private boolean activated;
-    
-    public BreakpoinkEvent(int index, boolean active)
-    {
-        activated= active;
+
+    public BreakpoinkEvent(int index, boolean active) {
+        activated = active;
         lineIndex = index;
     }
 
     public int getLineIndex() {
         return lineIndex;
     }
+
     public boolean isActivated() {
         return activated;
     }

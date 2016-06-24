@@ -33,76 +33,65 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
 final class TableRowCounter extends ComponentCommander {
 
-	private int lastCounter = 0;
-	
-	@Override
-	Integer executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		if (!(c instanceof JTable))
-		{
-			throw new QTasteTestFailException("The component " + componentName + " is not a JTable.");
-		}
-		JTable table = (JTable)c;
-		TableModel model = table.getModel();
-		int columnIndex = getColumnIndex(data[0].toString(), model);
-		return countRows(data[1].toString(), columnIndex, table);
-	}
-	
-	private int countRows(final String pValue, final int pColumnIndex, final JTable pTable) throws QTasteException {
-		try
-		{
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					for (int rowIndex = 0; rowIndex < pTable.getModel().getRowCount(); ++rowIndex )
-					{
-						//format model value
-						Object cellValue = pTable.getModel().getValueAt(rowIndex, pColumnIndex);
-						TableCellRenderer renderer = pTable.getCellRenderer(rowIndex, pColumnIndex);
-						Component c = renderer.getTableCellRendererComponent(pTable, cellValue, false, false, rowIndex, pColumnIndex);
-						String valueRepresentation;
-						if ( c instanceof Label )
-						{
-							LOGGER.debug("cell is represented by a Label");
-							valueRepresentation = ((Label)c).getText();
-						}
-						else if ( c instanceof JLabel )
-						{
-							LOGGER.debug("cell is represented by a JLabel");
-							valueRepresentation = ((JLabel)c).getText();
-						}
-						else
-						{
-							LOGGER.debug("cell is represented by a " + c.getClass());
-							valueRepresentation = c.toString();
-						}
+    private int lastCounter = 0;
 
-						//check with searched value
-						LOGGER.debug("compare value (" + pValue + ") with the cell value (" + valueRepresentation + ")");
-						if (pValue.equals(valueRepresentation))
-							lastCounter ++;
-					}
-				}
-			});
-		}
-		catch(Exception ex)
-		{
-			//LOGGER.fatal(ex.getMessage(), ex);
-			throw new QTasteTestFailException("Error counting the rows " + ex.getMessage());
-		}
-		return lastCounter;
-	}
+    @Override
+    Integer executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        if (!(c instanceof JTable)) {
+            throw new QTasteTestFailException("The component " + componentName + " is not a JTable.");
+        }
+        JTable table = (JTable) c;
+        TableModel model = table.getModel();
+        int columnIndex = getColumnIndex(data[0].toString(), model);
+        return countRows(data[1].toString(), columnIndex, table);
+    }
 
-	private int getColumnIndex(String pColumnName, TableModel pModel) throws QTasteTestFailException
-	{
-		for ( int columnIndex = 0; columnIndex < pModel.getColumnCount(); columnIndex++ )
-		{
-			if ( pColumnName.equals(pModel.getColumnName(columnIndex)) )
-			{
-				return columnIndex;
-			}
-		}
-		throw new QTasteTestFailException("The column " + pColumnName + " is not found.");
-	}
+    private int countRows(final String pValue, final int pColumnIndex, final JTable pTable) throws QTasteException {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    for (int rowIndex = 0; rowIndex < pTable.getModel().getRowCount(); ++rowIndex) {
+                        //format model value
+                        Object cellValue = pTable.getModel().getValueAt(rowIndex, pColumnIndex);
+                        TableCellRenderer renderer = pTable.getCellRenderer(rowIndex, pColumnIndex);
+                        Component c = renderer.getTableCellRendererComponent(pTable, cellValue, false, false, rowIndex,
+                              pColumnIndex);
+                        String valueRepresentation;
+                        if (c instanceof Label) {
+                            LOGGER.debug("cell is represented by a Label");
+                            valueRepresentation = ((Label) c).getText();
+                        } else if (c instanceof JLabel) {
+                            LOGGER.debug("cell is represented by a JLabel");
+                            valueRepresentation = ((JLabel) c).getText();
+                        } else {
+                            LOGGER.debug("cell is represented by a " + c.getClass());
+                            valueRepresentation = c.toString();
+                        }
+
+                        //check with searched value
+                        LOGGER.debug("compare value (" + pValue + ") with the cell value (" + valueRepresentation + ")");
+                        if (pValue.equals(valueRepresentation)) {
+                            lastCounter++;
+                        }
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            //LOGGER.fatal(ex.getMessage(), ex);
+            throw new QTasteTestFailException("Error counting the rows " + ex.getMessage());
+        }
+        return lastCounter;
+    }
+
+    private int getColumnIndex(String pColumnName, TableModel pModel) throws QTasteTestFailException {
+        for (int columnIndex = 0; columnIndex < pModel.getColumnCount(); columnIndex++) {
+            if (pColumnName.equals(pModel.getColumnName(columnIndex))) {
+                return columnIndex;
+            }
+        }
+        throw new QTasteTestFailException("The column " + pColumnName + " is not found.");
+    }
 
 }

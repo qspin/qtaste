@@ -20,44 +20,48 @@
 package com.qspin.qtaste.ui.log4j;
 
 /**
- *
  * @author vdubois
  */
+
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.spi.LoggingEvent;
+
 /**
  * Simple example of creating a Log4j appender that will
- * write to a JTextArea. 
+ * write to a JTextArea.
  */
 public class TextAreaAppender extends WriterAppender {
-	
-	static private ArrayList<Log4jPanel> jTextAreaList = new ArrayList<Log4jPanel> ();
-	
-	/** Set the target JTextArea for the logging information to appear. */
-	static public void addTextArea(Log4jPanel jTextArea) {
-		jTextAreaList.add(jTextArea);
-	}
-	static public void removeTextArea(Log4jPanel jTextArea) {
-		jTextAreaList.remove(jTextArea);
-	}
-	@Override
-	/**
-	 * Format and then append the loggingEvent to the stored
-	 * JTextArea.
-	 */
-	public void append(final LoggingEvent loggingEvent) {
 
-		// Append formatted message to textarea using the Swing Thread.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				for (Log4jPanel log4jPanel: jTextAreaList) {
-					log4jPanel.appendLog(loggingEvent);
-				}
-			}
-		});
-	}
+    static private ArrayList<Log4jPanel> jTextAreaList = new ArrayList<Log4jPanel>();
+
+    /**
+     * Set the target JTextArea for the logging information to appear.
+     */
+    static public void addTextArea(Log4jPanel jTextArea) {
+        jTextAreaList.add(jTextArea);
+    }
+
+    static public void removeTextArea(Log4jPanel jTextArea) {
+        jTextAreaList.remove(jTextArea);
+    }
+
+    @Override
+    /**
+     * Format and then append the loggingEvent to the stored
+     * JTextArea.
+     */ public void append(final LoggingEvent loggingEvent) {
+
+        // Append formatted message to textarea using the Swing Thread.
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                for (Log4jPanel log4jPanel : jTextAreaList) {
+                    log4jPanel.appendLog(loggingEvent);
+                }
+            }
+        });
+    }
 }

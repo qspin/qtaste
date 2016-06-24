@@ -24,9 +24,9 @@
 package com.qspin.qtaste.ui.tools;
 
 /**
- *
  * @author vdubois
  */
+
 import java.awt.BorderLayout;
 import java.awt.Window;
 import java.io.File;
@@ -40,7 +40,7 @@ public class DirectoryDialog extends javax.swing.JDialog {
     private JFileChooser chooser;
 
     public DirectoryDialog(Window owner, String title, File initDirectory) {
-    
+
         super(owner, title, ModalityType.APPLICATION_MODAL);
         initComponents(initDirectory);
         directory = "";
@@ -50,14 +50,16 @@ public class DirectoryDialog extends javax.swing.JDialog {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
     }
+
     public DirectoryDialog(Window owner, String title) {
         this(owner, title, null);
     }
 
     private void initComponents(File initDirectory) {
         chooser = new javax.swing.JFileChooser();
-        if (initDirectory != null)
+        if (initDirectory != null) {
             chooser.setSelectedFile(initDirectory);
+        }
         getContentPane().setLayout(new BorderLayout());
 
         setTitle("Select a folder");

@@ -26,9 +26,9 @@ import com.qspin.qtaste.testsuite.QTasteException;
 
 public class ComponentLocationGetter extends ComponentCommander {
 
-	@Override
-	Point executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component c = getComponentByName(componentName);
-		return c.getLocationOnScreen();
-	}
+    @Override
+    Point executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component c = getComponentByName(componentName);
+        return c.getLocationOnScreen();
+    }
 }

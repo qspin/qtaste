@@ -60,11 +60,11 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.TreePath;
 
-import org.apache.log4j.Logger;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+
 import com.qspin.qtaste.config.GUIConfiguration;
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
@@ -149,7 +149,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         GUIConfiguration guiConfiguration = GUIConfiguration.getInstance();
         boolean showLogsTab = guiConfiguration.getBoolean(SHOW_LOGS_TAB, true);
         if (showLogsTab) {
-           tcLogsPane = new Log4jPanel();
+            tcLogsPane = new Log4jPanel();
         }
 
         this.parent = parent;
@@ -160,14 +160,13 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         genUI();
     }
 
-    public void addTabPane(JScrollPane pPanel, String pTabTile)
-    {
-    	tabbedPane.addTab(pTabTile, pPanel);
+    public void addTabPane(JScrollPane pPanel, String pTabTile) {
+        tabbedPane.addTab(pTabTile, pPanel);
     }
 
-	public void removeTabPane(JScrollPane pEditor) {
-		tabbedPane.remove(pEditor);
-	}
+    public void removeTabPane(JScrollPane pEditor) {
+        tabbedPane.remove(pEditor);
+    }
 
     @Override
     protected void finalize() {
@@ -213,8 +212,8 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     }
 
     public void setStopButtonEnabled(boolean enabled, boolean visible) {
-    	stopExecutionButton.setEnabled(enabled);
-    	stopExecutionButton.setVisible(visible);
+        stopExecutionButton.setEnabled(enabled);
+        stopExecutionButton.setVisible(visible);
     }
 
     protected void genUI() {
@@ -225,7 +224,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         tcDocsPane.setContentType("text/html");
 
         if (tcLogsPane != null) {
-           TextAreaAppender.addTextArea(tcLogsPane);
+            TextAreaAppender.addTextArea(tcLogsPane);
         }
         tcDocsPane.setEditorKit(new HTMLEditorKit());
         tcDocsPane.addHyperlinkListener(new HyperlinkListener() {
@@ -309,7 +308,8 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 boolean showTestSuiteReport = resultsPane.getCurrentRunName().equals("Run1");
                 String resDir = TestEngineConfiguration.getInstance().getString("reporting.generated_report_path");
                 String baseDir = System.getProperty("user.dir");
-                String filename = baseDir + File.separator + resDir + File.separator + (showTestSuiteReport ? "index.html" : "campaign.html");
+                String filename =
+                      baseDir + File.separator + resDir + File.separator + (showTestSuiteReport ? "index.html" : "campaign.html");
                 File resultsFile = new File(filename);
                 try {
                     if (Desktop.isDesktopSupported()) {
@@ -326,7 +326,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         resultsButton.setToolTipText("View the HTML Test Run Summary Results");
         resultsButton.setName("test run results button");
 
-        FormLayout layout = new FormLayout("6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow", "6px, fill:pref, 6px");
+        FormLayout layout = new FormLayout(
+              "6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px, pref, 6px:grow",
+              "6px, fill:pref, 6px");
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
@@ -385,9 +387,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                             tab.requestFocusInWindow();
                         }
                     }
-                }
-                else
-                {
+                } else {
                     Component tab = tabbedPane.getSelectedComponent();
                     if (tab != null && tab instanceof JScrollPane) {
                         JScrollPane scrollPane = (JScrollPane) tab;
@@ -438,27 +438,27 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
         tabbedPane.add(RESULTS, resultsPane);
         if (tcLogsPane != null) {
-           tabbedPane.add(LOGS, tcLogsPane);
+            tabbedPane.add(LOGS, tcLogsPane);
         }
 
         add(tabbedPane, BorderLayout.CENTER);
     }
 
     public void stopExecution() {
-    	setStopButtonEnabled(false, true);
-    	stopDebug();
+        setStopButtonEnabled(false, true);
+        stopDebug();
         stopExecution = true;
         TestEngine.setAbortedByUser(); // Flag to terminate test suites
         if (testExecutionHandler != null) {
-        	testExecutionHandler.stop();
+            testExecutionHandler.stop();
         } else if (testCampaignExecutionHandler != null) {
             testCampaignExecutionHandler.stop();
         }
 
         if (!TestEngine.isSUTStartedManually()) {
             Thread t = new Thread(new Runnable() {
-            	public void run() {
-                	TestEngine.cancelStartStopSUT();
+                public void run() {
+                    TestEngine.cancelStartStopSUT();
                 }
             });
             t.start();
@@ -476,22 +476,22 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 }
                 // check only opened Python files
                 if (tabTextPane.getFileName().endsWith(".py")) {
-	                ScriptCheckSyntaxValidator scriptCheckSyntaxValidator =
-	                        new ScriptCheckSyntaxValidator(tabTextPane.getFileName(), tabTextPane.getText());
-	                if (!scriptCheckSyntaxValidator.check()) {
-	                	return false;
-	                }
+                    ScriptCheckSyntaxValidator scriptCheckSyntaxValidator = new ScriptCheckSyntaxValidator(
+                          tabTextPane.getFileName(), tabTextPane.getText());
+                    if (!scriptCheckSyntaxValidator.check()) {
+                        return false;
+                    }
                 }
             }
-            
+
             TestDataEditor tabDataPane = this.getTestDataPane(i);
             if (tabDataPane != null && tabDataPane.isModified()) {
                 tabDataPane.save();
             }
-            
+
             TestRequirementEditor requirementPane = this.getTestRequirementPane(i);
             if (requirementPane != null && requirementPane.isModified()) {
-            	requirementPane.save();
+                requirementPane.save();
             }
         }
 
@@ -546,8 +546,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     /**
      * loadTestCaseSource method loads the file contents if necessary. If the
-     *   file is already loaded, this method activates the correct tab based
-     *   on the filename
+     * file is already loaded, this method activates the correct tab based
+     * on the filename
+     *
      * @param f : file to load in the JTextPane
      * @param activateSourceTab : specifies if the tab "TestCase Source" must be activated
      * @param isTestScript : specifies if the file to load is the main TestScript
@@ -559,15 +560,17 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     /**
      * loadTestCaseSource method loads the file contents if necessary. If the
-     *   file is already loaded, this method activates the correct tab based
-     *   on the filename
+     * file is already loaded, this method activates the correct tab based
+     * on the filename
+     *
      * @param f : file to load in the JTextPane
      * @param activateSourceTab : specifies if the tab "TestCase Source" must be activated
      * @param isTestScript : specifies if the file to load is the main TestScript
      * @param force : specifies if the file must be read from source
      * @return the JTextPane(NonWrappingTextPane) containing the file content
      */
-    public NonWrappingTextPane loadTestCaseSource(final File f, final boolean activateSourceTab, final boolean isTestScript, final boolean force) {
+    public NonWrappingTextPane loadTestCaseSource(final File f, final boolean activateSourceTab, final boolean isTestScript,
+          final boolean force) {
         String absolutePath;
         try {
             absolutePath = f.getAbsoluteFile().getCanonicalPath();
@@ -583,7 +586,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             StringBuffer contents = new StringBuffer();
             BufferedReader in = null;
             try {
-            	in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
                 while (in.ready()) {
                     contents.append(in.readLine()).append("\n");
                 }
@@ -635,21 +638,19 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 }
 
                 // if needed, replace tabulations by spaces in the file content
-                String  fileContent    = contents.toString();
+                String fileContent = contents.toString();
                 boolean isAutoModified = false;
 
                 if (absolutePath.endsWith(".py")) {
-	                if (fileContent.contains("\t")) {
-	                	fileContent = fileContent.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
-	                	isAutoModified = true;
-	                	
-	                	JOptionPane.showMessageDialog(null, 
-	                								  "Tabulations have been automatically replaced by spaces",
-	                								  "Python indentation",
-	                								  JOptionPane.INFORMATION_MESSAGE);
-	                }
+                    if (fileContent.contains("\t")) {
+                        fileContent = fileContent.replaceAll("\t", StaticConfiguration.PYTHON_INDENT_STRING);
+                        isAutoModified = true;
+
+                        JOptionPane.showMessageDialog(null, "Tabulations have been automatically replaced by spaces",
+                              "Python indentation", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
-                
+
                 setTestCaseSource(textPane, absolutePath, fileContent, isTestScript);
                 textPane.setModified(isAutoModified);
                 textPane.clearUndos();
@@ -678,6 +679,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     /**
      * This method gets the current activated textPane
+     *
      * @return null if there is no tab or the current tab is not a TextPane
      */
     public NonWrappingTextPane getActiveTextPane() {
@@ -690,6 +692,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     /**
      * This method return the textPane in which the main TestScript is loaded
+     *
      * @return NonWrappingTextPane object containing the TestScript file
      */
     public NonWrappingTextPane getTcSourceTextPane() {
@@ -698,6 +701,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     /**
      * This method activates the python script based on the file name if already loaded
+     *
      * @param fileName of the script file
      * @param isTestScript specifies if the python script is the main TestScript file
      * @return TextPane is already loaded otherwise null
@@ -734,8 +738,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             if (currentPane != null) {
                 if (currentPane.isModified()) {
 
-                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentPane.getFileName() + "?'",
-                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if (JOptionPane.showConfirmDialog(null,
+                          "Do you want to save your current modification in '" + currentPane.getFileName() + "?'",
+                          "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         currentPane.save();
                     }
                 }
@@ -743,29 +748,32 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 currentPane.removeAllBreakpoints();
                 currentPane = null;
             } else {
-	            TestDataEditor currentDataPane = getTestDataPane(0);
-	            if (currentDataPane != null) {
-	                if (currentDataPane.isModified()) {
+                TestDataEditor currentDataPane = getTestDataPane(0);
+                if (currentDataPane != null) {
+                    if (currentDataPane.isModified()) {
 
-	                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentDataPane.getCurrentCSVFile() + "?'",
-	                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-	                        currentDataPane.save();
-	                    }
-	                }
-	                currentDataPane = null;
-	            } else {
-	                TestRequirementEditor currentrequirementPane = getTestRequirementPane(0);
-		            if (currentrequirementPane != null) {
-		                if (currentrequirementPane.isModified()) {
+                        if (JOptionPane.showConfirmDialog(null,
+                              "Do you want to save your current modification in '" + currentDataPane.getCurrentCSVFile() + "?'",
+                              "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            currentDataPane.save();
+                        }
+                    }
+                    currentDataPane = null;
+                } else {
+                    TestRequirementEditor currentrequirementPane = getTestRequirementPane(0);
+                    if (currentrequirementPane != null) {
+                        if (currentrequirementPane.isModified()) {
 
-		                    if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + currentrequirementPane.getCurrentXMLFile() + "?'",
-		                            "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-		                    	currentrequirementPane.save();
-		                    }
-		                }
-		                currentrequirementPane = null;
-		            }
-	            }
+                            if (JOptionPane.showConfirmDialog(null,
+                                  "Do you want to save your current modification in '" + currentrequirementPane
+                                        .getCurrentXMLFile() + "?'", "Save confirmation", JOptionPane.YES_NO_OPTION)
+                                  == JOptionPane.YES_OPTION) {
+                                currentrequirementPane.save();
+                            }
+                        }
+                        currentrequirementPane = null;
+                    }
+                }
             }
             editorTabbedPane.removeTabAt(0);
         }
@@ -962,7 +970,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         editorTabbedPane.addTab("TestRequirements", null, requirementEditor, fileName);
         requirementEditor.addPropertyChangeListener("isModified", new PropertyChangeListener() {
 
-        	private static final String MODIFIED_SUFFIX = " *";
+            private static final String MODIFIED_SUFFIX = " *";
 
             public void propertyChange(PropertyChangeEvent evt) {
                 String currentTitle = editorTabbedPane.getTitleAt(editorTabbedPane.getSelectedIndex());
@@ -971,7 +979,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                         currentTitle += MODIFIED_SUFFIX;
                     }
                 } else if (currentTitle.endsWith(MODIFIED_SUFFIX)) {
-                	currentTitle = currentTitle.replace(MODIFIED_SUFFIX, "");
+                    currentTitle = currentTitle.replace(MODIFIED_SUFFIX, "");
                 }
                 editorTabbedPane.setTitleAt(editorTabbedPane.getSelectedIndex(), currentTitle);
             }
@@ -1038,7 +1046,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         }
         DirectoryTestSuite testSuite = DirectoryTestSuite.createDirectoryTestSuite(testSuiteDir);
         if (testSuite != null) {
-        	testSuite.setExecutionLoops(numberLoops, loopsInHours);
+            testSuite.setExecutionLoops(numberLoops, loopsInHours);
             runTestSuite(testSuite, debug);
         }
     }
@@ -1086,7 +1094,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             case STOP:
                 startExecutionButton.setVisible(false);
                 //getVarButton.setVisible(false);
-//                stopExecutionButton.setVisible(false);
+                //                stopExecutionButton.setVisible(false);
                 stepOverExecutionButton.setVisible(false);
                 stepIntoExecutionButton.setVisible(false);
                 tabbedPane.setSelectedIndex(RESULTS_INDEX);
@@ -1105,7 +1113,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                 debugPanel.setVisible(true);
                 sourcePanel.setDividerLocation(sourcePanel.getDividerLocation() - 150);
                 // update the button status
-//                stopExecutionButton.setVisible(true);
+                //                stopExecutionButton.setVisible(true);
                 //getVarButton.setVisible(true);
                 tabbedPane.setSelectedIndex(SOURCE_INDEX);
                 getTcSourcePane().setVisible(true);
@@ -1130,7 +1138,8 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
         }
     }
 
-    public void setExecutingTestCampaign(boolean executing, TestCampaignMainPanel.CampaignExecutionThread testCampaignExecutionHandler) {
+    public void setExecutingTestCampaign(boolean executing, TestCampaignMainPanel.CampaignExecutionThread
+          testCampaignExecutionHandler) {
         isExecuting = executing;
         this.testCampaignExecutionHandler = testCampaignExecutionHandler;
     }
@@ -1157,21 +1166,21 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
 
     public class UpdateButtons implements Runnable {
 
-    	private boolean enableStopButton;
+        private boolean enableStopButton;
 
-    	public UpdateButtons() {
-    		this.enableStopButton = false;
-    	}
+        public UpdateButtons() {
+            this.enableStopButton = false;
+        }
 
-    	public UpdateButtons(final boolean enableStopButton) {
-    		this.enableStopButton = enableStopButton;
-    	}
+        public UpdateButtons(final boolean enableStopButton) {
+            this.enableStopButton = enableStopButton;
+        }
 
         public void run() {
             executeButton.setEnabled(!isExecuting);
             stopExecutionButton.setVisible(isExecuting);
             if (this.enableStopButton) {
-            	stopExecutionButton.setEnabled(true);
+                stopExecutionButton.setEnabled(true);
             }
             debugButton.setEnabled(!isExecuting);
             parent.getHeaderPanel().setControlTestbedButtonsEnabled();
@@ -1203,11 +1212,11 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             isExecuting = true;
 
             try {
-        		TestEngine.execute(testSuite, debug);
+                TestEngine.execute(testSuite, debug);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-            	TestEngine.tearDown();
+                TestEngine.tearDown();
                 isExecuting = false;
                 SwingUtilities.invokeLater(new UpdateButtons());
                 testExecutionHandler = null;
@@ -1225,8 +1234,9 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
                     // check if the textpane must be saved
 
                     if (textPane.isModified()) {
-                        if (JOptionPane.showConfirmDialog(null, "Do you want to save your current modification in '" + textPane.getFileName() + "?'",
-                                "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        if (JOptionPane.showConfirmDialog(null,
+                              "Do you want to save your current modification in '" + textPane.getFileName() + "?'",
+                              "Save confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             textPane.save();
                         }
                     }

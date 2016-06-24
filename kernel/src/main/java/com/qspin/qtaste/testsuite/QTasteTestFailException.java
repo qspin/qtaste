@@ -21,18 +21,21 @@ package com.qspin.qtaste.testsuite;
 
 /**
  * QTasteTestFailException are thrown by testAPI component.
- * This kind of exception is thrown, for example, when the testAPI is in an invalid state and 
- * the current cannot be continued.  
+ * This kind of exception is thrown, for example, when the testAPI is in an invalid state and
+ * the current cannot be continued.
+ *
  * @author dergo
  */
 @SuppressWarnings("serial")
 public class QTasteTestFailException extends QTasteException {
-    
-    /** Creates a new instance of QTASTEFailException */
+
+    /**
+     * Creates a new instance of QTASTEFailException
+     */
     public QTasteTestFailException(String message) {
         super(message);
     }
-    
+
     public QTasteTestFailException(String message, Throwable e) {
         super(message, e);
     }

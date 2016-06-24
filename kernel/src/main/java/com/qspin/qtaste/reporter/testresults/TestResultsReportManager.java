@@ -33,10 +33,10 @@ import com.qspin.qtaste.util.Log4jLoggerFactory;
 
 /**
  * A TestResultsReportManager manager is responsible to maintain the results of a test results report
+ *
  * @author lvboque
  */
 public class TestResultsReportManager extends ReportManager {
-   
 
     private static Logger logger = Log4jLoggerFactory.getLogger(TestResultsReportManager.class);
     private static TestResultsReportManager instance = null;
@@ -57,7 +57,8 @@ public class TestResultsReportManager extends ReportManager {
     }
 
     /**
-     * Get an instance of the TestResultsReportManager. 
+     * Get an instance of the TestResultsReportManager.
+     *
      * @return The TestResultsReportManager.
      */
     synchronized public static TestResultsReportManager getInstance() {
@@ -83,9 +84,11 @@ public class TestResultsReportManager extends ReportManager {
             String reportFormat = config.getString("reporting.reporters.format(" + reporterIndex + ")");
             try {
 
-                Class<?> formatterClass = Class.forName("com.qspin.qtaste.reporter.testresults." + reportFormat.toLowerCase() + "." + reportFormat.toUpperCase() + "ReportFormatter");
+                Class<?> formatterClass = Class.forName(
+                      "com.qspin.qtaste.reporter.testresults." + reportFormat.toLowerCase() + "." + reportFormat.toUpperCase()
+                            + "ReportFormatter");
 
-                Constructor<?> formatterConstructor = formatterClass.getConstructor(reportName.getClass());                
+                Constructor<?> formatterConstructor = formatterClass.getConstructor(reportName.getClass());
                 formatters.add((ReportFormatter) formatterConstructor.newInstance(reportName));
             } catch (Exception e) {
                 logger.fatal("Exception initializing the report format: " + reportFormat, e);

@@ -36,43 +36,41 @@ import javax.swing.table.TableCellEditor;
 import com.qspin.qtaste.ui.tools.TristateCheckBox;
 
 public class TristateEditor extends AbstractCellEditor implements TableCellEditor {
-	
+
     private static final long serialVersionUID = 1L;
     private TristateCheckBox.State b;
     private TristateCheckBox check = null;
     private int currentRow, currentColumn;
 
     public TristateEditor() {
-            //check = new DefaultCellEditor(new TristateCheckBox());        
-            check = new TristateCheckBox();
-            check.setHorizontalAlignment(JLabel.CENTER);
-            
-            check.addActionListener(new ActionListener() {
-            
+        //check = new DefaultCellEditor(new TristateCheckBox());
+        check = new TristateCheckBox();
+        check.setHorizontalAlignment(JLabel.CENTER);
+
+        check.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 stopCellEditing();
             }
         });
-            
 
     }
 
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
-                    int row, int column) {
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
-            currentRow = row;
-            currentColumn = column;
-            if( value instanceof TristateCheckBox.State ) {
-                    b = (TristateCheckBox.State) value;
-                    getCheck().setState(b);
-            }
-            this.fireEditingStopped();    
+        currentRow = row;
+        currentColumn = column;
+        if (value instanceof TristateCheckBox.State) {
+            b = (TristateCheckBox.State) value;
+            getCheck().setState(b);
+        }
+        this.fireEditingStopped();
 
-            return getCheck();
+        return getCheck();
     }
 
     public Object getCellEditorValue() {
-            return getCheck().getState();
+        return getCheck().getState();
     }
 
     public int getCurrentRow() {
@@ -87,7 +85,6 @@ public class TristateEditor extends AbstractCellEditor implements TableCellEdito
         return check;
     }
 
-    
-}    
+}
     
     

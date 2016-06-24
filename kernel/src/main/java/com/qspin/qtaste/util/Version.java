@@ -38,6 +38,7 @@ public class Version {
 
     /**
      * Constructs the Version object for the specified jar
+     *
      * @param jarFileName file name of the jar containing the manifest
      */
     public Version(String jarFileName) {
@@ -54,7 +55,7 @@ public class Version {
         }
     }
 
-    /** 
+    /**
      * Constructs the Version object for the jar containing the derived class.
      */
     protected Version() {
@@ -77,30 +78,34 @@ public class Version {
 
     /**
      * Gets version string.
+     *
      * @return the version string, stored in the "Implementation-Version" attribute of the manifest
      */
     public String getVersion() {
         return getManifestAttributeValue(new Attributes.Name("Kernel-Implementation-Version"));
     }
-	
-	/**
+
+    /**
      * Gets build number string.
+     *
      * @return the build number string, stored in the "Implementation-Build" attribute of the manifest
      */
-	public String getBuildNumber() {
-		return getManifestAttributeValue(new Attributes.Name("Implementation-Build"));
-	}
-	
+    public String getBuildNumber() {
+        return getManifestAttributeValue(new Attributes.Name("Implementation-Build"));
+    }
+
     /**
      * Gets full version string, is equivalent to getVersion.
+     *
      * @return the full version string
      */
-	public String getFullVersion() {
-		return getVersion() + " (build " + getBuildNumber() + ")";
-	}
+    public String getFullVersion() {
+        return getVersion() + " (build " + getBuildNumber() + ")";
+    }
 
     /**
      * Gets the value of an attribute of the manifest.
+     *
      * @param attributeName the name of the attribute
      * @return the value of the attribute, or "undefined" if the attribute couldn't be read
      */

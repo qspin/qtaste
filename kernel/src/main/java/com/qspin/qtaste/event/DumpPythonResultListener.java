@@ -27,12 +27,11 @@ package com.qspin.qtaste.event;
 import java.util.EventListener;
 
 /**
- *
  * @author vdubois
  */
-public interface DumpPythonResultListener  extends EventListener {
+public interface DumpPythonResultListener extends EventListener {
     /**
-     * 
+     *
      */
     public void pythonResult(DumpPythonResultEvent event);
 

@@ -28,6 +28,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 
 /**
  * This class is responsible for generating the documentation of all the testsuites
+ *
  * @author lvboque
  */
 public class GenerateTestSuitesDoc {
@@ -42,9 +43,9 @@ public class GenerateTestSuitesDoc {
                 return file.isDirectory() && !file.isHidden();
             }
         };
-        
+
         File[] files = dir.listFiles(fileFilter);
-        
+
         for (File file : files) {
             System.out.println("Directory:" + file.getPath());
             GenerateTestSuiteDoc.generate(file.getPath());

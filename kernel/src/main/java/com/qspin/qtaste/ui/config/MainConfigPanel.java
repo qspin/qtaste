@@ -19,7 +19,6 @@
 
 package com.qspin.qtaste.ui.config;
 
-import com.qspin.qtaste.ui.panel.TitlePanel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,69 +29,70 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import com.qspin.qtaste.ui.panel.TitlePanel;
 
 /**
- *
  * @author vdubois
  */
 @SuppressWarnings("serial")
 public class MainConfigPanel extends JPanel {
 
     protected JFrame parent;
-    
+
     protected EngineTestConfigPanel engineTestConfigPanel;
     protected TestBedConfigurationPanel testBedConfigPanel;
 
     private static final String TESTBED_CONFIG = "Test Bed Configuration";
     private static final String ENGINE_CONFIG = "Engine configuration";
-    
+
     public static final int TESTBED_CONFIG_INDEX = 0;
     public static final int ENGINE_CONFIG_INDEX = 1;
     public static final int TESTSUITE_CONFIG_INDEX = 2;
-    
+
     public MainConfigPanel(JFrame parent) {
         super(new BorderLayout());
         this.parent = parent;
 
         genUI();
     }
+
     protected void genUI() {
-//        this.setLayout(new GridBagLayout());
+        //        this.setLayout(new GridBagLayout());
 
         TitlePanel titlePanel = new TitlePanel("QTaste Configuration", "main/qspin", false);
         // create a tabbed pane
         JTabbedPane selectionConfig = new JTabbedPane();
-        
+
         engineTestConfigPanel = new EngineTestConfigPanel();
         testBedConfigPanel = new TestBedConfigurationPanel();
-        
+
         selectionConfig.add(TESTBED_CONFIG, new JScrollPane(testBedConfigPanel));
         selectionConfig.add(ENGINE_CONFIG, new JScrollPane(engineTestConfigPanel));
         //selectionConfig.add(TESTSUITE_CONFIG, new JScrollPane(tcDataCSVPane));
-        
+
         JPanel buttonPanel = new JPanel();
         JButton applyButton = new JButton("Apply");
         buttonPanel.add(applyButton);
-        applyButton.addActionListener(new ActionListener(){
+        applyButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 engineTestConfigPanel.Apply();
                 testBedConfigPanel.Apply();
-                        
+
             }
         });
 
         JButton saveButton = new JButton("Save");
         buttonPanel.add(saveButton);
-        saveButton.addActionListener(new ActionListener(){
+        saveButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 engineTestConfigPanel.Save();
                 testBedConfigPanel.Save();
-                        
+
             }
         });
-        
+
         this.add(titlePanel, BorderLayout.NORTH);
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.add(selectionConfig);

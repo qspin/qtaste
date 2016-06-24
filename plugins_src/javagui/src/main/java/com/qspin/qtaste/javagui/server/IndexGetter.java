@@ -19,27 +19,29 @@
 
 package com.qspin.qtaste.javagui.server;
 
+import java.awt.Component;
+
+import javax.swing.JComboBox;
+import javax.swing.JList;
+
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class IndexGetter extends ComponentCommander {
 
-	@Override
-	Integer executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
-		Component component = getComponentByName(componentName);
-        
-		if (component instanceof JComboBox) {
+    @Override
+    Integer executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
+        Component component = getComponentByName(componentName);
+
+        if (component instanceof JComboBox) {
             JComboBox<?> combo = (JComboBox<?>) component;
             return combo.getSelectedIndex();
-        } 
-		else if (component instanceof JList) {
-			JList<?> list = (JList<?>) component;
-			return list.getSelectedIndex();
-		}
-		
-		throw new QTasteTestFailException("The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
-	}
+        } else if (component instanceof JList) {
+            JList<?> list = (JList<?>) component;
+            return list.getSelectedIndex();
+        }
+
+        throw new QTasteTestFailException(
+              "The component \"" + componentName + "\" is not a supported component (" + component.getClass().getName() + ")");
+    }
 }

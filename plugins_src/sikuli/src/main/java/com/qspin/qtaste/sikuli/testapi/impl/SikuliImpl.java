@@ -24,29 +24,26 @@ import com.qspin.qtaste.testsuite.QTasteException;
 
 public class SikuliImpl extends com.qspin.qtaste.sikuli.client.Sikuli implements com.qspin.qtaste.sikuli.testapi.api.Sikuli {
 
-	public SikuliImpl(String instanceId) throws Exception
-    {
-		super(TestBedConfiguration.getInstance().getMIString(instanceId, "Sikuli", "jmx_url"));
-		mInstanceId = instanceId;
-	}
+    public SikuliImpl(String instanceId) throws Exception {
+        super(TestBedConfiguration.getInstance().getMIString(instanceId, "Sikuli", "jmx_url"));
+        mInstanceId = instanceId;
+    }
 
-	@Override
-	public String getInstanceId() {
-		return mInstanceId;
-	}
-	
-	@Override
-	public void terminate() throws QTasteException
-	{
-		super.terminate();
-	}
-	
-	@Override
-	public void initialize() throws QTasteException
-	{
-		super.initialize();
-	}
+    @Override
+    public String getInstanceId() {
+        return mInstanceId;
+    }
 
-	protected String mInstanceId;
+    @Override
+    public void terminate() throws QTasteException {
+        super.terminate();
+    }
+
+    @Override
+    public void initialize() throws QTasteException {
+        super.initialize();
+    }
+
+    protected String mInstanceId;
 
 }

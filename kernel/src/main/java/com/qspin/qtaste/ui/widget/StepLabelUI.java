@@ -18,29 +18,28 @@
 */
 
 package com.qspin.qtaste.ui.widget;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.metal.*;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
+import javax.swing.JLabel;
+import javax.swing.plaf.metal.MetalLabelUI;
 
 /**
  * The StepLabelUI class is responsible for painting a label with antialiasing.
  * The text is black for an enabled label and gray for a disabled one.
  */
-public class StepLabelUI extends MetalLabelUI
-{
-//   private static final int SPACE_INC = 12;
-   protected void paintDisabledText(JLabel pLabel,
-            Graphics pG,
-            String pStr,
-            int pTextX,
-            int pTextY)
-   {
-      Graphics2D g2 = (Graphics2D)pG;
+public class StepLabelUI extends MetalLabelUI {
+    //   private static final int SPACE_INC = 12;
+    protected void paintDisabledText(JLabel pLabel, Graphics pG, String pStr, int pTextX, int pTextY) {
+        Graphics2D g2 = (Graphics2D) pG;
 
-      pG.setColor(Color.GRAY);
-      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-      pG.drawString(pStr, pTextX, pTextY);
-      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        pG.setColor(Color.GRAY);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        pG.drawString(pStr, pTextX, pTextY);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
       /*FontMetrics fm = pG.getFontMetrics();
       Rectangle strrect = fm.getStringBounds(pStr, pG).getBounds();
@@ -49,20 +48,15 @@ public class StepLabelUI extends MetalLabelUI
          pG.setColor(ResourceManager.getInstance().getNormalColor());
          pG.fillRect(pTextX + strrect.width + SPACE_INC, pTextY + strrect.y, 2, strrect.height);
       }*/
-   }
+    }
 
-   protected void paintEnabledText(JLabel pLabel,
-            Graphics pG,
-            String pStr,
-            int pTextX,
-            int pTextY)
-   {
-      Graphics2D g2 = (Graphics2D)pG;
+    protected void paintEnabledText(JLabel pLabel, Graphics pG, String pStr, int pTextX, int pTextY) {
+        Graphics2D g2 = (Graphics2D) pG;
 
-      pG.setColor(Color.BLACK);
-      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-      pG.drawString(pStr, pTextX, pTextY);
-      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        pG.setColor(Color.BLACK);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        pG.drawString(pStr, pTextX, pTextY);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
       /*FontMetrics fm = pG.getFontMetrics();
       Rectangle strrect = fm.getStringBounds(pStr, pG).getBounds();
@@ -71,5 +65,5 @@ public class StepLabelUI extends MetalLabelUI
          pG.setColor(ResourceManager.getInstance().getNormalColor());
          pG.fillRect(pTextX + strrect.width + SPACE_INC, pTextY + strrect.y, 2, strrect.height);
       }*/
-   }
+    }
 }
