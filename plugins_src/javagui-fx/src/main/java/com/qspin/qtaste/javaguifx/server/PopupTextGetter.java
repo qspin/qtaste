@@ -24,6 +24,9 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+
+import javafx.scene.control.ScrollPane;
 
 import com.qspin.qtaste.testsuite.QTasteException;
 
@@ -57,8 +60,13 @@ public class PopupTextGetter extends ComponentCommander {
             LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
 
             //find the popup Component
-            JOptionPane jop = getJOptionPane(dialog);
-            texts.add(jop.getMessage().toString());
+            Object message = getJOptionPane(dialog).getMessage();
+            // if message is a scroll pane, use the displayed component
+            if (message instanceof ScrollPane)
+            {
+                message = ((ScrollPane) message).getContent();
+            }
+            texts.add(message.toString());
         }
         return texts;
     }
