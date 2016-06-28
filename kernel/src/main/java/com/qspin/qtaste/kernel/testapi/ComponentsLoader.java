@@ -48,6 +48,7 @@ public class ComponentsLoader {
 
     private static ComponentsLoader instance = null;
     private static Logger logger = Log4jLoggerFactory.getLogger(ComponentsLoader.class);
+    private static final String JACOCO_INIT_METHOD = "$jacocoInit";
     private TestAPI api;
     private List<Object> testapiImplementation;
     // key is the component name, value is the class implementing the component
@@ -178,7 +179,9 @@ public class ComponentsLoader {
         for (Method method : methods) {
             // Match the signature
             String verb = method.getName();
-            api.register(componentInterface.getPackage().getName(), componentName, factoryObject, verb);
+            if (!verb.equals(JACOCO_INIT_METHOD)) { // skip init method added by Jacoco
+                api.register(componentInterface.getPackage().getName(), componentName, factoryObject, verb);
+            }
         }
     }
 
