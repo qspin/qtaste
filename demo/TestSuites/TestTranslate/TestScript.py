@@ -62,7 +62,7 @@ def checkTranslation():
         if translation == expectedTranslation:
             found = True
             break
-    if ( found == False ):
+    if not found:
         testAPI.stopTest(Status.FAIL, "Expected to get " + expectedTranslation + " but got " + translations)
 
 doStep(connectToWeb)

@@ -302,7 +302,7 @@ def getTransformedTestDataSection(testDataTable, selectedRows):
             for dataIndex in sameDataValuesIndexes:
                 testDataSection += '<tr><td><code><b>' + dataNames[dataIndex] + '</code></b></td><td width="20">&nbsp;</td><td>' + dataValuesList[0][dataIndex]+ '</td></tr>'
             testDataSection += '</table>'
-            if (len(sameDataValuesIndexes) < len(dataNames)):
+            if len(sameDataValuesIndexes) < len(dataNames):
                 # remove test data with values for all rows
                 updateTestDataTable = '<br><table border="1" cellSpacing="0" cellPadding="2">'
                 rowId = 0

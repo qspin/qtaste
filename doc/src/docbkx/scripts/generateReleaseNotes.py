@@ -62,7 +62,7 @@ def createMilestonesItems(aGithubRepo, aVersion, aState="closed"):
     opennedMilestonesDict = {}
     closedMilestonesDict = {}
     for milestoneIt in milestones:
-        if (milestoneIt.state == OPEN_STATE):
+        if milestoneIt.state == OPEN_STATE:
             opennedMilestonesDict[milestoneIt.title] = milestoneIt
         else:
             closedMilestonesDict[milestoneIt.title] = milestoneIt
@@ -160,7 +160,7 @@ def createIssuesTableBody(aListOfIssues, aState):
     # Iterates through Issues read from GitHub
     for issue in aListOfIssues:
 
-        if (issue.state != aState):
+        if issue.state != aState:
             continue
 
         # Add row and append to root
@@ -283,12 +283,12 @@ def main():
         appVersionForRelease = args.releaseName
     else:
         releases = getReleases(repo) #get releaser ordered by out date
-        if (len(releases) == 0):
+        if len(releases) == 0:
             print "No version was provided by user (use -r or --release <version>) nor found at Github."
             sys.exit(1)
         appCurrentVersion = releases[0][0]
         appVersionForRelease = releases[0][0]
-        if (appVersionForRelease.startswith('v')):
+        if appVersionForRelease.startswith('v'):
             appVersionForRelease = appVersionForRelease[1:]
 
     print "reading release notes info from repository for version", appCurrentVersion, "..."

@@ -44,10 +44,8 @@ def test_with_int_value(componentName):
 def test_with_boolean_value(componentName):
     value = testData.getBooleanValue("BOOLEAN_VALUE")
     javaguiMI.selectComponent(componentName, value)
-    if (javaguiMI.getSelectedValue(componentName) == "true" and value) or \
+    if not (javaguiMI.getSelectedValue(componentName) == "true" and value) and not \
        (javaguiMI.getSelectedValue(componentName) == "false" and not value):
-        pass
-    else:
         testAPI.stopTest(Status.FAIL, "Fail to change the selection state of '" + componentName + "' to " + str(value))
 
 def test_with_string_value(componentName):

@@ -32,7 +32,7 @@ def unselectTab():
     javaguiMI.selectTab(component, -1)
     selectedIndex = javaguiMI.getSelectedTabIndex(component)
 
-    if (selectedIndex != -1):
+    if selectedIndex != -1:
         testAPI.stopTest(Status.FAIL, "Expected selected tab index : '-1' but got : '" + selectedIndex + "'")
 
     time.sleep(1)

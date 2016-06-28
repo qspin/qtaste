@@ -95,7 +95,7 @@ class PythonDocGenerator:
             except ValueError:
                 print "Invalid data tag format: ", elem.text
                 return None
-            if ((len(type) > 2) and (type[0] == '[') and (type[-1] == ']')):
+            if (len(type) > 2) and (type[0] == '[') and (type[-1] == ']'):
                 type = type[1:-1]
             else:
                 print "Invalid", name, "data tag type format: ", type
@@ -228,7 +228,7 @@ class PythonDocGenerator:
             previous = str(directory)
             directory = os.path.dirname(directory)
             pythonLibDir = directory + os.sep + "pythonlib"
-            if (os.path.isdir(pythonLibDir)):
+            if os.path.isdir(pythonLibDir):
                 pythonLibDirectories.append(directory + os.sep + "pythonlib")
         return pythonLibDirectories
 

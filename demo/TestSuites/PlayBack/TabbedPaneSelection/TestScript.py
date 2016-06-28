@@ -33,7 +33,7 @@ def testChangeTabByIndex():
     javaguiMI.selectTab(component, index)
     selectedIndex = javaguiMI.getSelectedTabIndex(component)
 
-    if (index != selectedIndex):
+    if index != selectedIndex:
         testAPI.stopTest(Status.FAIL, "Expected selected tab index : '" + index + "' but got : '" + selectedIndex + "'")
 
     time.sleep(1)
@@ -50,7 +50,7 @@ def testChangeTabByTitle():
         javaguiMI.selectTabTitled(component, title)
         selectedTitle = javaguiMI.getSelectedTabTitle(component)
 
-        if (title != selectedTitle):
+        if title != selectedTitle:
             testAPI.stopTest(Status.FAIL, "Expected selected tab title : '" + title + "' but got : '" + selectedTitle + "'")
 
     time.sleep(1)
@@ -68,7 +68,7 @@ def testChangeTabById():
 
         selectedId = javaguiMI.getSelectedTabId(component)
 
-        if (id != selectedId):
+        if id != selectedId:
             testAPI.stopTest(Status.FAIL, "Expected selected tab title : '" + id + "' but got : '" + selectedId + "'")
 
     time.sleep(1)
@@ -83,7 +83,7 @@ def unselectTab():
     javaguiMI.selectTab(component, index)
     selectedIndex = javaguiMI.getSelectedTabIndex(component)
 
-    if (index != selectedIndex):
+    if index != selectedIndex:
         testAPI.stopTest(Status.FAIL, "Expected selected tab index : '" + index + "' but got : '" + selectedIndex + "'")
 
     time.sleep(1)

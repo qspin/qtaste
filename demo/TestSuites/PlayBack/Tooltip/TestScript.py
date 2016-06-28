@@ -21,7 +21,6 @@ def checkToolTip():
     expected = testData.getValue("EXPECTED_TOOLTIP")
     if current != expected:
         testAPI.stopTest(Status.FAIL, "The returned tooltip (" + current + ") is not the expected one (" + expected + ")...")
-    pass
 
 javaGUI.selectTabId("TABBED_PANE", "DOCUMENT_PANEL")
 doStep(checkToolTip)

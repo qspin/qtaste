@@ -19,6 +19,5 @@ def execute():
     @expected  The test is executed.
     """
     sikuli.openAndRunScript(SCRIPT_PATH + testData.getValue("SCRIPT_NAME"))
-    pass
 
 doStep(execute)

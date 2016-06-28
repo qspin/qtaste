@@ -35,9 +35,7 @@ def selectFile():
     javaguiMI.selectFileThroughFileChooser(component, fileName)
     value = javaguiMI.getText("FILECHOOSER_RESULT")
     time.sleep(1)
-    if ( value == fileName):
-        pass
-    else:
+    if value != fileName:
         testAPI.stopTest(Status.FAIL, "The expected value is " + fileName + " but the current is : " + value)
 
 def reset():

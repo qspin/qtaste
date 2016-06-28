@@ -37,7 +37,7 @@ def step1():
     utility.showMessageDialog("Message Dialog", "This is a semi automated test where user need to confirm the test output.")
 
     ok = utility.getUserConfirmation("User confirmation", "Is Test output as expected?")
-    if (not ok):
+    if not ok:
         testAPI.stopTest(Status.FAIL, "Test Failed: Test output is not as expected!")
 
     value = utility.getUserStringValue("Please insert the output value (e.g Hardware component measure) resulting in this test?", "<Default Value>")
