@@ -4,7 +4,8 @@
 # If testsuite_dir is defined, a TestSuite-doc.xml file will be generated in this directory
 ##
 
-import string, os, re, codecs, subprocess, java.lang
+import string, os, sys, re, codecs, subprocess, java.lang
+import stepsmoduledoc_xmlformatter
 from com.qspin.qtaste.config import StaticConfiguration
 from com.qspin.qtaste.util import OS
 
@@ -14,10 +15,6 @@ try:
 except ImportError:
     import elementtree.ElementTree as et
     from elementtree.SimpleXMLTreeBuilder import TreeBuilder
-
-
-# conditional expression
-IF = lambda a,b,c:(a and [b] or [c])[0]
 
 
 def relpath(path, reldir):
@@ -246,10 +243,13 @@ class PythonDocGenerator:
 
     def _addImportedTestScriptModuleStepsDocAndTables(self, moduleName, directory):
         #create the step-doc.xml file for the imported test script
-        testScriptFilePath = directory.replace("/", os.sep) + os.sep + StaticConfiguration.TEST_SCRIPT_FILENAME
-        shellScriptExtension = IF(OS.getType() == OS.Type.WINDOWS, ".bat", ".sh")
-        generatorScript = "generate-TestStepsModules-doc" + shellScriptExtension
-        subprocess.call([StaticConfiguration.QTASTE_ROOT + os.sep + "bin" + os.sep + generatorScript, testScriptFilePath])
+        testScriptFilePath = os.path.normpath(directory + '/' + StaticConfiguration.TEST_SCRIPT_FILENAME)
+        modifiedFile = []
+        stepsmoduledoc_xmlformatter.checkForModifiedFiles(testScriptFilePath, modifiedFile)
+        if modifiedFile:
+            sys.argv[1:]= ['-f', '-s', '-Ostepsmoduledoc_xmlformatter']
+            sys.argv.extend(modifiedFile)
+            execfile(StaticConfiguration.PYTHON_DOC)
 
         stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables("TestScript", [directory])
         if stepsDocDict:
