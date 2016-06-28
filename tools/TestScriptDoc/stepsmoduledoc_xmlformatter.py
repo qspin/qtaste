@@ -6,13 +6,12 @@
 ##
 
 import string, os, re, sys, glob
+from com.qspin.qtaste.config import StaticConfiguration
 
 try:
     import xml.etree.ElementTree as et
 except ImportError:
     import elementtree.ElementTree as et
-
-JYTHON_HOME = os.getenv('QTASTE_ROOT') + '/tools/jython/lib'
 
 class PythonDocGenerator:
 
@@ -115,6 +114,6 @@ if __name__ == '__main__':
         print 'Generating test steps doc for files:', ', '.join(modifiedFiles)
         sys.argv[1:]= ['-f', '-s', '-Ostepsmoduledoc_xmlformatter']
         sys.argv.extend(modifiedFiles)
-        execfile(JYTHON_HOME + '/Lib/pythondoc.py')
+        execfile(StaticConfiguration.PYTHON_DOC)
     else:
         print 'No test steps doc to generate'

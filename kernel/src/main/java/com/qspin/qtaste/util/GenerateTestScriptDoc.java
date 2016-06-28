@@ -52,7 +52,7 @@ public class GenerateTestScriptDoc {
 
         try {
             System.out.println("Generate test script documentation.");
-            PythonHelper.execute(StaticConfiguration.PYTHON_DOC, "-V", "-f", "-s", "-Otestscriptdoc_xmlformatter",
+            PythonHelper.execute(StaticConfiguration.PYTHON_DOC, false, "-f", "-s", "-Otestscriptdoc_xmlformatter",
                   testScriptFile.getAbsolutePath());
         } catch (Exception e) {
             System.err.println("Error executing PythonInterpreter: " + e);

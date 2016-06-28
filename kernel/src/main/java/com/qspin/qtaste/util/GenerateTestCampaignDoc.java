@@ -69,10 +69,10 @@ public class GenerateTestCampaignDoc {
                 PythonHelper.execute(StaticConfiguration.QTASTE_ROOT + "/tools/TestProcedureDoc/generateTestCampaignDoc.py",
                       campaignFile);
             } catch (PyException e) {
-                System.err.println("Exception occurs executing PythonInterpreter:" + e.value);
+                System.err.println("Exception occurs executing PythonInterpreter: " + e.value);
             }
         } catch (Exception e) {
-            System.out.println("Error occurs parsing file " + campaignFile + " " + e.getMessage());
+            System.out.println("Error occurs generating documentation for test campaign " + campaignFile + ": " + e.getMessage());
             System.exit(2);
         }
     }

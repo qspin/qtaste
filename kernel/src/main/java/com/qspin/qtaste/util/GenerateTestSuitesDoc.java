@@ -25,6 +25,7 @@ import java.io.FileFilter;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
  * This class is responsible for generating the documentation of all the testsuites
@@ -37,15 +38,19 @@ public class GenerateTestSuitesDoc {
         GenerateTestStepsModulesDoc.generate(directory);
         File dir = new File(directory);
         FileFilter fileFilter = file -> {
-            // escape hidden directory like .svn, etc.
-            return file.isDirectory() && !file.isHidden();
+            // escape hidden directory like .svn, etc. and pythonlib directories
+            return file.isDirectory() && !file.isHidden() && !file.getName().equals("pythonlib");
         };
 
         File[] files = dir.listFiles(fileFilter);
 
         for (File file : files) {
-            System.out.println("Directory:" + file.getPath());
-            GenerateTestSuiteDoc.generate(file.getPath());
+            System.out.println("Directory: " + file.getPath());
+            try {
+                GenerateTestSuiteDoc.generate(file.getPath());
+            } catch (QTasteException pE) {
+                // ignore
+            }
         }
     }
 

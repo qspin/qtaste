@@ -23,7 +23,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +31,7 @@ import java.util.List;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.qspin.qtaste.config.StaticConfiguration;
+import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
  * This class is responsible for generating the documentation of a testsuite
@@ -44,27 +44,31 @@ public class GenerateTestSuiteDoc {
         System.exit(1);
     }
 
-    public static void generate(String testSuiteDir) {
-        System.out.println("Test suite directory:" + testSuiteDir);
+    public static void generate(String testSuiteDir) throws QTasteException {
+        System.out.println("Test suite directory: " + testSuiteDir);
 
         File testSuiteDirFile = new File(testSuiteDir);
         if (!(testSuiteDirFile).exists()) {
-            System.out.println("Directory " + testSuiteDir + " doesn't exist");
-            System.exit(2);
+            String message = "Directory " + testSuiteDir + " doesn't exist";
+            System.err.println(message);
+            throw new QTasteException(message);
         }
         File[] testScripts = searchTestScripts(testSuiteDirFile);
         if (testScripts.length == 0) {
-            System.out.println("No testscript found!");
-            System.exit(3);
+            String message = "No testscript found!";
+            System.err.println(message);
+            throw new QTasteException(message);
         }
 
         System.out.println("list of testscripts: ");
         for (File f : testScripts) {
             System.out.println("\t" + f);
         }
+
+        GenerateTestStepsModulesDoc.generate("TestSuites");
+
         System.out.println("Generating Test Scripts and Test suite XML doc...");
 
-        StringWriter outputs = new StringWriter();
         try {
             List<String> args = new ArrayList<>(Arrays.asList("-f", "-s", "-Otestscriptdoc_xmlformatter",
                   "-Dtestsuite_dir=" + testSuiteDir.replace(File.separator, "/")));
@@ -72,17 +76,15 @@ public class GenerateTestSuiteDoc {
                 args.add(testScriptFile.getAbsolutePath().replace(File.separator, "/"));
             }
 
-            PythonHelper.execute(StaticConfiguration.PYTHON_DOC, args.toArray(new String[args.size()]));
+            PythonHelper.execute(StaticConfiguration.PYTHON_DOC, false, args.toArray(new String[args.size()]));
         } catch (Exception e) {
-            System.err.println("GenerateTestSuiteDoc - Exception occurs executing PythonInterpreter:" + e.getMessage());
+            System.err.println("GenerateTestSuiteDoc - Exception occurs executing PythonInterpreter: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            System.out.println(outputs.getBuffer().toString());
         }
 
         for (File testscript : testScripts) {
-            File testScriptDir = new File(testscript.getParent() + "/TestScript-doc.xml");
-            if (testScriptDir.exists()) {
+            File testScriptDoc = new File(testscript.getParent() + "/TestScript-doc.xml");
+            if (testScriptDoc.exists()) {
                 System.out.println("Converting Test Script XML doc to HTML for " + testscript.getParent());
                 File xmlDocFile = new File(testscript.getParent() + "/TestScript-doc.xml");
 
@@ -112,9 +114,7 @@ public class GenerateTestSuiteDoc {
 
         if (testSuiteDocXML.exists()) {
             System.out.println("Creating Test suite frameset in " + testSuiteDir + "/TestSuite-doc.html");
-            try {
-                FileWriter output = new FileWriter(testSuiteDir + "/TestSuite-doc.html");
-                BufferedWriter out = new BufferedWriter(output);
+            try (BufferedWriter out = new BufferedWriter(new FileWriter(testSuiteDir + "/TestSuite-doc.html"))) {
                 out.write("<HTML>\n" +
                       "<HEAD>" +
                       "<FRAMESET cols=\"15%%,85%%\">" +
@@ -125,7 +125,6 @@ public class GenerateTestSuiteDoc {
                       "</FRAMESET>" +
                       "</HEAD>" +
                       "</HTML>");
-                out.close();
             } catch (Exception e) {
                 System.out.println("Error writting file " + e);
             }
@@ -146,7 +145,11 @@ public class GenerateTestSuiteDoc {
         if (args.length != 1) {
             displayUsage();
         } else {
-            generate(args[0]);
+            try {
+                generate(args[0]);
+            } catch (QTasteException pE) {
+                System.exit(-1);
+            }
         }
     }
 

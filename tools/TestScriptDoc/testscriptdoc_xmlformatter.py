@@ -272,7 +272,7 @@ class PythonDocGenerator:
         stepsDocDict, stepsTablesDict = self._getModuleStepsDocAndTables(moduleName, pythonLibDirectories)
         if stepsDocDict:
             stepDoc = stepsDocDict.get(symbol)
-            if stepDoc:
+            if stepDoc is not None:
                 self.declaredSteps[symbol] = stepDoc
         if stepsTablesDict:
             stepsTable = stepsTablesDict.get(symbol)

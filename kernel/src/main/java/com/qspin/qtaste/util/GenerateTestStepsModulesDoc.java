@@ -37,7 +37,7 @@ public class GenerateTestStepsModulesDoc {
         try {
             PythonHelper.execute(StaticConfiguration.FORMATTER_DIR + "/stepsmoduledoc_xmlformatter.py", directory);
         } catch (Exception e) {
-            System.err.println("Exception occurs executing PythonInterpreter:" + e);
+            System.err.println("Exception occurs executing PythonInterpreter: " + e);
         }
     }
 

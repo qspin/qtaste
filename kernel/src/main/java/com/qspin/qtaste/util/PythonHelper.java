@@ -37,7 +37,7 @@ import com.qspin.qtaste.config.StaticConfiguration;
 public class PythonHelper {
 
     /**
-     * Executes a python script.
+     * Executes a python script and return its output.
      *
      * @param fileName the filename of the python script to execute
      * @param arguments the arguments to pass to the python script
@@ -45,21 +45,38 @@ public class PythonHelper {
      * @throws PyException in case of exception during Python script execution
      */
     public static String execute(String fileName, String... arguments) throws PyException {
+        return execute(fileName, true, arguments);
+    }
+
+    /**
+     * Executes a python script, returning its output or not.
+     *
+     * @param fileName the filename of the python script to execute
+     * @param redirectOutput true to redirect outputs and return them, false otherwise
+     * @param arguments the arguments to pass to the python script
+     * @return the output of the python script execution (combined standard and error outputs) or null if outputs were not
+     * redirected
+     * @throws PyException in case of exception during Python script execution
+     */
+    public static String execute(String fileName, boolean redirectOutput, String... arguments) throws PyException {
         Properties properties = new Properties();
         properties.setProperty("python.home", StaticConfiguration.JYTHON_HOME);
         properties.setProperty("python.path", StaticConfiguration.FORMATTER_DIR);
         PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
 
         PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-        StringWriter output = new StringWriter();
-        interp.setOut(output);
-        interp.setErr(output);
+        StringWriter output = null;
+        if (redirectOutput) {
+            output = new StringWriter();
+            interp.setOut(output);
+            interp.setErr(output);
+        }
         interp.cleanup();
         interp.exec("import sys;sys.argv[1:]= [r'" + StringUtils.join(arguments, "','") + "']");
         interp.exec("__name__ = '__main__'");
         interp.exec("execfile(r'" + fileName + "')");
         interp.cleanup();
-        return output.toString();
+        return redirectOutput ? output.toString() : null;
     }
 
     /**
