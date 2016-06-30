@@ -168,12 +168,15 @@ public class ResultSetXMLConverter {
     public static String getDocumentAsXmlString(Document doc) throws TransformerConfigurationException, TransformerException {
         DOMSource domSource = new DOMSource(doc);
         TransformerFactory tf = TransformerFactory.newInstance();
+        try {
+            tf.setAttribute("indent-number", 4);
+        } catch (IllegalArgumentException e) {
+            // ignore
+        }
         Transformer transformer = tf.newTransformer();
         //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"yes");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
-        // we want to pretty format the XML output
-        // note : this is broken in jdk1.5 beta!
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         //
