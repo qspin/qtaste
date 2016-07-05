@@ -252,6 +252,18 @@ to be rechecked in version 5.0.0-beta11 or later
 				<include name="plugins/SUT/qtaste-javagui-deploy.jar"/>
 			</fileset>
         </pack>
+        <pack name="The JavaFX GUI binaries" required="true" preselected="true" installGroups="JavaFX GUI">
+			<description>The JavaFx GUI binaries</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
+				<include name="plugins/SUT/qtaste-javagui-fx-deploy.jar"/>
+			</fileset>
+        </pack>
+        <pack name="The Sikuli GUI binaries" required="true" preselected="true" installGroups="Sikuli GUI">
+			<description>The Sikuli GUI binaries</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
+				<include name="plugins/SUT/qtaste-sikuli-deploy.jar"/>
+			</fileset>
+        </pack>
         
     <!-- ignore source packages
         <pack name="The Java GUI sources" required="yes" preselected="yes" installGroups="Java GUI">
@@ -286,6 +298,7 @@ to be rechecked in version 5.0.0-beta11 or later
 				<include name="demo/TestSuites/**"/>
 				<include name="demo/selenium-server-*.jar"/>
 				<include name="demo/SUT/target/qtaste-demo-sut-jar-with-dependencies.jar"/>
+				<include name="demo/SUT-FX/target/qtaste-demo-sut-fx-jar-with-dependencies.jar"/>
 				<include name="demo/startUI.*"/>
 				<include name="demo/TestCampaigns/**"/>
 				<exclude name="**/Thumbs.db"/>
