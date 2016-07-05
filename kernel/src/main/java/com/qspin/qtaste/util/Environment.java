@@ -48,6 +48,9 @@ public class Environment {
                 showUsage();
             }
 
+            // use Xalan XSLTC transformer factory
+            System.setProperty("javax.xml.transform.TransformerFactory", "org.apache.xalan.xsltc.trax.TransformerFactoryImpl");
+
             // create TestCampaigns, TestSuites and Testbeds folders (if not exists yet)
             DirectoryUtilities.createDirectory(new File(StaticConfiguration.DEFAULT_TESTSUITES_DIR));
             DirectoryUtilities.createDirectory(new File(StaticConfiguration.CAMPAIGN_DIRECTORY));

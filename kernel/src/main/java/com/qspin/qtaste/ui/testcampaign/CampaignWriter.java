@@ -159,10 +159,10 @@ public class CampaignWriter {
             }
             DOMSource domSource = new DOMSource(doc);
             TransformerFactory tf = TransformerFactory.newInstance();
+            tf.setAttribute("indent-number", 4);
             Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             fw = new java.io.FileWriter(fileName);
             StreamResult sr = new StreamResult(fw);
