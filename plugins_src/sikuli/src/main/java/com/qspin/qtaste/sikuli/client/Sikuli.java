@@ -4,6 +4,8 @@
  */
 package com.qspin.qtaste.sikuli.client;
 
+import org.sikuli.script.Region;
+
 import com.qspin.qtaste.kernel.testapi.SingletonComponent;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -21,6 +23,7 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
         initialize();
     }
 
+    @Override
     public void initialize() throws QTasteException {
         try {
             mClient.connect();
@@ -82,8 +85,8 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
     }
 
     @Override
-    public boolean exist(String fileName) throws QTasteException {
-        return mProxy.exist(fileName);
+    public boolean exists(String fileName) throws QTasteException {
+        return mProxy.exists(fileName);
     }
 
     @Override
@@ -115,6 +118,7 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
         return (com.qspin.qtaste.sikuli.Sikuli) mClient.getProxy(BEAN_NAME, BEAN_INTERFACE);
     }
 
+    @Override
     public void terminate() throws QTasteException {
         try {
             mClient.disconnect();

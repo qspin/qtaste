@@ -68,9 +68,9 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
     }
 
     @Override
-    public boolean exist(String fileName) throws QTasteException {
+    public boolean exists(String fileName) throws QTasteException {
         //out of the try catch to ensure the error doesn't come from test data
-        getRegion(fileName);
+        loadImageFromPath(fileName);
         try {
             return getRegion(fileName) != null;
         } catch (Exception ex) {
@@ -111,7 +111,8 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
 
     @Override
     public void hover(String fileName) throws QTasteException {
-        getRegion(fileName).mouseMove();
+        if (getRegion(fileName).hover() != 1)
+			throw new QTasteTestFailException("Cannot move the pointer on the location (image: " + fileName + ")");
     }
 
     @Override

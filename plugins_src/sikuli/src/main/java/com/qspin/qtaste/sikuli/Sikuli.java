@@ -43,7 +43,7 @@ public interface Sikuli {
      * @return <code>true</code> if the image is displayed, otherwise, returns <code>false</code>.
      * @throws QTasteException If the image cannot be loaded.
      */
-    boolean exist(String fileName) throws QTasteException;
+    boolean exists(String fileName) throws QTasteException;
 
     /**
      * Waits a region matching the image is displayed on the screen.
