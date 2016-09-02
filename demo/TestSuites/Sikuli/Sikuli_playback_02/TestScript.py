@@ -30,7 +30,7 @@ def select_tab_document():
     sikuli.hover(TEXTFIELD_COMP)
     time.sleep(1.5)
     if not sikuli.exists(TEXTFIELD_TOOLTIP):
-        testAPI.stopTest(testAPI.FAIL, "no tooltip displayed")
+        testAPI.stopTest(Status.FAIL, "no tooltip displayed")
     pass
 
 doStep(select_tab_document)

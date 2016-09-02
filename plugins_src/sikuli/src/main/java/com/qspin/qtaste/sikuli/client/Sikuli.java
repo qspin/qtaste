@@ -4,9 +4,10 @@
  */
 package com.qspin.qtaste.sikuli.client;
 
-import org.sikuli.script.Region;
+import java.util.List;
 
 import com.qspin.qtaste.kernel.testapi.SingletonComponent;
+import com.qspin.qtaste.sikuli.Area;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
 
@@ -32,6 +33,16 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
             pExc.printStackTrace();
             throw new QTasteException("Unable to initialize the JMX client", pExc);
         }
+    }
+
+    @Override
+    public Area find(String fileName) throws QTasteException {
+        return mProxy.find(fileName);
+    }
+
+    @Override
+    public List<Area> findAll(String fileName) throws QTasteException {
+        return mProxy.findAll(fileName);
     }
 
     @Override

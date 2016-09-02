@@ -27,7 +27,7 @@ def select_tab_selection():
     """
     sikuli.click(SELECTION_TAB)
     if sikuli.exists(TEXTFIELD_COMP) or not javagui.isVisible("COMBO_BOX"):
-        testAPI.stopTest(testAPI.FAIL, "no combo box displayed")
+        testAPI.stopTest(Status.FAIL, "no combo box displayed")
     pass
 
 def select_tab_document():
@@ -37,7 +37,7 @@ def select_tab_document():
     """
     sikuli.click(DOCUMENT_TAB)
     if not sikuli.exists(TEXTFIELD_COMP):
-        testAPI.stopTest(testAPI.FAIL, "no text field displayed")
+        testAPI.stopTest(Status.FAIL, "no text field displayed")
     pass
 
 doStep(select_tab_document)

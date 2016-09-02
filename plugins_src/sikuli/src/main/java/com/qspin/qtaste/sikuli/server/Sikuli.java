@@ -20,15 +20,20 @@
 package com.qspin.qtaste.sikuli.server;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Image;
+import org.sikuli.script.Match;
 import org.sikuli.script.Region;
 import org.sikuli.script.Runner;
 import org.sikuli.script.Screen;
 
+import com.qspin.qtaste.sikuli.Area;
 import com.qspin.qtaste.tcom.jmx.impl.JMXAgent;
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -122,6 +127,33 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
         } catch (FindFailed ex) {
             throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
         }
+    }
+    
+    @Override
+    public Area find(String fileName) throws QTasteException
+    {
+    	return new Area(getRegion(fileName));
+    }
+    
+    @Override
+    public List<Area> findAll(String fileName) throws QTasteException
+    {
+    	try
+    	{
+	    	List<Area> areas = new ArrayList<Area>();
+	    	Iterator<Match> it = Screen.all().findAll(loadImageFromPath(fileName));
+	    	while(it.hasNext())
+	    	{
+	    		Match m = it.next();
+	    		areas.add(new Area(m));
+	    	}
+	    	return areas;
+    	}
+    	catch(Exception ex)
+    	{
+    		throw new QTasteException(ex.getMessage(), ex);
+    	}
+    	
     }
 
     @Override

@@ -12,7 +12,8 @@
 	<control_script>sikuli.py</control_script>
 
 	<multiple_instances_components default="Sikuli">
-		<JavaGUI id="lol">
+		<JavaGUI id="Playback">
+			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10102/jmxrmi</jmx_url>
 		</JavaGUI>
 		<Sikuli id="Sikuli">
 			<jmx_url>service:jmx:rmi:///jndi/rmi://${sut_host}:10101/jmxrmi</jmx_url>

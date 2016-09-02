@@ -19,6 +19,8 @@
 
 package com.qspin.qtaste.sikuli;
 
+import java.util.List;
+
 import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
@@ -36,6 +38,22 @@ public interface Sikuli {
      */
     void takeSnapShot(String directory, String fileNamePrefix) throws QTasteException;
 
+    /**
+     * Searches on all screens for an occurrence of the image and returns it.
+     * @param fileName The image to find.
+     * @return an {@link Area} instance.
+     * @throws QTasteException if the file doesn't exist or if no occurrence is found.
+     */
+    Area find(String fileName) throws QTasteException;
+
+    /**
+     * Searches on all screens for all occurrences of the image and returns them.
+     * @param fileName The image to find.
+     * @return a list of {@link Area} instances.
+     * @throws QTasteException if the file doesn't exist or if no occurrence is found.
+     */
+    List<Area> findAll(String fileName) throws QTasteException;
+    
     /**
      * Checks if the image is displayed on the screen or not.
      *
