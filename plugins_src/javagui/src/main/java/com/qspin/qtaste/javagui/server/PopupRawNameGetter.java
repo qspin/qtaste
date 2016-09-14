@@ -48,11 +48,11 @@ public class PopupRawNameGetter extends ComponentCommander {
         for (JDialog dialog : findPopups()) {
             if (onlyWithFocus && !activateAndFocusComponentWindow(dialog)) {
                 // if only the main popup text is needed, ignored popup without focus
-                LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
+                LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
                 continue;
             }
 
-            LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
+            LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
 
             //find the popup Component
             texts.add(dialog.getName());
