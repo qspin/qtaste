@@ -166,6 +166,10 @@ abstract class ComponentCommander {
             LOGGER.trace("The given component is rezisable!");
             return false;
         }
+        if (getJOptionPane(dialog) == null) {
+            LOGGER.trace("The given component does not contain any JOptionPane!");
+            return false;
+        }
         return true;
     }
 

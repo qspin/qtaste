@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -32,7 +33,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * Commander which sets a value in the input field of a popup.
  *
- * @see javax.swing.JOptionPane#showInputDialog(Object)
+ * @see JOptionPane#showInputDialog(Object)
  */
 public class PopupTextSetter extends UpdateComponentCommander {
 
@@ -52,20 +53,20 @@ public class PopupTextSetter extends UpdateComponentCommander {
             JDialog targetPopup = null;
             for (JDialog dialog : findPopups()) {
                 if (!dialog.isVisible() || !dialog.isEnabled()) {
-                    String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n";
+                    String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
                     if (!dialog.isVisible()) {
                         msg += "\t is not visible";
                     }
                     if (!dialog.isEnabled()) {
                         msg += "\t is not enabled";
                     }
-                    LOGGER.trace(msg);
+                    LOGGER.info(msg);
                     continue;
                 }
                 if (activateAndFocusComponentWindow(dialog)) {
                     targetPopup = dialog;
                 } else {
-                    LOGGER.trace("Ignore the dialog '" + dialog.getTitle() + "' cause:\n\t is not focused");
+                    LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
                 }
             }
             component = findTextComponent(targetPopup);

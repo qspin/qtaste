@@ -53,22 +53,14 @@ public class PopupTextGetter extends ComponentCommander {
             //			if ( onlyWithFocus && !activateAndFocusComponentWindow(dialog) )
             //			{
             //				// if only the main popup text is needed, ignored popup without focus
-            //				LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
+            //				LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
             //				continue;
             //			}
 
-            JOptionPane optionPane = getJOptionPane(dialog);
-            if (optionPane == null)
-            {
-                // ignore JDialog without JOptionPane
-                LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
-                continue;
-            }
-
-            LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
+            LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
 
             //find the popup Component
-            Object message = optionPane.getMessage();
+            Object message = getJOptionPane(dialog).getMessage();
             // if message is a scroll pane, use the displayed component
             if (message instanceof ScrollPane)
             {
@@ -78,4 +70,5 @@ public class PopupTextGetter extends ComponentCommander {
         }
         return texts;
     }
+
 }

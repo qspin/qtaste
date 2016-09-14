@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -48,29 +47,24 @@ public class PopupTextGetter extends ComponentCommander {
         boolean onlyWithFocus = (Boolean) data[0];
         List<String> texts = new ArrayList<>();
         for (JDialog dialog : findPopups()) {
-            JOptionPane optionPane;
-            if ((onlyWithFocus && !activateAndFocusComponentWindow(dialog))
-                || (optionPane = getJOptionPane(dialog)) == null) {
-                // if only the main popup text is needed, ignore popup without focus and ignore dialog without JOptionPane
-                LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
+            if (onlyWithFocus && !activateAndFocusComponentWindow(dialog)) {
+                // if only the main popup text is needed, ignored popup without focus
+                LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
                 continue;
             }
 
-            LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
+            LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
 
-            Object message = optionPane.getMessage();
+            //find the popup Component
+            Object message = getJOptionPane(dialog).getMessage();
             // if message is a scroll pane, use the displayed component
             if (message instanceof JScrollPane)
             {
                 message = ((JScrollPane) message).getViewport().getView();
             }
             texts.add(message.toString());
-
-            if (onlyWithFocus) {
-                // if only the main popup text is needed, there is only one text to return
-                break;
-            }
         }
         return texts;
     }
+
 }

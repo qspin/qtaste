@@ -48,11 +48,11 @@ public class PopupRowNameGetter extends ComponentCommander {
         //			if ( onlyWithFocus && !activateAndFocusComponentWindow(dialog) )
         //			{
         //				// if only the main popup text is needed, ignored popup without focus
-        //				LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
+        //				LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will be ignored");
         //				continue;
         //			}
         //
-        //			LOGGER.trace("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
+        //			LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
         //
         //			//find the popup Component
         //			texts.add(dialog.getName());
