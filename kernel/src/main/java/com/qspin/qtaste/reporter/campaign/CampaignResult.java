@@ -97,6 +97,9 @@ public class CampaignResult extends Result {
             setStatus(Status.FAIL);
         } else if (nbTestsNotAvailable > 0) {
             setStatus(Status.NOT_AVAILABLE);
+        // TestRetries are considered as something not normal, so we report NOT_NORMAL in that case
+        } else if (nbTestsRetries > 0) {
+            setStatus(Status.NOT_AVAILABLE);
         } else if (nbTestsExecuted == 0) {
             setStatus(Status.NOT_AVAILABLE);
         } else {
