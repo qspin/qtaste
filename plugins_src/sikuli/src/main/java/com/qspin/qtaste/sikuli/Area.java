@@ -3,6 +3,7 @@ package com.qspin.qtaste.sikuli;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import com.qspin.qtaste.testsuite.QTasteException;
 import org.sikuli.script.Region;
 
 public final class Area implements Serializable {
@@ -30,14 +31,46 @@ public final class Area implements Serializable {
 	{
 		new Region(this.rect).click();
 	}
+
+    /**
+     * Simulates a click on the specified image of the area.
+     * @param fileName The image to find.
+     * @throws QTasteException if the file doesn't exist or if no occurrence is found.
+     */
+    public void click(String fileName) throws QTasteException
+    {
+        try {
+            new Region(this.rect).click(fileName);
+        }
+        catch(Exception ex)
+        {
+            throw new QTasteException(ex.getMessage(), ex);
+        }
+    }
 	
 	/**
-	 * Simulates a mouse located on the area center. 
+	 * Simulates a mouse located on the area center.
 	 */
 	public void hover()
 	{
 		new Region(this.rect).hover();
 	}
+
+    /**
+     * Simulates a mouse located on the specified image of the area.
+     * @param fileName The image to find.
+     * @throws QTasteException if the file doesn't exist or if no occurrence is found.
+     */
+    public void hover(String fileName) throws QTasteException
+    {
+        try {
+            new Region(this.rect).hover(fileName);
+        }
+        catch(Exception ex)
+        {
+            throw new QTasteException(ex.getMessage(), ex);
+        }
+    }
 
 	/**
 	 * Simulates a right click on the center of the area.
@@ -48,7 +81,51 @@ public final class Area implements Serializable {
 		new Region(this.rect).rightClick();
 	}
 
-	/**
+    /**
+     * Simulates a right click on the specified image of the area.
+     * @param fileName The image to find.
+     * @throws QTasteException if the file doesn't exist or if no occurrence is found.
+     */
+    public void rightClick(String fileName) throws QTasteException
+    {
+       try {
+            new Region(this.rect).rightClick(fileName);
+
+        }
+        catch(Exception ex)
+        {
+            throw new QTasteException(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Simulates a double click on the center of the area.
+     *
+     */
+    public void doubleClick()
+    {
+        new Region(this.rect).doubleClick();
+    }
+
+    /**
+     * Simulates a double click on the specified image of the area.
+     * @param fileName The image to find.
+     * @throws QTasteException if the file doesn't exist or if no occurrence is found.
+     */
+    public void doubleClick(String fileName) throws QTasteException
+    {
+        try {
+            new Region(this.rect).doubleClick(fileName);
+
+        }
+        catch(Exception ex)
+        {
+            throw new QTasteException(ex.getMessage(), ex);
+        }
+    }
+
+
+    /**
 	 * Write the text in the area.
 	 * @param text The text to write.
 	 */
