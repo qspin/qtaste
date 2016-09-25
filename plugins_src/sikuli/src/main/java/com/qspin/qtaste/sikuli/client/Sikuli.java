@@ -130,6 +130,11 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
     }
 
     @Override
+    public void setSimilarity(double level) throws QTasteException {
+        mProxy.setSimilarity(level);
+    }
+
+    @Override
     public void terminate() throws QTasteException {
         try {
             mClient.disconnect();

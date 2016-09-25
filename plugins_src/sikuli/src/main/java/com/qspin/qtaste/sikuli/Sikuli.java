@@ -176,4 +176,13 @@ public interface Sikuli {
      * @throws QTasteException if the script cannot be executed or if the execution failed.
      */
     void openAndRunScript(String ScriptPath) throws QTasteException;
+
+    /**
+     * Set The default minimum similarity of find operations.
+     * While using a Region.find() operation, if only an image file is provided, Sikuli searches the region using a default minimum similarity of 0.7.
+     *
+     * @param level The similarity level value (0 <= value <= 1).
+     * @throws QTasteException if an error occurs while setting the similarity level.
+     */
+    void setSimilarity(double level) throws QTasteException;
 }

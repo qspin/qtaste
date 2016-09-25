@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.sikuli.basics.Settings;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Image;
 import org.sikuli.script.Match;
@@ -50,6 +51,8 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
     public final static double DEFAULT_TIMEOUT = 3;
 
     private boolean mPreviousScriptFailed;
+
+    private double mMinSimilarity = Settings.MinSimilarity;
 
     public Sikuli() {
         mPreviousScriptFailed = false;
@@ -212,5 +215,14 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
             throw new QTasteTestFailException("Execution failed... (return code : " + retCode + ")");
         }
     }
+
+    @Override
+    public void setSimilarity(double level) throws QTasteException {
+        if (level < 0.0 || level > 1.0) {
+            throw new QTasteTestFailException("Invalid similarity level provided (" + level + "). Expected value between 0 and 1!");
+        }
+        Settings.MinSimilarity = level;
+    }
+
 
 }

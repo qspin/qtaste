@@ -133,4 +133,60 @@ public final class Area implements Serializable {
 	{
 		new Region(this.rect).type(text);
 	}
+
+
+    /**
+     * Returns the X coordinate of the bounding <code>Rectangle</code> in
+     * <code>double</code> precision.
+     * @return the X coordinate of the bounding <code>Rectangle</code>.
+     */
+    public double getX() {
+        return rect.getX();
+    }
+
+    /**
+     * Returns the Y coordinate of the bounding <code>Rectangle</code> in
+     * <code>double</code> precision.
+     * @return the Y coordinate of the bounding <code>Rectangle</code>.
+     */
+    public double getY() {
+        return rect.getY();
+    }
+
+    /**
+     * Returns the width of the bounding <code>Rectangle</code> in
+     * <code>double</code> precision.
+     * @return the width of the bounding <code>Rectangle</code>.
+     */
+    public double getW() {
+        return rect.getWidth();
+    }
+
+    /**
+     * Returns the height of the bounding <code>Rectangle</code> in
+     * <code>double</code> precision.
+     * @return the height of the bounding <code>Rectangle</code>.
+     */
+    public double getH() {
+        return rect.getHeight();
+    }
+
+    /**
+     * Gets the bounding <code>Rectangle</code> of this <code>Rectangle</code>.
+     * <p>
+     * @return    a new <code>Rectangle</code>, equal to the
+     * bounding <code>Rectangle</code> for this <code>Rectangle</code>.
+     */
+    public Rectangle getBounds() {
+        return rect;
+    }
+
+    /**
+     * Extract the text contained in the region using OCR.
+     * @return the text as a string. Multiple lines of text are separated by intervening ‘n’.
+     */
+    public String text() {
+        return new Region(this.rect).text();
+    }
+
 }
