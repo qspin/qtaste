@@ -52,8 +52,6 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
 
     private boolean mPreviousScriptFailed;
 
-    private double mMinSimilarity = Settings.MinSimilarity;
-
     public Sikuli() {
         mPreviousScriptFailed = false;
         init();
