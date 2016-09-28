@@ -19,8 +19,6 @@
 
 package com.qspin.qtaste.sikuli;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 
 import com.qspin.qtaste.testsuite.QTasteException;

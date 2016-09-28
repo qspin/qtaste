@@ -4,16 +4,12 @@
  */
 package com.qspin.qtaste.sikuli.client;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 
 import com.qspin.qtaste.kernel.testapi.SingletonComponent;
 import com.qspin.qtaste.sikuli.Area;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
-
-import javax.imageio.ImageIO;
 
 /**
  *
