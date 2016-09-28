@@ -77,7 +77,7 @@ class TreeNodeSelector extends UpdateComponentCommander {
      * @throws QTasteTestFailException
      */
     protected void prepareActions() throws QTasteTestFailException {
-		SwingUtilities.invokeLater(() -> {
+
 			if (mSelectorIdentifier == SelectorIdentifier.CLEAR_SELECTION) {
 				// nothing special to do for CLEAR_SELECTION action
 				return;
@@ -102,60 +102,12 @@ class TreeNodeSelector extends UpdateComponentCommander {
 
 			if (component instanceof JTree) {
 				JTree tree = (JTree) component;
-				TreeModel treeModel = tree.getModel();
-				List<Object> treePath = new ArrayList<>();
-				int currentNodePathItemIndex = 0;
-
-				// if the root is visible, check it regarding the first node path item
-				if (tree.isRootVisible()) {
-					String rootNodeText = getNodeText(tree, treeModel.getRoot());
-
-					if (!compareNodeNames(nodePathElements[0], rootNodeText)) {
-						LOGGER.trace("rootNodeText: " + rootNodeText + " != nodePathElement: " + nodePathElements[0]);
-						throw new QTasteTestFailException("Unable to select a node with the following path : '" + nodePath + "'");
-					}
-
-					currentNodePathItemIndex++;
-				}
-
-				// loop on all node path elements
-				Object currentNode = treeModel.getRoot();
-				treePath.add(currentNode);
-
-				for (; currentNodePathItemIndex < nodePathElements.length; currentNodePathItemIndex++) {
-
-					// search the current node path element in the current node children list
-					Boolean bFound = false;
-
-					for (int currentChildIndex = 0; currentChildIndex < treeModel.getChildCount(currentNode); currentChildIndex++) {
-						Object currentChild = treeModel.getChild(currentNode, currentChildIndex);
-
-						if (compareNodeNames(nodePathElements[currentNodePathItemIndex], getNodeText(tree, currentChild))) {
-							currentNode = currentChild;
-							treePath.add(currentNode);
-							bFound = true;
-							break;
-						}
-					}
-
-					// check if the current node path element has been found in the current node children list
-					if (!bFound) {
-						LOGGER.trace(nodePathElements[currentNodePathItemIndex] + " not found in the tree.");
-						throw new QTasteTestFailException("Unable to select a node with the following path : '" + nodePath + "'");
-					}
-				}
-
-				// set the final tree path
-				mPath = new Object[treePath.size()];
-				treePath.toArray(mPath);
-
-				LOGGER.trace("tree path successfully built!");
 			} else {
 				throw new QTasteTestFailException(
-                  "Invalid component class (expected: JTree, got: " + component.getClass().getName() + ").");
+						"Invalid component class (expected: JTree, got: " + component.getClass().getName() + ").");
 			}
-		});
-    }
+	}
+
 
     /**
      * Get the text of a node.
@@ -181,6 +133,55 @@ class TreeNodeSelector extends UpdateComponentCommander {
     @Override
     protected void doActionsInSwingThread() throws QTasteTestFailException {
         JTree tree = (JTree) component;
+		String nodePath = mData[0].toString();
+		String nodePathSeparator = mData[1].toString();
+		// Split node path into an array of node path elements
+		// Be careful that String.split() method takes a regex as argument.
+		// Here, the token 'nodePathSeparator' is escaped using the Pattern.quote() method.
+		String[] nodePathElements = nodePath.split(Pattern.quote(nodePathSeparator));
+		TreeModel treeModel = tree.getModel();
+		List<Object> treePath = new ArrayList<>();
+		int currentNodePathItemIndex = 0;
+		// if the root is visible, check it regarding the first node path item
+		if (tree.isRootVisible()) {
+			String rootNodeText = getNodeText(tree, treeModel.getRoot());
+
+			if (!compareNodeNames(nodePathElements[0], rootNodeText)) {
+				LOGGER.trace("rootNodeText: " + rootNodeText + " != nodePathElement: " + nodePathElements[0]);
+				throw new QTasteTestFailException("Unable to select a node with the following path : '" + nodePath + "'");
+			}
+
+			currentNodePathItemIndex++;
+		}
+
+		// loop on all node path elements
+		Object currentNode = treeModel.getRoot();
+		treePath.add(currentNode);
+
+		for (; currentNodePathItemIndex < nodePathElements.length; currentNodePathItemIndex++) {
+
+			// search the current node path element in the current node children list
+			Boolean bFound = false;
+
+			for (int currentChildIndex = 0; currentChildIndex < treeModel.getChildCount(currentNode); currentChildIndex++) {
+				Object currentChild = treeModel.getChild(currentNode, currentChildIndex);
+
+				if (compareNodeNames(nodePathElements[currentNodePathItemIndex], getNodeText(tree, currentChild))) {
+					currentNode = currentChild;
+					treePath.add(currentNode);
+					bFound = true;
+					break;
+				}
+			}
+			// check if the current node path element has been found in the current node children list
+			if (!bFound) {
+				LOGGER.trace(nodePathElements[currentNodePathItemIndex] + " not found in the tree.");
+				throw new QTasteTestFailException("Unable to select a node with the following path : '" + nodePath + "'");
+			}
+		}
+		// set the final tree path
+		mPath = new Object[treePath.size()];
+		treePath.toArray(mPath);
 
         if (mSelectorIdentifier == SelectorIdentifier.CLEAR_SELECTION) {
             tree.clearSelection();
