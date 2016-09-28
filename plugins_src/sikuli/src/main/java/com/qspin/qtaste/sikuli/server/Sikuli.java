@@ -55,6 +55,9 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
     public Sikuli() {
         mPreviousScriptFailed = false;
         init();
+        // These settings are required to enable OCR but not setted by default by sikuli
+        Settings.OcrTextSearch = true;
+        Settings.OcrTextRead = true;
     }
 
     private Image loadImageFromPath(String path) throws QTasteTestFailException {
