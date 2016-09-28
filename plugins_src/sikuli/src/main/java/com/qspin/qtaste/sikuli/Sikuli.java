@@ -19,6 +19,8 @@
 
 package com.qspin.qtaste.sikuli;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -185,4 +187,26 @@ public interface Sikuli {
      * @throws QTasteException if an error occurs while setting the similarity level.
      */
     void setSimilarity(double level) throws QTasteException;
+
+    /**
+     * Create a PNG screen capture at specified position x, y and with size w, h saved under the specified filename
+     * @param x the x position
+     * @param y the y position
+     * @param w the width
+     * @param h the height
+     * @param filename the captured png file
+     */
+
+    void capture(int x,int y, int w, int h, String filename) throws QTasteException;
+
+    /**
+     * Create a PNG screen capture at specified position x, y and with size w, h saved under the specified filename
+     * @param x the x position
+     * @param y the y position
+     * @param w the width
+     * @param h the height
+     * @param directory the directory of the png file
+     * @param name the name of the captured png file
+     */
+    void capture(int x,int y, int w, int h, String directory, String name) throws QTasteException;
 }

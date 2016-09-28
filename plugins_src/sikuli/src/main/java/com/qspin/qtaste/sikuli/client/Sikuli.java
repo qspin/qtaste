@@ -4,12 +4,16 @@
  */
 package com.qspin.qtaste.sikuli.client;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 
 import com.qspin.qtaste.kernel.testapi.SingletonComponent;
 import com.qspin.qtaste.sikuli.Area;
 import com.qspin.qtaste.tcom.jmx.impl.JMXClient;
 import com.qspin.qtaste.testsuite.QTasteException;
+
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -133,6 +137,18 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
     public void setSimilarity(double level) throws QTasteException {
         mProxy.setSimilarity(level);
     }
+
+    @Override
+    public void capture(int x,int y, int w, int h, String filename) throws QTasteException {
+        mProxy.capture(x, y, w, h, filename);
+    }
+
+    @Override
+    public void capture(int x,int y, int w, int h, String directory, String name) throws QTasteException {
+        mProxy.capture(x, y, w, h, directory, name);
+    }
+
+
 
     @Override
     public void terminate() throws QTasteException {

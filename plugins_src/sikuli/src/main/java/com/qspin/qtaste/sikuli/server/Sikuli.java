@@ -19,6 +19,7 @@
 
 package com.qspin.qtaste.sikuli.server;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -225,5 +226,25 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
         Settings.MinSimilarity = level;
     }
 
+    @Override
+    public void capture(int x, int y, int w, int h, String filename) throws QTasteException {
+        try {
+            BufferedImage bi = Screen.all().capture(x, y, w, h).getImage();
+            ImageIO.write(bi, "png", new File(filename));
+        }
+        catch (Exception e) {
+            throw new QTasteException(e.getMessage());
+        }
+    }
 
+    @Override
+    public void capture(int x, int y, int w, int h, String directory, String name) throws QTasteException {
+        try {
+            BufferedImage bi = Screen.all().capture(x, y, w, h).getImage();
+            ImageIO.write(bi, "png", new File(directory, name));
+        }
+        catch (Exception e) {
+            throw new QTasteException(e.getMessage());
+        }
+    }
 }
