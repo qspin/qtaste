@@ -24,25 +24,17 @@ from lib import *
 ##
 #  QTaste documentation management:
 # <p>
-# This test case has the goal to verify that when a test step is imported, this documentation is well imported too.
+# This test case has the goal to verify that lib is correctly imported for each test execution and that when a test step is imported, its documentation is well imported too.
 ##
-
 
 def Step2():
     """
-    @step Define a Python script&nbsp;containing the following a syntax error:
-          if myValue eq True:
-    @expected Test result is "Not available" with the following reason:<p>
-              <i>Python syntax error in file .../TestScript.py at line 40, column 15:</i>
-              <pre><i>    if myValue eq True:</i></pre><p>
-              Script call stack is reported.
+    @step Check value of DATA test data during import vs value in test script
+    @expected Both values are equal
     """
-    if myValue eq True:
-        print "myValue is true"
-    else:
-        print "myValue is false"
+    if data != testData.getValue('DATA'):
+        testAPI.stopTest(Status.FAIL, "DATA value doesn't match in test script and imported lib.")
 
-doStep(Step1FromLIB)
+
+doStep(Step1FromLib)
 doStep(Step2)
-
-myValue = testAPI.getEngineTest().throwNoException()

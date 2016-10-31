@@ -19,10 +19,13 @@
 
 from qtaste import *
 
-def Step1FromLIB():
-    """
-    @step This documentation step is imported from LIB
-    @expected This documentation of expected is imported from LIB
-    """
-    pass
+# get value of DATA test data in a variable
+data = testData.getValue('DATA')
 
+def Step1FromLib():
+    """
+    @step Check value of DATA test data (this documentation step is imported from LIB)
+    @expected Value of Data startswith 'MyData' and documentation is imported from LIB
+    """
+    if data != 'MyData%d' % testData.getRowId():
+        testAPI.stopTest(Status.FAIL, "DATA value doesn't match 'MyData%d'." % testData.getRowId())

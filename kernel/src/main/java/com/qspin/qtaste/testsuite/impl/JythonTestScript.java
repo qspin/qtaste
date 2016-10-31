@@ -620,10 +620,16 @@ public class JythonTestScript extends TestScript implements Executable {
             Bindings bindings = engine.createBindings();
             engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
+            engine.eval("import sys as __sys");
+            engine.eval("if not globals().has_key('__initModules'):\n" +
+                        "  __initModules = __sys.modules.keys()\n" +
+                        "else:\n" +
+                        "  for m in __sys.modules.keys():\n" +
+                        "    if m not in __initModules:\n" +
+                        "      del __sys.modules[m]", globalBindings);
+
             // add all global bindinds
             bindings.putAll(globalBindings);
-
-            engine.eval("import sys as __sys");
 
             if (testSuite != null) {
                 // add pythonlib subdirectories of test script directory up to test suites directory, to python path
@@ -1217,7 +1223,6 @@ public class JythonTestScript extends TestScript implements Executable {
         }
 
         return debugVar;
-
     }
 
     private DebugVariable dumpPythonObject(Object value, DebugVariable debugVar) {
@@ -1235,7 +1240,6 @@ public class JythonTestScript extends TestScript implements Executable {
                 debugVar.addField(new DebugVariable("[" + i + "]", o.getClass().toString(), o.toString()));
             }
             return debugVar;
-
         }
         if (value instanceof PyArray) {
             PyArray arrayValue = (PyArray) value;
@@ -1259,7 +1263,6 @@ public class JythonTestScript extends TestScript implements Executable {
             }
         }
         return debugVar;
-
     }
 
     /**
@@ -1346,5 +1349,3 @@ public class JythonTestScript extends TestScript implements Executable {
         public static final TestResult.Status NOT_AVAILABLE = TestResult.Status.NOT_AVAILABLE;
     }
 }
-
-

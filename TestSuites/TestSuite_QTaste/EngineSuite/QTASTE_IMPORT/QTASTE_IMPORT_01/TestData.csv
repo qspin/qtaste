@@ -1,2 +1,3 @@
-COMMENT
-Python syntax error. Expected test result: Not available
+COMMENT;DATA
+Lib import. Expected test result: Passed;MyData1
+Second time lib import. Expected test result: Passed;MyData2
