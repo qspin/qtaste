@@ -1,2 +1,2 @@
 COMMENT
-Test script import failure. Expected test result: Not available (Python syntax error)
+Test script import failure. Expected test result: Not available (TestData doesn't contain value for data DATA)
