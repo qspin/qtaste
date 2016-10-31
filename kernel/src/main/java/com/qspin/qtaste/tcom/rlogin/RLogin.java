@@ -157,7 +157,6 @@ public class RLogin {
                 socket.close();
             } catch (IOException ex) {
             }
-            socket = null;
         }
         // Expected to get an exception as the remote host should not be reachable anymore
         logger.error(

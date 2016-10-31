@@ -8,9 +8,9 @@
 
 	<version>0.0.1</version>
 	<groupId>com.qspin.qtaste</groupId>
-	<artifactId>qtaste-demo-sut</artifactId>
+	<artifactId>qtaste-demo-sut-fx</artifactId>
 	<packaging>jar</packaging>
-	<name>QTaste Test SUT for QTaste Demo</name>
+	<name>QTaste Test SUT for QTaste JavaFX Demo</name>
 
 	<build>
 		<finalName>qtaste-demo-sut-fx</finalName>

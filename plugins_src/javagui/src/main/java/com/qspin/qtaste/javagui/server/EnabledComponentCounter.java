@@ -60,7 +60,11 @@ class EnabledComponentCounter extends ComponentCommander {
         }
         for (int i = 0; i < c.getComponentCount(); i++) {
             Component child = c.getComponent(i);
-            counter += getEnabledComponentCount(isEnabled, (Container) child);
+            if (child instanceof Container) {
+                counter += getEnabledComponentCount(isEnabled, (Container) child);
+            } else {
+                counter += child.isEnabled() == isEnabled ? 1 : 0;
+            }
         }
         return counter;
     }

@@ -149,8 +149,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
         this.generateStepsRows = config.getBoolean("reporting.html_settings.generate_steps_rows");
         if (!this.generateStepsRows) {
             // remove the hyperlink
-            String content = this.templateContents.get("testResult");
-            content = this.templateContents.get("testScriptRowResult").replace(
+            String content = this.templateContents.get("testScriptRowResult").replace(
                   "<a href=\"javascript:showHide('###ROW_ID###')\">###TEST_ID###</a>", "###TEST_ID###");
             this.templateContents.remove("testScriptRowResult");
             this.templateContents.put("testScriptRowResult", content);
@@ -371,13 +370,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
                 // TODO: Convert String into HTML String
 
                 NamesValuesList<String, String> namesValues = new NamesValuesList<>();
-                String testId = tr.getId();
                 String testComment = tr.getComment().replace("\n", "<BR>");
-                if (testComment.length() > 0) {
-                    testId += "<BR> (" + testComment + ")";
-                }
 
-                testId = testId.replace('\\', '/');
                 namesValues.add("###ROW_ID###", "row_" + rowId);
                 namesValues.add("###TEST_SCRIPT_SECTION_ID###", tr.getName() + "-" + (tr.getCurrentRowIndex() + 1));
                 if (tr.getTestData() != null) {

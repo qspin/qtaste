@@ -339,9 +339,7 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
         public void actionPerformed(ActionEvent e) {
             final String command = mInteractiveText.getText();
             if (!command.isEmpty()) {
-                new Thread(() -> {
-                    executeCommand(command);
-                }).start();
+                new Thread(() -> executeCommand(command)).start();
             }
         }
     }

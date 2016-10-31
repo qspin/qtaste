@@ -53,11 +53,10 @@ public class FileUtilities {
 
     public static File[] listSortedFiles(File directory, FileMask fileMask) {
         File[] fList = directory.listFiles(fileMask);
-        if (fList == null) {
-            return fList;
+        if (fList != null) {
+            // sort testbed by alphabetic order (ignoring case)
+            Arrays.sort(fList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         }
-        // sort testbed by alphabetic order (ignoring case)
-        Arrays.sort(fList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         return fList;
     }
 
@@ -67,11 +66,10 @@ public class FileUtilities {
 
     public static File[] listSortedFiles(File directory, FileFilter filter) {
         File[] fList = directory.listFiles(filter);
-        if (fList == null) {
-            return fList;
+        if (fList != null) {
+            // sort testbed by alphabetic order (ignoring case)
+            Arrays.sort(fList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         }
-        // sort testbed by alphabetic order (ignoring case)
-        Arrays.sort(fList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         return fList;
     }
 

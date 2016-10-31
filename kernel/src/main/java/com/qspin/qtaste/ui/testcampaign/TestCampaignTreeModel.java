@@ -378,9 +378,8 @@ public class TestCampaignTreeModel extends DefaultTreeModel //AbstractTreeTableM
                 return true;
             }
             if (child.getChildren().length > 0) {
-                boolean returnValue = isTestSuite(child, directory);
-                if (returnValue) {
-                    return returnValue;
+                if (isTestSuite(child, directory)) {
+                    return true;
                 }
             }
         }

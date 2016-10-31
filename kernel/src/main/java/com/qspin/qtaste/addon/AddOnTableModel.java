@@ -2,6 +2,7 @@ package com.qspin.qtaste.addon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -46,7 +47,7 @@ public class AddOnTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return mAddons.get(rowIndex).getStatus() == AddOnMetadata.LOAD;
+                return Objects.equals(mAddons.get(rowIndex).getStatus(), AddOnMetadata.LOAD);
             case 1:
                 return mAddons.get(rowIndex).getName();
             case 2:

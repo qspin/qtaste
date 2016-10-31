@@ -26,6 +26,7 @@ import java.awt.Window;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -62,28 +63,27 @@ final class StructureAnalyzer extends ComponentCommander {
 
     protected void analyzeComponent(Component pComponent, int pLevel) throws IOException {
         Class<?> componentClass = pComponent.getClass();
-        String componentName = componentClass.getName().replace(componentClass.getPackage().getName() + ".", "");
         String componentText = null;
-        componentName = componentName.replace('$', '_');
 
-        if (componentClass.getName() == "javax.swing.JButton") {
+        String componentClassName = componentClass.getName();
+        if (Objects.equals("javax.swing.JButton", componentClassName)) {
             componentText = ((javax.swing.JButton) pComponent).getText();
-        } else if (componentClass.getName() == "javax.swing.JToggleButton") {
+        } else if (Objects.equals("javax.swing.JToggleButton", componentClassName)) {
             componentText = ((javax.swing.JToggleButton) pComponent).getText();
-        } else if (componentClass.getName() == "javax.swing.JRadioButton") {
+        } else if (Objects.equals("javax.swing.JRadioButton", componentClassName)) {
             componentText = ((javax.swing.JRadioButton) pComponent).getText();
-        } else if (componentClass.getName() == "javax.swing.JLabel") {
+        } else if (Objects.equals("javax.swing.JLabel", componentClassName)) {
             componentText = ((javax.swing.JLabel) pComponent).getText();
-        } else if (componentClass.getName() == "javax.swing.JTextField") {
+        } else if (Objects.equals("javax.swing.JTextField", componentClassName)) {
             componentText = ((javax.swing.JTextField) pComponent).getText();
-        } else if (componentClass.getName() == "javax.swing.JFormattedTextField") {
+        } else if (Objects.equals("javax.swing.JFormattedTextField", componentClassName)) {
             componentText = ((javax.swing.JFormattedTextField) pComponent).getText();
-        } else if (componentClass.getName() == "javax.swing.JTextArea") {
+        } else if (Objects.equals("javax.swing.JTextArea", componentClassName)) {
             componentText = ((javax.swing.JTextArea) pComponent).getText();
         }
 
         if (pComponent instanceof Container && ((Container) pComponent).getComponentCount() > 0) {
-            writeComponent("<component class=\"" + componentClass.getName() + "\" name=\"" + pComponent.getName() + "\"" + (
+            writeComponent("<component class=\"" + componentClassName + "\" name=\"" + pComponent.getName() + "\"" + (
                   (componentText != null && componentText.equals("")) ? "" : " text=\"" + componentText + "\"") + ">", pLevel);
             for (int i = 0; i < ((Container) pComponent).getComponentCount(); ++i) {
                 Component c = ((Container) pComponent).getComponent(i);
@@ -91,7 +91,7 @@ final class StructureAnalyzer extends ComponentCommander {
             }
             writeComponent("</component>", pLevel);
         } else {
-            writeComponent("<component class=\"" + componentClass.getName() + "\" name=\"" + pComponent.getName() + "\"" + (
+            writeComponent("<component class=\"" + componentClassName + "\" name=\"" + pComponent.getName() + "\"" + (
                   (componentText != null && componentText.equals("")) ? "" : " text=\"" + componentText + "\"") +
                   "></component>", pLevel);
         }

@@ -96,9 +96,7 @@ public final class AddOnMetadata {
 
     public void setStatus(String status) {
         LOGGER.trace("Change status from " + mStatus + " to " + status + " for the addon " + getName());
-        PropertyChangeEvent evt = new PropertyChangeEvent(this, STATUS_PROPERTY_ID, mStatus, status);
-        mStatus = status;
-        firePropertyChangeEvent(evt);
+        firePropertyChangeEvent(new PropertyChangeEvent(this, STATUS_PROPERTY_ID, mStatus, mStatus = status));
     }
 
     public String getMainClass() {

@@ -18,9 +18,6 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
 
     public Sikuli(String url) throws Exception {
         mClient = new JMXClient(url);
-        if (mClient == null) {
-            throw new QTasteException("Unable to connect to the JMX client (" + url + ")");
-        }
         initialize();
     }
 

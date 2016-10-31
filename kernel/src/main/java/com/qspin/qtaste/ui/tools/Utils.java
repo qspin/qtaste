@@ -35,10 +35,9 @@ public class Utils {
      * @return ImageIcon, or null if the path was invalid.
      */
     static public ImageIcon setImageIcon(ImageIcon icon, String description) {
-        if (icon == null) {
-            return icon;
+        if (icon != null) {
+            icon.setDescription(description);
         }
-        icon.setDescription(description);
         return icon;
     }
 

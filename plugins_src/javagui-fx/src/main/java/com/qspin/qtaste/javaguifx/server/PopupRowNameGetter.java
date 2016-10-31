@@ -34,7 +34,7 @@ public class PopupRowNameGetter extends ComponentCommander {
     /**
      * Commander wich parses all Popups in order to find the contained message.
      *
-     * @param BOOLEAN value : <code>true</code> means that only the text of the active popup has to be returned.
+     * @param data BOOLEAN value : <code>true</code> means that only the text of the active popup has to be returned.
      * <code>false</code> means that all texts have to be returned.
      * @return the list containing the found texts.
      * @throws QTasteException

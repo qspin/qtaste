@@ -67,7 +67,7 @@ public class CheckBoxJList<E> extends JList<E> implements ListSelectionListener 
 
     public CheckBoxJList() {
         super();
-        setCellRenderer(new CheckBoxListCellRenderer<E>());
+        setCellRenderer(new CheckBoxListCellRenderer<>());
         addListSelectionListener(this);
     }
 

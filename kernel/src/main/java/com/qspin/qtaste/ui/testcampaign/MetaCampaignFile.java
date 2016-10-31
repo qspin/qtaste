@@ -76,10 +76,11 @@ public class MetaCampaignFile {
     }
 
     public boolean renameFile(String campaign) {
-        boolean ret = false;
         if (file == null) {
-            return ret;
+            return false;
         }
+
+        boolean ret = false;
 
         File newFile = new File(StaticConfiguration.CAMPAIGN_DIRECTORY +
               File.separator + campaign + "." + StaticConfiguration.CAMPAIGN_FILE_EXTENSION);

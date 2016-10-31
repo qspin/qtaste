@@ -145,7 +145,7 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
     {
     	try
     	{
-	    	List<Area> areas = new ArrayList<Area>();
+	    	List<Area> areas = new ArrayList<>();
 	    	Iterator<Match> it = Screen.all().findAll(loadImageFromPath(fileName));
 	    	while(it.hasNext())
 	    	{

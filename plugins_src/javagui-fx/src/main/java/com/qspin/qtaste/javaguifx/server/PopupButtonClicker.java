@@ -38,7 +38,7 @@ public class PopupButtonClicker extends UpdateComponentCommander {
     /**
      * Commander which clicks on a popup button.
      *
-     * @param INTEGER - the timeout value; String - the button text.
+     * @param data INTEGER - the timeout value; String - the button text.
      * @return true if the command is successfully performed.
      * @throws QTasteException
      */

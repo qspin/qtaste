@@ -633,7 +633,7 @@ public class Log4jPanel extends JPanel {
                     return !(filterSource || (filterTestCaseOrVerb && filterLevel));
                 } catch (IllegalAccessException | SecurityException | NoSuchMethodException | InvocationTargetException |
                       IllegalArgumentException ex) {
-                    logger.equals(ex);
+                    logger.debug(ex);
                 }
                 return true;
             } else {
