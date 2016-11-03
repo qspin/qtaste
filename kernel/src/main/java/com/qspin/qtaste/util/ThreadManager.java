@@ -44,4 +44,7 @@ public class ThreadManager {
         }
     }
 
+    private ThreadManager() {
+        // prevent instantiation
+    }
 }

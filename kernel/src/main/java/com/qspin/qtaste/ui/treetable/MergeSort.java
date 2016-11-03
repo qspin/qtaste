@@ -76,8 +76,8 @@ public abstract class MergeSort {
                 swapSpace[count++] = toSort[secondHalf++];
             }
         }
-        for (count = begin; count <= end; count++)
+        for (count = begin; count <= end; count++) {
             toSort[count] = swapSpace[count];
+        }
     }
 }
-

@@ -263,4 +263,8 @@ public class FileUtilities {
 
         throw new UnsupportedOperationException("Cannot list files for URL " + dirURL);
     }
+
+    private FileUtilities() {
+        // prevent instantiation
+    }
 }

@@ -91,11 +91,6 @@ public class CampaignReportManager extends ReportManager {
         super.startReport(timeStamp, name);
     }
 
-    @Override
-    public void stopReport() {
-        super.stopReport();
-    }
-
     public void putEntry(CampaignResult result) {
         results.add(result);
     }

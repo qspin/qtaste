@@ -48,11 +48,11 @@ import com.qspin.qtaste.util.Strings;
  * <p>
  * Command-line option:
  * <dl>
- * <dt><b>-d</b> <var>directory</var>
+ * <dt><b>-d</b> <i>directory</i>
  * <dd> Specifies the destination directory where javadoc saves the
  * generated HTML files (the "d" means "destination"). Omitting this
  * option causes the files to be saved in the current directory.
- * The value <var>directory</var> can be
+ * The value <i>directory</i> can be
  * absolute, or relative to the current working directory.
  * If the destination directory doesn't exist, it is automatically
  * created when javadoc is run.

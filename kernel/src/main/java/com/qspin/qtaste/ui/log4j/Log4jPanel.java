@@ -458,7 +458,7 @@ public class Log4jPanel extends JPanel {
             m_currentStepStack.pop();
         }
 
-        long currentScrollBarMax;
+        int currentScrollBarMax;
         //int lastRow = m_LogModel.getRowCount();
         // check if the user has change the scrolling position
         JScrollPane scrollPane = (JScrollPane) m_LogTable.getParent().getParent();
@@ -758,10 +758,8 @@ public class Log4jPanel extends JPanel {
             String level = (String) table.getValueAt(row, LOG_LEVEL);
             Color foregroundColor;
             switch (level) {
-                case "ERROR":
-                    foregroundColor = Color.RED;
-                    break;
                 case "FATAL":
+                case "ERROR":
                     foregroundColor = Color.RED;
                     break;
                 case "WARN":

@@ -466,8 +466,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
                                     stepsNamesValues.add("###STEP_RESULT_TEXT###", KO_TEXT);
                                     stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default
                                 } else if (tr.getStatus() == TestResult.Status.NOT_AVAILABLE) {
-                                    stepsNamesValues.add("###STEP_RESULT_PICTURE###", KO_IMAGE);
-                                    stepsNamesValues.add("###STEP_RESULT_TEXT###", KO_TEXT);
+                                    stepsNamesValues.add("###STEP_RESULT_PICTURE###", NA_IMAGE);
+                                    stepsNamesValues.add("###STEP_RESULT_TEXT###", NA_TEXT);
                                     stepsNamesValues.add("###STEP_STATUS###", "tc-nok"); // default
                                 } else {
                                     stepsNamesValues.add("###STEP_RESULT_PICTURE###", RUN_IMAGE);
@@ -660,7 +660,7 @@ public class HTMLReportFormatter extends HTMLFormatter {
                     if (aDataset.getValue(aKey).intValue() == 0) {
                         return null;
                     }
-                    double percentage = aDataset.getValue(aKey).intValue() * 100 / currentTestSuite.getNbTestsToExecute();
+                    double percentage = aDataset.getValue(aKey).intValue() * 100.0 / currentTestSuite.getNbTestsToExecute();
                     labelResult = percentage + "%";
                 } else {
                     return null;

@@ -58,4 +58,8 @@ public class DirectoryUtilities {
         }
         return (path.delete());
     }
+
+    private DirectoryUtilities() {
+        // prevent instantiation
+    }
 }

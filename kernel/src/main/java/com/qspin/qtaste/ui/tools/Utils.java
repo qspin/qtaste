@@ -203,4 +203,8 @@ public class Utils {
         }
         return row;
     } // expandJTreeNode()
+
+    private Utils() {
+        // prevent instantiation
+    }
 }

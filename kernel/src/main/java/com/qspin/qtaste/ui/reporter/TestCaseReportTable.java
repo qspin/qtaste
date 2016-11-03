@@ -365,7 +365,7 @@ public class TestCaseReportTable {
             //tcModel.addRow(cols);
             Integer rowNum = tcModel.getRowCount();
             testCases.put(tr, rowNum);
-            long currentScrollBarMax;
+            int currentScrollBarMax;
 
             JScrollPane scrollPane = (JScrollPane) tcTable.getParent().getParent();
             JScrollBar scrollbar = scrollPane.getVerticalScrollBar();

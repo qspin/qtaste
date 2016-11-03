@@ -333,8 +333,11 @@ public class TextUtilities {
         }
     }
 
+    private TextUtilities() {
+        // prevent instantiation
+    }
+
     private static final int WHITESPACE = 0;
     private static final int WORD_CHAR = 1;
     private static final int SYMBOL = 2;
-
 }

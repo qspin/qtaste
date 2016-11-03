@@ -111,7 +111,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
     protected JTabbedPane editorTabbedPane;
     protected JPanel tcSourcePanel = new JPanel(new BorderLayout());
     protected DebugVariablePanel debugPanel;
-    public TestCaseTree tcTree;
+    protected TestCaseTree tcTree;
     protected TestCaseResultsPane resultsPane;
     protected JTabbedPane tabbedPane;
     protected MainPanel parent;

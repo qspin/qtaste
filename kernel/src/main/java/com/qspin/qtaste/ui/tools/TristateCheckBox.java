@@ -201,9 +201,7 @@ public class TristateCheckBox extends JCheckBox {
             State current = getState();
             if (current == NOT_SELECTED) {
                 setState(SELECTED);
-            } else if (current == SELECTED) {
-                setState(NOT_SELECTED);
-            } else if (current == DONT_CARE) {
+            } else if (current == SELECTED || current == DONT_CARE) {
                 setState(NOT_SELECTED);
             }
         }
