@@ -795,15 +795,20 @@ public class JythonTestScript extends TestScript implements Executable {
                 String function = frame.f_code.co_name;
                 int lineNumber = frame.f_lineno;
 
+                // always display filenames with '/' separator to avoid mix of '/' and '\' under Windows
+                if (File.separatorChar != '/') {
+                    fileName = fileName.replace(File.separatorChar, '/');
+                }
+
                 if (function.equals("<module>")) {
-                    stackTrace.append("at file ").append(fileName).append(" line ").append(lineNumber);
-                } else {
+                    stackTrace.append("at file ").append(fileName).append(" line ").append(lineNumber).append('\n');
+                } else if (!function.equals("importTestScript")) {
                     stackTrace.append("function ").append(function);
                     if (!fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
                         stackTrace.append(" at file ").append(fileName).append(" line ").append(lineNumber);
                     }
+                    stackTrace.append('\n');
                 }
-                stackTrace.append('\n');
                 if (!stackLastDataExtracted && !fileName.equals("embedded_jython") && !fileName.equals("JythonTestScript.java")) {
                     stackLastDataExtracted = true;
                     result.setFailedLineNumber(lineNumber);
