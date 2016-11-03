@@ -49,6 +49,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultEditorKit.CopyAction;
+import javax.swing.text.DefaultEditorKit.CutAction;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.Element;
@@ -289,7 +290,7 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         getInputMap().put(ks, "PYTHON_INDENT");
         actions.put("PYTHON_INDENT", pythonIndentAction);
 
-        // install smart copy: select line and copy on CTRL-C key if nothing selected
+        // install smart copy/cut: select line and copy/cut on CTRL-C/X key if nothing selected
         final Action selectLineAction = actions.get(DefaultEditorKit.selectLineAction);
         Action smartCopyAction = new CopyAction() {
             @Override
@@ -305,9 +306,26 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
                 }
             }
         };
+        Action smartCutAction = new CutAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextComponent target = getTextComponent(e);
+                if (target != null) {
+                    if (target.getSelectedText() == null) {
+                        selectLineAction.actionPerformed(e);
+                        // include new-line
+                        target.setSelectionEnd(target.getSelectionEnd() + 1);
+                    }
+                    super.actionPerformed(e);
+                }
+            }
+        };
         smartCopyAction.putValue(Action.ACCELERATOR_KEY,
               actions.get(DefaultEditorKit.copyAction).getValue(Action.ACCELERATOR_KEY));
+        smartCutAction.putValue(Action.ACCELERATOR_KEY,
+              actions.get(DefaultEditorKit.cutAction).getValue(Action.ACCELERATOR_KEY));
         actions.put(DefaultEditorKit.copyAction, smartCopyAction);
+        actions.put(DefaultEditorKit.cutAction, smartCutAction);
 
         // add a document filter to replace tabs by 4 spaces when some text is added or replaced
         // in the document
