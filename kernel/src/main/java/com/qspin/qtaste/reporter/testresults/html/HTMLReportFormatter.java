@@ -37,7 +37,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -348,9 +347,8 @@ public class HTMLReportFormatter extends HTMLFormatter {
                         namesValues.add("###DATA_COLUMN###", "");
                     }
 
-                    if (testcaseName.equals("Start SUT") ||
-                          testcaseName.equals("(Re)start SUT") ||
-                          testcaseName.equals("Stop SUT")) {
+                    if (testcaseName.equals("Start SUT") || testcaseName.equals("(Re)start SUT") || testcaseName.equals(
+                          "Stop SUT")) {
                         substituteAndWriteFile(templateContents.get("testStartStopScript"), namesValues);
                     } else {
                         String requirementColumn = generateRequirementColumn(tr);
@@ -588,25 +586,22 @@ public class HTMLReportFormatter extends HTMLFormatter {
         pieDataSet.setValue("Not executed",
               new Integer(currentTestSuite.getNbTestsToExecute() - currentTestSuite.getNbTestsExecuted()));
         JFreeChart chart;
-        final boolean drilldown = true;
 
         // create the chart...
-        if (drilldown) {
-            final PiePlot plot = new PiePlot(pieDataSet);
+//        if (drilldown) {
+        final PiePlot plot = new PiePlot(pieDataSet);
 
-            Color[] colors = {new Color(100, 230, 40), new Color(210, 35, 35), new Color(230, 210, 40), new Color(100, 90, 40)};
-            PieRenderer renderer = new PieRenderer(colors);
-            renderer.setColor(plot, pieDataSet);
+        Color[] colors = {new Color(100, 230, 40), new Color(210, 35, 35), new Color(230, 210, 40), new Color(100, 90, 40)};
+        PieRenderer renderer = new PieRenderer(colors);
+        renderer.setColor(plot, pieDataSet);
 
-            plot.setURLGenerator(new StandardPieURLGenerator("pie_chart_detail.jsp"));
-            plot.setLabelGenerator(new TestSectiontLabelPieGenerator());
-            chart = new JFreeChart("Test summary", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-        } else {
-            chart = ChartFactory.createPieChart("Test summary", // chart title
-                  pieDataSet, // data
-                  true, // include legend
-                  true, false);
-        }
+        plot.setURLGenerator(new StandardPieURLGenerator("pie_chart_detail.jsp"));
+        plot.setLabelGenerator(new TestSectiontLabelPieGenerator());
+        chart = new JFreeChart("Test summary", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+//        } else {
+//            chart = ChartFactory.createPieChart("Test summary" /* chart title */, pieDataSet /* data */,
+//                  true /* include legend */, true, false);
+//        }
 
         chart.setBackgroundPaint(java.awt.Color.white);
 

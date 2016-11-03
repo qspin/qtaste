@@ -102,7 +102,7 @@ public class HTMLDocumentLoader {
             try {
                 Class<?> c = Class.forName("javax.swing.text.html.parser.ParserDelegator");
                 parser = (HTMLEditorKit.Parser) c.newInstance();
-            } catch (Throwable e) {
+            } catch (Exception e) {
             }
         }
         return parser;

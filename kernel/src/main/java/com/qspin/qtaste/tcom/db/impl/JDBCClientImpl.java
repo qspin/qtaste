@@ -20,7 +20,6 @@
 package com.qspin.qtaste.tcom.db.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -95,31 +94,29 @@ public class JDBCClientImpl implements JDBCClient {
 
     public void executeSQLScript(String scriptFile)
           throws SQLException, FileNotFoundException, ClassNotFoundException, IOException {
-        File script = new File(scriptFile);
-        BufferedReader reader = new BufferedReader(new FileReader(script));
-
-        if (!connected) {
-            open();
-        }
-        Statement stmt = con.createStatement();
-
-        String line;
-        StringBuilder query = new StringBuilder();
-        boolean queryEnds;
-
-        while ((line = reader.readLine()) != null) {
-            if (isComment(line)) {
-                continue;
+        try (BufferedReader reader = new BufferedReader(new FileReader(scriptFile))) {
+            if (!connected) {
+                open();
             }
-            queryEnds = checkStatementEnds(line);
-            query.append(line);
-            if (queryEnds) {
-                stmt.addBatch(query.toString());
-                query.setLength(0);
-            }
-        }
-        stmt.executeBatch();
+            Statement stmt = con.createStatement();
 
+            String line;
+            StringBuilder query = new StringBuilder();
+            boolean queryEnds;
+
+            while ((line = reader.readLine()) != null) {
+                if (isComment(line)) {
+                    continue;
+                }
+                queryEnds = checkStatementEnds(line);
+                query.append(line);
+                if (queryEnds) {
+                    stmt.addBatch(query.toString());
+                    query.setLength(0);
+                }
+            }
+            stmt.executeBatch();
+        }
     }
 
     /**

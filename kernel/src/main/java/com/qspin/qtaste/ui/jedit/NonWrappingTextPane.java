@@ -461,38 +461,26 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
     }
 
     public void save() {
-        BufferedWriter output = null;
-        try {
-            File file = new File(getFileName());
-            //output = new BufferedWriter(new FileWriter(file)); //TODO Remove loc
-            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+        File file = new File(getFileName());
+        try (BufferedWriter output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
             output.append(getText());
             output.close();
             loadDateAndTime = file.lastModified();
+            setModified(false);
         } catch (IOException ex) {
             logger.fatal("Cannot save file", ex);
             JOptionPane.showMessageDialog(null,
                   "Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
                   "Cannot save the file", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            try {
-                output.close();
-                setModified(false);
-            } catch (IOException ex) {
-                logger.fatal("Cannot save file", ex);
-                JOptionPane.showMessageDialog(null,
-                      "Error during the file saving :\n" + ex.getMessage() + "\nSee the log for more information",
-                      "Cannot save the file", JOptionPane.ERROR_MESSAGE);
-            }
         }
     }
 
     /**
      * Reload the current file (i.e revert unsaved modifications)
      */
-    class ReloadAction extends AbstractAction {
+    private class ReloadAction extends AbstractAction {
 
-        public ReloadAction() {
+        ReloadAction() {
             super("Revert unsaved modifications");
         }
 
@@ -504,9 +492,9 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         }
     }
 
-    public class AddNewStep extends AbstractAction {
+    private class AddNewStep extends AbstractAction {
 
-        public AddNewStep() {
+        AddNewStep() {
             super("Add new step");
         }
 
@@ -541,29 +529,10 @@ public class NonWrappingTextPane extends JEditorPane /*JTextPane*/ {
         }
     }
 
-    class SaveFile extends AbstractAction {
-
-        public SaveFile() {
-            super("Save");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (NonWrappingTextPane.this.isModified()) {
-                NonWrappingTextPane.this.save();
-            }
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return true;
-        }
-    }
-
     /**
      * Document filter to replace tabs with spaces when the document is edited.
      */
-    class IndentationDocumentFilter extends DocumentFilter {
+    private class IndentationDocumentFilter extends DocumentFilter {
 
         @Override
         public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attrs)

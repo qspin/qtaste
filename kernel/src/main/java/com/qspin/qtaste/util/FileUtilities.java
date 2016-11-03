@@ -242,23 +242,23 @@ public class FileUtilities {
 
         if (dirURL.getProtocol().equals("jar")) {
             String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
-            JarFile jar = new JarFile(jarPath);
-            Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-            List<String> result = new ArrayList<>();
-            String relativeResourceDirName = resourceDirName.startsWith("/") ? resourceDirName.substring(1) : resourceDirName;
-            while (entries.hasMoreElements()) {
-                String name = entries.nextElement().getName();
-                if (name.startsWith(relativeResourceDirName) && !name.equals(
-                      relativeResourceDirName)) { //filter according to the path
-                    String entry = name.substring(relativeResourceDirName.length());
-                    int checkSubdir = entry.indexOf("/");
-                    if (checkSubdir < 0) {
-                        // not a subdirectory
-                        result.add(entry);
+            try (JarFile jar = new JarFile(jarPath)) {
+                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+                List<String> result = new ArrayList<>();
+                String relativeResourceDirName = resourceDirName.startsWith("/") ? resourceDirName.substring(1) : resourceDirName;
+                while (entries.hasMoreElements()) {
+                    String name = entries.nextElement().getName();
+                    if (name.startsWith(relativeResourceDirName) && !name.equals(relativeResourceDirName)) { //filter according to the path
+                        String entry = name.substring(relativeResourceDirName.length());
+                        int checkSubdir = entry.indexOf("/");
+                        if (checkSubdir < 0) {
+                            // not a subdirectory
+                            result.add(entry);
+                        }
                     }
                 }
+                return result.toArray(new String[result.size()]);
             }
-            return result.toArray(new String[result.size()]);
         }
 
         throw new UnsupportedOperationException("Cannot list files for URL " + dirURL);

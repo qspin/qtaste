@@ -79,7 +79,7 @@ public class TestEngine {
             public void run() {
                 try {
                     Class.forName(JythonTestScript.class.getName());
-                } catch (Throwable pE) {
+                } catch (Exception e) {
                     // ignore
                 }
             }

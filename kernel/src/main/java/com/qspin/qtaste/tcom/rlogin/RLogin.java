@@ -141,8 +141,7 @@ public class RLogin {
 
         // check that remote host is not accessible anymore
         // open a socket without any parameters. It hasn't been binded or connected
-        Socket socket = new Socket();
-        try {
+        try (Socket socket = new Socket()) {
             // bind to a local ephemeral port
             socket.bind(null);
             socket.connect(new InetSocketAddress(remoteHost, RLoginClient.DEFAULT_PORT), 1);
@@ -152,11 +151,6 @@ public class RLogin {
         } catch (IOException e) {
             logger.error("Something went wrong while rebooting host:" + remoteHost);
             return false;
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException ex) {
-            }
         }
         // Expected to get an exception as the remote host should not be reachable anymore
         logger.error(

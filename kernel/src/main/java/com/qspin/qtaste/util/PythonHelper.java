@@ -64,19 +64,20 @@ public class PythonHelper {
         properties.setProperty("python.path", StaticConfiguration.FORMATTER_DIR);
         PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
 
-        PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(), new org.python.core.PySystemState());
-        StringWriter output = null;
-        if (redirectOutput) {
-            output = new StringWriter();
-            interp.setOut(output);
-            interp.setErr(output);
+        try (PythonInterpreter interp = new PythonInterpreter(new org.python.core.PyStringMap(),
+              new org.python.core.PySystemState())) {
+            StringWriter output = null;
+            if (redirectOutput) {
+                output = new StringWriter();
+                interp.setOut(output);
+                interp.setErr(output);
+            }
+            interp.cleanup();
+            interp.exec("import sys;sys.argv[1:]= [r'" + StringUtils.join(arguments, "','") + "']");
+            interp.exec("__name__ = '__main__'");
+            interp.exec("execfile(r'" + fileName + "')");
+            return redirectOutput ? output.toString() : null;
         }
-        interp.cleanup();
-        interp.exec("import sys;sys.argv[1:]= [r'" + StringUtils.join(arguments, "','") + "']");
-        interp.exec("__name__ = '__main__'");
-        interp.exec("execfile(r'" + fileName + "')");
-        interp.cleanup();
-        return redirectOutput ? output.toString() : null;
     }
 
     /**

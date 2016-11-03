@@ -60,8 +60,7 @@ public class OutputValidator extends Validator {
     }
 
     protected boolean validate() {
-        try {
-            BufferedReader ref = new BufferedReader(new FileReader(reference));
+        try (BufferedReader ref = new BufferedReader(new FileReader(reference))) {
             int s = 0;
             //int e=0;
             int lineCounter = 1;

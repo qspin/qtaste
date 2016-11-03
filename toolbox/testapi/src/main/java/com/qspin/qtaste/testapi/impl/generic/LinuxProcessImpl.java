@@ -97,14 +97,14 @@ public class LinuxProcessImpl extends ProcessImpl implements LinuxProcess {
         //use ps command to list all processes and filter on the process command
         try {
             java.lang.Process myProcess = Runtime.getRuntime().exec("ps -eo pid,command");
-            BufferedReader stdout = new BufferedReader(new InputStreamReader(myProcess.getInputStream()));
-            String line = stdout.readLine();
-            while (line != null) {
-                if (line.contains(cmd) && !lines.contains(line)) {
-                    LOGGER.info("line found for the process : " + line);
-                    lines.add(line);
+            try (BufferedReader stdout = new BufferedReader(new InputStreamReader(myProcess.getInputStream()))) {
+                String line;
+                while ((line = stdout.readLine()) != null) {
+                    if (line.contains(cmd) && !lines.contains(line)) {
+                        LOGGER.info("line found for the process : " + line);
+                        lines.add(line);
+                    }
                 }
-                line = stdout.readLine();
             }
             myProcess.waitFor();
         } catch (IOException | InterruptedException e) {

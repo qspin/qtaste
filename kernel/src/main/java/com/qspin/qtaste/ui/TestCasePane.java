@@ -526,7 +526,7 @@ public class TestCasePane extends JPanel implements TestScriptBreakpointListener
             return null;
         }
         NonWrappingTextPane textPane = activateSourceIfAlreadyLoaded(absolutePath, isTestScript);
-        if (!force & textPane != null) {
+        if (!force && textPane != null) {
             return textPane;
         }
         if (f.exists() && f.canRead()) {

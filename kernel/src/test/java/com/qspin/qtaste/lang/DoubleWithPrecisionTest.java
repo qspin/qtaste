@@ -33,14 +33,14 @@ public class DoubleWithPrecisionTest extends TestCase {
     }
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         instance = new DoubleWithPrecision("1.0(0.5)");
         System.out.println(instance);
     }
 
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         instance = null;
         super.tearDown();
     }

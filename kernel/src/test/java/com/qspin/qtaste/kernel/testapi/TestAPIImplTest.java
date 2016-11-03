@@ -44,7 +44,7 @@ public class TestAPIImplTest extends TestCase {
     }
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
 
         // register component into the TestAPI
@@ -56,7 +56,7 @@ public class TestAPIImplTest extends TestCase {
     }
 
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         super.tearDown();
         instance = null;
     }
