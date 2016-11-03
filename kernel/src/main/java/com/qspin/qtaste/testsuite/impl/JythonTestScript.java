@@ -29,6 +29,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -795,10 +797,13 @@ public class JythonTestScript extends TestScript implements Executable {
                 String function = frame.f_code.co_name;
                 int lineNumber = frame.f_lineno;
 
-                // always display filenames with '/' separator to avoid mix of '/' and '\' under Windows
-                if (File.separatorChar != '/') {
-                    fileName = fileName.replace(File.separatorChar, '/');
+                // convert absolute path to relative path
+                Path filePath = Paths.get(fileName);
+                if (filePath.isAbsolute()) {
+                    filePath = Paths.get("").toAbsolutePath().relativize(filePath);
                 }
+                // normalize path
+                fileName = filePath.normalize().toString();
 
                 if (function.equals("<module>")) {
                     stackTrace.append("at file ").append(fileName).append(" line ").append(lineNumber).append('\n');
