@@ -87,9 +87,7 @@ then
       cp "$OUTPUT" "$TITLE.$NOW.out"
    fi
 
-   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$OUTPUT" &
-   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 &>"$TITLE.$NOW.out" &
-   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2 2>&1 | tee "$TITLE.$NOW.out" > "$OUTPUT" &
+   COMMAND="java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2"
 else
    setArg $2 "$3"
    setArg $4 "$5"
@@ -108,13 +106,16 @@ else
       cp "$OUTPUT" "$TITLE.$NOW.out"
    fi
 
-   nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$OUTPUT" &
-   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 &>"$TITLE.$NOW.out" &
-   # nohup $NICE java $CP_ARG $VM_ARGS $JMX_ARGS $1 2>&1 | tee "$TITLE.$NOW.out" > "$OUTPUT" &
+   COMMAND="java $CP_ARG $VM_ARGS $JMX_ARGS $1"
 fi
 
-PID=$!
+exec bash <<EOFF
+nohup $NICE $COMMAND &>"$OUTPUT" &
+#nohup $NICE $COMMAND &>"$TITLE.$NOW.out" &
+#nohup $NICE $COMMAND 2>&1 | tee "$TITLE.$NOW.out" > "$OUTPUT" &
+PID=\$!
 
 sleep $PROCESS_START_TIME
 
-ps -p $PID >/dev/null || (echo "Process is not started"; exit -1)
+ps -p \$PID >/dev/null || (echo "Process is not started"; exit -1)
+EOFF
