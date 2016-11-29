@@ -115,13 +115,6 @@ from org.apache.log4j import Logger as _Logger, Level as _Level
 from com.qspin.qtaste.util import OS as _OS, Exec as _Exec
 from com.qspin.qtaste.config import TestBedConfiguration as _TestBedConfiguration
 from com.qspin.qtaste.tcom.rlogin import RLogin as _RLogin
-from com.qspin.qtaste.util import OS as _OS\n" +
-
-def getlogin():
-    if _OS.getType() == _OS.Type.WINDOWS:
-        return _os.getenv("USERNAME")
-    return _os.getenv("USER")
-_os.getlogin = getlogin
 
 # set log4j logger level to WARN
 _Logger.getRootLogger().setLevel(_Level.WARN)
