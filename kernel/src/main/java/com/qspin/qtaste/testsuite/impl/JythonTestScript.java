@@ -387,6 +387,22 @@ public class JythonTestScript extends TestScript implements Executable {
             System.exit(1);
         }
 
+        // Patch the os.getLogin() method to return the same result as with jython 2.2.1
+        try {
+            String code = "import os\n" +
+                    "from com.qspin.qtaste.util import OS as _OS\n" +
+                    "def getlogin():\n" +
+                    "    if _OS.getType() == _OS.Type.WINDOWS:\n" +
+                    "        return os.getenv(\"USERNAME\")\n" +
+                    "    return os.getenv(\"USER\")\n" +
+                    "os.getlogin = getlogin";
+            engine.eval(code, globalBindings);
+        } catch (ScriptException e) {
+            logger.fatal("Couldn't create os.getlogin() Python function", e);
+            TestEngine.shutdown();
+            System.exit(1);
+        }
+
         // set code to declare __ScriptDebugger class
         // note: it doesn't work if it is evaluated in the global bindings
         scriptDebuggerClassCode = "import bdb as __bdb\n" +
