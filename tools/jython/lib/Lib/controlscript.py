@@ -115,7 +115,7 @@ from org.apache.log4j import Logger as _Logger, Level as _Level
 from com.qspin.qtaste.util import OS as _OS, Exec as _Exec
 from com.qspin.qtaste.config import TestBedConfiguration as _TestBedConfiguration
 from com.qspin.qtaste.tcom.rlogin import RLogin as _RLogin
-from com.qspin.qtaste.util import OS as _OS\n" +
+from com.qspin.qtaste.util import OS as _OS
 
 def getlogin():
     if _OS.getType() == _OS.Type.WINDOWS:
