@@ -56,6 +56,38 @@
                             <silent>true</silent>
                         </configuration>
                     </execution>
+                    <!-- Unpack Sikuli in order to generate TestAPI Documentation -->
+                    <execution>
+                        <id>unpack-sikuli-src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeArtifactIds>sikuli</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <silent>true</silent>
+                        </configuration>
+                    </execution>
+                    <!-- Unpack JavaGUI FX in order to generate TestAPI Documentation -->
+                    <execution>
+                        <id>unpack-javagui-fx-src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeArtifactIds>javagui-fx</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/dependency-testapi-src</outputDirectory>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <silent>true</silent>
+                        </configuration>
+                    </execution>
 
                     <execution>
                         <phase>package</phase>
