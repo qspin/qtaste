@@ -6,7 +6,7 @@
 			<format>HTML</format>
 			<format>GUI</format>
 			<format>XML</format>
-			<format>JUNIT</format>
+			<!--format>JUNIT</format-->
 		</reporters>
 
 		<html_settings>
