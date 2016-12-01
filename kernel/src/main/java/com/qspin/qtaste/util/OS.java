@@ -49,4 +49,12 @@ public class OS {
 
         return Type.UNKNOWN;
     }
+
+    /**
+     * Return the name of the user
+     * @return the user
+     */
+    public static String getUserName() {
+        return System.getProperty("user.name");
+    }
 }
