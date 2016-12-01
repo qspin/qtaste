@@ -6,6 +6,7 @@
 			<format>HTML</format>
 			<format>GUI</format>
 			<format>XML</format>
+			<format>JUNIT</format>
 		</reporters>
 
 		<html_settings>
@@ -15,10 +16,18 @@
 			<report_restart_sut>true</report_restart_sut>
 		</html_settings>
 
+		<junit_settings>
+			<report_stop_start_sut>true</report_stop_start_sut>
+			<report_restart_sut>false</report_restart_sut>
+			<report_first_failure>true</report_first_failure>
+		</junit_settings>
+
 		<!-- Location of the HTML template -->
 		<html_template>conf/reporting/html/standard</html_template>
 		<!-- Location of the XML template -->
 		<xml_template>conf/reporting/xml/standard</xml_template>
+		<!-- Location of the JUNIT template -->
+		<junit_template>conf/reporting/junit/standard</junit_template>
 		<!-- Location of the generated reports -->
 		<generated_report_path>reports</generated_report_path>
 		<!-- Test campaign aggregated documentation parameters -->
