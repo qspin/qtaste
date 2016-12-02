@@ -49,28 +49,26 @@ public class InfoComboBox extends JComboBox<InfoComboBox.Info> implements PopupM
             if (pEnable && !mHighlight) {
                 mHighlight = pEnable;
 
-                Thread th = new Thread() {
-                    public void run() {
-                        int i = 0;
-                        while (i < 10 && mHighlight) {
-                            if ((i % 2) == 0) {
-                                mForeground = ResourceManager.getInstance().getNormalColor();
-                            } else {
-                                mForeground = ResourceManager.getInstance().getDarkColor();
-                            }
-                            mBox.repaint();
-                            ++i;
-                            try {
-                                sleep(500);
-                            } catch (InterruptedException e) {
-                                i = 10;
-                            }
+                Thread th = new Thread(() -> {
+                    int i = 0;
+                    while (i < 10 && mHighlight) {
+                        if ((i % 2) == 0) {
+                            mForeground = ResourceManager.getInstance().getNormalColor();
+                        } else {
+                            mForeground = ResourceManager.getInstance().getDarkColor();
                         }
-                        mHighlight = false;
-                        mForeground = Color.BLACK;
                         mBox.repaint();
+                        ++i;
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            i = 10;
+                        }
                     }
-                };
+                    mHighlight = false;
+                    mForeground = Color.BLACK;
+                    mBox.repaint();
+                });
                 th.start();
             }
             mHighlight = pEnable;

@@ -109,7 +109,7 @@ public class TableSorter extends AbstractTableModel {
     public static final Comparator<Object> COMPARABLE_COMPARATOR = (Comparator) (o1, o2) -> ((Comparable<Object>) o1).compareTo(
           o2);
     @SuppressWarnings("unchecked")
-    public static final Comparator<Object> LEXICAL_COMPARATOR = (Comparator) (o1, o2) -> o1.toString().compareTo(o2.toString());
+    public static final Comparator<Object> LEXICAL_COMPARATOR = (Comparator) Comparator.comparing(Object::toString);
 
     private Row[] viewToModel;
     private int[] modelToView;

@@ -62,9 +62,7 @@ public final class DialogPanel extends JPanel {
                 if (sureAnswer == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < numberOfPopup; i++) {
                         final String msg = "Popup number " + (i + 1);
-                        Thread t = new Thread(() -> {
-                            JOptionPane.showMessageDialog(null, msg, "POPUP", JOptionPane.INFORMATION_MESSAGE);
-                        });
+                        Thread t = new Thread(() -> JOptionPane.showMessageDialog(null, msg, "POPUP", JOptionPane.INFORMATION_MESSAGE));
                         t.start();
                     }
                 }

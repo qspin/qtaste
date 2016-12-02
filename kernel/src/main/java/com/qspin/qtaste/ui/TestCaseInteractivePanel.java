@@ -232,13 +232,10 @@ public class TestCaseInteractivePanel extends TestAPIPanel {
             TestBedConfiguration.reloadConfigFileIfModified();
 
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            Thread thread = new Thread() {
-
-                public void run() {
-                    ProbeManager.getInstance().start();
-                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-            };
+            Thread thread = new Thread(() -> {
+                ProbeManager.getInstance().start();
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            });
             thread.start();
 
             isStarted = true;

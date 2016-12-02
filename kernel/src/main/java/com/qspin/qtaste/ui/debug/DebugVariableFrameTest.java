@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.apache.log4j.Logger;
@@ -52,7 +53,7 @@ public class DebugVariableFrameTest extends JFrame {
 
     private void setUpFrame() {
         setName(title);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     public void launch() throws InterruptedException, InvocationTargetException {

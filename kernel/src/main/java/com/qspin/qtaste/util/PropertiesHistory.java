@@ -83,11 +83,7 @@ public class PropertiesHistory {
         oldValue = oldValue.toLowerCase();
         newValue = newValue.toLowerCase();
 
-        LinkedList<TimestampedValue> list = hash.get(property);
-        if (list == null) {
-            list = new LinkedList<>();
-            hash.put(property, list);
-        }
+        LinkedList<TimestampedValue> list = hash.computeIfAbsent(property, k -> new LinkedList<>());
 
         if (list.isEmpty()) {
             list.add(new TimestampedValue(oldValue, 0));

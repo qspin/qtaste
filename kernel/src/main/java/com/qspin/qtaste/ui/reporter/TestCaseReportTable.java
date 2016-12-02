@@ -777,12 +777,7 @@ public class TestCaseReportTable {
             }
             final TestSuite testSuite = MetaTestSuite.createMetaTestSuite("Test(s) re-execution", testSuitesParams);
             if (testSuite != null) {
-                Thread reExecuteTestsThread = new Thread() {
-                    @Override
-                    public void run() {
-                        tcPane.runTestSuite(testSuite, false);
-                    }
-                };
+                Thread reExecuteTestsThread = new Thread(() -> tcPane.runTestSuite(testSuite, false));
                 reExecuteTestsThread.start();
             }
         }
@@ -818,14 +813,11 @@ public class TestCaseReportTable {
                 String tc = (String) tcModel.getValueAt(selectedRows[i], TestCaseReportTable.TEST_CASE);
                 commands[i] = tc.substring(0, tc.lastIndexOf(" - "));
             }
-            new Thread() {
-                @Override
-                public void run() {
-                    for (final String command : commands) {
-                        tcInteractivePanel.executeCommand(command);
-                    }
+            new Thread(() -> {
+                for (final String command : commands) {
+                    tcInteractivePanel.executeCommand(command);
                 }
-            }.start();
+            }).start();
         }
 
         public boolean isEnabled() {

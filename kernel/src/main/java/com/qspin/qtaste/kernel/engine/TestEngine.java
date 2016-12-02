@@ -74,16 +74,13 @@ public class TestEngine {
 
     static {
         // pre-load JythonTestScript class and dependencies in the background which takes several seconds
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Class.forName(JythonTestScript.class.getName());
-                } catch (Exception e) {
-                    // ignore
-                }
+        new Thread(() -> {
+            try {
+                Class.forName(JythonTestScript.class.getName());
+            } catch (Exception e) {
+                // ignore
             }
-        }.start();
+        }).start();
     }
 
     /**

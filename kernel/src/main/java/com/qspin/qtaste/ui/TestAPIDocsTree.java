@@ -71,38 +71,36 @@ public class TestAPIDocsTree extends JTree {
     }
 
     private void buildTree(final DefaultMutableTreeNode rootNode, TestAPIDocsTree tree) {
-        Thread t = new Thread() {
-            public void run() {
-                TestAPI testAPI = TestAPIImpl.getInstance();
-                rootNode.removeAllChildren();
-                ComponentsLoader.getInstance(); // don't remove, it is to be sure that components are registered
-                Collection<String> hashComponents = testAPI.getRegisteredComponents();
-                TreeSet<String> sortedComponents = new TreeSet<>(hashComponents);
-                TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
-                for (String componentName : sortedComponents) {
-                    boolean componentPresentInTestbed = true;
-                    ComponentFactory componentFactory = testAPI.getComponentFactory(componentName);
-                    if (componentFactory instanceof SingletonComponentFactory) {
-                        componentPresentInTestbed = !testbedConfig.configurationsAt("singleton_components." + componentName)
-                              .isEmpty();
-                    } else if (componentFactory instanceof MultipleInstancesComponentFactory) {
-                        componentPresentInTestbed = !testbedConfig.configurationsAt(
-                              "multiple_instances_components." + componentName).isEmpty();
-                    }
-                    if (componentPresentInTestbed) {
-                        DefaultMutableTreeNode node = new DefaultMutableTreeNode(componentName, true);
-                        rootNode.add(node);
-                        // get all methods from this component
-                        List<String> methods = new ArrayList<>(testAPI.getRegisteredVerbs(componentName));
-                        Collections.sort(methods);
-                        for (String methodName : methods) {
-                            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(methodName, true);
-                            node.add(childNode);
-                        }
+        Thread t = new Thread(() -> {
+            TestAPI testAPI = TestAPIImpl.getInstance();
+            rootNode.removeAllChildren();
+            ComponentsLoader.getInstance(); // don't remove, it is to be sure that components are registered
+            Collection<String> hashComponents = testAPI.getRegisteredComponents();
+            TreeSet<String> sortedComponents = new TreeSet<>(hashComponents);
+            TestBedConfiguration testbedConfig = TestBedConfiguration.getInstance();
+            for (String componentName : sortedComponents) {
+                boolean componentPresentInTestbed = true;
+                ComponentFactory componentFactory = testAPI.getComponentFactory(componentName);
+                if (componentFactory instanceof SingletonComponentFactory) {
+                    componentPresentInTestbed = !testbedConfig.configurationsAt("singleton_components." + componentName)
+                          .isEmpty();
+                } else if (componentFactory instanceof MultipleInstancesComponentFactory) {
+                    componentPresentInTestbed = !testbedConfig.configurationsAt(
+                          "multiple_instances_components." + componentName).isEmpty();
+                }
+                if (componentPresentInTestbed) {
+                    DefaultMutableTreeNode node = new DefaultMutableTreeNode(componentName, true);
+                    rootNode.add(node);
+                    // get all methods from this component
+                    List<String> methods = new ArrayList<>(testAPI.getRegisteredVerbs(componentName));
+                    Collections.sort(methods);
+                    for (String methodName : methods) {
+                        DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(methodName, true);
+                        node.add(childNode);
                     }
                 }
             }
-        };
+        });
         t.start();
         while (t.isAlive()) {
             try {

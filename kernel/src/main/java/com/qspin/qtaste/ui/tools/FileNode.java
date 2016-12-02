@@ -23,7 +23,6 @@ package com.qspin.qtaste.ui.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,9 +102,6 @@ public class FileNode extends TreeNodeImpl {
         try {
             CSVFile testDataFile = new CSVFile(testDataFileName);
             return testDataFile.getCSVDataSet().size();
-        } catch (FileNotFoundException ex) {
-            //
-            return -1;
         } catch (IOException ex) {
             //
             return -1;
