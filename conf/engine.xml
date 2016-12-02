@@ -6,7 +6,7 @@
 			<format>HTML</format>
 			<format>GUI</format>
 			<format>XML</format>
-			<!--format>JUNIT</format-->
+			<!--format>JUnit</format-->
 		</reporters>
 
 		<html_settings>
@@ -26,7 +26,7 @@
 		<html_template>conf/reporting/html/standard</html_template>
 		<!-- Location of the XML template -->
 		<xml_template>conf/reporting/xml/standard</xml_template>
-		<!-- Location of the JUNIT template -->
+		<!-- Location of the JUnit template -->
 		<junit_template>conf/reporting/junit/standard</junit_template>
 		<!-- Location of the generated reports -->
 		<generated_report_path>reports</generated_report_path>

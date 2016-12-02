@@ -7,21 +7,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
-import com.qspin.qtaste.reporter.JUNITFormatter;
+import com.qspin.qtaste.reporter.ReportFormatter;
 import com.qspin.qtaste.reporter.testresults.TestResult;
 import com.qspin.qtaste.reporter.testresults.TestResult.Status;
+import com.qspin.qtaste.reporter.testresults.TestResultsReportManager;
+import com.qspin.qtaste.util.FileUtilities;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.NamesValuesList;
 
-public class JUNITReportFormatter extends JUNITFormatter {
+public class JUNITReportFormatter extends ReportFormatter {
     private static Logger logger = Log4jLoggerFactory.getLogger(JUNITReportFormatter.class);
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final String RESTART_SUT = "Restart SUT";
@@ -33,10 +37,16 @@ public class JUNITReportFormatter extends JUNITFormatter {
     private static String outputDir;
     private static TestEngineConfiguration config = TestEngineConfiguration.getInstance();
 
+    private String templateStartContent;
+    private String templateRefreshContent;
+    private String templateEndContent;
+
     private String testSuite;
     private boolean reportStopStartSUT;
     private boolean reportReStartSUT;
     private boolean reportFirstFailure;
+
+    private int numberOfAlreadyPrintedResult = 0;
 
     static {
         String template_root = config.getString("reporting.junit_template");
@@ -51,7 +61,10 @@ public class JUNITReportFormatter extends JUNITFormatter {
 
     // Need to have that signature for instantiation
     public JUNITReportFormatter(String notUsed) throws IOException {
-        super(templateStart, templateRefresh, templateEnd, new File(outputDir), "WillBeErased");
+        super(new File(outputDir), "WillBeErased");
+        templateStartContent = FileUtilities.readFileContent(templateStart);
+        templateRefreshContent = FileUtilities.readFileContent(templateRefresh);
+        templateEndContent = FileUtilities.readFileContent(templateEnd);
         reportStopStartSUT = config.getBoolean("reporting.junit_settings.report_stop_start_sut");
         reportReStartSUT = config.getBoolean("reporting.junit_settings.report_restart_sut");
         reportFirstFailure = config.getBoolean("reporting.junit_settings.report_first_failure");
@@ -82,44 +95,44 @@ public class JUNITReportFormatter extends JUNITFormatter {
             reportFile.getParentFile().mkdirs();
         }
 
+        output = null;
         try {
             output = new PrintWriter(new BufferedWriter(new FileWriter(reportFile)));
             substituteAndWriteFile(templateStartContent, namesValues);
-            logger.debug("File created");
         } catch (Exception e) {
-
+            logger.error("Cannot create the JUnit report", e);
         } finally {
-            output.close();
+            IOUtils.closeQuietly(output);
+            //logger.debug("File created");
         }
 
     }
 
-    @Override
     public void writeTestResult(TestResult result) throws IOException {
-        logger.debug("Writing result");
+        //logger.debug("Writing result");
 
         NamesValuesList<String, String> namesValues = new NamesValuesList<>();
 
         // One file per test.
         boolean fail = result.getStatus() == Status.FAIL;
         boolean error = result.getStatus() != Status.FAIL && result.getStatus() != Status.SUCCESS;
-        logger.debug(fail ? "Test failure" : error ? "Test in error" : "Test succeed");
+        //logger.debug(fail ? "Test failure" : error ? "Test in error" : "Test succeed");
         boolean isFirstAttempt = result.getRetryCount() == 0;
         String testCaseName = result.getId();
         if (!reportFirstFailure && fail && isFirstAttempt && !START_SUT.equalsIgnoreCase(testCaseName) && !STOP_SUT
               .equalsIgnoreCase(testCaseName) && !RESTART_SUT.equalsIgnoreCase(testCaseName)) {
             // Don't log the first failure (except for Start/Stop/Restart SUT).
-            logger.debug("First failure : don't create report");
+            //logger.debug("First failure : don't create report");
             return;
         }
         if (!reportStopStartSUT && (START_SUT.equalsIgnoreCase(testCaseName) || STOP_SUT.equalsIgnoreCase(testCaseName))) {
             // Don't log Start/Stop SUT.
-            logger.debug("Start/Stop SUT : don't create report");
+            //logger.debug("Start/Stop SUT : don't create report");
             return;
         }
         if (!reportReStartSUT && RESTART_SUT.equalsIgnoreCase(testCaseName)) {
             // Don't log Restart SUT.
-            logger.debug("Restart SUT : don't create report");
+            //logger.debug("Restart SUT : don't create report");
             return;
         }
         String elapsedTimeInS = String.format("%.4f", result.getElapsedTimeMs() / 1000.0);
@@ -146,10 +159,14 @@ public class JUNITReportFormatter extends JUNITFormatter {
 
         namesValues.add("###RESULT###", resultXML);
 
-        output = new PrintWriter(new BufferedWriter(new FileWriter(reportFile, true)));
-        logger.debug("File updated");
-        substituteAndAppendFile(templateRefreshContent, namesValues);
-        output.close();
+        output = null;
+        try {
+            output = new PrintWriter(new BufferedWriter(new FileWriter(reportFile, true)));
+            substituteAndWriteFile(templateRefreshContent, namesValues);
+        } finally {
+            IOUtils.closeQuietly(output);
+            //logger.debug("File updated");
+        }
     }
 
     @Override
@@ -158,14 +175,32 @@ public class JUNITReportFormatter extends JUNITFormatter {
 
         NamesValuesList<String, String> namesValues = new NamesValuesList<>();
 
+        output = null;
         try {
             output = new PrintWriter(new BufferedWriter(new FileWriter(reportFile, true)));
-            substituteAndAppendFile(templateEndContent, namesValues);
-            logger.debug("File closed");
+            substituteAndWriteFile(templateEndContent, namesValues);
         } catch (Exception e) {
-
+            logger.error("Cannot close the JUnit report", e);
         } finally {
-            output.close();
+            IOUtils.closeQuietly(output);
+            //logger.debug("File closed");
+        }
+    }
+
+    @Override
+    public void refresh() {
+        try {
+            ArrayList<TestResult> results = TestResultsReportManager.getInstance().getResults();
+            int numberOfResults = results.size();
+            for (int i = numberOfAlreadyPrintedResult; i < numberOfResults; i++) {
+                TestResult result = results.get(i);
+                if (result.getStatus() != Status.RUNNING) {
+                    writeTestResult(result);
+                    numberOfAlreadyPrintedResult++;
+                }
+            }
+        } catch (IOException e) {
+            logger.error("Cannot refresh the JUnit report", e);
         }
     }
 }

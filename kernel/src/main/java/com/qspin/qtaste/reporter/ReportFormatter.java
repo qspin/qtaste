@@ -88,16 +88,6 @@ public abstract class ReportFormatter {
     protected void substituteAndWriteFile(String templateContent, NamesValuesList<String, String> namesValues) {
         try {
             output.print(getSubstitutedTemplateContent(templateContent, namesValues));
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    protected void substituteAndAppendFile(String templateContent, NamesValuesList<String, String> namesValues) {
-        try {
-            output.append(getSubstitutedTemplateContent(templateContent, namesValues));
-
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
