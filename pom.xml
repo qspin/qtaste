@@ -72,6 +72,7 @@
    <properties>
       <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
       <qtaste-version>${project.version}</qtaste-version>
+      <additionalparam>-Xdoclint:none</additionalparam>
    </properties>
 
 
@@ -172,9 +173,6 @@
     	<activation>
       		<jdk>[1.8,)</jdk>
     	</activation>
-    	<properties>
-      		<javadoc.opts>-Xdoclint:none</javadoc.opts>
-    	</properties>
       </profile>
 </profiles>
 
@@ -189,9 +187,6 @@
              <executions>
                  <execution>
                     <id>attach-javadocs</id>
-                    <configuration>
-                    <additionalparam>${javadoc.opts}</additionalparam>
-                    </configuration>
                  </execution>
              </executions>
         </plugin>
