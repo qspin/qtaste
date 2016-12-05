@@ -56,17 +56,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>openqa-releases</id>
-			<name>OpenQA Releases</name>
-			<url>http://nexus.openqa.org/content/repositories/releases</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 	<dependencies>
 		<!-- QTaste kernel -->
