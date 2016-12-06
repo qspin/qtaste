@@ -8,6 +8,7 @@ technologies. For that reason, the test api has to be “tailored” in order to
 
 The QTaste framework is mainly developed in java programming language and python. So by definition, it can be installed
 on any platform running java VM 1.8. However, it has been only validated on Windows (Windows 8) and Linux platform.
+More info on http://www.qtaste.org
 
 Download
 ========
