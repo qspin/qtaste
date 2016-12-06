@@ -72,6 +72,7 @@
    <properties>
       <qtaste-parent-dir>${project.basedir}</qtaste-parent-dir>
       <qtaste-version>${project.version}</qtaste-version>
+      <additionalparam>-Xdoclint:none</additionalparam>
    </properties>
 
 
@@ -95,7 +96,7 @@
                   <inherited>true</inherited>
                   <configuration>
                      <links>
-                        <link>http://docs.oracle.com/javase/8/docs/api</link>
+                        <link>http://docs.oracle.com/javase/7/docs/api</link>
                      </links>
 
                      <aggregate>true</aggregate>
@@ -169,6 +170,12 @@
         </build>
       </profile>
 
+      <profile>
+    	<id>doclint-java8-disable</id>
+    	<activation>
+      		<jdk>[1.8,)</jdk>
+    	</activation>
+      </profile>
 </profiles>
 
 
