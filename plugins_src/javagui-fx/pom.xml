@@ -11,7 +11,7 @@
 
     <artifactId>javagui-fx</artifactId>
     <packaging>jar</packaging>
-    <name>QTASTE javagui</name>
+    <name>QTASTE javagui-fx</name>
 
     <properties>
         <!-- <preMainClass>com.qspin.qtaste.structureanalyzer.Analyzer</preMainClass> -->
@@ -55,7 +55,7 @@
                         <argument>-Xms64m</argument>
                         <argument>-Xmx512m</argument>
                         <argument>-classpath</argument>
-                        <argument>target/qtaste-javagui.jar</argument>
+                        <argument>target/qtaste-javagui-fx.jar</argument>
                         <argument>${preMainClass}</argument>
                     </arguments>
                     <workingDirectory>..</workingDirectory> <!-- run from QTASTE root directory -->

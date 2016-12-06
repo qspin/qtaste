@@ -140,6 +140,8 @@
             <module>kernel</module>
             <module>toolbox</module>
             <module>plugins_src/javagui</module>
+            <module>plugins_src/javagui-fx</module>
+            <module>plugins_src/sikuli</module>
             <module>demo/testapi</module>
             <module>izpack</module>
             <module>doc</module>
