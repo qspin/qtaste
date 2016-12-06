@@ -22,7 +22,7 @@ def isFirefoxInstalled():
     @step      Check if Mozilla Firefox is installed on the machine
     @expected  The Mozilla Firefox icon is displayed.
     """
-    if not sikuli.exist(IMAGE_DIRECTORY + "/MozillaFirefox.png"):
+    if not sikuli.exists(IMAGE_DIRECTORY + "/MozillaFirefox.png"):
         testAPI.stopTest(Status.FAIL, "Mozilla Firefox is required for this test!")
     
 def clickOnIcon():
