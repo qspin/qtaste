@@ -5,7 +5,7 @@ PLUGINS="javagui javagui-fx sikuli"
 targetDir=../plugins/SUT
 if [ ! -d "$targetDir" ]
 then
-    mkdir $targetDir
+    mkdir -p $targetDir
 fi
 
 for PLUGIN in $PLUGINS
