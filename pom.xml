@@ -6,7 +6,7 @@
     <url>https://github.com/qspin/qtaste</url>
     <connection>scm:git:ssh://git@github.com/qspin/qtaste.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/qspin/qtaste.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v3.0.0</tag>
    </scm>
 
    <parent>
@@ -17,7 +17,7 @@
 
    <groupId>com.qspin.qtaste</groupId>
    <artifactId>qtaste</artifactId>
-   <version>2.3.1-SNAPSHOT</version>
+   <version>3.0.0</version>
    <packaging>pom</packaging>
    <name>QTaste: QSpin Tailored Automated Test Environment</name>
    <description>QTaste is a generic engine to perform automated integration tests</description>
@@ -335,7 +335,7 @@
          <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>2.3.1-SNAPSHOT</version>
+            <version>3.0.0</version>
             <!-- exclude nb-javac-api because it's only needed by TestAPI doclet which should only be used by kernel and is only available in a repository only defined for the kernel -->
             <exclusions>
                <exclusion>
@@ -347,7 +347,7 @@
          <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-kernel</artifactId>
-            <version>2.3.1-SNAPSHOT</version>
+            <version>3.0.0</version>
             <classifier>tests</classifier>
          </dependency>
 
