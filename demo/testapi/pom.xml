@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.qspin.qtaste</groupId>
         <artifactId>qtaste-testapi-parent</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1-SNAPSHOT</version>
         <relativePath>../../testapi-parent</relativePath>
     </parent>
 
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>com.qspin.qtaste</groupId>
             <artifactId>qtaste-toolbox-testapi</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>
         <!-- EXTERNAL LIBRARIES -->
         <!-- Libraries are ordered by group/artifact. -->
@@ -149,17 +149,17 @@
         <dependency>
             <groupId>com.qspin.qtaste.plugin</groupId>
             <artifactId>javagui</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>
 	<dependency>
 	    <groupId>com.qspin.qtaste.plugin</groupId>
 	    <artifactId>javagui-fx</artifactId>
-	    <version>3.0.0</version>
+	    <version>3.0.1-SNAPSHOT</version>
 	</dependency>
         <dependency>
             <groupId>com.qspin.qtaste.plugin</groupId>
             <artifactId>sikuli</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
