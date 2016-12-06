@@ -44,30 +44,6 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>apache-releases</id>
-			<name>Apache Releases</name>
-			<url>http://repo1.maven.org/maven2</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-       			<id>sonatype-nexus-snapshots</id>
-       			<name>Sonatype Nexus Snapshots</name>
-       			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        		<releases>
-        	    		<enabled>false</enabled>
-        		</releases>
-        		<snapshots>
-        			<enabled>false</enabled>
-        		</snapshots>
-  		</repository>
-	</repositories>
 	<dependencies>
 		<!-- QTaste kernel -->
 
