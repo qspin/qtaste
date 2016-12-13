@@ -19,13 +19,15 @@
 
 package com.qspin.qtaste.javaguifx.server;
 
-import java.awt.Component;
-import java.awt.Container;
-
-import javax.swing.AbstractButton;
-import javax.swing.JDialog;
+import java.util.Collections;
+import java.util.List;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.DialogPane;
+import javafx.stage.Stage;
 
 import com.qspin.qtaste.testsuite.QTasteException;
 import com.qspin.qtaste.testsuite.QTasteTestFailException;
@@ -33,7 +35,7 @@ import com.qspin.qtaste.testsuite.QTasteTestFailException;
 /**
  * Commander which clicks on a popup button.
  */
-public class PopupButtonClicker extends UpdateComponentCommander {
+public class PopupButtonClicker extends ButtonClicker {
 
     /**
      * Commander which clicks on a popup button.
@@ -50,32 +52,34 @@ public class PopupButtonClicker extends UpdateComponentCommander {
         component = null;
 
         while (System.currentTimeMillis() < maxTime) {
-            JDialog targetPopup = null;
-            for (JDialog dialog : findPopups()) {
-                if (!dialog.isVisible() || !dialog.isEnabled()) {
-                    String msg = "Ignore the dialog '" + dialog.getTitle() + "' cause:\n ";
-                    if (!dialog.isVisible()) {
+            DialogPane targetPopup = null;
+            List<Stage> popups = findPopups();
+            Collections.reverse(popups);
+            for (Stage popup : popups) {
+                DialogPane dialogPane = getDialogPane(popup);
+                if (!dialogPane.isVisible() || dialogPane.isDisabled()) {
+                    String msg = "Ignore the dialog '" + popup.getTitle() + "' cause:\n ";
+                    if (!dialogPane.isVisible()) {
                         msg += "\t is not visible";
                     }
-                    if (!dialog.isEnabled()) {
-                        msg += "\t is not enabled";
+                    if (dialogPane.isDisabled()) {
+                        msg += "\t is disabled";
                     }
                     LOGGER.info(msg);
                     continue;
                 }
-                //				if (activateAndFocusComponentWindow(dialog))
-                //				{
-                //					targetPopup = dialog;
-                //				}
-                //				else
-                //				{
-                //					LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
-                //				}
+                if (activateAndFocusWindow(popup)) {
+                    targetPopup = dialogPane;
+                    break;
+                } else {
+                    LOGGER.info("Ignore the dialog '" + popup.getTitle() + "' cause:\n  \t is not focused");
+                }
             }
-            //			component = findButtonComponent(targetPopup, buttonText);
-            //
-            //			if ( component != null && component.isEnabled() && checkComponentIsVisible(component) )
-            //				break;
+
+            component = findButton(targetPopup, buttonText);
+
+            if ( component != null && !component.isDisabled() && checkComponentIsVisible(component) )
+                break;
 
             try {
                 Thread.sleep(1000);
@@ -88,7 +92,7 @@ public class PopupButtonClicker extends UpdateComponentCommander {
             throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not found.");
         }
         if (component.isDisabled()) {
-            throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not enabled.");
+            throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is disabled.");
         }
         if (!checkComponentIsVisible(component)) {
             throw new QTasteTestFailException("The button with the text \"" + buttonText + "\" is not visible!");
@@ -99,27 +103,17 @@ public class PopupButtonClicker extends UpdateComponentCommander {
         return true;
     }
 
-    private AbstractButton findButtonComponent(Component c, String buttonText) {
-        if ((c instanceof AbstractButton) && (((AbstractButton) c).getText().equals(buttonText))) {
-            return (AbstractButton) c;
-        } else if (c instanceof Container) {
-            for (Component comp : ((Container) c).getComponents()) {
-                AbstractButton ab = findButtonComponent(comp, buttonText);
-                if (ab != null) {
-                    return ab;
+    private ButtonBase findButton(Node node, String buttonText) {
+        if ((node instanceof ButtonBase) && (((ButtonBase) node).getText().equals(buttonText))) {
+            return (ButtonBase) node;
+        } else if (node instanceof Parent) {
+            for (Node child : ((Parent) node).getChildrenUnmodifiable()) {
+                ButtonBase button = findButton(child, buttonText);
+                if (button != null) {
+                    return button;
                 }
             }
         }
         return null;
-    }
-
-    @Override
-    protected void prepareActions() throws QTasteTestFailException {
-        //Do nothing
-    }
-
-    @Override
-    protected void doActionsInEventThread() throws QTasteTestFailException {
-        //		((AbstractButton)component).doClick();
     }
 }

@@ -22,9 +22,7 @@ package com.qspin.qtaste.javaguifx.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
-
-import javafx.scene.control.ScrollPane;
+import javafx.stage.Stage;
 
 import com.qspin.qtaste.testsuite.QTasteException;
 
@@ -47,7 +45,7 @@ public class PopupTextGetter extends ComponentCommander {
     List<String> executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
         boolean onlyWithFocus = (Boolean) data[0];
         List<String> texts = new ArrayList<>();
-        for (JDialog dialog : findPopups()) {
+        for (Stage stage : findPopups()) {
             //			if ( onlyWithFocus && !activateAndFocusComponentWindow(dialog) )
             //			{
             //				// if only the main popup text is needed, ignored popup without focus
@@ -55,16 +53,11 @@ public class PopupTextGetter extends ComponentCommander {
             //				continue;
             //			}
 
-            LOGGER.info("the dialog with the title '" + dialog.getTitle() + "' will not be ignored");
+            LOGGER.info("the dialog with the title '" + stage.getTitle() + "' will not be ignored");
 
             //find the popup Component
-            Object message = getJOptionPane(dialog).getMessage();
-            // if message is a scroll pane, use the displayed component
-            if (message instanceof ScrollPane)
-            {
-                message = ((ScrollPane) message).getContent();
-            }
-            texts.add(message.toString());
+            String message = getDialogPane(stage).getContentText();
+            texts.add(message);
         }
         return texts;
     }

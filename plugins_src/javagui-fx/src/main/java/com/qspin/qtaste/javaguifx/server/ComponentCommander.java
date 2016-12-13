@@ -1,21 +1,20 @@
 package com.qspin.qtaste.javaguifx.server;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.Window;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-
+import com.sun.javafx.application.PlatformImpl;
 import com.sun.javafx.stage.StageHelper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.DialogPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.apache.log4j.Logger;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -124,65 +123,58 @@ abstract class ComponentCommander {
     protected Node mFoundComponent;
 
     /**
-     * Finds all popups. A Component is a popup if it's a JDialog, modal and not resizable.
+     * Finds all popups. A Component is a popup if it's a DialogPane, modal and not resizable.
      *
      * @return the list of all found popups.
      */
-    protected static List<JDialog> findPopups() {
+    protected static List<Stage> findPopups() {
         //find all popups
-        List<JDialog> popupFound = new ArrayList<>();
-        for (Window window : Window.getWindows()) {
-            //			LOGGER.debug("parse window - type : " + window.getClass());
-            if (isAPopup(window)) {
-                //it's maybe a popup... a popup is modal and not resizable and containt a JOptionPane component.
-                JDialog dialog = (JDialog) window;
-                LOGGER.trace("Find a popup with the title '" + dialog.getTitle() + "'.");
-                popupFound.add(dialog);
+        List<Stage> popupFound = new ArrayList<>();
+        for (Stage stage : StageHelper.getStages()) {
+            Parent root = stage.getScene().getRoot();
+            if (isAPopup(stage)) {
+                //it's maybe a popup... a popup is modal and not resizable and has a DialogPane root
+                DialogPane dialog = (DialogPane) root;
+                LOGGER.trace("Find a popup with the title '" + stage.getTitle() + "'.");
+                popupFound.add(stage);
             }
         }
         return popupFound;
     }
 
-    protected static boolean isAPopup(Component c) {
-        if (c == null) {
-            LOGGER.trace("The given component is null!");
+    protected static boolean isAPopup(Stage stage) {
+        if (stage == null) {
+            LOGGER.trace("The given stage is null!");
             return false;
         }
-        if (!(c instanceof JDialog)) {
-            LOGGER.trace("The given component is not a JDialog!");
+        Parent root = stage.getScene().getRoot();
+        if (root == null) {
+            LOGGER.trace("The given stage's root is null!");
             return false;
         }
-        JDialog dialog = (JDialog) c;
-
-        if (!dialog.isShowing()) {
+        if (!(root instanceof DialogPane)) {
+            LOGGER.trace("The given stage's root is not a DialogPane!");
+            return false;
+        }
+        if (!stage.isShowing()) {
             LOGGER.trace("The given component is not displayed!");
             return false;
         }
-        if (!dialog.isModal()) {
+        if (stage.getModality() == Modality.NONE) {
             LOGGER.trace("The given component is not modal!");
             return false;
         }
-        if (dialog.isResizable()) {
+        if (stage.isResizable()) {
             LOGGER.trace("The given component is rezisable!");
-            return false;
-        }
-        if (getJOptionPane(dialog) == null) {
-            LOGGER.trace("The given component does not contain any JOptionPane!");
             return false;
         }
         return true;
     }
 
-    protected static JOptionPane getJOptionPane(Component c) {
-        if (c instanceof JOptionPane) {
-            return (JOptionPane) c;
-        } else if (c instanceof Container) {
-            for (Component comp : ((Container) c).getComponents()) {
-                JOptionPane jop = getJOptionPane(comp);
-                if (jop != null) {
-                    return jop;
-                }
-            }
+    protected static DialogPane getDialogPane(Stage stage) {
+        Parent root = stage.getScene().getRoot();
+        if (root instanceof DialogPane) {
+            return (DialogPane) root;
         }
         return null;
     }
@@ -190,85 +182,61 @@ abstract class ComponentCommander {
     /**
      * Try to activate and focus the window containing the component.
      *
-     * @param c the component contained in the window to active.
+     * @param c the component contained in the window to activate.
      * @return <code>true</code> only if the parent window is active at the end of the activation process.
      */
     protected boolean activateAndFocusComponentWindow(Node c) {
-        //		Node parent = c.getParent();
-        //		//active the parent window
-        //		while ( parent != null )
-        //		{
-        //			parent = parent.getParent();
-        //		}
-        //		final Window window = (Window) parent;
-        //
-        //		if ( !window.isFocused() )
-        //		{
-        //			if ( !window.isVisible() )
-        //			{
-        //				LOGGER.trace("cannot activate and focus the window of '" + c.getId() + "' cause its window is not
-        // visible");
-        //				return false;
-        //			}
-        //			LOGGER.trace("try to activate and focus the window of '" + c.getId() + "' cause its window is not focused");
-        //			final KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        ////			WindowFocusedListener windowFocusedListener = new WindowFocusedListener(window);
-        ////			window.addWindowFocusListener(windowFocusedListener);
-        ////			SwingUtilities.invokeLater(new Runnable()
-        ////			{
-        ////
-        ////				@Override
-        ////				public void run()
-        ////				{
-        ////					// try to activate application if not active
-        ////					if (keyboardFocusManager.getActiveWindow() == null)
-        ////					{
-        ////						LOGGER.trace("try to activate application");
-        ////						// create and display a new frame to force application activation
-        ////						JFrame newFrame = new JFrame();
-        ////						newFrame.pack();
-        ////						newFrame.setVisible(true);
-        ////						newFrame.toFront();
-        ////						newFrame.setVisible(false);
-        ////						newFrame.dispose();
-        ////					}
-        ////
-        ////					window.toFront();
-        ////
-        ////					LOGGER.trace("current focused window : " + keyboardFocusManager.getFocusedWindow());
-        ////					window.requestFocus();
-        ////				}
-        ////			});
-        //
-        ////			boolean windowFocused = windowFocusedListener.waitUntilWindowFocused();
-        ////			window.removeWindowFocusListener(windowFocusedListener);
-        ////			LOGGER.trace("window focused ? " + windowFocused );
-        ////			LOGGER.trace("focused window after request: " + keyboardFocusManager.getFocusedWindow());
-        ////			if (!windowFocused)
-        ////			{
-        ////				LOGGER.warn("The window activation/focus process failed!!!");
-        ////				return false;
-        ////			}
-        //			LOGGER.trace("The window activation/focus process is completed!!!");
-        //		} else {
-        //			LOGGER.trace("the window of '" + c.getId() + "' is already focused");
-        //		}
-        return true;
+        Window window = c.getScene().getWindow();
+        return window instanceof Stage && activateAndFocusWindow((Stage) window);
     }
 
     /**
-     * Window listener to wait for window to be focused.
+     * Try to activate and focus the stage window.
+     *
+     * @param window the stage window to activate.
+     * @return <code>true</code> only if the stage window is active at the end of the activation process.
      */
-    private static class WindowFocusedListener extends WindowAdapter {
+    protected boolean activateAndFocusWindow(Stage window) {
+        if (!window.isFocused()) {
+            if (!window.isShowing()) {
+                LOGGER.trace("cannot activate and focus the window '" + window.getTitle() + "' cause its window is not showing");
+                return false;
+            }
+            LOGGER.trace("try to activate and focus the window  '" + window.getTitle() + "' cause its window is not focused");
+            StageFocusedListener stageFocusedListener = new StageFocusedListener(window);
+            window.focusedProperty().addListener(stageFocusedListener);
 
-        public WindowFocusedListener(Window window) {
+            PlatformImpl.runAndWait(() -> {
+                window.toFront();
+                window.requestFocus();
+            });
+
+            boolean windowFocused = stageFocusedListener.waitUntilWindowFocused();
+            window.focusedProperty().removeListener(stageFocusedListener);
+            LOGGER.trace("window focused ? " + windowFocused);
+            if (!window.isFocused()) {
+                LOGGER.warn("The window activation/focus process failed!!!");
+                return false;
+            }
+            LOGGER.trace("The window activation/focus process is completed!!!");
+        } else {
+            LOGGER.trace("the window '" + window.getTitle() + "' is already focused");
+        }
+        return true;
+    }
+
+    private static class StageFocusedListener implements ChangeListener<Boolean> {
+
+        public StageFocusedListener(Stage window) {
             mWindowFocused = window.isFocused();
         }
 
         @Override
-        public synchronized void windowGainedFocus(WindowEvent event) {
-            mWindowFocused = true;
-            notify();
+        public synchronized void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+            if (newValue) {
+                mWindowFocused = true;
+                notify();
+            }
         }
 
         /**

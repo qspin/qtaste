@@ -61,9 +61,8 @@ public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
     }
 
     public boolean isEnabled(String componentName) throws QTasteException {
-        //		LOGGER.trace("isEnabled(\"" + componentName + "\")");
-        //		return new EnabledStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
-        return false;
+        LOGGER.trace("isEnabled(\"" + componentName + "\")");
+        return new EnabledStateGetter().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
     }
 
     public boolean isEditable(String componentName) throws QTasteException {
@@ -73,9 +72,8 @@ public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
     }
 
     public boolean isVisible(String componentName) throws QTasteException {
-        //		LOGGER.trace("isVisible(\"" + componentName + "\")");
-        //		return new ComponentVisibilityChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
-        return false;
+        LOGGER.trace("isVisible(\"" + componentName + "\")");
+        return new ComponentVisibilityChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, componentName);
     }
 
     public void takeSnapShot(final String componentName, final String fileName) throws QTasteException {
@@ -260,9 +258,8 @@ public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
     }
 
     public boolean isPopupDisplayed() throws QTasteException {
-        //		LOGGER.trace("isPopupDisplayed()");
-        //		return new PopupChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
-        return false;
+        LOGGER.trace("isPopupDisplayed()");
+        return new PopupChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null);
     }
 
     public String getPopupText() throws QTasteException {
@@ -288,8 +285,8 @@ public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
     }
 
     public void clickOnPopupButton(String buttonText) throws QTasteException {
-        //		LOGGER.trace("clickOnPopupButton(\"" + buttonText + "\")");
-        //		new PopupButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, buttonText);
+        LOGGER.trace("clickOnPopupButton(\"" + buttonText + "\")");
+        new PopupButtonClicker().executeCommand(COMPONENT_ENABLED_TIMEOUT, null, buttonText);
     }
 
     @Override
