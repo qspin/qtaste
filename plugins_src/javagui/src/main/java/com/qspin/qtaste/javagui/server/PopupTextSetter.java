@@ -65,6 +65,7 @@ public class PopupTextSetter extends UpdateComponentCommander {
                 }
                 if (activateAndFocusComponentWindow(dialog)) {
                     targetPopup = dialog;
+                    break;
                 } else {
                     LOGGER.info("Ignore the dialog '" + dialog.getTitle() + "' cause:\n  \t is not focused");
                 }
