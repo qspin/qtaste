@@ -28,6 +28,7 @@ import com.sun.javafx.stage.StageHelper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import com.qspin.qtaste.testsuite.QTasteException;
@@ -69,6 +70,11 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
                   "The component \"" + componentName + "\" is not reachable as a modal dialog is opened.");
         }
 
+        if (!isAccessible(component)) {
+            throw new QTasteTestFailException(
+                  "The component \"" + componentName + "\" is not reachable as a modal dialog is opened.");
+        }
+
         prepareActions();
         if (!activateAndFocusComponentWindow(component)) {
             LOGGER.error("Unable to activate/focus the parent window!");
@@ -81,16 +87,12 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
     }
 
     protected boolean isAccessible(Node c) {
-        //		Window[] windows = Window.getWindows();
-        //		if (windows != null ) {
-        //			for ( Window w : windows ) {
-        //				if ( w.isShowing() && w instanceof Dialog && ((Dialog)w).isModal() && !w.isAncestorOf(c)) {
-        //					if ( w.isShowing() &&  w instanceof Dialog && ((Dialog)w).isModal() && !w.isAncestorOf(c)) {
-        //						return false;
-        //					}
-        //				}
-        //			}
-        //		}
+        for (Stage s : StageHelper.getStages()) {
+            // TODO handle window vs application modality
+            if (s.isShowing() && s.getModality() != Modality.NONE && c.getScene() != s.getScene()) {
+                return false;
+            }
+        }
         return true;
     }
 
