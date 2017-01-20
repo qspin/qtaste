@@ -80,13 +80,6 @@ then
    setJMXcommand
    setNiceCommand
 
-   cd $WORKINGDIR
-
-   # if starting again (restart) then backup log file
-   if [ $RESTART -a -f "$OUTPUT" ]; then
-      cp "$OUTPUT" "$TITLE.$NOW.out"
-   fi
-
    COMMAND="java $CP_ARG $VM_ARGS $JMX_ARGS -jar $2"
 else
    setArg $2 "$3"
@@ -99,14 +92,14 @@ else
    setJMXcommand
    setNiceCommand
 
-   cd $WORKINGDIR
-
-   # if starting again (restart) then backup log file
-   if [ $RESTART = true -a -f "$OUTPUT" ]; then
-      cp "$OUTPUT" "$TITLE.$NOW.out"
-   fi
-
    COMMAND="java $CP_ARG $VM_ARGS $JMX_ARGS $1"
+fi
+
+cd $WORKINGDIR
+
+# if starting again (restart) then backup log file
+if [ $RESTART = true -a -f "$OUTPUT" ]; then
+   cp "$OUTPUT" "$TITLE.$NOW.out"
 fi
 
 exec bash <<EOFF

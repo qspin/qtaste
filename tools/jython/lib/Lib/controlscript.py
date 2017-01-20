@@ -556,6 +556,8 @@ class JavaProcess(ControlAction):
             if self.priority:
                 shellScriptArguments.append("-priority")
                 shellScriptArguments.append(self.priority)
+            shellScriptArguments.append("-restart")
+            shellScriptArguments.append("true")
         else:
             shellScriptArguments = _IF(isJar, '-jar ', '') + '"' + self.mainWithArgs + '" -dir ' + self.workingDir + ' -title "' + self.description + '"'
             if self.classPath:
@@ -570,6 +572,7 @@ class JavaProcess(ControlAction):
                 shellScriptArguments += ' -checkAfter ' + str(self.checkAfter)
             if self.priority:
                 shellScriptArguments += ' -priority ' + self.priority
+            shellScriptArguments += ' -restart true'
         
         ControlAction.executeShellScript("start_java_process", shellScriptArguments)
         print 
