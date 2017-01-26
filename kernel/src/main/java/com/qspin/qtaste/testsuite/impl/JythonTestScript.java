@@ -1146,8 +1146,8 @@ public class JythonTestScript extends TestScript implements Executable {
                     //              (!(variableValue instanceof PyModule))
                       ) {
                     //Object variableValue = locals.get(new PyString(localKey));
-                    DebugVariable debugVar = new DebugVariable(variableName, variableValue.getClass().toString(),
-                          variableValue.toString());
+                    DebugVariable debugVar = new DebugVariable(variableName,
+                          variableValue != null ? variableValue.getClass().toString() : "", String.valueOf(variableValue));
                     debugVar = dumpPythonObject(variableValue, debugVar);
                     debugVariables.add(debugVar);
                 }
