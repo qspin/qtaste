@@ -28,7 +28,7 @@
                         <Label text="Password Field : " GridPane.rowIndex="2" />
                         <Label text="Formatted TextField : " GridPane.rowIndex="1" />
                         <TextArea id="TEXT_AREA" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField id="FORMATTED_TEXT_FIELD" accessibleRole="PASSWORD_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField id="FORMATTED_TEXT_FIELD" fx:id="m_formattedTextField" accessibleRole="PASSWORD_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField id="TEXT_FIELD" GridPane.columnIndex="1" />
                         <PasswordField id="PASSWORD_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>

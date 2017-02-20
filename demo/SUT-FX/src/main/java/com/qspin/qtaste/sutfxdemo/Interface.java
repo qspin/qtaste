@@ -7,11 +7,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.PercentageStringConverter;
 
 public class Interface {
 
+    @FXML
+    private TextField m_formattedTextField;
     @FXML
     private ComboBox<Person> m_combo;
     @FXML
@@ -26,6 +31,8 @@ public class Interface {
 
     @FXML
     private void initialize() {
+        m_formattedTextField.setTextFormatter(new TextFormatter<>(new PercentageStringConverter()));
+
         m_combo.setItems(Person.DEFAULT_DATA);
         m_combo.setConverter(new StringConverter<Person>() {
 
