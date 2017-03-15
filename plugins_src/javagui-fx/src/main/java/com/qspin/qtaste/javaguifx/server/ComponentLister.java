@@ -26,11 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.javafx.stage.StageHelper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+
+import com.qspin.qtaste.testsuite.QTasteException;
 
 /**
  * Component asker responsible for the listing of all component's names.
@@ -45,10 +46,11 @@ final class ComponentLister extends ComponentCommander {
      * @return an array of Strings that have the following format : component_name (number of instance : X)
      */
     @Override
-    String[] executeCommand(int timeout, String componentName, Object... data) {
+    String[] executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
         mComponentsMap = new HashMap<>();
 
-        for (Stage s : StageHelper.getStages()) {
+        List<Stage> stages = getStages();
+        for (Stage s : stages) {
             browseComponent(s.getScene().getRoot().getChildrenUnmodifiable());
         }
 
@@ -59,7 +61,7 @@ final class ComponentLister extends ComponentCommander {
         Collections.sort(list);
         list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
         list.add("Number of windows : " + Window.getWindows().length);
-        list.add("Number of windows (JavaFX) : " + StageHelper.getStages().size());
+        list.add("Number of windows (JavaFX) : " + stages.size());
         return list.toArray(new String[list.size()]);
     }
 
