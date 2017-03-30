@@ -18,3 +18,8 @@ pushd sikuli
 call mvn clean install assembly:single
 copy target\*-deploy.jar ..\..\plugins\SUT\
 popd
+
+pushd opcua
+call mvn clean install assembly:single
+copy target\*-deploy.jar ..\..\plugins\SUT\
+popd

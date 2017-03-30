@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PLUGINS="javagui javagui-fx sikuli"
+PLUGINS="javagui javagui-fx sikuli opcua"
 
 targetDir=../plugins/SUT
 if [ ! -d "$targetDir" ]

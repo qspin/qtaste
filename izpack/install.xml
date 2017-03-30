@@ -246,22 +246,28 @@ to be rechecked in version 5.0.0-beta11 or later
 			<description>The JavaGUI agent plugin. This plugin is used to control to a jmx service a Java GUI.</description>
         </pack>
 	-->
-        <pack name="The Java GUI binaries" required="true" preselected="true" installGroups="Java GUI">
+        <pack name="The Java GUI test API binaries" required="true" preselected="true" installGroups="Java GUI">
 			<description>The Java GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="plugins/SUT/qtaste-javagui-deploy.jar"/>
 			</fileset>
         </pack>
-        <pack name="The JavaFX GUI binaries" required="true" preselected="true" installGroups="JavaFX GUI">
+        <pack name="The JavaFX GUI test API binaries" required="true" preselected="true" installGroups="JavaFX GUI">
 			<description>The JavaFx GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="plugins/SUT/qtaste-javagui-fx-deploy.jar"/>
 			</fileset>
         </pack>
-        <pack name="The Sikuli GUI binaries" required="true" preselected="true" installGroups="Sikuli GUI">
+        <pack name="The Sikuli test API binaries" required="true" preselected="true" installGroups="Sikuli GUI">
 			<description>The Sikuli GUI binaries</description>
             <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
 				<include name="plugins/SUT/qtaste-sikuli-deploy.jar"/>
+			</fileset>
+        </pack>
+		<pack name="The Prosys OPC-UA test API binaries" required="false" preselected="false" installGroups="Sikuli GUI">
+			<description>The Sikuli GUI binaries</description>
+            <fileset dir=".." targetdir="$INSTALL_PATH" casesensitive="true" defaultexcludes="true">
+				<include name="plugins/SUT/qtaste-opcua-deploy.jar"/>
 			</fileset>
         </pack>
         

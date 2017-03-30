@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.qspin.qtaste</groupId>
+        <artifactId>qtaste</artifactId>
+        <version>3.0.1-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>opcua</artifactId>
+    <packaging>jar</packaging>
+    <name>QTASTE OPCUA</name>
+
+    <build>
+        <finalName>qtaste-opcua</finalName>
+        <plugins>
+
+            <!-- plugin to get sources of other testapi dependency projects, for testapi
+                doc generation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/deploy.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Premain-Class>${preMainClass}</Premain-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-Xms64m</argument>
+                        <argument>-Xmx512m</argument>
+                        <argument>-classpath</argument>
+                        <argument>target/qtaste-javagui.jar</argument>
+                        <argument>${preMainClass}</argument>
+                    </arguments>
+                    <workingDirectory>..</workingDirectory> <!-- run from QTASTE root directory -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <workingDirectory>..</workingDirectory> <!-- run tests from QTASTE root directory -->
+                </configuration>
+            </plugin>
+            <!-- plugin to install source artifact -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+				<configuration>
+					<excludes>
+						<exclude>com/prosysopc/**</exclude>
+						<exclude>org/opcfoundation/**</exclude>
+					</excludes>
+				</configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+					<excludes>
+						<exclude>com/prosysopc/**</exclude>
+						<exclude>org/opcfoundation/**</exclude>
+					</excludes>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Premain-Class>${preMainClass}</Premain-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Main-Class>NotSuitableAsMain</Main-Class>
+                        </manifestEntries>
+                    </archive>
+					
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.qspin.qtaste</groupId>
+            <artifactId>qtaste-kernel</artifactId>
+        </dependency>
+        <!-- EXTERNAL LIBRARIES -->
+        <!-- Libraries are ordered by group/artifact. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+    </dependencies>
+    <groupId>com.qspin.qtaste.plugin</groupId>
+</project>
