@@ -2,7 +2,10 @@ package com.qspin.qtaste.javaguifx.server;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import com.sun.javafx.application.PlatformImpl;
 import com.sun.javafx.stage.StageHelper;
@@ -43,6 +46,18 @@ abstract class ComponentCommander {
      */
     protected static final Logger LOGGER = Logger.getLogger(ComponentCommander.class);
 
+    @SuppressWarnings("unchecked")
+    protected static List<Stage> getStages() throws QTasteTestFailException
+    {
+        final FutureTask query = new FutureTask(() -> Collections.unmodifiableList(StageHelper.getStages()));
+        PlatformImpl.runAndWait(query);
+        try {
+            return (List<Stage>) query.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new QTasteTestFailException("Cannot get JavaFx stages", e);
+        }
+    }
+
     /**
      * Retrieve the GUI component base on its name.
      *
@@ -55,7 +70,7 @@ abstract class ComponentCommander {
         mFindWithEqual = false;
         LOGGER.debug("try to find a component with the name : " + name);
         // TODO: Think about several component having the same names!
-        for (Stage s : StageHelper.getStages()) {
+        for (Stage s : getStages()) {
             if (mFindWithEqual) {
                 break;
             }
@@ -127,10 +142,10 @@ abstract class ComponentCommander {
      *
      * @return the list of all found popups.
      */
-    protected static List<Stage> findPopups() {
+    protected static List<Stage> findPopups() throws QTasteTestFailException {
         //find all popups
         List<Stage> popupFound = new ArrayList<>();
-        for (Stage stage : StageHelper.getStages()) {
+        for (Stage stage : getStages()) {
             Parent root = stage.getScene().getRoot();
             if (isAPopup(stage)) {
                 //it's maybe a popup... a popup is modal and not resizable and has a DialogPane root

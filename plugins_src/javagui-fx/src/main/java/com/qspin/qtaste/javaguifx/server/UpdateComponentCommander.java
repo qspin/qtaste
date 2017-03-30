@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.sun.javafx.stage.StageHelper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -86,8 +85,8 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
         return true;
     }
 
-    protected boolean isAccessible(Node c) {
-        for (Stage s : StageHelper.getStages()) {
+    protected boolean isAccessible(Node c) throws QTasteTestFailException {
+        for (Stage s : getStages()) {
             // TODO handle window vs application modality
             if (s.isShowing() && s.getModality() != Modality.NONE && c.getScene() != s.getScene()) {
                 return false;
@@ -112,12 +111,13 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
         LOGGER.debug("try to find a component with the name : " + name);
         // TODO: Think about several component having the same names!
         //search for all components which contains the name
-        for (Stage s : StageHelper.getStages()) {
+        for (Stage s : getStages()) {
             //			LOGGER.debug("parse window");
-            if (checkName(name, s.getScene().getRoot())) {
-                mFoundComponents.add(s.getScene().getRoot());
+            Parent root = s.getScene().getRoot();
+            if (checkName(name, root)) {
+                mFoundComponents.add(root);
             }
-            lookForComponent(name, s.getScene().getRoot().getChildrenUnmodifiable());
+            lookForComponent(name, root.getChildrenUnmodifiable());
         }
         LOGGER.trace(mFoundComponents.size() + " component(s) found with the contains");
 

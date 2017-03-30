@@ -222,9 +222,8 @@ public class JavaGUIFX extends JMXAgent implements JavaGUIFXMBean {
 
     @Override
     public boolean exist(String pComponentName) {
-        //		LOGGER.trace("exist(\"" + pComponentName + "\")");
-        //		return new ExistenceChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName);
-        return false;
+        LOGGER.trace("exist(\"" + pComponentName + "\")");
+        return new ExistenceChecker().executeCommand(COMPONENT_ENABLED_TIMEOUT, pComponentName);
     }
 
     @Override

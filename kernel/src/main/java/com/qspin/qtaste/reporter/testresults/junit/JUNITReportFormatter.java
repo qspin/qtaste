@@ -152,9 +152,9 @@ public class JUNITReportFormatter extends ReportFormatter {
         }
         String resultXML = "/>";
         if (fail || error) {
-            resultXML =
-                  "><" + (fail ? "failure" : "error") + " type=\"" + result.getFailedFunctionId() + "\">" + StringEscapeUtils
-                        .escapeXml(failedReason) + "</" + (fail ? "failure" : "error") + "></testcase>";
+            resultXML = "><" + (fail ? "failure" : "error") + " type=\"" + StringEscapeUtils.escapeXml(
+                  result.getFailedFunctionId()) + "\">" + StringEscapeUtils.escapeXml(failedReason) + "</" + (fail ? "failure" :
+                  "error") + "></testcase>";
         }
 
         namesValues.add("###RESULT###", resultXML);
