@@ -170,7 +170,15 @@ public class JythonTestScript extends TestScript implements Executable {
             bindings.clear();
         }
 
+        Object initModules = null;
+        if (globalBindings != null) {
+            initModules = globalBindings.get("__initModules");
+        }
+
         globalBindings = engine.createBindings();
+        if (initModules != null) {
+            globalBindings.put("__initModules", initModules);
+        }
         globalBindings.put(ScriptEngine.FILENAME, "embedded_jython");
         globalBindings.put("logger", scriptLogger);
         globalBindings.put("Status", ScriptTestResultStatus.class);
