@@ -28,6 +28,7 @@ import org.python.util.PythonInterpreter;
 
 import com.qspin.qtaste.config.StaticConfiguration;
 import com.qspin.qtaste.config.TestBedConfiguration;
+import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.log.Log4jServer;
 import com.qspin.qtaste.util.Log4jLoggerFactory;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
@@ -42,7 +43,7 @@ public class CampaignLauncher {
     private static Logger logger = Log4jLoggerFactory.getLogger(CampaignLauncher.class);
 
     private static void showUsage() {
-        System.err.println("Usage: <command> <campaignFileName.xml> [-sutversion <sut_version_identifier>]");
+	System.err.println("Usage: <command> <campaignFileName.xml> [-engine <engineFileName.xml>] [-sutversion <sut_version_identifier>]");
         System.exit(1);
     }
 
@@ -59,14 +60,33 @@ public class CampaignLauncher {
         logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
         logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
-        // handle config file name and optional -sutversion
-        if (args.length != 1 && (args.length != 3 || !args[1].equals("-sutversion"))) {
+        // handle config file name, optional -sutversion and -engine
+	if (args.length < 1) {
             showUsage();
+        } else {
+
+            int i = 1;
+            while (i < args.length)
+            {
+                if (args[i].equals("-engine") && (i + 1 < args.length))
+                {
+                    logger.info("Engine " + StaticConfiguration.CONFIG_DIRECTORY + "/" + args[i + 1]);
+                    TestEngineConfiguration.setConfigFile(StaticConfiguration.CONFIG_DIRECTORY + "/" + args[i + 1]);
+                    i += 2;
+                }
+                else if (args[i].equals("-sutversion") && (i + 1 < args.length))
+                {
+                    logger.info("SUT version: " + args[i + 1] );
+                    TestBedConfiguration.setSUTVersion(args[i + 1]);
+                    i += 2;
+                }
+                else
+                {
+                    showUsage();
+                }
+            }
         }
-        if (args.length == 3) {
-            logger.info("SUT version: " + args[2]);
-            TestBedConfiguration.setSUTVersion(args[2]);
-        }
+
         // start the log4j server
         Log4jServer.getInstance().start();
 
