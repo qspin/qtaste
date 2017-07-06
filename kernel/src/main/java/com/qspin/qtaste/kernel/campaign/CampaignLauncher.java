@@ -60,30 +60,24 @@ public class CampaignLauncher {
         logger.info("QTaste kernel version: " + com.qspin.qtaste.kernel.Version.getInstance().getFullVersion());
         logger.info("QTaste testAPI version: " + VersionControl.getInstance().getTestApiVersion(""));
 
-        // handle config file name, optional -sutversion and -engine
-	if (args.length < 1) {
+        // handle config file name and optional -sutversion
+        if (args.length < 1 || args.length > 5) {
             showUsage();
-        } else {
+        }
 
-            int i = 1;
-            while (i < args.length)
-            {
-                if (args[i].equals("-engine") && (i + 1 < args.length))
-                {
-                    logger.info("Engine " + StaticConfiguration.CONFIG_DIRECTORY + "/" + args[i + 1]);
-                    TestEngineConfiguration.setConfigFile(StaticConfiguration.CONFIG_DIRECTORY + "/" + args[i + 1]);
+        int i = 0;
+        String campaignFileName = args[i++];
+        while (i < args.length) {
+            if (args[i].equals("-engine") && (i + 1 < args.length)) {
+                logger.info("Using " + args[i + 1] + " as engine configuration file");
+                TestEngineConfiguration.setConfigFile(args[i + 1]);
                     i += 2;
-                }
-                else if (args[i].equals("-sutversion") && (i + 1 < args.length))
-                {
-                    logger.info("SUT version: " + args[i + 1] );
+            } else if (args[i].equals("-sutversion") && (i + 1 < args.length)) {
+                logger.info("Using " + args[i + 1] + " as SUT version");
                     TestBedConfiguration.setSUTVersion(args[i + 1]);
                     i += 2;
-                }
-                else
-                {
+            } else {
                     showUsage();
-                }
             }
         }
 
@@ -97,10 +91,10 @@ public class CampaignLauncher {
         PythonInterpreter.initialize(System.getProperties(), properties, new String[] {""});
 
         CampaignManager campaignManager = CampaignManager.getInstance();
-        boolean executionResult = false;
+        boolean executionResult;
 
         try {
-            Campaign campaign = campaignManager.readFile(args[0]);
+            Campaign campaign = campaignManager.readFile(campaignFileName);
             executionResult = campaignManager.execute(campaign);
         } finally {
             shutdown();

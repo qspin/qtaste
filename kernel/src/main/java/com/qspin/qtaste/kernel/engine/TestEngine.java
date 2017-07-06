@@ -508,7 +508,7 @@ public class TestEngine {
                     }
                     logger.info(message);
                 } else if (args[i].equals("-sutversion") && (i + 1 < args.length)) {
-                    logger.info("Using " + args[i + 1] + " as sutversion");
+                    logger.info("Using " + args[i + 1] + " as SUT version");
                     TestBedConfiguration.setSUTVersion(args[i + 1]);
                     i += 2;
                 } else {
