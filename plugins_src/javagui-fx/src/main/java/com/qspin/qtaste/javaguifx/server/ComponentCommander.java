@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Stream;
 
 import com.sun.javafx.application.PlatformImpl;
 import com.sun.javafx.stage.StageHelper;
@@ -136,6 +137,15 @@ abstract class ComponentCommander {
 
     protected boolean mFindWithEqual;
     protected Node mFoundComponent;
+
+    /**
+     * Returns the displayable windows.
+     * @return an array containing the displayable windows
+     */
+    protected static java.awt.Window[] getDisplayableWindows()
+    {
+        return Stream.of(java.awt.Window.getWindows()).filter(java.awt.Window::isDisplayable).toArray(java.awt.Window[]::new);
+    }
 
     /**
      * Finds all popups. A Component is a popup if it's a DialogPane, modal and not resizable.

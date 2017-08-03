@@ -46,9 +46,8 @@ final class StructureAnalyzer extends ComponentCommander {
     Object executeCommand(int timeout, String componentName, Object... data) throws QTasteException {
         try {
             prepareWriter(data[0].toString());
-            for (int i = 0; i < Frame.getWindows().length; ++i) {
-                Window windows = Frame.getWindows()[i];
-                analyzeComponent(windows, 1);
+            for (Window window : getDisplayableWindows()) {
+                analyzeComponent(window, 1);
             }
             mWriter.write("</root>");
             mWriter.flush();

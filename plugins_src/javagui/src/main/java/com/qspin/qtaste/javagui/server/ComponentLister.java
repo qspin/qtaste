@@ -46,7 +46,8 @@ final class ComponentLister extends ComponentCommander {
     String[] executeCommand(int timeout, String componentName, Object... data) {
         mComponentsMap = new HashMap<>();
 
-        for (Window window : Window.getWindows()) {
+        Window[] displayableWindows = getDisplayableWindows();
+        for (Window window : displayableWindows) {
             if (window.getName() != null) {
                 addToMap(window);
             }
@@ -59,7 +60,7 @@ final class ComponentLister extends ComponentCommander {
         }
         Collections.sort(list);
         list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
-        list.add("Number of windows : " + Window.getWindows().length);
+        list.add("Number of displayable windows : " + displayableWindows.length);
         return list.toArray(new String[list.size()]);
     }
 

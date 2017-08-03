@@ -60,7 +60,7 @@ final class ComponentLister extends ComponentCommander {
         }
         Collections.sort(list);
         list.add("Number of ownerless windows : " + Window.getOwnerlessWindows().length);
-        list.add("Number of windows : " + Window.getWindows().length);
+        list.add("Number of displayable windows : " + getDisplayableWindows().length);
         list.add("Number of windows (JavaFX) : " + stages.size());
         return list.toArray(new String[list.size()]);
     }

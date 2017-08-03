@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -54,7 +55,7 @@ abstract class ComponentCommander {
         mFindWithEqual = false;
         LOGGER.debug("try to find a component with the name : " + name);
         // TODO: Think about several component having the same names!
-        for (Window window : Window.getWindows()) {
+        for (Window window : getDisplayableWindows()) {
             if (mFindWithEqual) {
                 break;
             }
@@ -124,6 +125,15 @@ abstract class ComponentCommander {
     protected Component mFoundComponent;
 
     /**
+     * Returns the displayable windows.
+     * @return an array containing the displayable windows
+     */
+    protected static Window[] getDisplayableWindows()
+    {
+        return Stream.of(Window.getWindows()).filter(Window::isDisplayable).toArray(Window[]::new);
+    }
+
+    /**
      * Finds all popups. A Component is a popup if it's a JDialog, modal and not resizable.
      *
      * @return the list of all found popups.
@@ -131,7 +141,7 @@ abstract class ComponentCommander {
     protected static List<JDialog> findPopups() {
         //find all popups
         List<JDialog> popupFound = new ArrayList<>();
-        for (Window window : Window.getWindows()) {
+        for (Window window : getDisplayableWindows()) {
             //			LOGGER.debug("parse window - type : " + window.getClass());
             if (isAPopup(window)) {
                 //it's maybe a popup... a popup is modal and not resizable and containt a JOptionPane component.

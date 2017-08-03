@@ -81,7 +81,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
     }
 
     protected boolean isAccessible(Component c) {
-        Window[] windows = Window.getWindows();
+        Window[] windows = getDisplayableWindows();
         if (windows != null) {
             for (Window w : windows) {
                 if (w.isShowing() && w instanceof Dialog && ((Dialog) w).isModal() && !w.isAncestorOf(c)) {
@@ -107,7 +107,7 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
         LOGGER.debug("try to find a component with the name : " + name);
         // TODO: Think about several component having the same names!
         //search for all components which contains the name
-        Window[] windows = Window.getWindows();
+        Window[] windows = getDisplayableWindows();
         for (Window window : windows) {
             //			LOGGER.debug("parse window");
             if (checkName(name, window)) {
