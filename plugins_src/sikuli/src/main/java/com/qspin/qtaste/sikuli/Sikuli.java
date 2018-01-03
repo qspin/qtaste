@@ -116,6 +116,18 @@ public interface Sikuli {
     void dragDrop(String targetFileName, String destinationFileName) throws QTasteException;
 
     /**
+     * Executes a Drag'nDrop command from the first image to the second one, but sikuli is waiting the delay before
+     * release the mouse button.
+     * @param targetFileName the DnD origin image file path.
+     * @param destinationFileName the DnD destination image file path.
+     * @param delayBeforeDrop the delay to wait before release the mouse button, in Second.
+     * @throws QTasteException
+     */
+    void dragDrop(String targetFileName, String destinationFileName, int delayBeforeDrop) throws QTasteException;
+
+
+
+    /**
      * Executes a simple right click on the region identified by the picture.
      *
      * @param fileName the image file path.
