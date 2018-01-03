@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.script.ScriptEngine;
 
 import org.sikuli.basics.Settings;
 import org.sikuli.script.FindFailed;
@@ -133,7 +134,20 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
             throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
         }
     }
-    
+
+    @Override
+    public void dragDrop(String targetFileName, String destinationFileName, int delayBeforeDrop) throws QTasteException {
+        try {
+            Settings.DelayBeforeDrop = delayBeforeDrop;
+            Screen.all().dragDrop(loadImageFromPath(targetFileName), loadImageFromPath(destinationFileName));
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
+        }
+        finally {
+            Settings.DelayBeforeDrop = Settings.DelayValue;
+        }
+    }
+
     @Override
     public Area find(String fileName) throws QTasteException
     {
