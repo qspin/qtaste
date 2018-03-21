@@ -354,6 +354,11 @@
          <!-- EXTERNAL LIBRARIES -->
          <!-- Libraries are ordered by group/artifact. -->
 
+         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+         </dependency>
 
          <dependency>
             <groupId>commons-collections</groupId>

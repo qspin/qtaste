@@ -24,9 +24,11 @@ package com.qspin.qtaste.ui.log4j;
  */
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.MDC;
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -55,10 +57,12 @@ public class TextAreaAppender extends WriterAppender {
      * JTextArea.
      */ public void append(final LoggingEvent loggingEvent) {
 
+        Hashtable mdcContext = MDC.getContext();
+
         // Append formatted message to textarea using the Swing Thread.
         SwingUtilities.invokeLater(() -> {
             for (Log4jPanel log4jPanel : jTextAreaList) {
-                log4jPanel.appendLog(loggingEvent);
+                log4jPanel.appendLog(loggingEvent, mdcContext);
             }
         });
     }

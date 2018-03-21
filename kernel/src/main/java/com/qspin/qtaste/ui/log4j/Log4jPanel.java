@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -68,6 +69,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LoggingEvent;
 
 import com.qspin.qtaste.reporter.testresults.TestResult;
@@ -409,13 +411,16 @@ public class Log4jPanel extends JPanel {
         ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
     }
 
-    public void appendLog(LoggingEvent loggingEvent) {
+    public void appendLog(LoggingEvent loggingEvent, Hashtable mdcContext) {
         Object[] cols = new Object[m_LogTable.getColumnCount()];
         Time t = new Time(loggingEvent.getTimeStamp());
         cols[LOG_TIME] = t.toString();
         cols[LOG_LEVEL] = loggingEvent.getLevel().toString();
         // TO DO : improve the way to detect source log
         String application = loggingEvent.getProperty("application");
+		if ((application == null) && (mdcContext != null)) {
+            application = (String) mdcContext.get("application");
+        }
         if (application != null) {
             synchronized (m_applications) {
                 if (!m_applications.contains(application)) {

@@ -40,6 +40,9 @@
 <log4j_server>
 		<port>4446</port>
 	</log4j_server>
+	<logback_server>
+		<port>4447</port>
+	</logback_server>
 <version_control>com.qspin.qtaste.util.versioncontrol.impl.DefaultVersionControl</version_control>
 <addons>
 </addons>

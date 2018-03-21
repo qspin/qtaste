@@ -20,6 +20,7 @@ import com.qspin.qtaste.config.TestBedConfiguration;
 import com.qspin.qtaste.config.TestEngineConfiguration;
 import com.qspin.qtaste.kernel.engine.TestEngine;
 import com.qspin.qtaste.log.Log4jServer;
+import com.qspin.qtaste.log.LogbackReceiver;
 import com.qspin.qtaste.ui.MainPanel;
 import com.qspin.qtaste.util.versioncontrol.VersionControl;
 
@@ -148,6 +149,9 @@ public class Environment {
 
             // start the log4j server
             Log4jServer.getInstance().start();
+
+            // start the logback receiver
+            LogbackReceiver.getInstance().start();
 
             // initialize the Python interpreter (used for Doc generation)
             Properties props = new Properties();
