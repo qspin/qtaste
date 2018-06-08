@@ -68,6 +68,11 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
     }
 
     @Override
+    public void dragDrop(String targetFileName, String destinationFileName, int delayBeforeDrop) throws QTasteException {
+        mProxy.dragDrop(targetFileName, destinationFileName, delayBeforeDrop);
+    }
+
+    @Override
     public void takeSnapShot(String directory, String fileName) throws QTasteException {
         mProxy.takeSnapShot(directory, fileName);
     }
@@ -141,6 +146,10 @@ public class Sikuli implements com.qspin.qtaste.sikuli.Sikuli, SingletonComponen
         mProxy.capture(x, y, w, h, directory, name);
     }
 
+    @Override
+    public void focus(String application) throws QTasteException {
+        mProxy.focus(application);
+    }
 
 
     @Override

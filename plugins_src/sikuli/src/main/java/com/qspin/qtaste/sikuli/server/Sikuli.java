@@ -29,6 +29,7 @@ import javax.imageio.ImageIO;
 
 import org.sikuli.basics.Settings;
 import org.sikuli.script.FindFailed;
+import org.sikuli.script.App;
 import org.sikuli.script.Image;
 import org.sikuli.script.Match;
 import org.sikuli.script.Region;
@@ -131,6 +132,19 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
             Screen.all().dragDrop(loadImageFromPath(targetFileName), loadImageFromPath(destinationFileName));
         } catch (FindFailed ex) {
             throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void dragDrop(String targetFileName, String destinationFileName, int delayBeforeDrop) throws QTasteException {
+        try {
+            Settings.DelayBeforeDrop = delayBeforeDrop;
+            Screen.all().dragDrop(loadImageFromPath(targetFileName), loadImageFromPath(destinationFileName));
+        } catch (FindFailed ex) {
+            throw new QTasteTestFailException("Cannot execute the Drag And Drop command : " + ex.getMessage(), ex);
+        }
+        finally {
+            Settings.DelayBeforeDrop = Settings.DelayValue;
         }
     }
     
@@ -246,5 +260,10 @@ public class Sikuli extends JMXAgent implements SikuliMBean {
         catch (Exception e) {
             throw new QTasteException(e.getMessage());
         }
+    }
+
+    @Override
+    public void focus(String application) throws QTasteException {
+        App.focus(application);
     }
 }
