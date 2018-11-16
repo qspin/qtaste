@@ -251,7 +251,7 @@ public class PropertiesHistory {
         if ((values.length != 1) && (values.length != 2)) {
             throw new QTasteDataException("Invalid syntax");
         }
-        String expectedValueOrTransition = propertyValueOrTransition.replaceFirst(".*: *", "");
+        String expectedValueOrTransition = propertyValueOrTransition.replaceFirst(".*?: *", "");
 
         long remainingTime_ms = maxTime_ms - (System.currentTimeMillis() - beginTime_ms);
         checkPropertyValueOrTransition(property, values, mustBeAtBegin, mustBeAtEnd, remainingTime_ms, expectedValueOrTransition);
