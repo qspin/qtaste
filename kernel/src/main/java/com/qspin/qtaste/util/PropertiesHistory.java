@@ -230,7 +230,7 @@ public class PropertiesHistory {
         long beginTime_ms = System.currentTimeMillis();
         long maxTime_ms = Math.round(maxTime * 1000);
         propertyValueOrTransition = propertyValueOrTransition.toLowerCase();
-        String[] splitted = propertyValueOrTransition.split(" *: *");
+        String[] splitted = propertyValueOrTransition.split(" *: *", 2);
         if (splitted.length != 2) {
             throw new QTasteDataException("Invalid syntax");
         }
