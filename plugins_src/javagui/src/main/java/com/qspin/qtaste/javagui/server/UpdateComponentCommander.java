@@ -141,14 +141,20 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
 
         if (!mFoundComponents.isEmpty()) {
             mFoundComponent = mFoundComponents.get(0);
-            mFoundComponent.requestFocus();
-            Component parent = mFoundComponent;
-            //active the parent window
-            while (parent != null && !(parent instanceof Window)) {
-                parent = parent.getParent();
-            }
-            if (parent != null) {
-                ((Window) parent).toFront();
+            try {
+                SwingUtilities.invokeAndWait(()-> {
+                    mFoundComponent.requestFocus();
+                    Component parent = mFoundComponent;
+                    //active the parent window
+                    while (parent != null && !(parent instanceof Window)) {
+                        parent = parent.getParent();
+                    }
+                    if (parent != null) {
+                        ((Window) parent).toFront();
+                    }
+                });
+            } catch (InterruptedException | InvocationTargetException e) {
+                // ignore
             }
             return mFoundComponent;
         }
