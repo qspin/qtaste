@@ -6,6 +6,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -65,14 +66,20 @@ abstract class ComponentCommander {
             }
         }
         if (mFoundComponent != null) {
-            mFoundComponent.requestFocus();
-            Component parent = mFoundComponent.getParent();
-            //active the parent
-            while (parent != null && !(parent instanceof Window)) {
-                parent = parent.getParent();
-            }
-            if (parent != null) {
-                ((Window) parent).toFront();
+            try {
+                SwingUtilities.invokeAndWait(() -> {
+                    mFoundComponent.requestFocus();
+                    Component parent = mFoundComponent.getParent();
+                    //active the parent
+                    while (parent != null && !(parent instanceof Window)) {
+                        parent = parent.getParent();
+                    }
+                    if (parent != null) {
+                        ((Window) parent).toFront();
+                    }
+                });
+            } catch (InterruptedException | InvocationTargetException e) {
+                // ignore
             }
 
             return mFoundComponent;
