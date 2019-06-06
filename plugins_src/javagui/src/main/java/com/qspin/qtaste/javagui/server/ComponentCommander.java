@@ -66,25 +66,37 @@ abstract class ComponentCommander {
             }
         }
         if (mFoundComponent != null) {
-            try {
-                SwingUtilities.invokeAndWait(() -> {
-                    mFoundComponent.requestFocus();
-                    Component parent = mFoundComponent.getParent();
-                    //active the parent
-                    while (parent != null && !(parent instanceof Window)) {
-                        parent = parent.getParent();
-                    }
-                    if (parent != null) {
-                        ((Window) parent).toFront();
-                    }
-                });
-            } catch (InterruptedException | InvocationTargetException e) {
-                // ignore
-            }
-
+            requestFocus();
             return mFoundComponent;
         }
         throw new QTasteTestFailException("The component \"" + name + "\" is not found.");
+    }
+
+    private void requestFocus()
+    {
+        if (SwingUtilities.isEventDispatchThread()) {
+            mFoundComponent.requestFocus();
+            Component parent = mFoundComponent.getParent();
+            //active the parent
+            while (parent != null && !(parent instanceof Window))
+            {
+                parent = parent.getParent();
+            }
+            if (parent != null)
+            {
+                ((Window) parent).toFront();
+            }
+        } else {
+            // execute method in Swing thread
+            try
+            {
+                SwingUtilities.invokeAndWait(this::requestFocus);
+            }
+            catch (InterruptedException | InvocationTargetException e)
+            {
+                // ignore
+            }
+        }
     }
 
     /**
