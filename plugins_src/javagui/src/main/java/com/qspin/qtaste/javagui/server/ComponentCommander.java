@@ -2,6 +2,8 @@ package com.qspin.qtaste.javagui.server;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
@@ -142,6 +144,23 @@ abstract class ComponentCommander {
 
     protected boolean mFindWithEqual;
     protected Component mFoundComponent;
+
+    /**
+     * Checks if a component is accessible, i.e. is not inaccessible due to some modal dialog.
+     * @param c a component
+     * @return true if component is accessible, i.e. is not inaccessible due to some modal dialog, false otherwise
+     */
+    protected boolean isAccessible(Component c) {
+        if (SwingUtilities.getWindowAncestor(c).getModalExclusionType() != ModalExclusionType.NO_EXCLUDE) {
+            return true;
+        }
+        for (Window w : getDisplayableWindows()) {
+            if (w != c && w.isShowing() && w instanceof Dialog && ((Dialog) w).isModal() && !w.isAncestorOf(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Returns the displayable windows.

@@ -80,18 +80,6 @@ abstract class UpdateComponentCommander extends ComponentCommander implements Ru
         return true;
     }
 
-    protected boolean isAccessible(Component c) {
-        Window[] windows = getDisplayableWindows();
-        if (windows != null) {
-            for (Window w : windows) {
-                if (w.isShowing() && w instanceof Dialog && ((Dialog) w).isModal() && !w.isAncestorOf(c)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public void run() {
         try {
             doActionsInSwingThread();
