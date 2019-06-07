@@ -155,7 +155,7 @@ abstract class ComponentCommander {
             return true;
         }
         for (Window w : getDisplayableWindows()) {
-            if (w != c && w.isShowing() && w instanceof Dialog && ((Dialog) w).isModal() && !w.isAncestorOf(c)) {
+            if (w != c && w.isActive() && w instanceof Dialog && ((Dialog) w).isModal() && !w.isAncestorOf(c)) {
                 return false;
             }
         }
