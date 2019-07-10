@@ -151,7 +151,11 @@ abstract class ComponentCommander {
      * @return true if component is accessible, i.e. is not inaccessible due to some modal dialog, false otherwise
      */
     protected boolean isAccessible(Component c) {
-        if (SwingUtilities.getWindowAncestor(c).getModalExclusionType() != ModalExclusionType.NO_EXCLUDE) {
+        Window windowAncestor = SwingUtilities.getWindowAncestor(c);
+        if (windowAncestor == null) {
+            return false;
+        }
+        if (windowAncestor.getModalExclusionType() != ModalExclusionType.NO_EXCLUDE) {
             return true;
         }
         for (Window w : getDisplayableWindows()) {
